@@ -6,3 +6,5 @@
 library easyrefresh;
 
 export 'src/refresher.dart';
+export 'src/header/header.dart';
+export 'src/footer/footer.dart';
