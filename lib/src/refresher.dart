@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-typedef Future LoadData(bool isPullDown);
 typedef Future OnRefresh();
 typedef Future LoadMore();
 typedef ScrollPhysicsChanged(ScrollPhysics physics);
