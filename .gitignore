@@ -40,6 +40,7 @@ build/
 .ios/
 .flutter-plugins
 *.iml
+.metadata
 pubspec.lock
 ios/.generated/
 ios/Flutter/Generated.xcconfig
