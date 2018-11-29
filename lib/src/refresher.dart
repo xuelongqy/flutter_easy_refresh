@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'header/header.dart';
+import 'footer/footer.dart';
 
 typedef Future OnRefresh();
 typedef Future LoadMore();
@@ -35,7 +37,7 @@ class EasyRefresh extends StatefulWidget{
   final LoadMore loadMore;
   final ScrollPhysicsChanged scrollPhysicsChanged;
   final ScrollView child;
-  //去掉过度滑动时ListView顶部的蓝色光晕效果
+  // 去掉过度滑动时ListView顶部的蓝色光晕效果
   final bool isShowLeadingGlow;
   final bool isShowTrailingGlow;
 
@@ -43,7 +45,7 @@ class EasyRefresh extends StatefulWidget{
   final String defaultRefreshBoxTipText;
   final Color defaultRefreshBoxTextColor;//defaultRefreshBox
   final Color glowColor;
-  final Widget headerRefreshBox;
+  final RefreshHeaderBuilder refreshHeaderBuilder;
   final Widget footerRefreshBox;
 
   final AnimationStateChanged animationStateChangedCallback;
@@ -56,7 +58,7 @@ class EasyRefresh extends StatefulWidget{
     this.isShowTrailingGlow : false,
     this.defaultRefreshBoxTextColor:Colors.white,
     this.glowColor:Colors.blue,
-    this.headerRefreshBox,
+    this.refreshHeaderBuilder,
     this.footerRefreshBox,
     this.animationStateChangedCallback,
     this.onRefresh,
@@ -72,8 +74,8 @@ class EasyRefresh extends StatefulWidget{
 
 class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<EasyRefresh>{
 
-  double topItemHeight=0.0;
-  double bottomItemHeight=0.0;
+  double topItemHeight = 0.0;
+  double bottomItemHeight = 0.0;
 
   Animation<double> animation;
   AnimationController animationController;
@@ -86,6 +88,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   bool isReset=false;
   bool isPulling=false;
+
+  // 顶部视图
+  RefreshHeader _refreshHeader;
+  // 底部视图
+  RefreshFooter _refreshFooter;
 
   @override
   void initState() {
@@ -208,56 +215,32 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     );
   }
 
-  Widget _getHeaderBox(){
+  // 生成顶部栏
+  Widget _getHeader(){
     if(widget.onRefresh != null) {
-      if(widget.headerRefreshBox==null){
-        return _getDefaultHeaderBox();
+      if (this._refreshHeader != null) return this._refreshHeader;
+      if(widget.refreshHeaderBuilder == null){
+        this._refreshHeader = _classicsHeaderBuilder();
       }else{
-        return new Container(
-          height: topItemHeight,
-          child: widget.headerRefreshBox,
-        );
+        this._refreshHeader = widget.refreshHeaderBuilder(context, topItemHeight);
       }
+      return this._refreshHeader;
     }else{
       return new Container();
     }
   }
 
-  Widget _getDefaultHeaderBox(){
-    return new Container( // 下拉刷新的布局
-      color: widget.defaultRefreshBoxBackgroundColor,
-      height: topItemHeight,
-      child: new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Align(
-            alignment: Alignment.centerLeft,
-            child: new Container(
-              width: 25.0,
-              height: 25.0,
-              margin: EdgeInsets.only(right: 10.0),
-              child: CircularProgressIndicator(strokeWidth: 2.0,),
-            ),
-          ),
-
-          new Align( //这里是布局中的文字
-            child: new ClipRect(
-              child: new Text(widget.defaultRefreshBoxTipText,
-                style: new TextStyle(color: widget.defaultRefreshBoxTextColor),),
-            ),
-            alignment: Alignment.centerRight,
-          ),
-        ],
-      ),
-    );
+  // 默认顶部栏
+  Widget _classicsHeaderBuilder(){
+    return ClassicsHeader();
   }
 
   void _refreshStart (RefreshBoxDirectionStatus refreshBoxDirectionStatus) async{
     _checkStateAndCallback(AnimationStates.StartLoadData,refreshBoxDirectionStatus);
-    if(refreshBoxDirectionStatus==RefreshBoxDirectionStatus.PULL&&widget.headerRefreshBox==null && widget.onRefresh != null){
+    if(refreshBoxDirectionStatus==RefreshBoxDirectionStatus.PULL && this._refreshHeader == null && widget.onRefresh != null){
       //开始加载等待的动画
       animationControllerWait.forward();
-    }else if(refreshBoxDirectionStatus==RefreshBoxDirectionStatus.PUSH&&widget.footerRefreshBox==null && widget.loadMore != null){
+    }else if(refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH && widget.footerRefreshBox==null && widget.loadMore != null){
       //开始加载等待的动画
       animationControllerWait.forward();
     }
@@ -265,6 +248,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     // 这里我们开始加载数据 数据加载完成后，将新数据处理并开始加载完成后的处理
     if (topItemHeight > bottomItemHeight) {
       if (widget.onRefresh != null) {
+        // 调用刷新回调
         await widget.onRefresh();
       }
     }else {
@@ -283,11 +267,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     //开始将加载（刷新）布局缩回去的动画
     animationController.forward();
 
-    if(refreshBoxDirectionStatus==RefreshBoxDirectionStatus.PULL&&widget.headerRefreshBox==null && widget.onRefresh != null){
-      //结束加载等待的动画
+    if(refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL && this._refreshHeader == null && widget.onRefresh != null){
+      // 结束加载等待的动画
       animationControllerWait.reset();
-    }else if(refreshBoxDirectionStatus==RefreshBoxDirectionStatus.PUSH&&widget.footerRefreshBox==null && widget.loadMore != null){
-      //结束加载等待的动画
+    }else if(refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH && widget.footerRefreshBox == null && widget.loadMore != null){
+      // 结束加载等待的动画
       animationControllerWait.reset();
     }
   }
@@ -301,10 +285,14 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   @override
   Widget build(BuildContext context) {
+    // 更新高度
+    if (this._refreshHeader != null) {
+      this._refreshHeader.getKey().currentState.updateHeight(topItemHeight);
+    }
     return new Container(
       child:new Column(
         children: <Widget>[
-          _getHeaderBox(),
+          _getHeader(),
           new Expanded(
             flex:1,
             child: new NotificationListener(
@@ -476,10 +464,33 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   void _checkStateAndCallback(AnimationStates currentState,RefreshBoxDirectionStatus refreshBoxDirectionStatus){
-    if(animationStates!=currentState){
-      animationStates=currentState;
-      if(widget.animationStateChangedCallback!=null){
-        widget.animationStateChangedCallback(animationStates,refreshBoxDirectionStatus);
+    print(currentState);
+    print(refreshBoxDirectionStatus);
+    if(animationStates != currentState){
+      // 下拉刷新回调
+      if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL) {
+        // 释放刷新
+        if (currentState == AnimationStates.DragAndRefreshEnabled) {
+          this._refreshHeader.getKey().currentState.onRefreshReady();
+        }
+        // 刷新数据
+        if (currentState == AnimationStates.StartLoadData) {
+          this._refreshHeader.getKey().currentState.onRefreshing();
+        }
+        // 刷新完成
+        if (currentState == AnimationStates.LoadDataEnd) {
+          this._refreshHeader.getKey().currentState.onRefreshed();
+        }
+      }
+      else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.IDLE) {
+        // 顶部视图隐藏
+        if (currentState == AnimationStates.RefreshBoxIdle) {
+          this._refreshHeader.getKey().currentState.onHeaderHide();
+        }
+      }
+      animationStates = currentState;
+      if(widget.animationStateChangedCallback != null){
+        widget.animationStateChangedCallback(animationStates, refreshBoxDirectionStatus);
       }
     }
   }
@@ -520,9 +531,6 @@ class RefreshScrollPhysics extends ScrollPhysics {
   }
 }
 
-
-
-
 ///可去掉过度滑动时ListView顶部的蓝色光晕效果
 class MyBehavior extends ScrollBehavior {
 
@@ -550,8 +558,6 @@ class MyBehavior extends ScrollBehavior {
     }
   }
 }
-
-
 
 ///切记 继承ScrollPhysics  必须重写applyTo，，在NeverScrollableScrollPhysics类里面复制就可以
 ///此类用来控制IOS过度滑动出现弹簧效果

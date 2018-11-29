@@ -33,19 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
   ScrollController controller = new ScrollController();
   ScrollPhysics scrollPhysics = new RefreshAlwaysScrollPhysics();
 
-
-  Future _loadData(bool isPullDown) async{
-    setState(() {
-      //拿到数据后，对数据进行梳理
-      if(isPullDown){
-        strs.clear();
-        strs.addAll(addStrs);
-      }else{
-        strs.addAll(addStrs);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,9 +58,11 @@ class _MyHomePageState extends State<MyHomePage> {
             }
           ),
           onRefresh: () async{
-            setState(() {
-              strs.clear();
-              strs.addAll(addStrs);
+            await new Future.delayed(const Duration(seconds: 1), () {
+              setState(() {
+                strs.clear();
+                strs.addAll(addStrs);
+              });
             });
           },
           loadMore: () async {

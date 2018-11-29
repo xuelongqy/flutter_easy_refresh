@@ -10,6 +10,8 @@ typedef Future OnFooterHide();
 abstract class RefreshFooter extends StatefulWidget {
   // 高度
   final double height;
+  // 是否浮动
+  final bool isFloat;
   // 开始加载回调方法
   final OnLoading onLoading;
   // 完成加载回调方法
@@ -20,6 +22,7 @@ abstract class RefreshFooter extends StatefulWidget {
   const RefreshFooter({
     Key key,
     @required this.height,
+    this.isFloat: false,
     this.onLoading,
     this.onLoaded,
     this.onFooterHide
