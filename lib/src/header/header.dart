@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 typedef Future OnRefreshing();
 typedef Future OnRefreshed();
 typedef Future OnHeaderHide();
-typedef RefreshHeader RefreshHeaderBuilder(BuildContext context, double height);
 
 /// 顶部栏状态
 enum  RefreshHeaderStatus {

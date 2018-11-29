@@ -45,7 +45,7 @@ class EasyRefresh extends StatefulWidget{
   final String defaultRefreshBoxTipText;
   final Color defaultRefreshBoxTextColor;//defaultRefreshBox
   final Color glowColor;
-  final RefreshHeaderBuilder refreshHeaderBuilder;
+  final RefreshHeader refreshHeader;
   final Widget footerRefreshBox;
 
   final AnimationStateChanged animationStateChangedCallback;
@@ -58,7 +58,7 @@ class EasyRefresh extends StatefulWidget{
     this.isShowTrailingGlow : false,
     this.defaultRefreshBoxTextColor:Colors.white,
     this.glowColor:Colors.blue,
-    this.refreshHeaderBuilder,
+    this.refreshHeader,
     this.footerRefreshBox,
     this.animationStateChangedCallback,
     this.onRefresh,
@@ -219,10 +219,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   Widget _getHeader(){
     if(widget.onRefresh != null) {
       if (this._refreshHeader != null) return this._refreshHeader;
-      if(widget.refreshHeaderBuilder == null){
+      if(widget.refreshHeader == null){
         this._refreshHeader = _classicsHeaderBuilder();
       }else{
-        this._refreshHeader = widget.refreshHeaderBuilder(context, topItemHeight);
+        this._refreshHeader = widget.refreshHeader;
       }
       return this._refreshHeader;
     }else{
