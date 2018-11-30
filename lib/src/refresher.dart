@@ -46,7 +46,7 @@ class EasyRefresh extends StatefulWidget{
   final Color defaultRefreshBoxTextColor;//defaultRefreshBox
   final Color glowColor;
   final RefreshHeader refreshHeader;
-  final Widget footerRefreshBox;
+  final RefreshFooter refreshFooter;
 
   final AnimationStateChanged animationStateChangedCallback;
 
@@ -59,7 +59,7 @@ class EasyRefresh extends StatefulWidget{
     this.defaultRefreshBoxTextColor:Colors.white,
     this.glowColor:Colors.blue,
     this.refreshHeader,
-    this.footerRefreshBox,
+    this.refreshFooter,
     this.animationStateChangedCallback,
     this.onRefresh,
     this.loadMore,
@@ -82,6 +82,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   double shrinkageDistance = 0.0;
   final double _refreshHeight = 50.0;
   RefreshBoxDirectionStatus states = RefreshBoxDirectionStatus.IDLE;
+  RefreshBoxDirectionStatus lastStates = RefreshBoxDirectionStatus.IDLE;
   AnimationStates animationStates = AnimationStates.RefreshBoxIdle;
 
   AnimationController animationControllerWait;
@@ -174,45 +175,24 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     });
   }
 
-  Widget _getFooterBox(){
+  // 生成底部栏
+  Widget _getFooter(){
     if(widget.loadMore != null) {
-      if(widget.footerRefreshBox == null){
-        return _getDefaultFooterBox();
+      if (this._refreshFooter != null) return this._refreshFooter;
+      if(widget.refreshFooter == null){
+        this._refreshFooter = __classicsFooterBuilder();
       }else{
-        return new Container(
-          height: bottomItemHeight,
-          child: widget.footerRefreshBox,
-        );
+        this._refreshFooter = widget.refreshFooter;
       }
+      return this._refreshFooter;
     }else{
       return new Container();
     }
   }
 
-  Widget _getDefaultFooterBox(){
-    return new Container( //上拉加载布局
-      color: widget.defaultRefreshBoxBackgroundColor,
-      height: bottomItemHeight,
-      child: new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Align(
-            alignment: Alignment.centerLeft,
-            child: new Container(
-              width: 25.0,
-              height: 25.0,
-              margin: EdgeInsets.only(right: 10.0),
-              child: CircularProgressIndicator(strokeWidth: 2.0,),
-            ),
-          ),
-          new Align(
-            alignment: Alignment.centerRight,
-            child: new Text(widget.defaultRefreshBoxTipText,
-              style: new TextStyle(color: widget.defaultRefreshBoxTextColor),),
-          ),
-        ],
-      ),
-    );
+  // 默认底部栏
+  Widget __classicsFooterBuilder() {
+    return new ClassicsFooter();
   }
 
   // 生成顶部栏
@@ -240,7 +220,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     if(refreshBoxDirectionStatus==RefreshBoxDirectionStatus.PULL && this._refreshHeader == null && widget.onRefresh != null){
       //开始加载等待的动画
       animationControllerWait.forward();
-    }else if(refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH && widget.footerRefreshBox==null && widget.loadMore != null){
+    }else if(refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH && this._refreshFooter == null && widget.loadMore != null){
       //开始加载等待的动画
       animationControllerWait.forward();
     }
@@ -253,6 +233,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       }
     }else {
       if (widget.loadMore != null) {
+        // 调用加载更多
         await widget.loadMore();
       }
     }
@@ -270,7 +251,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     if(refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL && this._refreshHeader == null && widget.onRefresh != null){
       // 结束加载等待的动画
       animationControllerWait.reset();
-    }else if(refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH && widget.footerRefreshBox == null && widget.loadMore != null){
+    }else if(refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH && this._refreshFooter == null && widget.loadMore != null){
       // 结束加载等待的动画
       animationControllerWait.reset();
     }
@@ -288,6 +269,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     // 更新高度
     if (this._refreshHeader != null) {
       this._refreshHeader.getKey().currentState.updateHeight(topItemHeight);
+    }
+    if (this._refreshFooter != null) {
+      this._refreshFooter.getKey().currentState.updateHeight(bottomItemHeight);
     }
     return new Container(
       child:new Column(
@@ -323,7 +307,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
               ),
             ),
           ),
-          _getFooterBox(),
+          _getFooter(),
         ],
       ),
     );
@@ -474,21 +458,42 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           this._refreshHeader.getKey().currentState.onRefreshReady();
         }
         // 刷新数据
-        if (currentState == AnimationStates.StartLoadData) {
+        else if (currentState == AnimationStates.StartLoadData) {
           this._refreshHeader.getKey().currentState.onRefreshing();
         }
         // 刷新完成
-        if (currentState == AnimationStates.LoadDataEnd) {
+        else if (currentState == AnimationStates.LoadDataEnd) {
           this._refreshHeader.getKey().currentState.onRefreshed();
+        }
+      }
+      // 上拉加载
+      else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH) {
+        // 释放加载
+        if (currentState == AnimationStates.DragAndRefreshEnabled) {
+          this._refreshFooter.getKey().currentState.onLoadReady();
+        }
+        // 加载数据
+        else if (currentState == AnimationStates.StartLoadData) {
+          this._refreshFooter.getKey().currentState.onLoading();
+        }
+        // 加载完成
+        else if (currentState == AnimationStates.LoadDataEnd) {
+          this._refreshFooter.getKey().currentState.onLoaded();
         }
       }
       else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.IDLE) {
         // 顶部视图隐藏
         if (currentState == AnimationStates.RefreshBoxIdle) {
-          this._refreshHeader.getKey().currentState.onHeaderHide();
+          if (lastStates == RefreshBoxDirectionStatus.PULL) {
+            this._refreshHeader.getKey().currentState.onHeaderHide();
+          }
+          else if (lastStates == RefreshBoxDirectionStatus.PUSH) {
+            this._refreshFooter.getKey().currentState.onFooterHide();
+          }
         }
       }
       animationStates = currentState;
+      lastStates = refreshBoxDirectionStatus;
       if(widget.animationStateChangedCallback != null){
         widget.animationStateChangedCallback(animationStates, refreshBoxDirectionStatus);
       }

@@ -68,8 +68,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
-
-  assets:
-      - assets/image/icon_arrow.png
-      - assets/image/icon_cry.png
-      - assets/image/refresh.png

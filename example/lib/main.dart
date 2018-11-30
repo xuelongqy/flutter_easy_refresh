@@ -66,8 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           },
           loadMore: () async {
-            setState(() {
-              strs.addAll(addStrs);
+            await new Future.delayed(const Duration(seconds: 1), () {
+              setState(() {
+                strs.addAll(addStrs);
+              });
             });
           },
           scrollPhysicsChanged: (ScrollPhysics physics) {

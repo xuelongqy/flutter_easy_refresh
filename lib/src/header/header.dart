@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-typedef Future OnRefreshing();
-typedef Future OnRefreshed();
-typedef Future OnHeaderHide();
-
 /// 顶部栏状态
 enum  RefreshHeaderStatus {
   NO_REFRESH,
@@ -21,10 +17,12 @@ abstract class RefreshHeader extends StatefulWidget {
   // 是否浮动
   final bool isFloat;
 
+  // 获取键
   GlobalKey<RefreshHeaderState> getKey() {
     return this.key;
   }
 
+  // 构造函数
   const RefreshHeader({
     GlobalKey<RefreshHeaderState> key,
     this.refreshHeight: 50.0,
@@ -36,11 +34,6 @@ abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
   RefreshHeaderStatus refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
   // 高度
   double height = 0.0;
-
-  @override
-  Widget build(BuildContext context) {
-    return null;
-  }
 
   // 更新视图高度
   void updateHeight(double newHeight) {
