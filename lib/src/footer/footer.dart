@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-typedef Future OnLoading();
-typedef Future OnLoaded();
-typedef Future OnFooterHide();
-
 /// 底部栏状态
 enum  RefreshFooterStatus {
   NO_LOAD,
@@ -59,8 +55,8 @@ abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
   Future onLoaded() async {
     refreshFooterStatus = RefreshFooterStatus.LOADED;
   }
-  // 回调底部隐藏方法方法
-  Future onFooterHide() async {
+  // 回调加载重置方法
+  Future onLoadReset() async {
     refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
   }
 }
@@ -135,10 +131,10 @@ class _ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     });
   }
 
-  // 底部栏隐藏回调
+  // 加载重置回调
   @override
-  Future onFooterHide() async {
-    super.onFooterHide();
+  Future onLoadReset() async {
+    super.onLoadReset();
     setState(() {
       _showText = widget.loadText;
     });

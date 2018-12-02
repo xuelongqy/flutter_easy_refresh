@@ -17,7 +17,7 @@ enum  RefreshBoxDirectionStatus {
 
 enum  AnimationStates {
   ///RefreshBox高度没有达到50，上下拉刷新不可用（此状态下RefreshBox会自动弹回去）；RefreshBox height not reached 50，the function of load data is not available（In this state RefreshBox Will automatically bounce back）
-  //DragAndRefreshNotEnabled,
+  DragAndRefreshNotEnabled,
   ///RefreshBox高度达到50,上下拉刷新可用;RefreshBox height reached 50，the function of load data is  available
   DragAndRefreshEnabled,
   ///抬起手指后。RefreshBox 弹回到50的高度；After lifting your finger，RefreshBox bounce back to the height of 50，
@@ -331,6 +331,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           //当刷新布局可见时，让头部刷新布局的高度+delta.dy(此时dy为负数)，来缩小头部刷新布局的高度
           topItemHeight = topItemHeight + notification.dragDetails.delta.dy / 2;
         }
+        // 如果小于50.0则恢复下拉刷新
+        if (topItemHeight < 50.0) {
+          _checkStateAndCallback(AnimationStates.DragAndRefreshNotEnabled,RefreshBoxDirectionStatus.PULL);
+        }
       });
     }else if(bottomItemHeight>0.0){
       //底部的布局可见时 ，且手指反方向拖动（由上向下），这时notification 为 ScrollUpdateNotification，这个时候让底部加载布局的高度-delta.dy(此时dy为正数数)
@@ -351,6 +355,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             //当加载的布局可见时，让上拉加载布局的高度-delta.dy(此时dy为正数数)，来缩小底部的加载布局的高度
             bottomItemHeight = bottomItemHeight - notification.dragDetails.delta.dy / 2;
           }
+        }
+        // 如果小于50.0则恢复加载
+        if (bottomItemHeight < 50.0) {
+          _checkStateAndCallback(AnimationStates.DragAndRefreshNotEnabled,RefreshBoxDirectionStatus.PUSH);
         }
       });
     }
@@ -414,12 +422,12 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             _checkStateAndCallback(AnimationStates.DragAndRefreshEnabled,RefreshBoxDirectionStatus.PULL);
             topItemHeight=notification.dragDetails.delta.dy/4+topItemHeight;
           }else {
+            _checkStateAndCallback(AnimationStates.DragAndRefreshNotEnabled,RefreshBoxDirectionStatus.PULL);
             topItemHeight=notification.dragDetails.delta.dy/2+topItemHeight;
           }
         }
       });
     }else if(topItemHeight<0.5 && widget.loadMore != null){
-
       setState(() {
         if(-notification.dragDetails.delta.dy/2+bottomItemHeight<=0.0){
           //Refresh回弹完毕，恢复正常ListView的滑动状态
@@ -440,6 +448,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             _checkStateAndCallback(AnimationStates.DragAndRefreshEnabled,RefreshBoxDirectionStatus.PUSH);
             bottomItemHeight=-notification.dragDetails.delta.dy/4+bottomItemHeight;
           }else {
+            _checkStateAndCallback(AnimationStates.DragAndRefreshNotEnabled,RefreshBoxDirectionStatus.PUSH);
             bottomItemHeight=-notification.dragDetails.delta.dy/2+bottomItemHeight;
           }
         }
@@ -465,6 +474,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         else if (currentState == AnimationStates.LoadDataEnd) {
           this._refreshHeader.getKey().currentState.onRefreshed();
         }
+        // 刷新重置
+        else if (currentState == AnimationStates.DragAndRefreshNotEnabled) {
+          this._refreshHeader.getKey().currentState.onRefreshReset();
+        }
       }
       // 上拉加载
       else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH) {
@@ -480,15 +493,19 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         else if (currentState == AnimationStates.LoadDataEnd) {
           this._refreshFooter.getKey().currentState.onLoaded();
         }
+        // 刷新重置
+        else if (currentState == AnimationStates.DragAndRefreshNotEnabled) {
+          this._refreshFooter.getKey().currentState.onLoadReset();
+        }
       }
       else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.IDLE) {
-        // 顶部视图隐藏
+        // 重置
         if (currentState == AnimationStates.RefreshBoxIdle) {
           if (lastStates == RefreshBoxDirectionStatus.PULL) {
-            this._refreshHeader.getKey().currentState.onHeaderHide();
+            this._refreshHeader.getKey().currentState.onRefreshReset();
           }
           else if (lastStates == RefreshBoxDirectionStatus.PUSH) {
-            this._refreshFooter.getKey().currentState.onFooterHide();
+            this._refreshFooter.getKey().currentState.onLoadReset();
           }
         }
       }

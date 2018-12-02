@@ -54,8 +54,8 @@ abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
   Future onRefreshed() async {
     refreshHeaderStatus = RefreshHeaderStatus.REFRESHED;
   }
-  // 回调顶部视图隐藏方法
-  Future onHeaderHide() async {
+  // 回调刷新重置方法
+  Future onRefreshReset() async {
     refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
   }
 }
@@ -132,10 +132,10 @@ class _ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
     });
   }
 
-  // 顶部视图隐藏回调
+  // 刷新重置回调
   @override
-  Future onHeaderHide() async {
-    super.onHeaderHide();
+  Future onRefreshReset() async {
+    super.onRefreshReset();
     setState(() {
       _showText = widget.refreshText;
     });
