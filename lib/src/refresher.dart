@@ -457,8 +457,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   void _checkStateAndCallback(AnimationStates currentState,RefreshBoxDirectionStatus refreshBoxDirectionStatus){
-    print(currentState);
-    print(refreshBoxDirectionStatus);
     if(animationStates != currentState){
       // 下拉刷新回调
       if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL) {
