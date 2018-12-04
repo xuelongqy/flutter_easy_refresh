@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'header/header.dart';
 import 'footer/footer.dart';
+import 'behavior/behavior.dart';
 
 typedef Future OnRefresh();
 typedef Future LoadMore();
@@ -44,14 +45,9 @@ class EasyRefresh extends StatefulWidget {
   final ScrollPhysicsChanged scrollPhysicsChanged;
   final ScrollView child;
 
-  // 去掉过度滑动时ListView顶部的蓝色光晕效果
-  final bool isShowLeadingGlow;
-  final bool isShowTrailingGlow;
-
-  final Color defaultRefreshBoxBackgroundColor;
-  final String defaultRefreshBoxTipText;
-  final Color defaultRefreshBoxTextColor; //defaultRefreshBox
-  final Color glowColor;
+  // 滚动视图光晕
+  final ScrollBehavior behavior;
+  // 顶部和底部视图
   final RefreshHeader refreshHeader;
   final RefreshFooter refreshFooter;
 
@@ -59,12 +55,7 @@ class EasyRefresh extends StatefulWidget {
 
   EasyRefresh(
       {@required this.scrollPhysicsChanged,
-      this.defaultRefreshBoxBackgroundColor: Colors.grey,
-      this.defaultRefreshBoxTipText: "松手即可刷新",
-      this.isShowLeadingGlow: true,
-      this.isShowTrailingGlow: true,
-      this.defaultRefreshBoxTextColor: Colors.white,
-      this.glowColor: Colors.blue,
+      this.behavior,
       this.refreshHeader,
       this.refreshFooter,
       this.animationStateChangedCallback,
@@ -322,7 +313,7 @@ class EasyRefreshState extends State<EasyRefresh>
                 return true;
               },
               child: ScrollConfiguration(
-                behavior: MyBehavior(widget.isShowLeadingGlow, widget.isShowTrailingGlow, widget.glowColor),
+                behavior: widget.behavior ?? new RefreshBehavior(),
                 child: widget.child,
               ),
             ),
@@ -572,34 +563,6 @@ class RefreshScrollPhysics extends ScrollPhysics {
   Simulation createBallisticSimulation(
       ScrollMetrics position, double velocity) {
     return null;
-  }
-}
-
-///可去掉过度滑动时ListView顶部的蓝色光晕效果
-class MyBehavior extends ScrollBehavior {
-  final bool isShowLeadingGlow;
-  final bool isShowTrailingGlow;
-  final Color _kDefaultGlowColor;
-
-  MyBehavior(
-      this.isShowLeadingGlow, this.isShowTrailingGlow, this._kDefaultGlowColor);
-
-  @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
-    //如果头部或底部有一个 不需要 显示光晕时 返回GlowingOverScrollIndicator
-    if (!isShowLeadingGlow || !isShowTrailingGlow) {
-      return new GlowingOverscrollIndicator(
-        showLeading: isShowLeadingGlow,
-        showTrailing: isShowTrailingGlow,
-        child: child,
-        axisDirection: axisDirection,
-        color: _kDefaultGlowColor,
-      );
-    } else {
-      //都需要光晕时  返回系统默认
-      return super.buildViewportChrome(context, child, axisDirection);
-    }
   }
 }
 
