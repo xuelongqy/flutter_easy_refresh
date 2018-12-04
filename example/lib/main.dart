@@ -27,7 +27,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  List<String> addStrs=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+  List<String> addStrs=["1","2","3","4","5","6","7","8","9","0"];
   List<String> strs=["1","2","3","4","5","6","7","8","9","0"];
 
   ScrollController controller = new ScrollController();
