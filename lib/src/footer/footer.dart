@@ -55,6 +55,10 @@ abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
   Future onLoaded() async {
     refreshFooterStatus = RefreshFooterStatus.LOADED;
   }
+  // 回调没有更多数据方法
+  Future onNoMore() async {
+    refreshFooterStatus = RefreshFooterStatus.LOADED;
+  }
   // 回调加载重置方法
   Future onLoadReset() async {
     refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
@@ -69,6 +73,8 @@ class ClassicsFooter extends RefreshFooter {
   final String loadReadyText;
   // 正在加载文字
   final String loadingText;
+  // 没有更多文字
+  final String noMoreText;
   // 刷新完成文字
   final String loadedText;
   // 背景颜色
@@ -82,6 +88,7 @@ class ClassicsFooter extends RefreshFooter {
     this.loadReadyText: "Release to load",
     this.loadingText: "Loading...",
     this.loadedText: "Load finished",
+    this.noMoreText: "No more",
     this.bgColor: Colors.blue,
     this.textColor: Colors.white,
   }):super(
@@ -128,6 +135,15 @@ class _ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     super.onLoaded();
     setState(() {
       _showText = widget.loadedText;
+    });
+  }
+
+  // 没有更多数据回调
+  @override
+  Future onNoMore() async {
+    super.onNoMore();
+    setState(() {
+      _showText = widget.noMoreText;
     });
   }
 

@@ -27,8 +27,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  List<String> addStrs=["1","2","3","4","5","6","7","8","9","0"];
-  List<String> strs=["1","2","3","4","5","6","7","8","9","0"];
+  List<String> addStr=["1","2","3","4","5","6","7","8","9","0"];
+  List<String> str=["1","2","3","4","5","6","7","8","9","0"];
 
   ScrollController controller = new ScrollController();
   ScrollPhysics scrollPhysics = new RefreshAlwaysScrollPhysics();
@@ -45,14 +45,14 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new EasyRefresh(
           child: new ListView.builder(
             //ListView的Item
-            itemCount: strs.length,
+            itemCount: str.length,
             controller: controller,
             physics: scrollPhysics,
             itemBuilder: (BuildContext context,int index){
               return new Container(
                 height: 35.0,
                 child: new Center(
-                  child: new Text(strs[index],style: new TextStyle(fontSize: 18.0),),
+                  child: new Text(str[index],style: new TextStyle(fontSize: 18.0),),
                 ),
               );
             }
@@ -60,16 +60,18 @@ class _MyHomePageState extends State<MyHomePage> {
           onRefresh: () async{
             await new Future.delayed(const Duration(seconds: 1), () {
               setState(() {
-                strs.clear();
-                strs.addAll(addStrs);
+                str.clear();
+                str.addAll(addStr);
               });
             });
           },
           loadMore: () async {
             await new Future.delayed(const Duration(seconds: 1), () {
-              setState(() {
-                strs.addAll(addStrs);
-              });
+              if (str.length < 20) {
+                setState(() {
+                  str.addAll(addStr);
+                });
+              }
             });
           },
           scrollPhysicsChanged: (ScrollPhysics physics) {
