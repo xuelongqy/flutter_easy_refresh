@@ -36,26 +36,35 @@ class EasyRefresh extends StatefulWidget {
   final LoadMore loadMore;
   final ScrollPhysicsChanged scrollPhysicsChanged;
   final ScrollView child;
-
   // 滚动视图光晕
   final ScrollBehavior behavior;
   // 顶部和底部视图
   final RefreshHeader refreshHeader;
   final RefreshFooter refreshFooter;
-
   // 状态改变回调
   final AnimationStateChanged animationStateChangedCallback;
+  // 自动加载(滑动到底部时)
+  final bool autoLoad;
 
-  EasyRefresh(
-      {@required this.scrollPhysicsChanged,
-      this.behavior,
-      this.refreshHeader,
-      this.refreshFooter,
-      this.animationStateChangedCallback,
-      this.onRefresh,
-      this.loadMore,
-      @required this.child})
-      : assert(child != null);
+  EasyRefresh({
+    @required this.scrollPhysicsChanged,
+    GlobalKey<EasyRefreshState> key,
+    this.behavior,
+    this.refreshHeader,
+    this.refreshFooter,
+    this.animationStateChangedCallback,
+    this.onRefresh,
+    this.loadMore,
+    this.autoLoad: false,
+    @required this.child
+  }) : super(key: key) {
+    assert(child != null);
+  }
+
+  // 获取键
+  GlobalKey<EasyRefreshState> getKey() {
+    return this.key;
+  }
 
   @override
   EasyRefreshState createState() {
@@ -65,31 +74,48 @@ class EasyRefresh extends StatefulWidget {
 
 class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<EasyRefresh> {
   // 顶部栏和底部栏高度
-  double topItemHeight = 0.0;
-  double bottomItemHeight = 0.0;
+  double _topItemHeight = 0.0;
+  double _bottomItemHeight = 0.0;
   // 动画控制
-  Animation<double> animation;
-  AnimationController animationController;
-  AnimationController animationControllerWait;
-  double shrinkageDistance = 0.0;
+  Animation<double> _animation;
+  AnimationController _animationController;
+  AnimationController _animationControllerWait;
+  double _shrinkageDistance = 0.0;
   // 出发刷新和加载的高度
   double _refreshHeight = 50.0;
   double _loadHeight = 50.0;
   // 刷新和加载的状态
-  RefreshBoxDirectionStatus states = RefreshBoxDirectionStatus.IDLE;
-  RefreshBoxDirectionStatus lastStates = RefreshBoxDirectionStatus.IDLE;
-  AnimationStates animationStates = AnimationStates.RefreshBoxIdle;
+  RefreshBoxDirectionStatus _states = RefreshBoxDirectionStatus.IDLE;
+  RefreshBoxDirectionStatus _lastStates = RefreshBoxDirectionStatus.IDLE;
+  AnimationStates _animationStates = AnimationStates.RefreshBoxIdle;
   // 刷新的状态记录
-  bool isReset = false;
-  bool isPulling = false;
+  bool _isReset = false;
+  bool _isPulling = false;
+  bool _isPushing = false;
   // 记录子类条目(触发刷新和加载时记录)
-  int itemCount = 0;
+  int _itemCount = 0;
 
   // 顶部视图
   RefreshHeader _refreshHeader;
 
   // 底部视图
   RefreshFooter _refreshFooter;
+
+  // 触发刷新
+  void callRefresh() {
+    print("callRefresh");
+  }
+
+  // 触发加载
+  void callLoadMore() {
+    if (_isPushing) return;
+    _isPushing = true;
+    setState(() {
+      _bottomItemHeight = _loadHeight + 20.0;
+    });
+    //widget.child.controller.animateTo(widget.child.controller.position.maxScrollExtent, duration: new Duration(milliseconds: 500), curve: Curves.ease);
+    _animationController.forward();
+  }
 
   @override
   void initState() {
@@ -98,81 +124,79 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     _refreshHeight = widget.refreshHeader == null ? 50.0 : widget.refreshHeader.refreshHeight;
     _loadHeight = widget.refreshFooter == null ? 50.0 : widget.refreshFooter.loadHeight;
     // 这个是刷新时控件旋转的动画，用来使刷新的Icon动起来
-    animationControllerWait = new AnimationController(
+    _animationControllerWait = new AnimationController(
         duration: const Duration(milliseconds: 1000 * 100), vsync: this);
-    animationController = new AnimationController(
+    _animationController = new AnimationController(
         duration: const Duration(milliseconds: 250), vsync: this);
-    animation = new Tween(begin: 1.0, end: 0.0).animate(animationController)
+    _animation = new Tween(begin: 1.0, end: 0.0).animate(_animationController)
       ..addListener(() {
-        //因为animationController reset()后，addListener会收到监听，导致再执行一遍setState topItemHeight和bottomItemHeight会异常 所以用此标记
+        //因为_animationController reset()后，addListener会收到监听，导致再执行一遍setState _topItemHeight和_bottomItemHeight会异常 所以用此标记
         //判断是reset的话就返回避免异常
-        if (isReset) {
+        if (_isReset) {
           return;
         }
         //根据动画的值逐渐减小布局的高度，分为4种情况
         // 1.上拉高度超过_refreshHeight    2.上拉高度不够50   3.下拉拉高度超过_refreshHeight  4.下拉拉高度不够50
         setState(() {
-          if (topItemHeight > _refreshHeight) {
-            //shrinkageDistance*animation.value是由大变小的，模拟出弹回的效果
-            topItemHeight = _refreshHeight + shrinkageDistance * animation.value;
-          } else if (bottomItemHeight > _loadHeight) {
-            bottomItemHeight = _loadHeight + shrinkageDistance * animation.value;
+          if (_topItemHeight > _refreshHeight) {
+            //_shrinkageDistance*animation.value是由大变小的，模拟出弹回的效果
+            _topItemHeight = _refreshHeight + _shrinkageDistance * _animation.value;
+          } else if (_bottomItemHeight > _loadHeight) {
+            _bottomItemHeight = _loadHeight + _shrinkageDistance * _animation.value;
             //高度小于50时↓
-          } else if (topItemHeight <= _refreshHeight && topItemHeight > 0) {
-            topItemHeight = shrinkageDistance * animation.value;
-          } else if (bottomItemHeight <= _loadHeight && bottomItemHeight > 0) {
-            bottomItemHeight = shrinkageDistance * animation.value;
+          } else if (_topItemHeight <= _refreshHeight && _topItemHeight > 0) {
+            _topItemHeight = _shrinkageDistance * _animation.value;
+          } else if (_bottomItemHeight <= _loadHeight && _bottomItemHeight > 0) {
+            _bottomItemHeight = _shrinkageDistance * _animation.value;
           }
         });
       });
 
-    animation.addStatusListener((animationStatus) {
+    _animation.addStatusListener((animationStatus) {
       if (animationStatus == AnimationStatus.completed) {
-        //动画结束时首先将animationController重置
-        isReset = true;
-        animationController.reset();
-        isReset = false;
+        //动画结束时首先将_animationController重置
+        _isReset = true;
+        _animationController.reset();
+        _isReset = false;
         //动画完成后只有2种情况，高度是50和0，如果是高度》=50的，则开始刷新或者加载操作，如果是0则恢复ListView
         setState(() {
-          if (topItemHeight >= _refreshHeight) {
-            topItemHeight = _refreshHeight;
+          if (_topItemHeight >= _refreshHeight) {
+            _topItemHeight = _refreshHeight;
             _refreshStart(RefreshBoxDirectionStatus.PULL);
-          } else if (bottomItemHeight >= _loadHeight) {
-            bottomItemHeight = _loadHeight;
+          } else if (_bottomItemHeight >= _loadHeight) {
+            _bottomItemHeight = _loadHeight;
             _refreshStart(RefreshBoxDirectionStatus.PUSH);
             //动画结束，高度回到0，上下拉刷新彻底结束，ListView恢复正常
-          } else if (states == RefreshBoxDirectionStatus.PUSH) {
-            topItemHeight = 0.0;
+          } else if (_states == RefreshBoxDirectionStatus.PUSH) {
+            _topItemHeight = 0.0;
             widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
-            states = RefreshBoxDirectionStatus.IDLE;
-            _checkStateAndCallback(
-                AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
-          } else if (states == RefreshBoxDirectionStatus.PULL) {
-            bottomItemHeight = 0.0;
+            _states = RefreshBoxDirectionStatus.IDLE;
+            _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
+          } else if (_states == RefreshBoxDirectionStatus.PULL) {
+            _bottomItemHeight = 0.0;
             widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
-            states = RefreshBoxDirectionStatus.IDLE;
-            isPulling = false;
-            _checkStateAndCallback(
-                AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
+            _states = RefreshBoxDirectionStatus.IDLE;
+            _isPulling = false;
+            _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           }
         });
       } else if (animationStatus == AnimationStatus.forward) {
         //动画开始时根据情况计算要弹回去的距离
-        if (topItemHeight > _refreshHeight) {
-          shrinkageDistance = topItemHeight - _refreshHeight;
-        } else if (bottomItemHeight > _loadHeight) {
-          shrinkageDistance = bottomItemHeight - _loadHeight;
+        if (_topItemHeight > _refreshHeight) {
+          _shrinkageDistance = _topItemHeight - _refreshHeight;
+        } else if (_bottomItemHeight > _loadHeight) {
+          _shrinkageDistance = _bottomItemHeight - _loadHeight;
           //这里必须有个动画，不然上拉加载时  ListView不会自动滑下去，导致ListView悬在半空
           widget.child.controller.animateTo(
               widget.child.controller.position.maxScrollExtent,
               duration: new Duration(milliseconds: 250),
               curve: Curves.linear);
-        } else if (topItemHeight <= _refreshHeight && topItemHeight > 0.0) {
-          shrinkageDistance = topItemHeight;
-          states = RefreshBoxDirectionStatus.PUSH;
-        } else if (bottomItemHeight <= _loadHeight && bottomItemHeight > 0.0) {
-          shrinkageDistance = bottomItemHeight;
-          states = RefreshBoxDirectionStatus.PULL;
+        } else if (_topItemHeight <= _refreshHeight && _topItemHeight > 0.0) {
+          _shrinkageDistance = _topItemHeight;
+          _states = RefreshBoxDirectionStatus.PUSH;
+        } else if (_bottomItemHeight <= _loadHeight && _bottomItemHeight > 0.0) {
+          _shrinkageDistance = _bottomItemHeight;
+          _states = RefreshBoxDirectionStatus.PULL;
         }
       }
     });
@@ -219,22 +243,21 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   void _refreshStart(RefreshBoxDirectionStatus refreshBoxDirectionStatus) async {
-    _checkStateAndCallback(
-        AnimationStates.StartLoadData, refreshBoxDirectionStatus);
+    _checkStateAndCallback(AnimationStates.StartLoadData, refreshBoxDirectionStatus);
     if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL &&
         this._refreshHeader == null &&
         widget.onRefresh != null) {
       //开始加载等待的动画
-      animationControllerWait.forward();
+      _animationControllerWait.forward();
     } else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH &&
         this._refreshFooter == null &&
         widget.loadMore != null) {
       //开始加载等待的动画
-      animationControllerWait.forward();
+      _animationControllerWait.forward();
     }
 
     // 这里我们开始加载数据 数据加载完成后，将新数据处理并开始加载完成后的处理
-    if (topItemHeight > bottomItemHeight) {
+    if (_topItemHeight > _bottomItemHeight) {
       if (widget.onRefresh != null) {
         // 调用刷新回调
         await widget.onRefresh();
@@ -249,32 +272,32 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     }
     if (!mounted) return;
 
-    if (animationControllerWait.isAnimating) {
-      //结束加载等待的动画
-      animationControllerWait.stop();
+    if (_animationControllerWait.isAnimating) {
+      // 结束加载等待的动画
+      _animationControllerWait.stop();
     }
     _checkStateAndCallback(AnimationStates.LoadDataEnd, refreshBoxDirectionStatus);
     await Future.delayed(new Duration(seconds: 1));
-    //开始将加载（刷新）布局缩回去的动画
-    animationController.forward();
+    // 开始将加载（刷新）布局缩回去的动画
+    _animationController.forward();
 
     if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL &&
         this._refreshHeader == null &&
         widget.onRefresh != null) {
       // 结束加载等待的动画
-      animationControllerWait.reset();
+      _animationControllerWait.reset();
     } else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH &&
         this._refreshFooter == null &&
         widget.loadMore != null) {
       // 结束加载等待的动画
-      animationControllerWait.reset();
+      _animationControllerWait.reset();
     }
   }
 
   @override
   void dispose() {
-    animationController.dispose();
-    animationControllerWait.dispose();
+    _animationController.dispose();
+    _animationControllerWait.dispose();
     super.dispose();
   }
 
@@ -282,10 +305,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   Widget build(BuildContext context) {
     // 更新高度
     if (this._refreshHeader != null) {
-      this._refreshHeader.getKey().currentState.updateHeight(topItemHeight);
+      this._refreshHeader.getKey().currentState.updateHeight(_topItemHeight);
     }
     if (this._refreshFooter != null) {
-      this._refreshFooter.getKey().currentState.updateHeight(bottomItemHeight);
+      this._refreshFooter.getKey().currentState.updateHeight(_bottomItemHeight);
     }
     return new Container(
       child: new Column(
@@ -302,8 +325,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
                   _handleScrollEndNotification();
                 } else if (notification is UserScrollNotification) {
                   _handleUserScrollNotification(notification);
-                } else if (metrics.atEdge &&
-                    notification is OverscrollNotification) {
+                } else if (metrics.atEdge && notification is OverscrollNotification) {
                   _handleOverScrollNotification(notification);
                 }
                 return true;
@@ -327,24 +349,24 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     }
     // Header刷新的布局可见时，且当手指反方向拖动（由下向上），notification 为 ScrollUpdateNotification，这个时候让头部刷新布局的高度+delta.dy(此时dy为负数)
     // 来缩小头部刷新布局的高度，当完全看不见时，将scrollPhysics设置为RefreshAlwaysScrollPhysics，来保持ListView的正常滑动
-    if (topItemHeight > 0.0) {
+    if (_topItemHeight > 0.0) {
       setState(() {
-        //  如果头部的布局高度<0时，将topItemHeight=0；并恢复ListView的滑动
-        if (topItemHeight + notification.dragDetails.delta.dy / 2 <= 0.0) {
+        //  如果头部的布局高度<0时，将_topItemHeight=0；并恢复ListView的滑动
+        if (_topItemHeight + notification.dragDetails.delta.dy / 2 <= 0.0) {
           _checkStateAndCallback(
               AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
-          topItemHeight = 0.0;
+          _topItemHeight = 0.0;
           widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
         } else {
           // 当刷新布局可见时，让头部刷新布局的高度+delta.dy(此时dy为负数)，来缩小头部刷新布局的高度
-          topItemHeight = topItemHeight + notification.dragDetails.delta.dy / 2;
+          _topItemHeight = _topItemHeight + notification.dragDetails.delta.dy / 2;
         }
         // 如果小于刷新高度则恢复下拉刷新
-        if (topItemHeight < _refreshHeight) {
+        if (_topItemHeight < _refreshHeight) {
           _checkStateAndCallback(AnimationStates.DragAndRefreshNotEnabled, RefreshBoxDirectionStatus.PULL);
         }
       });
-    } else if (bottomItemHeight > 0.0) {
+    } else if (_bottomItemHeight > 0.0) {
       // 底部的布局可见时 ，且手指反方向拖动（由上向下），这时notification 为 ScrollUpdateNotification，这个时候让底部加载布局的高度-delta.dy(此时dy为正数数)
       // 来缩小底部加载布局的高度，当完全看不见时，将scrollPhysics设置为RefreshAlwaysScrollPhysics，来保持ListView的正常滑动
 
@@ -353,19 +375,19 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         return;
       }
       setState(() {
-        //如果底部的布局高度<0时，bottomItemHeight=0；并恢复ListView的滑动
-        if (bottomItemHeight - notification.dragDetails.delta.dy / 2 <= 0.0) {
+        //如果底部的布局高度<0时，_bottomItemHeight=0；并恢复ListView的滑动
+        if (_bottomItemHeight - notification.dragDetails.delta.dy / 2 <= 0.0) {
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
-          bottomItemHeight = 0.0;
+          _bottomItemHeight = 0.0;
           widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
         } else {
           if (notification.dragDetails.delta.dy > 0) {
             //当加载的布局可见时，让上拉加载布局的高度-delta.dy(此时dy为正数数)，来缩小底部的加载布局的高度
-            bottomItemHeight = bottomItemHeight - notification.dragDetails.delta.dy / 2;
+            _bottomItemHeight = _bottomItemHeight - notification.dragDetails.delta.dy / 2;
           }
         }
         // 如果小于加载高度则恢复加载
-        if (bottomItemHeight < _loadHeight) {
+        if (_bottomItemHeight < _loadHeight) {
           _checkStateAndCallback(AnimationStates.DragAndRefreshNotEnabled, RefreshBoxDirectionStatus.PUSH);
         }
       });
@@ -373,94 +395,96 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   void _handleScrollEndNotification() {
-    //如果滑动结束后（手指抬起来后），判断是否需要启动加载或者刷新的动画
-    if ((topItemHeight > 0 || bottomItemHeight > 0)) {
-      if (isPulling) {
+    // 如果滑动结束后（手指抬起来后），判断是否需要启动加载或者刷新的动画
+    if ((_topItemHeight > 0 || _bottomItemHeight > 0)) {
+      if (_isPulling) {
         return;
       }
-      //这里在动画开始时，做一个标记，表示上拉加载正在进行，因为在超出底部和头部刷新布局的高度后，高度会自动弹回，ListView也会跟着运动，
-      //返回结束时，ListView的运动也跟着结束，会触发ScrollEndNotification，导致再次启动动画，而发生BUG
-      if (bottomItemHeight > 0) {
-        isPulling = true;
+      // 这里在动画开始时，做一个标记，表示上拉加载正在进行，因为在超出底部和头部刷新布局的高度后，高度会自动弹回，ListView也会跟着运动，
+      // 返回结束时，ListView的运动也跟着结束，会触发ScrollEndNotification，导致再次启动动画，而发生BUG
+      if (_bottomItemHeight > 0) {
+        _isPulling = true;
       }
-      //启动动画后，ListView不可滑动
+      // 启动动画后，ListView不可滑动
       widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
-      animationController.forward();
+      _animationController.forward();
     }
   }
 
   void _handleUserScrollNotification(UserScrollNotification notification) {
-    if (bottomItemHeight > 0.0 &&
+    if (_bottomItemHeight > 0.0 &&
         notification.direction == ScrollDirection.forward) {
-      //底部加载布局出现反向滑动时（由上向下），将scrollPhysics置为RefreshScrollPhysics，只要有2个原因。1 减缓滑回去的速度，2 防止手指快速滑动时出现惯性滑动
+      // 底部加载布局出现反向滑动时（由上向下），将scrollPhysics置为RefreshScrollPhysics，只要有2个原因。1 减缓滑回去的速度，2 防止手指快速滑动时出现惯性滑动
       widget.scrollPhysicsChanged(new RefreshScrollPhysics());
-    } else if (topItemHeight > 0.0 &&
+    } else if (_topItemHeight > 0.0 &&
         notification.direction == ScrollDirection.reverse) {
-      //头部刷新布局出现反向滑动时（由下向上）
+      // 头部刷新布局出现反向滑动时（由下向上）
       widget.scrollPhysicsChanged(new RefreshScrollPhysics());
-    } else if (bottomItemHeight > 0.0 &&
+    } else if (_bottomItemHeight > 0.0 &&
         notification.direction == ScrollDirection.reverse) {
-      //反向再反向（恢复正向拖动）
+      // 反向再反向（恢复正向拖动）
       widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
     }
   }
 
   void _handleOverScrollNotification(OverscrollNotification notification) {
     //OverScrollNotification 和 metrics.atEdge 说明正在下拉或者 上拉
-    //此处同上
+    // 此处同上
     if (notification.dragDetails == null) {
       return;
     }
-
-    //如果notification.overScroll<0.0 说明是在下拉刷新，这里根据拉的距离设定高度的增加范围-->刷新高度时  是拖动速度的1/2，高度在刷新高度及大于40时 是
-    //拖动速度的1/4  .........若果超过100+刷新高度，结束拖动，自动开始刷新，拖过刷新布局高度小于0，恢复ListView的正常拖动
-    //当Item的数量不能铺满全屏时  上拉加载会引起下拉布局的出现，所以这里要判断下bottomItemHeight<0.5
-    if (notification.overscroll < 0.0 && bottomItemHeight < 0.5 && widget.onRefresh != null) {
+    // 如果notification.overScroll<0.0 说明是在下拉刷新，这里根据拉的距离设定高度的增加范围-->刷新高度时  是拖动速度的1/2，高度在刷新高度及大于40时 是
+    // 拖动速度的1/4  .........若果超过100+刷新高度，结束拖动，自动开始刷新，拖过刷新布局高度小于0，恢复ListView的正常拖动
+    // 当Item的数量不能铺满全屏时  上拉加载会引起下拉布局的出现，所以这里要判断下_bottomItemHeight<0.5
+    if (notification.overscroll < 0.0 && _bottomItemHeight < 0.5 && widget.onRefresh != null) {
       setState(() {
-        if (notification.dragDetails.delta.dy / 2 + topItemHeight <= 0.0) {
-          //Refresh回弹完毕，恢复正常ListView的滑动状态
-          _checkStateAndCallback(
-              AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
-          topItemHeight = 0.0;
+        if (notification.dragDetails.delta.dy / 2 + _topItemHeight <= 0.0) {
+          // Refresh回弹完毕，恢复正常ListView的滑动状态
+          _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
+          _topItemHeight = 0.0;
           widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
         } else {
-          if (topItemHeight > 100.0 + _refreshHeight) {
+          if (_topItemHeight > 100.0 + _refreshHeight) {
             widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
-            animationController.forward();
-          } else if (topItemHeight > 40.0 + _refreshHeight) {
-            topItemHeight = notification.dragDetails.delta.dy / 6 + topItemHeight;
-          } else if (topItemHeight > _refreshHeight) {
+            _animationController.forward();
+          } else if (_topItemHeight > 40.0 + _refreshHeight) {
+            _topItemHeight = notification.dragDetails.delta.dy / 6 + _topItemHeight;
+          } else if (_topItemHeight > _refreshHeight) {
             _checkStateAndCallback(AnimationStates.DragAndRefreshEnabled, RefreshBoxDirectionStatus.PULL);
-            topItemHeight = notification.dragDetails.delta.dy / 4 + topItemHeight;
+            _topItemHeight = notification.dragDetails.delta.dy / 4 + _topItemHeight;
           } else {
             _checkStateAndCallback(AnimationStates.DragAndRefreshNotEnabled, RefreshBoxDirectionStatus.PULL);
-            topItemHeight = notification.dragDetails.delta.dy / 2 + topItemHeight;
+            _topItemHeight = notification.dragDetails.delta.dy / 2 + _topItemHeight;
           }
         }
       });
-    } else if (topItemHeight < 0.5 && widget.loadMore != null) {
+    } else if (_topItemHeight < 0.5 && widget.loadMore != null) {
+      // 判断是否滑动到底部并自动加载
+      if (widget.autoLoad) {
+        callLoadMore();
+      }
       setState(() {
-        if (-notification.dragDetails.delta.dy / 2 + bottomItemHeight <= 0.0) {
-          //Refresh回弹完毕，恢复正常ListView的滑动状态
+        if (-notification.dragDetails.delta.dy / 2 + _bottomItemHeight <= 0.0) {
+          // Refresh回弹完毕，恢复正常ListView的滑动状态
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
-          bottomItemHeight = 0.0;
+          _bottomItemHeight = 0.0;
           widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
         } else {
-          if (bottomItemHeight > 25.0 + _loadHeight) {
-            if (isPulling) {
+          if (_bottomItemHeight > 25.0 + _loadHeight) {
+            if (_isPulling) {
               return;
             }
-            isPulling = true;
+            _isPulling = true;
             widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
-            animationController.forward();
-          } else if (bottomItemHeight > 10.0 + _loadHeight) {
-            bottomItemHeight = -notification.dragDetails.delta.dy / 6 + bottomItemHeight;
-          } else if (bottomItemHeight > _loadHeight) {
+            _animationController.forward();
+          } else if (_bottomItemHeight > 10.0 + _loadHeight) {
+            _bottomItemHeight = -notification.dragDetails.delta.dy / 6 + _bottomItemHeight;
+          } else if (_bottomItemHeight > _loadHeight) {
             _checkStateAndCallback(AnimationStates.DragAndRefreshEnabled, RefreshBoxDirectionStatus.PUSH);
-            bottomItemHeight = -notification.dragDetails.delta.dy / 4 + bottomItemHeight;
+            _bottomItemHeight = -notification.dragDetails.delta.dy / 4 + _bottomItemHeight;
           } else {
             _checkStateAndCallback(AnimationStates.DragAndRefreshNotEnabled, RefreshBoxDirectionStatus.PUSH);
-            bottomItemHeight = -notification.dragDetails.delta.dy / 2 + bottomItemHeight;
+            _bottomItemHeight = -notification.dragDetails.delta.dy / 2 + _bottomItemHeight;
           }
         }
       });
@@ -468,7 +492,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   void _checkStateAndCallback(AnimationStates currentState, RefreshBoxDirectionStatus refreshBoxDirectionStatus) {
-    if (animationStates != currentState) {
+    if (_animationStates != currentState) {
       // 下拉刷新回调
       if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL) {
         // 释放刷新
@@ -498,12 +522,13 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         else if (currentState == AnimationStates.StartLoadData) {
           this._refreshFooter.getKey().currentState.onLoading();
           // 记录当前条数
-          this.itemCount = widget.child.semanticChildCount;
+          this._itemCount = widget.child.semanticChildCount;
         }
         // 加载完成
         else if (currentState == AnimationStates.LoadDataEnd) {
+          _isPushing = false;
           // 判断是否加载出更多数据
-          if (widget.child.semanticChildCount > this.itemCount) {
+          if (widget.child.semanticChildCount > this._itemCount) {
             this._refreshFooter.getKey().currentState.onLoaded();
           }else {
             this._refreshFooter.getKey().currentState.onNoMore();
@@ -516,17 +541,17 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       } else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.IDLE) {
         // 重置
         if (currentState == AnimationStates.RefreshBoxIdle) {
-          if (lastStates == RefreshBoxDirectionStatus.PULL) {
+          if (_lastStates == RefreshBoxDirectionStatus.PULL) {
             this._refreshHeader.getKey().currentState.onRefreshReset();
-          } else if (lastStates == RefreshBoxDirectionStatus.PUSH) {
+          } else if (_lastStates == RefreshBoxDirectionStatus.PUSH) {
             this._refreshFooter.getKey().currentState.onLoadReset();
           }
         }
       }
-      animationStates = currentState;
-      lastStates = refreshBoxDirectionStatus;
+      _animationStates = currentState;
+      _lastStates = refreshBoxDirectionStatus;
       if (widget.animationStateChangedCallback != null) {
-        widget.animationStateChangedCallback(animationStates, refreshBoxDirectionStatus);
+        widget.animationStateChangedCallback(_animationStates, refreshBoxDirectionStatus);
       }
     }
   }
