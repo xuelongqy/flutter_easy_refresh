@@ -157,40 +157,47 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
     return new Container(
       color: widget.bgColor,
       height: this.height,
-      child: new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: ListView(
         children: <Widget>[
-          this.refreshHeaderStatus == RefreshHeaderStatus.NO_REFRESH ? Icon(
-            Icons.arrow_downward,
-            color: widget.textColor,
-          ): Container(),
-          this.refreshHeaderStatus == RefreshHeaderStatus.REFRESHING ? new Align(
-            alignment: Alignment.centerLeft,
-            child: new Container(
-              width: 20.0,
-              height: 20.0,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.0,
-                valueColor: AlwaysStoppedAnimation(widget.textColor),
-              ),
+          Container(
+            height: this.height > 30.0 ? this.height : 30.0,
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                this.refreshHeaderStatus == RefreshHeaderStatus.NO_REFRESH ? Icon(
+                  Icons.arrow_downward,
+                  color: widget.textColor,
+                ): Container(),
+                this.refreshHeaderStatus == RefreshHeaderStatus.REFRESHING ? new Align(
+                  alignment: Alignment.centerLeft,
+                  child: new Container(
+                    width: 20.0,
+                    height: 20.0,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      valueColor: AlwaysStoppedAnimation(widget.textColor),
+                    ),
+                  ),
+                ): new Container(),
+                this.refreshHeaderStatus == RefreshHeaderStatus.REFRESH_READY ? Icon(
+                  Icons.arrow_upward,
+                  color: widget.textColor,
+                ): Container(),
+                this.refreshHeaderStatus == RefreshHeaderStatus.REFRESHED ? Icon(
+                  Icons.done,
+                  color: widget.textColor,
+                ): Container(),
+                new Container(margin: EdgeInsets.only(right: 10.0),),
+                new Align(
+                  child: new ClipRect(
+                    child: new Text(_showText,
+                      style: new TextStyle(color: widget.textColor),),
+                  ),
+                  alignment: Alignment.centerRight,
+                ),
+              ],
             ),
-          ): new Container(),
-          this.refreshHeaderStatus == RefreshHeaderStatus.REFRESH_READY ? Icon(
-            Icons.arrow_upward,
-            color: widget.textColor,
-          ): Container(),
-          this.refreshHeaderStatus == RefreshHeaderStatus.REFRESHED ? Icon(
-            Icons.done,
-            color: widget.textColor,
-          ): Container(),
-          new Container(margin: EdgeInsets.only(right: 10.0),),
-          new Align(
-            child: new ClipRect(
-              child: new Text(_showText,
-                style: new TextStyle(color: widget.textColor),),
-            ),
-            alignment: Alignment.centerRight,
-          ),
+          )
         ],
       ),
     );
