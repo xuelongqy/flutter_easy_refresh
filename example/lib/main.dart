@@ -34,6 +34,8 @@ class _MyHomePageState extends State<MyHomePage> {
   ScrollPhysics scrollPhysics = new RefreshAlwaysScrollPhysics();
 
   GlobalKey<EasyRefreshState> _easyRefreshKey = new GlobalKey<EasyRefreshState>();
+  String _refreshedText = "1";
+  GlobalKey<ClassicsHeaderState> _headerKey = new GlobalKey<ClassicsHeaderState>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,10 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: new EasyRefresh(
           key: _easyRefreshKey,
+          refreshHeader: ClassicsHeader(
+            key: _headerKey,
+            refreshedText: _refreshedText,
+          ),
           child: new ListView.builder(
             //ListView的Item
             itemCount: str.length,
@@ -63,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
               setState(() {
                 str.clear();
                 str.addAll(addStr);
+                _headerKey.currentState.refreshedText = "刷新完成!";
               });
             });
           },

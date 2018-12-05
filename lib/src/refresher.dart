@@ -91,7 +91,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   // 刷新的状态记录
   bool _isReset = false;
   bool _isPulling = false;
-  bool _isPushing = false;
+  bool _isRefresh = false;
   // 记录子类条目(触发刷新和加载时记录)
   int _itemCount = 0;
 
@@ -102,10 +102,13 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   RefreshFooter _refreshFooter;
 
   // 触发刷新
-  void callRefresh() {
+  void callRefresh() async {
+    if (_isRefresh) return;
+    _isRefresh = true;
     setState(() {
       _topItemHeight = _refreshHeight + 20.0;
     });
+    widget.child.controller.animateTo(widget.child.controller.position.minScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
     // 等待列表高度渲染完成
     new Future.delayed(const Duration(milliseconds: 200), () async {
       widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
@@ -115,17 +118,17 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   // 触发加载
   void callLoadMore() async {
-    if (_isPushing) return;
-    _isPushing = true;
+    if (_isRefresh) return;
+    _isRefresh = true;
     setState(() {
       _bottomItemHeight = _loadHeight + 20.0;
     });
+    widget.child.controller.animateTo(widget.child.controller.position.maxScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
     // 等待列表高度渲染完成
     new Future.delayed(const Duration(milliseconds: 200), () async {
       widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
       _animationController.forward();
     });
-    //widget.child.controller.animateTo(widget.child.controller.position.maxScrollExtent, duration: new Duration(milliseconds: 500), curve: Curves.ease);
   }
 
   @override
@@ -355,7 +358,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   void _handleScrollUpdateNotification(ScrollUpdateNotification notification) {
     // 判断是否正在加载
-    if (_isPushing) return;
+    if (_isRefresh) return;
     //此处同上
     if (notification.dragDetails == null) {
       return;
@@ -409,7 +412,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   void _handleScrollEndNotification() {
     // 判断是否正在加载
-    if (_isPushing) return;
+    if (_isRefresh) return;
     // 如果滑动结束后（手指抬起来后），判断是否需要启动加载或者刷新的动画
     if ((_topItemHeight > 0 || _bottomItemHeight > 0)) {
       if (_isPulling) {
@@ -428,7 +431,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   void _handleUserScrollNotification(UserScrollNotification notification) {
     // 判断是否正在加载
-    if (_isPushing) return;
+    if (_isRefresh) return;
     if (_bottomItemHeight > 0.0 &&
         notification.direction == ScrollDirection.forward) {
       // 底部加载布局出现反向滑动时（由上向下），将scrollPhysics置为RefreshScrollPhysics，只要有2个原因。1 减缓滑回去的速度，2 防止手指快速滑动时出现惯性滑动
@@ -446,7 +449,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   void _handleOverScrollNotification(OverscrollNotification notification) {
     // 判断是否正在加载
-    if (_isPushing) return;
+    if (_isRefresh) return;
     //OverScrollNotification 和 metrics.atEdge 说明正在下拉或者 上拉
     // 此处同上
     if (notification.dragDetails == null) {
@@ -495,7 +498,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             }
             _isPulling = true;
             // 如果是触发刷新则设置延时，等待列表高度渲染完成
-            if (_isPushing) {
+            if (_isRefresh) {
               new Future.delayed(const Duration(milliseconds: 200), () async {
                 widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
                 _animationController.forward();
@@ -553,7 +556,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         }
         // 加载完成
         else if (currentState == AnimationStates.LoadDataEnd) {
-          _isPushing = false;
           // 判断是否加载出更多数据
           if (widget.child.semanticChildCount > this._itemCount) {
             this._refreshFooter.getKey().currentState.onLoaded();
@@ -561,11 +563,12 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             this._refreshFooter.getKey().currentState.onNoMore();
           }
         }
-        // 刷新重置
+        // 加载重置
         else if (currentState == AnimationStates.DragAndRefreshNotEnabled) {
           this._refreshFooter.getKey().currentState.onLoadReset();
         }
       } else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.IDLE) {
+        _isRefresh = false;
         // 重置
         if (currentState == AnimationStates.RefreshBoxIdle) {
           if (_lastStates == RefreshBoxDirectionStatus.PULL) {

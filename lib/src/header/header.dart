@@ -75,11 +75,9 @@ class ClassicsHeader extends RefreshHeader {
   // 字体颜色
   final Color textColor;
 
-  // 视图状态
-  final _ClassicsHeaderState _classicsHeaderState = _ClassicsHeaderState();
-
   // 构造函数
   ClassicsHeader({
+    GlobalKey<ClassicsHeaderState> key,
     this.refreshText: "Pull to refresh",
     this.refreshReadyText: "Release to refresh",
     this.refreshingText: "Refreshing...",
@@ -87,14 +85,22 @@ class ClassicsHeader extends RefreshHeader {
     this.bgColor: Colors.blue,
     this.textColor: Colors.white,
   }):super(
-    key: new GlobalKey<RefreshHeaderState>(),
+    key: key ?? new GlobalKey<RefreshHeaderState>(),
     refreshHeight: 50.0
   );
 
   @override
-  _ClassicsHeaderState createState() => _classicsHeaderState;
+  ClassicsHeaderState createState() => ClassicsHeaderState();
 }
-class _ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
+class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
+  // 提示刷新文字
+  String refreshText;
+  // 准备刷新文字
+  String refreshReadyText;
+  // 正在刷新文字
+  String refreshingText;
+  // 刷新完成文字
+  String refreshedText;
   // 显示的文字
   String _showText;
 
@@ -102,6 +108,10 @@ class _ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
   @override
   void initState() {
     super.initState();
+    refreshText = widget.refreshText;
+    refreshReadyText = widget.refreshReadyText;
+    refreshingText = widget.refreshingText;
+    refreshedText = widget.refreshedText;
     _showText = widget.refreshText;
   }
 
@@ -110,7 +120,7 @@ class _ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
   Future onRefreshReady() async {
     super.onRefreshReady();
     setState(() {
-      _showText = widget.refreshReadyText;
+      _showText = refreshReadyText;
     });
   }
 
@@ -119,7 +129,7 @@ class _ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
   Future onRefreshing() async {
     super.onRefreshing();
     setState(() {
-      _showText = widget.refreshingText;
+      _showText = refreshingText;
     });
   }
 
@@ -128,7 +138,7 @@ class _ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
   Future onRefreshed() async {
     super.onRefreshed();
     setState(() {
-      _showText = widget.refreshedText;
+      _showText = refreshedText;
     });
   }
 
@@ -137,7 +147,7 @@ class _ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
   Future onRefreshReset() async {
     super.onRefreshReset();
     setState(() {
-      _showText = widget.refreshText;
+      _showText = refreshText;
     });
   }
 

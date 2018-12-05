@@ -84,6 +84,7 @@ class ClassicsFooter extends RefreshFooter {
 
   // 构造函数
   ClassicsFooter({
+    GlobalKey<ClassicsFooterState> key,
     this.loadText: "Push to load",
     this.loadReadyText: "Release to load",
     this.loadingText: "Loading...",
@@ -92,14 +93,24 @@ class ClassicsFooter extends RefreshFooter {
     this.bgColor: Colors.blue,
     this.textColor: Colors.white,
   }):super(
-      key: new GlobalKey<RefreshFooterState>(),
+      key: key ?? new GlobalKey<ClassicsFooterState>(),
       loadHeight: 50.0
   );
 
   @override
-  _ClassicsFooterState createState() => _ClassicsFooterState();
+  ClassicsFooterState createState() => ClassicsFooterState();
 }
-class _ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
+class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
+  // 提示加载文字
+  String loadText;
+  // 准备加载文字
+  String loadReadyText;
+  // 正在加载文字
+  String loadingText;
+  // 没有更多文字
+  String noMoreText;
+  // 刷新完成文字
+  String loadedText;
   // 显示的文字
   String _showText;
 
@@ -107,6 +118,11 @@ class _ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   @override
   void initState() {
     super.initState();
+    loadText = widget.loadText;
+    loadReadyText = widget.loadReadyText;
+    loadingText = widget.loadingText;
+    noMoreText = widget.noMoreText;
+    loadedText = widget.loadedText;
     _showText = widget.loadText;
   }
 
@@ -116,7 +132,7 @@ class _ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   Future onLoadReady() async {
     super.onLoadReady();
     setState(() {
-      _showText = widget.loadReadyText;
+      _showText = loadReadyText;
     });
   }
 
@@ -125,7 +141,7 @@ class _ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   Future onLoading() async {
     super.onLoading();
     setState(() {
-      _showText = widget.loadingText;
+      _showText = loadingText;
     });
   }
 
@@ -134,7 +150,7 @@ class _ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   Future onLoaded() async {
     super.onLoaded();
     setState(() {
-      _showText = widget.loadedText;
+      _showText = loadedText;
     });
   }
 
@@ -143,7 +159,7 @@ class _ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   Future onNoMore() async {
     super.onNoMore();
     setState(() {
-      _showText = widget.noMoreText;
+      _showText = noMoreText;
     });
   }
 
@@ -152,7 +168,7 @@ class _ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   Future onLoadReset() async {
     super.onLoadReset();
     setState(() {
-      _showText = widget.loadText;
+      _showText = loadText;
     });
   }
 
