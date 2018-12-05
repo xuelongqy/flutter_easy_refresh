@@ -103,7 +103,14 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   // 触发刷新
   void callRefresh() {
-    print("callRefresh");
+    setState(() {
+      _topItemHeight = _refreshHeight + 20.0;
+    });
+    // 等待列表高度渲染完成
+    new Future.delayed(const Duration(milliseconds: 200), () async {
+      widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
+      _animationController.forward();
+    });
   }
 
   // 触发加载
@@ -113,7 +120,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     setState(() {
       _bottomItemHeight = _loadHeight + 20.0;
     });
-    // 如果是触发刷新则设置延时，等待列表高度渲染完成
+    // 等待列表高度渲染完成
     new Future.delayed(const Duration(milliseconds: 200), () async {
       widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
       _animationController.forward();

@@ -33,6 +33,8 @@ class _MyHomePageState extends State<MyHomePage> {
   ScrollController controller = new ScrollController();
   ScrollPhysics scrollPhysics = new RefreshAlwaysScrollPhysics();
 
+  GlobalKey<EasyRefreshState> _easyRefreshKey = new GlobalKey<EasyRefreshState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,9 +42,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: new EasyRefresh(
+          key: _easyRefreshKey,
           child: new ListView.builder(
             //ListView的Item
             itemCount: str.length,
@@ -80,7 +81,15 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           },
         )
-      ),// This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      persistentFooterButtons: <Widget>[
+        FlatButton(onPressed: () {
+          _easyRefreshKey.currentState.callRefresh();
+        }, child: Text("Refresh")),
+        FlatButton(onPressed: () {
+          _easyRefreshKey.currentState.callLoadMore();
+        }, child: Text("LoadMore"))
+      ],// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
