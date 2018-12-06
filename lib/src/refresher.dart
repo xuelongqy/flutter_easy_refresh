@@ -83,7 +83,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   // 动画控制
   Animation<double> _animation;
   AnimationController _animationController;
-  AnimationController _animationControllerWait;
   double _shrinkageDistance = 0.0;
   // 出发刷新和加载的高度
   double _refreshHeight = 50.0;
@@ -149,11 +148,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     // 初始化刷新高度
     _refreshHeight = widget.refreshHeader == null ? 50.0 : widget.refreshHeader.refreshHeight;
     _loadHeight = widget.refreshFooter == null ? 50.0 : widget.refreshFooter.loadHeight;
-    // 这个是刷新时控件旋转的动画，用来使刷新的Icon动起来
-    _animationControllerWait = new AnimationController(
-        duration: const Duration(milliseconds: 1000 * 100), vsync: this);
-    _animationController = new AnimationController(
-        duration: const Duration(milliseconds: 250), vsync: this);
+    // 顶部栏和底部栏动画控制
+    _animationController = new AnimationController(duration: const Duration(milliseconds: 250), vsync: this);
     _animation = new Tween(begin: 1.0, end: 0.0).animate(_animationController)
       ..addListener(() {
         //因为_animationController reset()后，addListener会收到监听，导致再执行一遍setState _topItemHeight和_bottomItemHeight会异常 所以用此标记
@@ -274,18 +270,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   void _refreshStart(RefreshBoxDirectionStatus refreshBoxDirectionStatus) async {
     _checkStateAndCallback(AnimationStates.StartLoadData, refreshBoxDirectionStatus);
-    if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL &&
-        this._refreshHeader == null &&
-        widget.onRefresh != null) {
-      //开始加载等待的动画
-      _animationControllerWait.forward();
-    } else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH &&
-        this._refreshFooter == null &&
-        widget.loadMore != null) {
-      //开始加载等待的动画
-      _animationControllerWait.forward();
-    }
-
     // 这里我们开始加载数据 数据加载完成后，将新数据处理并开始加载完成后的处理
     if (_topItemHeight > _bottomItemHeight) {
       if (widget.onRefresh != null) {
@@ -301,33 +285,15 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       }
     }
     if (!mounted) return;
-
-    if (_animationControllerWait.isAnimating) {
-      // 结束加载等待的动画
-      _animationControllerWait.stop();
-    }
     _checkStateAndCallback(AnimationStates.LoadDataEnd, refreshBoxDirectionStatus);
     await Future.delayed(new Duration(seconds: 1));
     // 开始将加载（刷新）布局缩回去的动画
     _animationController.forward();
-
-    if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL &&
-        this._refreshHeader == null &&
-        widget.onRefresh != null) {
-      // 结束加载等待的动画
-      _animationControllerWait.reset();
-    } else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH &&
-        this._refreshFooter == null &&
-        widget.loadMore != null) {
-      // 结束加载等待的动画
-      _animationControllerWait.reset();
-    }
   }
 
   @override
   void dispose() {
     _animationController.dispose();
-    _animationControllerWait.dispose();
     super.dispose();
   }
 
