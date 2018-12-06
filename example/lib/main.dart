@@ -29,12 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<String> addStr=["1","2","3","4","5","6","7","8","9","0"];
   List<String> str=["1","2","3","4","5","6","7","8","9","0"];
-
-  ScrollController controller = new ScrollController();
-  ScrollPhysics scrollPhysics = new RefreshAlwaysScrollPhysics();
-
   GlobalKey<EasyRefreshState> _easyRefreshKey = new GlobalKey<EasyRefreshState>();
-  String _refreshedText = "1";
   GlobalKey<ClassicsHeaderState> _headerKey = new GlobalKey<ClassicsHeaderState>();
 
   @override
@@ -46,15 +41,16 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: new EasyRefresh(
           key: _easyRefreshKey,
+          behavior: RefreshBehavior(
+            showLeading: true,
+            showTrailing: true
+          ),
           refreshHeader: ClassicsHeader(
             key: _headerKey,
-            refreshedText: _refreshedText,
           ),
           child: new ListView.builder(
             //ListView的Item
             itemCount: str.length,
-            controller: controller,
-            physics: scrollPhysics,
             itemBuilder: (BuildContext context,int index){
               return new Container(
                 height: 35.0,
@@ -80,11 +76,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   str.addAll(addStr);
                 });
               }
-            });
-          },
-          scrollPhysicsChanged: (ScrollPhysics physics) {
-            setState(() {
-              scrollPhysics = physics;
             });
           },
         )

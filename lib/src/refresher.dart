@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'header/header.dart';
 import 'footer/footer.dart';
 import 'behavior/behavior.dart';
+import 'scrollPhysics/scroll_physics.dart';
 
 typedef Future OnRefresh();
 typedef Future LoadMore();
@@ -32,9 +32,10 @@ enum AnimationStates {
 }
 
 class EasyRefresh extends StatefulWidget {
+  // 加载刷新回调
   final OnRefresh onRefresh;
   final LoadMore loadMore;
-  final ScrollPhysicsChanged scrollPhysicsChanged;
+  // 滚动视图
   final ScrollView child;
   // 滚动视图光晕
   final ScrollBehavior behavior;
@@ -47,7 +48,6 @@ class EasyRefresh extends StatefulWidget {
   final bool autoLoad;
 
   EasyRefresh({
-    @required this.scrollPhysicsChanged,
     GlobalKey<EasyRefreshState> key,
     this.behavior,
     this.refreshHeader,
@@ -73,6 +73,10 @@ class EasyRefresh extends StatefulWidget {
 }
 
 class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<EasyRefresh> {
+  // 滚动控制器
+  ScrollController _scrollController;
+  // 滚动形式
+  ScrollPhysics _scrollPhysics;
   // 顶部栏和底部栏高度
   double _topItemHeight = 0.0;
   double _bottomItemHeight = 0.0;
@@ -108,10 +112,12 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     setState(() {
       _topItemHeight = _refreshHeight + 20.0;
     });
-    widget.child.controller.animateTo(widget.child.controller.position.minScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
+    _scrollController.animateTo(_scrollController.position.minScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
     // 等待列表高度渲染完成
     new Future.delayed(const Duration(milliseconds: 200), () async {
-      widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
+      setState(() {
+        _scrollPhysics = new NeverScrollableScrollPhysics();
+      });
       _animationController.forward();
     });
   }
@@ -123,10 +129,12 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     setState(() {
       _bottomItemHeight = _loadHeight + 20.0;
     });
-    widget.child.controller.animateTo(widget.child.controller.position.maxScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
     // 等待列表高度渲染完成
     new Future.delayed(const Duration(milliseconds: 200), () async {
-      widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
+      setState(() {
+        _scrollPhysics = new NeverScrollableScrollPhysics();
+      });
       _animationController.forward();
     });
   }
@@ -134,6 +142,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   @override
   void initState() {
     super.initState();
+    // 初始化滚动控制器
+    _scrollController = widget.child.controller ?? new ScrollController();
+    // 初始化滚动形式
+    _scrollPhysics = new RefreshAlwaysScrollPhysics();
     // 初始化刷新高度
     _refreshHeight = widget.refreshHeader == null ? 50.0 : widget.refreshHeader.refreshHeight;
     _loadHeight = widget.refreshFooter == null ? 50.0 : widget.refreshFooter.loadHeight;
@@ -183,12 +195,16 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             //动画结束，高度回到0，上下拉刷新彻底结束，ListView恢复正常
           } else if (_states == RefreshBoxDirectionStatus.PUSH) {
             _topItemHeight = 0.0;
-            widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
+            setState(() {
+              _scrollPhysics = new RefreshAlwaysScrollPhysics();
+            });
             _states = RefreshBoxDirectionStatus.IDLE;
             _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           } else if (_states == RefreshBoxDirectionStatus.PULL) {
             _bottomItemHeight = 0.0;
-            widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
+            setState(() {
+              _scrollPhysics = new RefreshAlwaysScrollPhysics();
+            });
             _states = RefreshBoxDirectionStatus.IDLE;
             _isPulling = false;
             _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
@@ -201,8 +217,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         } else if (_bottomItemHeight > _loadHeight) {
           _shrinkageDistance = _bottomItemHeight - _loadHeight;
           //这里必须有个动画，不然上拉加载时  ListView不会自动滑下去，导致ListView悬在半空
-          widget.child.controller.animateTo(
-              widget.child.controller.position.maxScrollExtent,
+          _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
               duration: new Duration(milliseconds: 250),
               curve: Curves.linear);
         } else if (_topItemHeight <= _refreshHeight && _topItemHeight > 0.0) {
@@ -346,7 +362,12 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
               },
               child: ScrollConfiguration(
                 behavior: widget.behavior ?? new RefreshBehavior(),
-                child: widget.child,
+                child: new CustomScrollView(
+                  controller: _scrollController,
+                  physics: _scrollPhysics,
+                  // ignore: invalid_use_of_protected_member
+                  slivers: new List.from(widget.child.buildSlivers(context), growable: true),
+                ),
               ),
             ),
           ),
@@ -372,7 +393,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           _checkStateAndCallback(
               AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           _topItemHeight = 0.0;
-          widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
+          setState(() {
+            _scrollPhysics = new RefreshAlwaysScrollPhysics();
+          });
         } else {
           // 当刷新布局可见时，让头部刷新布局的高度+delta.dy(此时dy为负数)，来缩小头部刷新布局的高度
           _topItemHeight = _topItemHeight + notification.dragDetails.delta.dy / 2;
@@ -395,7 +418,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         if (_bottomItemHeight - notification.dragDetails.delta.dy / 2 <= 0.0) {
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           _bottomItemHeight = 0.0;
-          widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
+          setState(() {
+            _scrollPhysics = new RefreshAlwaysScrollPhysics();
+          });
         } else {
           if (notification.dragDetails.delta.dy > 0) {
             //当加载的布局可见时，让上拉加载布局的高度-delta.dy(此时dy为正数数)，来缩小底部的加载布局的高度
@@ -424,7 +449,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         _isPulling = true;
       }
       // 启动动画后，ListView不可滑动
-      widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
+      setState(() {
+        _scrollPhysics = new NeverScrollableScrollPhysics();
+      });
       _animationController.forward();
     }
   }
@@ -435,15 +462,20 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     if (_bottomItemHeight > 0.0 &&
         notification.direction == ScrollDirection.forward) {
       // 底部加载布局出现反向滑动时（由上向下），将scrollPhysics置为RefreshScrollPhysics，只要有2个原因。1 减缓滑回去的速度，2 防止手指快速滑动时出现惯性滑动
-      widget.scrollPhysicsChanged(new RefreshScrollPhysics());
+      setState(() {
+        _scrollPhysics = new RefreshScrollPhysics();
+      });
     } else if (_topItemHeight > 0.0 &&
         notification.direction == ScrollDirection.reverse) {
       // 头部刷新布局出现反向滑动时（由下向上）
-      widget.scrollPhysicsChanged(new RefreshScrollPhysics());
-    } else if (_bottomItemHeight > 0.0 &&
-        notification.direction == ScrollDirection.reverse) {
+      setState(() {
+        _scrollPhysics = new RefreshScrollPhysics();
+      });
+    } else if (_bottomItemHeight > 0.0 && notification.direction == ScrollDirection.reverse) {
       // 反向再反向（恢复正向拖动）
-      widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
+      setState(() {
+        _scrollPhysics = new RefreshAlwaysScrollPhysics();
+      });
     }
   }
 
@@ -464,10 +496,14 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           // Refresh回弹完毕，恢复正常ListView的滑动状态
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           _topItemHeight = 0.0;
-          widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
+          setState(() {
+            _scrollPhysics = new RefreshAlwaysScrollPhysics();
+          });
         } else {
           if (_topItemHeight > 100.0 + _refreshHeight) {
-            widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
+            setState(() {
+              _scrollPhysics = new NeverScrollableScrollPhysics();
+            });
             _animationController.forward();
           } else if (_topItemHeight > 40.0 + _refreshHeight) {
             _topItemHeight = notification.dragDetails.delta.dy / 6 + _topItemHeight;
@@ -490,7 +526,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           // Refresh回弹完毕，恢复正常ListView的滑动状态
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           _bottomItemHeight = 0.0;
-          widget.scrollPhysicsChanged(new RefreshAlwaysScrollPhysics());
+          setState(() {
+            _scrollPhysics = new RefreshAlwaysScrollPhysics();
+          });
         } else {
           if (_bottomItemHeight > 25.0 + _loadHeight) {
             if (_isPulling) {
@@ -500,11 +538,15 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             // 如果是触发刷新则设置延时，等待列表高度渲染完成
             if (_isRefresh) {
               new Future.delayed(const Duration(milliseconds: 200), () async {
-                widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
+                setState(() {
+                  _scrollPhysics = new NeverScrollableScrollPhysics();
+                });
                 _animationController.forward();
               });
             }else {
-              widget.scrollPhysicsChanged(new NeverScrollableScrollPhysics());
+              setState(() {
+                _scrollPhysics = new NeverScrollableScrollPhysics();
+              });
               _animationController.forward();
             }
           } else if (_bottomItemHeight > 10.0 + _loadHeight) {
@@ -584,118 +626,5 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         widget.animationStateChangedCallback(_animationStates, refreshBoxDirectionStatus);
       }
     }
-  }
-}
-
-/// 切记 继承ScrollPhysics  必须重写applyTo，，在NeverScrollableScrollPhysics类里面复制就可以
-/// 出现反向滑动时用此ScrollPhysics
-class RefreshScrollPhysics extends ScrollPhysics {
-  const RefreshScrollPhysics({ScrollPhysics parent}) : super(parent: parent);
-
-  @override
-  RefreshScrollPhysics applyTo(ScrollPhysics ancestor) {
-    return new RefreshScrollPhysics(parent: buildParent(ancestor));
-  }
-
-  @override
-  bool shouldAcceptUserOffset(ScrollMetrics position) {
-    return true;
-  }
-
-  //重写这个方法为了减缓ListView滑动速度
-  @override
-  double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
-    if (offset < 0.0) {
-      return 0.00000000000001;
-    }
-    if (offset == 0.0) {
-      return 0.0;
-    }
-    return offset / 2;
-  }
-
-  //此处返回null时为了取消惯性滑动
-  @override
-  Simulation createBallisticSimulation(
-      ScrollMetrics position, double velocity) {
-    return null;
-  }
-}
-
-/// 切记 继承ScrollPhysics  必须重写applyTo，，在NeverScrollableScrollPhysics类里面复制就可以
-/// 此类用来控制IOS过度滑动出现弹簧效果
-class RefreshAlwaysScrollPhysics extends AlwaysScrollableScrollPhysics {
-  const RefreshAlwaysScrollPhysics({ScrollPhysics parent})
-      : super(parent: parent);
-
-  @override
-  RefreshAlwaysScrollPhysics applyTo(ScrollPhysics ancestor) {
-    return new RefreshAlwaysScrollPhysics(parent: buildParent(ancestor));
-  }
-
-  @override
-  bool shouldAcceptUserOffset(ScrollMetrics position) {
-    return true;
-  }
-
-  /// 防止ios设备上出现弹簧效果
-  @override
-  double applyBoundaryConditions(ScrollMetrics position, double value) {
-    assert(() {
-      if (value == position.pixels) {
-        throw FlutterError(
-            '$runtimeType.applyBoundaryConditions() was called redundantly.\n'
-            'The proposed new position, $value, is exactly equal to the current position of the '
-            'given ${position.runtimeType}, ${position.pixels}.\n'
-            'The applyBoundaryConditions method should only be called when the value is '
-            'going to actually change the pixels, otherwise it is redundant.\n'
-            'The physics object in question was:\n'
-            '  $this\n'
-            'The position object in question was:\n'
-            '  $position\n');
-      }
-      return true;
-    }());
-    if (value < position.pixels &&
-        position.pixels <= position.minScrollExtent) // underScroll
-      return value - position.pixels;
-    if (position.maxScrollExtent <= position.pixels &&
-        position.pixels < value) // overScroll
-      return value - position.pixels;
-    if (value < position.minScrollExtent &&
-        position.minScrollExtent < position.pixels) // hit top edge
-      return value - position.minScrollExtent;
-    if (position.pixels < position.maxScrollExtent &&
-        position.maxScrollExtent < value) // hit bottom edge
-      return value - position.maxScrollExtent;
-    return 0.0;
-  }
-
-  /// 防止ios设备出现卡顿
-  @override
-  Simulation createBallisticSimulation(
-      ScrollMetrics position, double velocity) {
-    final Tolerance tolerance = this.tolerance;
-    if (position.outOfRange) {
-      double end;
-      if (position.pixels > position.maxScrollExtent)
-        end = position.maxScrollExtent;
-      if (position.pixels < position.minScrollExtent)
-        end = position.minScrollExtent;
-      assert(end != null);
-      return ScrollSpringSimulation(spring, position.pixels,
-          position.maxScrollExtent, math.min(0.0, velocity),
-          tolerance: tolerance);
-    }
-    if (velocity.abs() < tolerance.velocity) return null;
-    if (velocity > 0.0 && position.pixels >= position.maxScrollExtent)
-      return null;
-    if (velocity < 0.0 && position.pixels <= position.minScrollExtent)
-      return null;
-    return ClampingScrollSimulation(
-      position: position.pixels,
-      velocity: velocity,
-      tolerance: tolerance,
-    );
   }
 }
