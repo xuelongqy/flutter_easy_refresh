@@ -41,10 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: new EasyRefresh(
           key: _easyRefreshKey,
-          behavior: RefreshBehavior(
-            showLeading: true,
-            showTrailing: true
-          ),
           refreshHeader: ClassicsHeader(
             key: _headerKey,
           ),

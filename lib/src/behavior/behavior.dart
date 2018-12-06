@@ -24,3 +24,17 @@ class RefreshBehavior extends ScrollBehavior {
     );
   }
 }
+
+/// 回弹效果(仅用于判断类型)
+class ScrollOverBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
+    return new GlowingOverscrollIndicator(
+      showLeading: false,
+      showTrailing: false,
+      child: child,
+      axisDirection: axisDirection,
+      color: Colors.blue,
+    );
+  }
+}

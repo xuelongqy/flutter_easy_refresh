@@ -8,7 +8,6 @@ import 'scrollPhysics/scroll_physics.dart';
 
 typedef Future OnRefresh();
 typedef Future LoadMore();
-typedef ScrollPhysicsChanged(ScrollPhysics physics);
 typedef AnimationStateChanged(AnimationStates animationStates, RefreshBoxDirectionStatus refreshBoxDirectionStatus);
 
 enum RefreshBoxDirectionStatus {
@@ -89,6 +88,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   AnimationController _callRefreshAnimationController;
   Animation<double> _callLoadAnimation;
   AnimationController _callLoadAnimationController;
+  // 超过边界动画
+  Animation<double> _scrollOverAnimation;
+  AnimationController _scrollOverAnimationController;
   // 出发刷新和加载的高度
   double _refreshHeight = 50.0;
   double _loadHeight = 50.0;
@@ -106,6 +108,14 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   RefreshHeader _refreshHeader;
   // 底部视图
   RefreshFooter _refreshFooter;
+  // 滑动速度(ms)为单位
+  double scrollSpeed = 0;
+  double lastPixels = 0;
+  int lastTimeStamp = new DateTime.now().millisecondsSinceEpoch;
+  // 超出边界监听器
+  ScrollOverListener _scrollOverListener;
+  // 是否拉出底部
+  bool _isPushBottom = false;
 
   // 触发刷新
   void callRefresh() async {
@@ -118,17 +128,79 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   void callLoadMore() async {
     if (_isRefresh) return;
     _isRefresh = true;
-    _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
     _callLoadAnimationController.forward();
+  }
+
+  // 顶部超出边界
+  Future topOver() async {
+    if (widget.behavior is ScrollOverBehavior) {
+      int time = (_refreshHeight * 0.8 / scrollSpeed).floor();
+      if (time > 150) return;
+      _scrollOverAnimationController = new AnimationController(duration: Duration(milliseconds: time), vsync: this);
+      _scrollOverAnimation = new Tween(begin: 0.0, end: _refreshHeight * 0.8).animate(_scrollOverAnimationController)
+        ..addListener(() {
+          if (_scrollOverAnimation.value == 0.0) return;
+          setState(() {
+            _topItemHeight = _scrollOverAnimation.value;
+          });
+        });
+      _scrollOverAnimation.addStatusListener((animationStatus) {
+        if (animationStatus == AnimationStatus.completed) {
+          setState(() {
+            _topItemHeight = _refreshHeight * 0.8;
+            _scrollPhysics = new NeverScrollableScrollPhysics();
+          });
+          _animationController.forward();
+        }
+      });
+      _scrollOverAnimationController.forward();
+    }
+  }
+
+  // 底部超出边界
+  Future bottomOver() async {
+    // 判断是否滑动到底部并自动加载
+    if (widget.autoLoad) {
+      callLoadMore();
+      return;
+    }
+    if (!_isPushBottom && widget.behavior is ScrollOverBehavior) {
+      int time = (_loadHeight * 0.8 / (-scrollSpeed)).floor();
+      if (time > 150) return;
+      time = time > 20 ? time : 20;
+      _scrollOverAnimationController = new AnimationController(duration: Duration(milliseconds: time), vsync: this);
+      _scrollOverAnimation = new Tween(begin: 0.0, end: _loadHeight * 0.8).animate(_scrollOverAnimationController)
+        ..addListener(() {
+          if (_scrollOverAnimation.value == 0.0) return;
+          setState(() {
+            _bottomItemHeight = _scrollOverAnimation.value;
+          });
+          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        });
+      _scrollOverAnimation.addStatusListener((animationStatus) {
+        if (animationStatus == AnimationStatus.completed) {
+          setState(() {
+            _bottomItemHeight  = _loadHeight * 0.8;
+            _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+            _scrollPhysics = new NeverScrollableScrollPhysics();
+          });
+          _shrinkageDistance = _refreshHeight * 0.8;
+          _animationController.forward();
+        }
+      });
+      _scrollOverAnimationController.forward();
+    }
   }
 
   @override
   void initState() {
     super.initState();
+    // 超出边界监听器
+    _scrollOverListener = new ScrollOverListener(topOver: topOver, bottomOver: bottomOver);
     // 初始化滚动控制器
     _scrollController = widget.child.controller ?? new ScrollController();
     // 初始化滚动形式
-    _scrollPhysics = new RefreshAlwaysScrollPhysics();
+    _scrollPhysics = new RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
     // 初始化刷新高度
     _refreshHeight = widget.refreshHeader == null ? 50.0 : widget.refreshHeader.refreshHeight;
     _loadHeight = widget.refreshFooter == null ? 50.0 : widget.refreshFooter.loadHeight;
@@ -159,6 +231,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       });
     _animation.addStatusListener((animationStatus) {
       if (animationStatus == AnimationStatus.completed) {
+        // 还原拉出底部状态
+        _isPushBottom = false;
         //动画结束时首先将_animationController重置
         _isReset = true;
         _animationController.reset();
@@ -175,14 +249,14 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           } else if (_states == RefreshBoxDirectionStatus.PUSH) {
             _topItemHeight = 0.0;
             setState(() {
-              _scrollPhysics = new RefreshAlwaysScrollPhysics();
+              _scrollPhysics = new RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
             });
             _states = RefreshBoxDirectionStatus.IDLE;
             _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           } else if (_states == RefreshBoxDirectionStatus.PULL) {
             _bottomItemHeight = 0.0;
             setState(() {
-              _scrollPhysics = new RefreshAlwaysScrollPhysics();
+              _scrollPhysics = new RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
             });
             _states = RefreshBoxDirectionStatus.IDLE;
             _isPulling = false;
@@ -235,6 +309,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         setState(() {
           _bottomItemHeight = (_loadHeight + 20.0) * _callLoadAnimation.value;
         });
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       });
     _callLoadAnimation.addStatusListener((animationStatus) {
       if (animationStatus == AnimationStatus.completed) {
@@ -334,6 +409,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             child: new NotificationListener(
               onNotification: (ScrollNotification notification) {
                 ScrollMetrics metrics = notification.metrics;
+                computeScrollSpeed(metrics.pixels);
                 if (notification is ScrollUpdateNotification) {
                   _handleScrollUpdateNotification(notification);
                 } else if (notification is ScrollEndNotification) {
@@ -362,6 +438,20 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     );
   }
 
+  // 计算滑动速度
+  void computeScrollSpeed(double pixels) async {
+    int nowTimeStamp = new DateTime.now().millisecondsSinceEpoch;
+    int time = nowTimeStamp - lastTimeStamp;
+    if (time != 0) {
+      double nowScrollSpeed = (lastPixels - pixels) / time;
+      if (nowScrollSpeed != 0) {
+        scrollSpeed = nowScrollSpeed;
+      }
+    }
+    lastPixels = pixels;
+    lastTimeStamp = nowTimeStamp;
+  }
+
   void _handleScrollUpdateNotification(ScrollUpdateNotification notification) {
     // 判断是否正在加载
     if (_isRefresh) return;
@@ -379,7 +469,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
               AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           _topItemHeight = 0.0;
           setState(() {
-            _scrollPhysics = new RefreshAlwaysScrollPhysics();
+            _scrollPhysics = new RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
           });
         } else {
           // 当刷新布局可见时，让头部刷新布局的高度+delta.dy(此时dy为负数)，来缩小头部刷新布局的高度
@@ -404,7 +494,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           _bottomItemHeight = 0.0;
           setState(() {
-            _scrollPhysics = new RefreshAlwaysScrollPhysics();
+            _scrollPhysics = new RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
           });
         } else {
           if (notification.dragDetails.delta.dy > 0) {
@@ -459,7 +549,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     } else if (_bottomItemHeight > 0.0 && notification.direction == ScrollDirection.reverse) {
       // 反向再反向（恢复正向拖动）
       setState(() {
-        _scrollPhysics = new RefreshAlwaysScrollPhysics();
+        _scrollPhysics = new RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
       });
     }
   }
@@ -482,7 +572,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           _topItemHeight = 0.0;
           setState(() {
-            _scrollPhysics = new RefreshAlwaysScrollPhysics();
+            _scrollPhysics = new RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
           });
         } else {
           if (_topItemHeight > 100.0 + _refreshHeight) {
@@ -502,19 +592,17 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         }
       });
     } else if (_topItemHeight < 0.5 && widget.loadMore != null) {
-      // 判断是否滑动到底部并自动加载
-      if (widget.autoLoad) {
-        callLoadMore();
-      }
       setState(() {
         if (-notification.dragDetails.delta.dy / 2 + _bottomItemHeight <= 0.0) {
           // Refresh回弹完毕，恢复正常ListView的滑动状态
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           _bottomItemHeight = 0.0;
           setState(() {
-            _scrollPhysics = new RefreshAlwaysScrollPhysics();
+            _scrollPhysics = new RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
           });
         } else {
+          // 拉出底部
+          _isPushBottom = true;
           if (_bottomItemHeight > 25.0 + _loadHeight) {
             if (_isPulling) {
               return;
