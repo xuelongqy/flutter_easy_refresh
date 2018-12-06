@@ -172,6 +172,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       _scrollOverAnimation = new Tween(begin: 0.0, end: _loadHeight * 0.8).animate(_scrollOverAnimationController)
         ..addListener(() {
           if (_scrollOverAnimation.value == 0.0) return;
+          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
           setState(() {
             _bottomItemHeight = _scrollOverAnimation.value;
           });
@@ -180,6 +181,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       _scrollOverAnimation.addStatusListener((animationStatus) {
         if (animationStatus == AnimationStatus.completed) {
           setState(() {
+            _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
             _bottomItemHeight  = _loadHeight * 0.8;
             _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
             _scrollPhysics = new NeverScrollableScrollPhysics();
@@ -306,6 +308,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     _callLoadAnimation = new Tween(begin: 0.0, end: 1.0).animate(_callLoadAnimationController)
       ..addListener(() {
         if (_callLoadAnimation.value == 0.0) return;
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
         setState(() {
           _bottomItemHeight = (_loadHeight + 20.0) * _callLoadAnimation.value;
         });
