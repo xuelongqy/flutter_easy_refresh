@@ -84,6 +84,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   Animation<double> _animation;
   AnimationController _animationController;
   double _shrinkageDistance = 0.0;
+  // 触发刷新和加载动画
+  Animation<double> _callRefreshAnimation;
+  AnimationController _callRefreshAnimationController;
+  Animation<double> _callLoadAnimation;
+  AnimationController _callLoadAnimationController;
   // 出发刷新和加载的高度
   double _refreshHeight = 50.0;
   double _loadHeight = 50.0;
@@ -97,10 +102,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   bool _isRefresh = false;
   // 记录子类条目(触发刷新和加载时记录)
   int _itemCount = 0;
-
   // 顶部视图
   RefreshHeader _refreshHeader;
-
   // 底部视图
   RefreshFooter _refreshFooter;
 
@@ -108,34 +111,15 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   void callRefresh() async {
     if (_isRefresh) return;
     _isRefresh = true;
-    setState(() {
-      _topItemHeight = _refreshHeight + 20.0;
-    });
     _scrollController.animateTo(_scrollController.position.minScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
-    // 等待列表高度渲染完成
-    new Future.delayed(const Duration(milliseconds: 200), () async {
-      setState(() {
-        _scrollPhysics = new NeverScrollableScrollPhysics();
-      });
-      _animationController.forward();
-    });
+    _callRefreshAnimationController.forward();
   }
-
   // 触发加载
   void callLoadMore() async {
     if (_isRefresh) return;
     _isRefresh = true;
-    setState(() {
-      _bottomItemHeight = _loadHeight + 20.0;
-    });
     _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
-    // 等待列表高度渲染完成
-    new Future.delayed(const Duration(milliseconds: 200), () async {
-      setState(() {
-        _scrollPhysics = new NeverScrollableScrollPhysics();
-      });
-      _animationController.forward();
-    });
+    _callLoadAnimationController.forward();
   }
 
   @override
@@ -157,8 +141,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         if (_isReset) {
           return;
         }
-        //根据动画的值逐渐减小布局的高度，分为4种情况
-        // 1.上拉高度超过_refreshHeight    2.上拉高度不够50   3.下拉拉高度超过_refreshHeight  4.下拉拉高度不够50
+        // 根据动画的值逐渐减小布局的高度，分为4种情况
+        // 1.上拉高度超过_refreshHeight    2.上拉高度不够_refreshHeight   3.下拉拉高度超过_bottomItemHeight  4.下拉拉高度不够_bottomItemHeight
         setState(() {
           if (_topItemHeight > _refreshHeight) {
             //_shrinkageDistance*animation.value是由大变小的，模拟出弹回的效果
@@ -173,7 +157,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           }
         });
       });
-
     _animation.addStatusListener((animationStatus) {
       if (animationStatus == AnimationStatus.completed) {
         //动画结束时首先将_animationController重置
@@ -224,6 +207,42 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           _shrinkageDistance = _bottomItemHeight;
           _states = RefreshBoxDirectionStatus.PULL;
         }
+      }
+    });
+    // 触发刷新动画
+    _callRefreshAnimationController = new AnimationController(duration: const Duration(milliseconds: 100), vsync: this);
+    _callRefreshAnimation = new Tween(begin: 0.0, end: 1.0).animate(_callRefreshAnimationController)
+    ..addListener(() {
+      if (_callRefreshAnimation.value == 0.0) return;
+      setState(() {
+        _topItemHeight = (_refreshHeight + 20.0) * _callRefreshAnimation.value;
+      });
+    });
+    _callRefreshAnimation.addStatusListener((animationStatus) {
+      if (animationStatus == AnimationStatus.completed) {
+        _callRefreshAnimationController.reset();
+        setState(() {
+          _scrollPhysics = new NeverScrollableScrollPhysics();
+        });
+        _animationController.forward();
+      }
+    });
+    // 触发加载动画
+    _callLoadAnimationController = new AnimationController(duration: const Duration(milliseconds: 100), vsync: this);
+    _callLoadAnimation = new Tween(begin: 0.0, end: 1.0).animate(_callLoadAnimationController)
+      ..addListener(() {
+        if (_callLoadAnimation.value == 0.0) return;
+        setState(() {
+          _bottomItemHeight = (_loadHeight + 20.0) * _callLoadAnimation.value;
+        });
+      });
+    _callLoadAnimation.addStatusListener((animationStatus) {
+      if (animationStatus == AnimationStatus.completed) {
+        _callLoadAnimationController.reset();
+        setState(() {
+          _scrollPhysics = new NeverScrollableScrollPhysics();
+        });
+        _animationController.forward();
       }
     });
   }
