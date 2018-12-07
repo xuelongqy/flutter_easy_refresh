@@ -383,7 +383,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     }
     if (!mounted) return;
     _checkStateAndCallback(AnimationStates.LoadDataEnd, refreshBoxDirectionStatus);
-    await Future.delayed(new Duration(seconds: 1));
+    if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL) {
+      await Future.delayed(new Duration(milliseconds: this._refreshHeader.finishDelay));
+    }else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL) {
+      await Future.delayed(new Duration(milliseconds: this._refreshFooter.finishDelay));
+    }
     // 开始将加载（刷新）布局缩回去的动画
     _animationController.forward();
   }
@@ -391,6 +395,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   @override
   void dispose() {
     _animationController.dispose();
+    _callRefreshAnimationController.dispose();
+    _callLoadAnimationController.dispose();
+    if (_scrollOverAnimationController != null) {
+      _scrollOverAnimationController.dispose();
+    }
     super.dispose();
   }
 
@@ -669,7 +678,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         }
         // 刷新重置
         else if (currentState == AnimationStates.DragAndRefreshNotEnabled) {
-          this._refreshHeader.getKey().currentState.onRefreshReset();
+          this._refreshHeader.getKey().currentState.onRefreshRestore();
         }
       }
       // 上拉加载
@@ -695,16 +704,16 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         }
         // 加载重置
         else if (currentState == AnimationStates.DragAndRefreshNotEnabled) {
-          this._refreshFooter.getKey().currentState.onLoadReset();
+          this._refreshFooter.getKey().currentState.onLoadRestore();
         }
       } else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.IDLE) {
         _isRefresh = false;
         // 重置
         if (currentState == AnimationStates.RefreshBoxIdle) {
           if (_lastStates == RefreshBoxDirectionStatus.PULL) {
-            this._refreshHeader.getKey().currentState.onRefreshReset();
+            this._refreshHeader.getKey().currentState.onRefreshEnd();
           } else if (_lastStates == RefreshBoxDirectionStatus.PUSH) {
-            this._refreshFooter.getKey().currentState.onLoadReset();
+            this._refreshFooter.getKey().currentState.onLoadEnd();
           }
         }
       }

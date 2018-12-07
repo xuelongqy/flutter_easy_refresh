@@ -16,6 +16,8 @@ abstract class RefreshFooter extends StatefulWidget {
   final double loadHeight;
   // 是否浮动
   final bool isFloat;
+  // 完成延时时间(ms)
+  final int finishDelay;
 
   // 获取键
   GlobalKey<RefreshFooterState> getKey() {
@@ -27,6 +29,7 @@ abstract class RefreshFooter extends StatefulWidget {
     GlobalKey<RefreshFooterState> key,
     @required this.loadHeight,
     this.isFloat: false,
+    this.finishDelay: 1000
   }) : super(key: key);
 }
 
@@ -59,8 +62,12 @@ abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
   Future onNoMore() async {
     refreshFooterStatus = RefreshFooterStatus.LOADED;
   }
-  // 回调加载重置方法
-  Future onLoadReset() async {
+  // 回调加载恢复方法
+  Future onLoadRestore() async {
+    refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
+  }
+  // 回调加载结束方法
+  Future onLoadEnd() async {
     refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
   }
 }
@@ -170,10 +177,19 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     });
   }
 
-  // 加载重置回调
+  // 加载恢复回调
   @override
-  Future onLoadReset() async {
-    super.onLoadReset();
+  Future onLoadRestore() async {
+    super.onLoadRestore();
+    setState(() {
+      _showText = loadText;
+    });
+  }
+
+  // 加载结束回调
+  @override
+  Future onLoadEnd() async {
+    super.onLoadEnd();
     setState(() {
       _showText = loadText;
     });

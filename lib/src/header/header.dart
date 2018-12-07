@@ -16,6 +16,8 @@ abstract class RefreshHeader extends StatefulWidget {
   final double refreshHeight;
   // 是否浮动
   final bool isFloat;
+  // 完成延时时间(ms)
+  final int finishDelay;
 
   // 获取键
   GlobalKey<RefreshHeaderState> getKey() {
@@ -27,6 +29,7 @@ abstract class RefreshHeader extends StatefulWidget {
     GlobalKey<RefreshHeaderState> key,
     this.refreshHeight: 50.0,
     this.isFloat: false,
+    this.finishDelay: 1000
   }) : super(key: key);
 }
 abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
@@ -54,8 +57,12 @@ abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
   Future onRefreshed() async {
     refreshHeaderStatus = RefreshHeaderStatus.REFRESHED;
   }
-  // 回调刷新重置方法
-  Future onRefreshReset() async {
+  // 回调刷新恢复方法
+  Future onRefreshRestore() async {
+    refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
+  }
+  // 回调刷新结束方法
+  Future onRefreshEnd() async {
     refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
   }
 }
@@ -130,7 +137,6 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
       _showText = refreshReadyText;
     });
   }
-
   // 正在刷新回调
   @override
   Future onRefreshing() async {
@@ -139,7 +145,6 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
       _showText = refreshingText;
     });
   }
-
   // 完成刷新回调
   @override
   Future onRefreshed() async {
@@ -148,11 +153,18 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
       _showText = refreshedText;
     });
   }
-
-  // 刷新重置回调
+  // 刷新恢复回调
   @override
-  Future onRefreshReset() async {
-    super.onRefreshReset();
+  Future onRefreshRestore() async {
+    super.onRefreshRestore();
+    setState(() {
+      _showText = refreshText;
+    });
+  }
+  // 刷新结束回调
+  @override
+  Future onRefreshEnd() async {
+    super.onRefreshEnd();
     setState(() {
       _showText = refreshText;
     });
