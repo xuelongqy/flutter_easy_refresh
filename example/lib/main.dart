@@ -41,9 +41,11 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: new EasyRefresh(
           key: _easyRefreshKey,
+          behavior: ScrollOverBehavior(),
           refreshHeader: ClassicsHeader(
             key: _headerKey,
           ),
+          refreshFooter: ClassicsFooter(),
           child: new ListView.builder(
             //ListView的Item
             itemCount: str.length,

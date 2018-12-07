@@ -404,38 +404,50 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       this._refreshFooter.getKey().currentState.updateHeight(_bottomItemHeight);
     }
     return new Container(
-      child: new Column(
+      child: Stack(
         children: <Widget>[
-          _getHeader(),
-          new Expanded(
-            flex: 1,
-            child: new NotificationListener(
-              onNotification: (ScrollNotification notification) {
-                ScrollMetrics metrics = notification.metrics;
-                computeScrollSpeed(metrics.pixels);
-                if (notification is ScrollUpdateNotification) {
-                  _handleScrollUpdateNotification(notification);
-                } else if (notification is ScrollEndNotification) {
-                  _handleScrollEndNotification();
-                } else if (notification is UserScrollNotification) {
-                  _handleUserScrollNotification(notification);
-                } else if (metrics.atEdge && notification is OverscrollNotification) {
-                  _handleOverScrollNotification(notification);
-                }
-                return true;
-              },
-              child: ScrollConfiguration(
-                behavior: widget.behavior ?? new RefreshBehavior(),
-                child: new CustomScrollView(
-                  controller: _scrollController,
-                  physics: _scrollPhysics,
-                  // ignore: invalid_use_of_protected_member
-                  slivers: new List.from(widget.child.buildSlivers(context), growable: true),
+          new Column(
+            children: <Widget>[
+              widget.refreshHeader == null || !widget.refreshHeader.isFloat ? _getHeader() : new Container(),
+              new Expanded(
+                flex: 1,
+                child: new NotificationListener(
+                  onNotification: (ScrollNotification notification) {
+                    ScrollMetrics metrics = notification.metrics;
+                    computeScrollSpeed(metrics.pixels);
+                    if (notification is ScrollUpdateNotification) {
+                      _handleScrollUpdateNotification(notification);
+                    } else if (notification is ScrollEndNotification) {
+                      _handleScrollEndNotification();
+                    } else if (notification is UserScrollNotification) {
+                      _handleUserScrollNotification(notification);
+                    } else if (metrics.atEdge && notification is OverscrollNotification) {
+                      _handleOverScrollNotification(notification);
+                    }
+                    return true;
+                  },
+                  child: ScrollConfiguration(
+                    behavior: widget.behavior ?? new RefreshBehavior(),
+                    child: new CustomScrollView(
+                      controller: _scrollController,
+                      physics: _scrollPhysics,
+                      // ignore: invalid_use_of_protected_member
+                      slivers: new List.from(widget.child.buildSlivers(context), growable: true),
+                    ),
+                  ),
                 ),
               ),
-            ),
+              widget.refreshFooter == null || !widget.refreshFooter.isFloat ? _getFooter() : new Container(),
+            ],
           ),
-          _getFooter(),
+          Align(
+            alignment: Alignment.topCenter,
+            child: widget.refreshHeader != null && widget.refreshHeader.isFloat ? _getHeader() : new Container(),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: widget.refreshFooter != null && widget.refreshFooter.isFloat ? _getFooter() : new Container(),
+          ),
         ],
       ),
     );
