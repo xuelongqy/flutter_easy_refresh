@@ -44,17 +44,24 @@ class _MyHomePageState extends State<MyHomePage> {
           behavior: ScrollOverBehavior(),
           refreshHeader: ClassicsHeader(
             key: _headerKey,
+            bgColor: Colors.transparent,
+            textColor: Colors.black,
           ),
-          refreshFooter: ClassicsFooter(),
+          refreshFooter: ClassicsFooter(
+            bgColor: Colors.transparent,
+            textColor: Colors.black,
+          ),
           child: new ListView.builder(
             //ListView的Item
             itemCount: str.length,
             itemBuilder: (BuildContext context,int index){
               return new Container(
-                height: 35.0,
-                child: new Center(
-                  child: new Text(str[index],style: new TextStyle(fontSize: 18.0),),
-                ),
+                height: 70.0,
+                child: Card(
+                  child: new Center(
+                    child: new Text(str[index],style: new TextStyle(fontSize: 18.0),),
+                  ),
+                )
               );
             }
           ),

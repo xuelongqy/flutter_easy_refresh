@@ -74,6 +74,10 @@ class ClassicsHeader extends RefreshHeader {
   final Color bgColor;
   // 字体颜色
   final Color textColor;
+  // 触发刷新的高度
+  final double refreshHeight;
+  // 是否浮动
+  final bool isFloat;
 
   // 构造函数
   ClassicsHeader({
@@ -84,9 +88,12 @@ class ClassicsHeader extends RefreshHeader {
     this.refreshedText: "Refresh finished",
     this.bgColor: Colors.blue,
     this.textColor: Colors.white,
+    this.refreshHeight: 70.0,
+    this.isFloat: false
   }):super(
     key: key ?? new GlobalKey<RefreshHeaderState>(),
-    refreshHeight: 50.0
+    refreshHeight: refreshHeight,
+    isFloat: isFloat
   );
 
   @override

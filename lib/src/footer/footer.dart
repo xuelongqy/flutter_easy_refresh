@@ -81,6 +81,10 @@ class ClassicsFooter extends RefreshFooter {
   final Color bgColor;
   // 字体颜色
   final Color textColor;
+  // 触发加载的高度
+  final double loadHeight;
+  // 是否浮动
+  final bool isFloat;
 
   // 构造函数
   ClassicsFooter({
@@ -92,9 +96,12 @@ class ClassicsFooter extends RefreshFooter {
     this.noMoreText: "No more",
     this.bgColor: Colors.blue,
     this.textColor: Colors.white,
+    this.loadHeight: 70.0,
+    this.isFloat: false
   }):super(
-      key: key ?? new GlobalKey<ClassicsFooterState>(),
-      loadHeight: 50.0
+    key: key ?? new GlobalKey<ClassicsFooterState>(),
+    loadHeight: loadHeight,
+    isFloat: isFloat
   );
 
   @override
