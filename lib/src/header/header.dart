@@ -85,6 +85,12 @@ class ClassicsHeader extends RefreshHeader {
   final double refreshHeight;
   // 是否浮动
   final bool isFloat;
+  // 显示额外信息(默认为时间)
+  final bool showMore;
+  // 更多信息
+  final String moreInfo;
+  // 更多信息文字颜色
+  final Color moreInfoColor;
 
   // 构造函数
   ClassicsHeader({
@@ -95,8 +101,11 @@ class ClassicsHeader extends RefreshHeader {
     this.refreshedText: "Refresh finished",
     this.bgColor: Colors.blue,
     this.textColor: Colors.white,
+    this.moreInfoColor: Colors.white,
     this.refreshHeight: 70.0,
-    this.isFloat: false
+    this.isFloat: false,
+    this.showMore: false,
+    this.moreInfo: "Updated at %T"
   }):super(
     key: key ?? new GlobalKey<RefreshHeaderState>(),
     refreshHeight: refreshHeight,
@@ -115,8 +124,12 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
   String refreshingText;
   // 刷新完成文字
   String refreshedText;
+  // 更多信息文字
+  String moreInfo;
   // 显示的文字
   String _showText;
+  // 更新时间
+  DateTime _dateTime;
 
   // 初始化操作
   @override
@@ -126,7 +139,9 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
     refreshReadyText = widget.refreshReadyText;
     refreshingText = widget.refreshingText;
     refreshedText = widget.refreshedText;
+    moreInfo = widget.moreInfo;
     _showText = widget.refreshText;
+    _dateTime = DateTime.now();
   }
 
   // 准备刷新回调
@@ -150,6 +165,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
   Future onRefreshed() async {
     super.onRefreshed();
     setState(() {
+      _dateTime = DateTime.now();
       _showText = refreshedText;
     });
   }
@@ -170,6 +186,11 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
     });
   }
 
+  // 获取更多信息
+  String _getMoreInfo() {
+    return moreInfo.replaceAll("%T", "${_dateTime.hour}:${_dateTime.minute}");
+  }
+
   // 下拉刷新布局
   @override
   Widget build(BuildContext context) {
@@ -179,41 +200,72 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
       child: ListView(
         children: <Widget>[
           Container(
-            height: this.height > 30.0 ? this.height : 30.0,
+            height: this.height > 40.0 ? this.height : 40.0,
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                this.refreshHeaderStatus == RefreshHeaderStatus.NO_REFRESH ? Icon(
-                  Icons.arrow_downward,
-                  color: widget.textColor,
-                ): Container(),
-                this.refreshHeaderStatus == RefreshHeaderStatus.REFRESHING ? new Align(
-                  alignment: Alignment.centerLeft,
-                  child: new Container(
-                    width: 20.0,
-                    height: 20.0,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      valueColor: AlwaysStoppedAnimation(widget.textColor),
+                Expanded (
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        this.refreshHeaderStatus == RefreshHeaderStatus.NO_REFRESH ? Icon(
+                          Icons.arrow_downward,
+                          color: widget.textColor,
+                        ): Container(),
+                        this.refreshHeaderStatus == RefreshHeaderStatus.REFRESHING ? new Align(
+                          alignment: Alignment.centerLeft,
+                          child: new Container(
+                            width: 20.0,
+                            height: 20.0,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.0,
+                              valueColor: AlwaysStoppedAnimation(widget.textColor),
+                            ),
+                          ),
+                        ): new Container(),
+                        this.refreshHeaderStatus == RefreshHeaderStatus.REFRESH_READY ? Icon(
+                          Icons.arrow_upward,
+                          color: widget.textColor,
+                        ): Container(),
+                        this.refreshHeaderStatus == RefreshHeaderStatus.REFRESHED ? Icon(
+                          Icons.done,
+                          color: widget.textColor,
+                        ): Container(),
+                      ],
                     ),
                   ),
-                ): new Container(),
-                this.refreshHeaderStatus == RefreshHeaderStatus.REFRESH_READY ? Icon(
-                  Icons.arrow_upward,
-                  color: widget.textColor,
-                ): Container(),
-                this.refreshHeaderStatus == RefreshHeaderStatus.REFRESHED ? Icon(
-                  Icons.done,
-                  color: widget.textColor,
-                ): Container(),
-                new Container(margin: EdgeInsets.only(right: 10.0),),
-                new Align(
-                  child: new ClipRect(
-                    child: new Text(_showText,
-                      style: new TextStyle(color: widget.textColor),),
-                  ),
-                  alignment: Alignment.centerRight,
                 ),
+                Container(
+                  width: 150.0,
+                  height: double.infinity,
+                  child: new Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Text(_showText,
+                        style: new TextStyle(
+                          color: widget.textColor,
+                          fontSize: 16.0
+                        ),
+                      ),
+                      Container(
+                        height: 2.0,
+                      ),
+                      widget.showMore ? new Text(_getMoreInfo(),
+                        style: new TextStyle(
+                            color: widget.moreInfoColor,
+                            fontSize: 12.0
+                        ),
+                      ) : Container(),
+                    ],
+                  )
+                ),
+                Expanded (
+                  flex: 1,
+                  child: Container(),
+                )
               ],
             ),
           )

@@ -50,10 +50,14 @@ class _MyHomePageState extends State<MyHomePage> {
             key: _headerKey,
             bgColor: Colors.transparent,
             textColor: Colors.black,
+            moreInfoColor: Colors.black54,
+            showMore: true,
           ),
           refreshFooter: ClassicsFooter(
             bgColor: Colors.transparent,
             textColor: Colors.black,
+            moreInfoColor: Colors.black54,
+            showMore: true,
           ),
           child: new ListView.builder(
             //ListView的Item
@@ -74,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
               setState(() {
                 str.clear();
                 str.addAll(addStr);
-                _headerKey.currentState.refreshedText = "刷新完成!";
+                // _headerKey.currentState.refreshedText = "刷新完成!";
               });
             });
           },

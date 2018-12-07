@@ -92,6 +92,12 @@ class ClassicsFooter extends RefreshFooter {
   final double loadHeight;
   // 是否浮动
   final bool isFloat;
+  // 显示额外信息(默认为时间)
+  final bool showMore;
+  // 更多信息
+  final String moreInfo;
+  // 更多信息文字颜色
+  final Color moreInfoColor;
 
   // 构造函数
   ClassicsFooter({
@@ -103,8 +109,11 @@ class ClassicsFooter extends RefreshFooter {
     this.noMoreText: "No more",
     this.bgColor: Colors.blue,
     this.textColor: Colors.white,
+    this.moreInfoColor: Colors.white,
     this.loadHeight: 70.0,
-    this.isFloat: false
+    this.isFloat: false,
+    this.showMore: false,
+    this.moreInfo: "Loaded at %T"
   }):super(
     key: key ?? new GlobalKey<ClassicsFooterState>(),
     loadHeight: loadHeight,
@@ -125,8 +134,12 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   String noMoreText;
   // 刷新完成文字
   String loadedText;
+  // 更多信息文字
+  String moreInfo;
   // 显示的文字
   String _showText;
+  // 更新时间
+  DateTime _dateTime;
 
   // 初始化操作
   @override
@@ -138,6 +151,8 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     noMoreText = widget.noMoreText;
     loadedText = widget.loadedText;
     _showText = widget.loadText;
+    moreInfo = widget.moreInfo;
+    _dateTime = DateTime.now();
   }
 
   // 准备加载回调
@@ -161,6 +176,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   Future onLoaded() async {
     super.onLoaded();
     setState(() {
+      _dateTime = DateTime.now();
       _showText = loadedText;
     });
   }
@@ -169,6 +185,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   Future onNoMore() async {
     super.onNoMore();
     setState(() {
+      _dateTime = DateTime.now();
       _showText = noMoreText;
     });
   }
@@ -189,6 +206,11 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     });
   }
 
+  // 获取更多信息
+  String _getMoreInfo() {
+    return moreInfo.replaceAll("%T", "${_dateTime.hour}:${_dateTime.minute}");
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Container( //上拉加载布局
@@ -197,39 +219,72 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
       child: ListView(
         children: <Widget>[
           Container(
-            height: this.height > 30.0 ? this.height : 30.0,
+            height: this.height > 40.0 ? this.height : 40.0,
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                this.refreshFooterStatus == RefreshFooterStatus.NO_LOAD ? Icon(
-                  Icons.arrow_upward,
-                  color: widget.textColor,
-                ): Container(),
-                this.refreshFooterStatus == RefreshFooterStatus.LOADING ? new Align(
-                  alignment: Alignment.centerLeft,
+                Expanded (
+                  flex: 1,
                   child: new Container(
-                    width: 20.0,
-                    height: 20.0,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      valueColor: AlwaysStoppedAnimation(widget.textColor),
+                    alignment: Alignment.centerRight,
+                    child: Row (
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        this.refreshFooterStatus == RefreshFooterStatus.NO_LOAD ? Icon(
+                          Icons.arrow_upward,
+                          color: widget.textColor,
+                        ): Container(),
+                        this.refreshFooterStatus == RefreshFooterStatus.LOADING ? new Align(
+                          alignment: Alignment.centerLeft,
+                          child: new Container(
+                            width: 20.0,
+                            height: 20.0,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.0,
+                              valueColor: AlwaysStoppedAnimation(widget.textColor),
+                            ),
+                          ),
+                        ): Container(),
+                        this.refreshFooterStatus == RefreshFooterStatus.LOAD_READY ? Icon(
+                          Icons.arrow_downward,
+                          color: widget.textColor,
+                        ): Container(),
+                        this.refreshFooterStatus == RefreshFooterStatus.LOADED ? Icon(
+                          Icons.done,
+                          color: widget.textColor,
+                        ): Container(),
+                      ],
                     ),
                   ),
-                ): Container(),
-                this.refreshFooterStatus == RefreshFooterStatus.LOAD_READY ? Icon(
-                  Icons.arrow_downward,
-                  color: widget.textColor,
-                ): Container(),
-                this.refreshFooterStatus == RefreshFooterStatus.LOADED ? Icon(
-                  Icons.done,
-                  color: widget.textColor,
-                ): Container(),
-                new Container(margin: EdgeInsets.only(right: 10.0),),
-                new Align(
-                  alignment: Alignment.centerRight,
-                  child: new Text(_showText,
-                    style: new TextStyle(color: widget.textColor),),
                 ),
+                Container(
+                    width: 150.0,
+                    height: double.infinity,
+                    child: new Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Text(_showText,
+                          style: new TextStyle(
+                              color: widget.textColor,
+                              fontSize: 16.0
+                          ),
+                        ),
+                        Container(
+                          height: 2.0,
+                        ),
+                        widget.showMore ? new Text(_getMoreInfo(),
+                          style: new TextStyle(
+                              color: widget.moreInfoColor,
+                              fontSize: 12.0
+                          ),
+                        ) : Container(),
+                      ],
+                    )
+                ),
+                Expanded (
+                  flex: 1,
+                  child: Container(),
+                )
               ],
             ),
           )
