@@ -140,7 +140,6 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     _showText = widget.loadText;
   }
 
-
   // 准备加载回调
   @override
   Future onLoadReady() async {
@@ -149,7 +148,6 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
       _showText = loadReadyText;
     });
   }
-
   // 正在加载回调
   @override
   Future onLoading() async {
@@ -158,7 +156,6 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
       _showText = loadingText;
     });
   }
-
   // 加载完成回调
   @override
   Future onLoaded() async {
@@ -167,7 +164,6 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
       _showText = loadedText;
     });
   }
-
   // 没有更多数据回调
   @override
   Future onNoMore() async {
@@ -176,7 +172,6 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
       _showText = noMoreText;
     });
   }
-
   // 加载恢复回调
   @override
   Future onLoadRestore() async {
@@ -185,7 +180,6 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
       _showText = loadText;
     });
   }
-
   // 加载结束回调
   @override
   Future onLoadEnd() async {

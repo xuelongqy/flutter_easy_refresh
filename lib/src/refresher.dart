@@ -385,7 +385,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     _checkStateAndCallback(AnimationStates.LoadDataEnd, refreshBoxDirectionStatus);
     if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL) {
       await Future.delayed(new Duration(milliseconds: this._refreshHeader.finishDelay));
-    }else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL) {
+    }else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH) {
       await Future.delayed(new Duration(milliseconds: this._refreshFooter.finishDelay));
     }
     // 开始将加载（刷新）布局缩回去的动画
@@ -551,7 +551,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       setState(() {
         _scrollPhysics = new NeverScrollableScrollPhysics();
       });
-      _animationController.forward();
+      if (!_animationController.isAnimating) {
+        _animationController.forward();
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
+import 'package:flutter_easyrefresh/material_footer.dart';
 
 void main() => runApp(MyApp());
 
@@ -43,12 +44,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new EasyRefresh(
           key: _easyRefreshKey,
           behavior: ScrollOverBehavior(),
-          refreshHeader: MaterialHeader(),
-//          refreshHeader: ClassicsHeader(
-//            key: _headerKey,
-//            bgColor: Colors.transparent,
-//            textColor: Colors.black,
-//          ),
+//          refreshHeader: MaterialHeader(),
+//          refreshFooter: MaterialFooter(),
+          refreshHeader: ClassicsHeader(
+            key: _headerKey,
+            bgColor: Colors.transparent,
+            textColor: Colors.black,
+          ),
           refreshFooter: ClassicsFooter(
             bgColor: Colors.transparent,
             textColor: Colors.black,
@@ -72,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
               setState(() {
                 str.clear();
                 str.addAll(addStr);
-                //_headerKey.currentState.refreshedText = "刷新完成!";
+                _headerKey.currentState.refreshedText = "刷新完成!";
               });
             });
           },
