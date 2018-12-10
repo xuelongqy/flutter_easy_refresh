@@ -27,7 +27,7 @@ abstract class RefreshHeader extends StatefulWidget {
   // 构造函数
   const RefreshHeader({
     GlobalKey<RefreshHeaderState> key,
-    this.refreshHeight: 50.0,
+    this.refreshHeight: 70.0,
     this.isFloat: false,
     this.finishDelay: 1000
   }) : super(key: key);
@@ -45,6 +45,10 @@ abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
     });
   }
 
+  // 回调开始刷新方法
+  Future onRefreshStart() async {
+    refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
+  }
   // 回调准备刷新方法
   Future onRefreshReady() async {
     refreshHeaderStatus = RefreshHeaderStatus.REFRESH_READY;
@@ -94,7 +98,7 @@ class ClassicsHeader extends RefreshHeader {
 
   // 构造函数
   ClassicsHeader({
-    GlobalKey<ClassicsHeaderState> key,
+    GlobalKey<RefreshHeaderState> key,
     this.refreshText: "Pull to refresh",
     this.refreshReadyText: "Release to refresh",
     this.refreshingText: "Refreshing...",
@@ -173,7 +177,8 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
 
   // 获取更多信息
   String _getMoreInfo() {
-    return widget.moreInfo.replaceAll("%T", "${_dateTime.hour}:${_dateTime.minute}");
+    String fillChar = _dateTime.minute < 10 ? "0" : "";
+    return widget.moreInfo.replaceAll("%T", "${_dateTime.hour}:$fillChar${_dateTime.minute}");
   }
 
   // 下拉刷新布局

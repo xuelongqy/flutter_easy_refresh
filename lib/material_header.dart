@@ -24,11 +24,12 @@ class MaterialHeader extends RefreshHeader {
   final Color backgroundColor;
 
   MaterialHeader({
+    GlobalKey<RefreshHeaderState> key,
     this.displacement: 40.0,
     this.valueColor,
     this.backgroundColor,
   }): super(
-      key: new GlobalKey<RefreshHeaderState>(),
+      key: key ?? new GlobalKey<RefreshHeaderState>(),
       refreshHeight: 70.0,
       isFloat: true
   );

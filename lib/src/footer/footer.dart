@@ -27,7 +27,7 @@ abstract class RefreshFooter extends StatefulWidget {
   // 构造函数
   const RefreshFooter({
     GlobalKey<RefreshFooterState> key,
-    @required this.loadHeight,
+    this.loadHeight: 70.0,
     this.isFloat: false,
     this.finishDelay: 1000
   }) : super(key: key);
@@ -46,6 +46,10 @@ abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
     });
   }
 
+  // 回调开始加载方法
+  Future onLoadStart() async {
+    refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
+  }
   // 回调准备加载方法
   Future onLoadReady() async {
     refreshFooterStatus = RefreshFooterStatus.LOAD_READY;
@@ -101,7 +105,7 @@ class ClassicsFooter extends RefreshFooter {
 
   // 构造函数
   ClassicsFooter({
-    GlobalKey<ClassicsFooterState> key,
+    GlobalKey<RefreshFooterState> key,
     this.loadText: "Push to load",
     this.loadReadyText: "Release to load",
     this.loadingText: "Loading...",
@@ -115,7 +119,7 @@ class ClassicsFooter extends RefreshFooter {
     this.showMore: false,
     this.moreInfo: "Loaded at %T"
   }):super(
-    key: key ?? new GlobalKey<ClassicsFooterState>(),
+    key: key ?? new GlobalKey<RefreshFooterState>(),
     loadHeight: loadHeight,
     isFloat: isFloat
   );
@@ -190,7 +194,8 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
 
   // 获取更多信息
   String _getMoreInfo() {
-    return widget.moreInfo.replaceAll("%T", "${_dateTime.hour}:${_dateTime.minute}");
+    String fillChar = _dateTime.minute < 10 ? "0" : "";
+    return widget.moreInfo.replaceAll("%T", "${_dateTime.hour}:$fillChar${_dateTime.minute}");
   }
 
   @override
