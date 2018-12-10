@@ -22,7 +22,7 @@ class MaterialFooter extends RefreshFooter {
   final Color backgroundColor;
 
   MaterialFooter({
-    GlobalKey<RefreshFooterState> key,
+    @required GlobalKey<RefreshFooterState> key,
     this.displacement: 40.0,
     this.valueColor,
     this.backgroundColor,

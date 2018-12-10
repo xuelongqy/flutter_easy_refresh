@@ -25,12 +25,14 @@ abstract class RefreshHeader extends StatefulWidget {
   }
 
   // 构造函数
-  const RefreshHeader({
+  RefreshHeader({
     @required GlobalKey<RefreshHeaderState> key,
     this.refreshHeight: 70.0,
     this.isFloat: false,
     this.finishDelay: 1000
-  }) : super(key: key);
+  }) : super(key: key){
+    assert(this.key != null);
+  }
 }
 abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
   // 顶部栏状态
@@ -98,7 +100,7 @@ class ClassicsHeader extends RefreshHeader {
 
   // 构造函数
   ClassicsHeader({
-    GlobalKey<RefreshHeaderState> key,
+    @required GlobalKey<RefreshHeaderState> key,
     this.refreshText: "Pull to refresh",
     this.refreshReadyText: "Release to refresh",
     this.refreshingText: "Refreshing...",
@@ -111,7 +113,7 @@ class ClassicsHeader extends RefreshHeader {
     this.showMore: false,
     this.moreInfo: "Updated at %T"
   }):super(
-    key: key ?? new GlobalKey<RefreshHeaderState>(),
+    key: key,
     refreshHeight: refreshHeight,
     isFloat: isFloat
   );

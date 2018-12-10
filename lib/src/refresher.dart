@@ -109,8 +109,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   // 底部视图
   RefreshFooter _refreshFooter;
   // 默认顶部和底部视图
-  RefreshHeader _defaultHeader = ClassicsHeader();
-  RefreshFooter _defaultFooter = ClassicsFooter();
+  RefreshHeader _defaultHeader = ClassicsHeader(key: new GlobalKey<RefreshHeaderState>(),);
+  RefreshFooter _defaultFooter = ClassicsFooter(key: new GlobalKey<RefreshFooterState>());
   // 滑动速度(ms)为单位
   double scrollSpeed = 0;
   double lastPixels = 0;
@@ -367,6 +367,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       if (widget.onRefresh != null) {
         // 调用刷新回调
         await widget.onRefresh();
+        // 稍作延时(等待列表加载完成,用于判断前后条数差异)
+        await new Future.delayed(const Duration(milliseconds: 200), () {});
       }
     } else {
       if (widget.loadMore != null) {

@@ -10,7 +10,7 @@ class BallPulseHeader extends RefreshHeader {
   final Color backgroundColor;
 
   BallPulseHeader({
-    GlobalKey<RefreshHeaderState> key,
+    @required GlobalKey<RefreshHeaderState> key,
     this.color: Colors.blue,
     this.backgroundColor: Colors.transparent,
   }):super(

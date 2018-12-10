@@ -24,7 +24,7 @@ class MaterialHeader extends RefreshHeader {
   final Color backgroundColor;
 
   MaterialHeader({
-    GlobalKey<RefreshHeaderState> key,
+    @required GlobalKey<RefreshHeaderState> key,
     this.displacement: 40.0,
     this.valueColor,
     this.backgroundColor,

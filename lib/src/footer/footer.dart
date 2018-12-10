@@ -25,12 +25,14 @@ abstract class RefreshFooter extends StatefulWidget {
   }
 
   // 构造函数
-  const RefreshFooter({
+  RefreshFooter({
     @required GlobalKey<RefreshFooterState> key,
     this.loadHeight: 70.0,
     this.isFloat: false,
     this.finishDelay: 1000
-  }) : super(key: key);
+  }) : super(key: key) {
+    assert(this.key != null);
+  }
 }
 
 abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
@@ -119,7 +121,7 @@ class ClassicsFooter extends RefreshFooter {
     this.showMore: false,
     this.moreInfo: "Loaded at %T"
   }):super(
-    key: key ?? new GlobalKey<RefreshFooterState>(),
+    key: key,
     loadHeight: loadHeight,
     isFloat: isFloat
   );

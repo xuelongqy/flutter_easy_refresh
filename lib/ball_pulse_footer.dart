@@ -10,7 +10,7 @@ class BallPulseFooter extends RefreshFooter {
   final Color backgroundColor;
 
   BallPulseFooter({
-    GlobalKey<RefreshFooterState> key,
+    @required GlobalKey<RefreshFooterState> key,
     this.color: Colors.blue,
     this.backgroundColor: Colors.transparent,
   }):super(
