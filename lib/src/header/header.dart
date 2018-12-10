@@ -116,16 +116,6 @@ class ClassicsHeader extends RefreshHeader {
   ClassicsHeaderState createState() => ClassicsHeaderState();
 }
 class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
-  // 提示刷新文字
-  String refreshText;
-  // 准备刷新文字
-  String refreshReadyText;
-  // 正在刷新文字
-  String refreshingText;
-  // 刷新完成文字
-  String refreshedText;
-  // 更多信息文字
-  String moreInfo;
   // 显示的文字
   String _showText;
   // 更新时间
@@ -135,11 +125,6 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
   @override
   void initState() {
     super.initState();
-    refreshText = widget.refreshText;
-    refreshReadyText = widget.refreshReadyText;
-    refreshingText = widget.refreshingText;
-    refreshedText = widget.refreshedText;
-    moreInfo = widget.moreInfo;
     _showText = widget.refreshText;
     _dateTime = DateTime.now();
   }
@@ -149,7 +134,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
   Future onRefreshReady() async {
     super.onRefreshReady();
     setState(() {
-      _showText = refreshReadyText;
+      _showText = widget.refreshReadyText;
     });
   }
   // 正在刷新回调
@@ -157,7 +142,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
   Future onRefreshing() async {
     super.onRefreshing();
     setState(() {
-      _showText = refreshingText;
+      _showText = widget.refreshingText;
     });
   }
   // 完成刷新回调
@@ -166,7 +151,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
     super.onRefreshed();
     setState(() {
       _dateTime = DateTime.now();
-      _showText = refreshedText;
+      _showText = widget.refreshedText;
     });
   }
   // 刷新恢复回调
@@ -174,7 +159,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
   Future onRefreshRestore() async {
     super.onRefreshRestore();
     setState(() {
-      _showText = refreshText;
+      _showText = widget.refreshText;
     });
   }
   // 刷新结束回调
@@ -182,13 +167,13 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
   Future onRefreshEnd() async {
     super.onRefreshEnd();
     setState(() {
-      _showText = refreshText;
+      _showText = widget.refreshText;
     });
   }
 
   // 获取更多信息
   String _getMoreInfo() {
-    return moreInfo.replaceAll("%T", "${_dateTime.hour}:${_dateTime.minute}");
+    return widget.moreInfo.replaceAll("%T", "${_dateTime.hour}:${_dateTime.minute}");
   }
 
   // 下拉刷新布局

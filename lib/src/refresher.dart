@@ -92,8 +92,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   Animation<double> _scrollOverAnimation;
   AnimationController _scrollOverAnimationController;
   // 出发刷新和加载的高度
-  double _refreshHeight = 50.0;
-  double _loadHeight = 50.0;
+  double _refreshHeight = 70.0;
+  double _loadHeight = 70.0;
   // 刷新和加载的状态
   RefreshBoxDirectionStatus _states = RefreshBoxDirectionStatus.IDLE;
   RefreshBoxDirectionStatus _lastStates = RefreshBoxDirectionStatus.IDLE;
@@ -108,6 +108,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   RefreshHeader _refreshHeader;
   // 底部视图
   RefreshFooter _refreshFooter;
+  // 默认顶部和底部视图
+  RefreshHeader _defaultHeader = ClassicsHeader();
+  RefreshFooter _defaultFooter = ClassicsFooter();
   // 滑动速度(ms)为单位
   double scrollSpeed = 0;
   double lastPixels = 0;
@@ -208,8 +211,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     // 初始化滚动形式
     _scrollPhysics = new RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
     // 初始化刷新高度
-    _refreshHeight = widget.refreshHeader == null ? 50.0 : widget.refreshHeader.refreshHeight;
-    _loadHeight = widget.refreshFooter == null ? 50.0 : widget.refreshFooter.loadHeight;
+    _refreshHeight = widget.refreshHeader == null ? 70.0 : widget.refreshHeader.refreshHeight;
+    _loadHeight = widget.refreshFooter == null ? 70.0 : widget.refreshFooter.loadHeight;
     // 顶部栏和底部栏动画控制
     _animationController = new AnimationController(duration: const Duration(milliseconds: 250), vsync: this);
     _animation = new Tween(begin: 1.0, end: 0.0).animate(_animationController)
@@ -332,9 +335,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   // 生成底部栏
   Widget _getFooter() {
     if (widget.loadMore != null) {
-      if (this._refreshFooter != null) return this._refreshFooter;
       if (widget.refreshFooter == null) {
-        this._refreshFooter = __classicsFooterBuilder();
+        this._refreshFooter = _defaultFooter;
       } else {
         this._refreshFooter = widget.refreshFooter;
       }
@@ -344,17 +346,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     }
   }
 
-  // 默认底部栏
-  Widget __classicsFooterBuilder() {
-    return new ClassicsFooter();
-  }
-
   // 生成顶部栏
   Widget _getHeader() {
     if (widget.onRefresh != null) {
-      if (this._refreshHeader != null) return this._refreshHeader;
       if (widget.refreshHeader == null) {
-        this._refreshHeader = _classicsHeaderBuilder();
+        this._refreshHeader = _defaultHeader;
       } else {
         this._refreshHeader = widget.refreshHeader;
       }
@@ -362,11 +358,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     } else {
       return new Container();
     }
-  }
-
-  // 默认顶部栏
-  Widget _classicsHeaderBuilder() {
-    return ClassicsHeader();
   }
 
   void _refreshStart(RefreshBoxDirectionStatus refreshBoxDirectionStatus) async {

@@ -124,18 +124,6 @@ class ClassicsFooter extends RefreshFooter {
   ClassicsFooterState createState() => ClassicsFooterState();
 }
 class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
-  // 提示加载文字
-  String loadText;
-  // 准备加载文字
-  String loadReadyText;
-  // 正在加载文字
-  String loadingText;
-  // 没有更多文字
-  String noMoreText;
-  // 刷新完成文字
-  String loadedText;
-  // 更多信息文字
-  String moreInfo;
   // 显示的文字
   String _showText;
   // 更新时间
@@ -145,13 +133,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   @override
   void initState() {
     super.initState();
-    loadText = widget.loadText;
-    loadReadyText = widget.loadReadyText;
-    loadingText = widget.loadingText;
-    noMoreText = widget.noMoreText;
-    loadedText = widget.loadedText;
     _showText = widget.loadText;
-    moreInfo = widget.moreInfo;
     _dateTime = DateTime.now();
   }
 
@@ -160,7 +142,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   Future onLoadReady() async {
     super.onLoadReady();
     setState(() {
-      _showText = loadReadyText;
+      _showText = widget.loadReadyText;
     });
   }
   // 正在加载回调
@@ -168,7 +150,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   Future onLoading() async {
     super.onLoading();
     setState(() {
-      _showText = loadingText;
+      _showText = widget.loadingText;
     });
   }
   // 加载完成回调
@@ -177,7 +159,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     super.onLoaded();
     setState(() {
       _dateTime = DateTime.now();
-      _showText = loadedText;
+      _showText = widget.loadedText;
     });
   }
   // 没有更多数据回调
@@ -186,7 +168,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     super.onNoMore();
     setState(() {
       _dateTime = DateTime.now();
-      _showText = noMoreText;
+      _showText = widget.noMoreText;
     });
   }
   // 加载恢复回调
@@ -194,7 +176,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   Future onLoadRestore() async {
     super.onLoadRestore();
     setState(() {
-      _showText = loadText;
+      _showText = widget.loadText;
     });
   }
   // 加载结束回调
@@ -202,13 +184,13 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
   Future onLoadEnd() async {
     super.onLoadEnd();
     setState(() {
-      _showText = loadText;
+      _showText = widget.loadText;
     });
   }
 
   // 获取更多信息
   String _getMoreInfo() {
-    return moreInfo.replaceAll("%T", "${_dateTime.hour}:${_dateTime.minute}");
+    return widget.moreInfo.replaceAll("%T", "${_dateTime.hour}:${_dateTime.minute}");
   }
 
   @override

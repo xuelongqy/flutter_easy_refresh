@@ -33,6 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> str=["1","2","3","4","5","6","7","8","9","0"];
   GlobalKey<EasyRefreshState> _easyRefreshKey = new GlobalKey<EasyRefreshState>();
   GlobalKey<ClassicsHeaderState> _headerKey = new GlobalKey<ClassicsHeaderState>();
+  GlobalKey<ClassicsFooterState> _footerKey = new GlobalKey<ClassicsFooterState>();
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
             showMore: true,
           ),
           refreshFooter: ClassicsFooter(
+            key: _footerKey,
             bgColor: Colors.transparent,
             textColor: Colors.black,
             moreInfoColor: Colors.black54,
@@ -78,7 +80,6 @@ class _MyHomePageState extends State<MyHomePage> {
               setState(() {
                 str.clear();
                 str.addAll(addStr);
-                // _headerKey.currentState.refreshedText = "刷新完成!";
               });
             });
           },
