@@ -198,7 +198,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   void initState() {
     super.initState();
     // 超出边界监听器
-    _scrollOverListener = new ScrollOverListener(topOver: topOver, bottomOver: bottomOver);
+    _scrollOverListener = new ScrollOverListener(
+        topOver: topOver,
+        bottomOver: bottomOver,
+        justScrollOver: widget.onRefresh == null || widget.onRefresh == null && widget.behavior is ScrollOverBehavior
+    );
     // 初始化滚动控制器
     _scrollController = widget.child.controller ?? new ScrollController();
     // 初始化滚动形式

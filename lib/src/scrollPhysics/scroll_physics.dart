@@ -188,23 +188,25 @@ class RefreshAlwaysScrollPhysics extends ScrollPhysics {
 
   @override
   double applyBoundaryConditions(ScrollMetrics position, double value) {
-    if (value < position.pixels && position.pixels <= position.minScrollExtent) { // underscroll
-      return value - position.pixels;
-    }
-    if (value < position.minScrollExtent && position.minScrollExtent < position.pixels) { // hit top edge
-      if (scrollOverListener != null && scrollOverListener.topOver != null) {
-        scrollOverListener.topOver();
+    if (!scrollOverListener.justScrollOver) {
+      if (value < position.pixels && position.pixels <= position.minScrollExtent) { // underscroll
+        return value - position.pixels;
       }
-      return value - position.minScrollExtent;
-    }
-    if (position.maxScrollExtent <= position.pixels && position.pixels < value) { // overscroll
-      return value - position.pixels;
-    }
-    if (position.pixels < position.maxScrollExtent && position.maxScrollExtent < value) { // hit bottom edge
-      if (scrollOverListener != null && scrollOverListener.bottomOver != null) {
-        scrollOverListener.bottomOver();
+      if (value < position.minScrollExtent && position.minScrollExtent < position.pixels) { // hit top edge
+        if (scrollOverListener != null && scrollOverListener.topOver != null) {
+          scrollOverListener.topOver();
+        }
+        return value - position.minScrollExtent;
       }
-      return value - position.maxScrollExtent;
+      if (position.maxScrollExtent <= position.pixels && position.pixels < value) { // overscroll
+        return value - position.pixels;
+      }
+      if (position.pixels < position.maxScrollExtent && position.maxScrollExtent < value) { // hit bottom edge
+        if (scrollOverListener != null && scrollOverListener.bottomOver != null) {
+          scrollOverListener.bottomOver();
+        }
+        return value - position.maxScrollExtent;
+      }
     }
     return 0.0;
   }
@@ -264,6 +266,11 @@ class RefreshAlwaysScrollPhysics extends ScrollPhysics {
 class ScrollOverListener {
   final TopOver topOver;
   final BottomOver bottomOver;
+  final bool justScrollOver;
 
-  const ScrollOverListener({this.topOver, this.bottomOver});
+  const ScrollOverListener({
+    this.topOver,
+    this.bottomOver,
+    this.justScrollOver: false
+  });
 }
