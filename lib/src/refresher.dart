@@ -673,9 +673,14 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         else if (currentState == AnimationStates.LoadDataEnd) {
           this._refreshHeader.getKey().currentState.onRefreshed();
         }
-        // 刷新重置
         else if (currentState == AnimationStates.DragAndRefreshNotEnabled) {
-          this._refreshHeader.getKey().currentState.onRefreshRestore();
+          if (_animationStates == AnimationStates.RefreshBoxIdle) {
+            // 开始刷新
+            this._refreshHeader.getKey().currentState.onRefreshStart();
+          }else {
+            // 刷新重置
+            this._refreshHeader.getKey().currentState.onRefreshRestore();
+          }
         }
       }
       // 上拉加载
@@ -699,9 +704,14 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             this._refreshFooter.getKey().currentState.onNoMore();
           }
         }
-        // 加载重置
         else if (currentState == AnimationStates.DragAndRefreshNotEnabled) {
-          this._refreshFooter.getKey().currentState.onLoadRestore();
+          if (_animationStates == AnimationStates.RefreshBoxIdle) {
+            // 开始加载
+            this._refreshFooter.getKey().currentState.onLoadStart();
+          }else {
+            // 加载重置
+            this._refreshFooter.getKey().currentState.onLoadRestore();
+          }
         }
       } else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.IDLE) {
         _isRefresh = false;

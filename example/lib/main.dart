@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
+import 'package:flutter_easyrefresh/ball_pulse_header.dart';
+import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 
 void main() => runApp(MyApp());
 
@@ -32,8 +34,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> addStr=["1","2","3","4","5","6","7","8","9","0"];
   List<String> str=["1","2","3","4","5","6","7","8","9","0"];
   GlobalKey<EasyRefreshState> _easyRefreshKey = new GlobalKey<EasyRefreshState>();
-  GlobalKey<ClassicsHeaderState> _headerKey = new GlobalKey<ClassicsHeaderState>();
-  GlobalKey<ClassicsFooterState> _footerKey = new GlobalKey<ClassicsFooterState>();
+  GlobalKey<RefreshHeaderState> _headerKey = new GlobalKey<RefreshHeaderState>();
+  GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,19 +47,21 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new EasyRefresh(
           key: _easyRefreshKey,
           behavior: ScrollOverBehavior(),
-//          refreshHeader: MaterialHeader(),
-//          refreshFooter: MaterialFooter(),
+//          refreshHeader: BallPulseHeader(key: _headerKey,),
+//          refreshFooter: BallPulseFooter(key: _footerKey),
+//          refreshHeader: MaterialHeader(key: _headerKey,),
+//          refreshFooter: MaterialFooter(key: _footerKey),
           refreshHeader: ClassicsHeader(
             key: _headerKey,
             bgColor: Colors.transparent,
-            textColor: Colors.black,
+            textColor: Colors.black87,
             moreInfoColor: Colors.black54,
             showMore: true,
           ),
           refreshFooter: ClassicsFooter(
             key: _footerKey,
             bgColor: Colors.transparent,
-            textColor: Colors.black,
+            textColor: Colors.black87,
             moreInfoColor: Colors.black54,
             showMore: true,
           ),

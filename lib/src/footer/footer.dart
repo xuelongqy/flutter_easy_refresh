@@ -26,7 +26,7 @@ abstract class RefreshFooter extends StatefulWidget {
 
   // 构造函数
   const RefreshFooter({
-    GlobalKey<RefreshFooterState> key,
+    @required GlobalKey<RefreshFooterState> key,
     this.loadHeight: 70.0,
     this.isFloat: false,
     this.finishDelay: 1000

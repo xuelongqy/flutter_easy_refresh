@@ -26,7 +26,7 @@ abstract class RefreshHeader extends StatefulWidget {
 
   // 构造函数
   const RefreshHeader({
-    GlobalKey<RefreshHeaderState> key,
+    @required GlobalKey<RefreshHeaderState> key,
     this.refreshHeight: 70.0,
     this.isFloat: false,
     this.finishDelay: 1000
