@@ -41,6 +41,7 @@ abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
   double height = 0.0;
 
   // 更新视图高度
+  @mustCallSuper
   void updateHeight(double newHeight) {
     setState(() {
       height = newHeight;
@@ -48,26 +49,32 @@ abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
   }
 
   // 回调开始刷新方法
+  @mustCallSuper
   Future onRefreshStart() async {
     refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
   }
   // 回调准备刷新方法
+  @mustCallSuper
   Future onRefreshReady() async {
     refreshHeaderStatus = RefreshHeaderStatus.REFRESH_READY;
   }
   // 回调开始刷新方法
+  @mustCallSuper
   Future onRefreshing() async {
     refreshHeaderStatus = RefreshHeaderStatus.REFRESHING;
   }
   // 回调刷新完成方法
+  @mustCallSuper
   Future onRefreshed() async {
     refreshHeaderStatus = RefreshHeaderStatus.REFRESHED;
   }
   // 回调刷新恢复方法
+  @mustCallSuper
   Future onRefreshRestore() async {
     refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
   }
   // 回调刷新结束方法
+  @mustCallSuper
   Future onRefreshEnd() async {
     refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
   }
@@ -192,7 +199,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
       child: ListView(
         children: <Widget>[
           Container(
-            height: this.height > 40.0 ? this.height : 40.0,
+            height: this.height > 45.0 ? this.height : 45.0,
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[

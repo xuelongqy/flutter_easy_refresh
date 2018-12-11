@@ -42,6 +42,7 @@ abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
   double height = 0.0;
 
   // 更新视图高度
+  @mustCallSuper
   void updateHeight(double newHeight) {
     setState(() {
       height = newHeight;
@@ -49,30 +50,37 @@ abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
   }
 
   // 回调开始加载方法
+  @mustCallSuper
   Future onLoadStart() async {
     refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
   }
   // 回调准备加载方法
+  @mustCallSuper
   Future onLoadReady() async {
     refreshFooterStatus = RefreshFooterStatus.LOAD_READY;
   }
   // 回调开始加载方法
+  @mustCallSuper
   Future onLoading() async {
     refreshFooterStatus = RefreshFooterStatus.LOADING;
   }
   // 回调加载完成方法
+  @mustCallSuper
   Future onLoaded() async {
     refreshFooterStatus = RefreshFooterStatus.LOADED;
   }
   // 回调没有更多数据方法
+  @mustCallSuper
   Future onNoMore() async {
     refreshFooterStatus = RefreshFooterStatus.LOADED;
   }
   // 回调加载恢复方法
+  @mustCallSuper
   Future onLoadRestore() async {
     refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
   }
   // 回调加载结束方法
+  @mustCallSuper
   Future onLoadEnd() async {
     refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
   }
@@ -208,7 +216,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
       child: ListView(
         children: <Widget>[
           Container(
-            height: this.height > 40.0 ? this.height : 40.0,
+            height: this.height > 45.0 ? this.height : 45.0,
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
