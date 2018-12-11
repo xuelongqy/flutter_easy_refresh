@@ -1,7 +1,5 @@
 # flutter_easyrefresh
 
-A widget provided to the flutter scroll component drop-down refresh and pull up load.
-
 ## [English](https://github.com/xuelongqy/flutter_easyrefresh/edit/master/README.md) | 中文
 
 正如名字一样，EasyreFresh很容易就能在Flutter应用上实现下拉刷新以及上拉加载操作，它支持几乎所有的Flutter控件，但前提是需要包裹成ScrollView。它的功能与Android的SmartRefreshLayout很相似，同样也吸取了很多三方库的优点。EasyreFresh中集成了多种风格的Header和Footer，但是它并没有局限性，你可以很轻松的自定义。使用Flutter强大的动画，甚至随便一个简单的控件也可以完成。EasyreFresh的目标是为Flutter打造一个强大，稳定，成熟的下拉刷新框架。
@@ -15,11 +13,21 @@ A widget provided to the flutter scroll component drop-down refresh and pull up 
  - 支持 Header 和 Footer 列表嵌入以及视图浮动两种形式
  
 ## Demo
-[下载 APK-Demo](待上传)
+[下载 APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/pkg/EasyRefresh.apk)
 
 #### 项目演示
+|基本样式|自动加载|
+|:---:|:---:|
+|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/basic.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/auto_load.gif)|
 
- 待上传
+|浮动效果|个人中心|
+|:---:|:---:|
+|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/float.gif)|![](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/image/user_profile.gif)|
+
+#### 样式演示 Style
+|Material|BallPulse|
+|:---:|:---:|
+|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/material.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/ball_pulse.gif)|
  
 ## 简单用例
 #### 1.在 pubspec.yaml 中添加依赖
