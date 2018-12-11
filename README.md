@@ -19,15 +19,18 @@
 |基本样式|自动加载|
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/basic.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/auto_load.gif)|
+|[BasicPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/basic_page.dart)|[AutoLoadPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/auto_load_page.dart)|
 
 |浮动效果|个人中心|
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/float.gif)|![](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/image/user_profile.gif)|
+|[FloatPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/float_page.dart)|[UserProfilePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/user_profile_page.dart)|
 
 #### 样式演示 Style
 |Material|BallPulse|
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/material.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/ball_pulse.gif)|
+|[MaterialPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/material_page.dart)|[BallPulsePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/ball_pulse_page.dart)|
  
 ## 简单用例
 #### 1.在 pubspec.yaml 中添加依赖
