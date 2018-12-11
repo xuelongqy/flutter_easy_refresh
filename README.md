@@ -12,6 +12,12 @@
  - 支持下拉刷新、上拉加载(可自动)
  - 支持 Header 和 Footer 列表嵌入以及视图浮动两种形式
  
+## 传送门
+
+ - [属性文档](https://github.com/xuelongqy/flutter_easyrefresh/edit/master/README.md)
+ - [更新日志](https://github.com/xuelongqy/flutter_easyrefresh/edit/master/README.md)
+ - [自定义Header](https://github.com/xuelongqy/flutter_easyrefresh/edit/master/README.md)
+
 ## Demo
 [下载 APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/pkg/EasyRefresh.apk)
 
