@@ -223,7 +223,6 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
 ## 代码示例
 必须继承RefreshFooter以及RefreshFooterState并实现里面的方法即可(和你自定义StatefulWidget是一样的)
 ~~~dart
-/// 经典(默认)顶部视图
 /// 经典(默认)底部视图
 class ClassicsFooter extends RefreshFooter {
   // 提示加载文字
