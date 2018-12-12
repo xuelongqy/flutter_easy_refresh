@@ -41,10 +41,11 @@ Just like the name, EasyreFresh can easily implement pull-down refresh and uploa
 ## Sample
 #### 1.Adding dependencies to pubspec. yaml
 ```
-//pub way
-To upload
+//pub
+dependencies:
+  flutter_easyrefresh: ^1.0.0
 
-//import way
+//import
 dependencies:
   flutter_easyrefresh:
     path: Your path
