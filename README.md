@@ -96,7 +96,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 # 捐赠
 如果你喜欢我的项目，请在项目右上角 "Star" 一下。你的支持是我最大的鼓励！ ^_^
-你也还可以扫描下面的二维码~ 对作者进行打赏。  
+你也还可以扫描下面的二维码，或者通过“[PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=334PPRBZTY3J8&source=url)”，对作者进行打赏。  
 
 ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_alipay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_wxpay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_tencent.jpg?raw=true)
 
