@@ -1,6 +1,6 @@
 # flutter_easyrefresh
 
-## [English](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README.md) | 中文
+## [English](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README_EN.md) | 中文
 
 正如名字一样，EasyreFresh很容易就能在Flutter应用上实现下拉刷新以及上拉加载操作，它支持几乎所有的Flutter控件，但前提是需要包裹成ScrollView。它的功能与Android的SmartRefreshLayout很相似，同样也吸取了很多三方库的优点。EasyreFresh中集成了多种风格的Header和Footer，但是它并没有局限性，你可以很轻松的自定义。使用Flutter强大的动画，甚至随便一个简单的控件也可以完成。EasyreFresh的目标是为Flutter打造一个强大，稳定，成熟的下拉刷新框架。
 
@@ -8,7 +8,7 @@
 
  - 支持Andorid(光晕)，ios(越界回弹)效果
  - 支持任意的ScrollView控件，如果不是进行简单封装即可(所以理论是所有控件)
- - 支持自定义并且已经集成了很多炫酷的 Header 和 Footer.
+ - 支持自定义并且已经集成了很多炫酷的 Header 和 Footer
  - 支持下拉刷新、上拉加载(可自动)
  - 支持 Header 和 Footer 列表嵌入以及视图浮动两种形式
  
