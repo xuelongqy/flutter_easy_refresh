@@ -15,7 +15,7 @@
 ## 传送门
 
  - [属性文档](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README.md)
- - [更新日志](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README.md)
+ - [更新日志](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/cn/CHANGELOG.md)
  - [自定义Header](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README.md)
 
 ## Demo
