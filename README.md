@@ -42,7 +42,8 @@
 #### 1.在 pubspec.yaml 中添加依赖
 ```
 //pub方式
-待上传
+dependencies:
+  flutter_easyrefresh: ^1.0.0
 
 //导入方式
 dependencies:
