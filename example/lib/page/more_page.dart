@@ -1,7 +1,9 @@
 import 'package:example/generated/translations.dart';
+import 'package:example/page/support_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// 更多页面
 class MorePage extends StatefulWidget {
@@ -26,6 +28,9 @@ class _MorePageState extends State<MorePage> {
               icon: Icon(Icons.supervised_user_circle,
                 color: Colors.orange,
               ),
+              onPressed: () {
+                launch("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q");
+              },
             ),
             Container(
               width: double.infinity,
@@ -41,6 +46,9 @@ class _MorePageState extends State<MorePage> {
               icon: Icon(Icons.http,
                 color: Colors.orange,
               ),
+              onPressed: () {
+                launch("https://github.com/xuelongqy/flutter_easyrefresh");
+              },
             ),
             Container(
               width: double.infinity,
@@ -56,6 +64,11 @@ class _MorePageState extends State<MorePage> {
               icon: Icon(Icons.star,
                 color: Colors.orange,
               ),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                  return SupportPage();
+                }));
+              },
             ),
             Container(
               width: double.infinity,
@@ -70,6 +83,9 @@ class _MorePageState extends State<MorePage> {
               icon: Icon(Icons.info,
                 color: Colors.orange,
               ),
+              onPressed: () {
+                launch("https://github.com/xuelongqy/flutter_easyrefresh");
+              },
             ),
           ],
         ),

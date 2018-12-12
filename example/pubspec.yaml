@@ -21,6 +21,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+  url_launcher: ^4.0.2
   flutter_easyrefresh:
     path: ../
 
@@ -72,5 +73,9 @@ flutter:
   # see https://flutter.io/custom-fonts/#from-packages
   assets:
       - assets/image/head.jpg
+      - assets/image/paypal.png
+      - assets/image/QQ.png
+      - assets/image/weixin.png
+      - assets/image/alipay.png
       - assets/locale/i18n_en.json
       - assets/locale/i18n_zh.json

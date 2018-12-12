@@ -42,5 +42,10 @@
   "projectAddress": "Project address",
   "supportAuthor": "Support the author",
   "supportAuthorDescribe": "Your support is my biggest motivation",
-  "about": "About"
+  "about": "About",
+  "star": "Star project",
+  "aliPay": "AliPay",
+  "weiXinPay": "WeiXin Pay",
+  "qqPay": "QQ Pay",
+  "payPal": "PayPal"
 }

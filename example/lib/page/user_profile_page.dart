@@ -2,6 +2,7 @@ import 'package:example/generated/translations.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// 个人中心页面
 class UserProfilePage extends StatefulWidget {
@@ -105,6 +106,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         titleColor: Colors.white,
                         describe: "554981921",
                         describeColor: Colors.white,
+                        onPressed: () {
+                          launch("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q");
+                        },
                       ),
                       ListItem(
                         icon: Icon(Icons.http,
@@ -114,6 +118,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         titleColor: Colors.white,
                         describe: "https://github.com/xuelongqy",
                         describeColor: Colors.white,
+                        onPressed: () {
+                          launch("https://github.com/xuelongqy");
+                        },
                       )
                     ],
                   ),
@@ -185,6 +192,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           titleColor: Colors.white,
                           describe: "xuelongqy@foxmail.com",
                           describeColor: Colors.white,
+                          onPressed: () {
+                            launch("mailto:xuelongqy@foxmail.com?subject=EasyRefresh&body=I found a bug");
+                          },
                         )
                       ],
                     ),

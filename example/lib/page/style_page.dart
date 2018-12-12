@@ -5,6 +5,7 @@ import 'package:example/page/material_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// 样式页面
 class StylePage extends StatefulWidget {
@@ -89,6 +90,9 @@ class _StylePageState extends State<StylePage> {
               icon: Icon(Icons.style,
                 color: Colors.orange,
               ),
+              onPressed: () {
+                launch("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q");
+              },
             ),
           ],
         ),

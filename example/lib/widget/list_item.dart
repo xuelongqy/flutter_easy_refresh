@@ -5,7 +5,7 @@ class ListItem extends StatefulWidget {
   // 点击事件
   final VoidCallback onPressed;
   // 图标
-  final Icon icon;
+  final Widget icon;
   // 标题
   final String title;
   final Color titleColor;
@@ -78,6 +78,7 @@ class _ListItemState extends State<ListItem> {
   }
 }
 
+/// 空图标
 class EmptyIcon extends Icon {
   EmptyIcon() : super(Icons.hourglass_empty);
   @override

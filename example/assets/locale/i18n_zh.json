@@ -42,5 +42,10 @@
   "projectAddress": "项目地址",
   "supportAuthor": "支持作者",
   "supportAuthorDescribe": "你的支持是我最大的动力",
-  "about": "关于"
+  "about": "关于",
+  "star": "Star 项目",
+  "aliPay": "支付宝",
+  "weiXinPay": "微信钱包",
+  "qqPay": "QQ钱包",
+  "payPal": "PayPal"
 }
