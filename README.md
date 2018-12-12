@@ -32,7 +32,7 @@
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/float.gif)|![](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/image/user_profile.gif)|
 |[FloatPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/float_page.dart)|[UserProfilePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/user_profile_page.dart)|
 
-#### 样式演示 Style
+#### 样式演示
 |Material|BallPulse|
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/material.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/ball_pulse.gif)|
@@ -94,7 +94,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
   )
 ```
 
-# 捐赠 Donation
+# 捐赠
 如果你喜欢我的项目，请在项目右上角 "Star" 一下。你的支持是我最大的鼓励！ ^_^
 你也还可以扫描下面的二维码~ 对作者进行打赏。  
 
