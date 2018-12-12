@@ -16,7 +16,7 @@
 
  - [属性文档](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/cn/PROPERTY.md)
  - [更新日志](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/cn/CHANGELOG.md)
- - [自定义Header和Footer](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README.md)
+ - [自定义Header和Footer](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/cn/CUSTOM_HEADER_FOOTER.md)
 
 ## Demo
 [下载 APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/pkg/EasyRefresh.apk)
