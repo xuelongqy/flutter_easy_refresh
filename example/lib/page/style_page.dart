@@ -1,6 +1,7 @@
 import 'package:example/generated/translations.dart';
 import 'package:example/page/ball_pulse_page.dart';
 import 'package:example/page/basic_page.dart';
+import 'package:example/page/bezier_circle_page.dart';
 import 'package:example/page/material_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,26 @@ class _StylePageState extends State<StylePage> {
                 }));
               },
               icon: Icon(Icons.lens,
+                color: Colors.orange,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            ListItem(
+              title: "BezierCircle",
+              describe: Translations.of(context).text("bezierCircleDescribe"),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                  return BezierCirclePage();
+                }));
+              },
+              icon: Icon(Icons.radio_button_checked,
                 color: Colors.orange,
               ),
             ),
