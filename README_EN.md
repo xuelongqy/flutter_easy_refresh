@@ -1,5 +1,9 @@
 # flutter_easyrefresh
 
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
+[![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
+[![Pub](https://img.shields.io/badge/pub-v1.0.0-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+
 ## English | [中文](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README.md)
 
 Just like the name, EasyreFresh can easily implement pull-down refresh and upload operations on Flutter applications. It supports almost all Flutter controls, but only if they are wrapped in ScrollView. Its functions are similar to Android's Smart Refresh Layout, and it also draws on the advantages of many tripartite libraries. EasyreFresh integrates various styles of Headers and Footers, but it has no limitations. You can easily customize it. Using Flutter's powerful animation, even a simple control can be done. EasyreFresh aims to build a strong, stable and mature drop-down refresh framework for Flutter.
@@ -99,7 +103,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 # Donation
 If you like my project, please in the upper right corner of the project "Star". Your support is my biggest encouragement! ^_^
-You can also scan the qr code below or “[PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=334PPRBZTY3J8&source=url)”, donation to Author.
+You can also scan the qr code below or [![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=334PPRBZTY3J8&source=url), donation to Author.
 
 ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_alipay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_wxpay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_tencent.jpg?raw=true)
 
