@@ -21,6 +21,8 @@ Just like the name, EasyreFresh can easily implement pull-down refresh and uploa
 ## Demo
 [Download APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/pkg/EasyRefresh.apk)
 
+![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/apk_QRCode.png)
+
 #### Project presentations
 |Basic styles|Auto load|
 |:---:|:---:|
