@@ -21,6 +21,8 @@
 ## Demo
 [下载 APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/pkg/EasyRefresh.apk)
 
+![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/apk_QRCode.png)
+
 #### 项目演示
 |基本样式|自动加载|
 |:---:|:---:|
