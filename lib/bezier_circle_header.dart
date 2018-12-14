@@ -27,10 +27,17 @@ class BezierCircleHeaderState extends RefreshHeaderState<BezierCircleHeader> wit
   // 回弹动画
   AnimationController _backController;
   Animation<double> _backAnimation;
+  // 恢复动画
+  AnimationController _recoveryController;
+  Animation<double> _recoveryAnimation;
   // 回弹高度
   ValueNotifier<double> _backOffsetLis = new ValueNotifier(0.0);
-  // 圆点高度
+  // 圆点位移偏差
   ValueNotifier<double> _circlePointOffsetLis = new ValueNotifier(0.0);
+  // 是否显示进度条
+  bool _showProgress = false;
+  // 进度值
+  double progressValue;
 
   // 初始化
   @override
@@ -41,7 +48,7 @@ class BezierCircleHeaderState extends RefreshHeaderState<BezierCircleHeader> wit
     _backAnimation = new Tween(begin: 0.0, end: 110.0).animate(_backController)
       ..addListener(() {
         setState(() {
-          _circlePointOffsetLis.value = _backAnimation.value < 55.0 ? _backAnimation.value : 55.0;
+          _circlePointOffsetLis.value = _backAnimation.value;
           if (_backAnimation.value <= 30.0) {
             _backOffsetLis.value = _backAnimation.value;
           }else if (_backAnimation.value > 30.0 && _backAnimation.value <= 50.0) {
@@ -49,22 +56,43 @@ class BezierCircleHeaderState extends RefreshHeaderState<BezierCircleHeader> wit
           }else if (_backAnimation.value > 50.0 && _backAnimation.value < 65.0) {
             _backOffsetLis.value = _backAnimation.value - 50.0;
           }else if (_backAnimation.value > 65.0) {
+            _showProgress = true;
             _backOffsetLis.value = (45.0 - (_backAnimation.value - 65.0)) / 3;
           }
         });
       });
-    _backAnimation.addStatusListener((status){
-      if (status == AnimationStatus.completed) {
-        _backController.reset();
-      }
-    });
+    // 恢复动画
+    _recoveryController = new AnimationController(duration: const Duration(milliseconds: 400), vsync: this);
+    _recoveryAnimation = new Tween(begin: 55.0, end: 0.0).animate(_recoveryController)
+      ..addListener(() {
+        setState(() {
+          _circlePointOffsetLis.value = _recoveryAnimation.value;
+        });
+      });
   }
 
   // 正在刷新
   @override
   Future onRefreshing() async {
     super.onRefreshing();
+    _backController.reset();
     _backController.forward();
+  }
+
+  // 刷新结束
+  @override
+  Future onRefreshed() async {
+    super.onRefreshed();
+    setState(() {
+      progressValue = 1.0;
+    });
+    await new Future.delayed(const Duration(milliseconds: 400), () {});
+    setState(() {
+      _showProgress = false;
+      progressValue = null;
+    });
+    _recoveryController.reset();
+    _recoveryController.forward();
   }
 
   // 高度更新
@@ -76,6 +104,24 @@ class BezierCircleHeaderState extends RefreshHeaderState<BezierCircleHeader> wit
 
   @override
   Widget build(BuildContext context) {
+    // 圆点大小
+    double circlePointSize;
+    if (_circlePointOffsetLis.value <= 10.0) {
+      circlePointSize = 0.0;
+    }else if (_circlePointOffsetLis.value < 45.0) {
+      circlePointSize = _circlePointOffsetLis.value - 10.0;
+    }else {
+      circlePointSize = 30.0;
+    }
+    // 圆点底部距离
+    double circlePointBottomOffset;
+    if (_circlePointOffsetLis.value <= 40.0) {
+      circlePointBottomOffset = 0.0;
+    }else if (_circlePointOffsetLis.value < 55.0) {
+      circlePointBottomOffset = _circlePointOffsetLis.value - 30.0;
+    }else {
+      circlePointBottomOffset = 25.0;
+    }
     return new Container(
       height: this.height,
       child: Column(
@@ -86,20 +132,46 @@ class BezierCircleHeaderState extends RefreshHeaderState<BezierCircleHeader> wit
             color: widget.backgroundColor,
             child: Stack(
               children: <Widget>[
-//                Center(
-//                  child: Container(
-//                    width: 100.0,
-//                    height: double.infinity,
-//                    child: ClipPath(
-//                      clipper: CirclePointPainter(offset: _circlePointOffsetLis.value),
-//                      child: Container(
-//                        color: widget.color,
-//                        width: double.infinity,
-//                        height: double.infinity,
-//                      ),
-//                    ),
-//                  ),
-//                ),
+                Center(
+                  child: Offstage(
+                    offstage: !_showProgress,
+                    child: CircularProgressIndicator(
+                      value: progressValue,
+                      strokeWidth: 2.0,
+                      valueColor: AlwaysStoppedAnimation(widget.color),
+                    ),
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    ClipOval (
+                      child: Container(
+                        color: widget.color,
+                        height: circlePointSize,
+                        width: circlePointSize,
+                      ),
+                    ),
+                    Container(
+                      height: circlePointBottomOffset,
+                    )
+                  ],
+                ),
+                Center(
+                  child: Container(
+                    width: 100.0,
+                    height: double.infinity,
+                    child: ClipPath(
+                      clipper: CirclePointPainter(offset: _circlePointOffsetLis.value),
+                      child: Container(
+                        color: widget.color,
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
+                    ),
+                  ),
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: ClipPath(
@@ -141,7 +213,6 @@ class CirclePainter extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    // TODO: implement getClip
     final path = new Path();
     if(!up)
       path.moveTo(0.0, size.height);
@@ -164,11 +235,26 @@ class CirclePointPainter extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    // TODO: implement getClip
     final path = new Path();
-    path.moveTo(0.0, size.height);
-    path.cubicTo(0.0, size.height, size.width / 2, size.height-offset*2, size.width, size.height);
-    path.close();
+    if (offset < 55.0) {
+      double width = size.width - offset / 2;
+      path.moveTo((size.width - width) / 2, size.height);
+      path.cubicTo((size.width - width) / 2, size.height, size.width / 2, size.height-offset*2, size.width - (size.width - width) / 2, size.height);
+      path.close();
+    }else if (offset >= 55.0 && offset < 90.0) {
+      double width = 30.0;
+      path.moveTo((size.width - width) / 2, size.height - 40.0);
+      path.cubicTo((size.width - width) / 2, size.height - 40.0, (size.width - width) / 2 + (offset - 55.0), size.height - 20.0, (size.width - width) / 2, size.height);
+      path.lineTo(size.width - (size.width - width) / 2, size.height);
+      path.cubicTo(size.width - (size.width - width) / 2, size.height, size.width - (size.width - width) / 2 - (offset - 55.0), size.height - 20.0, size.width - (size.width - width) / 2, size.height - 40.0);
+      path.close();
+    }else {
+      double width = 30.0 + (offset - 90.0) * 3;
+      double height = size.height - (110.0 - offset) * 2;
+      path.moveTo((size.width - width) / 2, size.height);
+      path.cubicTo((size.width - width) / 2, size.height, size.width / 2, height, size.width - (size.width - width) / 2, size.height);
+      path.close();
+    }
     return path;
   }
 

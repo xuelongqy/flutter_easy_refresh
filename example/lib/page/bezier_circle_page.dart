@@ -42,7 +42,7 @@ class _BezierCirclePagePageState extends State<BezierCirclePage> {
                 }
             ),
             onRefresh: () async{
-              await new Future.delayed(const Duration(seconds: 1), () {
+              await new Future.delayed(const Duration(seconds: 2), () {
                 setState(() {
                   str.clear();
                   str.addAll(addStr);
