@@ -7,8 +7,7 @@ class APPLIC {
   final List<String> supportedLanguages = ['en', 'zh'];
 
   // Returns the list of supported Locales
-  Iterable<Locale> supportedLocales() =>
-      supportedLanguages.map<Locale>((lang) => new Locale(lang, ''));
+  Iterable<Locale> supportedLocales() => supportedLanguages.map<Locale>((lang) => new Locale(lang, ''));
 
   // Function to be invoked when changing the working language
   LocaleChangeCallback onLocaleChanged;

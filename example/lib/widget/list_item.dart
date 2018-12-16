@@ -52,25 +52,29 @@ class _ListItemState extends State<ListItem> {
                 child: widget.icon,
               ),
             ): Container(),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                widget.title != null ? Text( widget.title,
-                  style: TextStyle(
-                    color: widget.titleColor,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ): Container(),
-                widget.describe != null ? Text( widget.describe,
-                  style: TextStyle(
-                      color: widget.describeColor,
-                      fontSize: 12.0
-                  ),
-                ): Container(),
-              ],
-            )
+            Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  widget.title != null ? Text( widget.title,
+                    style: TextStyle(
+                      color: widget.titleColor,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ): Container(),
+                  widget.describe != null ? Text( widget.describe,
+                    maxLines: 2,
+                    style: TextStyle(
+                        color: widget.describeColor,
+                        fontSize: 12.0
+                    ),
+                  ): Container(),
+                ],
+              ),
+            ),
           ],
         )
       ),
