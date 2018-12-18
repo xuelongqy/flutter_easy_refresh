@@ -7,7 +7,7 @@
 >添加：Material和BallPulse视图
 
 ## V 1.0.1
->调整：触发加载的高度
->添加：BezierCircleHeader
->添加：BezierHourGlassHeader
->添加：BezierBounceFooter
+>调整：触发加载的高度  
+>添加：BezierCircleHeader  
+>添加：BezierHourGlassHeader  
+>添加：BezierBounceFooter  
