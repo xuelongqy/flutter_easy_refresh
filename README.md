@@ -123,6 +123,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 [PullToRefresh_Flutter](https://github.com/baoolong/PullToRefresh_Flutter)  
 [flutter_pulltorefresh](https://github.com/peng8350/flutter_pulltorefresh)  
 [SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)  
+[flutter_spinkit](https://github.com/jogboms/flutter_spinkit)  
 
 ## 开源协议
  
