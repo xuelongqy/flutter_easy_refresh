@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_easyrefresh/bezier_circle_header.dart';
+import 'package:flutter_easyrefresh/bezier_hour_glass_header.dart';
 import 'package:flutter_easyrefresh/bezier_bounce_footer.dart';
 
 /// 弹出圆圈样式页面
-class BezierCirclePage extends StatefulWidget {
+class BezierHourGlassPage extends StatefulWidget {
   @override
-  _BezierCirclePagePageState createState() => _BezierCirclePagePageState();
+  _BezierHourGlassPagePageState createState() => _BezierHourGlassPagePageState();
 }
 
-class _BezierCirclePagePageState extends State<BezierCirclePage> {
+class _BezierHourGlassPagePageState extends State<BezierHourGlassPage> {
 
   List<String> addStr=["1","2","3","4","5","6","7","8","9","0"];
   List<String> str=["1","2","3","4","5","6","7","8","9","0"];
@@ -21,12 +21,12 @@ class _BezierCirclePagePageState extends State<BezierCirclePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("BezierCircle"),
+        title: Text("BezierHourGlass"),
       ),
       body: Center(
           child: new EasyRefresh(
             key: _easyRefreshKey,
-            refreshHeader: BezierCircleHeader(
+            refreshHeader: BezierHourGlassHeader(
               key: _headerKey,
             ),
             refreshFooter: BezierBounceFooter(

@@ -626,7 +626,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         } else {
           // 拉出底部
           _isPushBottom = true;
-          if (_bottomItemHeight > 25.0 + _loadHeight) {
+          if (_bottomItemHeight > 50.0 + _loadHeight) {
             if (_isPulling) {
               return;
             }
@@ -645,7 +645,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
               });
               _animationController.forward();
             }
-          } else if (_bottomItemHeight > 10.0 + _loadHeight) {
+          } else if (_bottomItemHeight > 30.0 + _loadHeight) {
             _bottomItemHeight = -notification.dragDetails.delta.dy / 6 + _bottomItemHeight;
           } else if (_bottomItemHeight > _loadHeight) {
             _checkStateAndCallback(AnimationStates.DragAndRefreshEnabled, RefreshBoxDirectionStatus.PUSH);

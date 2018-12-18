@@ -2,6 +2,7 @@ import 'package:example/generated/translations.dart';
 import 'package:example/page/ball_pulse_page.dart';
 import 'package:example/page/basic_page.dart';
 import 'package:example/page/bezier_circle_page.dart';
+import 'package:example/page/bezier_hour_glass_page.dart';
 import 'package:example/page/material_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
@@ -94,6 +95,18 @@ class _StylePageState extends State<StylePage> {
                 }));
               },
               icon: Icon(Icons.radio_button_checked,
+                color: Colors.orange,
+              ),
+            ),
+            ListItem(
+              title: "BezierHourGlass",
+              describe: Translations.of(context).text("bezierHourGlassDescribe"),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                  return BezierHourGlassPage();
+                }));
+              },
+              icon: Icon(Icons.timelapse,
                 color: Colors.orange,
               ),
             ),

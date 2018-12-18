@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'src/header/header.dart';
 
-/// 弹出圆圈
+/// 弹出圆圈顶部视图
 class BezierCircleHeader extends RefreshHeader {
   // 颜色
   final Color color;
