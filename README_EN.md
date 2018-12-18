@@ -123,6 +123,7 @@ The group is not only solve the problem of EasyreFresh, any Flutter related issu
 [PullToRefresh_Flutter](https://github.com/baoolong/PullToRefresh_Flutter)  
 [flutter_pulltorefresh](https://github.com/peng8350/flutter_pulltorefresh)  
 [SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)  
+[flutter_spinkit](https://github.com/jogboms/flutter_spinkit)  
 
 ## Open source licenses
  
