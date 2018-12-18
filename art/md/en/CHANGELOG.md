@@ -7,7 +7,7 @@
 >Add：Material and BallPulse style
 
 ## V 1.0.1
->Adjustment：Height of trigger loading
->Add：BezierCircleHeader
->Add：BezierHourGlassHeader
->Add：BezierBounceFooter
+>Adjustment：Height of trigger loading  
+>Add：BezierCircleHeader  
+>Add：BezierHourGlassHeader  
+>Add：BezierBounceFooter  
