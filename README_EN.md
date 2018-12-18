@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v1.0.0-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/badge/pub-v1.0.1-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
 
 ## English | [中文](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README.md)
 
@@ -43,13 +43,18 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and uploa
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/material.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/ball_pulse.gif)|
 |[MaterialPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/material_page.dart)|[BallPulsePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/ball_pulse_page.dart)|
+
+|BezierCircle|BezierHourGlass|
+|:---:|:---:|
+|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/bezier_circle.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/bezier_hour_glass.gif)|
+|[BezierCirclePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/bezier_circle_page.dart)|[BezierHourGlassPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/bezier_hour_glass_page.dart)|
  
 ## Sample
 #### 1.Adding dependencies to pubspec. yaml
 ```
 //pub
 dependencies:
-  flutter_easyrefresh: ^1.0.0
+  flutter_easyrefresh: ^1.0.1
 
 //import
 dependencies:
