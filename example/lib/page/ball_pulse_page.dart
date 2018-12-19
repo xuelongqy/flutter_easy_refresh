@@ -26,6 +26,7 @@ class _BallPulsePageState extends State<BallPulsePage> {
       body: Center(
           child: new EasyRefresh(
             key: _easyRefreshKey,
+            autoLoad: true,
             refreshHeader: BallPulseHeader(
               key: _headerKey,
             ),

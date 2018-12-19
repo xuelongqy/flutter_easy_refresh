@@ -10,4 +10,9 @@
 >调整：触发加载的高度  
 >添加：BezierCircleHeader  
 >添加：BezierHourGlassHeader  
->添加：BezierBounceFooter  
+>添加：BezierBounceFooter
+
+## 下个版本
+>调整：上拉加载阻力系数
+>修复：多次上拉有可能卡住的问题
+>修复：自动触发BallPulse没有动画问题

@@ -137,10 +137,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   // 顶部超出边界
   Future topOver() async {
     if (widget.behavior is ScrollOverBehavior) {
-      int time = (_refreshHeight * 0.8 / scrollSpeed).floor();
+      int time = (_refreshHeight * 0.9 / scrollSpeed).floor();
       if (time > 150) return;
       _scrollOverAnimationController = new AnimationController(duration: Duration(milliseconds: time), vsync: this);
-      _scrollOverAnimation = new Tween(begin: 0.0, end: _refreshHeight * 0.8).animate(_scrollOverAnimationController)
+      _scrollOverAnimation = new Tween(begin: 0.0, end: _refreshHeight * 0.9).animate(_scrollOverAnimationController)
         ..addListener(() {
           if (_scrollOverAnimation.value == 0.0) return;
           setState(() {
@@ -150,7 +150,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       _scrollOverAnimation.addStatusListener((animationStatus) {
         if (animationStatus == AnimationStatus.completed) {
           setState(() {
-            _topItemHeight = _refreshHeight * 0.8;
+            _topItemHeight = _refreshHeight * 0.9;
             _scrollPhysics = new NeverScrollableScrollPhysics();
           });
           _animationController.forward();
@@ -168,11 +168,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       return;
     }
     if (!_isPushBottom && widget.behavior is ScrollOverBehavior) {
-      int time = (_loadHeight * 0.8 / (-scrollSpeed)).floor();
+      int time = (_loadHeight * 0.9 / (-scrollSpeed)).floor();
       if (time > 150) return;
       time = time > 20 ? time : 20;
       _scrollOverAnimationController = new AnimationController(duration: Duration(milliseconds: time), vsync: this);
-      _scrollOverAnimation = new Tween(begin: 0.0, end: _loadHeight * 0.8).animate(_scrollOverAnimationController)
+      _scrollOverAnimation = new Tween(begin: 0.0, end: _loadHeight * 0.9).animate(_scrollOverAnimationController)
         ..addListener(() {
           if (_scrollOverAnimation.value == 0.0) return;
           _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
@@ -185,11 +185,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         if (animationStatus == AnimationStatus.completed) {
           setState(() {
             _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-            _bottomItemHeight  = _loadHeight * 0.8;
+            _bottomItemHeight  = _loadHeight * 0.9;
             _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
             _scrollPhysics = new NeverScrollableScrollPhysics();
           });
-          _shrinkageDistance = _refreshHeight * 0.8;
+          _shrinkageDistance = _refreshHeight * 0.9;
           _animationController.forward();
         }
       });
@@ -427,7 +427,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
                       _handleScrollEndNotification();
                     } else if (notification is UserScrollNotification) {
                       _handleUserScrollNotification(notification);
-                    } else if (metrics.atEdge && notification is OverscrollNotification) {
+//                    } else if (metrics.atEdge && notification is OverscrollNotification) { // 加上metrics.atEdge验证，多次滑动会导致加载卡住
+                    } else if (notification is OverscrollNotification) {
                       _handleOverScrollNotification(notification);
                     }
                     return true;
@@ -646,10 +647,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
               _animationController.forward();
             }
           } else if (_bottomItemHeight > 30.0 + _loadHeight) {
-            _bottomItemHeight = -notification.dragDetails.delta.dy / 6 + _bottomItemHeight;
+            _bottomItemHeight = -notification.dragDetails.delta.dy / 4 + _bottomItemHeight;
           } else if (_bottomItemHeight > _loadHeight) {
             _checkStateAndCallback(AnimationStates.DragAndRefreshEnabled, RefreshBoxDirectionStatus.PUSH);
-            _bottomItemHeight = -notification.dragDetails.delta.dy / 4 + _bottomItemHeight;
+            _bottomItemHeight = -notification.dragDetails.delta.dy / 3 + _bottomItemHeight;
           } else {
             _checkStateAndCallback(AnimationStates.DragAndRefreshNotEnabled, RefreshBoxDirectionStatus.PUSH);
             _bottomItemHeight = -notification.dragDetails.delta.dy / 2 + _bottomItemHeight;

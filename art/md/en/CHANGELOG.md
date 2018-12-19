@@ -10,4 +10,9 @@
 >Adjustment：Height of trigger loading  
 >Add：BezierCircleHeader  
 >Add：BezierHourGlassHeader  
->Add：BezierBounceFooter  
+>Add：BezierBounceFooter
+
+## Next
+>Adjustment：Drag coefficient of pull-up loading
+>Repair：Problem of multiple pull-ups that may get stuck
+>Repair：Automatic triggering BallPulse without animation problems

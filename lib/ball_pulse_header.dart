@@ -117,6 +117,15 @@ class BallPulseHeaderState extends RefreshHeaderState<BallPulseHeader> with Tick
     _startController.forward();
   }
 
+  // 正在刷新
+  @override
+  Future onRefreshing() async {
+    super.onRefreshing();
+    if (!_startController.isAnimating) {
+      _startController.forward();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Container(
