@@ -98,6 +98,14 @@ class _StylePageState extends State<StylePage> {
                 color: Colors.orange,
               ),
             ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
             ListItem(
               title: "BezierHourGlass",
               describe: Translations.of(context).text("bezierHourGlassDescribe"),
