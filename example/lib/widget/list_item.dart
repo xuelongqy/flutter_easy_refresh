@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// 示例页面
+/// 列表项
 class ListItem extends StatefulWidget {
   // 点击事件
   final VoidCallback onPressed;
@@ -12,6 +12,8 @@ class ListItem extends StatefulWidget {
   // 描述
   final String describe;
   final Color describeColor;
+  // 右侧控件
+  final Widget rightWidget;
 
   // 构造函数
   ListItem({
@@ -21,7 +23,8 @@ class ListItem extends StatefulWidget {
     this.title,
     this.titleColor: Colors.black,
     this.describe,
-    this.describeColor: Colors.grey
+    this.describeColor: Colors.grey,
+    this.rightWidget,
   }): super(key: key);
 
   @override
@@ -40,43 +43,47 @@ class _ListItemState extends State<ListItem> {
         style: BorderStyle.none,
       ),
       child: Container(
-        height: 60.0,
-        width: double.infinity,
-        child: Row(
-          children: <Widget>[
-            widget.icon != null ? Container(
-              padding: EdgeInsets.all(14.0),
-              child: SizedBox(
-                height: 32.0,
-                width: 32.0,
-                child: widget.icon,
+          height: 60.0,
+          width: double.infinity,
+          child: Row(
+            children: <Widget>[
+              widget.icon != null ? Container(
+                padding: EdgeInsets.all(14.0),
+                child: SizedBox(
+                  height: 32.0,
+                  width: 32.0,
+                  child: widget.icon,
+                ),
+              ): Container(),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    widget.title != null ? Text( widget.title,
+                      style: TextStyle(
+                        color: widget.titleColor,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ): Container(),
+                    widget.describe != null ? Text( widget.describe,
+                      maxLines: 2,
+                      style: TextStyle(
+                          color: widget.describeColor,
+                          fontSize: 12.0
+                      ),
+                    ): Container(),
+                  ],
+                ),
               ),
-            ): Container(),
-            Expanded(
-              flex: 1,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  widget.title != null ? Text( widget.title,
-                    style: TextStyle(
-                      color: widget.titleColor,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ): Container(),
-                  widget.describe != null ? Text( widget.describe,
-                    maxLines: 2,
-                    style: TextStyle(
-                        color: widget.describeColor,
-                        fontSize: 12.0
-                    ),
-                  ): Container(),
-                ],
+              widget.rightWidget == null ? Container() : widget.rightWidget,
+              Container(
+                width: 14.0,
               ),
-            ),
-          ],
-        )
+            ],
+          )
       ),
     );
   }
