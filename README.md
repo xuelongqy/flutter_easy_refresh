@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v1.0.0-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/badge/pub-v1.0.1-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
 
 ## [English](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README_EN.md) | 中文
 
@@ -43,13 +43,18 @@
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/material.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/ball_pulse.gif)|
 |[MaterialPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/material_page.dart)|[BallPulsePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/ball_pulse_page.dart)|
+
+|BezierCircle|BezierHourGlass|
+|:---:|:---:|
+|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/bezier_circle.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/bezier_hour_glass.gif)|
+|[BezierCirclePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/bezier_circle_page.dart)|[BezierHourGlassPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/bezier_hour_glass_page.dart)|
  
 ## 简单用例
 #### 1.在 pubspec.yaml 中添加依赖
 ```
 //pub方式
 dependencies:
-  flutter_easyrefresh: ^1.0.0
+  flutter_easyrefresh: ^1.0.1
 
 //导入方式
 dependencies:
@@ -118,6 +123,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 [PullToRefresh_Flutter](https://github.com/baoolong/PullToRefresh_Flutter)  
 [flutter_pulltorefresh](https://github.com/peng8350/flutter_pulltorefresh)  
 [SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)  
+[flutter_spinkit](https://github.com/jogboms/flutter_spinkit)  
 
 ## 开源协议
  
