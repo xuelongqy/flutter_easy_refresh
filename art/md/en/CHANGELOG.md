@@ -12,7 +12,7 @@
 >Add：BezierHourGlassHeader  
 >Add：BezierBounceFooter
 
-## Next
+## V 1.0.2
 >Adjustment：Drag coefficient of pull-up loading
 >Repair：Problem of multiple pull-ups that may get stuck
 >Repair：Automatic triggering BallPulse without animation problems
