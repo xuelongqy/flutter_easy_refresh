@@ -2,6 +2,7 @@ import 'package:example/generated/translations.dart';
 import 'package:example/page/auto_load_page.dart';
 import 'package:example/page/basic_page.dart';
 import 'package:example/page/float_page.dart';
+import 'package:example/page/sliver_page.dart';
 import 'package:example/page/user_profile_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
@@ -93,6 +94,26 @@ class _SamplePageState extends State<SamplePage> {
                 }));
               },
               icon: Icon(Icons.person,
+                color: Colors.orange,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            ListItem(
+              title: Translations.of(context).text("CustomScrollView"),
+              describe: Translations.of(context).text("customScrollViewDescribe"),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                  return SliverPage();
+                }));
+              },
+              icon: Icon(Icons.format_line_spacing,
                 color: Colors.orange,
               ),
             ),

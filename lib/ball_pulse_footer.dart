@@ -129,61 +129,59 @@ class BallPulseFooterState extends RefreshFooterState<BallPulseFooter> with Tick
   @override
   Widget build(BuildContext context) {
     return new Container(
-        color: widget.backgroundColor,
-        height: this.height,
-        child: ListView(
+      color: widget.backgroundColor,
+      height: this.height,
+      child: SingleChildScrollView(
+        child: Container(
+          height: this.height > 30.0 ? this.height : 30.0,
+          child: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Container(
-                height: this.height > 30.0 ? this.height : 30.0,
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox (
-                        width: 20.0,
-                        height: 20.0,
-                        child: Center(
-                          child: ClipOval (
-                            child: Container(
-                              color: widget.color,
-                              height: ballSize1,
-                              width: ballSize1,
-                            ),
-                          ),
-                        )
+              SizedBox (
+                  width: 20.0,
+                  height: 20.0,
+                  child: Center(
+                    child: ClipOval (
+                      child: Container(
+                        color: widget.color,
+                        height: ballSize1,
+                        width: ballSize1,
+                      ),
                     ),
-                    Container (width: 5.0,),
-                    SizedBox (
-                        width: 20.0,
-                        height: 20.0,
-                        child: Center(
-                          child: ClipOval (
-                            child: Container(
-                              color: widget.color,
-                              height: ballSize2,
-                              width: ballSize2,
-                            ),
-                          ),
-                        )
+                  )
+              ),
+              Container (width: 5.0,),
+              SizedBox (
+                  width: 20.0,
+                  height: 20.0,
+                  child: Center(
+                    child: ClipOval (
+                      child: Container(
+                        color: widget.color,
+                        height: ballSize2,
+                        width: ballSize2,
+                      ),
                     ),
-                    Container (width: 5.0,),
-                    SizedBox (
-                        width: 20.0,
-                        height: 20.0,
-                        child: Center(
-                          child: ClipOval (
-                            child: Container(
-                              color: widget.color,
-                              height: ballSize3,
-                              width: ballSize3,
-                            ),
-                          ),
-                        )
+                  )
+              ),
+              Container (width: 5.0,),
+              SizedBox (
+                  width: 20.0,
+                  height: 20.0,
+                  child: Center(
+                    child: ClipOval (
+                      child: Container(
+                        color: widget.color,
+                        height: ballSize3,
+                        width: ballSize3,
+                      ),
                     ),
-                  ],
-                ),
-              )
-            ]
+                  )
+              ),
+            ],
+          ),
         )
+      )
     );
   }
 }

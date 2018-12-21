@@ -16,3 +16,8 @@
 >调整：上拉加载阻力系数  
 >修复：多次上拉有可能卡住的问题  
 >修复：自动触发BallPulse没有动画问题  
+
+## V 1.0.3
+>修复：使用CustomScrollView加载报错问题  
+>修复：部分视图在非SafeArea中偏移问题  
+>添加：CustomScrollView使用示例  

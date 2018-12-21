@@ -23,6 +23,7 @@
   "floatViewDescribe": "顶部或底部视图浮动在列表上",
   "userProfile": "个人中心",
   "userProfileDescribe": "带回弹效果的个人中心",
+  "customScrollViewDescribe": "带头部折叠的列表",
   "qqGroup": "QQ群",
   "github": "Github",
   "name": "名字",

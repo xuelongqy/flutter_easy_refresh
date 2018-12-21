@@ -23,6 +23,7 @@
   "floatViewDescribe": "At the top or bottom view floating on the list",
   "userProfile": "User Profile",
   "userProfileDescribe": "User Profile with the springback effect",
+  "customScrollViewDescribe": "List with AppBar Folding",
   "qqGroup": "QQ group",
   "github": "Github",
   "name": "Name",

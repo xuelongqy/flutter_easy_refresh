@@ -696,16 +696,27 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         else if (currentState == AnimationStates.StartLoadData) {
           this._refreshFooter.getKey().currentState.onLoading();
           // 记录当前条数
-          this._itemCount = widget.child.semanticChildCount;
+          if (widget.child.semanticChildCount == null && widget.child is CustomScrollView) {
+            this._itemCount = (widget.child as CustomScrollView).slivers.length;
+          }else {
+            this._itemCount = widget.child.semanticChildCount;
+          }
         }
         // 加载完成
         else if (currentState == AnimationStates.LoadDataEnd) {
           // 判断是否加载出更多数据
-          if (widget.child.semanticChildCount > this._itemCount) {
+          int currentItemCount = 0;
+          if (widget.child.semanticChildCount == null && widget.child is CustomScrollView) {
+            currentItemCount = (widget.child as CustomScrollView).slivers.length;
+          }else {
+            currentItemCount = widget.child.semanticChildCount;
+          }
+          if (currentItemCount > this._itemCount) {
             this._refreshFooter.getKey().currentState.onLoaded();
           }else {
             this._refreshFooter.getKey().currentState.onNoMore();
           }
+          this._itemCount = currentItemCount;
         }
         else if (currentState == AnimationStates.DragAndRefreshNotEnabled) {
           if (_animationStates == AnimationStates.RefreshBoxIdle) {

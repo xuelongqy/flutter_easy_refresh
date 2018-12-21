@@ -16,3 +16,8 @@
 >Adjustment：Drag coefficient of pull-up loading  
 >Repair：Problem of multiple pull-ups that may get stuck  
 >Repair：Automatic triggering BallPulse without animation problems  
+
+## V 1.0.3
+>Adjustment：Using CustomScrollView load error  
+>Adjustment：Partial view than SafeArea deviation  
+>Add：CustomScrollView usage examples  
