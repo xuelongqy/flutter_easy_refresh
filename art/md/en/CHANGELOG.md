@@ -18,6 +18,6 @@
 >Repair：Automatic triggering BallPulse without animation problems  
 
 ## V 1.0.3
->Adjustment：Using CustomScrollView load error  
->Adjustment：Partial view than SafeArea deviation  
+>Repair：Using CustomScrollView load error  
+>Repair：Partial view than SafeArea deviation  
 >Add：CustomScrollView usage examples  
