@@ -21,3 +21,7 @@
 >修复：使用CustomScrollView加载报错问题  
 >修复：部分视图在非SafeArea中偏移问题  
 >添加：CustomScrollView使用示例  
+
+## V 下个版本
+>修改：个人中心示例  
+>添加：limitScroll属性(刷新或加载过程中列表是否可滚动)  

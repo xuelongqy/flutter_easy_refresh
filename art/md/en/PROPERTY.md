@@ -96,6 +96,7 @@ class _BasicPageState extends State<BasicPage> {
 | key | EasyRefresh key     | GlobalKey<EasyRefreshState>  | null | optional(Used for manual trigger loading and refreshing) |
 | child      | your content View     | ? extends ScrollView   |   null |  necessary |
 | autoLoad | Bottom Autoloading     | bool  | false | optional |
+| limitScroll | Limit Scroll     | bool  | false | optional |
 | behavior | Crossing the line effect (with halo or rebound)     | ScrollBehavior | RefreshBehavior | optional |
 | refreshHeader | Header view     | RefreshHeader | ClassicsHeader | optional |
 | refreshFooter | Footer view     | RefreshFooter | ClassicsFooter | optional |

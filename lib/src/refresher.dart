@@ -45,6 +45,8 @@ class EasyRefresh extends StatefulWidget {
   final AnimationStateChanged animationStateChangedCallback;
   // 自动加载(滑动到底部时)
   final bool autoLoad;
+  // 限制滚动
+  final bool limitScroll;
 
   EasyRefresh({
     GlobalKey<EasyRefreshState> key,
@@ -55,6 +57,7 @@ class EasyRefresh extends StatefulWidget {
     this.onRefresh,
     this.loadMore,
     this.autoLoad: false,
+    this.limitScroll: false,
     @required this.child
   }) : super(key: key) {
     assert(child != null);
@@ -136,6 +139,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   // 顶部超出边界
   Future topOver() async {
+    if (_isRefresh) return;
     if (widget.behavior is ScrollOverBehavior) {
       int time = (_refreshHeight * 0.9 / scrollSpeed).floor();
       if (time > 150) return;
@@ -162,6 +166,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   // 底部超出边界
   Future bottomOver() async {
+    if (_isRefresh) return;
     // 判断是否滑动到底部并自动加载
     if (widget.autoLoad) {
       callLoadMore();
@@ -361,7 +366,16 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   void _refreshStart(RefreshBoxDirectionStatus refreshBoxDirectionStatus) async {
+    this._isRefresh = true;
     _checkStateAndCallback(AnimationStates.StartLoadData, refreshBoxDirectionStatus);
+    // 是否限制滚动
+    setState(() {
+      if (widget.limitScroll) {
+        _scrollPhysics = NeverScrollableScrollPhysics();
+      }else {
+        _scrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
+      }
+    });
     // 这里我们开始加载数据 数据加载完成后，将新数据处理并开始加载完成后的处理
     if (_topItemHeight > _bottomItemHeight) {
       if (widget.onRefresh != null) {
@@ -675,6 +689,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         // 刷新完成
         else if (currentState == AnimationStates.LoadDataEnd) {
           this._refreshHeader.getKey().currentState.onRefreshed();
+          _scrollController.animateTo(_scrollController.position.minScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
         }
         else if (currentState == AnimationStates.DragAndRefreshNotEnabled) {
           if (_animationStates == AnimationStates.RefreshBoxIdle) {
