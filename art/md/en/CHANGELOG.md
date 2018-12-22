@@ -22,6 +22,6 @@
 >Repair：Partial view than SafeArea deviation  
 >Add：CustomScrollView usage examples  
 
-## V Next
+## V 1.0.4
 >Modify：UserProfilePage  
 >Add：limitScroll attribute (scrollable list during refresh or loading)  
