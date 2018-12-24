@@ -54,7 +54,7 @@ class _ListItemState extends State<ListItem> {
                   width: 32.0,
                   child: widget.icon,
                 ),
-              ): Container(),
+              ): Container(width: 14.0,),
               Expanded(
                 flex: 1,
                 child: Column(
