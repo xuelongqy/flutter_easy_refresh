@@ -90,7 +90,7 @@ class _BasicPageState extends State<BasicPage> {
 }
 ~~~
 
-# Props Table
+# Props Table - EasyRefresh
 | Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
 |---------|--------------------------|:-----:|:-----:|:-----:|
 | key | EasyRefresh key     | GlobalKey<EasyRefreshState>  | null | optional(Used for manual trigger loading and refreshing) |
@@ -103,3 +103,8 @@ class _BasicPageState extends State<BasicPage> {
 | onRefresh | Refresh callback method     | () => Void | null | optional(Cannot trigger refresh for null) |
 | loadMore | Loading callback method     | () => Void | null | optional(Cannot trigger loading for null) |
 | animationStateChangedCallback | EasyRefresh state callback for manual handling of refresh loading and other operations     | (AnimationStates, RefreshBoxDirectionStatus) => void     | null | optional(不推荐使用) |
+
+# Props Table - RefreshSafeArea
+| Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| child      | your content View     | Widget   |   null |  necessary |
