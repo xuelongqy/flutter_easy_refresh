@@ -19,6 +19,7 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and uploa
 ## Portal
 
  - [Properties document](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/en/PROPERTY.md)
+ - [FAQ](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/cn/FAQ.md)
  - [Change log](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/en/CHANGELOG.md)
  - [Custom Header and Footer](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/en/CUSTOM_HEADER_FOOTER.md)
 
