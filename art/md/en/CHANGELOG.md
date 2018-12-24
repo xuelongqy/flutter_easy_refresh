@@ -28,3 +28,6 @@
 
 ## V 1.0.5
 >Repair：Not setting onRefresh causes more problems without triggering load  
+
+## V 1.0.6
+>Add：RefreshSafeArea，resolved Sliding Conflict  

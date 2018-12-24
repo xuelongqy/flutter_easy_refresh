@@ -24,6 +24,7 @@
   "userProfile": "个人中心",
   "userProfileDescribe": "带回弹效果的个人中心",
   "customScrollViewDescribe": "带头部折叠的列表",
+  "swiperDescribe": "Swiper示例，解决滑动冲突",
   "qqGroup": "QQ群",
   "github": "Github",
   "name": "名字",

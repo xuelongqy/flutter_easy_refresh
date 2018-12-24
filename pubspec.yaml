@@ -1,6 +1,6 @@
 name: flutter_easyrefresh
 description: A widget provided to the flutter scroll component drop-down refresh and pull up load.
-version: 1.0.5
+version: 1.0.6
 author: xuelongqy <xuelongqy@foxmail.com>
 homepage: https://github.com/xuelongqy/flutter_easyrefresh
 
@@ -15,6 +15,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+  flutter_swiper: ^1.1.4
 
 dev_dependencies:
   flutter_test:

@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v1.0.5-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/badge/pub-v1.0.6-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
 
 ## English | [中文](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README.md)
 
@@ -54,7 +54,7 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and uploa
 ```
 //pub
 dependencies:
-  flutter_easyrefresh: ^1.0.5
+  flutter_easyrefresh: ^1.0.6
 
 //import
 dependencies:
