@@ -90,7 +90,7 @@ class _BasicPageState extends State<BasicPage> {
 }
 ~~~
 
-# 属性表格
+# 属性表格 - EasyRefresh
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
 |---------|--------------------------|:-----:|:-----:|:-----:|
 | key | EasyRefresh的键     | GlobalKey<EasyRefreshState>  | null | 可选(用于手动触发加载和刷新) |
@@ -103,4 +103,10 @@ class _BasicPageState extends State<BasicPage> {
 | onRefresh | 刷新回调方法     | () => Void | null | 可选(为null时无法触发刷新) |
 | loadMore | 加载回调方法     | () => Void | null | 可选(为null时无法触发加载) |
 | animationStateChangedCallback | EasyRefresh状态回调，用于手动处理刷新加载等操作     | (AnimationStates, RefreshBoxDirectionStatus) => void     | null | 可选(不推荐使用) |
+
+# 属性表格 - RefreshSafeArea
+| 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| child      | 内容视图     | Widget   |   null |  必需 |
+
 
