@@ -50,17 +50,15 @@
 
 示例代码，完整示例[SwiperPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/swiper_page.dart)
 ~~~dart
-  SliverChildBuilderDelegate((context, index){
-    return RefreshSafeArea(
-      child: Swiper(
-        itemBuilder: (BuildContext context, int index) {
-          return _createMarqueeCard(index);
-        },
-        itemCount: 5,
-        viewportFraction: 0.8,
-        scale: 0.9,
-        autoplay: true,
-      ),
-    );
-  },
+  RefreshSafeArea(
+    child: Swiper(
+      itemBuilder: (BuildContext context, int index) {
+        return _createMarqueeCard(index);
+      },
+      itemCount: 5,
+      viewportFraction: 0.8,
+      scale: 0.9,
+      autoplay: true,
+    ),
+  );
 ~~~
