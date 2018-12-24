@@ -212,7 +212,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     _scrollOverListener = new ScrollOverListener(
         topOver: topOver,
         bottomOver: bottomOver,
-        justScrollOver: widget.onRefresh == null || widget.onRefresh == null && widget.behavior is ScrollOverBehavior
+        justScrollOver: widget.onRefresh == null && widget.loadMore == null && widget.behavior is ScrollOverBehavior
     );
     _neverScrollableScrollPhysics = NeverScrollableScrollPhysics();
     _refreshAlwaysScrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);

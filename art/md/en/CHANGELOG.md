@@ -25,3 +25,6 @@
 ## V 1.0.4
 >Modify：UserProfilePage  
 >Add：limitScroll attribute (scrollable list during refresh or loading)  
+
+## V 1.0.5
+>Repair：Not setting onRefresh causes more problems without triggering load  
