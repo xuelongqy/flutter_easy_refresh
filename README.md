@@ -19,6 +19,7 @@
 ## 传送门
 
  - [属性文档](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/cn/PROPERTY.md)
+ - [常见问题](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/cn/FAQ.md)
  - [更新日志](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/cn/CHANGELOG.md)
  - [自定义Header和Footer](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/cn/CUSTOM_HEADER_FOOTER.md)
 
