@@ -45,3 +45,4 @@ pubspec.lock
 ios/.generated/
 ios/Flutter/Generated.xcconfig
 ios/Runner/GeneratedPluginRegistrant.*
+.lib/generated/i18n.dart
