@@ -63,3 +63,18 @@ Sample code, complete example[SwiperPage](https://github.com/xuelongqy/flutter_e
     ),
   );
 ~~~
+
+## 4.Refresh or load ends immediately
+
+This is because EasyRefresh will start the completion callback after the onRefresh or loadMore methods are executed. If there is an asynchronous operation in the method,
+It means that the asynchronous operation time will not be calculated, so you need to add the await keyword.
+
+Sample code
+~~~dart
+    onRefresh: () async {
+      await Future.delayed(const Duration(seconds: 2), () {});
+    },
+    loadMore: () async {
+      await Future.delayed(const Duration(seconds: 2), () {});
+    },
+~~~
