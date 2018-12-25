@@ -62,3 +62,18 @@
     ),
   );
 ~~~
+
+## 4.刷新或加载立马结束
+
+这是因为EasyRefresh会在onRefresh或者loadMore方法执行完后启动完成回调。如果在方法里面有异步操作，
+则代表不会计算异步操作的时间，那么你需要加上await关键字。
+
+示例代码
+~~~dart
+    onRefresh: () async {
+      await Future.delayed(const Duration(seconds: 2), () {});
+    },
+    loadMore: () async {
+      await Future.delayed(const Duration(seconds: 2), () {});
+    },
+~~~
