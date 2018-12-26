@@ -439,6 +439,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
                 flex: 1,
                 child: new NotificationListener(
                   onNotification: (ScrollNotification notification) {
+                    // 判断是否正在加载
+                    if (_isRefresh) return true;
                     ScrollMetrics metrics = notification.metrics;
                     computeScrollSpeed(metrics.pixels);
                     if (notification is ScrollUpdateNotification) {
@@ -495,9 +497,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   void _handleScrollUpdateNotification(ScrollUpdateNotification notification) {
-    // 判断是否正在加载
-    if (_isRefresh) return;
-    //此处同上
+    // 当上拉加载时，不知道什么原因，dragDetails可能会为空，导致抛出异常，会发生很明显的卡顿，所以这里必须判空
     if (notification.dragDetails == null) {
       return;
     }
@@ -525,11 +525,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     } else if (_bottomItemHeight > 0.0) {
       // 底部的布局可见时 ，且手指反方向拖动（由上向下），这时notification 为 ScrollUpdateNotification，这个时候让底部加载布局的高度-delta.dy(此时dy为正数数)
       // 来缩小底部加载布局的高度，当完全看不见时，将scrollPhysics设置为RefreshAlwaysScrollPhysics，来保持ListView的正常滑动
-
-      // 当上拉加载时，不知道什么原因，dragDetails可能会为空，导致抛出异常，会发生很明显的卡顿，所以这里必须判空
-      if (notification.dragDetails == null) {
-        return;
-      }
       setState(() {
         //如果底部的布局高度<0时，_bottomItemHeight=0；并恢复ListView的滑动
         if (_bottomItemHeight - notification.dragDetails.delta.dy / 2 <= 0.0) {
@@ -553,8 +548,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   void _handleScrollEndNotification() {
-    // 判断是否正在加载
-    if (_isRefresh) return;
     // 如果滑动结束后（手指抬起来后），判断是否需要启动加载或者刷新的动画
     if ((_topItemHeight > 0 || _bottomItemHeight > 0)) {
       if (_isPulling) {
@@ -576,16 +569,12 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   void _handleUserScrollNotification(UserScrollNotification notification) {
-    // 判断是否正在加载
-    if (_isRefresh) return;
-    if (_bottomItemHeight > 0.0 &&
-        notification.direction == ScrollDirection.forward) {
+    if (_bottomItemHeight > 0.0 && notification.direction == ScrollDirection.forward) {
       // 底部加载布局出现反向滑动时（由上向下），将scrollPhysics置为RefreshScrollPhysics，只要有2个原因。1 减缓滑回去的速度，2 防止手指快速滑动时出现惯性滑动
       setState(() {
         _scrollPhysics = _refreshScrollPhysics;
       });
-    } else if (_topItemHeight > 0.0 &&
-        notification.direction == ScrollDirection.reverse) {
+    } else if (_topItemHeight > 0.0 && notification.direction == ScrollDirection.reverse) {
       // 头部刷新布局出现反向滑动时（由下向上）
       setState(() {
         _scrollPhysics = _refreshScrollPhysics;
@@ -599,8 +588,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   void _handleOverScrollNotification(OverscrollNotification notification) {
-    // 判断是否正在加载
-    if (_isRefresh) return;
     //OverScrollNotification 和 metrics.atEdge 说明正在下拉或者 上拉
     // 此处同上
     if (notification.dragDetails == null) {
