@@ -128,21 +128,21 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   // 触发刷新
   void callRefresh() async {
-    if (_isRefresh) return;
+    if (_isRefresh || widget.onRefresh == null) return;
     _isRefresh = true;
     _scrollController.animateTo(_scrollController.position.minScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
     _callRefreshAnimationController.forward();
   }
   // 触发加载
   void callLoadMore() async {
-    if (_isRefresh) return;
+    if (_isRefresh || widget.loadMore == null) return;
     _isRefresh = true;
     _callLoadAnimationController.forward();
   }
 
   // 顶部超出边界
   Future topOver() async {
-    if (_isRefresh) return;
+    if (_isRefresh || widget.onRefresh == null) return;
     if (widget.behavior is ScrollOverBehavior) {
       int time = (_refreshHeight * 0.9 / scrollSpeed).floor();
       if (time > 150) return;
@@ -169,7 +169,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   // 底部超出边界
   Future bottomOver() async {
-    if (_isRefresh) return;
+    if (_isRefresh || widget.loadMore == null) return;
     // 判断是否滑动到底部并自动加载
     if (widget.autoLoad) {
       callLoadMore();

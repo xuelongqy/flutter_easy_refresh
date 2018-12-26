@@ -31,3 +31,6 @@
 
 ## V 1.0.6
 >添加：RefreshSafeArea，解决滑动冲突问题  
+
+## 下个版本
+>修复：loadMore与autoLoad冲突问题  

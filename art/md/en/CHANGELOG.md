@@ -31,3 +31,6 @@
 
 ## V 1.0.6
 >Add：RefreshSafeArea，resolved Sliding Conflict  
+
+## 下个版本
+>Repair：loadMore conflicts with autoLoad  
