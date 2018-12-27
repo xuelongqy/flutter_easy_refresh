@@ -114,7 +114,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_alipay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_wxpay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_tencent.jpg?raw=true)
 
 如果在捐赠留言中备注名称，将会被记录到列表中~ 如果你也是github开源作者，捐赠时可以留下github项目地址或者个人主页地址，链接将会被添加到列表中起到互相推广的作用  
-[捐赠列表](https://github.com/xuelongqy/donation/blob/master/DONATIONLIST.md)
+[捐赠列表](https://github.com/xuelongqy/donation/blob/master/flutter_easyrefresh.md)
 
 ### QQ讨论群 - 554981921
 #### 进群须知
