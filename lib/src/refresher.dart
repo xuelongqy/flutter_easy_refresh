@@ -125,6 +125,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   ScrollOverListener _scrollOverListener;
   // 是否拉出底部
   bool _isPushBottom = false;
+  // 记录是否在拖动
+  bool _isDrag = false;
 
   // 触发刷新
   void callRefresh() async {
@@ -143,6 +145,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   // 顶部超出边界
   Future topOver() async {
     if (_isRefresh || widget.onRefresh == null) return;
+    // 如果用户正在拖动则不执行
+    if (_isDrag) return;
     if (widget.behavior is ScrollOverBehavior) {
       int time = (_refreshHeight * 0.9 / scrollSpeed).floor();
       if (time > 150) return;
@@ -170,6 +174,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   // 底部超出边界
   Future bottomOver() async {
     if (_isRefresh || widget.loadMore == null) return;
+    // 如果用户正在拖动则不执行
+    if (_isDrag) return;
     // 判断是否滑动到底部并自动加载
     if (widget.autoLoad) {
       callLoadMore();
@@ -443,7 +449,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
                     if (_isRefresh) return true;
                     ScrollMetrics metrics = notification.metrics;
                     computeScrollSpeed(metrics.pixels);
-                    if (notification is ScrollUpdateNotification) {
+                    if (notification is ScrollStartNotification) {
+                      if (notification.dragDetails != null) {
+                        _isDrag = true;
+                      }
+                    } else if (notification is ScrollUpdateNotification) {
                       _handleScrollUpdateNotification(notification);
                     } else if (notification is ScrollEndNotification) {
                       _handleScrollEndNotification();
@@ -499,8 +509,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   void _handleScrollUpdateNotification(ScrollUpdateNotification notification) {
     // 当上拉加载时，不知道什么原因，dragDetails可能会为空，导致抛出异常，会发生很明显的卡顿，所以这里必须判空
     if (notification.dragDetails == null) {
+      _isDrag = false;
       return;
     }
+    _isDrag = true;
     // Header刷新的布局可见时，且当手指反方向拖动（由下向上），notification 为 ScrollUpdateNotification，这个时候让头部刷新布局的高度+delta.dy(此时dy为负数)
     // 来缩小头部刷新布局的高度，当完全看不见时，将scrollPhysics设置为RefreshAlwaysScrollPhysics，来保持ListView的正常滑动
     if (_topItemHeight > 0.0) {
@@ -591,8 +603,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     //OverScrollNotification 和 metrics.atEdge 说明正在下拉或者 上拉
     // 此处同上
     if (notification.dragDetails == null) {
+      _isDrag = false;
       return;
     }
+    _isDrag = true;
     // 如果notification.overScroll<0.0 说明是在下拉刷新，这里根据拉的距离设定高度的增加范围-->刷新高度时  是拖动速度的1/2，高度在刷新高度及大于40时 是
     // 拖动速度的1/4  .........若果超过100+刷新高度，结束拖动，自动开始刷新，拖过刷新布局高度小于0，恢复ListView的正常拖动
     // 当Item的数量不能铺满全屏时  上拉加载会引起下拉布局的出现，所以这里要判断下_bottomItemHeight<0.5

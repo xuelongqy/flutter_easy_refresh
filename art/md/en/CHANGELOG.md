@@ -32,5 +32,6 @@
 ## V 1.0.6
 >Add：RefreshSafeArea，resolved Sliding Conflict  
 
-## 下个版本
+## Next
 >Repair：loadMore conflicts with autoLoad  
+>Repair：Drag a list repeatedly triggers a cross-border event  
