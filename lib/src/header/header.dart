@@ -47,7 +47,6 @@ abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
       height = newHeight;
     });
   }
-
   // 回调开始刷新方法
   @mustCallSuper
   Future onRefreshStart() async {
@@ -77,6 +76,92 @@ abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
   @mustCallSuper
   Future onRefreshEnd() async {
     refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
+  }
+}
+
+/// Header监听器
+abstract class HeaderListener {
+  // 更新视图高度
+  void updateHeight(double newHeight){}
+  // 回调开始刷新方法
+  void onRefreshStart(){}
+  // 回调准备刷新方法
+  void onRefreshReady(){}
+  // 回调开始刷新方法
+  void onRefreshing(){}
+  // 回调刷新完成方法
+  void onRefreshed(){}
+  // 回调刷新恢复方法
+  void onRefreshRestore(){}
+  // 回调刷新结束方法
+  void onRefreshEnd(){}
+}
+
+/// 监听器Header
+class ListenerHeader extends RefreshHeader {
+  // 触发刷新的高度
+  final double refreshHeight;
+  // 完成延时时间(ms)
+  final int finishDelay;
+  // 监听器
+  final HeaderListener listener;
+
+  // 构造函数
+  ListenerHeader({
+    @required GlobalKey<RefreshHeaderState> key,
+    @required this.listener,
+    this.refreshHeight: 70.0,
+    this.finishDelay: 1000,
+  }):super(
+    key: key,
+    refreshHeight: refreshHeight,
+    finishDelay: finishDelay,
+  ){
+    assert(listener != null);
+  }
+
+  @override
+  _ListenerHeaderState createState() => _ListenerHeaderState();
+}
+class _ListenerHeaderState extends RefreshHeaderState<ListenerHeader> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+  @override
+  Future onRefreshEnd() async {
+    super.onRefreshEnd();
+    widget.listener.onRefreshEnd();
+  }
+  @override
+  Future onRefreshRestore() async {
+    super.onRefreshRestore();
+    widget.listener.onRefreshRestore();
+  }
+  @override
+  Future onRefreshed() async {
+    super.onRefreshed();
+    widget.listener.onRefreshed();
+  }
+  @override
+  Future onRefreshing() async {
+    super.onRefreshing();
+    widget.listener.onRefreshing();
+  }
+  @override
+  Future onRefreshReady() async {
+    super.onRefreshReady();
+    widget.listener.onRefreshReady();
+  }
+  @override
+  Future onRefreshStart() async {
+    super.onRefreshStart();
+    widget.listener.onRefreshStart();
+  }
+  @override
+  void updateHeight(double newHeight) {
+    super.updateHeight(newHeight);
+    widget.listener.updateHeight(newHeight);
   }
 }
 

@@ -8,28 +8,26 @@ class SliverPage extends StatefulWidget {
   _SliverPageState createState() => _SliverPageState();
 }
 
-class _SliverPageState extends State<SliverPage> {
+class _SliverPageState extends State<SliverPage> with HeaderListener {
 
   List<String> addStr=["1","2","3","4","5","6","7","8","9","0"];
   List<String> str=["1","2","3","4","5","6","7","8","9","0"];
   GlobalKey<EasyRefreshState> _easyRefreshKey = new GlobalKey<EasyRefreshState>();
   GlobalKey<RefreshHeaderState> _headerKey = new GlobalKey<RefreshHeaderState>();
   GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
+  double _refreshHeight = 70.0;
+  double _indicatorValue = 0.0;
+  bool _updateIndicatorValue = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: new EasyRefresh(
         key: _easyRefreshKey,
-        refreshHeader: ClassicsHeader(
+        refreshHeader: ListenerHeader(
           key: _headerKey,
-          refreshText: Translations.of(context).text("pullToRefresh"),
-          refreshReadyText: Translations.of(context).text("releaseToRefresh"),
-          refreshingText: Translations.of(context).text("refreshing") + "...",
-          refreshedText: Translations.of(context).text("refreshed"),
-          moreInfo: Translations.of(context).text("updateAt"),
-          bgColor: Colors.orange,
-          textColor: Colors.black,
+          refreshHeight: _refreshHeight,
+          listener: this,
         ),
         refreshFooter: ClassicsFooter(
           key: _footerKey,
@@ -44,7 +42,7 @@ class _SliverPageState extends State<SliverPage> {
           textColor: Colors.black,
         ),
         onRefresh: () async{
-          await new Future.delayed(const Duration(seconds: 1), () {
+          await new Future.delayed(const Duration(seconds: 3), () {
             setState(() {
               str.clear();
               str.addAll(addStr);
@@ -71,6 +69,20 @@ class _SliverPageState extends State<SliverPage> {
               flexibleSpace: FlexibleSpaceBar(
                 title: Text("CustomScrollView"),
               ),
+              actions: <Widget>[
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10.0),
+                    width: 24.0,
+                    height: 24.0,
+                    child: CircularProgressIndicator(
+                      value: _indicatorValue,
+                      valueColor: AlwaysStoppedAnimation(Colors.black),
+                      strokeWidth: 2.4,
+                    ),
+                  )
+                )
+              ],
             ),
             SliverPadding(
               padding: EdgeInsets.all(0.0),
@@ -94,5 +106,50 @@ class _SliverPageState extends State<SliverPage> {
         )
       )
     );
+  }
+
+  @override
+  void onRefreshEnd() {
+    setState(() {
+      _indicatorValue = 0.0;
+    });
+  }
+
+  @override
+  void onRefreshReady() {
+  }
+
+  @override
+  void onRefreshRestore() {
+  }
+
+  @override
+  void onRefreshStart() {
+    _updateIndicatorValue = true;
+  }
+
+  @override
+  void onRefreshed() {
+    setState(() {
+      _indicatorValue = 1.0;
+    });
+  }
+
+  @override
+  void onRefreshing() {
+    _updateIndicatorValue = false;
+    setState(() {
+      _indicatorValue = null;
+    });
+  }
+
+  @override
+  void updateHeight(double newHeight) {
+    if (_updateIndicatorValue) {
+      double indicatorValue = newHeight / _refreshHeight * 0.75;
+      setState(() {
+        _indicatorValue = indicatorValue < 0.75 ? indicatorValue : 0.75;
+      });
+    }
   }
 }

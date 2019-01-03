@@ -86,6 +86,99 @@ abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
   }
 }
 
+/// Footer监听器
+abstract class FooterListener {
+  // 更新视图高度
+  void updateHeight(double newHeight){}
+  // 回调开始加载方法
+  void onLoadStart(){}
+  // 回调准备加载方法
+  void onLoadReady(){}
+  // 回调开始加载方法
+  void onLoading(){}
+  // 回调加载完成方法
+  void onLoaded(){}
+  // 回调没有更多数据方法
+  void onNoMore(){}
+  // 回调加载恢复方法
+  void onLoadRestore(){}
+  // 回调加载结束方法
+  void onLoadEnd(){}
+}
+
+/// 监听器Footer
+class ListenerFooter extends RefreshFooter {
+  // 触发加载的高度
+  final double loadHeight;
+  // 完成延时时间(ms)
+  final int finishDelay;
+  // 监听器
+  final FooterListener listener;
+
+  // 构造函数
+  ListenerFooter({
+    @required GlobalKey<RefreshFooterState> key,
+    @required this.listener,
+    this.loadHeight: 70.0,
+    this.finishDelay: 1000,
+  }):super(
+    key: key,
+    loadHeight: loadHeight,
+    finishDelay: finishDelay,
+  ){
+    assert(listener != null);
+  }
+
+  @override
+  _ListenerFooterState createState() => _ListenerFooterState();
+}
+class _ListenerFooterState extends RefreshFooterState<ListenerFooter> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+  @override
+  Future onLoadEnd() async {
+    super.onLoadEnd();
+    widget.listener.onLoadEnd();
+  }
+  @override
+  Future onLoadRestore() async {
+    super.onLoadRestore();
+    widget.listener.onLoadRestore();
+  }
+  @override
+  Future onNoMore() async {
+    super.onNoMore();
+    widget.listener.onNoMore();
+  }
+  @override
+  Future onLoaded() async {
+    super.onLoaded();
+    widget.listener.onLoaded();
+  }
+  @override
+  Future onLoading() async {
+    super.onLoading();
+    widget.listener.onLoading();
+  }
+  @override
+  Future onLoadReady() async {
+    super.onLoadReady();
+    widget.listener.onLoadReady();
+  }
+  @override
+  Future onLoadStart() async {
+    super.onLoadStart();
+    widget.listener.onLoadStart();
+  }
+  @override
+  void updateHeight(double newHeight) {
+    super.updateHeight(newHeight);
+    widget.listener.updateHeight(newHeight);
+  }
+}
+
 /// 经典(默认)底部视图
 class ClassicsFooter extends RefreshFooter {
   // 提示加载文字

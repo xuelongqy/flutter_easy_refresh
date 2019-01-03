@@ -155,13 +155,13 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         ..addListener(() {
           if (_scrollOverAnimation.value == 0.0) return;
           setState(() {
-            _topItemHeight = _scrollOverAnimation.value;
+            _setTopItemHeight(_scrollOverAnimation.value);
           });
         });
       _scrollOverAnimation.addStatusListener((animationStatus) {
         if (animationStatus == AnimationStatus.completed) {
           setState(() {
-            _topItemHeight = _refreshHeight * 0.9;
+            _setTopItemHeight(_refreshHeight * 0.9);
             _scrollPhysics = _neverScrollableScrollPhysics;
           });
           _animationController.forward();
@@ -190,9 +190,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         ..addListener(() {
           if (_scrollOverAnimation.value == 0.0) return;
           _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-          setState(() {
-            _bottomItemHeight = _scrollOverAnimation.value;
-          });
+          _setBottomItemHeight(_scrollOverAnimation.value);
           _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
         });
       _scrollOverAnimation.addStatusListener((animationStatus) {
@@ -244,14 +242,14 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         setState(() {
           if (_topItemHeight > _refreshHeight) {
             //_shrinkageDistance*animation.value是由大变小的，模拟出弹回的效果
-            _topItemHeight = _refreshHeight + _shrinkageDistance * _animation.value;
+            _setTopItemHeight(_refreshHeight + _shrinkageDistance * _animation.value);
           } else if (_bottomItemHeight > _loadHeight) {
-            _bottomItemHeight = _loadHeight + _shrinkageDistance * _animation.value;
+            _setBottomItemHeight(_loadHeight + _shrinkageDistance * _animation.value);
             //高度小于50时↓
           } else if (_topItemHeight <= _refreshHeight && _topItemHeight > 0) {
-            _topItemHeight = _shrinkageDistance * _animation.value;
+            _setTopItemHeight(_shrinkageDistance * _animation.value);
           } else if (_bottomItemHeight <= _loadHeight && _bottomItemHeight > 0) {
-            _bottomItemHeight = _shrinkageDistance * _animation.value;
+            _setBottomItemHeight(_shrinkageDistance * _animation.value);
           }
         });
       });
@@ -266,21 +264,21 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         //动画完成后只有2种情况，高度是50和0，如果是高度》=50的，则开始刷新或者加载操作，如果是0则恢复ListView
         setState(() {
           if (_topItemHeight >= _refreshHeight) {
-            _topItemHeight = _refreshHeight;
+            _setTopItemHeight(_refreshHeight);
             _refreshStart(RefreshBoxDirectionStatus.PULL);
           } else if (_bottomItemHeight >= _loadHeight) {
-            _bottomItemHeight = _loadHeight;
+            _setBottomItemHeight(_loadHeight);
             _refreshStart(RefreshBoxDirectionStatus.PUSH);
             //动画结束，高度回到0，上下拉刷新彻底结束，ListView恢复正常
           } else if (_states == RefreshBoxDirectionStatus.PUSH) {
-            _topItemHeight = 0.0;
+            _setTopItemHeight(0.0);
             setState(() {
               _scrollPhysics = _refreshAlwaysScrollPhysics;
             });
             _states = RefreshBoxDirectionStatus.IDLE;
             _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           } else if (_states == RefreshBoxDirectionStatus.PULL) {
-            _bottomItemHeight = 0.0;
+            _setBottomItemHeight(0.0);
             setState(() {
               _scrollPhysics = _refreshAlwaysScrollPhysics;
             });
@@ -315,7 +313,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     ..addListener(() {
       if (_callRefreshAnimation.value == 0.0) return;
       setState(() {
-        _topItemHeight = (_refreshHeight + 20.0) * _callRefreshAnimation.value;
+        _setTopItemHeight((_refreshHeight + 20.0) * _callRefreshAnimation.value);
       });
     });
     _callRefreshAnimation.addStatusListener((animationStatus) {
@@ -334,7 +332,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         if (_callLoadAnimation.value == 0.0) return;
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
         setState(() {
-          _bottomItemHeight = (_loadHeight + 20.0) * _callLoadAnimation.value;
+          _setBottomItemHeight((_loadHeight + 20.0) * _callLoadAnimation.value);
         });
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       });
@@ -426,15 +424,26 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     super.dispose();
   }
 
+  // 设置Header和Footer的拉动高度
+  void _setTopItemHeight(double height) {
+    setState(() {
+      _topItemHeight = height;
+      if (this._refreshHeader != null) {
+        this._refreshHeader.getKey().currentState.updateHeight(_topItemHeight);
+      }
+    });
+  }
+  void _setBottomItemHeight(double height) {
+    setState(() {
+      _bottomItemHeight = height;
+      if (this._refreshFooter != null) {
+        this._refreshFooter.getKey().currentState.updateHeight(_bottomItemHeight);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // 更新高度
-    if (this._refreshHeader != null) {
-      this._refreshHeader.getKey().currentState.updateHeight(_topItemHeight);
-    }
-    if (this._refreshFooter != null) {
-      this._refreshFooter.getKey().currentState.updateHeight(_bottomItemHeight);
-    }
     return new Container(
       child: Stack(
         children: <Widget>[
@@ -521,13 +530,13 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         if (_topItemHeight + notification.dragDetails.delta.dy / 2 <= 0.0) {
           _checkStateAndCallback(
               AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
-          _topItemHeight = 0.0;
+          _setTopItemHeight(0.0);
           setState(() {
             _scrollPhysics = _refreshAlwaysScrollPhysics;
           });
         } else {
           // 当刷新布局可见时，让头部刷新布局的高度+delta.dy(此时dy为负数)，来缩小头部刷新布局的高度
-          _topItemHeight = _topItemHeight + notification.dragDetails.delta.dy / 2;
+          _setTopItemHeight(_topItemHeight + notification.dragDetails.delta.dy / 2);
         }
         // 如果小于刷新高度则恢复下拉刷新
         if (_topItemHeight < _refreshHeight) {
@@ -541,14 +550,14 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         //如果底部的布局高度<0时，_bottomItemHeight=0；并恢复ListView的滑动
         if (_bottomItemHeight - notification.dragDetails.delta.dy / 2 <= 0.0) {
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
-          _bottomItemHeight = 0.0;
+          _setBottomItemHeight(0.0);
           setState(() {
             _scrollPhysics = _refreshAlwaysScrollPhysics;
           });
         } else {
           if (notification.dragDetails.delta.dy > 0) {
             //当加载的布局可见时，让上拉加载布局的高度-delta.dy(此时dy为正数数)，来缩小底部的加载布局的高度
-            _bottomItemHeight = _bottomItemHeight - notification.dragDetails.delta.dy / 2;
+            _setBottomItemHeight(_bottomItemHeight - notification.dragDetails.delta.dy / 2);
           }
         }
         // 如果小于加载高度则恢复加载
@@ -615,7 +624,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         if (notification.dragDetails.delta.dy / 2 + _topItemHeight <= 0.0) {
           // Refresh回弹完毕，恢复正常ListView的滑动状态
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
-          _topItemHeight = 0.0;
+          _setTopItemHeight(0.0);
           setState(() {
             _scrollPhysics = _refreshAlwaysScrollPhysics;
           });
@@ -626,13 +635,13 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             });
             _animationController.forward();
           } else if (_topItemHeight > 40.0 + _refreshHeight) {
-            _topItemHeight = notification.dragDetails.delta.dy / 6 + _topItemHeight;
+            _setTopItemHeight(notification.dragDetails.delta.dy / 6 + _topItemHeight);
           } else if (_topItemHeight > _refreshHeight) {
             _checkStateAndCallback(AnimationStates.DragAndRefreshEnabled, RefreshBoxDirectionStatus.PULL);
-            _topItemHeight = notification.dragDetails.delta.dy / 4 + _topItemHeight;
+            _setTopItemHeight(notification.dragDetails.delta.dy / 4 + _topItemHeight);
           } else {
             _checkStateAndCallback(AnimationStates.DragAndRefreshNotEnabled, RefreshBoxDirectionStatus.PULL);
-            _topItemHeight = notification.dragDetails.delta.dy / 2 + _topItemHeight;
+            _setTopItemHeight(notification.dragDetails.delta.dy / 2 + _topItemHeight);
           }
         }
       });
@@ -641,7 +650,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         if (-notification.dragDetails.delta.dy / 2 + _bottomItemHeight <= 0.0) {
           // Refresh回弹完毕，恢复正常ListView的滑动状态
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
-          _bottomItemHeight = 0.0;
+          _setBottomItemHeight(0.0);
           setState(() {
             _scrollPhysics = _refreshAlwaysScrollPhysics;
           });
@@ -668,13 +677,13 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
               _animationController.forward();
             }
           } else if (_bottomItemHeight > 30.0 + _loadHeight) {
-            _bottomItemHeight = -notification.dragDetails.delta.dy / 4 + _bottomItemHeight;
+            _setBottomItemHeight(-notification.dragDetails.delta.dy / 4 + _bottomItemHeight);
           } else if (_bottomItemHeight > _loadHeight) {
             _checkStateAndCallback(AnimationStates.DragAndRefreshEnabled, RefreshBoxDirectionStatus.PUSH);
-            _bottomItemHeight = -notification.dragDetails.delta.dy / 3 + _bottomItemHeight;
+            _setBottomItemHeight(-notification.dragDetails.delta.dy / 3 + _bottomItemHeight);
           } else {
             _checkStateAndCallback(AnimationStates.DragAndRefreshNotEnabled, RefreshBoxDirectionStatus.PUSH);
-            _bottomItemHeight = -notification.dragDetails.delta.dy / 2 + _bottomItemHeight;
+            _setBottomItemHeight(-notification.dragDetails.delta.dy / 2 + _bottomItemHeight);
           }
         }
       });
