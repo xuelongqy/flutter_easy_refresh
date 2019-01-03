@@ -25,6 +25,8 @@
   "userProfileDescribe": "User Profile with the springback effect",
   "customScrollViewDescribe": "List with AppBar Folding",
   "swiperDescribe": "Swiper example, resolve sliding conflicts",
+  "listEmbed": "List embed",
+  "listEmbedDescribe": "Use the connector to set the Header and Footer positions",
   "qqGroup": "QQ group",
   "github": "Github",
   "name": "Name",

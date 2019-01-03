@@ -2,6 +2,7 @@ import 'package:example/generated/translations.dart';
 import 'package:example/page/auto_load_page.dart';
 import 'package:example/page/basic_page.dart';
 import 'package:example/page/float_page.dart';
+import 'package:example/page/list_embed_page.dart';
 import 'package:example/page/sliver_page.dart';
 import 'package:example/page/swiper_page.dart';
 import 'package:example/page/user_profile_page.dart';
@@ -127,7 +128,7 @@ class _SamplePageState extends State<SamplePage> {
               ),
             ),
             ListItem(
-              title: Translations.of(context).text("Swiper"),
+              title: "Swiper",
               describe: Translations.of(context).text("swiperDescribe"),
               onPressed: () {
                 Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
@@ -135,6 +136,26 @@ class _SamplePageState extends State<SamplePage> {
                 }));
               },
               icon: Icon(Icons.view_array,
+                color: Colors.orange,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            ListItem(
+              title: Translations.of(context).text("listEmbed"),
+              describe: Translations.of(context).text("listEmbedDescribe"),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                  return ListEmbedPage();
+                }));
+              },
+              icon: Icon(Icons.view_day,
                 color: Colors.orange,
               ),
             ),

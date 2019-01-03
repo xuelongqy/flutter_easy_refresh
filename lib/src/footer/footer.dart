@@ -179,6 +179,36 @@ class _ListenerFooterState extends RefreshFooterState<ListenerFooter> {
   }
 }
 
+/// Footer连接器
+class ConnectorFooter extends RefreshFooter {
+  // 需要连接的Header的Key
+  final GlobalKey<RefreshFooterState> footerKey;
+
+  ConnectorFooter({
+    @required GlobalKey<RefreshFooterState> key,
+    @required this.footerKey
+  }):super(
+      key: key
+  ){
+    assert(footerKey != null);
+  }
+
+  @override
+  GlobalKey<RefreshFooterState> getKey() {
+    return footerKey;
+  }
+
+  @override
+  _ConnectorFooterState createState() => _ConnectorFooterState();
+}
+class _ConnectorFooterState extends RefreshFooterState<ConnectorFooter>{
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+
 /// 经典(默认)底部视图
 class ClassicsFooter extends RefreshFooter {
   // 提示加载文字

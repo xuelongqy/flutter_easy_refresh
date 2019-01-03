@@ -165,6 +165,35 @@ class _ListenerHeaderState extends RefreshHeaderState<ListenerHeader> {
   }
 }
 
+/// Header连接器
+class ConnectorHeader extends RefreshHeader {
+  // 需要连接的Header的Key
+  final GlobalKey<RefreshHeaderState> headerKey;
+
+  ConnectorHeader({
+    @required GlobalKey<RefreshHeaderState> key,
+    @required this.headerKey
+  }):super(
+    key: key
+  ){
+    assert(headerKey != null);
+  }
+
+  @override
+  GlobalKey<RefreshHeaderState> getKey() {
+    return headerKey;
+  }
+
+  @override
+  _ConnectorHeaderState createState() => _ConnectorHeaderState();
+}
+class _ConnectorHeaderState extends RefreshHeaderState<ConnectorHeader>{
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
 /// 经典(默认)顶部视图
 class ClassicsHeader extends RefreshHeader {
   // 提示刷新文字
