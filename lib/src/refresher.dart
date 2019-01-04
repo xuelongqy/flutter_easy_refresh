@@ -167,7 +167,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           _animationController.forward();
         }
       });
-      _scrollOverAnimationController.forward();
+      if (!_scrollOverAnimationController.isAnimating) {
+        _scrollOverAnimationController.forward();
+      }
     }
   }
 
@@ -201,11 +203,13 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
             _scrollPhysics = _neverScrollableScrollPhysics;
           });
-          _shrinkageDistance = _refreshHeight * 0.9;
+          _shrinkageDistance = _loadHeight * 0.9;
           _animationController.forward();
         }
       });
-      _scrollOverAnimationController.forward();
+      if (!_scrollOverAnimationController.isAnimating) {
+        _scrollOverAnimationController.forward();
+      }
     }
   }
 

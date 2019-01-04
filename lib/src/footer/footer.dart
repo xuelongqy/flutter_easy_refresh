@@ -181,21 +181,25 @@ class _ListenerFooterState extends RefreshFooterState<ListenerFooter> {
 
 /// Footer连接器
 class ConnectorFooter extends RefreshFooter {
-  // 需要连接的Header的Key
-  final GlobalKey<RefreshFooterState> footerKey;
+  // 需要连接的Header
+  final RefreshFooter footer;
+
+  get loadHeight => footer.loadHeight;
+  get isFloat => footer.isFloat;
+  get finishDelay => footer.finishDelay;
 
   ConnectorFooter({
     @required GlobalKey<RefreshFooterState> key,
-    @required this.footerKey
+    @required this.footer
   }):super(
       key: key
   ){
-    assert(footerKey != null);
+    assert(footer != null);
   }
 
   @override
   GlobalKey<RefreshFooterState> getKey() {
-    return footerKey;
+    return footer.getKey();
   }
 
   @override

@@ -20,6 +20,28 @@ class _ListEmbedPageState extends State<ListEmbedPage> {
 
   @override
   Widget build(BuildContext context) {
+    Widget header = ClassicsHeader(
+      key: _headerKey,
+      refreshText: Translations.of(context).text("pullToRefresh"),
+      refreshReadyText: Translations.of(context).text("releaseToRefresh"),
+      refreshingText: Translations.of(context).text("refreshing") + "...",
+      refreshedText: Translations.of(context).text("refreshed"),
+      moreInfo: Translations.of(context).text("updateAt"),
+      bgColor: Colors.transparent,
+      textColor: Colors.black,
+    );
+    Widget footer = ClassicsFooter(
+      key: _footerKey,
+      loadHeight: 50.0,
+      loadText: Translations.of(context).text("pushToLoad"),
+      loadReadyText: Translations.of(context).text("releaseToLoad"),
+      loadingText: Translations.of(context).text("loading"),
+      loadedText: Translations.of(context).text("loaded"),
+      noMoreText: Translations.of(context).text("noMore"),
+      moreInfo: Translations.of(context).text("updateAt"),
+      bgColor: Colors.transparent,
+      textColor: Colors.black,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(Translations.of(context).text("listEmbed")),
@@ -30,11 +52,11 @@ class _ListEmbedPageState extends State<ListEmbedPage> {
             behavior: ScrollOverBehavior(),
             refreshHeader: ConnectorHeader(
               key: _connectorHeaderKey,
-              headerKey: _headerKey,
+              header: header,
             ),
             refreshFooter: ConnectorFooter(
               key: _connectorFooterKey,
-              footerKey: _footerKey,
+              footer: footer,
             ),
             child: CustomScrollView(
               semanticChildCount: str.length,
@@ -42,16 +64,7 @@ class _ListEmbedPageState extends State<ListEmbedPage> {
                 SliverList(
                   delegate: SliverChildListDelegate(
                     <Widget>[
-                      ClassicsHeader(
-                        key: _headerKey,
-                        refreshText: Translations.of(context).text("pullToRefresh"),
-                        refreshReadyText: Translations.of(context).text("releaseToRefresh"),
-                        refreshingText: Translations.of(context).text("refreshing") + "...",
-                        refreshedText: Translations.of(context).text("refreshed"),
-                        moreInfo: Translations.of(context).text("updateAt"),
-                        bgColor: Colors.transparent,
-                        textColor: Colors.black,
-                      )
+                      header
                     ]
                   ),
                 ),
@@ -72,18 +85,7 @@ class _ListEmbedPageState extends State<ListEmbedPage> {
                 SliverList(
                   delegate: SliverChildListDelegate(
                     <Widget>[
-                      ClassicsFooter(
-                        key: _footerKey,
-                        loadHeight: 50.0,
-                        loadText: Translations.of(context).text("pushToLoad"),
-                        loadReadyText: Translations.of(context).text("releaseToLoad"),
-                        loadingText: Translations.of(context).text("loading"),
-                        loadedText: Translations.of(context).text("loaded"),
-                        noMoreText: Translations.of(context).text("noMore"),
-                        moreInfo: Translations.of(context).text("updateAt"),
-                        bgColor: Colors.transparent,
-                        textColor: Colors.black,
-                      )
+                      footer
                     ]
                   ),
                 )

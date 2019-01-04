@@ -167,21 +167,25 @@ class _ListenerHeaderState extends RefreshHeaderState<ListenerHeader> {
 
 /// Header连接器
 class ConnectorHeader extends RefreshHeader {
-  // 需要连接的Header的Key
-  final GlobalKey<RefreshHeaderState> headerKey;
+  // 需要连接的Header
+  final RefreshHeader header;
+
+  get refreshHeight => header.refreshHeight;
+  get isFloat => header.isFloat;
+  get finishDelay => header.finishDelay;
 
   ConnectorHeader({
     @required GlobalKey<RefreshHeaderState> key,
-    @required this.headerKey
+    @required this.header
   }):super(
     key: key
   ){
-    assert(headerKey != null);
+    assert(header != null);
   }
 
   @override
   GlobalKey<RefreshHeaderState> getKey() {
-    return headerKey;
+    return header.getKey();
   }
 
   @override
