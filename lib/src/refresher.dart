@@ -253,9 +253,23 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           } else if (_topItemHeight <= _refreshHeight && _topItemHeight > 0) {
             _setTopItemHeight(_shrinkageDistance * _animation.value);
           } else if (_bottomItemHeight <= _loadHeight && _bottomItemHeight > 0) {
-            _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+            if (_animationStates != AnimationStates.LoadDataEnd) {
+              _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+            }else {
+              if (_scrollController.offset - _scrollController.position.maxScrollExtent < _loadHeight
+                  && _scrollController.offset - _scrollController.position.maxScrollExtent > 0.0) {
+                _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+              }
+            }
             _setBottomItemHeight(_shrinkageDistance * _animation.value);
-            _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+            if (_animationStates != AnimationStates.LoadDataEnd) {
+              _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+            }else {
+              if (_scrollController.offset - _scrollController.position.maxScrollExtent < _loadHeight
+                  && _scrollController.offset - _scrollController.position.maxScrollExtent > 0.0) {
+                _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+              }
+            }
           }
         });
       });
