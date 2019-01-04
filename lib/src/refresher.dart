@@ -253,6 +253,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           } else if (_topItemHeight <= _refreshHeight && _topItemHeight > 0) {
             _setTopItemHeight(_shrinkageDistance * _animation.value);
           } else if (_bottomItemHeight <= _loadHeight && _bottomItemHeight > 0) {
+            // 如果不是加载完成或者列表底部就不用跳转到列表底部
             if (_animationStates != AnimationStates.LoadDataEnd) {
               _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
             }else {
@@ -261,7 +262,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
                 _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
               }
             }
+            // 设置底部高度
             _setBottomItemHeight(_shrinkageDistance * _animation.value);
+            // 同上
             if (_animationStates != AnimationStates.LoadDataEnd) {
               _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
             }else {
