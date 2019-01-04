@@ -27,6 +27,7 @@ class _ListEmbedPageState extends State<ListEmbedPage> {
       body: Center(
           child: new EasyRefresh(
             key: _easyRefreshKey,
+            behavior: ScrollOverBehavior(),
             refreshHeader: ConnectorHeader(
               key: _connectorHeaderKey,
               headerKey: _headerKey,
@@ -35,43 +36,58 @@ class _ListEmbedPageState extends State<ListEmbedPage> {
               key: _connectorFooterKey,
               footerKey: _footerKey,
             ),
-            child: new ListView.builder(
-              //ListView的Item
-                itemCount: str.length + 2,
-                itemBuilder: (BuildContext context,int index){
-                  if (index == 0) {
-                    return ClassicsHeader(
-                      key: _headerKey,
-                      refreshText: Translations.of(context).text("pullToRefresh"),
-                      refreshReadyText: Translations.of(context).text("releaseToRefresh"),
-                      refreshingText: Translations.of(context).text("refreshing") + "...",
-                      refreshedText: Translations.of(context).text("refreshed"),
-                      moreInfo: Translations.of(context).text("updateAt"),
-                      bgColor: Colors.orange
-                    );
-                  }else if (index == str.length + 1) {
-                    return ClassicsFooter(
-                      key: _footerKey,
-                      loadHeight: 50.0,
-                      loadText: Translations.of(context).text("pushToLoad"),
-                      loadReadyText: Translations.of(context).text("releaseToLoad"),
-                      loadingText: Translations.of(context).text("loading"),
-                      loadedText: Translations.of(context).text("loaded"),
-                      noMoreText: Translations.of(context).text("noMore"),
-                      moreInfo: Translations.of(context).text("updateAt"),
-                      bgColor: Colors.orange
-                    );
-                  }else {
+            child: CustomScrollView(
+              semanticChildCount: str.length,
+              slivers: <Widget>[
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    <Widget>[
+                      ClassicsHeader(
+                        key: _headerKey,
+                        refreshText: Translations.of(context).text("pullToRefresh"),
+                        refreshReadyText: Translations.of(context).text("releaseToRefresh"),
+                        refreshingText: Translations.of(context).text("refreshing") + "...",
+                        refreshedText: Translations.of(context).text("refreshed"),
+                        moreInfo: Translations.of(context).text("updateAt"),
+                        bgColor: Colors.transparent,
+                        textColor: Colors.black,
+                      )
+                    ]
+                  ),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index){
                     return new Container(
                         height: 70.0,
                         child: Card(
                           child: new Center(
-                            child: new Text(str[index - 1],style: new TextStyle(fontSize: 18.0),),
+                            child: new Text(str[index],style: new TextStyle(fontSize: 18.0),),
                           ),
                         )
                     );
-                  }
-                }
+                  },
+                    childCount: str.length,
+                  )
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    <Widget>[
+                      ClassicsFooter(
+                        key: _footerKey,
+                        loadHeight: 50.0,
+                        loadText: Translations.of(context).text("pushToLoad"),
+                        loadReadyText: Translations.of(context).text("releaseToLoad"),
+                        loadingText: Translations.of(context).text("loading"),
+                        loadedText: Translations.of(context).text("loaded"),
+                        noMoreText: Translations.of(context).text("noMore"),
+                        moreInfo: Translations.of(context).text("updateAt"),
+                        bgColor: Colors.transparent,
+                        textColor: Colors.black,
+                      )
+                    ]
+                  ),
+                )
+              ],
             ),
             onRefresh: () async{
               await new Future.delayed(const Duration(seconds: 1), () {

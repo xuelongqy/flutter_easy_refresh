@@ -249,7 +249,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           } else if (_topItemHeight <= _refreshHeight && _topItemHeight > 0) {
             _setTopItemHeight(_shrinkageDistance * _animation.value);
           } else if (_bottomItemHeight <= _loadHeight && _bottomItemHeight > 0) {
+            _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
             _setBottomItemHeight(_shrinkageDistance * _animation.value);
+            _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
           }
         });
       });
@@ -743,7 +745,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             currentItemCount = widget.child.semanticChildCount;
           }
           if (currentItemCount > this._itemCount) {
-            this._refreshFooter.getKey().currentState.onLoaded();
+            //this._refreshFooter.getKey().currentState.onLoaded();
           }else {
             this._refreshFooter.getKey().currentState.onNoMore();
           }
