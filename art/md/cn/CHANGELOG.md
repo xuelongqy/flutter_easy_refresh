@@ -41,3 +41,4 @@
 >添加：Header和Footer连接器，实现将Header和Footer放置在任何位置  
 >添加：手动控制加载刷新结束  
 >修复：越过边界触发加载问题  
+>修复：BallPulse动画问题  

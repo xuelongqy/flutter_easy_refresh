@@ -27,7 +27,7 @@
   "floatViewDescribe": "顶部或底部视图浮动在列表上",
   "userProfile": "个人中心",
   "userProfileDescribe": "带回弹效果的个人中心",
-  "customScrollViewDescribe": "带头部折叠的列表",
+  "customScrollViewDescribe": "带头部折叠的列表，监听器示例",
   "swiperDescribe": "Swiper示例，解决滑动冲突",
   "listEmbed": "列表嵌入",
   "listEmbedDescribe": "使用连接器设置Header和Footer位置",

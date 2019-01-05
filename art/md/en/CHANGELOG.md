@@ -41,3 +41,4 @@
 >Add: Header and Footer connectors for placing Header and Footer in any position  
 >Add：Manual control load refresh finish  
 >Repair: Trigger loading problem across borders  
+>Repair: BallPulse animation problem  

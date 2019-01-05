@@ -27,7 +27,7 @@
   "floatViewDescribe": "At the top or bottom view floating on the list",
   "userProfile": "User Profile",
   "userProfileDescribe": "User Profile with the springback effect",
-  "customScrollViewDescribe": "List with AppBar Folding",
+  "customScrollViewDescribe": "List with AppBar Folding, listener example",
   "swiperDescribe": "Swiper example, resolve sliding conflicts",
   "listEmbed": "List embed",
   "listEmbedDescribe": "Use the connector to set the Header and Footer positions",
