@@ -47,6 +47,8 @@ class EasyRefresh extends StatefulWidget {
   final bool autoLoad;
   // 限制滚动
   final bool limitScroll;
+  // 自动控制(用于刷新和加载完成)
+  final bool autoControl;
 
   EasyRefresh({
     GlobalKey<EasyRefreshState> key,
@@ -58,6 +60,7 @@ class EasyRefresh extends StatefulWidget {
     this.loadMore,
     this.autoLoad: false,
     this.limitScroll: false,
+    this.autoControl: true,
     @required this.child
   }) : super(key: key) {
     assert(child != null);
@@ -140,6 +143,35 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     if (_isRefresh || widget.loadMore == null) return;
     _isRefresh = true;
     _callLoadAnimationController.forward();
+  }
+
+  // 刷新完成
+  void callRefreshFinish() async {
+    if (!widget.autoControl && _animationStates == AnimationStates.StartLoadData) {
+      if (!mounted) return;
+      _checkStateAndCallback(AnimationStates.LoadDataEnd, _lastStates);
+      if (_lastStates == RefreshBoxDirectionStatus.PULL) {
+        await Future.delayed(new Duration(milliseconds: this._refreshHeader.finishDelay));
+      }else if (_lastStates == RefreshBoxDirectionStatus.PUSH) {
+        await Future.delayed(new Duration(milliseconds: this._refreshFooter.finishDelay));
+      }
+      // 开始将加载（刷新）布局缩回去的动画
+      _animationController.forward();
+    }
+  }
+  // 加载完成
+  void callLoadMoreFinish() async {
+    if (!widget.autoControl && _animationStates == AnimationStates.StartLoadData) {
+      if (!mounted) return;
+      _checkStateAndCallback(AnimationStates.LoadDataEnd, _lastStates);
+      if (_lastStates == RefreshBoxDirectionStatus.PULL) {
+        await Future.delayed(new Duration(milliseconds: this._refreshHeader.finishDelay));
+      }else if (_lastStates == RefreshBoxDirectionStatus.PUSH) {
+        await Future.delayed(new Duration(milliseconds: this._refreshFooter.finishDelay));
+      }
+      // 开始将加载（刷新）布局缩回去的动画
+      _animationController.forward();
+    }
   }
 
   // 顶部超出边界
@@ -425,15 +457,18 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         await new Future.delayed(const Duration(milliseconds: 200), () {});
       }
     }
-    if (!mounted) return;
-    _checkStateAndCallback(AnimationStates.LoadDataEnd, refreshBoxDirectionStatus);
-    if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL) {
-      await Future.delayed(new Duration(milliseconds: this._refreshHeader.finishDelay));
-    }else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH) {
-      await Future.delayed(new Duration(milliseconds: this._refreshFooter.finishDelay));
+    // 判断是否自动控制
+    if (widget.autoControl) {
+      if (!mounted) return;
+      _checkStateAndCallback(AnimationStates.LoadDataEnd, refreshBoxDirectionStatus);
+      if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PULL) {
+        await Future.delayed(new Duration(milliseconds: this._refreshHeader.finishDelay));
+      }else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH) {
+        await Future.delayed(new Duration(milliseconds: this._refreshFooter.finishDelay));
+      }
+      // 开始将加载（刷新）布局缩回去的动画
+      _animationController.forward();
     }
-    // 开始将加载（刷新）布局缩回去的动画
-    _animationController.forward();
   }
 
   @override
@@ -766,7 +801,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             currentItemCount = widget.child.semanticChildCount;
           }
           if (currentItemCount > this._itemCount) {
-            //this._refreshFooter.getKey().currentState.onLoaded();
+            this._refreshFooter.getKey().currentState.onLoaded();
           }else {
             this._refreshFooter.getKey().currentState.onNoMore();
           }

@@ -35,3 +35,9 @@
 ## V 1.0.7
 >修复：loadMore与autoLoad冲突问题  
 >修复：反复拖动触发越界事件  
+
+## V 下个版本
+>添加：Header和Footer监听器，方便快速自定义  
+>添加：Header和Footer连接器，实现将Header和Footer放置在任何位置  
+>添加：手动控制加载刷新结束  
+>修复：越过边界触发加载问题  

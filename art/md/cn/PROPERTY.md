@@ -97,6 +97,7 @@ class _BasicPageState extends State<BasicPage> {
 | child      | 内容视图     | ? extends ScrollView   |   null |  必需 |
 | autoLoad | 底部自动加载     | bool  | false | 可选 |
 | limitScroll | 限制滚动     | bool  | false | 可选 |
+| autoControl | 自动控制(刷新和加载完成)     | bool  | true | 可选 |
 | behavior | 越界效果(自带光晕或回弹)     | ScrollBehavior | RefreshBehavior | 可选 |
 | refreshHeader | 顶部视图     | RefreshHeader | ClassicsHeader | 可选 |
 | refreshFooter | 底部视图     | RefreshFooter | ClassicsFooter | 可选 |
@@ -104,7 +105,7 @@ class _BasicPageState extends State<BasicPage> {
 | loadMore | 加载回调方法     | () => Void | null | 可选(为null时无法触发加载) |
 | animationStateChangedCallback | EasyRefresh状态回调，用于手动处理刷新加载等操作     | (AnimationStates, RefreshBoxDirectionStatus) => void     | null | 可选(不推荐使用) |
 
-# 属性表格 - RefreshSafeArea
+# 属性表格 - RefreshSafeArea(用于包裹滚动冲突的Widget)
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
 |---------|--------------------------|:-----:|:-----:|:-----:|
 | child      | 内容视图     | Widget   |   null |  必需 |
