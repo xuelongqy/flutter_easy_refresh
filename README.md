@@ -55,7 +55,7 @@
 ```
 //pub方式
 dependencies:
-  flutter_easyrefresh: ^1.0.8
+  flutter_easyrefresh: ^1.0.9
 
 //导入方式
 dependencies:

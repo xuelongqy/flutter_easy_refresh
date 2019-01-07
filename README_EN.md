@@ -55,7 +55,7 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and uploa
 ```
 //pub
 dependencies:
-  flutter_easyrefresh: ^1.0.8
+  flutter_easyrefresh: ^1.0.9
 
 //import
 dependencies:
