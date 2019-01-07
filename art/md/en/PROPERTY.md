@@ -109,3 +109,27 @@ class _BasicPageState extends State<BasicPage> {
 | Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
 |---------|--------------------------|:-----:|:-----:|:-----:|
 | child      | your content View     | Widget   |   null |  necessary |
+
+# Props Table - ListenerHeader(Used to quickly define the Header on the page to facilitate the current page interaction)
+| Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| refreshHeight      | The height at which the refresh is triggered     | double   |   70.0 |  optional |
+| finishDelay      | Refresh completion delay     | int   |   1000 |  optional |
+| listener      | Header event listener     | HeaderListener   |   null |  necessary |
+
+# Props Table - ConnectorHeader(Used to place the Header in another location and connect)
+| Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| header      | Header that needs to be connected     | RefreshHeader   |   null |  necessary |
+
+# Props Table - ListenerFooter(Used to quickly define Footer on the page to facilitate current page interaction)
+| Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| loadHeight      | Trigger loading height     | double   |   70.0 |  optional |
+| finishDelay      | Load completion delay     | int   |   1000 |  optional |
+| listener      | Footer event listener     | FooterListener   |   null |  necessary |
+
+# Props Table - ConnectorFooter(Used to place Footer to other locations and connect)
+| Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| footer      | Need to connect to Footer     | RefreshFooter   |   null |  necessary |

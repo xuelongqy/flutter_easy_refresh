@@ -34,7 +34,6 @@ abstract class RefreshFooter extends StatefulWidget {
     assert(this.key != null);
   }
 }
-
 abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
   // 底部栏状态
   RefreshFooterStatus refreshFooterStatus = RefreshFooterStatus.NO_LOAD;

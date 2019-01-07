@@ -110,4 +110,27 @@ class _BasicPageState extends State<BasicPage> {
 |---------|--------------------------|:-----:|:-----:|:-----:|
 | child      | 内容视图     | Widget   |   null |  必需 |
 
+# 属性表格 - ListenerHeader(用于快速在页面定义Header,方便当前页面交互)
+| 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| refreshHeight      | 触发刷新的高度     | double   |   70.0 |  可选 |
+| finishDelay      | 刷新完成延时     | int   |   1000 |  可选 |
+| listener      | Header监听器     | HeaderListener   |   null |  必须 |
+
+# 属性表格 - ConnectorHeader(用于将Header放置到其他位置并做连接)
+| 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| header      | 需要连接的Header     | RefreshHeader   |   null |  必须 |
+
+# 属性表格 - ListenerFooter(用于快速在页面定义Footer,方便当前页面交互)
+| 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| loadHeight      | 触发加载的高度     | double   |   70.0 |  可选 |
+| finishDelay      | 加载完成延时     | int   |   1000 |  可选 |
+| listener      | Footer监听器     | FooterListener   |   null |  必须 |
+
+# 属性表格 - ConnectorFooter(用于将Footer放置到其他位置并做连接)
+| 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| footer      | 需要连接的Footer     | RefreshFooter   |   null |  必须 |
 
