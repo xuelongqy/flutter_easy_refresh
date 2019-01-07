@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -246,11 +248,19 @@ class ClassicsHeader extends RefreshHeader {
   @override
   ClassicsHeaderState createState() => ClassicsHeaderState();
 }
-class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
+class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> with TickerProviderStateMixin<ClassicsHeader> {
   // 显示的文字
   String _showText;
   // 更新时间
   DateTime _dateTime;
+
+  // 动画
+  AnimationController _readyController;
+  Animation<double> _readyAnimation;
+  AnimationController _restoreController;
+  Animation<double> _restoreAnimation;
+  // Icon旋转度
+  double _iconRotationValue = 1.0;
 
   // 初始化操作
   @override
@@ -258,6 +268,42 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
     super.initState();
     _showText = widget.refreshText;
     _dateTime = DateTime.now();
+    // 初始化动画
+    _readyController = new AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
+    _readyAnimation = new Tween(begin: 1.0, end: 0.5).animate(_readyController)
+      ..addListener(() {
+        setState(() {
+          if (_readyAnimation.status != AnimationStatus.dismissed) {
+            _iconRotationValue = _readyAnimation.value;
+          }
+        });
+      });
+    _readyAnimation.addStatusListener((status){
+      if (status == AnimationStatus.completed) {
+        _readyController.reset();
+      }
+    });
+    _restoreController = new AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
+    _restoreAnimation = new Tween(begin: 0.5, end: 1.0).animate(_restoreController)
+      ..addListener(() {
+        setState(() {
+          if (_restoreAnimation.status != AnimationStatus.dismissed) {
+            _iconRotationValue = _restoreAnimation.value;
+          }
+        });
+      });
+    _restoreAnimation.addStatusListener((status){
+      if (status == AnimationStatus.completed) {
+        _restoreController.reset();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _readyController.dispose();
+    _restoreController.dispose();
   }
 
   // 准备刷新回调
@@ -267,6 +313,10 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
     setState(() {
       _showText = widget.refreshReadyText;
     });
+    if (_restoreController.isAnimating) {
+      _restoreController.reset();
+    }
+    _readyController.forward();
   }
   // 正在刷新回调
   @override
@@ -292,6 +342,10 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
     setState(() {
       _showText = widget.refreshText;
     });
+    if (_readyController.isAnimating) {
+      _readyController.reset();
+    }
+    _restoreController.forward();
   }
   // 刷新结束回调
   @override
@@ -327,9 +381,12 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      this.refreshHeaderStatus == RefreshHeaderStatus.NO_REFRESH ? Icon(
-                        Icons.arrow_downward,
-                        color: widget.textColor,
+                      this.refreshHeaderStatus == RefreshHeaderStatus.NO_REFRESH || this.refreshHeaderStatus == RefreshHeaderStatus.REFRESH_READY ? Transform.rotate(
+                        child: Icon(
+                          Icons.arrow_downward,
+                          color: widget.textColor,
+                        ),
+                        angle: pi / _iconRotationValue,
                       ): Container(),
                       this.refreshHeaderStatus == RefreshHeaderStatus.REFRESHING ? new Align(
                         alignment: Alignment.centerLeft,
@@ -342,10 +399,6 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> {
                           ),
                         ),
                       ): new Container(),
-                      this.refreshHeaderStatus == RefreshHeaderStatus.REFRESH_READY ? Icon(
-                        Icons.arrow_upward,
-                        color: widget.textColor,
-                      ): Container(),
                       this.refreshHeaderStatus == RefreshHeaderStatus.REFRESHED ? Icon(
                         Icons.done,
                         color: widget.textColor,

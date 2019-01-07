@@ -137,12 +137,16 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     _isRefresh = true;
     _scrollController.animateTo(_scrollController.position.minScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
     _callRefreshAnimationController.forward();
+    _refreshHeader.getKey().currentState.onRefreshStart();
+    _refreshHeader.getKey().currentState.onRefreshReady();
   }
   // 触发加载
   void callLoadMore() async {
     if (_isRefresh || widget.loadMore == null) return;
     _isRefresh = true;
     _callLoadAnimationController.forward();
+    _refreshFooter.getKey().currentState.onLoadStart();
+    _refreshFooter.getKey().currentState.onLoadReady();
   }
 
   // 刷新完成

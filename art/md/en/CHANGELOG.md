@@ -43,3 +43,5 @@
 >Repair: Trigger loading problem across borders  
 >Repair: BallPulse animation problem  
 >Repair: Exception when the refresh process exited  
+>Add: ClassicHeader and ClassicFooter animation  
+>Repair: Manually calling refresh or loading does not trigger callbacks  

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -211,7 +213,6 @@ class _ConnectorFooterState extends RefreshFooterState<ConnectorFooter>{
   }
 }
 
-
 /// 经典(默认)底部视图
 class ClassicsFooter extends RefreshFooter {
   // 提示加载文字
@@ -263,11 +264,19 @@ class ClassicsFooter extends RefreshFooter {
   @override
   ClassicsFooterState createState() => ClassicsFooterState();
 }
-class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
+class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> with TickerProviderStateMixin<ClassicsFooter> {
   // 显示的文字
   String _showText;
   // 更新时间
   DateTime _dateTime;
+
+  // 动画
+  AnimationController _readyController;
+  Animation<double> _readyAnimation;
+  AnimationController _restoreController;
+  Animation<double> _restoreAnimation;
+  // Icon旋转度
+  double _iconRotationValue = 1.0;
 
   // 初始化操作
   @override
@@ -275,6 +284,42 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     super.initState();
     _showText = widget.loadText;
     _dateTime = DateTime.now();
+    // 初始化动画
+    _readyController = new AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
+    _readyAnimation = new Tween(begin: 1.0, end: 0.5).animate(_readyController)
+      ..addListener(() {
+        setState(() {
+          if (_readyAnimation.status != AnimationStatus.dismissed) {
+            _iconRotationValue = _readyAnimation.value;
+          }
+        });
+      });
+    _readyAnimation.addStatusListener((status){
+      if (status == AnimationStatus.completed) {
+        _readyController.reset();
+      }
+    });
+    _restoreController = new AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
+    _restoreAnimation = new Tween(begin: 0.5, end: 1.0).animate(_restoreController)
+      ..addListener(() {
+        setState(() {
+          if (_restoreAnimation.status != AnimationStatus.dismissed) {
+            _iconRotationValue = _restoreAnimation.value;
+          }
+        });
+      });
+    _restoreAnimation.addStatusListener((status){
+      if (status == AnimationStatus.completed) {
+        _restoreController.reset();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _readyController.dispose();
+    _restoreController.dispose();
   }
 
   // 准备加载回调
@@ -284,6 +329,10 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     setState(() {
       _showText = widget.loadReadyText;
     });
+    if (_restoreController.isAnimating) {
+      _restoreController.reset();
+    }
+    _readyController.forward();
   }
   // 正在加载回调
   @override
@@ -318,6 +367,10 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     setState(() {
       _showText = widget.loadText;
     });
+    if (_readyController.isAnimating) {
+      _readyController.reset();
+    }
+    _restoreController.forward();
   }
   // 加载结束回调
   @override
@@ -352,9 +405,12 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
                   child: Row (
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      this.refreshFooterStatus == RefreshFooterStatus.NO_LOAD ? Icon(
-                        Icons.arrow_upward,
-                        color: widget.textColor,
+                      this.refreshFooterStatus == RefreshFooterStatus.NO_LOAD || this.refreshFooterStatus == RefreshFooterStatus.LOAD_READY ? Transform.rotate(
+                        child: Icon(
+                          Icons.arrow_upward,
+                          color: widget.textColor,
+                        ),
+                        angle: pi / _iconRotationValue,
                       ): Container(),
                       this.refreshFooterStatus == RefreshFooterStatus.LOADING ? new Align(
                         alignment: Alignment.centerLeft,
@@ -367,10 +423,10 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
                           ),
                         ),
                       ): Container(),
-                      this.refreshFooterStatus == RefreshFooterStatus.LOAD_READY ? Icon(
-                        Icons.arrow_downward,
-                        color: widget.textColor,
-                      ): Container(),
+//                      this.refreshFooterStatus == RefreshFooterStatus.LOAD_READY ? Icon(
+//                        Icons.arrow_downward,
+//                        color: widget.textColor,
+//                      ): Container(),
                       this.refreshFooterStatus == RefreshFooterStatus.LOADED ? Icon(
                         Icons.done,
                         color: widget.textColor,

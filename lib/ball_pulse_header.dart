@@ -123,15 +123,6 @@ class BallPulseHeaderState extends RefreshHeaderState<BallPulseHeader> with Tick
     _isAnimation = true;
     _startController.forward();
   }
-  // 正在刷新
-  @override
-  Future onRefreshing() async {
-    super.onRefreshing();
-    if (!_isAnimation) {
-      _isAnimation = true;
-      _startController.forward();
-    }
-  }
   // 刷新结束
   @override
   Future onRefreshEnd() async {
