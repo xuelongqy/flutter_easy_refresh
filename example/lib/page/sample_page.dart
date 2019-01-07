@@ -1,6 +1,7 @@
 import 'package:example/generated/translations.dart';
 import 'package:example/page/auto_load_page.dart';
 import 'package:example/page/basic_page.dart';
+import 'package:example/page/cupertino_page.dart';
 import 'package:example/page/float_page.dart';
 import 'package:example/page/list_embed_page.dart';
 import 'package:example/page/manual_control_page.dart';
@@ -177,6 +178,26 @@ class _SamplePageState extends State<SamplePage> {
                 }));
               },
               icon: Icon(Icons.view_day,
+                color: Colors.orange,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            ListItem(
+              title: "Cupertino",
+              describe: Translations.of(context).text("cupertinoDescribe"),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                  return CupertinoPage();
+                }));
+              },
+              icon: Icon(Icons.color_lens,
                 color: Colors.orange,
               ),
             ),

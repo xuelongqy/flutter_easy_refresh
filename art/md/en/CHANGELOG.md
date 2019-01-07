@@ -47,4 +47,8 @@
 >Repair: Manually calling refresh or loading does not trigger callbacks  
 
 ## V 1.0.9
->Repair：Classic style arrow reverse problem  
+>Repair: Classic style arrow reverse  
+
+## V 1.1.0
+>Repair: Classic style arrows don't recover  
+>Add: Cupertino style example  

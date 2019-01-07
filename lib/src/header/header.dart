@@ -353,6 +353,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> with Ticker
     super.onRefreshEnd();
     setState(() {
       _showText = widget.refreshText;
+      _iconRotationValue = 1.0;
     });
   }
 

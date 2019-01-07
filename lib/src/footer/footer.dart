@@ -378,6 +378,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> with Ticker
     super.onLoadEnd();
     setState(() {
       _showText = widget.loadText;
+      _iconRotationValue = 1.0;
     });
   }
 
