@@ -45,3 +45,6 @@
 >Repair: Exception when the refresh process exited  
 >Add: ClassicHeader and ClassicFooter animation  
 >Repair: Manually calling refresh or loading does not trigger callbacks  
+
+## V 1.0.9
+>Repair：Classic style arrow reverse problem  

@@ -383,7 +383,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> with Ticker
                     children: <Widget>[
                       this.refreshHeaderStatus == RefreshHeaderStatus.NO_REFRESH || this.refreshHeaderStatus == RefreshHeaderStatus.REFRESH_READY ? Transform.rotate(
                         child: Icon(
-                          Icons.arrow_downward,
+                          Icons.arrow_upward,
                           color: widget.textColor,
                         ),
                         angle: pi / _iconRotationValue,

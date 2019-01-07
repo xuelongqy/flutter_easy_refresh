@@ -407,7 +407,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> with Ticker
                     children: <Widget>[
                       this.refreshFooterStatus == RefreshFooterStatus.NO_LOAD || this.refreshFooterStatus == RefreshFooterStatus.LOAD_READY ? Transform.rotate(
                         child: Icon(
-                          Icons.arrow_upward,
+                          Icons.arrow_downward,
                           color: widget.textColor,
                         ),
                         angle: pi / _iconRotationValue,
