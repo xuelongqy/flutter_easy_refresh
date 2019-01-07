@@ -36,7 +36,7 @@
 >Repair: loadMore conflicts with autoLoad  
 >Repair: Drag a list repeatedly triggers a cross-border event  
 
-## V Next
+## V 1.0.8
 >Add: Header and Footer listeners for quick and easy customization  
 >Add: Header and Footer connectors for placing Header and Footer in any position  
 >Add：Manual control load refresh finish  
