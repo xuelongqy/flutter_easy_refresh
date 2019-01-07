@@ -466,6 +466,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       }else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.PUSH) {
         await Future.delayed(new Duration(milliseconds: this._refreshFooter.finishDelay));
       }
+      if (!this.mounted) return;
       // 开始将加载（刷新）布局缩回去的动画
       _animationController.forward();
     }
@@ -723,6 +724,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             // 如果是触发刷新则设置延时，等待列表高度渲染完成
             if (_isRefresh) {
               new Future.delayed(const Duration(milliseconds: 200), () async {
+                if (!this.mounted) return;
                 setState(() {
                   _scrollPhysics = _neverScrollableScrollPhysics;
                 });

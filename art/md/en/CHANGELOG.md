@@ -42,3 +42,4 @@
 >Add：Manual control load refresh finish  
 >Repair: Trigger loading problem across borders  
 >Repair: BallPulse animation problem  
+>Repair: Exception when the refresh process exited  
