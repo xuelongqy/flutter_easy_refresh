@@ -52,3 +52,6 @@
 ## V 1.1.0
 >Repair: Classic style arrows don't recover  
 >Add: Cupertino style example  
+
+## V Next
+>Repair: Pulling down too fast triggers scrolling up and causing slow rebound  

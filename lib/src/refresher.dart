@@ -130,6 +130,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   bool _isPushBottom = false;
   // 记录是否在拖动
   bool _isDrag = false;
+  // 记录上一次滚动事件
+  ScrollNotification _lastScrollNotification;
 
   // 触发刷新
   void callRefresh() async {
@@ -517,6 +519,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
                 flex: 1,
                 child: new NotificationListener(
                   onNotification: (ScrollNotification notification) {
+//                    print(notification);
                     // 判断是否正在加载
                     if (_isRefresh) return true;
                     ScrollMetrics metrics = notification.metrics;
@@ -535,6 +538,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
                     } else if (notification is OverscrollNotification) {
                       _handleOverScrollNotification(notification);
                     }
+                    _lastScrollNotification = notification;
                     return true;
                   },
                   child: ScrollConfiguration(
@@ -581,6 +585,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   void _handleScrollUpdateNotification(ScrollUpdateNotification notification) {
     // 当上拉加载时，不知道什么原因，dragDetails可能会为空，导致抛出异常，会发生很明显的卡顿，所以这里必须判空
     if (notification.dragDetails == null) {
+      // 解决下拉过快触发向上滚动导致回弹变慢问题
+      if (_lastScrollNotification is OverscrollNotification && _isDrag) {
+        _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+        _handleScrollEndNotification();
+      }
       _isDrag = false;
       return;
     }
@@ -642,11 +651,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       if (_bottomItemHeight > 0) {
         _isPulling = true;
       }
-      // 启动动画后，ListView不可滑动
-      setState(() {
-        _scrollPhysics = _neverScrollableScrollPhysics;
-      });
       if (!_animationController.isAnimating) {
+        // 启动动画后，ListView不可滑动
+        setState(() {
+          _scrollPhysics = _neverScrollableScrollPhysics;
+        });
         _animationController.forward();
       }
     }
