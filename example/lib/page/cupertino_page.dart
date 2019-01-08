@@ -112,7 +112,7 @@ class _CupertinoPageState extends State<CupertinoPage> {
                                     child: Container(
                                       width: 50.0,
                                       height: 50.0,
-                                      child: Icon(Icons.add_circle_outline,
+                                      child: Icon(CupertinoIcons.add_circled,
                                         color: Colors.blue,
                                       ),
                                     ),

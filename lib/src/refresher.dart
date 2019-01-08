@@ -586,7 +586,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     // 当上拉加载时，不知道什么原因，dragDetails可能会为空，导致抛出异常，会发生很明显的卡顿，所以这里必须判空
     if (notification.dragDetails == null) {
       // 解决下拉过快触发向上滚动导致回弹变慢问题
-      if (_lastScrollNotification is OverscrollNotification && _isDrag) {
+      if (_lastScrollNotification is OverscrollNotification && _isDrag && _topItemHeight > 0.0) {
         _scrollController.jumpTo(_scrollController.position.minScrollExtent);
         _handleScrollEndNotification();
       }
