@@ -32,23 +32,38 @@
 |基本样式|自动加载|
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/basic.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/auto_load.gif)|
-|[BasicPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/basic_page.dart)|[AutoLoadPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/auto_load_page.dart)|
+|[BasicPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/sample/basic_page.dart)|[AutoLoadPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/sample/auto_load_page.dart)|
 
 |浮动效果|个人中心|
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/float.gif)|![](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/image/user_profile.gif)|
-|[FloatPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/float_page.dart)|[UserProfilePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/user_profile_page.dart)|
+|[FloatPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/sample/float_page.dart)|[UserProfilePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/sample/user_profile_page.dart)|
+
+|CustomScroolView|Swiper|
+|:---:|:---:|
+|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/sliver.gif)|![](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/image/swiper.gif)|
+|[SliverPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/sample/sliver_page.dart)|[SwiperPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/sample/swiper_page.dart)|
+
+|列表嵌入|Cupertino|
+|:---:|:---:|
+|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/list_embed.gif)|![](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/image/cupertino.gif)|
+|[ListEmbedPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/sample/sliver_page.dart)|[CupertinoPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/sample/swiper_page.dart)|
 
 #### 样式演示
 |Material|BallPulse|
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/material.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/ball_pulse.gif)|
-|[MaterialPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/material_page.dart)|[BallPulsePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/ball_pulse_page.dart)|
+|[MaterialPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/style/material_page.dart)|[BallPulsePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/style/ball_pulse_page.dart)|
 
 |BezierCircle|BezierHourGlass|
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/bezier_circle.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/bezier_hour_glass.gif)|
-|[BezierCirclePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/bezier_circle_page.dart)|[BezierHourGlassPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/bezier_hour_glass_page.dart)|
+|[BezierCirclePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/style/bezier_circle_page.dart)|[BezierHourGlassPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/style/bezier_hour_glass_page.dart)|
+
+|Phoenix|Taurus|
+|:---:|:---:|
+|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/phoenix.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/taurus.gif)|
+|[PhoenixPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/style/phoenix_page.dart)|[TaurusPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/style/taurus_page.dart)|
  
 ## 简单用例
 #### 1.在 pubspec.yaml 中添加依赖
