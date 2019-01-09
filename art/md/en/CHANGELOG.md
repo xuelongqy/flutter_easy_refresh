@@ -55,3 +55,4 @@
 
 ## V Next
 >Repair: Pulling down too fast triggers scrolling up and causing slow rebound  
+>Add: Taurus and Phoenix style  

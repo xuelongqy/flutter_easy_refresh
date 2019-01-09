@@ -1,9 +1,11 @@
 import 'package:example/generated/translations.dart';
-import 'package:example/page/ball_pulse_page.dart';
-import 'package:example/page/basic_page.dart';
-import 'package:example/page/bezier_circle_page.dart';
-import 'package:example/page/bezier_hour_glass_page.dart';
-import 'package:example/page/material_page.dart';
+import 'package:example/page/style/ball_pulse_page.dart';
+import 'package:example/page/sample/basic_page.dart';
+import 'package:example/page/style/bezier_circle_page.dart';
+import 'package:example/page/style/bezier_hour_glass_page.dart';
+import 'package:example/page/style/material_page.dart';
+import 'package:example/page/style/phoenix_page.dart';
+import 'package:example/page/style/taurus_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -115,6 +117,46 @@ class _StylePageState extends State<StylePage> {
                 }));
               },
               icon: Icon(Icons.timelapse,
+                color: Colors.orange,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            ListItem(
+              title: "Phoenix",
+              describe: Translations.of(context).text("phoenixDescribe"),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                  return PhoenixPage();
+                }));
+              },
+              icon: Icon(Icons.location_city,
+                color: Colors.orange,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            ListItem(
+              title: "Taurus",
+              describe: Translations.of(context).text("taurusDescribe"),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                  return TaurusPage();
+                }));
+              },
+              icon: Icon(Icons.airplanemode_active,
                 color: Colors.orange,
               ),
             ),
