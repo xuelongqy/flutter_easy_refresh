@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -34,7 +36,6 @@ abstract class RefreshFooter extends StatefulWidget {
     assert(this.key != null);
   }
 }
-
 abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
   // 底部栏状态
   RefreshFooterStatus refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
@@ -83,6 +84,132 @@ abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
   @mustCallSuper
   Future onLoadEnd() async {
     refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
+  }
+}
+
+/// Footer监听器
+abstract class FooterListener {
+  // 更新视图高度
+  void updateHeight(double newHeight){}
+  // 回调开始加载方法
+  void onLoadStart(){}
+  // 回调准备加载方法
+  void onLoadReady(){}
+  // 回调开始加载方法
+  void onLoading(){}
+  // 回调加载完成方法
+  void onLoaded(){}
+  // 回调没有更多数据方法
+  void onNoMore(){}
+  // 回调加载恢复方法
+  void onLoadRestore(){}
+  // 回调加载结束方法
+  void onLoadEnd(){}
+}
+
+/// 监听器Footer
+class ListenerFooter extends RefreshFooter {
+  // 触发加载的高度
+  final double loadHeight;
+  // 完成延时时间(ms)
+  final int finishDelay;
+  // 监听器
+  final FooterListener listener;
+
+  // 构造函数
+  ListenerFooter({
+    @required GlobalKey<RefreshFooterState> key,
+    @required this.listener,
+    this.loadHeight: 70.0,
+    this.finishDelay: 1000,
+  }):super(
+    key: key,
+    loadHeight: loadHeight,
+    finishDelay: finishDelay,
+  ){
+    assert(listener != null);
+  }
+
+  @override
+  _ListenerFooterState createState() => _ListenerFooterState();
+}
+class _ListenerFooterState extends RefreshFooterState<ListenerFooter> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+  @override
+  Future onLoadEnd() async {
+    super.onLoadEnd();
+    widget.listener.onLoadEnd();
+  }
+  @override
+  Future onLoadRestore() async {
+    super.onLoadRestore();
+    widget.listener.onLoadRestore();
+  }
+  @override
+  Future onNoMore() async {
+    super.onNoMore();
+    widget.listener.onNoMore();
+  }
+  @override
+  Future onLoaded() async {
+    super.onLoaded();
+    widget.listener.onLoaded();
+  }
+  @override
+  Future onLoading() async {
+    super.onLoading();
+    widget.listener.onLoading();
+  }
+  @override
+  Future onLoadReady() async {
+    super.onLoadReady();
+    widget.listener.onLoadReady();
+  }
+  @override
+  Future onLoadStart() async {
+    super.onLoadStart();
+    widget.listener.onLoadStart();
+  }
+  @override
+  void updateHeight(double newHeight) {
+    super.updateHeight(newHeight);
+    widget.listener.updateHeight(newHeight);
+  }
+}
+
+/// Footer连接器
+class ConnectorFooter extends RefreshFooter {
+  // 需要连接的Header
+  final RefreshFooter footer;
+
+  get loadHeight => footer.loadHeight;
+  get isFloat => footer.isFloat;
+  get finishDelay => footer.finishDelay;
+
+  ConnectorFooter({
+    @required GlobalKey<RefreshFooterState> key,
+    @required this.footer
+  }):super(
+      key: key
+  ){
+    assert(footer != null);
+  }
+
+  @override
+  GlobalKey<RefreshFooterState> getKey() {
+    return footer.getKey();
+  }
+
+  @override
+  _ConnectorFooterState createState() => _ConnectorFooterState();
+}
+class _ConnectorFooterState extends RefreshFooterState<ConnectorFooter>{
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
 
@@ -137,11 +264,19 @@ class ClassicsFooter extends RefreshFooter {
   @override
   ClassicsFooterState createState() => ClassicsFooterState();
 }
-class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
+class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> with TickerProviderStateMixin<ClassicsFooter> {
   // 显示的文字
   String _showText;
   // 更新时间
   DateTime _dateTime;
+
+  // 动画
+  AnimationController _readyController;
+  Animation<double> _readyAnimation;
+  AnimationController _restoreController;
+  Animation<double> _restoreAnimation;
+  // Icon旋转度
+  double _iconRotationValue = 1.0;
 
   // 初始化操作
   @override
@@ -149,6 +284,42 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     super.initState();
     _showText = widget.loadText;
     _dateTime = DateTime.now();
+    // 初始化动画
+    _readyController = new AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
+    _readyAnimation = new Tween(begin: 1.0, end: 0.5).animate(_readyController)
+      ..addListener(() {
+        setState(() {
+          if (_readyAnimation.status != AnimationStatus.dismissed) {
+            _iconRotationValue = _readyAnimation.value;
+          }
+        });
+      });
+    _readyAnimation.addStatusListener((status){
+      if (status == AnimationStatus.completed) {
+        _readyController.reset();
+      }
+    });
+    _restoreController = new AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
+    _restoreAnimation = new Tween(begin: 0.5, end: 1.0).animate(_restoreController)
+      ..addListener(() {
+        setState(() {
+          if (_restoreAnimation.status != AnimationStatus.dismissed) {
+            _iconRotationValue = _restoreAnimation.value;
+          }
+        });
+      });
+    _restoreAnimation.addStatusListener((status){
+      if (status == AnimationStatus.completed) {
+        _restoreController.reset();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _readyController.dispose();
+    _restoreController.dispose();
   }
 
   // 准备加载回调
@@ -158,6 +329,10 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     setState(() {
       _showText = widget.loadReadyText;
     });
+    if (_restoreController.isAnimating) {
+      _restoreController.reset();
+    }
+    _readyController.forward();
   }
   // 正在加载回调
   @override
@@ -192,6 +367,10 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     setState(() {
       _showText = widget.loadText;
     });
+    if (_readyController.isAnimating) {
+      _readyController.reset();
+    }
+    _restoreController.forward();
   }
   // 加载结束回调
   @override
@@ -199,6 +378,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
     super.onLoadEnd();
     setState(() {
       _showText = widget.loadText;
+      _iconRotationValue = 1.0;
     });
   }
 
@@ -226,9 +406,12 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
                   child: Row (
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      this.refreshFooterStatus == RefreshFooterStatus.NO_LOAD ? Icon(
-                        Icons.arrow_upward,
-                        color: widget.textColor,
+                      this.refreshFooterStatus == RefreshFooterStatus.NO_LOAD || this.refreshFooterStatus == RefreshFooterStatus.LOAD_READY ? Transform.rotate(
+                        child: Icon(
+                          Icons.arrow_downward,
+                          color: widget.textColor,
+                        ),
+                        angle: pi / _iconRotationValue,
                       ): Container(),
                       this.refreshFooterStatus == RefreshFooterStatus.LOADING ? new Align(
                         alignment: Alignment.centerLeft,
@@ -241,10 +424,10 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> {
                           ),
                         ),
                       ): Container(),
-                      this.refreshFooterStatus == RefreshFooterStatus.LOAD_READY ? Icon(
-                        Icons.arrow_downward,
-                        color: widget.textColor,
-                      ): Container(),
+//                      this.refreshFooterStatus == RefreshFooterStatus.LOAD_READY ? Icon(
+//                        Icons.arrow_downward,
+//                        color: widget.textColor,
+//                      ): Container(),
                       this.refreshFooterStatus == RefreshFooterStatus.LOADED ? Icon(
                         Icons.done,
                         color: widget.textColor,

@@ -83,6 +83,12 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
   }
 
   @override
+  void dispose() {
+    _backController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // 计算小球透明度
     double ballOpacity;

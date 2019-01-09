@@ -87,6 +87,12 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
     });
   }
 
+  @override
+  void dispose() {
+    _backController.dispose();
+    super.dispose();
+  }
+
   // 高度更新
   @override
   void updateHeight(double newHeight) {

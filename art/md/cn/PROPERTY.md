@@ -97,6 +97,7 @@ class _BasicPageState extends State<BasicPage> {
 | child      | 内容视图     | ? extends ScrollView   |   null |  必需 |
 | autoLoad | 底部自动加载     | bool  | false | 可选 |
 | limitScroll | 限制滚动     | bool  | false | 可选 |
+| autoControl | 自动控制(刷新和加载完成)     | bool  | true | 可选 |
 | behavior | 越界效果(自带光晕或回弹)     | ScrollBehavior | RefreshBehavior | 可选 |
 | refreshHeader | 顶部视图     | RefreshHeader | ClassicsHeader | 可选 |
 | refreshFooter | 底部视图     | RefreshFooter | ClassicsFooter | 可选 |
@@ -104,9 +105,32 @@ class _BasicPageState extends State<BasicPage> {
 | loadMore | 加载回调方法     | () => Void | null | 可选(为null时无法触发加载) |
 | animationStateChangedCallback | EasyRefresh状态回调，用于手动处理刷新加载等操作     | (AnimationStates, RefreshBoxDirectionStatus) => void     | null | 可选(不推荐使用) |
 
-# 属性表格 - RefreshSafeArea
+## 属性表格 - RefreshSafeArea(用于包裹滚动冲突的Widget)
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
 |---------|--------------------------|:-----:|:-----:|:-----:|
 | child      | 内容视图     | Widget   |   null |  必需 |
 
+## 属性表格 - ListenerHeader(用于快速在页面定义Header,方便当前页面交互)
+| 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| refreshHeight      | 触发刷新的高度     | double   |   70.0 |  可选 |
+| finishDelay      | 刷新完成延时     | int   |   1000 |  可选 |
+| listener      | Header监听器     | HeaderListener   |   null |  必须 |
+
+## 属性表格 - ConnectorHeader(用于将Header放置到其他位置并做连接)
+| 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| header      | 需要连接的Header     | RefreshHeader   |   null |  必须 |
+
+## 属性表格 - ListenerFooter(用于快速在页面定义Footer,方便当前页面交互)
+| 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| loadHeight      | 触发加载的高度     | double   |   70.0 |  可选 |
+| finishDelay      | 加载完成延时     | int   |   1000 |  可选 |
+| listener      | Footer监听器     | FooterListener   |   null |  必须 |
+
+## 属性表格 - ConnectorFooter(用于将Footer放置到其他位置并做连接)
+| 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| footer      | 需要连接的Footer     | RefreshFooter   |   null |  必须 |
 

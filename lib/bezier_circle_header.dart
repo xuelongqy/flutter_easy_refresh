@@ -102,6 +102,13 @@ class BezierCircleHeaderState extends RefreshHeaderState<BezierCircleHeader> wit
     super.updateHeight(newHeight);
   }
 
+
+  @override
+  void dispose() {
+    _backController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // 圆点大小

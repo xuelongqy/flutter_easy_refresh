@@ -48,6 +48,7 @@ class _BallPulsePageState extends State<BallPulsePage> {
             ),
             onRefresh: () async{
               await new Future.delayed(const Duration(seconds: 1), () {
+                if (!mounted) return;
                 setState(() {
                   str.clear();
                   str.addAll(addStr);
@@ -57,6 +58,7 @@ class _BallPulsePageState extends State<BallPulsePage> {
             loadMore: () async {
               await new Future.delayed(const Duration(seconds: 1), () {
                 if (str.length < 20) {
+                  if (!mounted) return;
                   setState(() {
                     str.addAll(addStr);
                   });

@@ -31,6 +31,8 @@ class BallPulseHeaderState extends RefreshHeaderState<BallPulseHeader> with Tick
   // 结束动画
   AnimationController _endController;
   Animation<double> _endAnimation;
+  // 是否开启动画
+  bool _isAnimation = false;
 
   // 三个球的大小
   double ballSize1 = 20.0;
@@ -44,6 +46,7 @@ class BallPulseHeaderState extends RefreshHeaderState<BallPulseHeader> with Tick
     _startController = new AnimationController(duration: const Duration(milliseconds: 400), vsync: this);
     _startAnimation = new Tween(begin: 6.0, end: 20.0).animate(_startController)
       ..addListener(() {
+        if (!mounted) return;
         setState(() {
           // 计算大小
           ballSize1 = 26.0 - _startAnimation.value;
@@ -65,6 +68,7 @@ class BallPulseHeaderState extends RefreshHeaderState<BallPulseHeader> with Tick
     _cycleController = new AnimationController(duration: const Duration(milliseconds: 800), vsync: this);
     _cycleAnimation = new Tween(begin: 6.0, end: 34.0).animate(_cycleController)
       ..addListener(() {
+        if (!mounted) return;
         setState(() {
           // 计算大小
           ballSize1 = _cycleAnimation.value <= 20.0 ? _cycleAnimation.value : 40.0 - _cycleAnimation.value;
@@ -79,12 +83,13 @@ class BallPulseHeaderState extends RefreshHeaderState<BallPulseHeader> with Tick
         });
       });
     _cycleAnimation.addStatusListener((status){
+      if (!mounted) return;
       if (status == AnimationStatus.completed) {
         _cycleController.reset();
-        if (this.refreshHeaderStatus == RefreshHeaderStatus.NO_REFRESH) {
-          _endController.forward();
-        }else {
+        if (_isAnimation) {
           _cycleController.forward();
+        }else {
+          _endController.forward();
         }
       }
     });
@@ -92,6 +97,7 @@ class BallPulseHeaderState extends RefreshHeaderState<BallPulseHeader> with Tick
     _endController = new AnimationController(duration: const Duration(milliseconds: 400), vsync: this);
     _endAnimation = new Tween(begin: 6.0, end: 20.0).animate(_endController)
       ..addListener(() {
+        if (!mounted) return;
         setState(() {
           // 计算大小
           ballSize1 = _endAnimation.value;
@@ -114,16 +120,22 @@ class BallPulseHeaderState extends RefreshHeaderState<BallPulseHeader> with Tick
   @override
   Future onRefreshStart() async {
     super.onRefreshStart();
+    _isAnimation = true;
     _startController.forward();
   }
-
-  // 正在刷新
+  // 刷新结束
   @override
-  Future onRefreshing() async {
-    super.onRefreshing();
-    if (!_startController.isAnimating) {
-      _startController.forward();
-    }
+  Future onRefreshEnd() async {
+    super.onRefreshEnd();
+    _isAnimation = false;
+  }
+
+  @override
+  void dispose() {
+    _cycleController.dispose();
+    _startController.dispose();
+    _endController.dispose();
+    super.dispose();
   }
 
   @override

@@ -97,6 +97,7 @@ class _BasicPageState extends State<BasicPage> {
 | child      | your content View     | ? extends ScrollView   |   null |  necessary |
 | autoLoad | Bottom Autoloading     | bool  | false | optional |
 | limitScroll | Limit Scroll     | bool  | false | optional |
+| autoControl | Automatic control (refresh and load complete)     | bool  | true | optional |
 | behavior | Crossing the line effect (with halo or rebound)     | ScrollBehavior | RefreshBehavior | optional |
 | refreshHeader | Header view     | RefreshHeader | ClassicsHeader | optional |
 | refreshFooter | Footer view     | RefreshFooter | ClassicsFooter | optional |
@@ -104,7 +105,31 @@ class _BasicPageState extends State<BasicPage> {
 | loadMore | Loading callback method     | () => Void | null | optional(Cannot trigger loading for null) |
 | animationStateChangedCallback | EasyRefresh state callback for manual handling of refresh loading and other operations     | (AnimationStates, RefreshBoxDirectionStatus) => void     | null | optional(不推荐使用) |
 
-# Props Table - RefreshSafeArea
+## Props Table - RefreshSafeArea(Solve the scroll conflict of Widget)
 | Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
 |---------|--------------------------|:-----:|:-----:|:-----:|
 | child      | your content View     | Widget   |   null |  necessary |
+
+## Props Table - ListenerHeader(Used to quickly define the Header on the page to facilitate the current page interaction)
+| Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| refreshHeight      | The height at which the refresh is triggered     | double   |   70.0 |  optional |
+| finishDelay      | Refresh completion delay     | int   |   1000 |  optional |
+| listener      | Header event listener     | HeaderListener   |   null |  necessary |
+
+## Props Table - ConnectorHeader(Used to place the Header in another location and connect)
+| Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| header      | Header that needs to be connected     | RefreshHeader   |   null |  necessary |
+
+## Props Table - ListenerFooter(Used to quickly define Footer on the page to facilitate current page interaction)
+| Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| loadHeight      | Trigger loading height     | double   |   70.0 |  optional |
+| finishDelay      | Load completion delay     | int   |   1000 |  optional |
+| listener      | Footer event listener     | FooterListener   |   null |  necessary |
+
+## Props Table - ConnectorFooter(Used to place Footer to other locations and connect)
+| Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| footer      | Need to connect to Footer     | RefreshFooter   |   null |  necessary |
