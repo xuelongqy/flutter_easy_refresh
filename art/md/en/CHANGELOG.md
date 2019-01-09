@@ -53,6 +53,6 @@
 >Repair: Classic style arrows don't recover  
 >Add: Cupertino style example  
 
-## V Next
+## V 1.1.1
 >Repair: Pulling down too fast triggers scrolling up and causing slow rebound  
 >Add: Taurus and Phoenix style  

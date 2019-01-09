@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v1.1.0-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/badge/pub-v1.1.1-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
 
 ## [English](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README_EN.md) | 中文
 
@@ -70,7 +70,7 @@
 ```
 //pub方式
 dependencies:
-  flutter_easyrefresh: ^1.1.0
+  flutter_easyrefresh: ^1.1.1
 
 //导入方式
 dependencies:
