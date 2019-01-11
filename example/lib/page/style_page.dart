@@ -5,6 +5,7 @@ import 'package:example/page/style/bezier_circle_page.dart';
 import 'package:example/page/style/bezier_hour_glass_page.dart';
 import 'package:example/page/style/material_page.dart';
 import 'package:example/page/style/phoenix_page.dart';
+import 'package:example/page/style/space_page.dart';
 import 'package:example/page/style/taurus_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
@@ -157,6 +158,26 @@ class _StylePageState extends State<StylePage> {
                 }));
               },
               icon: Icon(Icons.airplanemode_active,
+                color: Colors.orange,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            ListItem(
+              title: "Space",
+              describe: Translations.of(context).text("spaceDescribe"),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                  return SpacePage();
+                }));
+              },
+              icon: Icon(Icons.stars,
                 color: Colors.orange,
               ),
             ),
