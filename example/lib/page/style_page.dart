@@ -3,6 +3,7 @@ import 'package:example/page/style/ball_pulse_page.dart';
 import 'package:example/page/sample/basic_page.dart';
 import 'package:example/page/style/bezier_circle_page.dart';
 import 'package:example/page/style/bezier_hour_glass_page.dart';
+import 'package:example/page/style/delivery_page.dart';
 import 'package:example/page/style/material_page.dart';
 import 'package:example/page/style/phoenix_page.dart';
 import 'package:example/page/style/space_page.dart';
@@ -178,6 +179,26 @@ class _StylePageState extends State<StylePage> {
                 }));
               },
               icon: Icon(Icons.stars,
+                color: Colors.orange,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            ListItem(
+              title: "Delivery",
+              describe: Translations.of(context).text("deliveryDescribe"),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                  return DeliveryPage();
+                }));
+              },
+              icon: Icon(Icons.cloud,
                 color: Colors.orange,
               ),
             ),

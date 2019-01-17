@@ -59,3 +59,4 @@
 
 ## V Next
 >Add: Flare animation - Space  
+>Add: Delivery animation  
