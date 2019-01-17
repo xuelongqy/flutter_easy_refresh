@@ -64,6 +64,11 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and uploa
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/phoenix.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/taurus.gif)|
 |[PhoenixPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/style/phoenix_page.dart)|[TaurusPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/style/taurus_page.dart)|
+
+|Space|Delivery|
+|:---:|:---:|
+|![](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/image/space.gif)|![](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/image/delivery.gif)|
+|[SpacePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/style/space_page.dart)|[DeliveryPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/style/delivery_page.dart)|
  
 ## Sample
 #### 1.Adding dependencies to pubspec. yaml
