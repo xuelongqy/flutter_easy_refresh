@@ -57,6 +57,6 @@
 >Repair: Pulling down too fast triggers scrolling up and causing slow rebound  
 >Add: Taurus and Phoenix style  
 
-## V Next
+## V 1.1.2
 >Add: Flare animation - Space  
 >Add: Delivery animation  
