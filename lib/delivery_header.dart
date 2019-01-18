@@ -17,7 +17,7 @@ class DeliveryHeader extends RefreshHeader {
     this.backgroundColor: Colors.transparent,
   }):super(
       key: key,
-      refreshHeight: 180.0
+      refreshHeight: 140.0
   );
 
   @override
@@ -180,7 +180,7 @@ class DeliveryHeaderState extends RefreshHeaderState<DeliveryHeader> with Ticker
         children: <Widget>[
           // 云朵
           new Positioned(
-            top: widget.refreshHeight / 4.0,
+            top: widget.refreshHeight / 5.0,
             left: _cloud1Offset,
             child: Container(
               height: 20.0,
@@ -218,7 +218,7 @@ class DeliveryHeaderState extends RefreshHeaderState<DeliveryHeader> with Ticker
               width: double.infinity,
               height: this.height,
               padding: EdgeInsets.only(
-                bottom: 20.0 + _umbrellaOffsetY / 2,
+                bottom: 10.0 + _umbrellaOffsetY / 2,
                 left: 30.0 - _umbrellaOffsetX,
                 right: 30.0 + _umbrellaOffsetX,
               ),
@@ -229,7 +229,7 @@ class DeliveryHeaderState extends RefreshHeaderState<DeliveryHeader> with Ticker
                     left: 0.0,
                     right: 0.0,
                     top: null,
-                    bottom: 10.0 + _mergeAnimation.value * 20.0,
+                    bottom: _mergeAnimation.value * 10.0,
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Transform.rotate(
@@ -250,7 +250,7 @@ class DeliveryHeaderState extends RefreshHeaderState<DeliveryHeader> with Ticker
                     left: 0.0,
                     right: 0.0,
                     top: null,
-                    bottom: 250.0 -  _mergeAnimation.value * 180.0,
+                    bottom: 250.0 -  _mergeAnimation.value * 200.0,
                     child: Container(
                       alignment: Alignment.bottomCenter,
                       height: 300.0,

@@ -60,3 +60,7 @@
 ## V 1.1.2
 >Add: Flare animation - Space  
 >Add: Delivery animation  
+
+## V 1.1.3
+>Repair: ios repeatedly pull down, the distance becomes longer  
+>Modify: Delivery animation height  
