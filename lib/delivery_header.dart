@@ -125,21 +125,17 @@ class DeliveryHeaderState extends RefreshHeaderState<DeliveryHeader> with Ticker
 
   // 计算加速值
   double _accelerationValue(double a, double l) {
-    double tmp = a.abs();
-    if (tmp >= l.abs()) {
+    if (a.abs() >= l.abs()) {
       return a;
     }
-    tmp = Math.sqrt(tmp * l.abs() - tmp * tmp);
-    if (a.abs() < l.abs() / 2) {
-      tmp = tmp / (l.abs() / 2) * a.abs();
-    }else {
-      tmp = tmp / (l.abs() / 2) * (l.abs() - a.abs());
-      tmp = l.abs() - tmp;
-    }
+    double tmp = l - a.abs();
+    tmp = Math.sqrt(tmp * 2 * l - tmp * tmp);
+    tmp = (l - a.abs()) * (tmp / l);
     if (a < 0) {
-      tmp = -tmp;
+      return tmp - l;
+    }else {
+      return l - tmp;
     }
-    return tmp;
   }
 
   @override

@@ -67,3 +67,4 @@
 
 ## V 下个版本
 >修复：HeaderListener和FooterListener同时使用高度更新融合问题  
+>调整：Delivery动画运动速度  

@@ -67,3 +67,4 @@
 
 ## V Next
 >Repair: HeaderListener and FooterListener use both highly updated fusions  
+>Adjustment: Delivery animation speed  

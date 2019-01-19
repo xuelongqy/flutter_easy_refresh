@@ -121,8 +121,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   RefreshHeader _defaultHeader = ClassicsHeader(key: new GlobalKey<RefreshHeaderState>(),);
   RefreshFooter _defaultFooter = ClassicsFooter(key: new GlobalKey<RefreshFooterState>());
   // 滑动速度(ms)为单位
-  double scrollSpeed = 0;
-  double lastPixels = 0;
+  double scrollSpeed = 0.0;
+  double lastPixels = 0.0;
   int lastTimeStamp = new DateTime.now().millisecondsSinceEpoch;
   // 超出边界监听器
   ScrollOverListener _scrollOverListener;
