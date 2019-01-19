@@ -144,7 +144,7 @@ class _SliverPageState extends State<SliverPage> with HeaderListener {
   }
 
   @override
-  void updateHeight(double newHeight) {
+  void updateHeaderHeight(double newHeight) {
     if (_updateIndicatorValue) {
       double indicatorValue = newHeight / _refreshHeight * 0.9;
       setState(() {

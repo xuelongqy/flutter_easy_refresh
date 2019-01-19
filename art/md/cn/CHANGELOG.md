@@ -64,3 +64,6 @@
 ## V 1.1.3
 >修复：ios反复下拉,距离变长的问题  
 >修改：Delivery动画高度  
+
+## V 下个版本
+>修复：HeaderListener和FooterListener同时使用高度更新融合问题  

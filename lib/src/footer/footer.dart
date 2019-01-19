@@ -90,7 +90,9 @@ abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
 /// Footer监听器
 abstract class FooterListener {
   // 更新视图高度
+  @deprecated
   void updateHeight(double newHeight){}
+  void updateFooterHeight(double newHeight){}
   // 回调开始加载方法
   void onLoadStart(){}
   // 回调准备加载方法
@@ -177,6 +179,7 @@ class _ListenerFooterState extends RefreshFooterState<ListenerFooter> {
   void updateHeight(double newHeight) {
     super.updateHeight(newHeight);
     widget.listener.updateHeight(newHeight);
+    widget.listener.updateFooterHeight(newHeight);
   }
 }
 
