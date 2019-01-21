@@ -88,23 +88,21 @@ class DeliveryHeaderState extends RefreshHeaderState<DeliveryHeader> with Ticker
   @override
   Future onRefreshEnd() async {
     super.onRefreshEnd();
+    _timerStop();
+    _timerValue = 0.0;
+    // 初始化偏移量
+    _cloud1Offset = _cloudDefaultOffset;
+    _cloud2Offset = _cloudDefaultOffset;
+    _cloud3Offset = _cloudDefaultOffset;
+    _umbrellaRotateValue = 0.0;
+    _umbrellaOffsetX = 0.0;
+    _umbrellaOffsetY = 0.0;
   }
 
   // 高度更新
   @override
   void updateHeight(double newHeight) {
     super.updateHeight(newHeight);
-    if (newHeight == 0.0) {
-      _timerStop();
-      _timerValue = 0.0;
-      // 初始化偏移量
-      _cloud1Offset = _cloudDefaultOffset;
-      _cloud2Offset = _cloudDefaultOffset;
-      _cloud3Offset = _cloudDefaultOffset;
-      _umbrellaRotateValue = 0.0;
-      _umbrellaOffsetX = 0.0;
-      _umbrellaOffsetY = 0.0;
-    }
   }
 
   // 计时

@@ -446,3 +446,50 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> with Ticker
     );
   }
 }
+
+/// 首次刷新
+class FirstRefreshHeader extends RefreshHeader {
+  final Widget child;
+
+  // 构造函数
+  FirstRefreshHeader({
+    @required GlobalKey<RefreshHeaderState> key,
+    @required this.child,
+  }):super(
+    key: key,
+    isFloat: true,
+    finishDelay: 0
+  ){
+    assert(child != null);
+  }
+
+  @override
+  ClassicsHeaderState createState() => ClassicsHeaderState();
+}
+class FirstRefreshHeaderState extends RefreshHeaderState<FirstRefreshHeader> {
+  // 是否显示
+  bool _isShow = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: _isShow ? widget.child : Container(),
+    );
+  }
+
+  @override
+  Future onRefreshStart() async {
+    super.onRefreshStart();
+    setState(() {
+      _isShow = true;
+    });
+  }
+
+  @override
+  Future onRefreshEnd() async {
+    super.onRefreshEnd();
+    setState(() {
+      _isShow = false;
+    });
+  }
+}
