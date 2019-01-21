@@ -350,8 +350,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             });
             _states = RefreshBoxDirectionStatus.IDLE;
             _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
-            // 刷新结束
-            this._refreshHeader.getKey().currentState.onRefreshEnd();
+            // 刷新关闭
+            this._refreshHeader.getKey().currentState.onRefreshClose();
             if (_firstRefresh) {
               setState(() {
                 _firstRefresh = false;
@@ -365,8 +365,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             _states = RefreshBoxDirectionStatus.IDLE;
             _isPulling = false;
             _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
-            // 加载结束
-            this._refreshFooter.getKey().currentState.onLoaded();
+            // 加载关闭
+            this._refreshFooter.getKey().currentState.onLoadClose();
           }
         });
       } else if (animationStatus == AnimationStatus.forward) {
@@ -460,10 +460,14 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   // 生成顶部栏
   Widget _getHeader() {
     if (widget.onRefresh != null) {
-      if (widget.refreshHeader == null) {
-        this._refreshHeader = _defaultHeader;
-      } else {
-        this._refreshHeader = widget.refreshHeader;
+      if (_firstRefresh && widget.firstRefreshWidget != null) {
+        this._refreshHeader = FirstRefreshHeader(key: _firstRefreshHeaderKey, child: widget.firstRefreshWidget);
+      }else {
+        if (widget.refreshHeader == null || widget.refreshHeader is FirstRefreshHeader) {
+          this._refreshHeader = _defaultHeader;
+        } else {
+          this._refreshHeader = widget.refreshHeader;
+        }
       }
       return this._refreshHeader;
     } else {
@@ -544,12 +548,14 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   @override
   Widget build(BuildContext context) {
+    Widget header = _getHeader();
+    Widget footer = _getFooter();
     return new Container(
       child: Stack(
         children: <Widget>[
           new Column(
             children: <Widget>[
-              widget.refreshHeader == null || !widget.refreshHeader.isFloat ? _getHeader() : new Container(),
+              widget.refreshHeader == null || !(header as RefreshHeader).isFloat ? header : new Container(),
               new Expanded(
                 flex: 1,
                 child: new NotificationListener(
@@ -587,16 +593,16 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
                   ),
                 ),
               ),
-              widget.refreshFooter == null || !widget.refreshFooter.isFloat ? _getFooter() : new Container(),
+              widget.refreshFooter == null || !widget.refreshFooter.isFloat ? footer : new Container(),
             ],
           ),
           Align(
             alignment: Alignment.topCenter,
-            child: widget.refreshHeader != null && widget.refreshHeader.isFloat ? _getHeader() : new Container(),
+            child: widget.refreshHeader != null && (header as RefreshHeader).isFloat ? header : new Container(),
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: widget.refreshFooter != null && widget.refreshFooter.isFloat ? _getFooter() : new Container(),
+            child: widget.refreshFooter != null && widget.refreshFooter.isFloat ? footer : new Container(),
           ),
         ],
       ),
@@ -869,13 +875,13 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       } else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.IDLE) {
         _isRefresh = false;
         // 重置
-//        if (currentState == AnimationStates.RefreshBoxIdle) {
-//          if (_lastStates == RefreshBoxDirectionStatus.PULL) {
-//            this._refreshHeader.getKey().currentState.onRefreshEnd();
-//          } else if (_lastStates == RefreshBoxDirectionStatus.PUSH) {
-//            this._refreshFooter.getKey().currentState.onLoadEnd();
-//          }
-//        }
+        if (currentState == AnimationStates.RefreshBoxIdle) {
+          if (_lastStates == RefreshBoxDirectionStatus.PULL) {
+            this._refreshHeader.getKey().currentState.onRefreshEnd();
+          } else if (_lastStates == RefreshBoxDirectionStatus.PUSH) {
+            this._refreshFooter.getKey().currentState.onLoadEnd();
+          }
+        }
       }
       _animationStates = currentState;
       _lastStates = refreshBoxDirectionStatus;

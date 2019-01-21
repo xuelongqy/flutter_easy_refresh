@@ -68,4 +68,4 @@
 ## V Next
 >Repair: HeaderListener and FooterListener use both highly updated fusions  
 >Adjustment: Delivery animation speed  
->Adjustment: End callback timing  
+>Add: Close callback for Header and Footer  

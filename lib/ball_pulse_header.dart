@@ -125,8 +125,8 @@ class BallPulseHeaderState extends RefreshHeaderState<BallPulseHeader> with Tick
   }
   // 刷新结束
   @override
-  Future onRefreshEnd() async {
-    super.onRefreshEnd();
+  Future onRefreshClose() async {
+    super.onRefreshClose();
     _isAnimation = false;
   }
 

@@ -86,8 +86,8 @@ class DeliveryHeaderState extends RefreshHeaderState<DeliveryHeader> with Ticker
 
   // 刷新结束
   @override
-  Future onRefreshEnd() async {
-    super.onRefreshEnd();
+  Future onRefreshClose() async {
+    super.onRefreshClose();
     _timerStop();
     _timerValue = 0.0;
     // 初始化偏移量

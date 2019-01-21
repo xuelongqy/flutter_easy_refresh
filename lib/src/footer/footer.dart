@@ -85,6 +85,11 @@ abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
   Future onLoadEnd() async {
     refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
   }
+  // 回调加载关闭方法
+  @mustCallSuper
+  Future onLoadClose() async {
+    refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
+  }
 }
 
 /// Footer监听器
@@ -107,6 +112,8 @@ abstract class FooterListener {
   void onLoadRestore(){}
   // 回调加载结束方法
   void onLoadEnd(){}
+  // 回调加载结束方法
+  void onLoadClose(){}
 }
 
 /// 监听器Footer
@@ -174,6 +181,11 @@ class _ListenerFooterState extends RefreshFooterState<ListenerFooter> {
   Future onLoadStart() async {
     super.onLoadStart();
     widget.listener.onLoadStart();
+  }
+  @override
+  Future onLoadClose() async {
+    super.onLoadClose();
+    widget.listener.onLoadClose();
   }
   @override
   void updateHeight(double newHeight) {

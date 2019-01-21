@@ -79,6 +79,11 @@ abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
   Future onRefreshEnd() async {
     refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
   }
+  // 回调刷新关闭方法
+  @mustCallSuper
+  Future onRefreshClose() async {
+    refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
+  }
 }
 
 /// Header监听器
@@ -99,6 +104,8 @@ abstract class HeaderListener {
   void onRefreshRestore(){}
   // 回调刷新结束方法
   void onRefreshEnd(){}
+  // 回调刷新关闭方法
+  void onRefreshClose(){}
 }
 
 /// 监听器Header
@@ -161,6 +168,11 @@ class _ListenerHeaderState extends RefreshHeaderState<ListenerHeader> {
   Future onRefreshStart() async {
     super.onRefreshStart();
     widget.listener.onRefreshStart();
+  }
+  @override
+  Future onRefreshClose() async {
+    super.onRefreshClose();
+    widget.listener.onRefreshClose();
   }
   @override
   void updateHeight(double newHeight) {
@@ -464,7 +476,7 @@ class FirstRefreshHeader extends RefreshHeader {
   }
 
   @override
-  ClassicsHeaderState createState() => ClassicsHeaderState();
+  FirstRefreshHeaderState createState() => FirstRefreshHeaderState();
 }
 class FirstRefreshHeaderState extends RefreshHeaderState<FirstRefreshHeader> {
   // 是否显示
@@ -473,6 +485,8 @@ class FirstRefreshHeaderState extends RefreshHeaderState<FirstRefreshHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: double.infinity,
+      width: double.infinity,
       child: _isShow ? widget.child : Container(),
     );
   }
