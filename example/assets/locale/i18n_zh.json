@@ -34,6 +34,8 @@
   "cupertinoDescribe": "ios风格",
   "firstRefresh": "首次刷新",
   "firstRefreshDescribe": "首次刷新视图",
+  "emptyWidget": "空视图",
+  "emptyWidgetDescribe": "没有数据时显示空视图",
   "qqGroup": "QQ群",
   "github": "Github",
   "name": "名字",
@@ -64,5 +66,6 @@
   "aliPay": "支付宝",
   "weiXinPay": "微信钱包",
   "qqPay": "QQ钱包",
-  "payPal": "PayPal"
+  "payPal": "PayPal",
+  "noData": "没有数据"
 }

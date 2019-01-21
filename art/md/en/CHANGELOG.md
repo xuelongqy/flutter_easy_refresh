@@ -70,3 +70,4 @@
 >Adjustment: Delivery animation speed  
 >Add: Close callback for Header and Footer  
 >Add: First refresh  
+>Add: Empty widget  

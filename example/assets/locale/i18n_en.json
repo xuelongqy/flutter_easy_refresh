@@ -34,6 +34,8 @@
   "cupertinoDescribe": "ios style",
   "firstRefresh": "First refresh",
   "firstRefreshDescribe": "First refresh widget",
+  "emptyWidget": "Empty widget",
+  "emptyWidgetDescribe": "Show empty widget when there is no data",
   "qqGroup": "QQ group",
   "github": "Github",
   "name": "Name",
@@ -64,5 +66,6 @@
   "aliPay": "AliPay",
   "weiXinPay": "WeiXin Pay",
   "qqPay": "QQ Pay",
-  "payPal": "PayPal"
+  "payPal": "PayPal",
+  "noData": "No data"
 }

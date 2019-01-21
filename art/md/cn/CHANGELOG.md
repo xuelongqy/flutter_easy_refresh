@@ -70,3 +70,4 @@
 >调整：Delivery动画运动速度  
 >添加：Header和Footer的close回调  
 >添加：首次刷新  
+>添加：空视图  

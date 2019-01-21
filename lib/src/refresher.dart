@@ -43,6 +43,8 @@ class EasyRefresh extends StatefulWidget {
   final RefreshFooter refreshFooter;
   // 首次刷新视图
   final Widget firstRefreshWidget;
+  // 空视图
+  final Widget emptyWidget;
   // 状态改变回调
   final AnimationStateChanged animationStateChangedCallback;
   // 自动加载(滑动到底部时)
@@ -60,6 +62,7 @@ class EasyRefresh extends StatefulWidget {
     this.refreshHeader,
     this.refreshFooter,
     this.firstRefreshWidget,
+    this.emptyWidget,
     this.animationStateChangedCallback,
     this.onRefresh,
     this.loadMore,
@@ -560,6 +563,12 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   Widget build(BuildContext context) {
     Widget header = _getHeader();
     Widget footer = _getFooter();
+    // ignore: invalid_use_of_protected_member
+    var slivers = widget.child.buildSlivers(context);
+    // 是否添加空视图
+    if (widget.emptyWidget != null && widget.child.semanticChildCount == 0) {
+      slivers.add(SliverList(delegate: SliverChildListDelegate(<Widget>[widget.emptyWidget])));
+    }
     return new Container(
       child: Stack(
         children: <Widget>[
@@ -570,7 +579,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
                 flex: 1,
                 child: new NotificationListener(
                   onNotification: (ScrollNotification notification) {
-//                    print(notification);
                     // 判断是否正在加载
                     if (_isRefresh) return true;
                     ScrollMetrics metrics = notification.metrics;
@@ -585,7 +593,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
                       _handleScrollEndNotification();
                     } else if (notification is UserScrollNotification) {
                       _handleUserScrollNotification(notification);
-//                    } else if (metrics.atEdge && notification is OverscrollNotification) { // 加上metrics.atEdge验证，多次滑动会导致加载卡住
+                    // } else if (metrics.atEdge && notification is OverscrollNotification) { // 加上metrics.atEdge验证，多次滑动会导致加载卡住
                     } else if (notification is OverscrollNotification) {
                       _handleOverScrollNotification(notification);
                     }
@@ -597,8 +605,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
                     child: new CustomScrollView(
                       controller: _scrollController,
                       physics: _scrollPhysics,
-                      // ignore: invalid_use_of_protected_member
-                      slivers: new List.from(widget.child.buildSlivers(context), growable: true),
+                      slivers: new List.from(slivers, growable: true),
                     ),
                   ),
                 ),

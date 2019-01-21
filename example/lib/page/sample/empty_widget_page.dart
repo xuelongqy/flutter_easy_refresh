@@ -1,15 +1,14 @@
 import 'package:example/generated/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-/// 首次刷新页面
-class FirstRefreshPage extends StatefulWidget {
+/// 空视图页面
+class EmptyWidgetPage extends StatefulWidget {
   @override
-  _FirstRefreshPageState createState() => _FirstRefreshPageState();
+  _EmptyWidgetPageState createState() => _EmptyWidgetPageState();
 }
 
-class _FirstRefreshPageState extends State<FirstRefreshPage> {
+class _EmptyWidgetPageState extends State<EmptyWidgetPage> {
 
   List<String> addStr=["1","2","3","4","5","6","7","8","9","0"];
   List<String> str=[];
@@ -21,7 +20,7 @@ class _FirstRefreshPageState extends State<FirstRefreshPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Translations.of(context).text("firstRefresh")),
+        title: Text(Translations.of(context).text("emptyWidget")),
       ),
       body: Center(
           child: new EasyRefresh(
@@ -47,34 +46,22 @@ class _FirstRefreshPageState extends State<FirstRefreshPage> {
                 bgColor: Colors.orange
             ),
             firstRefresh: true,
-            firstRefreshWidget: new Container(
+            // 添加空视图,当列表的semanticChildCount为0时显示
+            emptyWidget: Container(
               width: double.infinity,
-              height: double.infinity,
-              color: Colors.black12,
-              child: new Center(
-                  child: SizedBox(
-                    height: 200.0,
-                    width: 300.0,
-                    child: Card(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            width: 50.0,
-                            height: 50.0,
-                            child: SpinKitFadingCube(
-                              color: Theme.of(context).primaryColor,
-                              size: 25.0,
-                            ),
-                          ),
-                          Container(
-                            child: Text(Translations.of(context).text("loading") + "..."),
-                          )
-                        ],
-                      ),
+              height: 400.0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.inbox, size: 50.0, color: Colors.grey,),
+                  Text(Translations.of(context).text("noData"),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      color: Colors.grey
                     ),
                   )
+                ],
               ),
             ),
             child: new ListView.builder(

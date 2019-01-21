@@ -2,6 +2,7 @@ import 'package:example/generated/translations.dart';
 import 'package:example/page/sample/auto_load_page.dart';
 import 'package:example/page/sample/basic_page.dart';
 import 'package:example/page/sample/cupertino_page.dart';
+import 'package:example/page/sample/empty_widget_page.dart';
 import 'package:example/page/sample/first_refresh_page.dart';
 import 'package:example/page/sample/float_page.dart';
 import 'package:example/page/sample/list_embed_page.dart';
@@ -219,6 +220,26 @@ class _SamplePageState extends State<SamplePage> {
                 }));
               },
               icon: Icon(Icons.refresh,
+                color: Colors.orange,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            ListItem(
+              title: Translations.of(context).text("emptyWidget"),
+              describe: Translations.of(context).text("emptyWidgetDescribe"),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                  return EmptyWidgetPage();
+                }));
+              },
+              icon: Icon(Icons.inbox,
                 color: Colors.orange,
               ),
             ),
