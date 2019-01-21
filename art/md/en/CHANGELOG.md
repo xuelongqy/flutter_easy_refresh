@@ -65,7 +65,7 @@
 >Repair: ios repeatedly pull down, the distance becomes longer  
 >Modify: Delivery animation height  
 
-## V Next
+## V 1.1.4
 >Repair: HeaderListener and FooterListener use both highly updated fusions  
 >Adjustment: Delivery animation speed  
 >Add: Close callback for Header and Footer  
