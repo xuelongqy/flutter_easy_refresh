@@ -500,8 +500,8 @@ class FirstRefreshHeaderState extends RefreshHeaderState<FirstRefreshHeader> {
   }
 
   @override
-  Future onRefreshEnd() async {
-    super.onRefreshEnd();
+  Future onRefreshed() async {
+    super.onRefreshed();
     setState(() {
       _isShow = false;
     });

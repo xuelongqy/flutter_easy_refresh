@@ -69,3 +69,4 @@
 >Repair: HeaderListener and FooterListener use both highly updated fusions  
 >Adjustment: Delivery animation speed  
 >Add: Close callback for Header and Footer  
+>Add: First refresh  

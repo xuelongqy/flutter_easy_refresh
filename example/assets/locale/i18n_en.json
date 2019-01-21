@@ -32,6 +32,8 @@
   "listEmbed": "List embed",
   "listEmbedDescribe": "Use the connector to set the Header and Footer positions",
   "cupertinoDescribe": "ios style",
+  "firstRefresh": "First refresh",
+  "firstRefreshDescribe": "First refresh widget",
   "qqGroup": "QQ group",
   "github": "Github",
   "name": "Name",

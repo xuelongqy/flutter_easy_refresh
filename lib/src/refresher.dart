@@ -280,7 +280,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     // 初始化滚动形式
     _scrollPhysics = _refreshAlwaysScrollPhysics;
     // 初始化刷新高度
-    _refreshHeight = widget.refreshHeader == null ? 70.0 : widget.refreshHeader.refreshHeight;
+    if (_firstRefresh && widget.firstRefreshWidget is RefreshHeader) {
+      _refreshHeight = (widget.firstRefreshWidget as RefreshHeader).refreshHeight;
+    }else {
+      _refreshHeight = widget.refreshHeader == null ? 70.0 : widget.refreshHeader.refreshHeight;
+    }
     _loadHeight = widget.refreshFooter == null ? 70.0 : widget.refreshFooter.loadHeight;
     // 顶部栏和底部栏动画控制
     _animationController = new AnimationController(duration: const Duration(milliseconds: 250), vsync: this);
@@ -355,6 +359,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             if (_firstRefresh) {
               setState(() {
                 _firstRefresh = false;
+                // 恢复刷新高度
+                _refreshHeight = widget.refreshHeader == null ? 70.0 : widget.refreshHeader.refreshHeight;
               });
             }
           } else if (_states == RefreshBoxDirectionStatus.PULL) {
@@ -461,9 +467,13 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   Widget _getHeader() {
     if (widget.onRefresh != null) {
       if (_firstRefresh && widget.firstRefreshWidget != null) {
-        this._refreshHeader = FirstRefreshHeader(key: _firstRefreshHeaderKey, child: widget.firstRefreshWidget);
+        if (widget.firstRefreshWidget is RefreshHeader) {
+          this._refreshHeader = widget.firstRefreshWidget;
+        }else {
+          this._refreshHeader = FirstRefreshHeader(key: _firstRefreshHeaderKey, child: widget.firstRefreshWidget);
+        }
       }else {
-        if (widget.refreshHeader == null || widget.refreshHeader is FirstRefreshHeader) {
+        if (widget.refreshHeader == null) {
           this._refreshHeader = _defaultHeader;
         } else {
           this._refreshHeader = widget.refreshHeader;
