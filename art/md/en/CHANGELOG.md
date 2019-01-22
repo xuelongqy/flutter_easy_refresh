@@ -72,5 +72,5 @@
 >Add: First refresh  
 >Add: Empty widget  
 
-## V 下个版本
+## V 1.1.5
 >Repair: Pull down may get stuck  
