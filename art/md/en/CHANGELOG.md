@@ -71,3 +71,6 @@
 >Add: Close callback for Header and Footer  
 >Add: First refresh  
 >Add: Empty widget  
+
+## V 下个版本
+>Repair: Pull down may get stuck  

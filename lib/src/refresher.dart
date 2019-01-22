@@ -504,15 +504,13 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       if (widget.onRefresh != null) {
         // 调用刷新回调
         await widget.onRefresh();
-        // 稍作延时(等待列表加载完成,用于判断前后条数差异)
-        await new Future.delayed(const Duration(milliseconds: 200), () {});
       }
     } else {
       if (widget.loadMore != null) {
         // 调用加载更多
         await widget.loadMore();
         // 稍作延时(等待列表加载完成,用于判断前后条数差异)
-        await new Future.delayed(const Duration(milliseconds: 200), () {});
+        await new Future.delayed(const Duration(milliseconds: 100), () {});
       }
     }
     // 判断是否自动控制
@@ -644,7 +642,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     // 当上拉加载时，不知道什么原因，dragDetails可能会为空，导致抛出异常，会发生很明显的卡顿，所以这里必须判空
     if (notification.dragDetails == null) {
       // 解决下拉过快触发向上滚动导致回弹变慢问题
-      if (_lastScrollNotification is OverscrollNotification && _isDrag && _topItemHeight > 0.0) {
+      if (_lastScrollNotification is OverscrollNotification && _isDrag && (_topItemHeight > 0.0)) {
         _scrollController.jumpTo(_scrollController.position.minScrollExtent);
         _handleScrollEndNotification();
       }
@@ -711,9 +709,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       }
       if (!_animationController.isAnimating) {
         // 启动动画后，ListView不可滑动
-        setState(() {
-          _scrollPhysics = _neverScrollableScrollPhysics;
-        });
+        _scrollPhysics = _neverScrollableScrollPhysics;
         _animationController.forward();
       }
     }
