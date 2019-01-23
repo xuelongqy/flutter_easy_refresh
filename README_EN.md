@@ -15,6 +15,8 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and uploa
  - Support custom and has integrated a lot of cool Header and Footer
  - Support pull refresh, on the load (automatically)
  - Support the Header and Footer list embedded and view the floating two forms
+ - Support for first refresh and custom view
+ - Support for custom view when the view is empty, only for ScrollView
  
 ## Portal
 
