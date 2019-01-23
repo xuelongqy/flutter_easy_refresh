@@ -92,8 +92,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   // 滚动形式
   ScrollPhysics _scrollPhysics;
   NeverScrollableScrollPhysics _neverScrollableScrollPhysics;
-  RefreshAlwaysScrollPhysics _refreshAlwaysScrollPhysics;
-  RefreshScrollPhysics _refreshScrollPhysics;
   // 顶部栏和底部栏高度
   double _topItemHeight = 0.0;
   double _bottomItemHeight = 0.0;
@@ -276,12 +274,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         justScrollOver: widget.onRefresh == null && widget.loadMore == null && widget.behavior is ScrollOverBehavior
     );
     _neverScrollableScrollPhysics = NeverScrollableScrollPhysics();
-    _refreshAlwaysScrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
-    _refreshScrollPhysics = RefreshScrollPhysics();
     // 初始化滚动控制器
     _scrollController = widget.child.controller ?? new ScrollController();
     // 初始化滚动形式
-    _scrollPhysics = _refreshAlwaysScrollPhysics;
+    _scrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
     // 初始化刷新高度
     if (_firstRefresh && widget.firstRefreshWidget is RefreshHeader) {
       _refreshHeight = (widget.firstRefreshWidget as RefreshHeader).refreshHeight;
@@ -353,7 +349,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           } else if (_states == RefreshBoxDirectionStatus.PUSH) {
             _setTopItemHeight(0.0);
             setState(() {
-              _scrollPhysics = _refreshAlwaysScrollPhysics;
+              _scrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
             });
             _states = RefreshBoxDirectionStatus.IDLE;
             _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
@@ -369,7 +365,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           } else if (_states == RefreshBoxDirectionStatus.PULL) {
             _setBottomItemHeight(0.0);
             setState(() {
-              _scrollPhysics = _refreshAlwaysScrollPhysics;
+              _scrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
             });
             _states = RefreshBoxDirectionStatus.IDLE;
             _isPulling = false;
@@ -496,7 +492,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       if (widget.limitScroll) {
         _scrollPhysics = _neverScrollableScrollPhysics;
       }else {
-        _scrollPhysics = _refreshAlwaysScrollPhysics;
+        _scrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
       }
     });
     // 这里我们开始加载数据 数据加载完成后，将新数据处理并开始加载完成后的处理
@@ -660,7 +656,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
               AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           _setTopItemHeight(0.0);
           setState(() {
-            _scrollPhysics = _refreshAlwaysScrollPhysics;
+            _scrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
           });
         } else {
           // 当刷新布局可见时，让头部刷新布局的高度+delta.dy(此时dy为负数)，来缩小头部刷新布局的高度
@@ -680,7 +676,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           _setBottomItemHeight(0.0);
           setState(() {
-            _scrollPhysics = _refreshAlwaysScrollPhysics;
+            _scrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
           });
         } else {
           if (notification.dragDetails.delta.dy > 0) {
@@ -719,17 +715,17 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     if (_bottomItemHeight > 0.0 && notification.direction == ScrollDirection.forward) {
       // 底部加载布局出现反向滑动时（由上向下），将scrollPhysics置为RefreshScrollPhysics，只要有2个原因。1 减缓滑回去的速度，2 防止手指快速滑动时出现惯性滑动
       setState(() {
-        _scrollPhysics = _refreshScrollPhysics;
+        _scrollPhysics = RefreshScrollPhysics(_refreshHeader.isFloat, _refreshFooter.isFloat);
       });
     } else if (_topItemHeight > 0.0 && notification.direction == ScrollDirection.reverse) {
       // 头部刷新布局出现反向滑动时（由下向上）
       setState(() {
-        _scrollPhysics = _refreshScrollPhysics;
+        _scrollPhysics = RefreshScrollPhysics(_refreshHeader.isFloat, _refreshFooter.isFloat);
       });
     } else if (_bottomItemHeight > 0.0 && notification.direction == ScrollDirection.reverse) {
       // 反向再反向（恢复正向拖动）
       setState(() {
-        _scrollPhysics = _refreshAlwaysScrollPhysics;
+        _scrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
       });
     }
   }
@@ -752,7 +748,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           _setTopItemHeight(0.0);
           setState(() {
-            _scrollPhysics = _refreshAlwaysScrollPhysics;
+            _scrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
           });
         } else {
           if (_topItemHeight > 100.0 + _refreshHeight) {
@@ -778,7 +774,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
           _setBottomItemHeight(0.0);
           setState(() {
-            _scrollPhysics = _refreshAlwaysScrollPhysics;
+            _scrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
           });
         } else {
           // 拉出底部

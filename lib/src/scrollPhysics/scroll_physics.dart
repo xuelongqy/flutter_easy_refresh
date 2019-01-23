@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
 
@@ -8,11 +9,15 @@ typedef Future BottomOver();
 /// 切记 继承ScrollPhysics  必须重写applyTo，，在NeverScrollableScrollPhysics类里面复制就可以
 /// 出现反向滑动时用此ScrollPhysics
 class RefreshScrollPhysics extends ScrollPhysics {
-  const RefreshScrollPhysics({ScrollPhysics parent}) : super(parent: parent);
+  const RefreshScrollPhysics(this.headerFloat, this.footerFloat, {ScrollPhysics parent}) : super(parent: parent);
+
+  // 是否浮动
+  final bool headerFloat;
+  final bool footerFloat;
 
   @override
   RefreshScrollPhysics applyTo(ScrollPhysics ancestor) {
-    return new RefreshScrollPhysics(parent: buildParent(ancestor));
+    return new RefreshScrollPhysics(this.headerFloat, this.footerFloat, parent: buildParent(ancestor));
   }
 
   @override
@@ -24,10 +29,12 @@ class RefreshScrollPhysics extends ScrollPhysics {
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
     if (offset < 0.0) {
-      return 0.00000000000001;
+      return 0.0000001;
     }
     if (offset == 0.0) {
       return 0.0;
+    }else if (offset > 0 && footerFloat) {
+      return 0.0000001;
     }
     return offset / 2;
   }
@@ -73,84 +80,12 @@ class RefreshScrollPhysics extends ScrollPhysics {
   }
 }
 
-///// 切记 继承ScrollPhysics  必须重写applyTo，，在NeverScrollableScrollPhysics类里面复制就可以
-///// 此类用来控制IOS过度滑动出现弹簧效果
-//class RefreshAlwaysScrollPhysics extends AlwaysScrollableScrollPhysics {
-//  const RefreshAlwaysScrollPhysics({ScrollPhysics parent})
-//      : super(parent: parent);
-//
-//  @override
-//  RefreshAlwaysScrollPhysics applyTo(ScrollPhysics ancestor) {
-//    return new RefreshAlwaysScrollPhysics(parent: buildParent(ancestor));
-//  }
-//
-//  @override
-//  bool shouldAcceptUserOffset(ScrollMetrics position) {
-//    return true;
-//  }
-//
-//  /// 防止ios设备上出现弹簧效果
-//  @override
-//  double applyBoundaryConditions(ScrollMetrics position, double value) {
-//    assert(() {
-//      if (value == position.pixels) {
-//        throw FlutterError(
-//            '$runtimeType.applyBoundaryConditions() was called redundantly.\n'
-//                'The proposed new position, $value, is exactly equal to the current position of the '
-//                'given ${position.runtimeType}, ${position.pixels}.\n'
-//                'The applyBoundaryConditions method should only be called when the value is '
-//                'going to actually change the pixels, otherwise it is redundant.\n'
-//                'The physics object in question was:\n'
-//                '  $this\n'
-//                'The position object in question was:\n'
-//                '  $position\n');
-//      }
-//      return true;
-//    }());
-//    if (value < position.pixels &&
-//        position.pixels <= position.minScrollExtent) // underScroll
-//      return value - position.pixels;
-//    if (position.maxScrollExtent <= position.pixels &&
-//        position.pixels < value) // overScroll
-//      return value - position.pixels;
-//    if (value < position.minScrollExtent &&
-//        position.minScrollExtent < position.pixels) // hit top edge
-//      return value - position.minScrollExtent;
-//    if (position.pixels < position.maxScrollExtent &&
-//        position.maxScrollExtent < value) // hit bottom edge
-//      return value - position.maxScrollExtent;
-//    return 0.0;
-//  }
-//
-//  /// 防止ios设备出现卡顿
-//  @override
-//  Simulation createBallisticSimulation(
-//      ScrollMetrics position, double velocity) {
-//    final Tolerance tolerance = this.tolerance;
-//    if (position.outOfRange) {
-//      double end;
-//      if (position.pixels > position.maxScrollExtent)
-//        end = position.maxScrollExtent;
-//      if (position.pixels < position.minScrollExtent)
-//        end = position.minScrollExtent;
-//      assert(end != null);
-//      return ScrollSpringSimulation(spring, position.pixels,
-//          position.maxScrollExtent, math.min(0.0, velocity),
-//          tolerance: tolerance);
-//    }
-//    if (velocity.abs() < tolerance.velocity) return null;
-//    if (velocity > 0.0 && position.pixels >= position.maxScrollExtent)
-//      return null;
-//    if (velocity < 0.0 && position.pixels <= position.minScrollExtent)
-//      return null;
-//    return ClampingScrollSimulation(
-//      position: position.pixels,
-//      velocity: velocity,
-//      tolerance: tolerance,
-//    );
-//  }
-//}
-
+// 上一次的position信息(用于消除切换方向时小幅度移动)
+double _alwaysLastPixels;
+ScrollDirection _alwaysLastDirection;
+// 是否回拉
+bool _isPullBack;
+/// 总是滚动(带回弹效果)
 class RefreshAlwaysScrollPhysics extends ScrollPhysics {
 
   final ScrollOverListener scrollOverListener;
@@ -160,6 +95,9 @@ class RefreshAlwaysScrollPhysics extends ScrollPhysics {
 
   @override
   RefreshAlwaysScrollPhysics applyTo(ScrollPhysics ancestor) {
+    _alwaysLastPixels = null;
+    _alwaysLastDirection = null;
+    _isPullBack = false;
     return new RefreshAlwaysScrollPhysics(parent: buildParent(ancestor),scrollOverListener: scrollOverListener);
   }
 
@@ -184,6 +122,26 @@ class RefreshAlwaysScrollPhysics extends ScrollPhysics {
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
     assert(offset != 0.0);
     assert(position.minScrollExtent <= position.maxScrollExtent);
+
+    // 判断是否为回拉操作
+    if (_isPullBack) return 0.0;
+    if (position is ScrollPositionWithSingleContext) {
+      if (_alwaysLastPixels != null && _alwaysLastDirection != null) {
+        if (_alwaysLastPixels == position.minScrollExtent &&
+            _alwaysLastDirection == ScrollDirection.forward &&
+            position.userScrollDirection == ScrollDirection.reverse) {
+          _isPullBack = true;
+          return 0.0;
+        }else if (_alwaysLastPixels == position.maxScrollExtent &&
+            _alwaysLastDirection == ScrollDirection.reverse &&
+            position.userScrollDirection == ScrollDirection.forward) {
+          _isPullBack = true;
+          return 0.0;
+        }
+      }
+      _alwaysLastPixels = position.pixels;
+      _alwaysLastDirection = position.userScrollDirection;
+    }
 
     if (!position.outOfRange) return offset;
 

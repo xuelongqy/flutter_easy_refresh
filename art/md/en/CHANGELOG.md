@@ -77,3 +77,5 @@
 
 ## V Next
 >Repair: BallPulse sometimes bounces  
+>Repair:Footer float when the pullback list follows the move  
+>Repair:Switch direction when Header floats, list moves slightly  
