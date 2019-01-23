@@ -47,6 +47,7 @@ class BallPulseFooterState extends RefreshFooterState<BallPulseFooter> with Tick
     _startAnimation = new Tween(begin: 6.0, end: 20.0).animate(_startController)
       ..addListener(() {
         if (!mounted) return;
+        if (_startAnimation.status == AnimationStatus.dismissed) return;
         setState(() {
           // 计算大小
           ballSize1 = 26.0 - _startAnimation.value;

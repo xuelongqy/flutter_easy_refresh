@@ -74,3 +74,6 @@
 
 ## V 1.1.5
 >Repair: Pull down may get stuck  
+
+## V Next
+>Repair: BallPulse sometimes bounces  
