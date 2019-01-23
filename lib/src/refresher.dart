@@ -141,7 +141,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   ScrollNotification _lastScrollNotification;
   // 首次刷新
   bool _firstRefresh;
-  bool _firstRefreshCall;
+  bool _firstRefreshCall = false;
   GlobalKey<RefreshHeaderState> _firstRefreshHeaderKey = new GlobalKey<RefreshHeaderState>();
 
   // 触发刷新
