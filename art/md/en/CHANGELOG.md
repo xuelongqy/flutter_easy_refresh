@@ -75,7 +75,7 @@
 ## V 1.1.5
 >Repair: Pull down may get stuck  
 
-## V Next
+## V 1.1.6
 >Repair: BallPulse sometimes bounces  
 >Repair:Footer float when the pullback list follows the move  
 >Repair:Switch direction when Header floats, list moves slightly  
