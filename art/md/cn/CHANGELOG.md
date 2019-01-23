@@ -79,3 +79,4 @@
 >修复：BallPulse有时出现跳动的问题  
 >修复：Footer浮动时回拉列表跟随移动问题  
 >修复：Header浮动时切换方向，列表小幅度移动  
+>调整：MaterialFooter动画  

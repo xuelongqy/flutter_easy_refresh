@@ -3,7 +3,7 @@ import 'src/footer/footer.dart';
 
 // How much the scroll's drag gesture can overshoot the RefreshIndicator's
 // displacement; max displacement = _kDragSizeFactorLimit * displacement.
-const double _kDragSizeFactorLimit = 1.5;
+const double _kDragSizeFactorLimit = 3.0;
 
 // The duration of the ScaleTransition that starts when the refresh action
 // has completed.
@@ -55,7 +55,7 @@ class MaterialFooterState extends RefreshFooterState<MaterialFooter> with Ticker
   // 更新视图高度
   void updateHeight(double newHeight) {
     super.updateHeight(newHeight);
-    double positionValue = newHeight / 50;
+    double positionValue = newHeight / 105.0;
     _positionController.value = positionValue < _kDragSizeFactorLimit ? positionValue : _kDragSizeFactorLimit;
   }
 
