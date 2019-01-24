@@ -87,5 +87,5 @@
 >Modify: Child to Widget type  
 >Adjustment：ClassicsHeader style  
 
-## V Next
+## V 1.1.8
 >Repair: Pullback exception when loadMore is not set  
