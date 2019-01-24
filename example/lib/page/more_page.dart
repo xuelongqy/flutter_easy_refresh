@@ -11,9 +11,10 @@ class MorePage extends StatefulWidget {
   _MorePageState createState() => _MorePageState();
 
 }
-class _MorePageState extends State<MorePage> {
+class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(Translations.of(context).text("more")),
@@ -92,4 +93,7 @@ class _MorePageState extends State<MorePage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

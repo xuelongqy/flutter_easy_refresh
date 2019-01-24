@@ -21,9 +21,10 @@ class SamplePage extends StatefulWidget {
   _SamplePageState createState() => _SamplePageState();
 
 }
-class _SamplePageState extends State<SamplePage> {
+class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(Translations.of(context).text("sample")),
@@ -269,4 +270,7 @@ class _SamplePageState extends State<SamplePage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
