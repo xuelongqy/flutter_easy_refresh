@@ -1,8 +1,9 @@
+import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'src/header/header.dart';
 import 'package:flare_flutter/flare.dart';
-import 'package:flare_flutter/flare/math/mat2d.dart';
+import 'package:flare_dart/math/mat2d.dart';
 import "package:flare_flutter/flare_actor.dart";
 
 /// 动画来源于Flare-Flutter
