@@ -19,9 +19,10 @@ class StylePage extends StatefulWidget {
   _StylePageState createState() => _StylePageState();
 
 }
-class _StylePageState extends State<StylePage> {
+class _StylePageState extends State<StylePage> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(Translations.of(context).text("style")),
@@ -225,4 +226,7 @@ class _StylePageState extends State<StylePage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
