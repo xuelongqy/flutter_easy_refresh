@@ -58,7 +58,7 @@ class _SliverPageState extends State<SliverPage> with HeaderListener {
             }
           });
         },
-        child: CustomScrollView(
+        child: new CustomScrollView(
           // 手动维护semanticChildCount,用于判断是否没有更多数据
           semanticChildCount: str.length,
           slivers: <Widget>[

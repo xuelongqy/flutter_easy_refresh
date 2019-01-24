@@ -36,6 +36,7 @@
   "firstRefreshDescribe": "首次刷新视图",
   "emptyWidget": "空视图",
   "emptyWidgetDescribe": "没有数据时显示空视图",
+  "tabViewWidgetDescribe": "List和Grid组成的TabBarView",
   "qqGroup": "QQ群",
   "github": "Github",
   "name": "名字",

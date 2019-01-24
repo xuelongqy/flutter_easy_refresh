@@ -9,6 +9,7 @@ import 'package:example/page/sample/list_embed_page.dart';
 import 'package:example/page/sample/manual_control_page.dart';
 import 'package:example/page/sample/sliver_page.dart';
 import 'package:example/page/sample/swiper_page.dart';
+import 'package:example/page/sample/tab_view_page.dart';
 import 'package:example/page/sample/user_profile_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
@@ -240,6 +241,26 @@ class _SamplePageState extends State<SamplePage> {
                 }));
               },
               icon: Icon(Icons.inbox,
+                color: Colors.orange,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            ListItem(
+              title: Translations.of(context).text("TabView"),
+              describe: Translations.of(context).text("tabViewWidgetDescribe"),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                  return TabViewPage();
+                }));
+              },
+              icon: Icon(Icons.tab,
                 color: Colors.orange,
               ),
             ),
