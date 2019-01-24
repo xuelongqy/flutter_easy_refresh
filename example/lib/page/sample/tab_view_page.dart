@@ -2,7 +2,7 @@ import 'package:example/generated/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
-/// 自动加载页面
+/// TabView页面
 class TabViewPage extends StatefulWidget {
   @override
   _TabViewPageState createState() => _TabViewPageState();
