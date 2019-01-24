@@ -35,7 +35,7 @@ class EasyRefresh extends StatefulWidget {
   final OnRefresh onRefresh;
   final LoadMore loadMore;
   // 滚动视图
-  final ScrollView child;
+  final Widget child;
   // 滚动视图光晕
   final ScrollBehavior behavior;
   // 顶部和底部视图
@@ -275,7 +275,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     );
     _neverScrollableScrollPhysics = NeverScrollableScrollPhysics();
     // 初始化滚动控制器
-    _scrollController = widget.child.controller ?? new ScrollController();
+    _scrollController = widget.child is ScrollView && (widget.child as ScrollView).controller != null ?
+      (widget.child as ScrollView).controller : new ScrollController();
     // 初始化滚动形式
     _scrollPhysics = RefreshAlwaysScrollPhysics(scrollOverListener: _scrollOverListener);
     // 初始化刷新高度
@@ -553,73 +554,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Widget header = _getHeader();
-    Widget footer = _getFooter();
-    // ignore: invalid_use_of_protected_member
-    var slivers = widget.child.buildSlivers(context);
-    // 是否添加空视图
-    if (widget.emptyWidget != null && widget.child.semanticChildCount == 0) {
-      slivers.add(SliverList(delegate: SliverChildListDelegate(<Widget>[widget.emptyWidget])));
-    }
-    return new Container(
-      child: Stack(
-        children: <Widget>[
-          new Column(
-            children: <Widget>[
-              widget.refreshHeader == null || !(header as RefreshHeader).isFloat ? header : new Container(),
-              new Expanded(
-                flex: 1,
-                child: new NotificationListener(
-                  onNotification: (ScrollNotification notification) {
-                    // 判断是否正在加载
-                    if (_isRefresh) return true;
-                    ScrollMetrics metrics = notification.metrics;
-                    computeScrollSpeed(metrics.pixels);
-                    if (notification is ScrollStartNotification) {
-                      if (notification.dragDetails != null) {
-                        _isDrag = true;
-                      }
-                    } else if (notification is ScrollUpdateNotification) {
-                      _handleScrollUpdateNotification(notification);
-                    } else if (notification is ScrollEndNotification) {
-                      _handleScrollEndNotification();
-                    } else if (notification is UserScrollNotification) {
-                      _handleUserScrollNotification(notification);
-                    // } else if (metrics.atEdge && notification is OverscrollNotification) { // 加上metrics.atEdge验证，多次滑动会导致加载卡住
-                    } else if (notification is OverscrollNotification) {
-                      _handleOverScrollNotification(notification);
-                    }
-                    _lastScrollNotification = notification;
-                    return true;
-                  },
-                  child: ScrollConfiguration(
-                    behavior: widget.behavior ?? new RefreshBehavior(),
-                    child: new CustomScrollView(
-                      controller: _scrollController,
-                      physics: _scrollPhysics,
-                      slivers: new List.from(slivers, growable: true),
-                    ),
-                  ),
-                ),
-              ),
-              widget.refreshFooter == null || !widget.refreshFooter.isFloat ? footer : new Container(),
-            ],
-          ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: widget.refreshHeader != null && (header as RefreshHeader).isFloat ? header : new Container(),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: widget.refreshFooter != null && widget.refreshFooter.isFloat ? footer : new Container(),
-          ),
-        ],
-      ),
-    );
-  }
-
   // 计算滑动速度
   void computeScrollSpeed(double pixels) async {
     int nowTimeStamp = new DateTime.now().millisecondsSinceEpoch;
@@ -634,6 +568,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     lastTimeStamp = nowTimeStamp;
   }
 
+  // 滚动更新通知
   void _handleScrollUpdateNotification(ScrollUpdateNotification notification) {
     // 当上拉加载时，不知道什么原因，dragDetails可能会为空，导致抛出异常，会发生很明显的卡顿，所以这里必须判空
     if (notification.dragDetails == null) {
@@ -692,6 +627,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     }
   }
 
+  // 结束滚动通知
   void _handleScrollEndNotification() {
     // 如果滑动结束后（手指抬起来后），判断是否需要启动加载或者刷新的动画
     if ((_topItemHeight > 0 || _bottomItemHeight > 0)) {
@@ -711,6 +647,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     }
   }
 
+  // 手势变换通知
   void _handleUserScrollNotification(UserScrollNotification notification) {
     if (_bottomItemHeight > 0.0 && notification.direction == ScrollDirection.forward) {
       // 底部加载布局出现反向滑动时（由上向下），将scrollPhysics置为RefreshScrollPhysics，只要有2个原因。1 减缓滑回去的速度，2 防止手指快速滑动时出现惯性滑动
@@ -730,6 +667,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     }
   }
 
+  // 超出边界通知
   void _handleOverScrollNotification(OverscrollNotification notification) {
     //OverScrollNotification 和 metrics.atEdge 说明正在下拉或者 上拉
     // 此处同上
@@ -813,6 +751,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     }
   }
 
+  // 状态变更
   void _checkStateAndCallback(AnimationStates currentState, RefreshBoxDirectionStatus refreshBoxDirectionStatus) {
     if (_animationStates != currentState) {
       // 下拉刷新回调
@@ -849,28 +788,37 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         // 加载数据
         else if (currentState == AnimationStates.StartLoadData) {
           this._refreshFooter.getKey().currentState.onLoading();
-          // 记录当前条数
-          if (widget.child.semanticChildCount == null && widget.child is CustomScrollView) {
-            this._itemCount = (widget.child as CustomScrollView).slivers.length;
+          if (widget.child is ScrollView) {
+            // 记录当前条数
+            if ((widget.child as ScrollView).semanticChildCount == null && widget.child is CustomScrollView) {
+              this._itemCount = (widget.child as CustomScrollView).slivers.length;
+            }else {
+              this._itemCount = (widget.child as ScrollView).semanticChildCount;
+            }
           }else {
-            this._itemCount = widget.child.semanticChildCount;
+            this._itemCount = 1;
           }
         }
         // 加载完成
         else if (currentState == AnimationStates.LoadDataEnd) {
           // 判断是否加载出更多数据
           int currentItemCount = 0;
-          if (widget.child.semanticChildCount == null && widget.child is CustomScrollView) {
-            currentItemCount = (widget.child as CustomScrollView).slivers.length;
+          if (widget.child is ScrollView) {
+            if ((widget.child as ScrollView).semanticChildCount == null && widget.child is CustomScrollView) {
+              currentItemCount = (widget.child as CustomScrollView).slivers.length;
+            }else {
+              currentItemCount = (widget.child as ScrollView).semanticChildCount;
+            }
+            if (currentItemCount > this._itemCount) {
+              this._refreshFooter.getKey().currentState.onLoaded();
+            }else {
+              this._refreshFooter.getKey().currentState.onNoMore();
+            }
+            this._itemCount = currentItemCount;
           }else {
-            currentItemCount = widget.child.semanticChildCount;
-          }
-          if (currentItemCount > this._itemCount) {
+            this._itemCount = 1;
             this._refreshFooter.getKey().currentState.onLoaded();
-          }else {
-            this._refreshFooter.getKey().currentState.onNoMore();
           }
-          this._itemCount = currentItemCount;
         }
         else if (currentState == AnimationStates.DragAndRefreshNotEnabled) {
           if (_animationStates == AnimationStates.RefreshBoxIdle) {
@@ -898,5 +846,79 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         widget.animationStateChangedCallback(_animationStates, refreshBoxDirectionStatus);
       }
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget header = _getHeader();
+    Widget footer = _getFooter();
+    List<Widget> slivers;
+    if (widget.child is ScrollView) {
+      // ignore: invalid_use_of_protected_member
+      slivers = (widget.child as ScrollView).buildSlivers(context);
+      // 是否添加空视图
+      if (widget.emptyWidget != null && (widget.child as ScrollView).semanticChildCount == 0) {
+        slivers.add(SliverList(delegate: SliverChildListDelegate(<Widget>[widget.emptyWidget])));
+      }
+    }else {
+      slivers = new List<Widget>();
+      slivers.add(SliverList(delegate: SliverChildListDelegate(<Widget>[widget.child])));
+    }
+    return new Container(
+      child: Stack(
+        children: <Widget>[
+          new Column(
+            children: <Widget>[
+              widget.refreshHeader == null || !(header as RefreshHeader).isFloat ? header : new Container(),
+              new Expanded(
+                flex: 1,
+                child: new NotificationListener(
+                  onNotification: (ScrollNotification notification) {
+                    // 判断是否正在加载
+                    if (_isRefresh) return true;
+                    ScrollMetrics metrics = notification.metrics;
+                    computeScrollSpeed(metrics.pixels);
+                    if (notification is ScrollStartNotification) {
+                      if (notification.dragDetails != null) {
+                        _isDrag = true;
+                      }
+                    } else if (notification is ScrollUpdateNotification) {
+                      _handleScrollUpdateNotification(notification);
+                    } else if (notification is ScrollEndNotification) {
+                      _handleScrollEndNotification();
+                    } else if (notification is UserScrollNotification) {
+                      _handleUserScrollNotification(notification);
+                      // } else if (metrics.atEdge && notification is OverscrollNotification) { // 加上metrics.atEdge验证，多次滑动会导致加载卡住
+                    } else if (notification is OverscrollNotification) {
+                      _handleOverScrollNotification(notification);
+                    }
+                    _lastScrollNotification = notification;
+                    return true;
+                  },
+                  child: ScrollConfiguration(
+                    behavior: widget.behavior ?? new RefreshBehavior(),
+                    child: new CustomScrollView(
+                      semanticChildCount: widget.child is ScrollView ? (widget.child as ScrollView).semanticChildCount : 1,
+                      controller: _scrollController,
+                      physics: _scrollPhysics,
+                      slivers: new List.from(slivers, growable: true),
+                    ),
+                  ),
+                ),
+              ),
+              widget.refreshFooter == null || !widget.refreshFooter.isFloat ? footer : new Container(),
+            ],
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: widget.refreshHeader != null && (header as RefreshHeader).isFloat ? header : new Container(),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: widget.refreshFooter != null && widget.refreshFooter.isFloat ? footer : new Container(),
+          ),
+        ],
+      ),
+    );
   }
 }
