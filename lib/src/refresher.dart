@@ -664,7 +664,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     if (_bottomItemHeight > 0.0 && notification.direction == ScrollDirection.forward) {
       // 底部加载布局出现反向滑动时（由上向下），将scrollPhysics置为RefreshScrollPhysics，只要有2个原因。1 减缓滑回去的速度，2 防止手指快速滑动时出现惯性滑动
       setState(() {
-        _scrollPhysics = RefreshScrollPhysics( _refreshFooter == null ? false : _refreshFooter.isFloat);
+        _scrollPhysics = RefreshScrollPhysics(_refreshFooter == null ? false : _refreshFooter.isFloat);
       });
     } else if (_topItemHeight > 0.0 && notification.direction == ScrollDirection.reverse) {
       // 头部刷新布局出现反向滑动时（由下向上）
