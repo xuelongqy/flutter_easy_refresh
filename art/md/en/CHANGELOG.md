@@ -85,3 +85,4 @@
 ## V Next
 >Repair: Pullback control causes the list to slow down  
 >Modify: Child to Widget type  
+>Adjustment：ClassicsHeader style  

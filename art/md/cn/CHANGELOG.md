@@ -85,3 +85,4 @@
 ## V 下个版本
 >修复：回拉控制导致列表速度变慢  
 >修改：Child为Widget类型  
+>调整：ClassicsHeader样式  
