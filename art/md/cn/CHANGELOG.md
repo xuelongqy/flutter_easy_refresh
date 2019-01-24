@@ -87,5 +87,5 @@
 >修改：Child为Widget类型  
 >调整：ClassicsHeader样式  
 
-## V 1.1.8
->修复：不设置loadMore时，回拉异常的问题  
+## V 1.1.9
+>修复：不设置loadMore或者onRefresh时，回拉异常的问题  

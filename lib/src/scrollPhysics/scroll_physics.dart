@@ -9,15 +9,14 @@ typedef Future BottomOver();
 /// 切记 继承ScrollPhysics  必须重写applyTo，，在NeverScrollableScrollPhysics类里面复制就可以
 /// 出现反向滑动时用此ScrollPhysics
 class RefreshScrollPhysics extends ScrollPhysics {
-  const RefreshScrollPhysics(this.headerFloat, this.footerFloat, {ScrollPhysics parent}) : super(parent: parent);
+  const RefreshScrollPhysics(this.footerFloat, {ScrollPhysics parent}) : super(parent: parent);
 
-  // 是否浮动
-  final bool headerFloat;
+  // Footer是否浮动
   final bool footerFloat;
 
   @override
   RefreshScrollPhysics applyTo(ScrollPhysics ancestor) {
-    return new RefreshScrollPhysics(this.headerFloat, this.footerFloat, parent: buildParent(ancestor));
+    return new RefreshScrollPhysics(this.footerFloat, parent: buildParent(ancestor));
   }
 
   @override
