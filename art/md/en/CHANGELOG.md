@@ -86,3 +86,6 @@
 >Repair: Pullback control causes the list to slow down  
 >Modify: Child to Widget type  
 >Adjustment：ClassicsHeader style  
+
+## V Next
+>Repair: Pullback exception when loadMore is not set  
