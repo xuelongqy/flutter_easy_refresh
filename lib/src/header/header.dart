@@ -89,8 +89,6 @@ abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
 /// Header监听器
 abstract class HeaderListener {
   // 更新视图高度
-  @deprecated
-  void updateHeight(double newHeight){}
   void updateHeaderHeight(double newHeight){}
   // 回调开始刷新方法
   void onRefreshStart(){}
@@ -177,7 +175,6 @@ class _ListenerHeaderState extends RefreshHeaderState<ListenerHeader> {
   @override
   void updateHeight(double newHeight) {
     super.updateHeight(newHeight);
-    widget.listener.updateHeight(newHeight);
     widget.listener.updateHeaderHeight(newHeight);
   }
 }
