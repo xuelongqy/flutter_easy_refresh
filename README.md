@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v1.1.6-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/badge/pub-v1.1.7-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
 
 ## [English](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README_EN.md) | 中文
 
@@ -11,10 +11,11 @@
 ## 特点功能:
 
  - 支持Andorid(光晕)，ios(越界回弹)效果
- - 支持任意的ScrollView控件，如果不是进行简单封装即可(所以理论是所有控件)
+ - 支持绝大多数Widget
  - 支持自定义并且已经集成了很多炫酷的 Header 和 Footer
  - 支持下拉刷新、上拉加载(可自动)
  - 支持 Header 和 Footer 列表嵌入以及视图浮动两种形式
+ - 支持列表事件监听，制作任何样子的 Header 和 Footer，并且能够放在任何位置
  - 支持首次刷新，并自定义视图
  - 支持自定义列表为空时的视图,仅限于ScrollView
  
@@ -77,7 +78,7 @@
 ```
 //pub方式
 dependencies:
-  flutter_easyrefresh: ^1.1.6
+  flutter_easyrefresh: ^1.1.7
 
 //导入方式
 dependencies:

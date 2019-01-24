@@ -94,7 +94,7 @@ class _BasicPageState extends State<BasicPage> {
 | Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
 |---------|--------------------------|:-----:|:-----:|:-----:|
 | key | EasyRefresh key     | GlobalKey<EasyRefreshState>  | null | optional(Used for manual trigger loading and refreshing) |
-| child      | your content View     | ? extends ScrollView   |   null |  necessary |
+| child      | your content View     | Widget   |   null |  necessary |
 | autoLoad | Bottom Autoloading     | bool  | false | optional |
 | firstRefresh | First refresh     | bool |false | optional |
 | firstRefreshWidget | First refresh widget     | Widget |null | optional(Use refreshHeader when null, can be of type RefreshHeader) |

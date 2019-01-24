@@ -82,7 +82,7 @@
 >Adjustment: MaterialFooter animation  
 >Repair: callRefresh error  
 
-## V Next
+## V 1.1.7
 >Repair: Pullback control causes the list to slow down  
 >Modify: Child to Widget type  
 >Adjustment：ClassicsHeader style  

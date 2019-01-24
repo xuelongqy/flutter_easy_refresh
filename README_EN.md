@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v1.1.6-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/badge/pub-v1.1.7-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
 
 ## English | [中文](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README.md)
 
@@ -11,10 +11,11 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and uploa
 ## Features:
 
  - Support android (halo), ios (cross springback) effect
- - Support arbitrary ScrollView controls, if not for easy encapsulation (so the theory is that all controls)
+ - Support for most Widgets
  - Support custom and has integrated a lot of cool Header and Footer
  - Support pull refresh, on the load (automatically)
  - Support the Header and Footer list embedded and view the floating two forms
+ - Support list event listener, make any look of Header and Footer, and can be placed anywhere
  - Support for first refresh and custom view
  - Support for custom view when the view is empty, only for ScrollView
  
@@ -77,7 +78,7 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and uploa
 ```
 //pub
 dependencies:
-  flutter_easyrefresh: ^1.1.6
+  flutter_easyrefresh: ^1.1.7
 
 //import
 dependencies:

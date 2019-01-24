@@ -82,7 +82,7 @@
 >调整：MaterialFooter动画  
 >修复：callRefresh报错问题  
 
-## V 下个版本
+## V 1.1.7
 >修复：回拉控制导致列表速度变慢  
 >修改：Child为Widget类型  
 >调整：ClassicsHeader样式  

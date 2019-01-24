@@ -94,7 +94,7 @@ class _BasicPageState extends State<BasicPage> {
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
 |---------|--------------------------|:-----:|:-----:|:-----:|
 | key | EasyRefresh的键     | GlobalKey<EasyRefreshState>  | null | 可选(用于手动触发加载和刷新) |
-| child      | 内容视图     | ? extends ScrollView   |   null |  必需 |
+| child      | 内容视图     | Widget   |   null |  必需 |
 | autoLoad | 底部自动加载     | bool  | false | 可选 |
 | firstRefresh | 首次刷新     | bool |false | 可选 |
 | firstRefreshWidget | 首次刷新视图     | Widget |null | 可选(为null时使用refreshHeader, 可以为RefreshHeader类型) |
