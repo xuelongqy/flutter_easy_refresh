@@ -81,3 +81,7 @@
 >Repair:Switch direction when Header floats, list moves slightly  
 >Adjustment: MaterialFooter animation  
 >Repair: callRefresh error  
+
+## V Next
+>Repair: Pullback control causes the list to slow down  
+>Modify: Child to Widget type  

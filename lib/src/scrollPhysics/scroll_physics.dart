@@ -88,17 +88,25 @@ bool _isPullBack;
 /// 总是滚动(带回弹效果)
 class RefreshAlwaysScrollPhysics extends ScrollPhysics {
 
+  // 越界监听
   final ScrollOverListener scrollOverListener;
+  // 是否需要控制回拉
+  final headerPullBackRecord;
+  final footerPullBackRecord;
 
   /// Creates scroll physics that bounce back from the edge.
-  const RefreshAlwaysScrollPhysics({ScrollPhysics parent,this.scrollOverListener}) : super(parent: parent);
+  const RefreshAlwaysScrollPhysics({ScrollPhysics parent,this.scrollOverListener,
+    this.headerPullBackRecord = false,
+    this.footerPullBackRecord = false}) : super(parent: parent);
 
   @override
   RefreshAlwaysScrollPhysics applyTo(ScrollPhysics ancestor) {
     _alwaysLastPixels = null;
     _alwaysLastDirection = null;
     _isPullBack = false;
-    return new RefreshAlwaysScrollPhysics(parent: buildParent(ancestor),scrollOverListener: scrollOverListener);
+    return new RefreshAlwaysScrollPhysics(parent: buildParent(ancestor),scrollOverListener: scrollOverListener,
+        headerPullBackRecord: headerPullBackRecord,
+        footerPullBackRecord: footerPullBackRecord);
   }
 
   /// The multiple applied to overscroll to make it appear that scrolling past
@@ -129,12 +137,14 @@ class RefreshAlwaysScrollPhysics extends ScrollPhysics {
       if (_alwaysLastPixels != null && _alwaysLastDirection != null) {
         if (_alwaysLastPixels == position.minScrollExtent &&
             _alwaysLastDirection == ScrollDirection.forward &&
-            position.userScrollDirection == ScrollDirection.reverse) {
+            position.userScrollDirection == ScrollDirection.reverse &&
+            headerPullBackRecord) {
           _isPullBack = true;
           return 0.0;
         }else if (_alwaysLastPixels == position.maxScrollExtent &&
             _alwaysLastDirection == ScrollDirection.reverse &&
-            position.userScrollDirection == ScrollDirection.forward) {
+            position.userScrollDirection == ScrollDirection.forward &&
+            footerPullBackRecord) {
           _isPullBack = true;
           return 0.0;
         }
