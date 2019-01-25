@@ -193,8 +193,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     }
   }
 
+  // 是否正在刷新
+  bool get isRefreshing => _isRefresh;
+
   // 顶部超出边界
-  Future topOver() async {
+  Future _topOver() async {
     if (_isRefresh || widget.onRefresh == null) return;
     // 如果用户正在拖动则不执行
     if (_isDrag) return;
@@ -225,7 +228,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   // 底部超出边界
-  Future bottomOver() async {
+  Future _bottomOver() async {
     if (_isRefresh || widget.loadMore == null) return;
     // 如果用户正在拖动则不执行
     if (_isDrag) return;
@@ -264,9 +267,6 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     }
   }
 
-  // 是否正在刷新
-  bool get isRefreshing => _isRefresh;
-
   @override
   void initState() {
     super.initState();
@@ -274,8 +274,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     _firstRefresh = widget.firstRefresh;
     // 超出边界监听器
     _scrollOverListener = new ScrollOverListener(
-        topOver: topOver,
-        bottomOver: bottomOver,
+        topOver: _topOver,
+        bottomOver: _bottomOver,
         justScrollOver: widget.onRefresh == null && widget.loadMore == null && widget.behavior is ScrollOverBehavior
     );
     _neverScrollableScrollPhysics = NeverScrollableScrollPhysics();
