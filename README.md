@@ -50,7 +50,7 @@
 |列表嵌入|Cupertino|
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/list_embed.gif)|![](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/image/cupertino.gif)|
-|[ListEmbedPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/sample/sliver_page.dart)|[CupertinoPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/sample/swiper_page.dart)|
+|[ListEmbedPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/sample/list_embed_page.dart)|[CupertinoPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/sample/cupertino_page.dart)|
 
 #### 样式演示
 |Material|BallPulse|
