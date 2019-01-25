@@ -264,6 +264,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     }
   }
 
+  // 是否正在刷新
+  bool get isRefreshing => _isRefresh;
+
   @override
   void initState() {
     super.initState();

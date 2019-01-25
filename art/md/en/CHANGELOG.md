@@ -92,3 +92,4 @@
 
 ## V Next
 >Repair: onNoMore callback is not accurate  
+>Add: isRefreshing to determine if it is being refreshed or loaded  
