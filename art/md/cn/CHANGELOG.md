@@ -93,3 +93,5 @@
 ## V 下个版本
 >修复：onNoMore回调不准确问题  
 >添加：isRefreshing用于判断是否正在刷新或加载中  
+>添加：Header和Footer状态改变回调  
+>添加：Header和Footer高度改变回调  

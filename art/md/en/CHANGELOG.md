@@ -93,3 +93,5 @@
 ## V Next
 >Repair: onNoMore callback is not accurate  
 >Add: isRefreshing to determine if it is being refreshed or loaded  
+>Add: Header and Footer status change callbacks  
+>Add: Header and Footer height change callbacks  

@@ -8,13 +8,39 @@ import 'scrollPhysics/scroll_physics.dart';
 
 typedef Future OnRefresh();
 typedef Future LoadMore();
+typedef void HeaderStatusChanged(HeaderStatus status);
+typedef void FooterStatusChanged(FooterStatus status);
+typedef void HeaderHeightChanged(double height);
+typedef void FooterHeightChanged(double height);
 typedef AnimationStateChanged(AnimationStates animationStates, RefreshBoxDirectionStatus refreshBoxDirectionStatus);
 
 enum RefreshBoxDirectionStatus {
-  //  上拉加载的状态 分别为 闲置 上拉  下拉
+  // 上拉加载的状态 分别为 闲置 上拉  下拉
   IDLE,
   PUSH,
   PULL
+}
+
+/// Header状态
+enum HeaderStatus {
+  START,
+  READY,
+  REFRESHING,
+  REFRESHED,
+  RESTORE,
+  END,
+  CLOSE
+}
+/// Footer状态
+enum FooterStatus {
+  START,
+  READY,
+  LOADING,
+  LOADED,
+  NO_MORE,
+  RESTORE,
+  END,
+  CLOSE
 }
 
 enum AnimationStates {
@@ -47,6 +73,12 @@ class EasyRefresh extends StatefulWidget {
   final Widget emptyWidget;
   // 状态改变回调
   final AnimationStateChanged animationStateChangedCallback;
+  // Header和Footer改变回调
+  final HeaderStatusChanged headerStatusChanged;
+  final FooterStatusChanged footerStatusChanged;
+  // Header和Footer高度改变回调
+  final HeaderHeightChanged headerHeightChanged;
+  final FooterHeightChanged footerHeightChanged;
   // 自动加载(滑动到底部时)
   final bool autoLoad;
   // 限制滚动
@@ -64,6 +96,10 @@ class EasyRefresh extends StatefulWidget {
     this.firstRefreshWidget,
     this.emptyWidget,
     this.animationStateChangedCallback,
+    this.headerStatusChanged,
+    this.footerStatusChanged,
+    this.headerHeightChanged,
+    this.footerHeightChanged,
     this.onRefresh,
     this.loadMore,
     this.autoLoad: false,
@@ -153,7 +189,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     _scrollController.animateTo(_scrollController.position.minScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
     _callRefreshAnimationController.forward();
     _refreshHeader.getKey().currentState.onRefreshStart();
+    _onHeaderStatusChanged(HeaderStatus.START);
     _refreshHeader.getKey().currentState.onRefreshReady();
+    _onHeaderStatusChanged(HeaderStatus.READY);
   }
   // 触发加载
   void callLoadMore() async {
@@ -161,7 +199,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     _isRefresh = true;
     _callLoadAnimationController.forward();
     _refreshFooter.getKey().currentState.onLoadStart();
+    _onFooterStatusChanged(FooterStatus.START);
     _refreshFooter.getKey().currentState.onLoadReady();
+    _onFooterStatusChanged(FooterStatus.READY);
   }
 
   // 刷新完成
@@ -195,6 +235,30 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
 
   // 是否正在刷新
   bool get isRefreshing => _isRefresh;
+
+  // Header和Footer状态改变回调
+  void _onHeaderStatusChanged(HeaderStatus status) {
+    if (widget.headerStatusChanged != null) {
+      widget.headerStatusChanged(status);
+    }
+  }
+  void _onFooterStatusChanged(FooterStatus status) {
+    if (widget.footerStatusChanged != null) {
+      widget.footerStatusChanged(status);
+    }
+  }
+
+  // Header和Footer高度改变回调
+  void _onHeaderHeightChanged(double height) {
+    if (widget.headerHeightChanged != null) {
+      widget.headerHeightChanged(height);
+    }
+  }
+  void _onFooterHeightChanged(double height) {
+    if (widget.footerHeightChanged != null) {
+      widget.footerHeightChanged(height);
+    }
+  }
 
   // 顶部超出边界
   Future _topOver() async {
@@ -365,6 +429,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
             // 刷新关闭
             this._refreshHeader.getKey().currentState.onRefreshClose();
+            _onHeaderStatusChanged(HeaderStatus.CLOSE);
             if (_firstRefresh) {
               setState(() {
                 _firstRefresh = false;
@@ -384,6 +449,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
             _checkStateAndCallback(AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
             // 加载关闭
             this._refreshFooter.getKey().currentState.onLoadClose();
+            _onFooterStatusChanged(FooterStatus.CLOSE);
           }
         });
       } else if (animationStatus == AnimationStatus.forward) {
@@ -415,7 +481,9 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         // 判断是否为首次刷新
         if (_firstRefreshCall) {
           _refreshHeader.getKey().currentState.onRefreshStart();
+          _onHeaderStatusChanged(HeaderStatus.START);
           _refreshHeader.getKey().currentState.onRefreshReady();
+          _onHeaderStatusChanged(HeaderStatus.READY);
           _firstRefreshCall = false;
         }
         _setTopItemHeight((_refreshHeight + 20.0) * _callRefreshAnimation.value);
@@ -555,6 +623,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       _topItemHeight = height;
       if (this._refreshHeader != null) {
         this._refreshHeader.getKey().currentState.updateHeight(_topItemHeight);
+        _onHeaderHeightChanged(_topItemHeight);
       }
     });
   }
@@ -563,6 +632,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       _bottomItemHeight = height;
       if (this._refreshFooter != null) {
         this._refreshFooter.getKey().currentState.updateHeight(_bottomItemHeight);
+        _onFooterHeightChanged(_bottomItemHeight);
       }
     });
   }
@@ -782,23 +852,28 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         // 释放刷新
         if (currentState == AnimationStates.DragAndRefreshEnabled) {
           this._refreshHeader.getKey().currentState.onRefreshReady();
+          _onHeaderStatusChanged(HeaderStatus.READY);
         }
         // 刷新数据
         else if (currentState == AnimationStates.StartLoadData) {
           this._refreshHeader.getKey().currentState.onRefreshing();
+          _onHeaderStatusChanged(HeaderStatus.REFRESHING);
         }
         // 刷新完成
         else if (currentState == AnimationStates.LoadDataEnd) {
           this._refreshHeader.getKey().currentState.onRefreshed();
+          _onHeaderStatusChanged(HeaderStatus.REFRESHED);
           _scrollController.animateTo(_scrollController.position.minScrollExtent, duration: new Duration(milliseconds: 200), curve: Curves.ease);
         }
         else if (currentState == AnimationStates.DragAndRefreshNotEnabled) {
           if (_animationStates == AnimationStates.RefreshBoxIdle) {
             // 开始刷新
             this._refreshHeader.getKey().currentState.onRefreshStart();
+            _onHeaderStatusChanged(HeaderStatus.START);
           }else {
             // 刷新重置
             this._refreshHeader.getKey().currentState.onRefreshRestore();
+            _onHeaderStatusChanged(HeaderStatus.RESTORE);
           }
         }
       }
@@ -807,10 +882,12 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         // 释放加载
         if (currentState == AnimationStates.DragAndRefreshEnabled) {
           this._refreshFooter.getKey().currentState.onLoadReady();
+          _onFooterStatusChanged(FooterStatus.READY);
         }
         // 加载数据
         else if (currentState == AnimationStates.StartLoadData) {
           this._refreshFooter.getKey().currentState.onLoading();
+          _onFooterStatusChanged(FooterStatus.LOADING);
           if (widget.child is ScrollView) {
             // 记录当前条数
             if ((widget.child as ScrollView).semanticChildCount == null && widget.child is CustomScrollView) {
@@ -850,9 +927,11 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
           if (_animationStates == AnimationStates.RefreshBoxIdle) {
             // 开始加载
             this._refreshFooter.getKey().currentState.onLoadStart();
+            _onFooterStatusChanged(FooterStatus.START);
           }else {
             // 加载重置
             this._refreshFooter.getKey().currentState.onLoadRestore();
+            _onFooterStatusChanged(FooterStatus.RESTORE);
           }
         }
       } else if (refreshBoxDirectionStatus == RefreshBoxDirectionStatus.IDLE) {
@@ -861,8 +940,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         if (currentState == AnimationStates.RefreshBoxIdle) {
           if (_lastStates == RefreshBoxDirectionStatus.PULL) {
             this._refreshHeader.getKey().currentState.onRefreshEnd();
+            _onHeaderStatusChanged(HeaderStatus.END);
           } else if (_lastStates == RefreshBoxDirectionStatus.PUSH) {
             this._refreshFooter.getKey().currentState.onLoadEnd();
+            _onFooterStatusChanged(FooterStatus.END);
           }
         }
       }
@@ -891,8 +972,10 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
       if (_loaded) {
         if (body.semanticChildCount > this._itemCount) {
           this._refreshFooter.getKey().currentState.onLoaded();
+          _onFooterStatusChanged(FooterStatus.LOADED);
         }else {
           this._refreshFooter.getKey().currentState.onNoMore();
+          _onFooterStatusChanged(FooterStatus.NO_MORE);
         }
         _loaded = false;
       }
