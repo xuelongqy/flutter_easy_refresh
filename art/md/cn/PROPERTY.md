@@ -104,6 +104,10 @@ class _BasicPageState extends State<BasicPage> {
 | behavior | 越界效果(自带光晕或回弹)     | ScrollBehavior | RefreshBehavior | 可选 |
 | refreshHeader | 顶部视图     | RefreshHeader | ClassicsHeader | 可选 |
 | refreshFooter | 底部视图     | RefreshFooter | ClassicsFooter | 可选 |
+| headerStatusChanged | Header状态改变回调     | (HeaderStatus) => void | null | 可选 |
+| footerStatusChanged | Footer状态改变回调     | (FooterStatus) => void | null | 可选 |
+| headerHeightChanged | Header高度改变回调     | (double) => void | null | 可选 |
+| footerHeightChanged | Footer高度改变回调     | (double) => void | null | 可选 |
 | onRefresh | 刷新回调方法     | () => Void | null | 可选(为null时无法触发刷新) |
 | loadMore | 加载回调方法     | () => Void | null | 可选(为null时无法触发加载) |
 | animationStateChangedCallback | EasyRefresh状态回调，用于手动处理刷新加载等操作     | (AnimationStates, RefreshBoxDirectionStatus) => void     | null | 可选(不推荐使用) |

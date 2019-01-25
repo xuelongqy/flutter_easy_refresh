@@ -104,6 +104,10 @@ class _BasicPageState extends State<BasicPage> {
 | behavior | Crossing the line effect (with halo or rebound)     | ScrollBehavior | RefreshBehavior | optional |
 | refreshHeader | Header view     | RefreshHeader | ClassicsHeader | optional |
 | refreshFooter | Footer view     | RefreshFooter | ClassicsFooter | optional |
+| headerStatusChanged | Header status change callback     | (HeaderStatus) => void | null | optional |
+| footerStatusChanged | Footer status change callback     | (FooterStatus) => void | null | optional |
+| headerHeightChanged | Header height change callback     | (double) => void | null | optional |
+| footerHeightChanged | Footer height change callback     | (double) => void | null | optional |
 | onRefresh | Refresh callback method     | () => Void | null | optional(Cannot trigger refresh for null) |
 | loadMore | Loading callback method     | () => Void | null | optional(Cannot trigger loading for null) |
 | animationStateChangedCallback | EasyRefresh state callback for manual handling of refresh loading and other operations     | (AnimationStates, RefreshBoxDirectionStatus) => void     | null | optional(不推荐使用) |
