@@ -89,3 +89,6 @@
 
 ## V 1.1.9
 >修复：不设置loadMore或者onRefresh时，回拉异常的问题  
+
+## V 下个版本
+>修复：onNoMore回调不准确问题  

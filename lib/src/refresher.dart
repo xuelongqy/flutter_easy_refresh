@@ -143,6 +143,8 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   bool _firstRefresh;
   bool _firstRefreshCall = false;
   GlobalKey<RefreshHeaderState> _firstRefreshHeaderKey = new GlobalKey<RefreshHeaderState>();
+  // 加载完成(用于判断是否有更多数据)
+  bool _loaded = false;
 
   // 触发刷新
   void callRefresh() async {
@@ -515,7 +517,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         // 调用加载更多
         await widget.loadMore();
         // 稍作延时(等待列表加载完成,用于判断前后条数差异)
-        await new Future.delayed(const Duration(milliseconds: 100), () {});
+        //await new Future.delayed(const Duration(milliseconds: 100), () {});
       }
     }
     // 判断是否自动控制
@@ -819,24 +821,27 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
         }
         // 加载完成
         else if (currentState == AnimationStates.LoadDataEnd) {
+          setState(() {
+            _loaded = true;
+          });
           // 判断是否加载出更多数据
-          int currentItemCount = 0;
-          if (widget.child is ScrollView) {
-            if ((widget.child as ScrollView).semanticChildCount == null && widget.child is CustomScrollView) {
-              currentItemCount = (widget.child as CustomScrollView).slivers.length;
-            }else {
-              currentItemCount = (widget.child as ScrollView).semanticChildCount;
-            }
-            if (currentItemCount > this._itemCount) {
-              this._refreshFooter.getKey().currentState.onLoaded();
-            }else {
-              this._refreshFooter.getKey().currentState.onNoMore();
-            }
-            this._itemCount = currentItemCount;
-          }else {
-            this._itemCount = 1;
-            this._refreshFooter.getKey().currentState.onLoaded();
-          }
+//          int currentItemCount = 0;
+//          if (widget.child is ScrollView) {
+//            if ((widget.child as ScrollView).semanticChildCount == null && widget.child is CustomScrollView) {
+//              currentItemCount = (widget.child as CustomScrollView).slivers.length;
+//            }else {
+//              currentItemCount = (widget.child as ScrollView).semanticChildCount;
+//            }
+//            if (currentItemCount > this._itemCount) {
+//              this._refreshFooter.getKey().currentState.onLoaded();
+//            }else {
+//              this._refreshFooter.getKey().currentState.onNoMore();
+//            }
+//            this._itemCount = currentItemCount;
+//          }else {
+//            this._itemCount = 1;
+//            this._refreshFooter.getKey().currentState.onLoaded();
+//          }
         }
         else if (currentState == AnimationStates.DragAndRefreshNotEnabled) {
           if (_animationStates == AnimationStates.RefreshBoxIdle) {
@@ -871,16 +876,28 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
     Widget header = _getHeader();
     Widget footer = _getFooter();
     List<Widget> slivers;
-    if (widget.child is ScrollView) {
+    Widget body = widget.child;
+    if (body is ScrollView) {
       // ignore: invalid_use_of_protected_member
-      slivers = (widget.child as ScrollView).buildSlivers(context);
+      slivers = body.buildSlivers(context);
       // 是否添加空视图
-      if (widget.emptyWidget != null && (widget.child as ScrollView).semanticChildCount == 0) {
+      if (widget.emptyWidget != null && body.semanticChildCount == 0) {
         slivers.add(SliverList(delegate: SliverChildListDelegate(<Widget>[widget.emptyWidget])));
       }
+      // 判断是否为加载更多
+      if (_loaded) {
+        if (body.semanticChildCount > this._itemCount) {
+          this._refreshFooter.getKey().currentState.onLoaded();
+        }else {
+          this._refreshFooter.getKey().currentState.onNoMore();
+        }
+        _loaded = false;
+      }
+      // 记录列表项
+      this._itemCount = body.semanticChildCount;
     }else {
       slivers = new List<Widget>();
-      slivers.add(SliverList(delegate: SliverChildListDelegate(<Widget>[widget.child])));
+      slivers.add(SliverList(delegate: SliverChildListDelegate(<Widget>[body])));
     }
     return new Container(
       child: Stack(

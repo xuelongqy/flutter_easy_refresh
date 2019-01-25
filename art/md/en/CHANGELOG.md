@@ -89,3 +89,6 @@
 
 ## V 1.1.9
 >Repair: Pullback exception when loadMore or onRefresh is not set  
+
+## V Next
+>Repair: onNoMore callback is not accurate  
