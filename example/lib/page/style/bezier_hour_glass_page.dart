@@ -28,9 +28,11 @@ class _BezierHourGlassPageState extends State<BezierHourGlassPage> {
             key: _easyRefreshKey,
             refreshHeader: BezierHourGlassHeader(
               key: _headerKey,
+              color: Theme.of(context).scaffoldBackgroundColor,
             ),
             refreshFooter: BezierBounceFooter(
               key: _footerKey,
+              color: Theme.of(context).scaffoldBackgroundColor,
             ),
             child: new ListView.builder(
               //ListView的Item

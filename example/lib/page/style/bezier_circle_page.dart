@@ -28,9 +28,11 @@ class _BezierCirclePageState extends State<BezierCirclePage> {
             key: _easyRefreshKey,
             refreshHeader: BezierCircleHeader(
               key: _headerKey,
+              color: Theme.of(context).scaffoldBackgroundColor,
             ),
             refreshFooter: BezierBounceFooter(
               key: _footerKey,
+              color: Theme.of(context).scaffoldBackgroundColor,
             ),
             child: new ListView.builder(
               //ListView的Item
