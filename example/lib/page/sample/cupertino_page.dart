@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
-/// 浮动视图页面
+/// ios风格页面
 class CupertinoPage extends StatefulWidget {
   @override
   _CupertinoPageState createState() => _CupertinoPageState();
