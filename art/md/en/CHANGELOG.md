@@ -90,7 +90,7 @@
 ## V 1.1.9
 >Repair: Pullback exception when loadMore or onRefresh is not set  
 
-## V Next
+## V 1.2.0
 >Repair: onNoMore callback is not accurate  
 >Add: isRefreshing to determine if it is being refreshed or loaded  
 >Add: Header and Footer status change callbacks  
