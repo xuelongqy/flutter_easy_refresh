@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_easyrefresh/space_header.dart';
-import 'package:flutter_easyrefresh/space_footer.dart';
+import 'package:example/header/space_header.dart';
+import 'package:example/footer/space_footer.dart';
 
 /// Flare Space Header页面
 class SpacePage extends StatefulWidget {

@@ -1,10 +1,10 @@
 import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'src/footer/footer.dart';
 import 'package:flare_flutter/flare.dart';
 import 'package:flare_dart/math/mat2d.dart';
 import "package:flare_flutter/flare_actor.dart";
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 /// 动画来源于Flare-Flutter
 /*
@@ -144,7 +144,7 @@ class SpaceFooterState extends RefreshFooterState<SpaceFooter>
       height: height,
       child: height > 0.0
           ? FlareActor(
-              "packages/flutter_easyrefresh/assets/flare/Space Demo.flr",
+              "assets/flare/Space Demo.flr",
               alignment: Alignment.center,
               animation: "idle",
               fit: BoxFit.cover,
