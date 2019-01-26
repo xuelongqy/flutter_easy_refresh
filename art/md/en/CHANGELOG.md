@@ -96,7 +96,7 @@
 >Add: Header and Footer status change callbacks  
 >Add: Header and Footer height change callbacks  
 
-## V Next
+## V 1.2.1
 >Specification code to improve compatibility  
 >Adjustment: part of the style  
 >The library does not have its own space style, transfer to example  
