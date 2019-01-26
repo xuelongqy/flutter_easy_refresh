@@ -48,7 +48,7 @@ class PhoenixHeaderState extends RefreshHeaderState<PhoenixHeader> {
 
   // 正在刷新
   @override
-  Future onRefreshing() async {
+  void onRefreshing() {
     super.onRefreshing();
     _isRotateSun = true;
     _sunRotateValue = widget.refreshHeight;
@@ -67,7 +67,7 @@ class PhoenixHeaderState extends RefreshHeaderState<PhoenixHeader> {
 
   // 刷新结束
   @override
-  Future onRefreshEnd() async {
+  void onRefreshEnd() {
     super.onRefreshEnd();
     _isRotateSun = false;
     if (_sunRotateTimer != null) {

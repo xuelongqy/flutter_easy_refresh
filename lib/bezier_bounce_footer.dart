@@ -64,7 +64,7 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
 
   // 正在加载
   @override
-  Future onLoading() async {
+  void onLoading() {
     super.onLoading();
     _backController.reset();
     _backController.forward();
@@ -75,7 +75,7 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
 
   // 加载结束
   @override
-  Future onLoadClose() async {
+  void onLoadClose() {
     super.onLoadClose();
     setState(() {
       showBounce = false;

@@ -59,40 +59,27 @@ class MaterialFooterState extends RefreshFooterState<MaterialFooter> with Ticker
     _positionController.value = positionValue < _kDragSizeFactorLimit ? positionValue : _kDragSizeFactorLimit;
   }
 
-  // 准备加载回调
-  @override
-  Future onLoadReady() async {
-    super.onLoadReady();
-  }
-  // 正在加载回调
-  @override
-  Future onLoading() async {
-    super.onLoading();
-  }
   // 加载完成回调
   @override
-  Future onLoaded() async {
+  void onLoaded() async {
     super.onLoaded();
     // 此处延时用于等待加载完成显示时间
     await Future.delayed(new Duration(milliseconds: widget.finishDelay - 200));
+    if (!mounted) return;
     _scaleController.animateTo(1.0, duration: _kIndicatorScaleDuration);
   }
   // 没有更多数据回调
   @override
-  Future onNoMore() async {
+  void onNoMore() async {
     super.onNoMore();
     // 此处延时用于等待加载完成显示时间
     await Future.delayed(new Duration(milliseconds: widget.finishDelay - 200));
+    if (!mounted) return;
     _scaleController.animateTo(1.0, duration: _kIndicatorScaleDuration);
-  }
-  // 加载恢复回调
-  @override
-  Future onLoadRestore() async {
-    super.onLoadRestore();
   }
   // 加载结束回调
   @override
-  Future onLoadEnd() async {
+  void onLoadEnd() {
     super.onLoadEnd();
     _scaleController.animateTo(0.0, duration: Duration(milliseconds: 10));
   }

@@ -69,7 +69,7 @@ class TaurusFooterState extends RefreshFooterState<TaurusFooter> {
 
   // 正在加载
   @override
-  Future onLoading() async {
+  void onLoading() {
     super.onLoading();
     _cloudFloatValue = 0;
     _isCloudFloat = true;
@@ -78,13 +78,13 @@ class TaurusFooterState extends RefreshFooterState<TaurusFooter> {
 
   // 加载完成
   @override
-  Future onLoaded() async {
+  void onLoaded() {
     super.onLoaded();
     _isCloudFloat = false;
     _isLoaded = true;
   }
   @override
-  Future onNoMore() async {
+  void onNoMore() {
     super.onNoMore();
     _isCloudFloat = false;
     _isLoaded = true;
@@ -92,7 +92,7 @@ class TaurusFooterState extends RefreshFooterState<TaurusFooter> {
 
   // 刷新结束
   @override
-  Future onLoadStart() async {
+  void onLoadStart() {
     super.onLoadStart();
     _isLoaded = false;
   }

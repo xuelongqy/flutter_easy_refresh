@@ -73,7 +73,7 @@ class BezierCircleHeaderState extends RefreshHeaderState<BezierCircleHeader> wit
 
   // 正在刷新
   @override
-  Future onRefreshing() async {
+  void onRefreshing() {
     super.onRefreshing();
     _backController.reset();
     _backController.forward();
@@ -81,12 +81,13 @@ class BezierCircleHeaderState extends RefreshHeaderState<BezierCircleHeader> wit
 
   // 刷新结束
   @override
-  Future onRefreshed() async {
+  void onRefreshed() async {
     super.onRefreshed();
     setState(() {
       progressValue = 1.0;
     });
     await new Future.delayed(const Duration(milliseconds: 400), () {});
+    if (!mounted) return;
     setState(() {
       _showProgress = false;
       progressValue = null;

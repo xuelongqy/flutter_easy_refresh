@@ -103,21 +103,21 @@ class SpaceHeaderState extends RefreshHeaderState<SpaceHeader> implements FlareC
 
   // 开始刷新
   @override
-  Future onRefreshStart() async {
+  void onRefreshStart() {
     _successTime = _loadingTime = _cometTime = 0.0;
     super.onRefreshStart();
   }
 
   // 正在刷新
   @override
-  Future onRefreshing() async {
+  void onRefreshing() {
     _isSurround = true;
     super.onRefreshing();
   }
 
   // 刷新结束
   @override
-  Future onRefreshEnd() async {
+  void onRefreshEnd() {
     _isSurround = false;
     super.onRefreshEnd();
   }

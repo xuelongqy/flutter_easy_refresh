@@ -48,7 +48,7 @@ class PhoenixFooterState extends RefreshFooterState<PhoenixFooter> {
 
   // 正在刷新
   @override
-  Future onLoading() async {
+  void onLoading() {
     super.onLoading();
     _isRotateSun = true;
     _sunRotateValue = widget.loadHeight;
@@ -67,7 +67,7 @@ class PhoenixFooterState extends RefreshFooterState<PhoenixFooter> {
 
   // 刷新结束
   @override
-  Future onLoadEnd() async {
+  void onLoadEnd() {
     super.onLoadEnd();
     _isRotateSun = false;
     if (_sunRotateTimer != null) {

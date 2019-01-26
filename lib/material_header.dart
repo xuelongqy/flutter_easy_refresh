@@ -63,32 +63,18 @@ class MaterialHeaderState extends RefreshHeaderState<MaterialHeader> with Ticker
     _positionController.value = positionValue < _kDragSizeFactorLimit ? positionValue : _kDragSizeFactorLimit;
   }
 
-  // 准备刷新回调
-  @override
-  Future onRefreshReady() async {
-    super.onRefreshReady();
-  }
-  // 正在刷新回调
-  @override
-  Future onRefreshing() async {
-    super.onRefreshing();
-  }
   // 完成刷新回调
   @override
-  Future onRefreshed() async {
+  void onRefreshed() async {
     super.onRefreshed();
     // 此处延时用于等待加载完成显示时间
     await Future.delayed(new Duration(milliseconds: widget.finishDelay - 200));
+    if (!mounted) return;
     _scaleController.animateTo(1.0, duration: _kIndicatorScaleDuration);
-  }
-  // 刷新恢复回调
-  @override
-  Future onRefreshRestore() async {
-    super.onRefreshRestore();
   }
   // 刷新结束回调
   @override
-  Future onRefreshEnd() async {
+  void onRefreshEnd() {
     super.onRefreshEnd();
     _scaleController.animateTo(0.0, duration: Duration(milliseconds: 10));
   }

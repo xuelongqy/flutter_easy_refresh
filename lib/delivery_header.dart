@@ -71,14 +71,14 @@ class DeliveryHeaderState extends RefreshHeaderState<DeliveryHeader> with Ticker
 
   // 开始刷新
   @override
-  Future onRefreshStart() async {
+  void onRefreshStart() {
     super.onRefreshStart();
     _mergeController.reverse(from: 0.0);
   }
 
   // 正在刷新
   @override
-  Future onRefreshing() async {
+  void onRefreshing() {
     super.onRefreshing();
     _mergeController.forward();
     _timerRun();
@@ -86,7 +86,7 @@ class DeliveryHeaderState extends RefreshHeaderState<DeliveryHeader> with Ticker
 
   // 刷新结束
   @override
-  Future onRefreshClose() async {
+  void onRefreshClose() {
     super.onRefreshClose();
     _timerStop();
     _timerValue = 0.0;

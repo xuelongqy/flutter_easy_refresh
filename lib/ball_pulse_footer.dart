@@ -118,14 +118,14 @@ class BallPulseFooterState extends RefreshFooterState<BallPulseFooter> with Tick
 
   // 开始加载
   @override
-  Future onLoadStart() async {
+  void onLoadStart() {
     super.onLoadStart();
     _isAnimation = true;
     _startController.forward();
   }
   // 加载结束
   @override
-  Future onLoadClose() async {
+  void onLoadClose() {
     super.onLoadClose();
     _isAnimation = false;
   }

@@ -69,7 +69,7 @@ class TaurusHeaderState extends RefreshHeaderState<TaurusHeader> {
 
   // 正在刷新
   @override
-  Future onRefreshing() async {
+  void onRefreshing() {
     super.onRefreshing();
     _cloudFloatValue = 0;
     _isCloudFloat = true;
@@ -78,7 +78,7 @@ class TaurusHeaderState extends RefreshHeaderState<TaurusHeader> {
 
   // 刷新完成
   @override
-  Future onRefreshed() async {
+  void onRefreshed() {
     super.onRefreshed();
     _isCloudFloat = false;
     _isRefreshed = true;
@@ -86,7 +86,7 @@ class TaurusHeaderState extends RefreshHeaderState<TaurusHeader> {
 
   // 刷新结束
   @override
-  Future onRefreshStart() async {
+  void onRefreshStart() {
     super.onRefreshStart();
     _isRefreshed = false;
   }

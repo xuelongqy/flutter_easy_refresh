@@ -119,14 +119,14 @@ class BallPulseHeaderState extends RefreshHeaderState<BallPulseHeader> with Tick
 
   // 开始刷新
   @override
-  Future onRefreshStart() async {
+  void onRefreshStart() {
     super.onRefreshStart();
     _isAnimation = true;
     _startController.forward();
   }
   // 刷新结束
   @override
-  Future onRefreshClose() async {
+  void onRefreshClose() {
     super.onRefreshClose();
     _isAnimation = false;
   }

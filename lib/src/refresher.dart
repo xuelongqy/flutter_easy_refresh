@@ -6,13 +6,13 @@ import 'footer/footer.dart';
 import 'behavior/behavior.dart';
 import 'scrollPhysics/scroll_physics.dart';
 
-typedef Future OnRefresh();
-typedef Future LoadMore();
+typedef void OnRefresh();
+typedef void LoadMore();
 typedef void HeaderStatusChanged(HeaderStatus status);
 typedef void FooterStatusChanged(FooterStatus status);
 typedef void HeaderHeightChanged(double height);
 typedef void FooterHeightChanged(double height);
-typedef AnimationStateChanged(AnimationStates animationStates, RefreshBoxDirectionStatus refreshBoxDirectionStatus);
+typedef void AnimationStateChanged(AnimationStates animationStates, RefreshBoxDirectionStatus refreshBoxDirectionStatus);
 
 enum RefreshBoxDirectionStatus {
   // 上拉加载的状态 分别为 闲置 上拉  下拉
@@ -261,7 +261,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   // 顶部超出边界
-  Future _topOver() async {
+  void _topOver() async {
     if (_isRefresh || widget.onRefresh == null) return;
     // 如果用户正在拖动则不执行
     if (_isDrag) return;
@@ -292,7 +292,7 @@ class EasyRefreshState extends State<EasyRefresh> with TickerProviderStateMixin<
   }
 
   // 底部超出边界
-  Future _bottomOver() async {
+  void _bottomOver() async {
     if (_isRefresh || widget.loadMore == null) return;
     // 如果用户正在拖动则不执行
     if (_isDrag) return;

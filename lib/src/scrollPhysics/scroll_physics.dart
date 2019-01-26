@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
 
 // 边界超出回调
-typedef Future TopOver();
-typedef Future BottomOver();
+typedef void TopOver();
+typedef void BottomOver();
 
 /// 切记 继承ScrollPhysics  必须重写applyTo，，在NeverScrollableScrollPhysics类里面复制就可以
 /// 出现反向滑动时用此ScrollPhysics

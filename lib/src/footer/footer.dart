@@ -52,42 +52,42 @@ abstract class RefreshFooterState<T extends RefreshFooter> extends State<T> {
 
   // 回调开始加载方法
   @mustCallSuper
-  Future onLoadStart() async {
+  void onLoadStart() {
     refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
   }
   // 回调准备加载方法
   @mustCallSuper
-  Future onLoadReady() async {
+  void onLoadReady() {
     refreshFooterStatus = RefreshFooterStatus.LOAD_READY;
   }
   // 回调开始加载方法
   @mustCallSuper
-  Future onLoading() async {
+  void onLoading() {
     refreshFooterStatus = RefreshFooterStatus.LOADING;
   }
   // 回调加载完成方法
   @mustCallSuper
-  Future onLoaded() async {
+  void onLoaded() {
     refreshFooterStatus = RefreshFooterStatus.LOADED;
   }
   // 回调没有更多数据方法
   @mustCallSuper
-  Future onNoMore() async {
+  void onNoMore() {
     refreshFooterStatus = RefreshFooterStatus.LOADED;
   }
   // 回调加载恢复方法
   @mustCallSuper
-  Future onLoadRestore() async {
+  void onLoadRestore() {
     refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
   }
   // 回调加载结束方法
   @mustCallSuper
-  Future onLoadEnd() async {
+  void onLoadEnd() {
     refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
   }
   // 回调加载关闭方法
   @mustCallSuper
-  Future onLoadClose() async {
+  void onLoadClose() {
     refreshFooterStatus = RefreshFooterStatus.NO_LOAD;
   }
 }
@@ -146,42 +146,42 @@ class _ListenerFooterState extends RefreshFooterState<ListenerFooter> {
     return Container();
   }
   @override
-  Future onLoadEnd() async {
+  void onLoadEnd() {
     super.onLoadEnd();
     widget.listener.onLoadEnd();
   }
   @override
-  Future onLoadRestore() async {
+  void onLoadRestore() {
     super.onLoadRestore();
     widget.listener.onLoadRestore();
   }
   @override
-  Future onNoMore() async {
+  void onNoMore() {
     super.onNoMore();
     widget.listener.onNoMore();
   }
   @override
-  Future onLoaded() async {
+  void onLoaded() {
     super.onLoaded();
     widget.listener.onLoaded();
   }
   @override
-  Future onLoading() async {
+  void onLoading() {
     super.onLoading();
     widget.listener.onLoading();
   }
   @override
-  Future onLoadReady() async {
+  void onLoadReady() {
     super.onLoadReady();
     widget.listener.onLoadReady();
   }
   @override
-  Future onLoadStart() async {
+  void onLoadStart() {
     super.onLoadStart();
     widget.listener.onLoadStart();
   }
   @override
-  Future onLoadClose() async {
+  void onLoadClose() {
     super.onLoadClose();
     widget.listener.onLoadClose();
   }
@@ -336,7 +336,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> with Ticker
 
   // 准备加载回调
   @override
-  Future onLoadReady() async {
+  void onLoadReady() {
     super.onLoadReady();
     setState(() {
       _showText = widget.loadReadyText;
@@ -348,7 +348,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> with Ticker
   }
   // 正在加载回调
   @override
-  Future onLoading() async {
+  void onLoading() {
     super.onLoading();
     setState(() {
       _showText = widget.loadingText;
@@ -356,7 +356,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> with Ticker
   }
   // 加载完成回调
   @override
-  Future onLoaded() async {
+  void onLoaded() {
     super.onLoaded();
     setState(() {
       _dateTime = DateTime.now();
@@ -365,7 +365,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> with Ticker
   }
   // 没有更多数据回调
   @override
-  Future onNoMore() async {
+  void onNoMore() {
     super.onNoMore();
     setState(() {
       _dateTime = DateTime.now();
@@ -374,7 +374,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> with Ticker
   }
   // 加载恢复回调
   @override
-  Future onLoadRestore() async {
+  void onLoadRestore() {
     super.onLoadRestore();
     setState(() {
       _showText = widget.loadText;
@@ -386,7 +386,7 @@ class ClassicsFooterState extends RefreshFooterState<ClassicsFooter> with Ticker
   }
   // 加载结束回调
   @override
-  Future onLoadEnd() async {
+  void onLoadEnd() {
     super.onLoadEnd();
     setState(() {
       _showText = widget.loadText;

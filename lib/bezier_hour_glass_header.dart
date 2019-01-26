@@ -59,7 +59,7 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
 
   // 正在刷新
   @override
-  Future onRefreshing() async {
+  void onRefreshing() {
     super.onRefreshing();
     _backController.reset();
     _backController.forward();
@@ -70,7 +70,7 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
 
   // 刷新完成
   @override
-  Future onRefreshed() async {
+  void onRefreshed() {
     super.onRefreshed();
     setState(() {
       isHidingRipple = true;
@@ -79,7 +79,7 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
 
   // 刷新结束
   @override
-  Future onRefreshEnd() async {
+  void onRefreshEnd() {
     super.onRefreshEnd();
     setState(() {
       isHidingRipple = false;

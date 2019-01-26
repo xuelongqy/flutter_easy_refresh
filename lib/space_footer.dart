@@ -103,21 +103,21 @@ class SpaceFooterState extends RefreshFooterState<SpaceFooter> implements FlareC
 
   // 开始刷新
   @override
-  Future onLoadStart() async {
+  void onLoadStart() {
     _successTime = _loadingTime = _cometTime = 0.0;
     super.onLoadStart();
   }
 
   // 正在刷新
   @override
-  Future onLoading() async {
+  void onLoading() {
     _isSurround = true;
     super.onLoading();
   }
 
   // 刷新结束
   @override
-  Future onLoadEnd() async {
+  void onLoadEnd() {
     _isSurround = false;
     super.onLoadEnd();
   }

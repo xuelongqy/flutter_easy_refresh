@@ -51,37 +51,37 @@ abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
   }
   // 回调开始刷新方法
   @mustCallSuper
-  Future onRefreshStart() async {
+  void onRefreshStart() {
     refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
   }
   // 回调准备刷新方法
   @mustCallSuper
-  Future onRefreshReady() async {
+  void onRefreshReady() {
     refreshHeaderStatus = RefreshHeaderStatus.REFRESH_READY;
   }
   // 回调开始刷新方法
   @mustCallSuper
-  Future onRefreshing() async {
+  void onRefreshing() {
     refreshHeaderStatus = RefreshHeaderStatus.REFRESHING;
   }
   // 回调刷新完成方法
   @mustCallSuper
-  Future onRefreshed() async {
+  void onRefreshed() {
     refreshHeaderStatus = RefreshHeaderStatus.REFRESHED;
   }
   // 回调刷新恢复方法
   @mustCallSuper
-  Future onRefreshRestore() async {
+  void onRefreshRestore() {
     refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
   }
   // 回调刷新结束方法
   @mustCallSuper
-  Future onRefreshEnd() async {
+  void onRefreshEnd() {
     refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
   }
   // 回调刷新关闭方法
   @mustCallSuper
-  Future onRefreshClose() async {
+  void onRefreshClose() {
     refreshHeaderStatus = RefreshHeaderStatus.NO_REFRESH;
   }
 }
@@ -138,37 +138,37 @@ class _ListenerHeaderState extends RefreshHeaderState<ListenerHeader> {
     return Container();
   }
   @override
-  Future onRefreshEnd() async {
+  void onRefreshEnd() {
     super.onRefreshEnd();
     widget.listener.onRefreshEnd();
   }
   @override
-  Future onRefreshRestore() async {
+  void onRefreshRestore() {
     super.onRefreshRestore();
     widget.listener.onRefreshRestore();
   }
   @override
-  Future onRefreshed() async {
+  void onRefreshed() {
     super.onRefreshed();
     widget.listener.onRefreshed();
   }
   @override
-  Future onRefreshing() async {
+  void onRefreshing() {
     super.onRefreshing();
     widget.listener.onRefreshing();
   }
   @override
-  Future onRefreshReady() async {
+  void onRefreshReady() {
     super.onRefreshReady();
     widget.listener.onRefreshReady();
   }
   @override
-  Future onRefreshStart() async {
+  void onRefreshStart() {
     super.onRefreshStart();
     widget.listener.onRefreshStart();
   }
   @override
-  Future onRefreshClose() async {
+  void onRefreshClose() {
     super.onRefreshClose();
     widget.listener.onRefreshClose();
   }
@@ -320,7 +320,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> with Ticker
 
   // 准备刷新回调
   @override
-  Future onRefreshReady() async {
+  void onRefreshReady() {
     super.onRefreshReady();
     setState(() {
       _showText = widget.refreshReadyText;
@@ -332,7 +332,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> with Ticker
   }
   // 正在刷新回调
   @override
-  Future onRefreshing() async {
+  void onRefreshing() {
     super.onRefreshing();
     setState(() {
       _showText = widget.refreshingText;
@@ -340,7 +340,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> with Ticker
   }
   // 完成刷新回调
   @override
-  Future onRefreshed() async {
+  void onRefreshed() {
     super.onRefreshed();
     setState(() {
       _dateTime = DateTime.now();
@@ -349,7 +349,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> with Ticker
   }
   // 刷新恢复回调
   @override
-  Future onRefreshRestore() async {
+  void onRefreshRestore() {
     super.onRefreshRestore();
     setState(() {
       _showText = widget.refreshText;
@@ -361,7 +361,7 @@ class ClassicsHeaderState extends RefreshHeaderState<ClassicsHeader> with Ticker
   }
   // 刷新结束回调
   @override
-  Future onRefreshEnd() async {
+  void onRefreshEnd() {
     super.onRefreshEnd();
     setState(() {
       _showText = widget.refreshText;
@@ -505,7 +505,7 @@ class FirstRefreshHeaderState extends RefreshHeaderState<FirstRefreshHeader> {
   }
 
   @override
-  Future onRefreshStart() async {
+  void onRefreshStart() {
     super.onRefreshStart();
     setState(() {
       _isShow = true;
@@ -513,7 +513,7 @@ class FirstRefreshHeaderState extends RefreshHeaderState<FirstRefreshHeader> {
   }
 
   @override
-  Future onRefreshed() async {
+  void onRefreshed() {
     super.onRefreshed();
     setState(() {
       _isShow = false;
