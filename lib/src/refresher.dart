@@ -6,8 +6,8 @@ import 'footer/footer.dart';
 import 'behavior/behavior.dart';
 import 'scrollPhysics/scroll_physics.dart';
 
-typedef void OnRefresh();
-typedef void LoadMore();
+typedef Future<void> OnRefresh();
+typedef Future<void> LoadMore();
 typedef void HeaderStatusChanged(HeaderStatus status);
 typedef void FooterStatusChanged(FooterStatus status);
 typedef void HeaderHeightChanged(double height);
