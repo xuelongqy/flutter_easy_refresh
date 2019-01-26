@@ -19,9 +19,10 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 class SamplePage extends StatefulWidget {
   @override
   _SamplePageState createState() => _SamplePageState();
-
 }
-class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMixin {
+
+class _SamplePageState extends State<SamplePage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -37,11 +38,13 @@ class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMi
               title: Translations.of(context).text("basicUse"),
               describe: Translations.of(context).text("basicUseDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return BasicPage();
                 }));
               },
-              icon: Icon(Icons.format_list_bulleted,
+              icon: Icon(
+                Icons.format_list_bulleted,
                 color: Colors.orange,
               ),
             ),
@@ -57,11 +60,13 @@ class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMi
               title: Translations.of(context).text("manualControl"),
               describe: Translations.of(context).text("manualControlDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return ManualControlPage();
                 }));
               },
-              icon: Icon(Icons.gamepad,
+              icon: Icon(
+                Icons.gamepad,
                 color: Colors.orange,
               ),
             ),
@@ -77,11 +82,13 @@ class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMi
               title: Translations.of(context).text("autoLoad"),
               describe: Translations.of(context).text("autoLoadDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return AutoLoadPage();
                 }));
               },
-              icon: Icon(Icons.autorenew,
+              icon: Icon(
+                Icons.autorenew,
                 color: Colors.orange,
               ),
             ),
@@ -97,11 +104,13 @@ class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMi
               title: Translations.of(context).text("floatView"),
               describe: Translations.of(context).text("floatViewDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return FloatPage();
                 }));
               },
-              icon: Icon(Icons.layers,
+              icon: Icon(
+                Icons.layers,
                 color: Colors.orange,
               ),
             ),
@@ -117,11 +126,13 @@ class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMi
               title: Translations.of(context).text("userProfile"),
               describe: Translations.of(context).text("userProfileDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return UserProfilePage();
                 }));
               },
-              icon: Icon(Icons.person,
+              icon: Icon(
+                Icons.person,
                 color: Colors.orange,
               ),
             ),
@@ -135,13 +146,16 @@ class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMi
             ),
             ListItem(
               title: Translations.of(context).text("CustomScrollView"),
-              describe: Translations.of(context).text("customScrollViewDescribe"),
+              describe:
+                  Translations.of(context).text("customScrollViewDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return SliverPage();
                 }));
               },
-              icon: Icon(Icons.format_line_spacing,
+              icon: Icon(
+                Icons.format_line_spacing,
                 color: Colors.orange,
               ),
             ),
@@ -157,11 +171,13 @@ class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMi
               title: "Swiper",
               describe: Translations.of(context).text("swiperDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return SwiperPage();
                 }));
               },
-              icon: Icon(Icons.view_array,
+              icon: Icon(
+                Icons.view_array,
                 color: Colors.orange,
               ),
             ),
@@ -177,11 +193,13 @@ class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMi
               title: Translations.of(context).text("listEmbed"),
               describe: Translations.of(context).text("listEmbedDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return ListEmbedPage();
                 }));
               },
-              icon: Icon(Icons.view_day,
+              icon: Icon(
+                Icons.view_day,
                 color: Colors.orange,
               ),
             ),
@@ -197,11 +215,13 @@ class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMi
               title: "Cupertino",
               describe: Translations.of(context).text("cupertinoDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return CupertinoPage();
                 }));
               },
-              icon: Icon(Icons.color_lens,
+              icon: Icon(
+                Icons.color_lens,
                 color: Colors.orange,
               ),
             ),
@@ -217,11 +237,13 @@ class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMi
               title: Translations.of(context).text("firstRefresh"),
               describe: Translations.of(context).text("firstRefreshDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return FirstRefreshPage();
                 }));
               },
-              icon: Icon(Icons.refresh,
+              icon: Icon(
+                Icons.refresh,
                 color: Colors.orange,
               ),
             ),
@@ -237,11 +259,13 @@ class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMi
               title: Translations.of(context).text("emptyWidget"),
               describe: Translations.of(context).text("emptyWidgetDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return EmptyWidgetPage();
                 }));
               },
-              icon: Icon(Icons.inbox,
+              icon: Icon(
+                Icons.inbox,
                 color: Colors.orange,
               ),
             ),
@@ -257,11 +281,13 @@ class _SamplePageState extends State<SamplePage> with AutomaticKeepAliveClientMi
               title: Translations.of(context).text("TabView"),
               describe: Translations.of(context).text("tabViewWidgetDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return TabViewPage();
                 }));
               },
-              icon: Icon(Icons.tab,
+              icon: Icon(
+                Icons.tab,
                 color: Colors.orange,
               ),
             ),

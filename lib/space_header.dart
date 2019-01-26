@@ -36,16 +36,17 @@ class SpaceHeader extends RefreshHeader {
   SpaceHeader({
     @required GlobalKey<RefreshHeaderState> key,
     double refreshHeight = 180.0,
-  }):super(
-      key: key ?? new GlobalKey<RefreshHeaderState>(),
-      refreshHeight: refreshHeight,
-  );
+  }) : super(
+          key: key ?? new GlobalKey<RefreshHeaderState>(),
+          refreshHeight: refreshHeight,
+        );
 
   @override
   SpaceHeaderState createState() => SpaceHeaderState();
 }
-class SpaceHeaderState extends RefreshHeaderState<SpaceHeader> implements FlareController {
 
+class SpaceHeaderState extends RefreshHeaderState<SpaceHeader>
+    implements FlareController {
   ActorAnimation _loadingAnimation;
   ActorAnimation _successAnimation;
   ActorAnimation _pullAnimation;
@@ -94,7 +95,8 @@ class SpaceHeaderState extends RefreshHeaderState<SpaceHeader> implements FlareC
       _successTime = _loadingTime = 0.0;
     }
     if (_successTime >= _successAnimation.duration) {
-      _loadingAnimation.apply(_loadingTime % _loadingAnimation.duration, artboard, 1.0);
+      _loadingAnimation.apply(
+          _loadingTime % _loadingAnimation.duration, artboard, 1.0);
     } else if (_successTime > 0.0) {
       _successAnimation.apply(_successTime, artboard, 1.0);
     }
@@ -140,12 +142,14 @@ class SpaceHeaderState extends RefreshHeaderState<SpaceHeader> implements FlareC
     return Container(
       width: double.infinity,
       height: height,
-      child: height > 0.0 ? FlareActor("packages/flutter_easyrefresh/assets/flare/Space Demo.flr",
-        alignment: Alignment.center,
-        animation: "idle",
-        fit: BoxFit.cover,
-        controller: this
-      ): Container(),
+      child: height > 0.0
+          ? FlareActor(
+              "packages/flutter_easyrefresh/assets/flare/Space Demo.flr",
+              alignment: Alignment.center,
+              animation: "idle",
+              fit: BoxFit.cover,
+              controller: this)
+          : Container(),
     );
   }
 }

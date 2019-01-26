@@ -25,12 +25,12 @@ class ListItem extends StatefulWidget {
     this.describe,
     this.describeColor: Colors.grey,
     this.rightWidget,
-  }): super(key: key);
+  }) : super(key: key);
 
   @override
   _ListItemState createState() => _ListItemState();
-
 }
+
 class _ListItemState extends State<ListItem> {
   @override
   Widget build(BuildContext context) {
@@ -47,34 +47,42 @@ class _ListItemState extends State<ListItem> {
           width: double.infinity,
           child: Row(
             children: <Widget>[
-              widget.icon != null ? Container(
-                padding: EdgeInsets.all(14.0),
-                child: SizedBox(
-                  height: 32.0,
-                  width: 32.0,
-                  child: widget.icon,
-                ),
-              ): Container(width: 14.0,),
+              widget.icon != null
+                  ? Container(
+                      padding: EdgeInsets.all(14.0),
+                      child: SizedBox(
+                        height: 32.0,
+                        width: 32.0,
+                        child: widget.icon,
+                      ),
+                    )
+                  : Container(
+                      width: 14.0,
+                    ),
               Expanded(
                 flex: 1,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    widget.title != null ? Text( widget.title,
-                      style: TextStyle(
-                        color: widget.titleColor,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ): Container(),
-                    widget.describe != null ? Text( widget.describe,
-                      maxLines: 2,
-                      style: TextStyle(
-                          color: widget.describeColor,
-                          fontSize: 12.0
-                      ),
-                    ): Container(),
+                    widget.title != null
+                        ? Text(
+                            widget.title,
+                            style: TextStyle(
+                              color: widget.titleColor,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : Container(),
+                    widget.describe != null
+                        ? Text(
+                            widget.describe,
+                            maxLines: 2,
+                            style: TextStyle(
+                                color: widget.describeColor, fontSize: 12.0),
+                          )
+                        : Container(),
                   ],
                 ),
               ),
@@ -83,8 +91,7 @@ class _ListItemState extends State<ListItem> {
                 width: 14.0,
               ),
             ],
-          )
-      ),
+          )),
     );
   }
 }

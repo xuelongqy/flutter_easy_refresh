@@ -9,14 +9,16 @@ typedef void BottomOver();
 /// 切记 继承ScrollPhysics  必须重写applyTo，，在NeverScrollableScrollPhysics类里面复制就可以
 /// 出现反向滑动时用此ScrollPhysics
 class RefreshScrollPhysics extends ScrollPhysics {
-  const RefreshScrollPhysics(this.footerFloat, {ScrollPhysics parent}) : super(parent: parent);
+  const RefreshScrollPhysics(this.footerFloat, {ScrollPhysics parent})
+      : super(parent: parent);
 
   // Footer是否浮动
   final bool footerFloat;
 
   @override
   RefreshScrollPhysics applyTo(ScrollPhysics ancestor) {
-    return new RefreshScrollPhysics(this.footerFloat, parent: buildParent(ancestor));
+    return new RefreshScrollPhysics(this.footerFloat,
+        parent: buildParent(ancestor));
   }
 
   @override
@@ -32,7 +34,7 @@ class RefreshScrollPhysics extends ScrollPhysics {
     }
     if (offset == 0.0) {
       return 0.0;
-    }else if (offset > 0 && footerFloat) {
+    } else if (offset > 0 && footerFloat) {
       return 0.0000001;
     }
     return offset / 2;
@@ -45,14 +47,14 @@ class RefreshScrollPhysics extends ScrollPhysics {
       if (value == position.pixels) {
         throw FlutterError(
             '$runtimeType.applyBoundaryConditions() was called redundantly.\n'
-                'The proposed new position, $value, is exactly equal to the current position of the '
-                'given ${position.runtimeType}, ${position.pixels}.\n'
-                'The applyBoundaryConditions method should only be called when the value is '
-                'going to actually change the pixels, otherwise it is redundant.\n'
-                'The physics object in question was:\n'
-                '  $this\n'
-                'The position object in question was:\n'
-                '  $position\n');
+            'The proposed new position, $value, is exactly equal to the current position of the '
+            'given ${position.runtimeType}, ${position.pixels}.\n'
+            'The applyBoundaryConditions method should only be called when the value is '
+            'going to actually change the pixels, otherwise it is redundant.\n'
+            'The physics object in question was:\n'
+            '  $this\n'
+            'The position object in question was:\n'
+            '  $position\n');
       }
       return true;
     }());
@@ -84,9 +86,9 @@ double _alwaysLastPixels;
 ScrollDirection _alwaysLastDirection;
 // 是否回拉
 bool _isPullBack;
+
 /// 总是滚动(带回弹效果)
 class RefreshAlwaysScrollPhysics extends ScrollPhysics {
-
   // 越界监听
   final ScrollOverListener scrollOverListener;
   // 是否需要控制回拉
@@ -94,16 +96,21 @@ class RefreshAlwaysScrollPhysics extends ScrollPhysics {
   final footerPullBackRecord;
 
   /// Creates scroll physics that bounce back from the edge.
-  const RefreshAlwaysScrollPhysics({ScrollPhysics parent,this.scrollOverListener,
-    this.headerPullBackRecord = false,
-    this.footerPullBackRecord = false}) : super(parent: parent);
+  const RefreshAlwaysScrollPhysics(
+      {ScrollPhysics parent,
+      this.scrollOverListener,
+      this.headerPullBackRecord = false,
+      this.footerPullBackRecord = false})
+      : super(parent: parent);
 
   @override
   RefreshAlwaysScrollPhysics applyTo(ScrollPhysics ancestor) {
     _alwaysLastPixels = null;
     _alwaysLastDirection = null;
     _isPullBack = false;
-    return new RefreshAlwaysScrollPhysics(parent: buildParent(ancestor),scrollOverListener: scrollOverListener,
+    return new RefreshAlwaysScrollPhysics(
+        parent: buildParent(ancestor),
+        scrollOverListener: scrollOverListener,
         headerPullBackRecord: headerPullBackRecord,
         footerPullBackRecord: footerPullBackRecord);
   }
@@ -140,7 +147,7 @@ class RefreshAlwaysScrollPhysics extends ScrollPhysics {
             headerPullBackRecord) {
           _isPullBack = true;
           return 0.0;
-        }else if (_alwaysLastPixels == position.maxScrollExtent &&
+        } else if (_alwaysLastPixels == position.maxScrollExtent &&
             _alwaysLastDirection == ScrollDirection.reverse &&
             position.userScrollDirection == ScrollDirection.forward &&
             footerPullBackRecord) {
@@ -155,26 +162,25 @@ class RefreshAlwaysScrollPhysics extends ScrollPhysics {
     if (!position.outOfRange) return offset;
 
     final double overscrollPastStart =
-    math.max(position.minScrollExtent - position.pixels, 0.0);
+        math.max(position.minScrollExtent - position.pixels, 0.0);
     final double overscrollPastEnd =
-    math.max(position.pixels - position.maxScrollExtent, 0.0);
+        math.max(position.pixels - position.maxScrollExtent, 0.0);
     final double overscrollPast =
-    math.max(overscrollPastStart, overscrollPastEnd);
+        math.max(overscrollPastStart, overscrollPastEnd);
     final bool easing = (overscrollPastStart > 0.0 && offset < 0.0) ||
         (overscrollPastEnd > 0.0 && offset > 0.0);
 
     final double friction = easing
-    // Apply less resistance when easing the overscroll vs tensioning.
+        // Apply less resistance when easing the overscroll vs tensioning.
         ? frictionFactor(
-        (overscrollPast - offset.abs()) / position.viewportDimension)
+            (overscrollPast - offset.abs()) / position.viewportDimension)
         : frictionFactor(overscrollPast / position.viewportDimension);
     final double direction = offset.sign;
-    return  direction * _applyFriction(overscrollPast, offset.abs(), friction);
+    return direction * _applyFriction(overscrollPast, offset.abs(), friction);
   }
 
   static double _applyFriction(
       double extentOutside, double absDelta, double gamma) {
-
     assert(absDelta > 0);
     double total = 0.0;
     if (extentOutside > 0) {
@@ -189,20 +195,29 @@ class RefreshAlwaysScrollPhysics extends ScrollPhysics {
   @override
   double applyBoundaryConditions(ScrollMetrics position, double value) {
     if (!scrollOverListener.justScrollOver) {
-      if (value < position.pixels && position.pixels <= position.minScrollExtent) { // underscroll
+      if (value < position.pixels &&
+          position.pixels <= position.minScrollExtent) {
+        // underscroll
         return value - position.pixels;
       }
-      if (value < position.minScrollExtent && position.minScrollExtent < position.pixels) { // hit top edge
+      if (value < position.minScrollExtent &&
+          position.minScrollExtent < position.pixels) {
+        // hit top edge
         if (scrollOverListener != null && scrollOverListener.topOver != null) {
           scrollOverListener.topOver();
         }
         return value - position.minScrollExtent;
       }
-      if (position.maxScrollExtent <= position.pixels && position.pixels < value) { // overscroll
+      if (position.maxScrollExtent <= position.pixels &&
+          position.pixels < value) {
+        // overscroll
         return value - position.pixels;
       }
-      if (position.pixels < position.maxScrollExtent && position.maxScrollExtent < value) { // hit bottom edge
-        if (scrollOverListener != null && scrollOverListener.bottomOver != null) {
+      if (position.pixels < position.maxScrollExtent &&
+          position.maxScrollExtent < value) {
+        // hit bottom edge
+        if (scrollOverListener != null &&
+            scrollOverListener.bottomOver != null) {
           scrollOverListener.bottomOver();
         }
         return value - position.maxScrollExtent;
@@ -268,9 +283,6 @@ class ScrollOverListener {
   final BottomOver bottomOver;
   final bool justScrollOver;
 
-  const ScrollOverListener({
-    this.topOver,
-    this.bottomOver,
-    this.justScrollOver: false
-  });
+  const ScrollOverListener(
+      {this.topOver, this.bottomOver, this.justScrollOver: false});
 }

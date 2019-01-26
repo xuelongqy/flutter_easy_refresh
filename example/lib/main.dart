@@ -15,8 +15,9 @@ class _MyAppState extends State<MyApp> {
   SpecificLocalizationDelegate _localeOverrideDelegate;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
+
     /// 初始化一个新的Localization Delegate，有了它，当用户选择一种新的工作语言时，可以强制初始化一个新的Translations
     _localeOverrideDelegate = new SpecificLocalizationDelegate(null);
 
@@ -25,8 +26,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   /// 改变语言时的应用刷新核心，每次选择一种新的语言时，都会创造一个新的SpecificLocalizationDelegate实例，强制Translations类刷新。
-  onLocaleChange(Locale locale){
-    setState((){
+  onLocaleChange(Locale locale) {
+    setState(() {
       _localeOverrideDelegate = new SpecificLocalizationDelegate(locale);
     });
   }
@@ -44,11 +45,11 @@ class _MyAppState extends State<MyApp> {
       // 主页
       home: HomePage(),
       // 路由
-      routes: <String, WidgetBuilder> {
+      routes: <String, WidgetBuilder>{
         '/home': (BuildContext context) => HomePage()
       },
       localizationsDelegates: [
-        _localeOverrideDelegate,  // 注册一个新的delegate
+        _localeOverrideDelegate, // 注册一个新的delegate
         const TranslationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate

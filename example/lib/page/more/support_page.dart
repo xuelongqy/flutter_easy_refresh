@@ -9,8 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 class SupportPage extends StatefulWidget {
   @override
   _SupportPageState createState() => _SupportPageState();
-
 }
+
 class _SupportPageState extends State<SupportPage> {
   // 交互通道名字
   final String CHANNEL = "com.qingyi.easyrefresh.example/channel";
@@ -38,7 +38,8 @@ class _SupportPageState extends State<SupportPage> {
           children: <Widget>[
             ListItem(
               title: Translations.of(context).text("star"),
-              icon: Icon(Icons.star,
+              icon: Icon(
+                Icons.star,
                 size: 30.0,
                 color: Colors.orange,
               ),
@@ -56,7 +57,8 @@ class _SupportPageState extends State<SupportPage> {
             ),
             ListItem(
               title: Translations.of(context).text("aliPay"),
-              icon: ImageIcon(AssetImage("assets/image/alipay.png"),
+              icon: ImageIcon(
+                AssetImage("assets/image/alipay.png"),
                 color: Colors.orange,
               ),
               onPressed: () {
@@ -101,11 +103,13 @@ class _SupportPageState extends State<SupportPage> {
             ),
             ListItem(
               title: Translations.of(context).text("payPal"),
-              icon: ImageIcon(AssetImage("assets/image/paypal.png"),
+              icon: ImageIcon(
+                AssetImage("assets/image/paypal.png"),
                 color: Colors.orange,
               ),
               onPressed: () {
-                launch("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=334PPRBZTY3J8&source=url");
+                launch(
+                    "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=334PPRBZTY3J8&source=url");
               },
             ),
           ],

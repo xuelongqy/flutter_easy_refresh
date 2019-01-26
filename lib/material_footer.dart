@@ -26,22 +26,25 @@ class MaterialFooter extends RefreshFooter {
     this.displacement: 40.0,
     this.valueColor,
     this.backgroundColor,
-  }): super(
-      key: key ?? new GlobalKey<RefreshFooterState>(),
-      loadHeight: 70.0,
-      isFloat: true
-  );
+  }) : super(
+            key: key ?? new GlobalKey<RefreshFooterState>(),
+            loadHeight: 70.0,
+            isFloat: true);
   @override
   MaterialFooterState createState() => MaterialFooterState();
 }
-class MaterialFooterState extends RefreshFooterState<MaterialFooter> with TickerProviderStateMixin<MaterialFooter> {
+
+class MaterialFooterState extends RefreshFooterState<MaterialFooter>
+    with TickerProviderStateMixin<MaterialFooter> {
   AnimationController _positionController;
   AnimationController _scaleController;
   Animation<double> _positionFactor;
   Animation<double> _scaleFactor;
 
-  static final Animatable<double> _kDragSizeFactorLimitTween = Tween<double>(begin: 0.0, end: _kDragSizeFactorLimit);
-  static final Animatable<double> _oneToZeroTween = Tween<double>(begin: 1.0, end: 0.0);
+  static final Animatable<double> _kDragSizeFactorLimitTween =
+      Tween<double>(begin: 0.0, end: _kDragSizeFactorLimit);
+  static final Animatable<double> _oneToZeroTween =
+      Tween<double>(begin: 1.0, end: 0.0);
 
   @override
   void initState() {
@@ -56,7 +59,9 @@ class MaterialFooterState extends RefreshFooterState<MaterialFooter> with Ticker
   void updateHeight(double newHeight) {
     super.updateHeight(newHeight);
     double positionValue = newHeight / 105.0;
-    _positionController.value = positionValue < _kDragSizeFactorLimit ? positionValue : _kDragSizeFactorLimit;
+    _positionController.value = positionValue < _kDragSizeFactorLimit
+        ? positionValue
+        : _kDragSizeFactorLimit;
   }
 
   // 加载完成回调
@@ -68,6 +73,7 @@ class MaterialFooterState extends RefreshFooterState<MaterialFooter> with Ticker
     if (!mounted) return;
     _scaleController.animateTo(1.0, duration: _kIndicatorScaleDuration);
   }
+
   // 没有更多数据回调
   @override
   void onNoMore() async {
@@ -77,6 +83,7 @@ class MaterialFooterState extends RefreshFooterState<MaterialFooter> with Ticker
     if (!mounted) return;
     _scaleController.animateTo(1.0, duration: _kIndicatorScaleDuration);
   }
+
   // 加载结束回调
   @override
   void onLoadEnd() {
@@ -108,8 +115,12 @@ class MaterialFooterState extends RefreshFooterState<MaterialFooter> with Ticker
                   animation: _positionController,
                   builder: (BuildContext context, Widget child) {
                     return RefreshProgressIndicator(
-                      value: this.refreshFooterStatus == RefreshFooterStatus.LOADING ||
-                          this.refreshFooterStatus == RefreshFooterStatus.LOADED? null : indicatorValue,
+                      value: this.refreshFooterStatus ==
+                                  RefreshFooterStatus.LOADING ||
+                              this.refreshFooterStatus ==
+                                  RefreshFooterStatus.LOADED
+                          ? null
+                          : indicatorValue,
                       valueColor: widget.valueColor,
                       backgroundColor: widget.backgroundColor,
                     );

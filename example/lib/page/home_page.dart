@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
-
 }
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
 
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   // 页面控制
   TabController _tabController;
 
@@ -26,9 +26,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
     _tabController = new TabController(initialIndex: 0, length: 3, vsync: this);
-    _tabController.addListener((){
-      setState(() {
-      });
+    _tabController.addListener(() {
+      setState(() {});
     });
   }
 
@@ -38,11 +37,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return Scaffold(
       body: TabBarView(
         controller: _tabController,
-        children: <Widget>[
-          SamplePage(),
-          StylePage(),
-          MorePage()
-        ],
+        children: <Widget>[SamplePage(), StylePage(), MorePage()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _tabController.index,
@@ -51,17 +46,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         onTap: _onBottomNavigationBarTap,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            title: Text(Translations.of(context).text("sample"))
-          ),
+              icon: Icon(Icons.dashboard),
+              title: Text(Translations.of(context).text("sample"))),
           BottomNavigationBarItem(
               icon: Icon(Icons.style),
-              title: Text(Translations.of(context).text("style"))
-          ),
+              title: Text(Translations.of(context).text("style"))),
           BottomNavigationBarItem(
               icon: Icon(Icons.more_vert),
-              title: Text(Translations.of(context).text("more"))
-          )
+              title: Text(Translations.of(context).text("more")))
         ],
       ),
     );

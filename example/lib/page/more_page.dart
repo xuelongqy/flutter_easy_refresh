@@ -9,9 +9,10 @@ import 'package:url_launcher/url_launcher.dart';
 class MorePage extends StatefulWidget {
   @override
   _MorePageState createState() => _MorePageState();
-
 }
-class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin {
+
+class _MorePageState extends State<MorePage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -26,11 +27,13 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin 
             ListItem(
               title: Translations.of(context).text("joinDiscussion"),
               describe: Translations.of(context).text("joinDiscussionDescribe"),
-              icon: Icon(Icons.supervised_user_circle,
+              icon: Icon(
+                Icons.supervised_user_circle,
                 color: Colors.orange,
               ),
               onPressed: () {
-                launch("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q");
+                launch(
+                    "mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q");
               },
             ),
             Container(
@@ -44,7 +47,8 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin 
             ListItem(
               title: Translations.of(context).text("projectAddress"),
               describe: "https://github.com/xuelongqy/flutter_easyrefresh",
-              icon: Icon(Icons.http,
+              icon: Icon(
+                Icons.http,
                 color: Colors.orange,
               ),
               onPressed: () {
@@ -62,11 +66,13 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin 
             ListItem(
               title: Translations.of(context).text("supportAuthor"),
               describe: Translations.of(context).text("supportAuthorDescribe"),
-              icon: Icon(Icons.star,
+              icon: Icon(
+                Icons.star,
                 color: Colors.orange,
               ),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return SupportPage();
                 }));
               },
@@ -81,7 +87,8 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin 
             ),
             ListItem(
               title: Translations.of(context).text("about"),
-              icon: Icon(Icons.info,
+              icon: Icon(
+                Icons.info,
                 color: Colors.orange,
               ),
               onPressed: () {

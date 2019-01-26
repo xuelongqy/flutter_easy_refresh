@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show  rootBundle;
+import 'package:flutter/services.dart' show rootBundle;
 import 'application.dart';
 
 class Translations {
@@ -12,7 +12,7 @@ class Translations {
   Locale locale;
   static Map<dynamic, dynamic> _localizedValues;
 
-  static Translations of(BuildContext context){
+  static Translations of(BuildContext context) {
     return Localizations.of<Translations>(context, Translations);
   }
 
@@ -25,8 +25,12 @@ class Translations {
 
   static Future<Translations> load(Locale locale) async {
     Translations translations = new Translations(locale);
-    String languageCode = applic.supportedLanguages.contains(locale.languageCode) ? locale.languageCode : "en";
-    String jsonContent = await rootBundle.loadString("assets/locale/i18n_$languageCode.json");
+    String languageCode =
+        applic.supportedLanguages.contains(locale.languageCode)
+            ? locale.languageCode
+            : "en";
+    String jsonContent =
+        await rootBundle.loadString("assets/locale/i18n_$languageCode.json");
     _localizedValues = json.decode(jsonContent);
     return translations;
   }
@@ -38,7 +42,8 @@ class TranslationsDelegate extends LocalizationsDelegate<Translations> {
   const TranslationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => applic.supportedLanguages.contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      applic.supportedLanguages.contains(locale.languageCode);
 
   @override
   Future<Translations> load(Locale locale) => Translations.load(locale);
@@ -56,7 +61,8 @@ class SpecificLocalizationDelegate extends LocalizationsDelegate<Translations> {
   bool isSupported(Locale locale) => overriddenLocale != null;
 
   @override
-  Future<Translations> load(Locale locale) => Translations.load(overriddenLocale);
+  Future<Translations> load(Locale locale) =>
+      Translations.load(overriddenLocale);
 
   @override
   bool shouldReload(LocalizationsDelegate<Translations> old) => true;

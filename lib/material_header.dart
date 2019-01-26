@@ -28,24 +28,26 @@ class MaterialHeader extends RefreshHeader {
     this.displacement: 40.0,
     this.valueColor,
     this.backgroundColor,
-  }): super(
-      key: key ?? new GlobalKey<RefreshHeaderState>(),
-      refreshHeight: 70.0,
-      isFloat: true
-  );
+  }) : super(
+            key: key ?? new GlobalKey<RefreshHeaderState>(),
+            refreshHeight: 70.0,
+            isFloat: true);
 
   @override
   MaterialHeaderState createState() => new MaterialHeaderState();
 }
-class MaterialHeaderState extends RefreshHeaderState<MaterialHeader> with TickerProviderStateMixin<MaterialHeader> {
 
+class MaterialHeaderState extends RefreshHeaderState<MaterialHeader>
+    with TickerProviderStateMixin<MaterialHeader> {
   AnimationController _positionController;
   AnimationController _scaleController;
   Animation<double> _positionFactor;
   Animation<double> _scaleFactor;
 
-  static final Animatable<double> _kDragSizeFactorLimitTween = Tween<double>(begin: 0.0, end: _kDragSizeFactorLimit);
-  static final Animatable<double> _oneToZeroTween = Tween<double>(begin: 1.0, end: 0.0);
+  static final Animatable<double> _kDragSizeFactorLimitTween =
+      Tween<double>(begin: 0.0, end: _kDragSizeFactorLimit);
+  static final Animatable<double> _oneToZeroTween =
+      Tween<double>(begin: 1.0, end: 0.0);
 
   @override
   void initState() {
@@ -60,7 +62,9 @@ class MaterialHeaderState extends RefreshHeaderState<MaterialHeader> with Ticker
   void updateHeight(double newHeight) {
     super.updateHeight(newHeight);
     double positionValue = newHeight / 105.0;
-    _positionController.value = positionValue < _kDragSizeFactorLimit ? positionValue : _kDragSizeFactorLimit;
+    _positionController.value = positionValue < _kDragSizeFactorLimit
+        ? positionValue
+        : _kDragSizeFactorLimit;
   }
 
   // 完成刷新回调
@@ -72,13 +76,13 @@ class MaterialHeaderState extends RefreshHeaderState<MaterialHeader> with Ticker
     if (!mounted) return;
     _scaleController.animateTo(1.0, duration: _kIndicatorScaleDuration);
   }
+
   // 刷新结束回调
   @override
   void onRefreshEnd() {
     super.onRefreshEnd();
     _scaleController.animateTo(0.0, duration: Duration(milliseconds: 10));
   }
-
 
   @override
   void dispose() {
@@ -111,8 +115,12 @@ class MaterialHeaderState extends RefreshHeaderState<MaterialHeader> with Ticker
                   animation: _positionController,
                   builder: (BuildContext context, Widget child) {
                     return RefreshProgressIndicator(
-                      value: this.refreshHeaderStatus == RefreshHeaderStatus.REFRESHING ||
-                        this.refreshHeaderStatus == RefreshHeaderStatus.REFRESHED? null : indicatorValue,
+                      value: this.refreshHeaderStatus ==
+                                  RefreshHeaderStatus.REFRESHING ||
+                              this.refreshHeaderStatus ==
+                                  RefreshHeaderStatus.REFRESHED
+                          ? null
+                          : indicatorValue,
                       valueColor: widget.valueColor,
                       backgroundColor: widget.backgroundColor,
                     );

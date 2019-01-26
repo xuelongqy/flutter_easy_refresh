@@ -17,9 +17,10 @@ import 'package:url_launcher/url_launcher.dart';
 class StylePage extends StatefulWidget {
   @override
   _StylePageState createState() => _StylePageState();
-
 }
-class _StylePageState extends State<StylePage> with AutomaticKeepAliveClientMixin {
+
+class _StylePageState extends State<StylePage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -35,11 +36,13 @@ class _StylePageState extends State<StylePage> with AutomaticKeepAliveClientMixi
               title: "Classic",
               describe: Translations.of(context).text("classicDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return BasicPage();
                 }));
               },
-              icon: Icon(Icons.format_list_bulleted,
+              icon: Icon(
+                Icons.format_list_bulleted,
                 color: Colors.orange,
               ),
             ),
@@ -55,11 +58,13 @@ class _StylePageState extends State<StylePage> with AutomaticKeepAliveClientMixi
               title: "Material",
               describe: Translations.of(context).text("materialDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return MaterialPage();
                 }));
               },
-              icon: Icon(Icons.android,
+              icon: Icon(
+                Icons.android,
                 color: Colors.orange,
               ),
             ),
@@ -75,11 +80,13 @@ class _StylePageState extends State<StylePage> with AutomaticKeepAliveClientMixi
               title: "BallPulse",
               describe: Translations.of(context).text("ballPulseDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return BallPulsePage();
                 }));
               },
-              icon: Icon(Icons.lens,
+              icon: Icon(
+                Icons.lens,
                 color: Colors.orange,
               ),
             ),
@@ -95,11 +102,13 @@ class _StylePageState extends State<StylePage> with AutomaticKeepAliveClientMixi
               title: "BezierCircle",
               describe: Translations.of(context).text("bezierCircleDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return BezierCirclePage();
                 }));
               },
-              icon: Icon(Icons.radio_button_checked,
+              icon: Icon(
+                Icons.radio_button_checked,
                 color: Colors.orange,
               ),
             ),
@@ -113,13 +122,16 @@ class _StylePageState extends State<StylePage> with AutomaticKeepAliveClientMixi
             ),
             ListItem(
               title: "BezierHourGlass",
-              describe: Translations.of(context).text("bezierHourGlassDescribe"),
+              describe:
+                  Translations.of(context).text("bezierHourGlassDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return BezierHourGlassPage();
                 }));
               },
-              icon: Icon(Icons.timelapse,
+              icon: Icon(
+                Icons.timelapse,
                 color: Colors.orange,
               ),
             ),
@@ -135,11 +147,13 @@ class _StylePageState extends State<StylePage> with AutomaticKeepAliveClientMixi
               title: "Phoenix",
               describe: Translations.of(context).text("phoenixDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return PhoenixPage();
                 }));
               },
-              icon: Icon(Icons.location_city,
+              icon: Icon(
+                Icons.location_city,
                 color: Colors.orange,
               ),
             ),
@@ -155,11 +169,13 @@ class _StylePageState extends State<StylePage> with AutomaticKeepAliveClientMixi
               title: "Taurus",
               describe: Translations.of(context).text("taurusDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return TaurusPage();
                 }));
               },
-              icon: Icon(Icons.airplanemode_active,
+              icon: Icon(
+                Icons.airplanemode_active,
                 color: Colors.orange,
               ),
             ),
@@ -175,11 +191,13 @@ class _StylePageState extends State<StylePage> with AutomaticKeepAliveClientMixi
               title: "Space",
               describe: Translations.of(context).text("spaceDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return SpacePage();
                 }));
               },
-              icon: Icon(Icons.stars,
+              icon: Icon(
+                Icons.stars,
                 color: Colors.orange,
               ),
             ),
@@ -195,11 +213,13 @@ class _StylePageState extends State<StylePage> with AutomaticKeepAliveClientMixi
               title: "Delivery",
               describe: Translations.of(context).text("deliveryDescribe"),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
                   return DeliveryPage();
                 }));
               },
-              icon: Icon(Icons.cloud,
+              icon: Icon(
+                Icons.cloud,
                 color: Colors.orange,
               ),
             ),
@@ -214,11 +234,13 @@ class _StylePageState extends State<StylePage> with AutomaticKeepAliveClientMixi
             ListItem(
               title: Translations.of(context).text("moreStyle"),
               describe: Translations.of(context).text("moreStyleDescribe"),
-              icon: Icon(Icons.style,
+              icon: Icon(
+                Icons.style,
                 color: Colors.orange,
               ),
               onPressed: () {
-                launch("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q");
+                launch(
+                    "mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q");
               },
             ),
           ],

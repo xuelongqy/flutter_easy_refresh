@@ -14,15 +14,17 @@ class BezierHourGlassHeader extends RefreshHeader {
     @required GlobalKey<RefreshHeaderState> key,
     this.color: Colors.white,
     this.backgroundColor: Colors.blue,
-  }):super(
-      key: key ?? new GlobalKey<RefreshHeaderState>(),
-      refreshHeight: 80.0
-  );
+  }) : super(
+            key: key ?? new GlobalKey<RefreshHeaderState>(),
+            refreshHeight: 80.0);
 
   @override
   BezierHourGlassHeaderState createState() => BezierHourGlassHeaderState();
 }
-class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeader> with TickerProviderStateMixin<BezierHourGlassHeader> {
+
+class BezierHourGlassHeaderState
+    extends RefreshHeaderState<BezierHourGlassHeader>
+    with TickerProviderStateMixin<BezierHourGlassHeader> {
   // 顶部拉动偏差
   ValueNotifier<double> _topOffsetLis = new ValueNotifier(0.0);
   // 回弹动画
@@ -40,17 +42,21 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
   void initState() {
     super.initState();
     // 回弹动画
-    _backController = new AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
+    _backController = new AnimationController(
+        duration: const Duration(milliseconds: 600), vsync: this);
     _backAnimation = new Tween(begin: 0.0, end: 110.0).animate(_backController)
       ..addListener(() {
         setState(() {
           if (_backAnimation.value <= 30.0) {
             _backOffsetLis.value = _backAnimation.value;
-          }else if (_backAnimation.value > 30.0 && _backAnimation.value <= 50.0) {
-            _backOffsetLis.value = (20.0 - (_backAnimation.value - 30.0)) * 3 / 2;
-          }else if (_backAnimation.value > 50.0 && _backAnimation.value < 65.0) {
+          } else if (_backAnimation.value > 30.0 &&
+              _backAnimation.value <= 50.0) {
+            _backOffsetLis.value =
+                (20.0 - (_backAnimation.value - 30.0)) * 3 / 2;
+          } else if (_backAnimation.value > 50.0 &&
+              _backAnimation.value < 65.0) {
             _backOffsetLis.value = _backAnimation.value - 50.0;
-          }else if (_backAnimation.value > 65.0) {
+          } else if (_backAnimation.value > 65.0) {
             _backOffsetLis.value = (45.0 - (_backAnimation.value - 65.0)) / 3;
           }
         });
@@ -96,7 +102,9 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
   // 高度更新
   @override
   void updateHeight(double newHeight) {
-    _topOffsetLis.value = newHeight > widget.refreshHeight ? newHeight - widget.refreshHeight : 0.0;
+    _topOffsetLis.value = newHeight > widget.refreshHeight
+        ? newHeight - widget.refreshHeight
+        : 0.0;
     super.updateHeight(newHeight);
   }
 
@@ -106,22 +114,27 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
     double ballOpacity;
     if (this.height > widget.refreshHeight + 40.0) {
       ballOpacity = 1.0;
-    }else if (this.height > widget.refreshHeight) {
+    } else if (this.height > widget.refreshHeight) {
       ballOpacity = (this.height - widget.refreshHeight) / 40.0;
-    }else {
+    } else {
       ballOpacity = 0.0;
     }
     // 计算水波纹宽度
-    double rippleWidth = MediaQuery.of(context).size.width * ((widget.refreshHeight - this.height) / widget.refreshHeight);
+    double rippleWidth = MediaQuery.of(context).size.width *
+        ((widget.refreshHeight - this.height) / widget.refreshHeight);
     rippleWidth = rippleWidth < 0.0 ? 0.0 : rippleWidth;
-    rippleWidth = rippleWidth < MediaQuery.of(context).size.width ? rippleWidth : MediaQuery.of(context).size.width;
+    rippleWidth = rippleWidth < MediaQuery.of(context).size.width
+        ? rippleWidth
+        : MediaQuery.of(context).size.width;
     return new Container(
         height: this.height,
         child: Column(
           children: <Widget>[
             Container(
                 width: double.infinity,
-                height: this.height < widget.refreshHeight ? this.height : widget.refreshHeight,
+                height: this.height < widget.refreshHeight
+                    ? this.height
+                    : widget.refreshHeight,
                 color: widget.backgroundColor,
                 child: Stack(
                   children: <Widget>[
@@ -134,7 +147,8 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
                         children: <Widget>[
                           Opacity(
                             opacity: ballOpacity / 4,
-                            child: Icon(Icons.lens,
+                            child: Icon(
+                              Icons.lens,
                               size: 15.0,
                               color: widget.color,
                             ),
@@ -144,7 +158,8 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
                           ),
                           Opacity(
                             opacity: ballOpacity / 2,
-                            child: Icon(Icons.lens,
+                            child: Icon(
+                              Icons.lens,
                               size: 15.0,
                               color: widget.color,
                             ),
@@ -154,7 +169,8 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
                           ),
                           Opacity(
                             opacity: ballOpacity,
-                            child: Icon(Icons.lens,
+                            child: Icon(
+                              Icons.lens,
                               size: 15.0,
                               color: widget.color,
                             ),
@@ -164,7 +180,8 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
                           ),
                           Opacity(
                             opacity: ballOpacity / 2,
-                            child: Icon(Icons.lens,
+                            child: Icon(
+                              Icons.lens,
                               size: 15.0,
                               color: widget.color,
                             ),
@@ -174,7 +191,8 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
                           ),
                           Opacity(
                             opacity: ballOpacity / 4,
-                            child: Icon(Icons.lens,
+                            child: Icon(
+                              Icons.lens,
                               size: 15.0,
                               color: widget.color,
                             ),
@@ -190,23 +208,22 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
                       ),
                     ),
                     Offstage(
-                      offstage: !isHidingRipple,
-                      child: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: Center(
-                          child: Container(
-                            width: rippleWidth,
+                        offstage: !isHidingRipple,
+                        child: Container(
+                            width: double.infinity,
                             height: double.infinity,
-                            color: widget.color,
-                          ),
-                        )
-                      )
-                    ),
+                            child: Center(
+                              child: Container(
+                                width: rippleWidth,
+                                height: double.infinity,
+                                color: widget.color,
+                              ),
+                            ))),
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: ClipPath(
-                        clipper: CirclePainter(offset: _backOffsetLis.value, up:false),
+                        clipper: CirclePainter(
+                            offset: _backOffsetLis.value, up: false),
                         child: Container(
                           color: widget.color,
                           width: double.infinity,
@@ -215,13 +232,14 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
                       ),
                     ),
                   ],
-                )
-            ),
+                )),
             Container(
               width: double.infinity,
-              height: this.height > widget.refreshHeight ? this.height - widget.refreshHeight : 0.0,
+              height: this.height > widget.refreshHeight
+                  ? this.height - widget.refreshHeight
+                  : 0.0,
               child: ClipPath(
-                clipper: CirclePainter(offset: _topOffsetLis.value,up:true),
+                clipper: CirclePainter(offset: _topOffsetLis.value, up: true),
                 child: new Container(
                   color: widget.backgroundColor,
                   width: double.infinity,
@@ -230,8 +248,7 @@ class BezierHourGlassHeaderState extends RefreshHeaderState<BezierHourGlassHeade
               ),
             )
           ],
-        )
-    );
+        ));
   }
 }
 
@@ -240,14 +257,19 @@ class CirclePainter extends CustomClipper<Path> {
   final double offset;
   final bool up;
 
-  CirclePainter({this.offset,this.up});
+  CirclePainter({this.offset, this.up});
 
   @override
   Path getClip(Size size) {
     final path = new Path();
-    if(!up)
-      path.moveTo(0.0, size.height);
-    path.cubicTo(0.0, up?0.0:size.height, size.width / 2, up?offset*2:size.height-offset*2, size.width, up?0.0:size.height);
+    if (!up) path.moveTo(0.0, size.height);
+    path.cubicTo(
+        0.0,
+        up ? 0.0 : size.height,
+        size.width / 2,
+        up ? offset * 2 : size.height - offset * 2,
+        size.width,
+        up ? 0.0 : size.height);
     path.close();
     return path;
   }
@@ -287,6 +309,7 @@ class SpinKitHourGlass extends StatefulWidget {
   @override
   _SpinKitHourGlassState createState() => _SpinKitHourGlassState();
 }
+
 class _SpinKitHourGlassState extends State<SpinKitHourGlass>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;

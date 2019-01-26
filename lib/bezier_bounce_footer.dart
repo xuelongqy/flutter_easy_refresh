@@ -14,15 +14,14 @@ class BezierBounceFooter extends RefreshFooter {
     @required GlobalKey<RefreshFooterState> key,
     this.color: Colors.white,
     this.backgroundColor: Colors.blue,
-  }):super(
-      key: key ?? new GlobalKey<RefreshFooterState>(),
-      loadHeight: 80.0
-  );
+  }) : super(key: key ?? new GlobalKey<RefreshFooterState>(), loadHeight: 80.0);
 
   @override
   BezierBounceFooterState createState() => BezierBounceFooterState();
 }
-class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> with TickerProviderStateMixin<BezierBounceFooter> {
+
+class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter>
+    with TickerProviderStateMixin<BezierBounceFooter> {
   // 顶部拉动偏差
   ValueNotifier<double> _bottomOffsetLis = new ValueNotifier(0.0);
   // 回弹动画
@@ -38,17 +37,21 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
   void initState() {
     super.initState();
     // 回弹动画
-    _backController = new AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
+    _backController = new AnimationController(
+        duration: const Duration(milliseconds: 600), vsync: this);
     _backAnimation = new Tween(begin: 0.0, end: 110.0).animate(_backController)
       ..addListener(() {
         setState(() {
           if (_backAnimation.value <= 30.0) {
             _backOffsetLis.value = _backAnimation.value;
-          }else if (_backAnimation.value > 30.0 && _backAnimation.value <= 50.0) {
-            _backOffsetLis.value = (20.0 - (_backAnimation.value - 30.0)) * 3 / 2;
-          }else if (_backAnimation.value > 50.0 && _backAnimation.value < 65.0) {
+          } else if (_backAnimation.value > 30.0 &&
+              _backAnimation.value <= 50.0) {
+            _backOffsetLis.value =
+                (20.0 - (_backAnimation.value - 30.0)) * 3 / 2;
+          } else if (_backAnimation.value > 50.0 &&
+              _backAnimation.value < 65.0) {
             _backOffsetLis.value = _backAnimation.value - 50.0;
-          }else if (_backAnimation.value > 65.0) {
+          } else if (_backAnimation.value > 65.0) {
             _backOffsetLis.value = (45.0 - (_backAnimation.value - 65.0)) / 3;
           }
         });
@@ -58,7 +61,8 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
   // 高度更新
   @override
   void updateHeight(double newHeight) {
-    _bottomOffsetLis.value = newHeight > widget.loadHeight ? newHeight - widget.loadHeight : 0.0;
+    _bottomOffsetLis.value =
+        newHeight > widget.loadHeight ? newHeight - widget.loadHeight : 0.0;
     super.updateHeight(newHeight);
   }
 
@@ -94,9 +98,9 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
     double ballOpacity;
     if (this.height > widget.loadHeight + 30.0) {
       ballOpacity = 1.0;
-    }else if (this.height > widget.loadHeight) {
+    } else if (this.height > widget.loadHeight) {
       ballOpacity = (this.height - widget.loadHeight) / 30.0;
-    }else {
+    } else {
       ballOpacity = 0.0;
     }
     return new Container(
@@ -105,9 +109,12 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
           children: <Widget>[
             Container(
               width: double.infinity,
-              height: this.height > widget.loadHeight ? this.height - widget.loadHeight : 0.0,
+              height: this.height > widget.loadHeight
+                  ? this.height - widget.loadHeight
+                  : 0.0,
               child: ClipPath(
-                clipper: CirclePainter(offset: _bottomOffsetLis.value,up:false),
+                clipper:
+                    CirclePainter(offset: _bottomOffsetLis.value, up: false),
                 child: new Container(
                   color: widget.backgroundColor,
                   width: double.infinity,
@@ -117,7 +124,9 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
             ),
             Container(
                 width: double.infinity,
-                height: this.height < widget.loadHeight ? this.height : widget.loadHeight,
+                height: this.height < widget.loadHeight
+                    ? this.height
+                    : widget.loadHeight,
                 color: widget.backgroundColor,
                 child: Stack(
                   children: <Widget>[
@@ -130,7 +139,8 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
                         children: <Widget>[
                           Opacity(
                             opacity: ballOpacity / 4,
-                            child: Icon(Icons.lens,
+                            child: Icon(
+                              Icons.lens,
                               size: 15.0,
                               color: widget.color,
                             ),
@@ -140,7 +150,8 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
                           ),
                           Opacity(
                             opacity: ballOpacity / 2,
-                            child: Icon(Icons.lens,
+                            child: Icon(
+                              Icons.lens,
                               size: 15.0,
                               color: widget.color,
                             ),
@@ -150,7 +161,8 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
                           ),
                           Opacity(
                             opacity: ballOpacity,
-                            child: Icon(Icons.lens,
+                            child: Icon(
+                              Icons.lens,
                               size: 15.0,
                               color: widget.color,
                             ),
@@ -160,7 +172,8 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
                           ),
                           Opacity(
                             opacity: ballOpacity / 2,
-                            child: Icon(Icons.lens,
+                            child: Icon(
+                              Icons.lens,
                               size: 15.0,
                               color: widget.color,
                             ),
@@ -170,7 +183,8 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
                           ),
                           Opacity(
                             opacity: ballOpacity / 4,
-                            child: Icon(Icons.lens,
+                            child: Icon(
+                              Icons.lens,
                               size: 15.0,
                               color: widget.color,
                             ),
@@ -188,7 +202,8 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
                     Align(
                       alignment: Alignment.topCenter,
                       child: ClipPath(
-                        clipper: CirclePainter(offset: _backOffsetLis.value, up:true),
+                        clipper: CirclePainter(
+                            offset: _backOffsetLis.value, up: true),
                         child: Container(
                           color: widget.color,
                           width: double.infinity,
@@ -197,11 +212,9 @@ class BezierBounceFooterState extends RefreshFooterState<BezierBounceFooter> wit
                       ),
                     ),
                   ],
-                )
-            ),
+                )),
           ],
-        )
-    );
+        ));
   }
 }
 
@@ -210,14 +223,19 @@ class CirclePainter extends CustomClipper<Path> {
   final double offset;
   final bool up;
 
-  CirclePainter({this.offset,this.up});
+  CirclePainter({this.offset, this.up});
 
   @override
   Path getClip(Size size) {
     final path = new Path();
-    if(!up)
-      path.moveTo(0.0, size.height);
-    path.cubicTo(0.0, up?0.0:size.height, size.width / 2, up?offset*2:size.height-offset*2, size.width, up?0.0:size.height);
+    if (!up) path.moveTo(0.0, size.height);
+    path.cubicTo(
+        0.0,
+        up ? 0.0 : size.height,
+        size.width / 2,
+        up ? offset * 2 : size.height - offset * 2,
+        size.width,
+        up ? 0.0 : size.height);
     path.close();
     return path;
   }
@@ -253,15 +271,16 @@ class SpinKitThreeBounce extends StatefulWidget {
     this.size = 50.0,
     this.itemBuilder,
   })  : assert(
-  !(itemBuilder is IndexedWidgetBuilder && color is Color) &&
-      !(itemBuilder == null && color == null),
-  'You should specify either a itemBuilder or a color'),
+            !(itemBuilder is IndexedWidgetBuilder && color is Color) &&
+                !(itemBuilder == null && color == null),
+            'You should specify either a itemBuilder or a color'),
         assert(size != null),
         super(key: key);
 
   @override
   _SpinKitThreeBounceState createState() => _SpinKitThreeBounceState();
 }
+
 class _SpinKitThreeBounceState extends State<SpinKitThreeBounce>
     with SingleTickerProviderStateMixin {
   AnimationController _scaleCtrl;
@@ -302,8 +321,7 @@ class _SpinKitThreeBounceState extends State<SpinKitThreeBounce>
   Widget _circle(int index, double delay) {
     final _size = widget.size * 0.5;
     return ScaleTransition(
-      scale: DelayTween(begin: 0.0, end: 1.0, delay: delay)
-          .animate(_scaleCtrl),
+      scale: DelayTween(begin: 0.0, end: 1.0, delay: delay).animate(_scaleCtrl),
       child: SizedBox.fromSize(
         size: Size.square(_size),
         child: _itemBuilder(index),
@@ -315,11 +333,11 @@ class _SpinKitThreeBounceState extends State<SpinKitThreeBounce>
     return widget.itemBuilder != null
         ? widget.itemBuilder(context, index)
         : DecoratedBox(
-      decoration: BoxDecoration(
-        color: widget.color,
-        shape: BoxShape.circle,
-      ),
-    );
+            decoration: BoxDecoration(
+              color: widget.color,
+              shape: BoxShape.circle,
+            ),
+          );
   }
 }
 
