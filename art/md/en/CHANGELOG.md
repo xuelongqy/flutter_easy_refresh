@@ -95,3 +95,7 @@
 >Add: isRefreshing to determine if it is being refreshed or loaded  
 >Add: Header and Footer status change callbacks  
 >Add: Header and Footer height change callbacks  
+
+## V Next
+>Specification code to improve compatibility  
+>Adjustment: part of the style  
