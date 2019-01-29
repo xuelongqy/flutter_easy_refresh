@@ -101,5 +101,5 @@
 >Adjustment: part of the style  
 >The library does not have its own space style, transfer to example  
 
-## V Next
+## V 1.2.2
 >Fix: header is null, onRefresh is not null error[#19](https://github.com/xuelongqy/flutter_easyrefresh/issues/19)  
