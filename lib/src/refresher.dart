@@ -1096,7 +1096,7 @@ class EasyRefreshState extends State<EasyRefresh>
         children: <Widget>[
           new Column(
             children: <Widget>[
-              widget.refreshHeader == null || !(header as RefreshHeader).isFloat
+              widget.onRefresh == null || !(header as RefreshHeader).isFloat
                   ? header
                   : new Container(),
               new Expanded(
@@ -1137,21 +1137,21 @@ class EasyRefreshState extends State<EasyRefresh>
                   ),
                 ),
               ),
-              widget.refreshFooter == null || !widget.refreshFooter.isFloat
+              widget.loadMore == null || !(footer as RefreshFooter).isFloat
                   ? footer
                   : new Container(),
             ],
           ),
           Align(
             alignment: Alignment.topCenter,
-            child: widget.refreshHeader != null &&
+            child: widget.onRefresh != null &&
                     (header as RefreshHeader).isFloat
                 ? header
                 : new Container(),
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: widget.refreshFooter != null && widget.refreshFooter.isFloat
+            child: widget.loadMore != null && (footer as RefreshFooter).isFloat
                 ? footer
                 : new Container(),
           ),

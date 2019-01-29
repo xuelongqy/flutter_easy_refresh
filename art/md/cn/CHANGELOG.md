@@ -100,3 +100,6 @@
 >规范代码，提高兼容性  
 >调整：部分样式  
 >库中不在自带星空样式，转移至example  
+
+## V 下个版本
+>修复：header为null，onRefresh不为null报错的问题[#19](https://github.com/xuelongqy/flutter_easyrefresh/issues/19)  
