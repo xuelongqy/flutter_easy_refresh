@@ -104,5 +104,5 @@
 ## V 1.2.2
 >修复：header为null，onRefresh不为null报错的问题[#19](https://github.com/xuelongqy/flutter_easyrefresh/issues/19)  
 
-## V 下个版本
+## V 1.2.3
 >添加：onRefresh和loadMore为null时的回弹效果[#18](https://github.com/xuelongqy/flutter_easyrefresh/issues/18)  

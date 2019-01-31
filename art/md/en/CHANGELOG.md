@@ -104,5 +104,5 @@
 ## V 1.2.2
 >Fix: header is null, onRefresh is not null error [#19](https://github.com/xuelongqy/flutter_easyrefresh/issues/19)  
 
-## V Next
+## V 1.2.3
 >Add: rebound effect when onRefresh and loadMore are null [#18](https://github.com/xuelongqy/flutter_easyrefresh/issues/18)  
