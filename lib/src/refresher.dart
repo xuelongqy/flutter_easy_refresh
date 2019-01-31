@@ -23,7 +23,15 @@ enum RefreshBoxDirectionStatus {
 }
 
 /// Header状态
-enum HeaderStatus { START, READY, REFRESHING, REFRESHED, RESTORE, END, CLOSE }
+enum HeaderStatus {
+  START,
+  READY,
+  REFRESHING,
+  REFRESHED,
+  RESTORE,
+  END,
+  CLOSE
+}
 
 /// Footer状态
 enum FooterStatus {
@@ -165,8 +173,6 @@ class EasyRefreshState extends State<EasyRefresh>
   double scrollSpeed = 0.0;
   double lastPixels = 0.0;
   int lastTimeStamp = new DateTime.now().millisecondsSinceEpoch;
-  // 超出边界监听器
-  ScrollOverListener _scrollOverListener;
   // 是否拉出底部
   bool _isPushBottom = false;
   // 记录是否在拖动
@@ -180,6 +186,46 @@ class EasyRefreshState extends State<EasyRefresh>
       new GlobalKey<RefreshHeaderState>();
   // 加载完成(用于判断是否有更多数据)
   bool _loaded = false;
+  // 等待State回调列表
+  final List<VoidCallback> _waitStateCallBackList = List();
+
+  // 等待state更新完成
+  void waitState(VoidCallback done) {
+    _waitStateCallBackList.add(done);
+  }
+  // 触发等待state回调
+  void _triggerWaitStateCallBack() {
+    if (_waitStateCallBackList.isEmpty) return;
+    for (var done in _waitStateCallBackList) {
+      done();
+    }
+    _waitStateCallBackList.clear();
+    // 稍作延时设置列表滚动属性
+    Future.delayed(Duration(milliseconds: 100),() {
+      if (_scrollPhysics is RefreshAlwaysScrollPhysics) {
+        setState(() {
+          _scrollPhysics = _neverScrollableScrollPhysics;
+        });
+        Future.delayed(Duration(milliseconds: 100),() {
+          setState(() {
+            if (_isRefresh) {
+              _scrollPhysics = RefreshAlwaysScrollPhysics(
+                  scrollOverListener: _getScrollOverListener(),
+                  headerPullBackRecord: false,
+                  footerPullBackRecord: false
+              );
+            }else {
+              _scrollPhysics = RefreshAlwaysScrollPhysics(
+                  scrollOverListener: _getScrollOverListener(),
+                  headerPullBackRecord: widget.onRefresh != null,
+                  footerPullBackRecord: widget.loadMore != null
+              );
+            }
+          });
+        });
+      }
+    });
+  }
 
   // 触发刷新
   void callRefresh() async {
@@ -354,13 +400,6 @@ class EasyRefreshState extends State<EasyRefresh>
     super.initState();
     // 初始化首次刷新
     _firstRefresh = widget.firstRefresh;
-    // 超出边界监听器
-    _scrollOverListener = new ScrollOverListener(
-        topOver: _topOver,
-        bottomOver: _bottomOver,
-        justScrollOver: widget.onRefresh == null &&
-            widget.loadMore == null &&
-            widget.behavior is ScrollOverBehavior);
     _neverScrollableScrollPhysics = NeverScrollableScrollPhysics();
     // 初始化滚动控制器
     _scrollController = widget.child is ScrollView &&
@@ -369,7 +408,7 @@ class EasyRefreshState extends State<EasyRefresh>
         : new ScrollController();
     // 初始化滚动形式
     _scrollPhysics = RefreshAlwaysScrollPhysics(
-        scrollOverListener: _scrollOverListener,
+        scrollOverListener: _getScrollOverListener(),
         headerPullBackRecord: widget.onRefresh != null,
         footerPullBackRecord: widget.loadMore != null);
     // 初始化刷新高度
@@ -462,9 +501,10 @@ class EasyRefreshState extends State<EasyRefresh>
             //动画结束，高度回到0，上下拉刷新彻底结束，ListView恢复正常
           } else if (_states == RefreshBoxDirectionStatus.PUSH) {
             _setTopItemHeight(0.0);
+            _triggerWaitStateCallBack();
             setState(() {
               _scrollPhysics = RefreshAlwaysScrollPhysics(
-                  scrollOverListener: _scrollOverListener,
+                  scrollOverListener: _getScrollOverListener(),
                   headerPullBackRecord: widget.onRefresh != null,
                   footerPullBackRecord: widget.loadMore != null);
             });
@@ -473,6 +513,7 @@ class EasyRefreshState extends State<EasyRefresh>
                 AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
             // 刷新关闭
             this._refreshHeader.getKey().currentState.onRefreshClose();
+            _triggerWaitStateCallBack();
             _onHeaderStatusChanged(HeaderStatus.CLOSE);
             if (_firstRefresh) {
               setState(() {
@@ -485,9 +526,10 @@ class EasyRefreshState extends State<EasyRefresh>
             }
           } else if (_states == RefreshBoxDirectionStatus.PULL) {
             _setBottomItemHeight(0.0);
+            _triggerWaitStateCallBack();
             setState(() {
               _scrollPhysics = RefreshAlwaysScrollPhysics(
-                  scrollOverListener: _scrollOverListener,
+                  scrollOverListener: _getScrollOverListener(),
                   headerPullBackRecord: widget.onRefresh != null,
                   footerPullBackRecord: widget.loadMore != null);
             });
@@ -497,6 +539,7 @@ class EasyRefreshState extends State<EasyRefresh>
                 AnimationStates.RefreshBoxIdle, RefreshBoxDirectionStatus.IDLE);
             // 加载关闭
             this._refreshFooter.getKey().currentState.onLoadClose();
+            _triggerWaitStateCallBack();
             _onFooterStatusChanged(FooterStatus.CLOSE);
           }
         });
@@ -584,6 +627,17 @@ class EasyRefreshState extends State<EasyRefresh>
     }
   }
 
+  // 获取越界监听
+  ScrollOverListener _getScrollOverListener() {
+    return ScrollOverListener(
+      topOver: _topOver,
+      bottomOver: _bottomOver,
+      justScrollOver: widget.behavior is ScrollOverBehavior,
+      refresh: widget.onRefresh != null,
+      loadMore: widget.loadMore != null
+    );
+  }
+
   // 生成底部栏
   Widget _getFooter() {
     if (widget.loadMore != null) {
@@ -632,7 +686,7 @@ class EasyRefreshState extends State<EasyRefresh>
         _scrollPhysics = _neverScrollableScrollPhysics;
       } else {
         _scrollPhysics = RefreshAlwaysScrollPhysics(
-            scrollOverListener: _scrollOverListener,
+            scrollOverListener: _getScrollOverListener(),
             headerPullBackRecord: false,
             footerPullBackRecord: false);
       }
@@ -745,7 +799,7 @@ class EasyRefreshState extends State<EasyRefresh>
           _setTopItemHeight(0.0);
           setState(() {
             _scrollPhysics = RefreshAlwaysScrollPhysics(
-                scrollOverListener: _scrollOverListener,
+                scrollOverListener: _getScrollOverListener(),
                 headerPullBackRecord: widget.onRefresh != null,
                 footerPullBackRecord: widget.loadMore != null);
           });
@@ -771,7 +825,7 @@ class EasyRefreshState extends State<EasyRefresh>
           _setBottomItemHeight(0.0);
           setState(() {
             _scrollPhysics = RefreshAlwaysScrollPhysics(
-                scrollOverListener: _scrollOverListener,
+                scrollOverListener: _getScrollOverListener(),
                 headerPullBackRecord: widget.onRefresh != null,
                 footerPullBackRecord: widget.loadMore != null);
           });
@@ -832,7 +886,7 @@ class EasyRefreshState extends State<EasyRefresh>
       // 反向再反向（恢复正向拖动）
       setState(() {
         _scrollPhysics = RefreshAlwaysScrollPhysics(
-            scrollOverListener: _scrollOverListener,
+            scrollOverListener: _getScrollOverListener(),
             headerPullBackRecord: widget.onRefresh != null,
             footerPullBackRecord: widget.loadMore != null);
       });
@@ -862,7 +916,7 @@ class EasyRefreshState extends State<EasyRefresh>
           _setTopItemHeight(0.0);
           setState(() {
             _scrollPhysics = RefreshAlwaysScrollPhysics(
-                scrollOverListener: _scrollOverListener,
+                scrollOverListener: _getScrollOverListener(),
                 headerPullBackRecord: widget.onRefresh != null,
                 footerPullBackRecord: widget.loadMore != null);
           });
@@ -897,7 +951,7 @@ class EasyRefreshState extends State<EasyRefresh>
           _setBottomItemHeight(0.0);
           setState(() {
             _scrollPhysics = RefreshAlwaysScrollPhysics(
-                scrollOverListener: _scrollOverListener,
+                scrollOverListener: _getScrollOverListener(),
                 headerPullBackRecord: widget.onRefresh != null,
                 footerPullBackRecord: widget.loadMore != null);
           });
@@ -1061,6 +1115,18 @@ class EasyRefreshState extends State<EasyRefresh>
 
   @override
   Widget build(BuildContext context) {
+    // 更新刷新高度
+    if (_firstRefresh && widget.firstRefreshWidget is RefreshHeader) {
+      _refreshHeight =
+          (widget.firstRefreshWidget as RefreshHeader).refreshHeight;
+    } else {
+      _refreshHeight = widget.refreshHeader == null
+          ? 70.0
+          : widget.refreshHeader.refreshHeight;
+    }
+    _loadHeight =
+    widget.refreshFooter == null ? 70.0 : widget.refreshFooter.loadHeight;
+    // 获取Header和Footer
     Widget header = _getHeader();
     Widget footer = _getFooter();
     List<Widget> slivers;

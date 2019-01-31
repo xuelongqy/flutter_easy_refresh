@@ -17,6 +17,7 @@ class _BasicPageState extends State<BasicPage> {
       new GlobalKey<RefreshHeaderState>();
   GlobalKey<RefreshFooterState> _footerKey =
       new GlobalKey<RefreshFooterState>();
+  bool _loadMore = true;
 
   @override
   Widget build(BuildContext context) {
@@ -73,18 +74,29 @@ class _BasicPageState extends State<BasicPage> {
             setState(() {
               str.clear();
               str.addAll(addStr);
+              _easyRefreshKey.currentState.waitState((){
+                setState(() {
+                  _loadMore = true;
+                });
+              });
             });
           });
         },
-        loadMore: () async {
+        loadMore: _loadMore ? () async {
           await new Future.delayed(const Duration(seconds: 1), () {
             if (str.length < 20) {
               setState(() {
                 str.addAll(addStr);
               });
+            }else {
+              _easyRefreshKey.currentState.waitState((){
+                setState(() {
+                  _loadMore = false;
+                });
+              });
             }
           });
-        },
+        }: null,
       )),
       persistentFooterButtons: <Widget>[
         FlatButton(
