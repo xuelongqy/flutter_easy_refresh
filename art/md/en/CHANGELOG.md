@@ -107,5 +107,5 @@
 ## V 1.2.3
 >Add: rebound effect when onRefresh and loadMore are null [#18](https://github.com/xuelongqy/flutter_easyrefresh/issues/18)  
 
-## V Next
+## V 1.2.4
 >Add: support for NestedScrollView [#7](https://github.com/xuelongqy/flutter_easyrefresh/issues/7),[#11](https://github.com/xuelongqy/flutter_easyrefresh/issues/11)  
