@@ -108,6 +108,7 @@ class _BasicPageState extends State<BasicPage> {
 | footerStatusChanged | Footer status change callback     | (FooterStatus) => void | null | optional |
 | headerHeightChanged | Header height change callback     | (double) => void | null | optional |
 | footerHeightChanged | Footer height change callback     | (double) => void | null | optional |
+| outerController | External scroll controller (eg NestedScrollView)     | ScrollController | null | optional |
 | onRefresh | Refresh callback method     | () => Void | null | optional(Cannot trigger refresh for null) |
 | loadMore | Loading callback method     | () => Void | null | optional(Cannot trigger loading for null) |
 | animationStateChangedCallback | EasyRefresh state callback for manual handling of refresh loading and other operations     | (AnimationStates, RefreshBoxDirectionStatus) => void     | null | optional(不推荐使用) |

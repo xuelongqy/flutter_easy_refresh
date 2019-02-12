@@ -108,6 +108,7 @@ class _BasicPageState extends State<BasicPage> {
 | footerStatusChanged | Footer状态改变回调     | (FooterStatus) => void | null | 可选 |
 | headerHeightChanged | Header高度改变回调     | (double) => void | null | 可选 |
 | footerHeightChanged | Footer高度改变回调     | (double) => void | null | 可选 |
+| outerController | 外部滚动控制器(例如NestedScrollView)     | ScrollController | null | 可选 |
 | onRefresh | 刷新回调方法     | () => Void | null | 可选(为null时无法触发刷新) |
 | loadMore | 加载回调方法     | () => Void | null | 可选(为null时无法触发加载) |
 | animationStateChangedCallback | EasyRefresh状态回调，用于手动处理刷新加载等操作     | (AnimationStates, RefreshBoxDirectionStatus) => void     | null | 可选(不推荐使用) |

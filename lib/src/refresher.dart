@@ -89,6 +89,8 @@ class EasyRefresh extends StatefulWidget {
   final bool autoControl;
   // 首次刷新
   final bool firstRefresh;
+  // 滚动控制器
+  final ScrollController outerController;
 
   EasyRefresh(
       {GlobalKey<EasyRefreshState> key,
@@ -108,6 +110,7 @@ class EasyRefresh extends StatefulWidget {
       this.limitScroll: false,
       this.autoControl: true,
       this.firstRefresh: false,
+      this.outerController,
       @required this.child})
       : super(key: key) {
     assert(child != null);
@@ -402,10 +405,14 @@ class EasyRefreshState extends State<EasyRefresh>
     _firstRefresh = widget.firstRefresh;
     _neverScrollableScrollPhysics = NeverScrollableScrollPhysics();
     // 初始化滚动控制器
-    _scrollController = widget.child is ScrollView &&
-            (widget.child as ScrollView).controller != null
-        ? (widget.child as ScrollView).controller
-        : new ScrollController();
+    if (widget.outerController == null) {
+      _scrollController = widget.child is ScrollView &&
+          (widget.child as ScrollView).controller != null
+          ? (widget.child as ScrollView).controller
+          : new ScrollController();
+    }else {
+      _scrollController = widget.outerController;
+    }
     // 初始化滚动形式
     _scrollPhysics = RefreshAlwaysScrollPhysics(
         scrollOverListener: _getScrollOverListener(),
@@ -448,7 +455,7 @@ class EasyRefreshState extends State<EasyRefresh>
           } else if (_bottomItemHeight <= _loadHeight &&
               _bottomItemHeight > 0) {
             // 如果不是加载完成或者列表底部就不用跳转到列表底部
-            if (_animationStates != AnimationStates.LoadDataEnd) {
+            if (_animationStates != AnimationStates.LoadDataEnd && widget.outerController == null) {
               _scrollController
                   .jumpTo(_scrollController.position.maxScrollExtent);
             } else {
@@ -465,7 +472,7 @@ class EasyRefreshState extends State<EasyRefresh>
             // 设置底部高度
             _setBottomItemHeight(_shrinkageDistance * _animation.value);
             // 同上
-            if (_animationStates != AnimationStates.LoadDataEnd) {
+            if (_animationStates != AnimationStates.LoadDataEnd && widget.outerController == null) {
               _scrollController
                   .jumpTo(_scrollController.position.maxScrollExtent);
             } else {
@@ -1196,7 +1203,7 @@ class EasyRefreshState extends State<EasyRefresh>
                       semanticChildCount: widget.child is ScrollView
                           ? (widget.child as ScrollView).semanticChildCount
                           : 1,
-                      controller: _scrollController,
+                      controller: widget.outerController == null ? _scrollController : null,
                       physics: _scrollPhysics,
                       slivers: new List.from(slivers, growable: true),
                     ),

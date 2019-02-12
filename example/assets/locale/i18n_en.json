@@ -37,6 +37,7 @@
   "emptyWidget": "Empty widget",
   "emptyWidgetDescribe": "Show empty widget when there is no data",
   "tabViewWidgetDescribe": "List and Grid consist of TabBarView",
+  "nestedScrollViewDescribe": "NestedScrollView example",
   "qqGroup": "QQ group",
   "github": "Github",
   "name": "Name",
