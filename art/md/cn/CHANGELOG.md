@@ -110,7 +110,7 @@
 ## V 1.2.4
 >添加：NestedScrollView支持 [#7](https://github.com/xuelongqy/flutter_easyrefresh/issues/7),[#11](https://github.com/xuelongqy/flutter_easyrefresh/issues/11)  
 
-## 1.2.5
+## V 1.2.5
 >修复：CustomScrollView不维护semanticChildCount报错问题 [#24](https://github.com/xuelongqy/flutter_easyrefresh/issues/24),[#25](https://github.com/xuelongqy/flutter_easyrefresh/issues/25)  
 >修复：CustomScrollView刷新或加载导致emptyWidget多次添加问题,感谢hwh97 [#29](https://github.com/xuelongqy/flutter_easyrefresh/pull/29)  
  
