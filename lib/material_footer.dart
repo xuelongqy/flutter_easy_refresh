@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'src/footer/footer.dart';
-import 'dart:core';
+import 'dart:async';
 
 // How much the scroll's drag gesture can overshoot the RefreshIndicator's
 // displacement; max displacement = _kDragSizeFactorLimit * displacement.

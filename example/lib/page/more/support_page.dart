@@ -13,9 +13,9 @@ class SupportPage extends StatefulWidget {
 
 class _SupportPageState extends State<SupportPage> {
   // 交互通道名字
-  final String CHANNEL = "com.qingyi.easyrefresh.example/channel";
+  final String _channel = "com.qingyi.easyrefresh.example/channel";
   // 支付宝捐赠
-  final String ALIPAY_DONATION = "aliPayDonation";
+  final String _alipayDonation = "aliPayDonation";
   // 交互通道
   MethodChannel _nativeChannel;
 
@@ -23,7 +23,7 @@ class _SupportPageState extends State<SupportPage> {
   @override
   void initState() {
     super.initState();
-    _nativeChannel = MethodChannel(CHANNEL);
+    _nativeChannel = MethodChannel(_channel);
   }
 
   @override
@@ -62,7 +62,7 @@ class _SupportPageState extends State<SupportPage> {
                 color: Colors.orange,
               ),
               onPressed: () {
-                _nativeChannel.invokeMethod(ALIPAY_DONATION);
+                _nativeChannel.invokeMethod(_alipayDonation);
               },
             ),
 //            Container(

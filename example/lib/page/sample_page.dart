@@ -302,12 +302,13 @@ class _SamplePageState extends State<SamplePage>
             ),
             ListItem(
               title: Translations.of(context).text("NestedScrollView"),
-              describe: Translations.of(context).text("nestedScrollViewDescribe"),
+              describe:
+                  Translations.of(context).text("nestedScrollViewDescribe"),
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (BuildContext context) {
-                      return NestedScrollViewPage();
-                    }));
+                  return NestedScrollViewPage();
+                }));
               },
               icon: Icon(
                 Icons.line_style,

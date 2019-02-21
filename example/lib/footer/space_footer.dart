@@ -143,8 +143,7 @@ class SpaceFooterState extends RefreshFooterState<SpaceFooter>
       width: double.infinity,
       height: height,
       child: height > 0.0
-          ? FlareActor(
-              "assets/flare/Space Demo.flr",
+          ? FlareActor("assets/flare/Space Demo.flr",
               alignment: Alignment.center,
               animation: "idle",
               fit: BoxFit.cover,

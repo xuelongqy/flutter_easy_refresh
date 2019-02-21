@@ -196,7 +196,8 @@ class RefreshAlwaysScrollPhysics extends ScrollPhysics {
   double applyBoundaryConditions(ScrollMetrics position, double value) {
     if (value < position.pixels &&
         position.pixels <= position.minScrollExtent) {
-      if (!scrollOverListener.justScrollOver || scrollOverListener.justScrollOver && scrollOverListener.refresh) {
+      if (!scrollOverListener.justScrollOver ||
+          scrollOverListener.justScrollOver && scrollOverListener.refresh) {
         // underscroll
         return value - position.pixels;
       } else {
@@ -213,7 +214,8 @@ class RefreshAlwaysScrollPhysics extends ScrollPhysics {
     }
     if (position.maxScrollExtent <= position.pixels &&
         position.pixels < value) {
-      if (!scrollOverListener.justScrollOver || scrollOverListener.justScrollOver && scrollOverListener.loadMore) {
+      if (!scrollOverListener.justScrollOver ||
+          scrollOverListener.justScrollOver && scrollOverListener.loadMore) {
         // overscroll
         return value - position.pixels;
       } else {
@@ -223,8 +225,7 @@ class RefreshAlwaysScrollPhysics extends ScrollPhysics {
     if (position.pixels < position.maxScrollExtent &&
         position.maxScrollExtent < value) {
       // hit bottom edge
-      if (scrollOverListener != null &&
-          scrollOverListener.bottomOver != null) {
+      if (scrollOverListener != null && scrollOverListener.bottomOver != null) {
         scrollOverListener.bottomOver();
       }
       return value - position.maxScrollExtent;
@@ -292,5 +293,9 @@ class ScrollOverListener {
   final bool loadMore;
 
   const ScrollOverListener(
-      {this.topOver, this.bottomOver, this.justScrollOver: false, this.refresh: false, this.loadMore: false});
+      {this.topOver,
+      this.bottomOver,
+      this.justScrollOver: false,
+      this.refresh: false,
+      this.loadMore: false});
 }
