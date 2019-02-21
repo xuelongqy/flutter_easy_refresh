@@ -1148,7 +1148,11 @@ class EasyRefreshState extends State<EasyRefresh>
       }
       // 判断是否为加载更多
       if (_loaded) {
-        if (body.semanticChildCount > this._itemCount) {
+        if (body.semanticChildCount == null) {
+          this._refreshFooter.getKey().currentState.onLoaded();
+          _onFooterStatusChanged(FooterStatus.LOADED);
+        }
+        else if (body.semanticChildCount > this._itemCount) {
           this._refreshFooter.getKey().currentState.onLoaded();
           _onFooterStatusChanged(FooterStatus.LOADED);
         } else {
