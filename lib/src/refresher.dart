@@ -1140,7 +1140,7 @@ class EasyRefreshState extends State<EasyRefresh>
     Widget body = widget.child;
     if (body is ScrollView) {
       // ignore: invalid_use_of_protected_member
-      slivers = body.buildSlivers(context);
+      slivers = new List.from(body.buildSlivers(context), growable: true);
       // 是否添加空视图
       if (widget.emptyWidget != null && body.semanticChildCount == 0) {
         slivers.add(SliverList(
