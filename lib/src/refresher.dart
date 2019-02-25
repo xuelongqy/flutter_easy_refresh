@@ -1198,9 +1198,7 @@ class EasyRefreshState extends State<EasyRefresh>
                       semanticChildCount: widget.child is ScrollView
                           ? (widget.child as ScrollView).semanticChildCount
                           : 1,
-                      controller: widget.outerController == null
-                          ? _scrollController
-                          : null,
+                      controller: _scrollController,
                       physics: _scrollPhysics,
                       slivers: new List.from(slivers, growable: true),
                     ),
