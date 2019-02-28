@@ -77,3 +77,7 @@
       await Future.delayed(const Duration(seconds: 2), () {});
     },
 ~~~
+
+## 5.暂不支持设置reverse
+
+由于EasyRefresh的设计原理，目前暂时不支持reverse，我想你也不会经常用到

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:example/generated/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';

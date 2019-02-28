@@ -695,12 +695,14 @@ class EasyRefreshState extends State<EasyRefresh>
       if (widget.onRefresh != null) {
         // 调用刷新回调
         await widget.onRefresh();
+        // 稍作延时(等待列表加载完成,用于界面修改数据)
+        await new Future.delayed(const Duration(milliseconds: 100), () {});
       }
     } else {
       if (widget.loadMore != null) {
         // 调用加载更多
         await widget.loadMore();
-        // 稍作延时(等待列表加载完成,用于判断前后条数差异)
+        // 稍作延时(等待列表加载完成,用于界面修改数据以及判断前后条数差异)
         //await new Future.delayed(const Duration(milliseconds: 100), () {});
       }
     }
@@ -920,7 +922,7 @@ class EasyRefreshState extends State<EasyRefresh>
                 footerPullBackRecord: widget.loadMore != null);
           });
         } else {
-          if (_topItemHeight > 100.0 + _refreshHeight) {
+          if (_topItemHeight > 1000.0 + _refreshHeight) {
             setState(() {
               _scrollPhysics = _neverScrollableScrollPhysics;
             });
@@ -957,7 +959,8 @@ class EasyRefreshState extends State<EasyRefresh>
         } else {
           // 拉出底部
           _isPushBottom = true;
-          if (_bottomItemHeight > 50.0 + _loadHeight) {
+          if (_bottomItemHeight > 500.0 + _loadHeight &&
+              widget.outerController == null) {
             if (_isPulling) {
               return;
             }
@@ -1141,14 +1144,20 @@ class EasyRefreshState extends State<EasyRefresh>
       // 判断是否为加载更多
       if (_loaded) {
         if (body.semanticChildCount == null) {
-          this._refreshFooter.getKey().currentState.onLoaded();
-          _onFooterStatusChanged(FooterStatus.LOADED);
+          new Future.delayed(const Duration(milliseconds: 100), () {
+            this._refreshFooter.getKey().currentState.onLoaded();
+            _onFooterStatusChanged(FooterStatus.LOADED);
+          });
         } else if (body.semanticChildCount > this._itemCount) {
-          this._refreshFooter.getKey().currentState.onLoaded();
-          _onFooterStatusChanged(FooterStatus.LOADED);
+          new Future.delayed(const Duration(milliseconds: 100), () {
+            this._refreshFooter.getKey().currentState.onLoaded();
+            _onFooterStatusChanged(FooterStatus.LOADED);
+          });
         } else {
-          this._refreshFooter.getKey().currentState.onNoMore();
-          _onFooterStatusChanged(FooterStatus.NO_MORE);
+          new Future.delayed(const Duration(milliseconds: 100), () {
+            this._refreshFooter.getKey().currentState.onNoMore();
+            _onFooterStatusChanged(FooterStatus.NO_MORE);
+          });
         }
         _loaded = false;
       }
@@ -1190,7 +1199,7 @@ class EasyRefreshState extends State<EasyRefresh>
                       _handleOverScrollNotification(notification);
                     }
                     _lastScrollNotification = notification;
-                    return true;
+                    return false;
                   },
                   child: ScrollConfiguration(
                     behavior: widget.behavior ?? new RefreshBehavior(),

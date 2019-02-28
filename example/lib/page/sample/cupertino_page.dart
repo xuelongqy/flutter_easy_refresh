@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:example/generated/translations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

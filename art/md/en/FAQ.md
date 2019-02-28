@@ -78,3 +78,7 @@ Sample code
       await Future.delayed(const Duration(seconds: 2), () {});
     },
 ~~~
+
+## 5.Setting reverse is not supported at this time
+
+Due to the design principle of EasyRefresh, there is currently no support for reverse. I don't think you will use it often.
