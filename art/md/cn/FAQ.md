@@ -81,3 +81,7 @@
 ## 5.暂不支持设置reverse
 
 由于EasyRefresh的设计原理，目前暂时不支持reverse，我想你也不会经常用到
+
+## 6.outerController并不是列表的ScrollController
+
+outerController目前的作用是用来兼容NestedScrollView的，如果需要ScrollController，直接设置到列表里就可以了

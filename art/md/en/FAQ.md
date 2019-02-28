@@ -82,3 +82,7 @@ Sample code
 ## 5.Setting reverse is not supported at this time
 
 Due to the design principle of EasyRefresh, there is currently no support for reverse. I don't think you will use it often.
+
+## 6.outerController is not a list of ScrollController
+
+The outerController current role is to be compatible with the NestedScrollView. If you need a ScrollController, you can set it directly to the list.
