@@ -8,6 +8,7 @@ import 'package:example/page/sample/float_page.dart';
 import 'package:example/page/sample/list_embed_page.dart';
 import 'package:example/page/sample/manual_control_page.dart';
 import 'package:example/page/sample/nested_scroll_view_page.dart';
+import 'package:example/page/sample/second_floor_page.dart';
 import 'package:example/page/sample/sliver_page.dart';
 import 'package:example/page/sample/swiper_page.dart';
 import 'package:example/page/sample/tab_view_page.dart';
@@ -312,6 +313,28 @@ class _SamplePageState extends State<SamplePage>
               },
               icon: Icon(
                 Icons.line_style,
+                color: Colors.orange,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            ListItem(
+              title: Translations.of(context).text("secondFloor"),
+              describe: Translations.of(context).text("secondFloorDescribe"),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                  return SecondFloorPage();
+                }));
+              },
+              icon: Icon(
+                Icons.view_agenda,
                 color: Colors.orange,
               ),
             ),
