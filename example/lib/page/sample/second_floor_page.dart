@@ -166,7 +166,6 @@ class _SecondFloorPageState extends State<SecondFloorPage>
                         child: Center(
                             child: Icon(
                           Icons.keyboard_arrow_up,
-                          size: 36.0,
                           color: Colors.white,
                         )),
                       )

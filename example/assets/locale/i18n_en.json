@@ -41,6 +41,8 @@
   "secondFloor": "Second floor",
   "secondFloorDescribe": "Imitate the second floor of Taobao",
   "welcomeToSecondFloor": "Welcome to second floor",
+  "scrollBar": "ScrollBar",
+  "scrollBarDescribe": "Add a scroll bar to the list",
   "qqGroup": "QQ group",
   "github": "Github",
   "name": "Name",
