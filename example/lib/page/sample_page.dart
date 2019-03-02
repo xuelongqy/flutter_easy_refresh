@@ -353,8 +353,8 @@ class _SamplePageState extends State<SamplePage>
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (BuildContext context) {
-                      return ScrollBarPage();
-                    }));
+                  return ScrollBarPage();
+                }));
               },
               icon: Icon(
                 Icons.border_right,

@@ -118,3 +118,8 @@
 >Fix: NotificationListener is invalid [#30](https://github.com/xuelongqy/flutter_easyrefresh/issues/30)  
 >Remove: A certain height is reached to trigger a refresh or load   
 >Fix: Unable to modify prompt text after refresh or loading [#22](https://github.com/xuelongqy/flutter_easyrefresh/issues/22)   
+
+## V 1.2.7
+>Add: builder property to add additional components, such as scroll bars [#39](https://github.com/xuelongqy/flutter_easyrefresh/issues/39)  
+>Add: Scrollbar example  
+>Add: Taobao second floor example [#26](https://github.com/xuelongqy/flutter_easyrefresh/issues/26)   

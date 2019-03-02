@@ -12,7 +12,8 @@ typedef void HeaderStatusChanged(HeaderStatus status);
 typedef void FooterStatusChanged(FooterStatus status);
 typedef void HeaderHeightChanged(double height);
 typedef void FooterHeightChanged(double height);
-typedef Widget TransitionBuilder(BuildContext context, Widget child, ScrollController scrollController);
+typedef Widget TransitionBuilder(
+    BuildContext context, Widget child, ScrollController scrollController);
 typedef void AnimationStateChanged(AnimationStates animationStates,
     RefreshBoxDirectionStatus refreshBoxDirectionStatus);
 
@@ -1177,13 +1178,18 @@ class EasyRefreshState extends State<EasyRefresh>
       semanticChildCount: widget.child is ScrollView
           ? (widget.child as ScrollView).semanticChildCount
           : 1,
-      controller: widget.outerController == null
-          ? _scrollController
-          : null,
+      controller: widget.outerController == null ? _scrollController : null,
       physics: _scrollPhysics,
       slivers: new List.from(slivers, growable: true),
     );
-    var listWidget = widget.builder == null ? listChild : widget.builder(context, listChild, widget.outerController == null ? _scrollController : widget.outerController);
+    var listWidget = widget.builder == null
+        ? listChild
+        : widget.builder(
+            context,
+            listChild,
+            widget.outerController == null
+                ? _scrollController
+                : widget.outerController);
     return new Container(
       child: Stack(
         children: <Widget>[
