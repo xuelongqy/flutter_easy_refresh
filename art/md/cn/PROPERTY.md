@@ -112,6 +112,7 @@ class _BasicPageState extends State<BasicPage> {
 | onRefresh | 刷新回调方法     | () => Void | null | 可选(为null时无法触发刷新) |
 | loadMore | 加载回调方法     | () => Void | null | 可选(为null时无法触发加载) |
 | animationStateChangedCallback | EasyRefresh状态回调，用于手动处理刷新加载等操作     | (AnimationStates, RefreshBoxDirectionStatus) => void     | null | 可选(不推荐使用) |
+| builder | 过渡构建器，用于添加额外组件，例如滚动条     | (BuildContext, Widget, ScrollController) => Widget     | null | 可选 |
 
 ## 属性表格 - RefreshSafeArea(用于包裹滚动冲突的Widget)
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |

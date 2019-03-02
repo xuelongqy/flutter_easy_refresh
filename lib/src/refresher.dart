@@ -12,6 +12,7 @@ typedef void HeaderStatusChanged(HeaderStatus status);
 typedef void FooterStatusChanged(FooterStatus status);
 typedef void HeaderHeightChanged(double height);
 typedef void FooterHeightChanged(double height);
+typedef Widget TransitionBuilder(BuildContext context, Widget child, ScrollController scrollController);
 typedef void AnimationStateChanged(AnimationStates animationStates,
     RefreshBoxDirectionStatus refreshBoxDirectionStatus);
 
@@ -83,6 +84,8 @@ class EasyRefresh extends StatefulWidget {
   final bool firstRefresh;
   // 滚动控制器
   final ScrollController outerController;
+  // 列表构建器
+  final TransitionBuilder builder;
 
   EasyRefresh(
       {GlobalKey<EasyRefreshState> key,
@@ -103,6 +106,7 @@ class EasyRefresh extends StatefulWidget {
       this.autoControl: true,
       this.firstRefresh: false,
       this.outerController,
+      this.builder,
       @required this.child})
       : super(key: key) {
     assert(child != null);
@@ -1168,6 +1172,18 @@ class EasyRefreshState extends State<EasyRefresh>
       slivers
           .add(SliverList(delegate: SliverChildListDelegate(<Widget>[body])));
     }
+    // 构建列表
+    var listChild = CustomScrollView(
+      semanticChildCount: widget.child is ScrollView
+          ? (widget.child as ScrollView).semanticChildCount
+          : 1,
+      controller: widget.outerController == null
+          ? _scrollController
+          : null,
+      physics: _scrollPhysics,
+      slivers: new List.from(slivers, growable: true),
+    );
+    var listWidget = widget.builder == null ? listChild : widget.builder(context, listChild, widget.outerController == null ? _scrollController : widget.outerController);
     return new Container(
       child: Stack(
         children: <Widget>[
@@ -1203,16 +1219,7 @@ class EasyRefreshState extends State<EasyRefresh>
                   },
                   child: ScrollConfiguration(
                     behavior: widget.behavior ?? new RefreshBehavior(),
-                    child: new CustomScrollView(
-                      semanticChildCount: widget.child is ScrollView
-                          ? (widget.child as ScrollView).semanticChildCount
-                          : 1,
-                      controller: widget.outerController == null
-                          ? _scrollController
-                          : null,
-                      physics: _scrollPhysics,
-                      slivers: new List.from(slivers, growable: true),
-                    ),
+                    child: listWidget,
                   ),
                 ),
               ),

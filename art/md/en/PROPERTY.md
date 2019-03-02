@@ -112,6 +112,7 @@ class _BasicPageState extends State<BasicPage> {
 | onRefresh | Refresh callback method     | () => Void | null | optional(Cannot trigger refresh for null) |
 | loadMore | Loading callback method     | () => Void | null | optional(Cannot trigger loading for null) |
 | animationStateChangedCallback | EasyRefresh state callback for manual handling of refresh loading and other operations     | (AnimationStates, RefreshBoxDirectionStatus) => void     | null | optional(不推荐使用) |
+| builder | Transition builder for adding additional components, such as scroll bars     | (BuildContext, Widget, ScrollController) => Widget     | null | optional |
 
 ## Props Table - RefreshSafeArea(Solve the scroll conflict of Widget)
 | Attribute Name     |     Attribute Explain     | Parameter Type | Default Value  | Requirement |
