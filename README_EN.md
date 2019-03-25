@@ -137,7 +137,7 @@ You can also scan the qr code below or [![Donate to this project using Paypal](h
 ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_alipay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_wxpay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_tencent.jpg?raw=true)
 
 If in donation message note name, will be record to the list if you are making open source authors, donation can leave when making project address or personal home page, a link will be added to the list have the effect of promoting each other
-[Donation list](https://github.com/xuelongqy/donation/blob/master/flutter_easyrefresh.md)
+[Donation list](https://github.com/xuelongqy/donation/blob/master/DONATIONLIST.md)
 
 ### QQ Group - 554981921
 #### Into the group of instructions
