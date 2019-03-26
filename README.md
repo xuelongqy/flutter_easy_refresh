@@ -8,6 +8,8 @@
 
 正如名字一样，EasyRefresh很容易就能在Flutter应用上实现下拉刷新以及上拉加载操作，它支持几乎所有的Flutter控件，但前提是需要包裹成ScrollView。它的功能与Android的SmartRefreshLayout很相似，同样也吸取了很多三方库的优点。EasyRefresh中集成了多种风格的Header和Footer，但是它并没有局限性，你可以很轻松的自定义。使用Flutter强大的动画，甚至随便一个简单的控件也可以完成。EasyRefresh的目标是为Flutter打造一个强大，稳定，成熟的下拉刷新框架。
 
+Web版本移步：[vue-easyrefresh](https://github.com/xuelongqy/vue-easyrefresh)
+
 ## 特点功能:
 
  - 支持Andorid(光晕)，ios(越界回弹)效果
