@@ -46,7 +46,7 @@ class SpaceFooter extends RefreshFooter {
 }
 
 class SpaceFooterState extends RefreshFooterState<SpaceFooter>
-    implements FlareController {
+    with FlareController {
   ActorAnimation _loadingAnimation;
   ActorAnimation _successAnimation;
   ActorAnimation _pullAnimation;
