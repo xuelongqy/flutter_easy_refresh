@@ -46,7 +46,7 @@ class SpaceHeader extends RefreshHeader {
 }
 
 class SpaceHeaderState extends RefreshHeaderState<SpaceHeader>
-    implements FlareController {
+    with FlareController {
   ActorAnimation _loadingAnimation;
   ActorAnimation _successAnimation;
   ActorAnimation _pullAnimation;
