@@ -25,7 +25,7 @@ enum RefreshBoxDirectionStatus {
 }
 
 /// Header状态
-enum HeaderStatus { START, READY, REFRESHING, REFRESHED, RESTORE, END, CLOSE }
+enum HeaderStatus { START, READY,RELEASE, REFRESHING, REFRESHED, RESTORE, END, CLOSE }
 
 /// Footer状态
 enum FooterStatus {
@@ -552,6 +552,9 @@ class EasyRefreshState extends State<EasyRefresh>
         //动画开始时根据情况计算要弹回去的距离
         if (_topItemHeight > _refreshHeight) {
           _shrinkageDistance = _topItemHeight - _refreshHeight;
+          //增加开始释放的状态
+          _onHeaderStatusChanged(HeaderStatus.RELEASE);
+          _refreshHeader.getKey().currentState.onRefreshRelease();
         } else if (_bottomItemHeight > _loadHeight) {
           _shrinkageDistance = _bottomItemHeight - _loadHeight;
           //这里必须有个动画，不然上拉加载时  ListView不会自动滑下去，导致ListView悬在半空

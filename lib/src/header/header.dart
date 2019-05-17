@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 enum RefreshHeaderStatus {
   NO_REFRESH,
   REFRESH_READY,
+  RELEASE,
   REFRESHING,
   REFRESHED,
 }
@@ -63,6 +64,11 @@ abstract class RefreshHeaderState<T extends RefreshHeader> extends State<T> {
     refreshHeaderStatus = RefreshHeaderStatus.REFRESH_READY;
   }
 
+  // 回调释放刷新方法
+  @mustCallSuper
+  void onRefreshRelease() {
+    refreshHeaderStatus = RefreshHeaderStatus.RELEASE;
+  }
   // 回调开始刷新方法
   @mustCallSuper
   void onRefreshing() {
