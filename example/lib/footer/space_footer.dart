@@ -151,4 +151,7 @@ class SpaceFooterState extends RefreshFooterState<SpaceFooter>
           : Container(),
     );
   }
+
+  @override
+  ValueNotifier<bool> isActive;
 }
