@@ -13,6 +13,7 @@ import 'package:example/page/sample/second_floor_page.dart';
 import 'package:example/page/sample/sliver_page.dart';
 import 'package:example/page/sample/swiper_page.dart';
 import 'package:example/page/sample/tab_view_page.dart';
+import 'package:example/page/sample/tab_views2_page.dart';
 import 'package:example/page/sample/tab_views_page.dart';
 import 'package:example/page/sample/user_profile_page.dart';
 import 'package:example/widget/list_item.dart';
@@ -310,6 +311,28 @@ class _SamplePageState extends State<SamplePage>
                 Navigator.push(context,
                     MaterialPageRoute(builder: (BuildContext context) {
                   return TabViewsPage();
+                }));
+              },
+              icon: Icon(
+                Icons.tab,
+                color: Colors.orange,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            ListItem(
+              title: Translations.of(context).text("TabViews2"),
+              describe: Translations.of(context).text("tabViewWidgetDescribe"),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                  return TabViews2Page();
                 }));
               },
               icon: Icon(
