@@ -1,18 +1,60 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class EasyRefresh extends StatefulWidget {
-  EasyRefresh();
+  // EasyRefresh控制器
+  EasyRefreshController controller;
+  // 滚动控制器
+  ScrollController scrollController;
+
+  EasyRefresh({
+    this.controller,
+    this.scrollController
+  });
 
   @override
-  EasyRefreshState createState() {
-    return EasyRefreshState();
+  _EasyRefreshState createState() {
+    return _EasyRefreshState();
   }
 }
 
-class EasyRefreshState extends State<EasyRefresh> {
+class _EasyRefreshState extends State<EasyRefresh> {
+
+  // 初始化
+  @override
+  void initState() {
+     super.initState();
+    // 绑定EasyRefresh控制器
+    widget.controller ?? widget.controller.bindEasyRefreshState(this);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container();
+  }
+}
+
+/// EasyRefresh控制器
+class EasyRefreshController {
+  // 状态
+  _EasyRefreshState _easyRefreshState;
+
+  // 绑定状态
+  void bindEasyRefreshState(_EasyRefreshState state) {
+    this._easyRefreshState = state;
+  }
+
+  // 完成刷新
+  void finishRefresh() {
+    if (this._easyRefreshState != null) {
+
+    }
+  }
+
+  // 完成加载
+  void finishLoadMore() {
+    if (this._easyRefreshState != null) {
+
+    }
   }
 }
