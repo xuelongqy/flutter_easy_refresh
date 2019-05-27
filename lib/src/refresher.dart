@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class EasyRefresh extends StatefulWidget {
   // EasyRefresh控制器
-  EasyRefreshController controller;
+  final EasyRefreshController controller;
   // 滚动控制器
-  ScrollController scrollController;
+  final ScrollController scrollController;
 
   EasyRefresh({
     this.controller,
