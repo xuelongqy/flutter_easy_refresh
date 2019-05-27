@@ -151,4 +151,7 @@ class SpaceHeaderState extends RefreshHeaderState<SpaceHeader>
           : Container(),
     );
   }
+
+  @override
+  ValueNotifier<bool> isActive;
 }
