@@ -3,9 +3,6 @@ import 'package:flutter/widgets.dart';
 /// Header状态枚举
 enum HeaderStatus { idle, start, ready, refreshing, completed, noMore, failed }
 
-typedef HeaderBuilder = Widget Function(
-    BuildContext context);
-
 /// Header属性
 class HeaderState {
   // 状态

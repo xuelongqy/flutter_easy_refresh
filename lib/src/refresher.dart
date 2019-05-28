@@ -44,10 +44,6 @@ class EasyRefresh extends StatefulWidget {
   final ScrollController scrollController;
   // 刷新组件构建器
   final RefreshWidgetBuilder builder;
-  // Header构造器
-  final HeaderBuilder headerBuilder;
-  // Footer构造器
-  final FooterBuilder footerBuilder;
   // 刷新回调
   final RefreshCallback onRefresh;
   // 加载回调
@@ -57,8 +53,6 @@ class EasyRefresh extends StatefulWidget {
     this.controller,
     this.scrollController,
     this.builder,
-    this.headerBuilder,
-    this.footerBuilder,
     this.onRefresh,
     this.onLoadMore
   });
