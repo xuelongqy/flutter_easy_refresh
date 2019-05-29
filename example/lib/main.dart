@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
+import 'widget/sample_list_item.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -62,7 +64,15 @@ class _ExampleState extends State<_Example> {
           child: EasyRefresh(
             controller: _controller,
             builder: CustomRefreshWidgetBuilder(
-              child: Container(),
+              child: ListView.builder(
+                itemCount: 20,
+                itemBuilder: (context, index) {
+                  return SampleListItem(
+                    text: '$index',
+                    bgColor: index%2==0 ? Colors.grey[300] : Colors.transparent,
+                  );
+                },
+              )
             ).builder,
           )
       ),
@@ -71,12 +81,12 @@ class _ExampleState extends State<_Example> {
             onPressed: () {
               _controller.callRefresh();
             },
-            child: Text("refresh", style: TextStyle(color: Colors.black))),
+            child: Text("Refresh", style: TextStyle(color: Colors.black))),
         FlatButton(
             onPressed: () {
               _controller.callLoadMore();
             },
-            child: Text("loadMore", style: TextStyle(color: Colors.black))),
+            child: Text("Load more", style: TextStyle(color: Colors.black))),
       ]
     );
   }

@@ -4,6 +4,7 @@
     createTime:2018-05-02 14:39
  */
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
 
@@ -103,7 +104,7 @@ class RefreshBouncePhysics extends ScrollPhysics {
   // ClampingScrollPhysics so we require a more deliberate input gesture
   // to trigger a fling.
   @override
-  double get minFlingVelocity => 2.5 * 2.0;
+  double get minFlingVelocity => kMinFlingVelocity * 2.0;
 
   // Methodology:
   // 1- Use https://github.com/flutter/scroll_overlay to test with Flutter and
@@ -250,7 +251,7 @@ class RefreshClampingSimulation extends Simulation {
           (velocity * _duration / _initialVelocityPenetration).abs(),
           extentBefore);
       if (_distance == extentBefore) {
-        _duration = 0.9;
+        _duration = _distance/1000;
       }
     }
     else{
