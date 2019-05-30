@@ -63,6 +63,8 @@ class _ExampleState extends State<_Example> {
       body: Center(
           child: EasyRefresh(
             controller: _controller,
+            onRefresh: () {},
+            onLoadMore: () {},
             builder: CustomRefreshWidgetBuilder(
               child: ListView.builder(
                 itemCount: 20,

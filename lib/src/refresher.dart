@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'footer/footer.dart';
 import 'header/header.dart';
-import 'scrollPhysics/scroll_physics.dart';
+import 'physics/scroll_physics.dart';
 
 /// 需要刷新组件构建器
 /// context为上下文[BuildContext]
@@ -22,9 +22,12 @@ typedef RefreshCallback = Future<void> Function();
 /// 通用的刷新组件构造器
 /// context为上下文[BuildContext]
 class CustomRefreshWidgetBuilder {
+  // 子组件
   final Widget child;
 
-  CustomRefreshWidgetBuilder({this.child}){
+  CustomRefreshWidgetBuilder({
+    this.child,
+  }){
     assert(this.child != null);
   }
 
@@ -81,12 +84,28 @@ class CustomRefreshWidgetBuilder {
       slivers = [child];
     }
     // 添加非浮动Header和Footer
-    if (!header.float && header.widget != null) {
-      slivers.insert(0, header.widget);
+    /*if (!header.float && header.widget != null) {
+      slivers.insert(0, SliverList(
+          delegate: SliverChildListDelegate([
+            Container(
+              alignment: Alignment.bottomCenter,
+              height: header.extent,
+              width: double.infinity,
+              child: footer.widget,
+            )
+          ])));
     }
     if (!footer.float && footer.widget != null) {
-      slivers.add(footer.widget);
-    }
+      slivers.add(SliverList(
+          delegate: SliverChildListDelegate([
+            Container(
+              alignment: Alignment.topCenter,
+              height: footer.extent,
+              width: double.infinity,
+              child: footer.widget,
+            )
+          ])));
+    }*/
     return Stack(
       children: <Widget>[
         CustomScrollView(
@@ -141,14 +160,14 @@ class EasyRefresh extends StatefulWidget {
   final double infiniteOffset = 0.0;
 
   // 全局默认Header
-  static Header _defaultHeader;
+  static Header _defaultHeader = ClassicalHeader();
   static set defaultHeader(Header header) {
     if (header != null) {
       _defaultHeader = header;
     }
   }
   // 全局默认Footer
-  static Footer _defaultFooter;
+  static Footer _defaultFooter = ClassicalFooter();
   static set defaultFooter(Footer footer) {
     if (footer != null) {
       defaultFooter = footer;
@@ -181,12 +200,21 @@ class _EasyRefreshState extends State<EasyRefresh> {
   @override
   void initState() {
      super.initState();
-    // 生成滚动形式
-     _scrollPhysics = RefreshBouncePhysics();
   }
 
   @override
   void didChangeDependencies() {
+    // 生成滚动形式
+    _scrollPhysics = EasyRefreshPhysics();
+    /*if (widget.onRefresh == null) {
+      _scrollPhysics = RefreshBouncePhysics();
+    } else if (widget.header == null) {
+      _scrollPhysics = RefreshClampPhysics(
+          springBackDistance: EasyRefresh._defaultHeader.extent);
+    } else {
+      _scrollPhysics = RefreshClampPhysics(
+          springBackDistance: widget.header.extent);
+    }*/
     // 绑定EasyRefresh控制器
     if (widget.controller != null) {
       widget.controller.bindEasyRefreshState(this);
@@ -197,11 +225,23 @@ class _EasyRefreshState extends State<EasyRefresh> {
           widget.controller.scrollController ?? ScrollController();
     }
     // 设置Header和Footer属性
-    if (widget.header != null) {
+    if (widget.header == null) {
+      widget.controller.header.triggerHeight = EasyRefresh._defaultHeader.triggerHeight;
+      widget.controller.header.float = EasyRefresh._defaultHeader.float;
+      widget.controller.header.extent = EasyRefresh._defaultHeader.extent;
+    } else {
+      widget.controller.header.triggerHeight = widget.header.triggerHeight;
       widget.controller.header.float = widget.header.float;
+      widget.controller.header.extent = widget.header.extent;
     }
-    if (widget.footer != null) {
+    if (widget.footer == null) {
+      widget.controller.footer.triggerHeight = EasyRefresh._defaultFooter.triggerHeight;
+      widget.controller.footer.float = EasyRefresh._defaultFooter.float;
+      widget.controller.footer.extent = EasyRefresh._defaultFooter.extent;
+    } else {
+      widget.controller.footer.triggerHeight = widget.header.triggerHeight;
       widget.controller.footer.float = widget.header.float;
+      widget.controller.footer.extent = widget.header.extent;
     }
     super.didChangeDependencies();
   }
@@ -234,15 +274,19 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
   // 构建Header
   HeaderState buildHeader() {
-    widget.controller.header.widget = widget.onRefresh == null ?
-        null : widget.header.builder(context, widget.controller.header);
+    widget.controller.header.widget = widget.onRefresh == null
+        ? null : widget.header == null
+        ? EasyRefresh._defaultHeader.builder(context, widget.controller.header)
+        : widget.header.builder(context, widget.controller.header);
     return widget.controller.header;
   }
 
   // 构建Footer
   FooterState buildFooter() {
-    widget.controller.footer.widget = widget.onRefresh == null ?
-    null : widget.header.builder(context, widget.controller.header);
+    widget.controller.footer.widget = widget.onRefresh == null
+        ? null : widget.footer == null
+        ? EasyRefresh._defaultFooter.builder(context, widget.controller.footer)
+        : widget.footer.builder(context, widget.controller.footer);
     return widget.controller.footer;
   }
 }
