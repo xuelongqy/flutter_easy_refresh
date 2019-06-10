@@ -66,15 +66,19 @@ class _ExampleState extends State<_Example> {
             onRefresh: () {},
             onLoadMore: () {},
             builder: CustomRefreshWidgetBuilder(
-              child: ListView.builder(
-                itemCount: 20,
-                itemBuilder: (context, index) {
-                  return SampleListItem(
-                    text: '$index',
-                    bgColor: index%2==0 ? Colors.grey[300] : Colors.transparent,
-                  );
-                },
-              )
+              childBuilder: (context, scrollController, physics) {
+                return ListView.builder(
+                  controller: scrollController,
+                  physics: physics,
+                  itemCount: 20,
+                  itemBuilder: (context, index) {
+                    return SampleListItem(
+                      text: '$index',
+                      bgColor: index%2==0 ? Colors.grey[300] : Colors.transparent,
+                    );
+                  },
+                );
+              },
             ).builder,
           )
       ),

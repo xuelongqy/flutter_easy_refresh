@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 /// Footer状态枚举
@@ -90,11 +91,9 @@ class ClassicalFooter extends Footer {
   @override
   Widget builder(BuildContext context, FooterState state) {
     return Container(
-      height: 70.0,
+      height: state.height,
       width: double.infinity,
-      child: Center(
-        child: Text('ClassicalFooter'),
-      ),
+      color: Colors.red,
     );
   }
 }

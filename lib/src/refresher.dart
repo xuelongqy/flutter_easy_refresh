@@ -19,19 +19,28 @@ typedef RefreshWidgetBuilder = Widget Function(
 /// 回调
 typedef RefreshCallback = Future<void> Function();
 
+/// 通用刷新组件子组件构造器
+/// context为上下文[BuildContext]
+/// scrollController为列表滚动控制器[ScrollController]
+/// physics为列表滚动形式[ScrollPhysics]
+typedef CustomRefreshChildBuilder = Widget Function(
+    BuildContext context,
+    ScrollController scrollController,
+    ScrollPhysics physics);
+
 /// 通用的刷新组件构造器
 /// context为上下文[BuildContext]
 class CustomRefreshWidgetBuilder {
-  // 子组件
-  final Widget child;
+  // 子组件构造器
+  final CustomRefreshChildBuilder childBuilder;
 
   CustomRefreshWidgetBuilder({
-    this.child,
+    this.childBuilder,
   }){
-    assert(this.child != null);
+    assert(this.childBuilder != null);
   }
 
-  Widget builder(
+  /*Widget builder(
       BuildContext context,
       HeaderState header,
       FooterState footer,
@@ -137,9 +146,34 @@ class CustomRefreshWidgetBuilder {
         ),
       ],
     );
+  }*/
+
+  Widget builder(
+      BuildContext context,
+      HeaderState header,
+      FooterState footer,
+      ScrollController scrollController,
+      ScrollPhysics physics) {
+    return Stack(
+      children: <Widget>[
+        childBuilder(context, scrollController, physics),
+        // Header
+        Align(
+          alignment: Alignment.topCenter,
+          child: header.widget,
+        ),
+        // Footer
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: footer.widget,
+        ),
+      ],
+    );
   }
 }
 
+/// EasyRefresh
+/// 下拉刷新,上拉加载组件
 class EasyRefresh extends StatefulWidget {
   // EasyRefresh控制器
   final EasyRefreshController controller;
@@ -204,17 +238,6 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
   @override
   void didChangeDependencies() {
-    // 生成滚动形式
-    _scrollPhysics = EasyRefreshPhysics();
-    /*if (widget.onRefresh == null) {
-      _scrollPhysics = RefreshBouncePhysics();
-    } else if (widget.header == null) {
-      _scrollPhysics = RefreshClampPhysics(
-          springBackDistance: EasyRefresh._defaultHeader.extent);
-    } else {
-      _scrollPhysics = RefreshClampPhysics(
-          springBackDistance: widget.header.extent);
-    }*/
     // 绑定EasyRefresh控制器
     if (widget.controller != null) {
       widget.controller.bindEasyRefreshState(this);
@@ -246,6 +269,30 @@ class _EasyRefreshState extends State<EasyRefresh> {
     super.didChangeDependencies();
   }
 
+  // 顶部超出回调
+  void topOffset(bool bounce,double offset) {
+    if (widget.controller.header.height == 0.0 && offset == 0.0) {
+      return;
+    }
+    setState(() {
+      if (bounce) {
+        widget.controller.header.height = offset;
+      }
+    });
+  }
+
+  // 底部超出回调
+  void bottomOffset(bool bounce,double offset) {
+    if (widget.controller.footer.height == 0.0 && offset == 0.0) {
+      return;
+    }
+    setState(() {
+      if (bounce) {
+        widget.controller.footer.height = offset;
+      }
+    });
+  }
+
   // 触发刷新
   void callRefresh() {
     print("callRefresh");
@@ -268,12 +315,28 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context, buildHeader(), buildFooter(),
-        widget.controller.scrollController, _scrollPhysics);
+    // 生成滚动形式
+    _scrollPhysics = EasyRefreshPhysics(
+      topOffset: topOffset,
+      bottomOffset: bottomOffset,
+    );
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        // 判断是否停止滑动动作
+        if (notification is ScrollUpdateNotification &&
+            notification.dragDetails == null ||
+            notification is ScrollEndNotification &&
+            notification.dragDetails == null) {
+          print('stop');
+        }
+      },
+      child: widget.builder(context, _buildHeader(), _buildFooter(),
+          widget.controller.scrollController, _scrollPhysics),
+    );
   }
 
   // 构建Header
-  HeaderState buildHeader() {
+  HeaderState _buildHeader() {
     widget.controller.header.widget = widget.onRefresh == null
         ? null : widget.header == null
         ? EasyRefresh._defaultHeader.builder(context, widget.controller.header)
@@ -282,7 +345,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
   }
 
   // 构建Footer
-  FooterState buildFooter() {
+  FooterState _buildFooter() {
     widget.controller.footer.widget = widget.onRefresh == null
         ? null : widget.footer == null
         ? EasyRefresh._defaultFooter.builder(context, widget.controller.footer)

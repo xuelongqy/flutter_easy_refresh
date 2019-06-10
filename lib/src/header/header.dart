@@ -91,12 +91,9 @@ class ClassicalHeader extends Header{
   @override
   Widget builder(BuildContext context, HeaderState state) {
     return Container(
-      height: 70.0,
+      height: state.height,
       width: double.infinity,
       color: Colors.red,
-      child: Center(
-        child: Text('ClassicalHeader'),
-      ),
     );
   }
 }
