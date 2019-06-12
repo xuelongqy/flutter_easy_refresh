@@ -160,12 +160,12 @@ class CustomRefreshWidgetBuilder {
         // Header
         Align(
           alignment: Alignment.topCenter,
-          child: header.widget,
+          child: header.widget ?? Container(),
         ),
         // Footer
         Align(
           alignment: Alignment.bottomCenter,
-          child: footer.widget,
+          child: footer.widget ?? Container(),
         ),
       ],
     );
@@ -318,7 +318,11 @@ class _EasyRefreshState extends State<EasyRefresh> {
     // 生成滚动形式
     _scrollPhysics = EasyRefreshPhysics(
       topOffset: topOffset,
+      topExtent: widget.controller.header.triggerHeight,
+      showTopExtent: widget.controller.header.status == HeaderStatus.refreshing,
       bottomOffset: bottomOffset,
+      bottomExtent: widget.controller.footer.triggerHeight,
+      showBottomExtent: widget.controller.footer.status == FooterStatus.loading,
     );
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
@@ -327,7 +331,32 @@ class _EasyRefreshState extends State<EasyRefresh> {
             notification.dragDetails == null ||
             notification is ScrollEndNotification &&
             notification.dragDetails == null) {
-          print('stop');
+          // 判断是否超过刷新高度
+          if (widget.controller.header.height >=
+              widget.controller.header.triggerHeight &&
+              widget.onRefresh != null) {
+            setState(() {
+              widget.controller.header.status = HeaderStatus.refreshing;
+            });
+            // 执行刷新
+            widget.onRefresh().whenComplete(() {
+              setState(() {
+                widget.controller.header.status = HeaderStatus.idle;
+              });
+            });
+          }
+          // 判断是否超过加载高度
+          if (widget.controller.footer.height >=
+              widget.controller.footer.triggerHeight &&
+              widget.onLoadMore != null) {
+            setState(() {
+              widget.controller.footer.status = FooterStatus.loading;
+            });
+            // 执行加载
+            widget.onLoadMore().whenComplete(() {
+              widget.controller.footer.status = FooterStatus.idle;
+            });
+          }
         }
       },
       child: widget.builder(context, _buildHeader(), _buildFooter(),

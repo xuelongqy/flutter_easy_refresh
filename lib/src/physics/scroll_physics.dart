@@ -1,4 +1,5 @@
 import 'package:flutter/gestures.dart';
+import 'package:flutter/physics.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
 
@@ -157,8 +158,10 @@ class EasyRefreshPhysics extends ScrollPhysics {
         spring: spring,
         position: position.pixels,
         velocity: velocity * 0.91, // TODO(abarth): We should move this constant closer to the drag end.
-        leadingExtent: showTopExtent ? position.minScrollExtent - topExtent : position.minScrollExtent,
-        trailingExtent: showBottomExtent ? position.maxScrollExtent + bottomExtent : position.maxScrollExtent,
+        leadingExtent: showTopExtent ? position.minScrollExtent - topExtent
+            : position.minScrollExtent,
+        trailingExtent: showBottomExtent ? position.maxScrollExtent
+            + bottomExtent : position.maxScrollExtent,
         tolerance: tolerance,
       );
     }
@@ -196,3 +199,4 @@ class EasyRefreshPhysics extends ScrollPhysics {
   @override
   double get dragStartDistanceMotionThreshold => 3.5;
 }
+

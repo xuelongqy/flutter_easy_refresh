@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -63,8 +65,16 @@ class _ExampleState extends State<_Example> {
       body: Center(
           child: EasyRefresh(
             controller: _controller,
-            onRefresh: () {},
-            onLoadMore: () {},
+            onRefresh: () async {
+              await Future.delayed(Duration(seconds: 2), () {
+                return 'stop';
+              });
+            },
+            onLoadMore: () async {
+              await Future.delayed(Duration(seconds: 2), () {
+                return 'stop';
+              });
+            },
             builder: CustomRefreshWidgetBuilder(
               childBuilder: (context, scrollController, physics) {
                 return ListView.builder(
