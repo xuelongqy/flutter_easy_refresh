@@ -63,8 +63,7 @@ class _ExampleState extends State<_Example> {
         title: Text("EasyRefresh"),
       ),
       body: Center(
-          child: EasyRefresh(
-            controller: _controller,
+          child: EasyRefresh.custom(
             onRefresh: () async {
               await Future.delayed(Duration(seconds: 2), () {
                 return 'stop';
@@ -75,21 +74,19 @@ class _ExampleState extends State<_Example> {
                 return 'stop';
               });
             },
-            builder: CustomRefreshWidgetBuilder(
-              childBuilder: (context, scrollController, physics) {
-                return ListView.builder(
-                  controller: scrollController,
-                  physics: physics,
-                  itemCount: 20,
-                  itemBuilder: (context, index) {
+            slivers: <Widget>[
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
                     return SampleListItem(
                       text: '$index',
                       bgColor: index%2==0 ? Colors.grey[300] : Colors.transparent,
                     );
                   },
-                );
-              },
-            ).builder,
+                  childCount: 20,
+                ),
+              ),
+            ],
           )
       ),
       persistentFooterButtons: <Widget>[

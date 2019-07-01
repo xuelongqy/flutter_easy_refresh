@@ -3,57 +3,26 @@ import 'package:flutter/physics.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
 
-/// 偏移量回调
-/// bounce为是否回弹
-/// offset为偏移量
-typedef OffsetCallBack = void Function(bool bounce,double offset);
-
 /// EasyRefresh滚动形式
+/// Scroll physics for environments that allow the scroll offset to go beyond
+/// the bounds of the content, but then bounce the content back to the edge of
+/// those bounds.
+///
+/// This is the behavior typically seen on iOS.
+///
+/// See also:
+///
+///  * [ScrollConfiguration], which uses this to provide the default
+///    scroll behavior on iOS.
+///  * [ClampingScrollPhysics], which is the analogous physics for Android's
+///    clamping behavior.
 class EasyRefreshPhysics extends ScrollPhysics {
-
-  // 顶部是否回弹
-  final bool topBounce;
-  // 底部是否回弹
-  final bool bottomBounce;
-  // 顶部超出回调
-  final OffsetCallBack topOffset;
-  // 底部超出回调
-  final OffsetCallBack bottomOffset;
-  // 顶部扩展(Header高度)
-  final double topExtent;
-  // 显示顶部扩展
-  final bool showTopExtent;
-  // 底部扩展(Footer高度)
-  final double bottomExtent;
-  // 显示底部扩展
-  final bool showBottomExtent;
-
   /// Creates scroll physics that bounce back from the edge.
-  const EasyRefreshPhysics({
-    ScrollPhysics parent,
-    this.topBounce = true,
-    this.bottomBounce = true,
-    this.topOffset,
-    this.bottomOffset,
-    this.topExtent = 0.0,
-    this.showTopExtent = false,
-    this.bottomExtent = 0.0,
-    this.showBottomExtent = false,
-  }) : super(parent: parent);
+  const EasyRefreshPhysics({ ScrollPhysics parent }) : super(parent: parent);
 
   @override
   EasyRefreshPhysics applyTo(ScrollPhysics ancestor) {
-    return EasyRefreshPhysics(
-      parent: buildParent(ancestor),
-      topBounce: topBounce,
-      bottomBounce: bottomBounce,
-      topOffset: topOffset,
-      bottomOffset: bottomOffset,
-      topExtent: topExtent,
-      showTopExtent: showBottomExtent,
-      bottomExtent: bottomExtent,
-      showBottomExtent: showBottomExtent,
-    );
+    return EasyRefreshPhysics(parent: buildParent(ancestor));
   }
 
   /// The multiple applied to overscroll to make it appear that scrolling past
@@ -65,6 +34,12 @@ class EasyRefreshPhysics extends ScrollPhysics {
   /// as more of the area past the edge is dragged in (represented by an increasing
   /// `overscrollFraction` which starts at 0 when there is no overscroll).
   double frictionFactor(double overscrollFraction) => 0.52 * math.pow(1 - overscrollFraction, 2);
+
+  @override
+  bool shouldAcceptUserOffset(ScrollMetrics position) {
+    // TODO: implement shouldAcceptUserOffset
+    return true;
+  }
 
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
@@ -103,52 +78,7 @@ class EasyRefreshPhysics extends ScrollPhysics {
   }
 
   @override
-  double applyBoundaryConditions(ScrollMetrics position, double value){
-    assert(() {
-      if (value == position.pixels) {
-        throw FlutterError(
-            '$runtimeType.applyBoundaryConditions() was called redundantly.\n'
-                'The proposed new position, $value, is exactly equal to the current position of the '
-                'given ${position.runtimeType}, ${position.pixels}.\n'
-                'The applyBoundaryConditions method should only be called when the value is '
-                'going to actually change the pixels, otherwise it is redundant.\n'
-                'The physics object in question was:\n'
-                '  $this\n'
-                'The position object in question was:\n'
-                '  $position\n'
-        );
-      }
-      return true;
-    }());
-    // 判断是否超出边界并调用回调
-    if (value <= 0.0 && this.topOffset != null && value != -position.maxScrollExtent) {
-      // 判断是否为惯性滑动到顶部
-      bool inertia = value < position.minScrollExtent && position.minScrollExtent < position.pixels;
-      if (topBounce || !inertia) {
-        this.topOffset(this.topBounce, -value);
-      }
-    }
-    if (value >= position.maxScrollExtent && this.bottomOffset != null) {
-      // 判断是否为惯性滑动到底部
-      bool inertia = position.pixels < position.maxScrollExtent && position.maxScrollExtent < value;
-      if (bottomBounce || !inertia) {
-        this.bottomOffset(this.bottomBounce, value - position.maxScrollExtent);
-      }
-    }
-    if (value > 0.0 && value < position.maxScrollExtent) {
-      this.topOffset(this.topBounce, 0.0);
-      this.bottomOffset(this.bottomBounce, 0.0);
-    }
-    if (value < position.pixels && position.pixels <= position.minScrollExtent) // underscroll
-      return this.topBounce ? 0.0 : value - position.pixels;
-    if (position.maxScrollExtent <= position.pixels && position.pixels < value) // overscroll
-      return this.bottomBounce ? 0.0 : value - position.pixels;
-    if (value < position.minScrollExtent && position.minScrollExtent < position.pixels) // hit top edge
-      return this.topBounce ? 0.0 : value - position.minScrollExtent;
-    if (position.pixels < position.maxScrollExtent && position.maxScrollExtent < value) // hit bottom edge
-      return this.bottomBounce ? 0.0 : value - position.maxScrollExtent;
-    return 0.0;
-  }
+  double applyBoundaryConditions(ScrollMetrics position, double value) => 0.0;
 
   @override
   Simulation createBallisticSimulation(ScrollMetrics position, double velocity) {
@@ -158,10 +88,8 @@ class EasyRefreshPhysics extends ScrollPhysics {
         spring: spring,
         position: position.pixels,
         velocity: velocity * 0.91, // TODO(abarth): We should move this constant closer to the drag end.
-        leadingExtent: showTopExtent ? position.minScrollExtent - topExtent
-            : position.minScrollExtent,
-        trailingExtent: showBottomExtent ? position.maxScrollExtent
-            + bottomExtent : position.maxScrollExtent,
+        leadingExtent: position.minScrollExtent,
+        trailingExtent: position.maxScrollExtent,
         tolerance: tolerance,
       );
     }

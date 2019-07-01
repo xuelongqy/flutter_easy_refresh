@@ -1,75 +1,70 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-/// Header状态枚举
-enum HeaderStatus { idle, start, ready, refreshing, completed, noMore, failed }
-
-/// Header构造器
-typedef HeaderBuilder = Widget Function(
-    BuildContext context, HeaderState state);
-
-/// Header属性
-class HeaderState {
-  // 状态
-  HeaderStatus status = HeaderStatus.idle;
-  // 高度
-  double height = 0.0;
-  // Header容器高度
-  double extent;
-  // 触发刷新高度
-  double triggerHeight = 70.0;
-  // 是否浮动
-  bool float = false;
-  // 组件
-  Widget widget;
-}
+import 'package:flutter_easyrefresh/src/header/refresh_indicator.dart';
 
 /// Header
 abstract class Header {
   // Header容器高度
   final double extent;
   // 出发刷新高度
-  final double triggerHeight;
+  final double triggerDistance;
   // 是否浮动
   final bool float;
   // 完成延时
   final Duration completeDuration;
 
   Header({
-    this.extent = 400.0,
-    this.triggerHeight = 70.0,
+    this.extent = 60.0,
+    this.triggerDistance = 70.0,
     this.float = false,
     this.completeDuration = const Duration(seconds: 1),
   });
 
-  // Header构造器
-  Widget builder(BuildContext context, HeaderState state);
-}
-
-/// 通用Header构造器
-class CustomHeader extends Header {
-
-  // Header构造函数
-  final HeaderBuilder headerBuilder;
-
-  CustomHeader({
-    extent = 400.0,
-    triggerHeight = 70.0,
-    float = false,
-    completeDuration = const Duration(seconds: 1),
-    this.headerBuilder
-  }): super(
-    extent: extent,
-    triggerHeight: triggerHeight,
-    float: float,
-    completeDuration: completeDuration
-  ){
-    assert(this.headerBuilder != null);
+  // 构造器
+  Widget builder(BuildContext context, RefreshCallback onRefresh) {
+    return EasyRefreshSliverRefreshControl(
+      refreshIndicatorExtent: extent,
+      refreshTriggerPullDistance: triggerDistance,
+      builder: contentBuilder,
+      onRefresh: onRefresh,
+    );
   }
 
+  // Header构造器
+  Widget contentBuilder(
+      BuildContext context,
+      RefreshIndicatorMode refreshState,
+      double pulledExtent,
+      double refreshTriggerPullDistance,
+      double refreshIndicatorExtent,
+      );
+}
+
+/// 通用Header
+class CustomHeader extends Header {
+
+  /// Header构造器
+  final RefreshControlIndicatorBuilder headerBuilder;
+
+  CustomHeader({
+    extent = 60.0,
+    triggerDistance = 70.0,
+    float = false,
+    completeDuration = const Duration(seconds: 1),
+    RefreshCallback onRefresh,
+    @required this.headerBuilder,
+  }) : super (
+    extent: extent,
+    triggerDistance: triggerDistance,
+    float: float,
+    completeDuration: completeDuration,
+  );
+
   @override
-  Widget builder(BuildContext context, HeaderState state) {
-    return this.headerBuilder(context, state);
+  Widget contentBuilder(BuildContext context,
+      RefreshIndicatorMode refreshState, double pulledExtent,
+      double refreshTriggerPullDistance, double refreshIndicatorExtent) {
+    return headerBuilder(context, refreshState, pulledExtent,
+      refreshTriggerPullDistance, refreshIndicatorExtent);
   }
 }
 
@@ -77,23 +72,26 @@ class CustomHeader extends Header {
 class ClassicalHeader extends Header{
 
   ClassicalHeader({
-    extent = 400.0,
-    triggerHeight = 70.0,
+    extent = 60.0,
+    triggerDistance = 70.0,
     float = false,
     completeDuration = const Duration(seconds: 1),
+    RefreshCallback onRefresh,
   }): super(
-      extent: extent,
-      triggerHeight: triggerHeight,
-      float: float,
-      completeDuration: completeDuration
+    extent: extent,
+    triggerDistance: triggerDistance,
+    float: float,
+    completeDuration: completeDuration,
   );
 
   @override
-  Widget builder(BuildContext context, HeaderState state) {
+  Widget contentBuilder(BuildContext context, RefreshIndicatorMode refreshState,
+      double pulledExtent, double refreshTriggerPullDistance,
+      double refreshIndicatorExtent) {
     return Container(
-      height: state.height,
       width: double.infinity,
-      color: Colors.red,
+      height: double.infinity,
+      color: Color(0xFF000000),
     );
   }
 }
