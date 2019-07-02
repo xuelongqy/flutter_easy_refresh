@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_easyrefresh/src/footer/load_indicator.dart';
 import 'package:flutter_easyrefresh/src/header/refresh_indicator.dart';
 import 'footer/footer.dart';
 import 'header/header.dart';
@@ -18,7 +18,7 @@ class EasyRefresh extends StatefulWidget {
   // 刷新回调(null为不开启刷新)
   final RefreshCallback onRefresh;
   // 加载回调(null为不开启加载)
-  final RefreshCallback onLoadMore;
+  final LoadCallback onLoad;
   // Header
   final Header header;
   // Footer
@@ -60,7 +60,7 @@ class EasyRefresh extends StatefulWidget {
   EasyRefresh.custom({
     key,
     this.onRefresh,
-    this.onLoadMore,
+    this.onLoad,
     this.header,
     this.footer,
     this.scrollDirection = Axis.vertical,
@@ -79,7 +79,7 @@ class EasyRefresh extends StatefulWidget {
   EasyRefresh({
     key,
     this.onRefresh,
-    this.onLoadMore,
+    this.onLoad,
     this.header,
     this.footer,
     @required this.builder,
@@ -102,6 +102,11 @@ class _EasyRefreshState extends State<EasyRefresh> {
   // Header
   Header get _header {
     return widget.header ?? EasyRefresh._defaultHeader;
+  }
+
+  // Footer
+  Footer get _footer {
+    return widget.footer ?? EasyRefresh._defaultFooter;
   }
 
   // 初始化
@@ -135,9 +140,11 @@ class _EasyRefreshState extends State<EasyRefresh> {
   Widget build(BuildContext context) {
     // 构建Header和Footer
     var header = _header.builder(context, widget.onRefresh);
+    var footer = _footer.builder(context, widget.onLoad);
     // 插入Header和Footer
     var slivers = widget.slivers;
     slivers.insert(0, header);
+    slivers.add(footer);
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {},
       child: widget.builder == null ? CustomScrollView(

@@ -66,11 +66,13 @@ class _ExampleState extends State<_Example> {
           child: EasyRefresh.custom(
             onRefresh: () async {
               await Future.delayed(Duration(seconds: 2), () {
+                print('onRefresh');
                 return 'stop';
               });
             },
-            onLoadMore: () async {
+            onLoad: () async {
               await Future.delayed(Duration(seconds: 2), () {
+                print('onLoad');
                 return 'stop';
               });
             },

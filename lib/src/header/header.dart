@@ -5,7 +5,7 @@ import 'package:flutter_easyrefresh/src/header/refresh_indicator.dart';
 abstract class Header {
   // Header容器高度
   final double extent;
-  // 出发刷新高度
+  // 触发刷新高度
   final double triggerDistance;
   // 是否浮动
   final bool float;
@@ -25,6 +25,7 @@ abstract class Header {
       refreshIndicatorExtent: extent,
       refreshTriggerPullDistance: triggerDistance,
       builder: contentBuilder,
+      completeDuration: completeDuration,
       onRefresh: onRefresh,
     );
   }

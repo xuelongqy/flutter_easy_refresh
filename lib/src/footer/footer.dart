@@ -1,75 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-/// Footer状态枚举
-enum FooterStatus { idle, start, ready, loading, completed, noMore, failed }
-
-/// Footer构造器
-typedef FooterBuilder = Widget Function(
-    BuildContext context, FooterState state);
-
-/// Footer属性
-class FooterState {
-  // 状态
-  FooterStatus status = FooterStatus.idle;
-  // 高度
-  double height = 0.0;
-  // Footer容器高度
-  double extent;
-  // 触发刷新高度
-  double triggerHeight = 70.0;
-  // 是否浮动
-  bool float = false;
-  // 组件
-  Widget widget;
-}
+import 'package:flutter_easyrefresh/src/footer/load_indicator.dart';
 
 /// Header
 abstract class Footer {
   // Footer容器高度
   final double extent;
   // 高度(超过这个高度出发刷新)
-  final double triggerHeight;
+  final double triggerDistance;
   // 是否浮动
   final bool float;
   // 完成延时
   final Duration completeDuration;
 
   Footer({
-    this.extent = 400.0,
-    this.triggerHeight = 70.0,
+    this.extent = 60.0,
+    this.triggerDistance = 70.0,
     this.float = false,
     this.completeDuration = const Duration(seconds: 1),
   });
 
+  // 构造器
+  Widget builder(BuildContext context, RefreshCallback onLoad) {
+    return EasyRefreshSliverLoadControl(
+      loadIndicatorExtent: extent,
+      loadTriggerPullDistance: triggerDistance,
+      builder: contentBuilder,
+      completeDuration: completeDuration,
+      onLoad: onLoad,
+    );
+  }
+
   // Header构造器
-  Widget builder(BuildContext context, FooterState state);
+  Widget contentBuilder(
+      BuildContext context,
+      LoadIndicatorMode refreshState,
+      double pulledExtent,
+      double refreshTriggerPullDistance,
+      double refreshIndicatorExtent,
+      );
 }
 
 /// 通用Footer构造器
 class CustomFooter extends Footer {
 
-  // Footer构造函数
-  final FooterBuilder footerBuilder;
+  /// Header构造器
+  final LoadControlIndicatorBuilder headerBuilder;
 
   CustomFooter({
-    extent = 400.0,
-    triggerHeight = 70.0,
+    extent = 60.0,
+    triggerDistance = 70.0,
     float = false,
     completeDuration = const Duration(seconds: 1),
-    this.footerBuilder
-  }): super(
+    RefreshCallback onRefresh,
+    @required this.headerBuilder,
+  }) : super (
     extent: extent,
-    triggerHeight: triggerHeight,
+    triggerDistance: triggerDistance,
     float: float,
-    completeDuration: completeDuration
-  ){
-    assert(this.footerBuilder != null);
-  }
+    completeDuration: completeDuration,
+  );
 
   @override
-  Widget builder(BuildContext context, FooterState state) {
-    return this.footerBuilder(context, state);
+  Widget contentBuilder(BuildContext context,
+      LoadIndicatorMode refreshState, double pulledExtent,
+      double refreshTriggerPullDistance, double refreshIndicatorExtent) {
+    return headerBuilder(context, refreshState, pulledExtent,
+        refreshTriggerPullDistance, refreshIndicatorExtent);
   }
 }
 
@@ -77,23 +74,26 @@ class CustomFooter extends Footer {
 class ClassicalFooter extends Footer {
 
   ClassicalFooter({
-    extent = 400.0,
-    triggerHeight = 70.0,
+    extent = 60.0,
+    triggerDistance = 70.0,
     float = false,
     completeDuration = const Duration(seconds: 1),
+    RefreshCallback onRefresh,
   }): super(
     extent: extent,
-    triggerHeight: triggerHeight,
+    triggerDistance: triggerDistance,
     float: float,
-    completeDuration: completeDuration
+    completeDuration: completeDuration,
   );
 
   @override
-  Widget builder(BuildContext context, FooterState state) {
+  Widget contentBuilder(BuildContext context, LoadIndicatorMode refreshState,
+      double pulledExtent, double refreshTriggerPullDistance,
+      double refreshIndicatorExtent) {
     return Container(
-      height: state.height,
       width: double.infinity,
-      color: Colors.red,
+      height: double.infinity,
+      color: Color(0xFF000000),
     );
   }
 }

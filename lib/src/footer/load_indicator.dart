@@ -10,38 +10,38 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
-  const _EasyRefreshSliverRefresh({
+class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
+  const _EasyRefreshSliverLoad({
     Key key,
-    this.refreshIndicatorLayoutExtent = 0.0,
+    this.loadIndicatorLayoutExtent = 0.0,
     this.hasLayoutExtent = false,
     Widget child,
-  }) : assert(refreshIndicatorLayoutExtent != null),
-        assert(refreshIndicatorLayoutExtent >= 0.0),
+  }) : assert(loadIndicatorLayoutExtent != null),
+        assert(loadIndicatorLayoutExtent >= 0.0),
         assert(hasLayoutExtent != null),
         super(key: key, child: child);
 
   // The amount of space the indicator should occupy in the sliver in a
   // resting state when in the refreshing mode.
-  final double refreshIndicatorLayoutExtent;
+  final double loadIndicatorLayoutExtent;
 
-  // _RenderEasyRefreshSliverRefresh will paint the child in the available
-  // space either way but this instructs the _RenderEasyRefreshSliverRefresh
+  // _RenderEasyRefreshSliverLoad will paint the child in the available
+  // space either way but this instructs the _RenderEasyRefreshSliverLoad
   // on whether to also occupy any layoutExtent space or not.
   final bool hasLayoutExtent;
 
   @override
-  _RenderEasyRefreshSliverRefresh createRenderObject(BuildContext context) {
-    return _RenderEasyRefreshSliverRefresh(
-      refreshIndicatorExtent: refreshIndicatorLayoutExtent,
+  _RenderEasyRefreshSliverLoad createRenderObject(BuildContext context) {
+    return _RenderEasyRefreshSliverLoad(
+      loadIndicatorExtent: loadIndicatorLayoutExtent,
       hasLayoutExtent: hasLayoutExtent,
     );
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant _RenderEasyRefreshSliverRefresh renderObject) {
+  void updateRenderObject(BuildContext context, covariant _RenderEasyRefreshSliverLoad renderObject) {
     renderObject
-      ..refreshIndicatorLayoutExtent = refreshIndicatorLayoutExtent
+      ..loadIndicatorLayoutExtent = loadIndicatorLayoutExtent
       ..hasLayoutExtent = hasLayoutExtent;
   }
 }
@@ -52,30 +52,30 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
 //
 // The [layoutExtentOffsetCompensation] field keeps internal accounting to
 // prevent scroll position jumps as the [layoutExtent] is set and unset.
-class _RenderEasyRefreshSliverRefresh extends RenderSliver
+class _RenderEasyRefreshSliverLoad extends RenderSliver
     with RenderObjectWithChildMixin<RenderBox> {
-  _RenderEasyRefreshSliverRefresh({
-    @required double refreshIndicatorExtent,
+  _RenderEasyRefreshSliverLoad({
+    @required double loadIndicatorExtent,
     @required bool hasLayoutExtent,
     RenderBox child,
-  }) : assert(refreshIndicatorExtent != null),
-        assert(refreshIndicatorExtent >= 0.0),
+  }) : assert(loadIndicatorExtent != null),
+        assert(loadIndicatorExtent >= 0.0),
         assert(hasLayoutExtent != null),
-        _refreshIndicatorExtent = refreshIndicatorExtent,
+        _loadIndicatorExtent = loadIndicatorExtent,
         _hasLayoutExtent = hasLayoutExtent {
     this.child = child;
   }
 
   // The amount of layout space the indicator should occupy in the sliver in a
   // resting state when in the refreshing mode.
-  double get refreshIndicatorLayoutExtent => _refreshIndicatorExtent;
-  double _refreshIndicatorExtent;
-  set refreshIndicatorLayoutExtent(double value) {
+  double get loadIndicatorLayoutExtent => _loadIndicatorExtent;
+  double _loadIndicatorExtent;
+  set loadIndicatorLayoutExtent(double value) {
     assert(value != null);
     assert(value >= 0.0);
-    if (value == _refreshIndicatorExtent)
+    if (value == _loadIndicatorExtent)
       return;
-    _refreshIndicatorExtent = value;
+    _loadIndicatorExtent = value;
     markNeedsLayout();
   }
 
@@ -93,7 +93,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
   }
 
   // This keeps track of the previously applied scroll offsets to the scrollable
-  // so that when [refreshIndicatorLayoutExtent] or [hasLayoutExtent] changes,
+  // so that when [loadIndicatorLayoutExtent] or [hasLayoutExtent] changes,
   // the appropriate delta can be applied to keep everything in the same place
   // visually.
   double layoutExtentOffsetCompensation = 0.0;
@@ -107,11 +107,11 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
 
     // The new layout extent this sliver should now have.
     final double layoutExtent =
-        (_hasLayoutExtent ? 1.0 : 0.0) * _refreshIndicatorExtent;
+        (_hasLayoutExtent ? 1.0 : 0.0) * _loadIndicatorExtent;
     // If the new layoutExtent instructive changed, the SliverGeometry's
     // layoutExtent will take that value (on the next performLayout run). Shift
     // the scroll offset first so it doesn't make the scroll position suddenly jump.
-    if (layoutExtent != layoutExtentOffsetCompensation) {
+    /*if (layoutExtent != layoutExtentOffsetCompensation) {
       geometry = SliverGeometry(
         scrollOffsetCorrection: layoutExtent - layoutExtentOffsetCompensation,
       );
@@ -121,27 +121,24 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
       // combination of existing layout extent, new layout extent change and
       // the overlap.
       return;
-    }
+    }*/
 
-    final bool active = constraints.overlap < 0.0 || layoutExtent > 0.0;
+    final bool active = constraints.remainingPaintExtent > 0.0 || layoutExtent > 0.0;
     final double overscrolledExtent =
-    constraints.overlap < 0.0 ? constraints.overlap.abs() : 0.0;
+    constraints.remainingPaintExtent > 0.0 ? constraints.remainingPaintExtent.abs() : 0.0;
     // Layout the child giving it the space of the currently dragged overscroll
     // which may or may not include a sliver layout extent space that it will
     // keep after the user lets go during the refresh process.
     child.layout(
       constraints.asBoxConstraints(
-        maxExtent: layoutExtent
-            // Plus only the overscrolled portion immediately preceding this
-            // sliver.
-            + overscrolledExtent,
+        maxExtent: overscrolledExtent,
       ),
       parentUsesSize: true,
     );
     if (active) {
       geometry = SliverGeometry(
         scrollExtent: layoutExtent,
-        paintOrigin: -overscrolledExtent - constraints.scrollOffset,
+        paintOrigin: - constraints.scrollOffset,
         paintExtent: max(
           // Check child size (which can come from overscroll) because
           // layoutExtent may be zero. Check layoutExtent also since even
@@ -164,7 +161,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
 
   @override
   void paint(PaintingContext paintContext, Offset offset) {
-    if (constraints.overlap < 0.0 ||
+    if (constraints.remainingPaintExtent > 0.0 ||
         constraints.scrollOffset + child.size.height > 0) {
       paintContext.paintChild(child, offset);
     }
@@ -178,9 +175,9 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
 
 /// The current state of the refresh control.
 ///
-/// Passed into the [RefreshControlIndicatorBuilder] builder function so
+/// Passed into the [LoadControlIndicatorBuilder] builder function so
 /// users can show different UI in different modes.
-enum RefreshIndicatorMode {
+enum LoadIndicatorMode {
   /// Initial state, when not being overscrolled into, or after the overscroll
   /// is canceled or after done and the sliver retracted away.
   inactive,
@@ -188,11 +185,11 @@ enum RefreshIndicatorMode {
   /// While being overscrolled but not far enough yet to trigger the refresh.
   drag,
 
-  /// Dragged far enough that the onRefresh callback will run and the dragged
+  /// Dragged far enough that the onLoad callback will run and the dragged
   /// displacement is not yet at the final refresh resting state.
   armed,
 
-  /// While the onRefresh task is running.
+  /// While the onLoad task is running.
   refresh,
 
   /// 刷新完成
@@ -212,24 +209,24 @@ enum RefreshIndicatorMode {
 /// refresh indicator space depending on the current state of the refresh
 /// control and the space available.
 ///
-/// The `refreshTriggerPullDistance` and `refreshIndicatorExtent` parameters are
-/// the same values passed into the [EasyRefreshSliverRefreshControl].
+/// The `loadTriggerPullDistance` and `loadIndicatorExtent` parameters are
+/// the same values passed into the [EasyRefreshSliverLoadControl].
 ///
 /// The `pulledExtent` parameter is the currently available space either from
 /// overscrolling or as held by the sliver during refresh.
-typedef RefreshControlIndicatorBuilder = Widget Function(
+typedef LoadControlIndicatorBuilder = Widget Function(
     BuildContext context,
-    RefreshIndicatorMode refreshState,
+    LoadIndicatorMode loadState,
     double pulledExtent,
-    double refreshTriggerPullDistance,
-    double refreshIndicatorExtent,
+    double loadTriggerPullDistance,
+    double loadIndicatorExtent,
     );
 
-/// A callback function that's invoked when the [EasyRefreshSliverRefreshControl] is
-/// pulled a `refreshTriggerPullDistance`. Must return a [Future]. Upon
-/// completion of the [Future], the [EasyRefreshSliverRefreshControl] enters the
-/// [RefreshIndicatorMode.done] state and will start to go away.
-typedef RefreshCallback = Future<void> Function();
+/// A callback function that's invoked when the [EasyRefreshSliverLoadControl] is
+/// pulled a `loadTriggerPullDistance`. Must return a [Future]. Upon
+/// completion of the [Future], the [EasyRefreshSliverLoadControl] enters the
+/// [LoadIndicatorMode.done] state and will start to go away.
+typedef LoadCallback = Future<void> Function();
 
 /// A sliver widget implementing the iOS-style pull to refresh content control.
 ///
@@ -238,17 +235,17 @@ typedef RefreshCallback = Future<void> Function();
 /// the [CupertinoSliverNavigationBar], this widget will:
 ///
 ///  * Let the user draw inside the overscrolled area via the passed in [builder].
-///  * Trigger the provided [onRefresh] function when overscrolled far enough to
-///    pass [refreshTriggerPullDistance].
-///  * Continue to hold [refreshIndicatorExtent] amount of space for the [builder]
-///    to keep drawing inside of as the [Future] returned by [onRefresh] processes.
-///  * Scroll away once the [onRefresh] [Future] completes.
+///  * Trigger the provided [onLoad] function when overscrolled far enough to
+///    pass [loadTriggerPullDistance].
+///  * Continue to hold [loadIndicatorExtent] amount of space for the [builder]
+///    to keep drawing inside of as the [Future] returned by [onLoad] processes.
+///  * Scroll away once the [onLoad] [Future] completes.
 ///
-/// The [builder] function will be informed of the current [RefreshIndicatorMode]
-/// when invoking it, except in the [RefreshIndicatorMode.inactive] state when
+/// The [builder] function will be informed of the current [LoadIndicatorMode]
+/// when invoking it, except in the [LoadIndicatorMode.inactive] state when
 /// no space is available and nothing needs to be built. The [builder] function
 /// will otherwise be continuously invoked as the amount of space available
-/// changes from overscroll, as the sliver scrolls away after the [onRefresh]
+/// changes from overscroll, as the sliver scrolls away after the [onLoad]
 /// task is done, etc.
 ///
 /// Only one refresh can be triggered until the previous refresh has completed
@@ -270,33 +267,33 @@ typedef RefreshCallback = Future<void> Function();
 ///  * [RefreshIndicator], a Material Design version of the pull-to-refresh
 ///    paradigm. This widget works differently than [RefreshIndicator] because
 ///    instead of being an overlay on top of the scrollable, the
-///    [EasyRefreshSliverRefreshControl] is part of the scrollable and actively occupies
+///    [EasyRefreshSliverLoadControl] is part of the scrollable and actively occupies
 ///    scrollable space.
-class EasyRefreshSliverRefreshControl extends StatefulWidget {
+class EasyRefreshSliverLoadControl extends StatefulWidget {
   /// Create a new refresh control for inserting into a list of slivers.
   ///
-  /// The [refreshTriggerPullDistance] and [refreshIndicatorExtent] arguments
+  /// The [loadTriggerPullDistance] and [loadIndicatorExtent] arguments
   /// must not be null and must be >= 0.
   ///
   /// The [builder] argument may be null, in which case no indicator UI will be
-  /// shown but the [onRefresh] will still be invoked. By default, [builder]
+  /// shown but the [onLoad] will still be invoked. By default, [builder]
   /// shows a [CupertinoActivityIndicator].
   ///
-  /// The [onRefresh] argument will be called when pulled far enough to trigger
+  /// The [onLoad] argument will be called when pulled far enough to trigger
   /// a refresh.
-  const EasyRefreshSliverRefreshControl({
+  const EasyRefreshSliverLoadControl({
     Key key,
-    this.refreshTriggerPullDistance = _defaultRefreshTriggerPullDistance,
-    this.refreshIndicatorExtent = _defaultRefreshIndicatorExtent,
+    this.loadTriggerPullDistance = _defaultloadTriggerPullDistance,
+    this.loadIndicatorExtent = _defaultloadIndicatorExtent,
     this.builder = buildSimpleRefreshIndicator,
     this.completeDuration = const Duration(seconds: 1),
-    this.onRefresh,
-  }) : assert(refreshTriggerPullDistance != null),
-        assert(refreshTriggerPullDistance > 0.0),
-        assert(refreshIndicatorExtent != null),
-        assert(refreshIndicatorExtent >= 0.0),
+    this.onLoad,
+  }) : assert(loadTriggerPullDistance != null),
+        assert(loadTriggerPullDistance > 0.0),
+        assert(loadIndicatorExtent != null),
+        assert(loadIndicatorExtent >= 0.0),
         assert(
-        refreshTriggerPullDistance >= refreshIndicatorExtent,
+        loadTriggerPullDistance >= loadIndicatorExtent,
         'The refresh indicator cannot take more space in its final state '
             'than the amount initially created by overscrolling.'
         ),
@@ -305,22 +302,22 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   /// The amount of overscroll the scrollable must be dragged to trigger a reload.
   ///
   /// Must not be null, must be larger than 0.0 and larger than
-  /// [refreshIndicatorExtent]. Defaults to 100px when not specified.
+  /// [loadIndicatorExtent]. Defaults to 100px when not specified.
   ///
-  /// When overscrolled past this distance, [onRefresh] will be called if not
-  /// null and the [builder] will build in the [RefreshIndicatorMode.armed] state.
-  final double refreshTriggerPullDistance;
+  /// When overscrolled past this distance, [onLoad] will be called if not
+  /// null and the [builder] will build in the [LoadIndicatorMode.armed] state.
+  final double loadTriggerPullDistance;
 
   /// The amount of space the refresh indicator sliver will keep holding while
-  /// [onRefresh]'s [Future] is still running.
+  /// [onLoad]'s [Future] is still running.
   ///
   /// Must not be null and must be positive, but can be 0.0, in which case the
   /// sliver will start retracting back to 0.0 as soon as the refresh is started.
   /// Defaults to 60px when not specified.
   ///
-  /// Must be smaller than [refreshTriggerPullDistance], since the sliver
+  /// Must be smaller than [loadTriggerPullDistance], since the sliver
   /// shouldn't grow further after triggering the refresh.
-  final double refreshIndicatorExtent;
+  final double loadIndicatorExtent;
 
   /// A builder that's called as this sliver's size changes, and as the state
   /// changes.
@@ -333,31 +330,31 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   ///
   /// Will not be called when the available space is zero such as before any
   /// overscroll.
-  final RefreshControlIndicatorBuilder builder;
+  final LoadControlIndicatorBuilder builder;
 
-  /// Callback invoked when pulled by [refreshTriggerPullDistance].
+  /// Callback invoked when pulled by [loadTriggerPullDistance].
   ///
   /// If provided, must return a [Future] which will keep the indicator in the
-  /// [RefreshIndicatorMode.refresh] state until the [Future] completes.
+  /// [LoadIndicatorMode.refresh] state until the [Future] completes.
   ///
-  /// Can be null, in which case a single frame of [RefreshIndicatorMode.armed]
-  /// state will be drawn before going immediately to the [RefreshIndicatorMode.done]
+  /// Can be null, in which case a single frame of [LoadIndicatorMode.armed]
+  /// state will be drawn before going immediately to the [LoadIndicatorMode.done]
   /// where the sliver will start retracting.
-  final RefreshCallback onRefresh;
-
+  final LoadCallback onLoad;
+  
   /// 完成延时
   final Duration completeDuration;
 
-  static const double _defaultRefreshTriggerPullDistance = 100.0;
-  static const double _defaultRefreshIndicatorExtent = 60.0;
+  static const double _defaultloadTriggerPullDistance = 100.0;
+  static const double _defaultloadIndicatorExtent = 60.0;
 
-  /// Retrieve the current state of the EasyRefreshSliverRefreshControl. The same as the
+  /// Retrieve the current state of the EasyRefreshSliverLoadControl. The same as the
   /// state that gets passed into the [builder] function. Used for testing.
   @visibleForTesting
-  static RefreshIndicatorMode state(BuildContext context) {
-    final _EasyRefreshSliverRefreshControlState state
-    = context.ancestorStateOfType(const TypeMatcher<_EasyRefreshSliverRefreshControlState>());
-    return state.refreshState;
+  static LoadIndicatorMode state(BuildContext context) {
+    final _EasyRefreshSliverLoadControlState state
+    = context.ancestorStateOfType(const TypeMatcher<_EasyRefreshSliverLoadControlState>());
+    return state.loadState;
   }
 
   /// Builds a simple refresh indicator that fades in a bottom aligned down
@@ -366,20 +363,20 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   /// the refresh is done.
   static Widget buildSimpleRefreshIndicator(
       BuildContext context,
-      RefreshIndicatorMode refreshState,
+      LoadIndicatorMode loadState,
       double pulledExtent,
-      double refreshTriggerPullDistance,
-      double refreshIndicatorExtent,
+      double loadTriggerPullDistance,
+      double loadIndicatorExtent,
       ) {
     const Curve opacityCurve = Interval(0.4, 0.8, curve: Curves.easeInOut);
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16.0),
-        child: refreshState == RefreshIndicatorMode.drag
+        child: loadState == LoadIndicatorMode.drag
             ? Opacity(
           opacity: opacityCurve.transform(
-              min(pulledExtent / refreshTriggerPullDistance, 1.0)
+              min(pulledExtent / loadTriggerPullDistance, 1.0)
           ),
           child: const Icon(
             CupertinoIcons.down_arrow,
@@ -389,7 +386,7 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
         )
             : Opacity(
           opacity: opacityCurve.transform(
-              min(pulledExtent / refreshIndicatorExtent, 1.0)
+              min(pulledExtent / loadIndicatorExtent, 1.0)
           ),
           child: const CupertinoActivityIndicator(radius: 14.0),
         ),
@@ -398,16 +395,16 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   }
 
   @override
-  _EasyRefreshSliverRefreshControlState createState() => _EasyRefreshSliverRefreshControlState();
+  _EasyRefreshSliverLoadControlState createState() => _EasyRefreshSliverLoadControlState();
 }
 
-class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefreshControl> {
+class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadControl> {
   // Reset the state from done to inactive when only this fraction of the
-  // original `refreshTriggerPullDistance` is left.
+  // original `loadTriggerPullDistance` is left.
   static const double _inactiveResetOverscrollFraction = 0.1;
 
-  RefreshIndicatorMode refreshState;
-  // [Future] returned by the widget's `onRefresh`.
+  LoadIndicatorMode loadState;
+  // [Future] returned by the widget's `onLoad`.
   Future<void> refreshTask;
   // The amount of space available from the inner indicator box's perspective.
   //
@@ -423,16 +420,16 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   @override
   void initState() {
     super.initState();
-    refreshState = RefreshIndicatorMode.inactive;
+    loadState = LoadIndicatorMode.inactive;
   }
 
   // A state machine transition calculator. Multiple states can be transitioned
   // through per single call.
-  RefreshIndicatorMode transitionNextState() {
-    RefreshIndicatorMode nextState;
+  LoadIndicatorMode transitionNextState() {
+    LoadIndicatorMode nextState;
 
     void goToDone() {
-      nextState = RefreshIndicatorMode.done;
+      nextState = LoadIndicatorMode.done;
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
       if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
@@ -444,76 +441,76 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
       }
     }
 
-    switch (refreshState) {
-      case RefreshIndicatorMode.inactive:
+    switch (loadState) {
+      case LoadIndicatorMode.inactive:
         if (latestIndicatorBoxExtent <= 0) {
-          return RefreshIndicatorMode.inactive;
+          return LoadIndicatorMode.inactive;
         } else {
-          nextState = RefreshIndicatorMode.drag;
+          nextState = LoadIndicatorMode.drag;
         }
         continue drag;
       drag:
-      case RefreshIndicatorMode.drag:
+      case LoadIndicatorMode.drag:
         if (latestIndicatorBoxExtent == 0) {
-          return RefreshIndicatorMode.inactive;
-        } else if (latestIndicatorBoxExtent < widget.refreshTriggerPullDistance) {
-          return RefreshIndicatorMode.drag;
+          return LoadIndicatorMode.inactive;
+        } else if (latestIndicatorBoxExtent < widget.loadTriggerPullDistance) {
+          return LoadIndicatorMode.drag;
         } else {
-          if (widget.onRefresh != null) {
+          if (widget.onLoad != null) {
             HapticFeedback.mediumImpact();
-            // Call onRefresh after this frame finished since the function is
+            // Call onLoad after this frame finished since the function is
             // user supplied and we're always here in the middle of the sliver's
             // performLayout.
             SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-              refreshTask = widget.onRefresh()..then((_) {
+              refreshTask = widget.onLoad()..then((_) {
                 if (mounted) {
                   setState(() => refreshTask = null);
                   // Trigger one more transition because by this time, BoxConstraint's
                   // maxHeight might already be resting at 0 in which case no
                   // calls to [transitionNextState] will occur anymore and the
                   // state may be stuck in a non-inactive state.
-                  refreshState = transitionNextState();
+                  loadState = transitionNextState();
                 }
               });
               setState(() => hasSliverLayoutExtent = true);
             });
           }
-          return RefreshIndicatorMode.armed;
+          return LoadIndicatorMode.armed;
         }
-        // Don't continue here. We can never possibly call onRefresh and
+        // Don't continue here. We can never possibly call onLoad and
         // progress to the next state in one [computeNextState] call.
         break;
-      case RefreshIndicatorMode.armed:
-        if (refreshState == RefreshIndicatorMode.armed && refreshTask == null) {
+      case LoadIndicatorMode.armed:
+        if (loadState == LoadIndicatorMode.armed && refreshTask == null) {
           goToDone();
           continue done;
         }
 
-        if (latestIndicatorBoxExtent > widget.refreshIndicatorExtent) {
-          return RefreshIndicatorMode.armed;
+        if (latestIndicatorBoxExtent > widget.loadIndicatorExtent) {
+          return LoadIndicatorMode.armed;
         } else {
-          nextState = RefreshIndicatorMode.refresh;
+          nextState = LoadIndicatorMode.refresh;
         }
         continue refresh;
       refresh:
-      case RefreshIndicatorMode.refresh:
+      case LoadIndicatorMode.refresh:
         if (refreshTask != null) {
-          return RefreshIndicatorMode.refresh;
+          return LoadIndicatorMode.refresh;
         } else {
           goToDone();
         }
         continue done;
       done:
-      case RefreshIndicatorMode.done:
+      case LoadIndicatorMode.done:
       // Let the transition back to inactive trigger before strictly going
       // to 0.0 since the last bit of the animation can take some time and
       // can feel sluggish if not going all the way back to 0.0 prevented
       // a subsequent pull-to-refresh from starting.
         if (latestIndicatorBoxExtent >
-            widget.refreshTriggerPullDistance * _inactiveResetOverscrollFraction) {
-          return RefreshIndicatorMode.done;
+            widget.loadTriggerPullDistance * _inactiveResetOverscrollFraction) {
+          return LoadIndicatorMode.done;
         } else {
-          nextState = RefreshIndicatorMode.inactive;
+          nextState = LoadIndicatorMode.inactive;
         }
         break;
       default:
@@ -525,22 +522,22 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
   @override
   Widget build(BuildContext context) {
-    return _EasyRefreshSliverRefresh(
-      refreshIndicatorLayoutExtent: widget.refreshIndicatorExtent,
+    return _EasyRefreshSliverLoad(
+      loadIndicatorLayoutExtent: widget.loadIndicatorExtent,
       hasLayoutExtent: hasSliverLayoutExtent,
       // A LayoutBuilder lets the sliver's layout changes be fed back out to
       // its owner to trigger state changes.
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           latestIndicatorBoxExtent = constraints.maxHeight;
-          refreshState = transitionNextState();
+          loadState = transitionNextState();
           if (widget.builder != null && latestIndicatorBoxExtent > 0) {
             return widget.builder(
               context,
-              refreshState,
+              loadState,
               latestIndicatorBoxExtent,
-              widget.refreshTriggerPullDistance,
-              widget.refreshIndicatorExtent,
+              widget.loadTriggerPullDistance,
+              widget.loadIndicatorExtent,
             );
           }
           return Container();
