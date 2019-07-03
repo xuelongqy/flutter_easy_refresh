@@ -92,6 +92,10 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
     markNeedsLayout();
   }
 
+  // 获取子组件大小
+  double get childSize =>
+    constraints.axis == Axis.vertical ? child.size.height : child.size.width;
+
   // This keeps track of the previously applied scroll offsets to the scrollable
   // so that when [refreshIndicatorLayoutExtent] or [hasLayoutExtent] changes,
   // the appropriate delta can be applied to keep everything in the same place
@@ -122,7 +126,6 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
       // the overlap.
       return;
     }
-
     final bool active = constraints.overlap < 0.0 || layoutExtent > 0.0;
     final double overscrolledExtent =
     constraints.overlap < 0.0 ? constraints.overlap.abs() : 0.0;
@@ -147,11 +150,11 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
           // layoutExtent may be zero. Check layoutExtent also since even
           // with a layoutExtent, the indicator builder may decide to not
           // build anything.
-          max(child.size.height, layoutExtent) - constraints.scrollOffset,
+          max(childSize, layoutExtent) - constraints.scrollOffset,
           0.0,
         ),
         maxPaintExtent: max(
-          max(child.size.height, layoutExtent) - constraints.scrollOffset,
+          max(childSize, layoutExtent) - constraints.scrollOffset,
           0.0,
         ),
         layoutExtent: max(layoutExtent - constraints.scrollOffset, 0.0),
@@ -165,7 +168,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
   @override
   void paint(PaintingContext paintContext, Offset offset) {
     if (constraints.overlap < 0.0 ||
-        constraints.scrollOffset + child.size.height > 0) {
+        constraints.scrollOffset + childSize > 0) {
       paintContext.paintChild(child, offset);
     }
   }
@@ -530,20 +533,25 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
       hasLayoutExtent: hasSliverLayoutExtent,
       // A LayoutBuilder lets the sliver's layout changes be fed back out to
       // its owner to trigger state changes.
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          latestIndicatorBoxExtent = constraints.maxHeight;
-          refreshState = transitionNextState();
-          if (widget.builder != null && latestIndicatorBoxExtent > 0) {
-            return widget.builder(
-              context,
-              refreshState,
-              latestIndicatorBoxExtent,
-              widget.refreshTriggerPullDistance,
-              widget.refreshIndicatorExtent,
-            );
-          }
-          return Container();
+      child: OrientationBuilder(
+        builder: (context, orientation) {
+          return LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              latestIndicatorBoxExtent = orientation == Orientation.landscape
+                  ? constraints.maxHeight : constraints.maxWidth;
+              refreshState = transitionNextState();
+              if (widget.builder != null && latestIndicatorBoxExtent > 0) {
+                return widget.builder(
+                  context,
+                  refreshState,
+                  latestIndicatorBoxExtent,
+                  widget.refreshTriggerPullDistance,
+                  widget.refreshIndicatorExtent,
+                );
+              }
+              return Container();
+            },
+          );
         },
       ),
     );

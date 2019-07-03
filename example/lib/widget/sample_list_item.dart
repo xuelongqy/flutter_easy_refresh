@@ -20,7 +20,7 @@ class SampleListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 60.0,
-      width: double.infinity,
+      width: 60.0,
       color: bgColor,
       child: Center(
         child: Text(text,
