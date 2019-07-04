@@ -157,7 +157,8 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
               constraints.remainingPaintExtent) - constraints.scrollOffset,
           0.0,
         ),
-        layoutExtent: max(layoutExtent - constraints.scrollOffset, 0.0),
+        layoutExtent: min(max(layoutExtent - constraints.scrollOffset, 0.0),
+            constraints.remainingPaintExtent),
       );
     } else {
       // If we never started overscrolling, return no geometry.

@@ -64,10 +64,10 @@ class _ExampleState extends State<_Example> {
       body: Center(
           child: EasyRefresh.custom(
             header: ClassicalHeader(
-              completeDuration: Duration(seconds: 5)
+              completeDuration: Duration(seconds: 1)
             ),
             footer: ClassicalFooter(
-              completeDuration: Duration(seconds: 5),
+              completeDuration: Duration(seconds: 1),
             ),
             onRefresh: () async {
               await Future.delayed(Duration(seconds: 2), () {
