@@ -15,6 +15,8 @@ typedef EasyRefreshChildBuilder = Widget Function(
 /// EasyRefresh
 /// 下拉刷新,上拉加载组件
 class EasyRefresh extends StatefulWidget {
+  // 控制器
+  final EasyRefreshController controller;
   // 刷新回调(null为不开启刷新)
   final RefreshCallback onRefresh;
   // 加载回调(null为不开启加载)
@@ -32,7 +34,7 @@ class EasyRefresh extends StatefulWidget {
   final Axis scrollDirection;
   // 反向
   final bool reverse;
-  final ScrollController controller;
+  final ScrollController scrollController;
   final bool primary;
   final bool shrinkWrap;
   final Key center;
@@ -59,13 +61,14 @@ class EasyRefresh extends StatefulWidget {
 
   EasyRefresh.custom({
     key,
+    this.controller,
     this.onRefresh,
     this.onLoad,
     this.header,
     this.footer,
     this.scrollDirection = Axis.vertical,
     this.reverse = false,
-    this.controller,
+    this.scrollController,
     this.primary,
     this.shrinkWrap = false,
     this.center,
@@ -78,12 +81,13 @@ class EasyRefresh extends StatefulWidget {
 
   EasyRefresh({
     key,
+    this.controller,
     this.onRefresh,
     this.onLoad,
     this.header,
     this.footer,
     @required this.builder,
-  }) : this.scrollDirection = null, this.reverse = null, this.controller = null,
+  }) : this.scrollDirection = null, this.reverse = null, this.scrollController = null,
         this.primary = null, this.shrinkWrap = null, this.center = null,
         this.anchor = null, this.cacheExtent = null, this.slivers = null,
         this.semanticChildCount = null, this.dragStartBehavior = null;
@@ -116,6 +120,15 @@ class _EasyRefreshState extends State<EasyRefresh> {
      _physics = EasyRefreshPhysics();
   }
 
+  // 更新依赖
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // 绑定控制器
+    if (widget.controller != null)
+      widget.controller._bindEasyRefreshState(this);
+  }
+
   // 触发刷新
   void callRefresh() {
     print("callRefresh");
@@ -139,8 +152,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
   @override
   Widget build(BuildContext context) {
     // 构建Header和Footer
-    var header = _header.builder(context, widget.onRefresh);
-    var footer = _footer.builder(context, widget.onLoad);
+    var header = _header.builder(context, widget);
+    var footer = _footer.builder(context, widget);
     // 插入Header和Footer
     var slivers = widget.slivers;
     slivers.insert(0, header);
@@ -152,7 +165,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
         slivers: slivers,
         scrollDirection: widget.scrollDirection,
         reverse: widget.reverse,
-        controller: widget.controller,
+        controller: widget.scrollController,
         primary: widget.primary,
         shrinkWrap: widget.shrinkWrap,
         center: widget.center,
@@ -167,11 +180,16 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
 /// EasyRefresh控制器
 class EasyRefreshController {
+  // 完成刷新
+  FinishRefresh finishRefresh;
+  // 完成加载
+  FinishLoad finishLoad;
+
   // 状态
   _EasyRefreshState _easyRefreshState;
 
   // 绑定状态
-  void bindEasyRefreshState(_EasyRefreshState state) {
+  void _bindEasyRefreshState(_EasyRefreshState state) {
     this._easyRefreshState = state;
   }
 
@@ -183,23 +201,9 @@ class EasyRefreshController {
   }
 
   // 触发加载
-  void callLoadMore() {
+  void callLoad() {
     if (this._easyRefreshState != null) {
       this._easyRefreshState.callLoadMore();
-    }
-  }
-
-  // 完成刷新
-  void finishRefresh() {
-    if (this._easyRefreshState != null) {
-      this._easyRefreshState.finishRefresh();
-    }
-  }
-
-  // 完成加载
-  void finishLoadMore() {
-    if (this._easyRefreshState != null) {
-      this._easyRefreshState.finishLoadMore();
     }
   }
 }

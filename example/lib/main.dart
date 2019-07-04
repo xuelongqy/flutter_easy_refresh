@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-
 import 'widget/sample_list_item.dart';
 
 void main() => runApp(MyApp());
@@ -64,6 +63,12 @@ class _ExampleState extends State<_Example> {
       ),
       body: Center(
           child: EasyRefresh.custom(
+            header: ClassicalHeader(
+              completeDuration: Duration(seconds: 5)
+            ),
+            footer: ClassicalFooter(
+              completeDuration: Duration(seconds: 5),
+            ),
             onRefresh: () async {
               await Future.delayed(Duration(seconds: 2), () {
                 print('onRefresh');
@@ -99,7 +104,7 @@ class _ExampleState extends State<_Example> {
             child: Text("Refresh", style: TextStyle(color: Colors.black))),
         FlatButton(
             onPressed: () {
-              _controller.callLoadMore();
+              _controller.callLoad();
             },
             child: Text("Load more", style: TextStyle(color: Colors.black))),
       ]

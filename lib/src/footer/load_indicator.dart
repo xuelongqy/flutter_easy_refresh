@@ -234,6 +234,17 @@ typedef LoadControlIndicatorBuilder = Widget Function(
 /// [LoadIndicatorMode.done] state and will start to go away.
 typedef LoadCallback = Future<void> Function();
 
+/// 结束加载
+/// success 为是否成功(为false时，nodata无效)
+/// nodata 为是否有更多数据
+typedef FinishLoad = void Function({
+  bool success,
+  bool nodata,
+});
+
+/// 绑定加载指示剂
+typedef BindLoadIndicator = void Function(FinishLoad finishLoad);
+
 /// A sliver widget implementing the iOS-style pull to refresh content control.
 ///
 /// When inserted as the first sliver in a scroll view or behind other slivers
@@ -292,8 +303,9 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     this.loadTriggerPullDistance = _defaultloadTriggerPullDistance,
     this.loadIndicatorExtent = _defaultloadIndicatorExtent,
     this.builder = buildSimpleRefreshIndicator,
-    this.completeDuration = const Duration(seconds: 1),
+    this.completeDuration,
     this.onLoad,
+    this.bindLoadIndicator,
   }) : assert(loadTriggerPullDistance != null),
         assert(loadTriggerPullDistance > 0.0),
         assert(loadIndicatorExtent != null),
@@ -350,6 +362,9 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   
   /// 完成延时
   final Duration completeDuration;
+
+  /// 绑定加载指示器
+  final BindLoadIndicator bindLoadIndicator;
 
   static const double _defaultloadTriggerPullDistance = 100.0;
   static const double _defaultloadIndicatorExtent = 60.0;
@@ -427,6 +442,18 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   void initState() {
     super.initState();
     loadState = LoadIndicatorMode.inactive;
+    // 绑定加载指示器
+    if (widget.bindLoadIndicator != null) {
+      widget.bindLoadIndicator(finishLoad);
+    }
+  }
+
+  // 完成刷新
+  void finishLoad({
+    bool success = true,
+    bool nodata = false,
+  }) {
+
   }
 
   // A state machine transition calculator. Multiple states can be transitioned
@@ -503,7 +530,16 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         if (refreshTask != null) {
           return LoadIndicatorMode.refresh;
         } else {
-          goToDone();
+          // 添加延时
+          if (widget.completeDuration == null) {
+            goToDone();
+          } else {
+            Future.delayed(widget.completeDuration, (){
+              if (mounted) {
+                goToDone();
+              }
+            });
+          }
         }
         continue done;
       done:

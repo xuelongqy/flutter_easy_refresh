@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyrefresh/src/header/refresh_indicator.dart';
 
+import '../../easy_refresh.dart';
+
 /// Header
 abstract class Header {
   // Header容器高度
@@ -16,17 +18,22 @@ abstract class Header {
     this.extent = 60.0,
     this.triggerDistance = 70.0,
     this.float = false,
-    this.completeDuration = const Duration(seconds: 1),
+    this.completeDuration,
   });
 
   // 构造器
-  Widget builder(BuildContext context, RefreshCallback onRefresh) {
+  Widget builder(BuildContext context, EasyRefresh easyRefresh) {
     return EasyRefreshSliverRefreshControl(
       refreshIndicatorExtent: extent,
       refreshTriggerPullDistance: triggerDistance,
       builder: contentBuilder,
       completeDuration: completeDuration,
-      onRefresh: onRefresh,
+      onRefresh: easyRefresh.onRefresh,
+      bindRefreshIndicator: (finishRefresh) {
+        if (easyRefresh.controller != null) {
+          easyRefresh.controller.finishRefresh = finishRefresh;
+        }
+      },
     );
   }
 
@@ -50,8 +57,7 @@ class CustomHeader extends Header {
     extent = 60.0,
     triggerDistance = 70.0,
     float = false,
-    completeDuration = const Duration(seconds: 1),
-    RefreshCallback onRefresh,
+    completeDuration,
     @required this.headerBuilder,
   }) : super (
     extent: extent,
@@ -76,8 +82,7 @@ class ClassicalHeader extends Header{
     extent = 60.0,
     triggerDistance = 70.0,
     float = false,
-    completeDuration = const Duration(seconds: 1),
-    RefreshCallback onRefresh,
+    completeDuration,
   }): super(
     extent: extent,
     triggerDistance: triggerDistance,

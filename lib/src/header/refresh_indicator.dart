@@ -234,6 +234,17 @@ typedef RefreshControlIndicatorBuilder = Widget Function(
 /// [RefreshIndicatorMode.done] state and will start to go away.
 typedef RefreshCallback = Future<void> Function();
 
+/// 结束刷新
+/// success 为是否成功(为false时，nodata无效)
+/// nodata 为是否有更多数据
+typedef FinishRefresh = void Function({
+  bool success,
+  bool nodata,
+});
+
+/// 绑定刷新指示剂
+typedef BindRefreshIndicator = void Function(FinishRefresh fnishRefresh);
+
 /// A sliver widget implementing the iOS-style pull to refresh content control.
 ///
 /// When inserted as the first sliver in a scroll view or behind other slivers
@@ -292,8 +303,9 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
     this.refreshTriggerPullDistance = _defaultRefreshTriggerPullDistance,
     this.refreshIndicatorExtent = _defaultRefreshIndicatorExtent,
     this.builder = buildSimpleRefreshIndicator,
-    this.completeDuration = const Duration(seconds: 1),
+    this.completeDuration,
     this.onRefresh,
+    this.bindRefreshIndicator,
   }) : assert(refreshTriggerPullDistance != null),
         assert(refreshTriggerPullDistance > 0.0),
         assert(refreshIndicatorExtent != null),
@@ -350,6 +362,9 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
 
   /// 完成延时
   final Duration completeDuration;
+
+  /// 绑定刷新指示器
+  final BindRefreshIndicator bindRefreshIndicator;
 
   static const double _defaultRefreshTriggerPullDistance = 100.0;
   static const double _defaultRefreshIndicatorExtent = 60.0;
@@ -427,6 +442,18 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   void initState() {
     super.initState();
     refreshState = RefreshIndicatorMode.inactive;
+    // 绑定刷新指示器
+    if (widget.bindRefreshIndicator != null) {
+      widget.bindRefreshIndicator(finishRefresh);
+    }
+  }
+
+  // 完成刷新
+  void finishRefresh({
+    bool success = true,
+    bool nodata = false,
+  }) {
+
   }
 
   // A state machine transition calculator. Multiple states can be transitioned
@@ -503,7 +530,16 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         if (refreshTask != null) {
           return RefreshIndicatorMode.refresh;
         } else {
-          goToDone();
+          // 添加延时
+          if (widget.completeDuration == null) {
+            goToDone();
+          } else {
+            Future.delayed(widget.completeDuration, (){
+              if (mounted) {
+                goToDone();
+              }
+            });
+          }
         }
         continue done;
       done:

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyrefresh/src/footer/load_indicator.dart';
 
+import '../../easy_refresh.dart';
+
 /// Header
 abstract class Footer {
   // Footer容器高度
@@ -17,17 +19,22 @@ abstract class Footer {
     this.extent = 60.0,
     this.triggerDistance = 70.0,
     this.float = false,
-    this.completeDuration = const Duration(seconds: 1),
+    this.completeDuration,
   });
 
   // 构造器
-  Widget builder(BuildContext context, RefreshCallback onLoad) {
+  Widget builder(BuildContext context, EasyRefresh easyRefresh) {
     return EasyRefreshSliverLoadControl(
       loadIndicatorExtent: extent,
       loadTriggerPullDistance: triggerDistance,
       builder: contentBuilder,
       completeDuration: completeDuration,
-      onLoad: onLoad,
+      onLoad: easyRefresh.onLoad,
+      bindLoadIndicator: (finishLoad) {
+        if (easyRefresh.controller != null) {
+          easyRefresh.controller.finishLoad = finishLoad;
+        }
+      },
     );
   }
 
@@ -51,8 +58,7 @@ class CustomFooter extends Footer {
     extent = 60.0,
     triggerDistance = 70.0,
     float = false,
-    completeDuration = const Duration(seconds: 1),
-    RefreshCallback onRefresh,
+    completeDuration,
     @required this.headerBuilder,
   }) : super (
     extent: extent,
@@ -77,8 +83,7 @@ class ClassicalFooter extends Footer {
     extent = 60.0,
     triggerDistance = 70.0,
     float = false,
-    completeDuration = const Duration(seconds: 1),
-    RefreshCallback onRefresh,
+    completeDuration,
   }): super(
     extent: extent,
     triggerDistance: triggerDistance,
