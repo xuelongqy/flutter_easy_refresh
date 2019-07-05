@@ -29,6 +29,7 @@ abstract class Header {
       builder: contentBuilder,
       completeDuration: completeDuration,
       onRefresh: easyRefresh.onRefresh,
+      enableControlFinishRefresh: easyRefresh.enableControlFinishRefresh,
       bindRefreshIndicator: (finishRefresh) {
         if (easyRefresh.controller != null) {
           easyRefresh.controller.finishRefresh = finishRefresh;

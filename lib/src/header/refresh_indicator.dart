@@ -4,7 +4,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -302,10 +301,11 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
     Key key,
     this.refreshTriggerPullDistance = _defaultRefreshTriggerPullDistance,
     this.refreshIndicatorExtent = _defaultRefreshIndicatorExtent,
-    this.builder = buildSimpleRefreshIndicator,
+    @required this.builder,
     this.completeDuration,
     this.onRefresh,
     this.bindRefreshIndicator,
+    this.enableControlFinishRefresh = false,
   }) : assert(refreshTriggerPullDistance != null),
         assert(refreshTriggerPullDistance > 0.0),
         assert(refreshIndicatorExtent != null),
@@ -366,6 +366,9 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   /// 绑定刷新指示器
   final BindRefreshIndicator bindRefreshIndicator;
 
+  /// 是否开启控制结束
+  final enableControlFinishRefresh;
+
   static const double _defaultRefreshTriggerPullDistance = 100.0;
   static const double _defaultRefreshIndicatorExtent = 60.0;
 
@@ -376,43 +379,6 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
     final _EasyRefreshSliverRefreshControlState state
     = context.ancestorStateOfType(const TypeMatcher<_EasyRefreshSliverRefreshControlState>());
     return state.refreshState;
-  }
-
-  /// Builds a simple refresh indicator that fades in a bottom aligned down
-  /// arrow before the refresh is triggered, a [CupertinoActivityIndicator]
-  /// during the refresh and fades the [CupertinoActivityIndicator] away when
-  /// the refresh is done.
-  static Widget buildSimpleRefreshIndicator(
-      BuildContext context,
-      RefreshIndicatorMode refreshState,
-      double pulledExtent,
-      double refreshTriggerPullDistance,
-      double refreshIndicatorExtent,
-      ) {
-    const Curve opacityCurve = Interval(0.4, 0.8, curve: Curves.easeInOut);
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 16.0),
-        child: refreshState == RefreshIndicatorMode.drag
-            ? Opacity(
-          opacity: opacityCurve.transform(
-              min(pulledExtent / refreshTriggerPullDistance, 1.0)
-          ),
-          child: const Icon(
-            CupertinoIcons.down_arrow,
-            color: CupertinoColors.inactiveGray,
-            size: 36.0,
-          ),
-        )
-            : Opacity(
-          opacity: opacityCurve.transform(
-              min(pulledExtent / refreshIndicatorExtent, 1.0)
-          ),
-          child: const CupertinoActivityIndicator(radius: 14.0),
-        ),
-      ),
-    );
   }
 
   @override
@@ -515,7 +481,16 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         break;
       case RefreshIndicatorMode.armed:
         if (refreshState == RefreshIndicatorMode.armed && refreshTask == null) {
-          goToDone();
+          // 添加延时
+          if (widget.completeDuration == null) {
+            goToDone();
+          } else {
+            Future.delayed(widget.completeDuration, (){
+              if (mounted) {
+                goToDone();
+              }
+            });
+          }
           continue done;
         }
 

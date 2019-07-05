@@ -4,7 +4,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -197,10 +196,10 @@ enum LoadIndicatorMode {
   armed,
 
   /// While the onLoad task is running.
-  refresh,
+  load,
 
   /// 刷新完成
-  refreshed,
+  loaded,
 
   /// 没有数据
   nodata,
@@ -303,10 +302,11 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     Key key,
     this.loadTriggerPullDistance = _defaultloadTriggerPullDistance,
     this.loadIndicatorExtent = _defaultloadIndicatorExtent,
-    this.builder = buildSimpleRefreshIndicator,
+    @required this.builder,
     this.completeDuration,
     this.onLoad,
     this.bindLoadIndicator,
+    this.enableControlFinishLoad = false,
   }) : assert(loadTriggerPullDistance != null),
         assert(loadTriggerPullDistance > 0.0),
         assert(loadIndicatorExtent != null),
@@ -367,6 +367,9 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   /// 绑定加载指示器
   final BindLoadIndicator bindLoadIndicator;
 
+  /// 是否开启控制结束
+  final enableControlFinishLoad;
+
   static const double _defaultloadTriggerPullDistance = 100.0;
   static const double _defaultloadIndicatorExtent = 60.0;
 
@@ -377,43 +380,6 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     final _EasyRefreshSliverLoadControlState state
     = context.ancestorStateOfType(const TypeMatcher<_EasyRefreshSliverLoadControlState>());
     return state.loadState;
-  }
-
-  /// Builds a simple refresh indicator that fades in a bottom aligned down
-  /// arrow before the refresh is triggered, a [CupertinoActivityIndicator]
-  /// during the refresh and fades the [CupertinoActivityIndicator] away when
-  /// the refresh is done.
-  static Widget buildSimpleRefreshIndicator(
-      BuildContext context,
-      LoadIndicatorMode loadState,
-      double pulledExtent,
-      double loadTriggerPullDistance,
-      double loadIndicatorExtent,
-      ) {
-    const Curve opacityCurve = Interval(0.4, 0.8, curve: Curves.easeInOut);
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 16.0),
-        child: loadState == LoadIndicatorMode.drag
-            ? Opacity(
-          opacity: opacityCurve.transform(
-              min(pulledExtent / loadTriggerPullDistance, 1.0)
-          ),
-          child: const Icon(
-            CupertinoIcons.down_arrow,
-            color: CupertinoColors.inactiveGray,
-            size: 36.0,
-          ),
-        )
-            : Opacity(
-          opacity: opacityCurve.transform(
-              min(pulledExtent / loadIndicatorExtent, 1.0)
-          ),
-          child: const CupertinoActivityIndicator(radius: 14.0),
-        ),
-      ),
-    );
   }
 
   @override
@@ -516,20 +482,29 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         break;
       case LoadIndicatorMode.armed:
         if (loadState == LoadIndicatorMode.armed && refreshTask == null) {
-          goToDone();
+          // 添加延时
+          if (widget.completeDuration == null) {
+            goToDone();
+          } else {
+            Future.delayed(widget.completeDuration, (){
+              if (mounted) {
+                goToDone();
+              }
+            });
+          }
           continue done;
         }
 
         if (latestIndicatorBoxExtent > widget.loadIndicatorExtent) {
           return LoadIndicatorMode.armed;
         } else {
-          nextState = LoadIndicatorMode.refresh;
+          nextState = LoadIndicatorMode.load;
         }
         continue refresh;
       refresh:
-      case LoadIndicatorMode.refresh:
+      case LoadIndicatorMode.load:
         if (refreshTask != null) {
-          return LoadIndicatorMode.refresh;
+          return LoadIndicatorMode.load;
         } else {
           // 添加延时
           if (widget.completeDuration == null) {

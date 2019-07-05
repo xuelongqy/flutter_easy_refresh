@@ -30,6 +30,7 @@ abstract class Footer {
       builder: contentBuilder,
       completeDuration: completeDuration,
       onLoad: easyRefresh.onLoad,
+      enableControlFinishLoad: easyRefresh.enableControlFinishLoad,
       bindLoadIndicator: (finishLoad) {
         if (easyRefresh.controller != null) {
           easyRefresh.controller.finishLoad = finishLoad;
