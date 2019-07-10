@@ -4,6 +4,7 @@ import 'package:flutter_easyrefresh/src/footer/load_indicator.dart';
 import 'package:flutter_easyrefresh/src/header/refresh_indicator.dart';
 import 'footer/footer.dart';
 import 'header/header.dart';
+import 'listener/scroll_notification_listener.dart';
 import 'physics/scroll_physics.dart';
 
 /// 子组件构造器
@@ -166,8 +167,10 @@ class _EasyRefreshState extends State<EasyRefresh> {
     var slivers = widget.slivers;
     slivers.insert(0, header);
     slivers.add(footer);
-    return NotificationListener<ScrollNotification>(
-      onNotification: (notification) {},
+    return ScrollNotificationListener(
+      onNotification: (notification) {
+        return true;
+      },
       child: widget.builder == null ? CustomScrollView(
         physics: _physics,
         slivers: slivers,
