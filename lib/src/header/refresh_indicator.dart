@@ -429,7 +429,10 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
     bool success = true,
     bool nodata = false,
   }) {
-
+    if (widget.enableControlFinishRefresh) {
+      setState(() => refreshTask = null);
+      refreshState = transitionNextState();
+    }
   }
 
   // 滚动焦点变化
@@ -444,6 +447,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
     void goToDone() {
       nextState = RefreshIndicatorMode.done;
+      refreshState = RefreshIndicatorMode.done;
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
       if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
@@ -480,7 +484,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
               // performLayout.
               SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
                 refreshTask = widget.onRefresh()..then((_) {
-                  if (mounted) {
+                  if (mounted && !widget.enableControlFinishRefresh) {
                     setState(() => refreshTask = null);
                     // Trigger one more transition because by this time, BoxConstraint's
                     // maxHeight might already be resting at 0 in which case no
@@ -510,6 +514,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
                 goToDone();
               }
             });
+            return RefreshIndicatorMode.refreshed;
           }
           continue done;
         }
@@ -534,6 +539,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
                 goToDone();
               }
             });
+            return RefreshIndicatorMode.refreshed;
           }
         }
         continue done;
@@ -549,6 +555,15 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         } else {
           nextState = RefreshIndicatorMode.inactive;
         }
+        break;
+      case RefreshIndicatorMode.refreshed:
+        nextState = refreshState;
+        break;
+      case RefreshIndicatorMode.nodata:
+        nextState = refreshState;
+        break;
+      case RefreshIndicatorMode.failed:
+        nextState = refreshState;
         break;
       default:
         break;

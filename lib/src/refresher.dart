@@ -16,28 +16,32 @@ typedef EasyRefreshChildBuilder = Widget Function(
 /// EasyRefresh
 /// 下拉刷新,上拉加载组件
 class EasyRefresh extends StatefulWidget {
-  // 控制器
+  /// 控制器
   final EasyRefreshController controller;
-  // 刷新回调(null为不开启刷新)
+  /// 刷新回调(null为不开启刷新)
   final RefreshCallback onRefresh;
-  // 加载回调(null为不开启加载)
+  /// 加载回调(null为不开启加载)
   final LoadCallback onLoad;
-  // 是否开启控制结束刷新
-  final enableControlFinishRefresh;
-  // 是否开启控制结束加载
-  final enableControlFinishLoad;
-  // Header
+  /// 是否开启控制结束刷新
+  final bool enableControlFinishRefresh;
+  /// 是否开启控制结束加载
+  final bool  enableControlFinishLoad;
+  /// 开启无限刷新
+  final bool  enableInfiniteRefresh;
+  /// 开启无限加载
+  final bool  enableInfiniteLoad;
+  /// Header
   final Header header;
-  // Footer
+  /// Footer
   final Footer footer;
-  // 子组件构造器
+  /// 子组件构造器
   final EasyRefreshChildBuilder builder;
 
-  // Slivers集合
+  /// Slivers集合
   final List<Widget> slivers;
-  // 列表方向
+  /// 列表方向
   final Axis scrollDirection;
-  // 反向
+  /// 反向
   final bool reverse;
   final ScrollController scrollController;
   final bool primary;
@@ -71,6 +75,8 @@ class EasyRefresh extends StatefulWidget {
     this.onLoad,
     this.enableControlFinishRefresh = false,
     this.enableControlFinishLoad = false,
+    this.enableInfiniteRefresh = false,
+    this.enableInfiniteLoad = false,
     this.header,
     this.footer,
     this.scrollDirection = Axis.vertical,
@@ -93,6 +99,8 @@ class EasyRefresh extends StatefulWidget {
     this.onLoad,
     this.enableControlFinishRefresh = false,
     this.enableControlFinishLoad = false,
+    this.enableInfiniteRefresh = false,
+    this.enableInfiniteLoad = false,
     this.header,
     this.footer,
     @required this.builder,

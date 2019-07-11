@@ -63,6 +63,9 @@ class _ExampleState extends State<_Example> {
       ),
       body: Center(
           child: EasyRefresh.custom(
+            //enableControlFinishRefresh: true,
+            //enableControlFinishLoad: true,
+            controller: _controller,
             header: ClassicalHeader(
               completeDuration: Duration(seconds: 1)
             ),
@@ -99,12 +102,12 @@ class _ExampleState extends State<_Example> {
       persistentFooterButtons: <Widget>[
         FlatButton(
             onPressed: () {
-              _controller.callRefresh();
+              _controller.finishRefresh();
             },
             child: Text("Refresh", style: TextStyle(color: Colors.black))),
         FlatButton(
             onPressed: () {
-              _controller.callLoad();
+              _controller.finishLoad();
             },
             child: Text("Load more", style: TextStyle(color: Colors.black))),
       ]

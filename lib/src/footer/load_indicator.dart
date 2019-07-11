@@ -430,7 +430,10 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     bool success = true,
     bool nodata = false,
   }) {
-
+    if (widget.enableControlFinishLoad) {
+      setState(() => refreshTask = null);
+      loadState = transitionNextState();
+    }
   }
 
   // 滚动焦点变化
@@ -445,6 +448,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
     void goToDone() {
       nextState = LoadIndicatorMode.done;
+      loadState = LoadIndicatorMode.done;
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
       if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
@@ -481,7 +485,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
               // performLayout.
               SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
                 refreshTask = widget.onLoad()..then((_) {
-                  if (mounted) {
+                  if (mounted && !widget.enableControlFinishLoad) {
                     setState(() => refreshTask = null);
                     // Trigger one more transition because by this time, BoxConstraint's
                     // maxHeight might already be resting at 0 in which case no
@@ -511,6 +515,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
                 goToDone();
               }
             });
+            return LoadIndicatorMode.loaded;
           }
           continue done;
         }
@@ -535,6 +540,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
                 goToDone();
               }
             });
+            return LoadIndicatorMode.loaded;
           }
         }
         continue done;
@@ -550,6 +556,15 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         } else {
           nextState = LoadIndicatorMode.inactive;
         }
+        break;
+      case LoadIndicatorMode.loaded:
+        nextState = loadState;
+        break;
+      case LoadIndicatorMode.nodata:
+        nextState = loadState;
+        break;
+      case LoadIndicatorMode.failed:
+        nextState = loadState;
         break;
       default:
         break;

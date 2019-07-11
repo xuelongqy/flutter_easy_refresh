@@ -64,14 +64,14 @@ abstract class Footer {
 class CustomFooter extends Footer {
 
   /// Header构造器
-  final LoadControlIndicatorBuilder headerBuilder;
+  final LoadControlIndicatorBuilder footerBuilder;
 
   CustomFooter({
     extent = 60.0,
     triggerDistance = 70.0,
     float = false,
     completeDuration,
-    @required this.headerBuilder,
+    @required this.footerBuilder,
   }) : super (
     extent: extent,
     triggerDistance: triggerDistance,
@@ -81,9 +81,9 @@ class CustomFooter extends Footer {
 
   @override
   Widget contentBuilder(BuildContext context,
-      LoadIndicatorMode refreshState, double pulledExtent,
+      LoadIndicatorMode loadState, double pulledExtent,
       double refreshTriggerPullDistance, double refreshIndicatorExtent) {
-    return headerBuilder(context, refreshState, pulledExtent,
+    return footerBuilder(context, loadState, pulledExtent,
         refreshTriggerPullDistance, refreshIndicatorExtent);
   }
 }
@@ -106,7 +106,7 @@ class ClassicalFooter extends Footer {
   );
 
   @override
-  Widget contentBuilder(BuildContext context, LoadIndicatorMode refreshState,
+  Widget contentBuilder(BuildContext context, LoadIndicatorMode loadState,
       double pulledExtent, double refreshTriggerPullDistance,
       double refreshIndicatorExtent) {
     return Container(
