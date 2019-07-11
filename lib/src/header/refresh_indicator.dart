@@ -9,6 +9,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import '../listener/scroll_notification_listener.dart';
+
 class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
   const _EasyRefreshSliverRefresh({
     Key key,
@@ -242,7 +244,8 @@ typedef FinishRefresh = void Function({
 });
 
 /// 绑定刷新指示剂
-typedef BindRefreshIndicator = void Function(FinishRefresh fnishRefresh);
+typedef BindRefreshIndicator = void Function(FinishRefresh fnishRefresh,
+    ScrollFocusCallback onFocus);
 
 /// A sliver widget implementing the iOS-style pull to refresh content control.
 ///
@@ -306,6 +309,7 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
     this.onRefresh,
     this.bindRefreshIndicator,
     this.enableControlFinishRefresh = false,
+    this.enableHapticFeedback = false,
   }) : assert(refreshTriggerPullDistance != null),
         assert(refreshTriggerPullDistance > 0.0),
         assert(refreshIndicatorExtent != null),
@@ -369,6 +373,9 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   /// 是否开启控制结束
   final enableControlFinishRefresh;
 
+  /// 开启震动反馈
+  final enableHapticFeedback;
+
   static const double _defaultRefreshTriggerPullDistance = 100.0;
   static const double _defaultRefreshIndicatorExtent = 60.0;
 
@@ -404,13 +411,16 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   double latestIndicatorBoxExtent = 0.0;
   bool hasSliverLayoutExtent = false;
 
+  // 滚动焦点
+  bool _focus = false;
+
   @override
   void initState() {
     super.initState();
     refreshState = RefreshIndicatorMode.inactive;
     // 绑定刷新指示器
     if (widget.bindRefreshIndicator != null) {
-      widget.bindRefreshIndicator(finishRefresh);
+      widget.bindRefreshIndicator(finishRefresh, onFocus);
     }
   }
 
@@ -420,6 +430,11 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
     bool nodata = false,
   }) {
 
+  }
+
+  // 滚动焦点变化
+  void onFocus(bool focus) {
+    _focus = focus;
   }
 
   // A state machine transition calculator. Multiple states can be transitioned
@@ -442,7 +457,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
     switch (refreshState) {
       case RefreshIndicatorMode.inactive:
-        if (latestIndicatorBoxExtent <= 0) {
+        if (latestIndicatorBoxExtent <= 0 || !_focus) {
           return RefreshIndicatorMode.inactive;
         } else {
           nextState = RefreshIndicatorMode.drag;
@@ -456,25 +471,30 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
           return RefreshIndicatorMode.drag;
         } else {
           if (widget.onRefresh != null) {
-            HapticFeedback.mediumImpact();
-            // Call onRefresh after this frame finished since the function is
-            // user supplied and we're always here in the middle of the sliver's
-            // performLayout.
-            SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-              refreshTask = widget.onRefresh()..then((_) {
-                if (mounted) {
-                  setState(() => refreshTask = null);
-                  // Trigger one more transition because by this time, BoxConstraint's
-                  // maxHeight might already be resting at 0 in which case no
-                  // calls to [transitionNextState] will occur anymore and the
-                  // state may be stuck in a non-inactive state.
-                  refreshState = transitionNextState();
-                }
+            if (!_focus) {
+              if (widget.enableHapticFeedback) {
+                HapticFeedback.mediumImpact();
+              }
+              // Call onRefresh after this frame finished since the function is
+              // user supplied and we're always here in the middle of the sliver's
+              // performLayout.
+              SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+                refreshTask = widget.onRefresh()..then((_) {
+                  if (mounted) {
+                    setState(() => refreshTask = null);
+                    // Trigger one more transition because by this time, BoxConstraint's
+                    // maxHeight might already be resting at 0 in which case no
+                    // calls to [transitionNextState] will occur anymore and the
+                    // state may be stuck in a non-inactive state.
+                    refreshState = transitionNextState();
+                  }
+                });
+                setState(() => hasSliverLayoutExtent = true);
               });
-              setState(() => hasSliverLayoutExtent = true);
-            });
+              return RefreshIndicatorMode.armed;
+            }
+            return RefreshIndicatorMode.drag;
           }
-          return RefreshIndicatorMode.armed;
         }
         // Don't continue here. We can never possibly call onRefresh and
         // progress to the next state in one [computeNextState] call.

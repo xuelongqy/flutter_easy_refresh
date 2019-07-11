@@ -171,6 +171,10 @@ class _EasyRefreshState extends State<EasyRefresh> {
       onNotification: (notification) {
         return true;
       },
+      onFocus: (focus) {
+        _header.onFocus(focus);
+        _footer.onFocus(focus);
+      },
       child: widget.builder == null ? CustomScrollView(
         physics: _physics,
         slivers: slivers,

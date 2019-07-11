@@ -1,26 +1,35 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_easyrefresh/src/footer/load_indicator.dart';
 
+import '../listener/scroll_notification_listener.dart';
 import '../../easy_refresh.dart';
 
 /// Header
 abstract class Footer {
-  // Footer容器高度
+  /// Footer容器高度
   final double extent;
-  // 高度(超过这个高度出发刷新)
+  /// 高度(超过这个高度出发刷新)
   final double triggerDistance;
-  // 是否浮动
+  /// 是否浮动
   final bool float;
   // 完成延时
   final Duration completeDuration;
+  /// 开启震动反馈
+  final enableHapticFeedback;
+  /// 指示器滚动焦点变化回调
+  ScrollFocusCallback _onFocus;
 
   Footer({
     this.extent = 60.0,
     this.triggerDistance = 70.0,
     this.float = false,
     this.completeDuration,
+    this.enableHapticFeedback = false,
   });
+
+  // 滚动焦点变化
+  void onFocus(bool focus) {
+    if (_onFocus != null) _onFocus(focus);
+  }
 
   // 构造器
   Widget builder(BuildContext context, EasyRefresh easyRefresh) {
@@ -31,10 +40,12 @@ abstract class Footer {
       completeDuration: completeDuration,
       onLoad: easyRefresh.onLoad,
       enableControlFinishLoad: easyRefresh.enableControlFinishLoad,
-      bindLoadIndicator: (finishLoad) {
+      enableHapticFeedback: enableHapticFeedback,
+      bindLoadIndicator: (finishLoad, onFocus) {
         if (easyRefresh.controller != null) {
           easyRefresh.controller.finishLoad = finishLoad;
         }
+        this._onFocus = onFocus;
       },
     );
   }
@@ -85,11 +96,13 @@ class ClassicalFooter extends Footer {
     triggerDistance = 70.0,
     float = false,
     completeDuration,
+    enableHapticFeedback = true,
   }): super(
     extent: extent,
     triggerDistance: triggerDistance,
     float: float,
     completeDuration: completeDuration,
+    enableHapticFeedback: enableHapticFeedback,
   );
 
   @override

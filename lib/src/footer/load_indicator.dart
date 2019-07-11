@@ -9,6 +9,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import '../listener/scroll_notification_listener.dart';
+
 class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
   const _EasyRefreshSliverLoad({
     Key key,
@@ -243,7 +245,8 @@ typedef FinishLoad = void Function({
 });
 
 /// 绑定加载指示剂
-typedef BindLoadIndicator = void Function(FinishLoad finishLoad);
+typedef BindLoadIndicator = void Function(FinishLoad finishLoad,
+    ScrollFocusCallback onFocus);
 
 /// A sliver widget implementing the iOS-style pull to refresh content control.
 ///
@@ -307,6 +310,7 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     this.onLoad,
     this.bindLoadIndicator,
     this.enableControlFinishLoad = false,
+    this.enableHapticFeedback = false,
   }) : assert(loadTriggerPullDistance != null),
         assert(loadTriggerPullDistance > 0.0),
         assert(loadIndicatorExtent != null),
@@ -370,6 +374,9 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   /// 是否开启控制结束
   final enableControlFinishLoad;
 
+  /// 开启震动反馈
+  final enableHapticFeedback;
+
   static const double _defaultloadTriggerPullDistance = 100.0;
   static const double _defaultloadIndicatorExtent = 60.0;
 
@@ -405,13 +412,16 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   double latestIndicatorBoxExtent = 0.0;
   bool hasSliverLayoutExtent = false;
 
+  // 滚动焦点
+  bool _focus = false;
+
   @override
   void initState() {
     super.initState();
     loadState = LoadIndicatorMode.inactive;
     // 绑定加载指示器
     if (widget.bindLoadIndicator != null) {
-      widget.bindLoadIndicator(finishLoad);
+      widget.bindLoadIndicator(finishLoad, onFocus);
     }
   }
 
@@ -421,6 +431,11 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     bool nodata = false,
   }) {
 
+  }
+
+  // 滚动焦点变化
+  void onFocus(bool focus) {
+    _focus = focus;
   }
 
   // A state machine transition calculator. Multiple states can be transitioned
@@ -443,7 +458,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
     switch (loadState) {
       case LoadIndicatorMode.inactive:
-        if (latestIndicatorBoxExtent <= 0) {
+        if (latestIndicatorBoxExtent <= 0 || !_focus) {
           return LoadIndicatorMode.inactive;
         } else {
           nextState = LoadIndicatorMode.drag;
@@ -457,25 +472,30 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
           return LoadIndicatorMode.drag;
         } else {
           if (widget.onLoad != null) {
-            HapticFeedback.mediumImpact();
-            // Call onLoad after this frame finished since the function is
-            // user supplied and we're always here in the middle of the sliver's
-            // performLayout.
-            SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-              refreshTask = widget.onLoad()..then((_) {
-                if (mounted) {
-                  setState(() => refreshTask = null);
-                  // Trigger one more transition because by this time, BoxConstraint's
-                  // maxHeight might already be resting at 0 in which case no
-                  // calls to [transitionNextState] will occur anymore and the
-                  // state may be stuck in a non-inactive state.
-                  loadState = transitionNextState();
-                }
+            if (!_focus) {
+              if (widget.enableHapticFeedback) {
+                HapticFeedback.mediumImpact();
+              }
+              // Call onLoad after this frame finished since the function is
+              // user supplied and we're always here in the middle of the sliver's
+              // performLayout.
+              SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+                refreshTask = widget.onLoad()..then((_) {
+                  if (mounted) {
+                    setState(() => refreshTask = null);
+                    // Trigger one more transition because by this time, BoxConstraint's
+                    // maxHeight might already be resting at 0 in which case no
+                    // calls to [transitionNextState] will occur anymore and the
+                    // state may be stuck in a non-inactive state.
+                    loadState = transitionNextState();
+                  }
+                });
+                setState(() => hasSliverLayoutExtent = true);
               });
-              setState(() => hasSliverLayoutExtent = true);
-            });
+              return LoadIndicatorMode.armed;
+            }
+            return LoadIndicatorMode.drag;
           }
-          return LoadIndicatorMode.armed;
         }
         // Don't continue here. We can never possibly call onLoad and
         // progress to the next state in one [computeNextState] call.
