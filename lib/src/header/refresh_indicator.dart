@@ -413,6 +413,10 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
   // 滚动焦点
   bool _focus = false;
+  // 刷新完成
+  bool _success;
+  // 没有更多数据
+  bool _nodata;
 
   @override
   void initState() {
@@ -426,9 +430,11 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
   // 完成刷新
   void finishRefresh({
-    bool success = true,
-    bool nodata = false,
+    bool success,
+    bool nodata,
   }) {
+    _success = success;
+    _nodata = nodata;
     if (widget.enableControlFinishRefresh) {
       setState(() => refreshTask = null);
       refreshState = transitionNextState();
@@ -505,8 +511,25 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         break;
       case RefreshIndicatorMode.armed:
         if (refreshState == RefreshIndicatorMode.armed && refreshTask == null) {
+          // 判断刷新完成
+          RefreshIndicatorMode state;
+          if (_success != false && _nodata == true) {
+            state = RefreshIndicatorMode.nodata;
+          } else if (_success == false) {
+            state = RefreshIndicatorMode.failed;
+          } else {
+            state = RefreshIndicatorMode.refreshed;
+          }
           // 添加延时
           if (widget.completeDuration == null) {
+            // 记录一个状态
+            widget.builder(
+              context,
+              state,
+              latestIndicatorBoxExtent,
+              widget.refreshTriggerPullDistance,
+              widget.refreshIndicatorExtent,
+            );
             goToDone();
           } else {
             Future.delayed(widget.completeDuration, (){
@@ -514,7 +537,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
                 goToDone();
               }
             });
-            return RefreshIndicatorMode.refreshed;
+            return state;
           }
           continue done;
         }
@@ -530,8 +553,25 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         if (refreshTask != null) {
           return RefreshIndicatorMode.refresh;
         } else {
+          // 判断刷新完成
+          RefreshIndicatorMode state;
+          if (_success != false && _nodata == true) {
+            state = RefreshIndicatorMode.nodata;
+          } else if (_success == false) {
+            state = RefreshIndicatorMode.failed;
+          } else {
+            state = RefreshIndicatorMode.refreshed;
+          }
           // 添加延时
           if (widget.completeDuration == null) {
+            // 记录一个状态
+            widget.builder(
+              context,
+              state,
+              latestIndicatorBoxExtent,
+              widget.refreshTriggerPullDistance,
+              widget.refreshIndicatorExtent,
+            );
             goToDone();
           } else {
             Future.delayed(widget.completeDuration, (){
@@ -539,7 +579,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
                 goToDone();
               }
             });
-            return RefreshIndicatorMode.refreshed;
+            return state;
           }
         }
         continue done;

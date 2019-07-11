@@ -95,7 +95,7 @@ class ClassicalHeader extends Header{
     extent = 60.0,
     triggerDistance = 70.0,
     float = false,
-    completeDuration,
+    completeDuration = const Duration(seconds: 1),
     enableHapticFeedback = true,
   }): super(
     extent: extent,

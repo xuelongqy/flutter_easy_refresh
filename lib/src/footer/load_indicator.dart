@@ -414,6 +414,10 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
   // 滚动焦点
   bool _focus = false;
+  // 刷新完成
+  bool _success;
+  // 没有更多数据
+  bool _nodata;
 
   @override
   void initState() {
@@ -430,6 +434,8 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     bool success = true,
     bool nodata = false,
   }) {
+    _success = success;
+    _nodata = nodata;
     if (widget.enableControlFinishLoad) {
       setState(() => refreshTask = null);
       loadState = transitionNextState();
@@ -506,8 +512,25 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         break;
       case LoadIndicatorMode.armed:
         if (loadState == LoadIndicatorMode.armed && refreshTask == null) {
+          // 判断加载完成
+          LoadIndicatorMode state;
+          if (_success != false && _nodata == true) {
+            state = LoadIndicatorMode.nodata;
+          } else if (_success == false) {
+            state = LoadIndicatorMode.failed;
+          } else {
+            state = LoadIndicatorMode.loaded;
+          }
           // 添加延时
           if (widget.completeDuration == null) {
+            // 记录一个状态
+            widget.builder(
+              context,
+              state,
+              latestIndicatorBoxExtent,
+              widget.loadTriggerPullDistance,
+              widget.loadIndicatorExtent,
+            );
             goToDone();
           } else {
             Future.delayed(widget.completeDuration, (){
@@ -515,7 +538,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
                 goToDone();
               }
             });
-            return LoadIndicatorMode.loaded;
+            return state;
           }
           continue done;
         }
@@ -531,8 +554,25 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         if (refreshTask != null) {
           return LoadIndicatorMode.load;
         } else {
+          // 判断加载完成
+          LoadIndicatorMode state;
+          if (_success != false && _nodata == true) {
+            state = LoadIndicatorMode.nodata;
+          } else if (_success == false) {
+            state = LoadIndicatorMode.failed;
+          } else {
+            state = LoadIndicatorMode.loaded;
+          }
           // 添加延时
           if (widget.completeDuration == null) {
+            // 记录一个状态
+            widget.builder(
+              context,
+              state,
+              latestIndicatorBoxExtent,
+              widget.loadTriggerPullDistance,
+              widget.loadIndicatorExtent,
+            );
             goToDone();
           } else {
             Future.delayed(widget.completeDuration, (){
@@ -540,7 +580,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
                 goToDone();
               }
             });
-            return LoadIndicatorMode.loaded;
+            return state;
           }
         }
         continue done;
