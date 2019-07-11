@@ -127,8 +127,10 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
       // the overlap.
       return;
     }*/
-
-    final bool active = constraints.remainingPaintExtent > 0.0 || layoutExtent > 0.0;
+    final bool active = constraints.remainingPaintExtent > 0.0
+        && constraints.remainingPaintExtent != 5.684341886080802e-14
+        && constraints.remainingPaintExtent != 1.1368683772161603e-13
+        && constraints.remainingCacheExtent != 0.0 || layoutExtent > 0.0;
     final double overscrolledExtent =
     constraints.remainingPaintExtent > 0.0 ? constraints.remainingPaintExtent.abs() : 0.0;
     // Layout the child giving it the space of the currently dragged overscroll
