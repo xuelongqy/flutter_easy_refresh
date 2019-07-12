@@ -181,10 +181,12 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
       // the overlap.
       return;
     }*/
-    final bool active = constraints.remainingPaintExtent > 0.0
+    final bool active = (constraints.remainingPaintExtent > 0.0
         && constraints.remainingPaintExtent != 5.684341886080802e-14
         && constraints.remainingPaintExtent != 1.1368683772161603e-13
-        && constraints.remainingCacheExtent != 0.0 || layoutExtent > 0.0;
+        && constraints.remainingCacheExtent != 0.0
+        || layoutExtent > (enableInfiniteLoad ? 1.0 : 0.0)
+            * _loadIndicatorExtent);
     final double overscrolledExtent =
     constraints.remainingPaintExtent > 0.0 ? constraints.remainingPaintExtent.abs() : 0.0;
     // Layout the child giving it the space of the currently dragged overscroll
@@ -259,8 +261,8 @@ enum LoadIndicatorMode {
   /// 刷新完成
   loaded,
 
-  /// 没有数据
-  nodata,
+  /// 没有更多
+  nomore,
 
   /// 刷新失败
   failed,
@@ -293,11 +295,11 @@ typedef LoadControlIndicatorBuilder = Widget Function(
 typedef LoadCallback = Future<void> Function();
 
 /// 结束加载
-/// success 为是否成功(为false时，nodata无效)
-/// nodata 为是否有更多数据
+/// success 为是否成功(为false时，nomore无效)
+/// nomore 为是否有更多数据
 typedef FinishLoad = void Function({
   bool success,
-  bool nodata,
+  bool nomore,
 });
 
 /// 绑定加载指示剂
@@ -473,7 +475,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   // 刷新完成
   bool _success;
   // 没有更多数据
-  bool _nodata;
+  bool _nomore;
 
   @override
   void initState() {
@@ -488,10 +490,10 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   // 完成刷新
   void finishLoad({
     bool success = true,
-    bool nodata = false,
+    bool nomore = false,
   }) {
     _success = success;
-    _nodata = nodata;
+    _nomore = nomore;
     if (widget.enableControlFinishLoad && loadTask != null) {
       setState(() => loadTask = null);
       loadState = transitionNextState();
@@ -505,7 +507,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
   // 无限加载
   void _infiniteLoad() {
-    if (loadTask == null && widget.enableInfiniteLoad) {
+    if (loadTask == null && widget.enableInfiniteLoad && _nomore != true) {
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
@@ -531,10 +533,17 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   LoadIndicatorMode transitionNextState() {
     LoadIndicatorMode nextState;
 
+    // 判断是否没有更多
+    if (_nomore == true && widget.enableInfiniteLoad) {
+      return LoadIndicatorMode.nomore;
+    }
+
     // 完成
     void goToDone() {
-      nextState = LoadIndicatorMode.done;
-      loadState = LoadIndicatorMode.done;
+      nextState = _nomore == true
+          ? LoadIndicatorMode.nomore : LoadIndicatorMode.done;
+      loadState = _nomore == true
+          ? LoadIndicatorMode.nomore : LoadIndicatorMode.done;
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
       if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
@@ -550,8 +559,8 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     LoadIndicatorMode goToFinish() {
       // 判断加载完成
       LoadIndicatorMode state;
-      if (_success != false && _nodata == true) {
-        state = LoadIndicatorMode.nodata;
+      if (_success != false && _nomore == true) {
+        state = LoadIndicatorMode.nomore;
       } else if (_success == false) {
         state = LoadIndicatorMode.failed;
       } else {
@@ -664,7 +673,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
       case LoadIndicatorMode.loaded:
         nextState = loadState;
         break;
-      case LoadIndicatorMode.nodata:
+      case LoadIndicatorMode.nomore:
         nextState = loadState;
         break;
       case LoadIndicatorMode.failed:

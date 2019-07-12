@@ -179,7 +179,9 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
       // the overlap.
       return;
     }
-    final bool active = constraints.overlap < 0.0 || layoutExtent > 0.0;
+    final bool active = constraints.overlap < 0.0
+        || layoutExtent > (enableInfiniteRefresh ? 1.0 : 0.0)
+            * _refreshIndicatorExtent;
     final double overscrolledExtent =
     constraints.overlap < 0.0 ? constraints.overlap.abs() : 0.0;
     // Layout the child giving it the space of the currently dragged overscroll
@@ -254,8 +256,8 @@ enum RefreshIndicatorMode {
   /// 刷新完成
   refreshed,
 
-  /// 没有数据
-  nodata,
+  /// 没有更多
+  nomore,
 
   /// 刷新失败
   failed,
@@ -288,11 +290,11 @@ typedef RefreshControlIndicatorBuilder = Widget Function(
 typedef RefreshCallback = Future<void> Function();
 
 /// 结束刷新
-/// success 为是否成功(为false时，nodata无效)
-/// nodata 为是否有更多数据
+/// success 为是否成功(为false时，nomore无效)
+/// nomore 为是否有更多数据
 typedef FinishRefresh = void Function({
   bool success,
-  bool nodata,
+  bool nomore,
 });
 
 /// 绑定刷新指示剂
@@ -468,7 +470,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   // 刷新完成
   bool _success;
   // 没有更多数据
-  bool _nodata;
+  bool _nomore;
 
   @override
   void initState() {
@@ -483,10 +485,10 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   // 完成刷新
   void finishRefresh({
     bool success,
-    bool nodata,
+    bool nomore,
   }) {
     _success = success;
-    _nodata = nodata;
+    _nomore = nomore;
     if (widget.enableControlFinishRefresh && refreshTask != null) {
       setState(() => refreshTask = null);
       refreshState = transitionNextState();
@@ -500,7 +502,8 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
   // 无限加载
   void _infiniteRefresh() {
-    if (refreshTask == null && widget.enableInfiniteRefresh) {
+    if (refreshTask == null && widget.enableInfiniteRefresh
+        && _nomore != true) {
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
@@ -526,10 +529,17 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   RefreshIndicatorMode transitionNextState() {
     RefreshIndicatorMode nextState;
 
+    // 判断是否没有更多
+    if (_nomore == true && widget.enableInfiniteRefresh) {
+      return RefreshIndicatorMode.nomore;
+    }
+
     // 结束
     void goToDone() {
-      nextState = RefreshIndicatorMode.done;
-      refreshState = RefreshIndicatorMode.done;
+      nextState = _nomore == true
+          ? RefreshIndicatorMode.nomore : RefreshIndicatorMode.done;
+      refreshState = _nomore == true
+          ? RefreshIndicatorMode.nomore : RefreshIndicatorMode.done;
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
       if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
@@ -545,8 +555,8 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
     RefreshIndicatorMode goToFinish() {
       // 判断刷新完成
       RefreshIndicatorMode state;
-      if (_success != false && _nodata == true) {
-        state = RefreshIndicatorMode.nodata;
+      if (_success != false && _nomore == true) {
+        state = RefreshIndicatorMode.nomore;
       } else if (_success == false) {
         state = RefreshIndicatorMode.failed;
       } else {
@@ -659,7 +669,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
       case RefreshIndicatorMode.refreshed:
         nextState = refreshState;
         break;
-      case RefreshIndicatorMode.nodata:
+      case RefreshIndicatorMode.nomore:
         nextState = refreshState;
         break;
       case RefreshIndicatorMode.failed:
