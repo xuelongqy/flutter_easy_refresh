@@ -105,7 +105,7 @@ class _ExampleState extends State<_Example> {
       persistentFooterButtons: <Widget>[
         FlatButton(
             onPressed: () {
-              _controller.finishRefresh();
+              _controller.finishRefresh(nodata: true);
             },
             child: Text("Refresh", style: TextStyle(color: Colors.black))),
         FlatButton(

@@ -492,7 +492,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   }) {
     _success = success;
     _nodata = nodata;
-    if (widget.enableControlFinishLoad) {
+    if (widget.enableControlFinishLoad && loadTask != null) {
       setState(() => loadTask = null);
       loadState = transitionNextState();
     }
@@ -594,7 +594,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         } else if (latestIndicatorBoxExtent < widget.loadTriggerPullDistance) {
           return LoadIndicatorMode.drag;
         } else {
-          if (widget.onLoad != null) {
+          if (widget.onLoad != null && !widget.enableInfiniteLoad) {
             if (!_focus) {
               if (widget.enableHapticFeedback) {
                 HapticFeedback.mediumImpact();
@@ -619,6 +619,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
             }
             return LoadIndicatorMode.drag;
           }
+          return LoadIndicatorMode.drag;
         }
         // Don't continue here. We can never possibly call onLoad and
         // progress to the next state in one [computeNextState] call.

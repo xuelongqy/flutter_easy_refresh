@@ -487,7 +487,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   }) {
     _success = success;
     _nodata = nodata;
-    if (widget.enableControlFinishRefresh) {
+    if (widget.enableControlFinishRefresh && refreshTask != null) {
       setState(() => refreshTask = null);
       refreshState = transitionNextState();
     }
@@ -589,7 +589,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         } else if (latestIndicatorBoxExtent < widget.refreshTriggerPullDistance) {
           return RefreshIndicatorMode.drag;
         } else {
-          if (widget.onRefresh != null) {
+          if (widget.onRefresh != null && !widget.enableInfiniteRefresh) {
             if (!_focus) {
               if (widget.enableHapticFeedback) {
                 HapticFeedback.mediumImpact();
@@ -614,6 +614,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
             }
             return RefreshIndicatorMode.drag;
           }
+          return RefreshIndicatorMode.drag;
         }
         // Don't continue here. We can never possibly call onRefresh and
         // progress to the next state in one [computeNextState] call.
