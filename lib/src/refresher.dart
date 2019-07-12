@@ -25,11 +25,7 @@ class EasyRefresh extends StatefulWidget {
   /// 是否开启控制结束刷新
   final bool enableControlFinishRefresh;
   /// 是否开启控制结束加载
-  final bool  enableControlFinishLoad;
-  /// 开启无限刷新
-  final bool  enableInfiniteRefresh;
-  /// 开启无限加载
-  final bool  enableInfiniteLoad;
+  final bool enableControlFinishLoad;
   /// Header
   final Header header;
   /// Footer
@@ -75,8 +71,6 @@ class EasyRefresh extends StatefulWidget {
     this.onLoad,
     this.enableControlFinishRefresh = false,
     this.enableControlFinishLoad = false,
-    this.enableInfiniteRefresh = false,
-    this.enableInfiniteLoad = false,
     this.header,
     this.footer,
     this.scrollDirection = Axis.vertical,
@@ -99,8 +93,6 @@ class EasyRefresh extends StatefulWidget {
     this.onLoad,
     this.enableControlFinishRefresh = false,
     this.enableControlFinishLoad = false,
-    this.enableInfiniteRefresh = false,
-    this.enableInfiniteLoad = false,
     this.header,
     this.footer,
     @required this.builder,

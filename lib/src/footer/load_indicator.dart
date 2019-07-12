@@ -16,6 +16,8 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
     Key key,
     this.loadIndicatorLayoutExtent = 0.0,
     this.hasLayoutExtent = false,
+    this.enableInfiniteLoad = true,
+    @required this.infiniteLoad,
     Widget child,
   }) : assert(loadIndicatorLayoutExtent != null),
         assert(loadIndicatorLayoutExtent >= 0.0),
@@ -31,11 +33,19 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
   // on whether to also occupy any layoutExtent space or not.
   final bool hasLayoutExtent;
 
+  /// 是否开启无限加载
+  final bool enableInfiniteLoad;
+
+  /// 无限加载回调
+  final VoidCallback infiniteLoad;
+
   @override
   _RenderEasyRefreshSliverLoad createRenderObject(BuildContext context) {
     return _RenderEasyRefreshSliverLoad(
       loadIndicatorExtent: loadIndicatorLayoutExtent,
       hasLayoutExtent: hasLayoutExtent,
+      enableInfiniteLoad: enableInfiniteLoad,
+      infiniteLoad: infiniteLoad,
     );
   }
 
@@ -43,7 +53,8 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
   void updateRenderObject(BuildContext context, covariant _RenderEasyRefreshSliverLoad renderObject) {
     renderObject
       ..loadIndicatorLayoutExtent = loadIndicatorLayoutExtent
-      ..hasLayoutExtent = hasLayoutExtent;
+      ..hasLayoutExtent = hasLayoutExtent
+      ..enableInfiniteLoad = enableInfiniteLoad;
   }
 }
 
@@ -58,11 +69,14 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
   _RenderEasyRefreshSliverLoad({
     @required double loadIndicatorExtent,
     @required bool hasLayoutExtent,
+    @required bool enableInfiniteLoad,
+    @required this.infiniteLoad,
     RenderBox child,
   }) : assert(loadIndicatorExtent != null),
         assert(loadIndicatorExtent >= 0.0),
         assert(hasLayoutExtent != null),
         _loadIndicatorExtent = loadIndicatorExtent,
+        _enableInfiniteLoad = enableInfiniteLoad,
         _hasLayoutExtent = hasLayoutExtent {
     this.child = child;
   }
@@ -93,6 +107,23 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
     markNeedsLayout();
   }
 
+  /// 是否开启无限加载
+  bool get enableInfiniteLoad => _enableInfiniteLoad;
+  bool _enableInfiniteLoad;
+  set enableInfiniteLoad(bool value) {
+    assert(value != null);
+    if (value == _enableInfiniteLoad)
+      return;
+    _enableInfiniteLoad = value;
+    markNeedsLayout();
+  }
+
+  /// 无限加载回调
+  final VoidCallback infiniteLoad;
+
+  // 触发无限加载
+  bool _triggerInfiniteLoad = false;
+
   // 获取子组件大小
   double get childSize =>
       constraints.axis == Axis.vertical ? child.size.height : child.size.width;
@@ -110,9 +141,32 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
     // assert(constraints.axisDirection == AxisDirection.down);
     assert(constraints.growthDirection == GrowthDirection.forward);
 
+    // 判断是否触发无限加载
+    if (enableInfiniteLoad && constraints.remainingPaintExtent > 0
+        && constraints.remainingPaintExtent != 5.684341886080802e-14
+        && constraints.remainingPaintExtent != 1.1368683772161603e-13
+        && constraints.remainingCacheExtent != 0.0
+        && constraints.userScrollDirection != ScrollDirection.idle) {
+      if (!_triggerInfiniteLoad) {
+        _triggerInfiniteLoad = true;
+        infiniteLoad();
+      }
+    } else {
+      if (constraints.remainingPaintExtent <= 0.0) {
+        if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
+          _triggerInfiniteLoad = false;
+        } else {
+          SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+            _triggerInfiniteLoad = false;
+          });
+        }
+      }
+    }
+
     // The new layout extent this sliver should now have.
     final double layoutExtent =
-        (_hasLayoutExtent ? 1.0 : 0.0) * _loadIndicatorExtent;
+        (_hasLayoutExtent || enableInfiniteLoad
+            ? 1.0 : 0.0) * _loadIndicatorExtent;
     // If the new layoutExtent instructive changed, the SliverGeometry's
     // layoutExtent will take that value (on the next performLayout run). Shift
     // the scroll offset first so it doesn't make the scroll position suddenly jump.
@@ -312,6 +366,7 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     this.onLoad,
     this.bindLoadIndicator,
     this.enableControlFinishLoad = false,
+    this.enableInfiniteLoad = true,
     this.enableHapticFeedback = false,
   }) : assert(loadTriggerPullDistance != null),
         assert(loadTriggerPullDistance > 0.0),
@@ -369,15 +424,14 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   
   /// 完成延时
   final Duration completeDuration;
-
   /// 绑定加载指示器
   final BindLoadIndicator bindLoadIndicator;
-
   /// 是否开启控制结束
-  final enableControlFinishLoad;
-
+  final bool enableControlFinishLoad;
+  /// 是否开启无限加载
+  final bool enableInfiniteLoad;
   /// 开启震动反馈
-  final enableHapticFeedback;
+  final bool enableHapticFeedback;
 
   static const double _defaultloadTriggerPullDistance = 100.0;
   static const double _defaultloadIndicatorExtent = 60.0;
@@ -402,7 +456,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
   LoadIndicatorMode loadState;
   // [Future] returned by the widget's `onLoad`.
-  Future<void> refreshTask;
+  Future<void> loadTask;
   // The amount of space available from the inner indicator box's perspective.
   //
   // The value is the sum of the sliver's layout extent and the overscroll
@@ -439,7 +493,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     _success = success;
     _nodata = nodata;
     if (widget.enableControlFinishLoad) {
-      setState(() => refreshTask = null);
+      setState(() => loadTask = null);
       loadState = transitionNextState();
     }
   }
@@ -449,11 +503,35 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     _focus = focus;
   }
 
+  // 无限加载
+  void _infiniteLoad() {
+    if (loadTask == null && widget.enableInfiniteLoad) {
+      if (widget.enableHapticFeedback) {
+        HapticFeedback.mediumImpact();
+      }
+      SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+        loadTask = widget.onLoad()..then((_) {
+          if (mounted && !widget.enableControlFinishLoad) {
+            loadState = LoadIndicatorMode.load;
+            setState(() => loadTask = null);
+            // Trigger one more transition because by this time, BoxConstraint's
+            // maxHeight might already be resting at 0 in which case no
+            // calls to [transitionNextState] will occur anymore and the
+            // state may be stuck in a non-inactive state.
+            loadState = transitionNextState();
+          }
+        });
+        setState(() => hasSliverLayoutExtent = true);
+      });
+    }
+  }
+
   // A state machine transition calculator. Multiple states can be transitioned
   // through per single call.
   LoadIndicatorMode transitionNextState() {
     LoadIndicatorMode nextState;
 
+    // 完成
     void goToDone() {
       nextState = LoadIndicatorMode.done;
       loadState = LoadIndicatorMode.done;
@@ -465,6 +543,39 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
           setState(() => hasSliverLayoutExtent = false);
         });
+      }
+    }
+
+    // 结束
+    LoadIndicatorMode goToFinish() {
+      // 判断加载完成
+      LoadIndicatorMode state;
+      if (_success != false && _nodata == true) {
+        state = LoadIndicatorMode.nodata;
+      } else if (_success == false) {
+        state = LoadIndicatorMode.failed;
+      } else {
+        state = LoadIndicatorMode.loaded;
+      }
+      // 添加延时
+      if (widget.completeDuration == null) {
+        // 记录一个状态
+        widget.builder(
+          context,
+          state,
+          latestIndicatorBoxExtent,
+          widget.loadTriggerPullDistance,
+          widget.loadIndicatorExtent,
+        );
+        goToDone();
+        return null;
+      } else {
+        Future.delayed(widget.completeDuration, (){
+          if (mounted) {
+            goToDone();
+          }
+        });
+        return state;
       }
     }
 
@@ -492,9 +603,9 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
               // user supplied and we're always here in the middle of the sliver's
               // performLayout.
               SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-                refreshTask = widget.onLoad()..then((_) {
+                loadTask = widget.onLoad()..then((_) {
                   if (mounted && !widget.enableControlFinishLoad) {
-                    setState(() => refreshTask = null);
+                    setState(() => loadTask = null);
                     // Trigger one more transition because by this time, BoxConstraint's
                     // maxHeight might already be resting at 0 in which case no
                     // calls to [transitionNextState] will occur anymore and the
@@ -513,35 +624,10 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         // progress to the next state in one [computeNextState] call.
         break;
       case LoadIndicatorMode.armed:
-        if (loadState == LoadIndicatorMode.armed && refreshTask == null) {
-          // 判断加载完成
-          LoadIndicatorMode state;
-          if (_success != false && _nodata == true) {
-            state = LoadIndicatorMode.nodata;
-          } else if (_success == false) {
-            state = LoadIndicatorMode.failed;
-          } else {
-            state = LoadIndicatorMode.loaded;
-          }
-          // 添加延时
-          if (widget.completeDuration == null) {
-            // 记录一个状态
-            widget.builder(
-              context,
-              state,
-              latestIndicatorBoxExtent,
-              widget.loadTriggerPullDistance,
-              widget.loadIndicatorExtent,
-            );
-            goToDone();
-          } else {
-            Future.delayed(widget.completeDuration, (){
-              if (mounted) {
-                goToDone();
-              }
-            });
-            return state;
-          }
+        if (loadState == LoadIndicatorMode.armed && loadTask == null) {
+          // 结束
+          var state = goToFinish();
+          if (state != null) return state;
           continue done;
         }
 
@@ -553,37 +639,12 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         continue refresh;
       refresh:
       case LoadIndicatorMode.load:
-        if (refreshTask != null) {
+        if (loadTask != null) {
           return LoadIndicatorMode.load;
         } else {
-          // 判断加载完成
-          LoadIndicatorMode state;
-          if (_success != false && _nodata == true) {
-            state = LoadIndicatorMode.nodata;
-          } else if (_success == false) {
-            state = LoadIndicatorMode.failed;
-          } else {
-            state = LoadIndicatorMode.loaded;
-          }
-          // 添加延时
-          if (widget.completeDuration == null) {
-            // 记录一个状态
-            widget.builder(
-              context,
-              state,
-              latestIndicatorBoxExtent,
-              widget.loadTriggerPullDistance,
-              widget.loadIndicatorExtent,
-            );
-            goToDone();
-          } else {
-            Future.delayed(widget.completeDuration, (){
-              if (mounted) {
-                goToDone();
-              }
-            });
-            return state;
-          }
+          // 结束
+          var state = goToFinish();
+          if (state != null) return state;
         }
         continue done;
       done:
@@ -620,6 +681,8 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     return _EasyRefreshSliverLoad(
       loadIndicatorLayoutExtent: widget.loadIndicatorExtent,
       hasLayoutExtent: hasSliverLayoutExtent,
+      enableInfiniteLoad: widget.enableInfiniteLoad,
+      infiniteLoad: _infiniteLoad,
       // A LayoutBuilder lets the sliver's layout changes be fed back out to
       // its owner to trigger state changes.
       child: OrientationBuilder(

@@ -13,8 +13,10 @@ abstract class Header {
   final bool float;
   /// 完成延时
   final Duration completeDuration;
+  /// 是否开启无限刷新
+  final bool enableInfiniteRefresh;
   /// 开启震动反馈
-  final enableHapticFeedback;
+  final bool enableHapticFeedback;
   /// 指示器滚动焦点变化回调
   ScrollFocusCallback _onFocus;
 
@@ -23,6 +25,7 @@ abstract class Header {
     this.triggerDistance = 70.0,
     this.float = false,
     this.completeDuration,
+    this.enableInfiniteRefresh = false,
     this.enableHapticFeedback = false,
   });
 
@@ -40,6 +43,7 @@ abstract class Header {
       completeDuration: completeDuration,
       onRefresh: easyRefresh.onRefresh,
       enableControlFinishRefresh: easyRefresh.enableControlFinishRefresh,
+      enableInfiniteRefresh: enableInfiniteRefresh,
       enableHapticFeedback: enableHapticFeedback,
       bindRefreshIndicator: (finishRefresh, onFocus) {
         if (easyRefresh.controller != null) {

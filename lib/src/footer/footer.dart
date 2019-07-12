@@ -13,8 +13,10 @@ abstract class Footer {
   final bool float;
   // 完成延时
   final Duration completeDuration;
+  /// 是否开启无限加载
+  final bool enableInfiniteLoad;
   /// 开启震动反馈
-  final enableHapticFeedback;
+  final bool enableHapticFeedback;
   /// 指示器滚动焦点变化回调
   ScrollFocusCallback _onFocus;
 
@@ -23,6 +25,7 @@ abstract class Footer {
     this.triggerDistance = 70.0,
     this.float = false,
     this.completeDuration,
+    this.enableInfiniteLoad = true,
     this.enableHapticFeedback = false,
   });
 
@@ -40,6 +43,7 @@ abstract class Footer {
       completeDuration: completeDuration,
       onLoad: easyRefresh.onLoad,
       enableControlFinishLoad: easyRefresh.enableControlFinishLoad,
+      enableInfiniteLoad: enableInfiniteLoad,
       enableHapticFeedback: enableHapticFeedback,
       bindLoadIndicator: (finishLoad, onFocus) {
         if (easyRefresh.controller != null) {

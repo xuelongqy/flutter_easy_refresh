@@ -49,6 +49,9 @@ class _ExampleState extends State<_Example> {
 
   EasyRefreshController _controller;
 
+  // 条目总数
+  int _count = 20;
+
   @override
   void initState() {
     super.initState();
@@ -69,12 +72,18 @@ class _ExampleState extends State<_Example> {
             onRefresh: () async {
               await Future.delayed(Duration(seconds: 2), () {
                 print('onRefresh');
+                setState(() {
+                  _count = 20;
+                });
                 return 'stop';
               });
             },
             onLoad: () async {
               await Future.delayed(Duration(seconds: 2), () {
                 print('onLoad');
+                setState(() {
+                  _count += 10;
+                });
                 return 'stop';
               });
             },
@@ -87,7 +96,7 @@ class _ExampleState extends State<_Example> {
                       bgColor: index%2==0 ? Colors.grey[300] : Colors.transparent,
                     );
                   },
-                  childCount: 20,
+                  childCount: _count,
                 ),
               ),
             ],
