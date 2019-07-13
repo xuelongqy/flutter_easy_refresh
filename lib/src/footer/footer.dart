@@ -61,7 +61,7 @@ abstract class Footer {
       double pulledExtent,
       double refreshTriggerPullDistance,
       double refreshIndicatorExtent,
-      );
+      bool success, bool nomore);
 }
 
 /// 通用Footer构造器
@@ -86,9 +86,10 @@ class CustomFooter extends Footer {
   @override
   Widget contentBuilder(BuildContext context,
       LoadIndicatorMode loadState, double pulledExtent,
-      double refreshTriggerPullDistance, double refreshIndicatorExtent) {
+      double refreshTriggerPullDistance, double refreshIndicatorExtent,
+      bool success, bool nomore) {
     return footerBuilder(context, loadState, pulledExtent,
-        refreshTriggerPullDistance, refreshIndicatorExtent);
+        refreshTriggerPullDistance, refreshIndicatorExtent, success, nomore);
   }
 }
 
@@ -112,7 +113,7 @@ class ClassicalFooter extends Footer {
   @override
   Widget contentBuilder(BuildContext context, LoadIndicatorMode loadState,
       double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent) {
+      double refreshIndicatorExtent, bool success, bool nomore) {
     return Container(
       width: double.infinity,
       height: double.infinity,

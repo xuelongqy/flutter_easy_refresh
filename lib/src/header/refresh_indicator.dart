@@ -180,8 +180,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
       return;
     }
     final bool active = constraints.overlap < 0.0
-        || layoutExtent > (enableInfiniteRefresh ? 1.0 : 0.0)
-            * _refreshIndicatorExtent;
+        || layoutExtent > 0.0;
     final double overscrolledExtent =
     constraints.overlap < 0.0 ? constraints.overlap.abs() : 0.0;
     // Layout the child giving it the space of the currently dragged overscroll
@@ -256,12 +255,6 @@ enum RefreshIndicatorMode {
   /// 刷新完成
   refreshed,
 
-  /// 没有更多
-  nomore,
-
-  /// 刷新失败
-  failed,
-
   /// While the indicator is animating away after refreshing.
   done,
 }
@@ -281,7 +274,7 @@ typedef RefreshControlIndicatorBuilder = Widget Function(
     double pulledExtent,
     double refreshTriggerPullDistance,
     double refreshIndicatorExtent,
-    );
+    bool success, bool nomore);
 
 /// A callback function that's invoked when the [EasyRefreshSliverRefreshControl] is
 /// pulled a `refreshTriggerPullDistance`. Must return a [Future]. Upon
@@ -490,6 +483,9 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
     _success = success;
     _nomore = nomore;
     if (widget.enableControlFinishRefresh && refreshTask != null) {
+      if (widget.enableInfiniteRefresh) {
+        refreshState = RefreshIndicatorMode.refreshed;
+      }
       setState(() => refreshTask = null);
       refreshState = transitionNextState();
     }
@@ -500,7 +496,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
     _focus = focus;
   }
 
-  // 无限加载
+  // 无限刷新
   void _infiniteRefresh() {
     if (refreshTask == null && widget.enableInfiniteRefresh
         && _nomore != true) {
@@ -508,6 +504,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         HapticFeedback.mediumImpact();
       }
       SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+        refreshState = RefreshIndicatorMode.refresh;
         refreshTask = widget.onRefresh()..then((_) {
           if (mounted && !widget.enableControlFinishRefresh) {
             refreshState = RefreshIndicatorMode.refresh;
@@ -531,15 +528,18 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
     // 判断是否没有更多
     if (_nomore == true && widget.enableInfiniteRefresh) {
-      return RefreshIndicatorMode.nomore;
+      return refreshState;
+    } else if (_nomore == true
+        && refreshState != RefreshIndicatorMode.refresh
+        && refreshState != RefreshIndicatorMode.refreshed
+        && refreshState != RefreshIndicatorMode.done) {
+      return refreshState;
     }
 
     // 结束
     void goToDone() {
-      nextState = _nomore == true
-          ? RefreshIndicatorMode.nomore : RefreshIndicatorMode.done;
-      refreshState = _nomore == true
-          ? RefreshIndicatorMode.nomore : RefreshIndicatorMode.done;
+      nextState = RefreshIndicatorMode.done;
+      refreshState = RefreshIndicatorMode.done;
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
       if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
@@ -554,24 +554,9 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
     // 完成
     RefreshIndicatorMode goToFinish() {
       // 判断刷新完成
-      RefreshIndicatorMode state;
-      if (_success != false && _nomore == true) {
-        state = RefreshIndicatorMode.nomore;
-      } else if (_success == false) {
-        state = RefreshIndicatorMode.failed;
-      } else {
-        state = RefreshIndicatorMode.refreshed;
-      }
+      RefreshIndicatorMode state = RefreshIndicatorMode.refreshed;
       // 添加延时
       if (widget.completeDuration == null) {
-        // 记录一个状态
-        widget.builder(
-          context,
-          state,
-          latestIndicatorBoxExtent,
-          widget.refreshTriggerPullDistance,
-          widget.refreshIndicatorExtent,
-        );
         goToDone();
         return null;
       } else {
@@ -669,12 +654,6 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
       case RefreshIndicatorMode.refreshed:
         nextState = refreshState;
         break;
-      case RefreshIndicatorMode.nomore:
-        nextState = refreshState;
-        break;
-      case RefreshIndicatorMode.failed:
-        nextState = refreshState;
-        break;
       default:
         break;
     }
@@ -705,6 +684,8 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
                   latestIndicatorBoxExtent,
                   widget.refreshTriggerPullDistance,
                   widget.refreshIndicatorExtent,
+                  _success ?? true,
+                  _nomore ?? false,
                 );
               }
               return Container();

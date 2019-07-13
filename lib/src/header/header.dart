@@ -61,7 +61,7 @@ abstract class Header {
       double pulledExtent,
       double refreshTriggerPullDistance,
       double refreshIndicatorExtent,
-      );
+      bool success, bool nomore);
 }
 
 /// 通用Header
@@ -86,9 +86,10 @@ class CustomHeader extends Header {
   @override
   Widget contentBuilder(BuildContext context,
       RefreshIndicatorMode refreshState, double pulledExtent,
-      double refreshTriggerPullDistance, double refreshIndicatorExtent) {
+      double refreshTriggerPullDistance, double refreshIndicatorExtent,
+      bool success, bool nomore) {
     return headerBuilder(context, refreshState, pulledExtent,
-      refreshTriggerPullDistance, refreshIndicatorExtent);
+      refreshTriggerPullDistance, refreshIndicatorExtent, success, nomore);
   }
 }
 
@@ -112,7 +113,7 @@ class ClassicalHeader extends Header{
   @override
   Widget contentBuilder(BuildContext context, RefreshIndicatorMode refreshState,
       double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent) {
+      double refreshIndicatorExtent, bool success, bool nomore) {
     return Container(
       width: double.infinity,
       height: double.infinity,

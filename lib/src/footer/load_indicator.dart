@@ -261,12 +261,6 @@ enum LoadIndicatorMode {
   /// 刷新完成
   loaded,
 
-  /// 没有更多
-  nomore,
-
-  /// 刷新失败
-  failed,
-
   /// While the indicator is animating away after refreshing.
   done,
 }
@@ -286,7 +280,7 @@ typedef LoadControlIndicatorBuilder = Widget Function(
     double pulledExtent,
     double loadTriggerPullDistance,
     double loadIndicatorExtent,
-    );
+    bool success, bool nomore);
 
 /// A callback function that's invoked when the [EasyRefreshSliverLoadControl] is
 /// pulled a `loadTriggerPullDistance`. Must return a [Future]. Upon
@@ -494,7 +488,11 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   }) {
     _success = success;
     _nomore = nomore;
+    print('sss');
     if (widget.enableControlFinishLoad && loadTask != null) {
+      if (widget.enableInfiniteLoad) {
+        loadState = LoadIndicatorMode.loaded;
+      }
       setState(() => loadTask = null);
       loadState = transitionNextState();
     }
@@ -512,6 +510,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         HapticFeedback.mediumImpact();
       }
       SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+        loadState = LoadIndicatorMode.load;
         loadTask = widget.onLoad()..then((_) {
           if (mounted && !widget.enableControlFinishLoad) {
             loadState = LoadIndicatorMode.load;
@@ -535,15 +534,18 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
     // 判断是否没有更多
     if (_nomore == true && widget.enableInfiniteLoad) {
-      return LoadIndicatorMode.nomore;
+      return loadState;
+    } else if (_nomore == true
+        && loadState != LoadIndicatorMode.load
+        && loadState != LoadIndicatorMode.loaded
+        && loadState != LoadIndicatorMode.done) {
+      return loadState;
     }
 
     // 完成
     void goToDone() {
-      nextState = _nomore == true
-          ? LoadIndicatorMode.nomore : LoadIndicatorMode.done;
-      loadState = _nomore == true
-          ? LoadIndicatorMode.nomore : LoadIndicatorMode.done;
+      nextState = LoadIndicatorMode.done;
+      loadState = LoadIndicatorMode.done;
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
       if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
@@ -558,24 +560,9 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     // 结束
     LoadIndicatorMode goToFinish() {
       // 判断加载完成
-      LoadIndicatorMode state;
-      if (_success != false && _nomore == true) {
-        state = LoadIndicatorMode.nomore;
-      } else if (_success == false) {
-        state = LoadIndicatorMode.failed;
-      } else {
-        state = LoadIndicatorMode.loaded;
-      }
+      LoadIndicatorMode state = LoadIndicatorMode.loaded;
       // 添加延时
       if (widget.completeDuration == null) {
-        // 记录一个状态
-        widget.builder(
-          context,
-          state,
-          latestIndicatorBoxExtent,
-          widget.loadTriggerPullDistance,
-          widget.loadIndicatorExtent,
-        );
         goToDone();
         return null;
       } else {
@@ -673,12 +660,6 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
       case LoadIndicatorMode.loaded:
         nextState = loadState;
         break;
-      case LoadIndicatorMode.nomore:
-        nextState = loadState;
-        break;
-      case LoadIndicatorMode.failed:
-        nextState = loadState;
-        break;
       default:
         break;
     }
@@ -709,6 +690,8 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
                   latestIndicatorBoxExtent,
                   widget.loadTriggerPullDistance,
                   widget.loadIndicatorExtent,
+                  _success ?? true,
+                  _nomore ?? false,
                 );
               }
               return Container();
