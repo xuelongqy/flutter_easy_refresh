@@ -45,9 +45,10 @@ abstract class Header {
       enableControlFinishRefresh: easyRefresh.enableControlFinishRefresh,
       enableInfiniteRefresh: enableInfiniteRefresh,
       enableHapticFeedback: enableHapticFeedback,
-      bindRefreshIndicator: (finishRefresh, onFocus) {
+      bindRefreshIndicator: (finishRefresh, resetRefreshState, onFocus) {
         if (easyRefresh.controller != null) {
           easyRefresh.controller.finishRefresh = finishRefresh;
+          easyRefresh.controller.resetRefreshState = resetRefreshState;
         }
         this._onFocus = onFocus;
       },
@@ -101,12 +102,14 @@ class ClassicalHeader extends Header{
     triggerDistance = 70.0,
     float = false,
     completeDuration = const Duration(seconds: 1),
+    enableInfiniteRefresh = false,
     enableHapticFeedback = true,
   }): super(
     extent: extent,
     triggerDistance: triggerDistance,
     float: float,
     completeDuration: completeDuration,
+    enableInfiniteRefresh: enableInfiniteRefresh,
     enableHapticFeedback: enableHapticFeedback,
   );
 

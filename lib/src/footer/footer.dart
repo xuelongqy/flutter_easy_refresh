@@ -45,9 +45,10 @@ abstract class Footer {
       enableControlFinishLoad: easyRefresh.enableControlFinishLoad,
       enableInfiniteLoad: enableInfiniteLoad,
       enableHapticFeedback: enableHapticFeedback,
-      bindLoadIndicator: (finishLoad, onFocus) {
+      bindLoadIndicator: (finishLoad, resetLoadState, onFocus) {
         if (easyRefresh.controller != null) {
           easyRefresh.controller.finishLoad = finishLoad;
+          easyRefresh.controller.resetLoadState = resetLoadState;
         }
         this._onFocus = onFocus;
       },
@@ -101,12 +102,14 @@ class ClassicalFooter extends Footer {
     triggerDistance = 70.0,
     float = false,
     completeDuration = const Duration(seconds: 1),
+    enableInfiniteLoad = false,
     enableHapticFeedback = true,
   }): super(
     extent: extent,
     triggerDistance: triggerDistance,
     float: float,
     completeDuration: completeDuration,
+    enableInfiniteLoad: enableInfiniteLoad,
     enableHapticFeedback: enableHapticFeedback,
   );
 

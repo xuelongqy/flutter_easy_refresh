@@ -195,10 +195,14 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
 /// EasyRefresh控制器
 class EasyRefreshController {
-  // 完成刷新
+  /// 完成刷新
   FinishRefresh finishRefresh;
-  // 完成加载
+  /// 完成加载
   FinishLoad finishLoad;
+  /// 恢复刷新状态(用于没有更多后)
+  VoidCallback resetRefreshState;
+  /// 恢复加载状态(用于没有更多后)
+  VoidCallback resetLoadState;
 
   // 状态
   _EasyRefreshState _easyRefreshState;

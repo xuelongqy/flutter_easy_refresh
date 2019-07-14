@@ -297,7 +297,9 @@ typedef FinishLoad = void Function({
 });
 
 /// 绑定加载指示剂
-typedef BindLoadIndicator = void Function(FinishLoad finishLoad,
+typedef BindLoadIndicator = void Function(
+    FinishLoad finishLoad,
+    VoidCallback resetLoadState,
     ScrollFocusCallback onFocus);
 
 /// A sliver widget implementing the iOS-style pull to refresh content control.
@@ -475,10 +477,6 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   void initState() {
     super.initState();
     loadState = LoadIndicatorMode.inactive;
-    // 绑定加载指示器
-    if (widget.bindLoadIndicator != null) {
-      widget.bindLoadIndicator(finishLoad, onFocus);
-    }
   }
 
   // 完成刷新
@@ -488,7 +486,6 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   }) {
     _success = success;
     _nomore = nomore;
-    print('sss');
     if (widget.enableControlFinishLoad && loadTask != null) {
       if (widget.enableInfiniteLoad) {
         loadState = LoadIndicatorMode.loaded;
@@ -496,6 +493,14 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
       setState(() => loadTask = null);
       loadState = transitionNextState();
     }
+  }
+
+  // 恢复状态
+  void resetLoadState() {
+    setState(() {
+      _nomore = false;
+      loadState = LoadIndicatorMode.inactive;
+    });
   }
 
   // 滚动焦点变化
@@ -669,6 +674,10 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
   @override
   Widget build(BuildContext context) {
+    // 绑定加载指示器
+    if (widget.bindLoadIndicator != null) {
+      widget.bindLoadIndicator(finishLoad, resetLoadState, onFocus);
+    }
     return _EasyRefreshSliverLoad(
       loadIndicatorLayoutExtent: widget.loadIndicatorExtent,
       hasLayoutExtent: hasSliverLayoutExtent,

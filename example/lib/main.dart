@@ -67,14 +67,21 @@ class _ExampleState extends State<_Example> {
       body: Center(
           child: EasyRefresh.custom(
             //enableControlFinishRefresh: true,
-            //enableControlFinishLoad: true,
+            enableControlFinishLoad: true,
             controller: _controller,
+            header: ClassicalHeader(
+              enableInfiniteRefresh: false,
+            ),
+            footer: ClassicalFooter(
+              enableInfiniteLoad: true,
+            ),
             onRefresh: () async {
               await Future.delayed(Duration(seconds: 2), () {
                 print('onRefresh');
                 setState(() {
                   _count = 20;
                 });
+                _controller.resetLoadState();
                 return 'stop';
               });
             },
@@ -84,6 +91,7 @@ class _ExampleState extends State<_Example> {
                 setState(() {
                   _count += 10;
                 });
+                _controller.finishLoad(nomore: _count >= 40);
                 return 'stop';
               });
             },
@@ -105,12 +113,12 @@ class _ExampleState extends State<_Example> {
       persistentFooterButtons: <Widget>[
         FlatButton(
             onPressed: () {
-              _controller.finishRefresh(nomore: true);
+              _controller.callRefresh();
             },
             child: Text("Refresh", style: TextStyle(color: Colors.black))),
         FlatButton(
             onPressed: () {
-              _controller.finishLoad(nomore: true);
+              _controller.callLoad();
             },
             child: Text("Load more", style: TextStyle(color: Colors.black))),
       ]

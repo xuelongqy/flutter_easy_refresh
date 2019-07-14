@@ -39,10 +39,12 @@ class ScrollNotificationListenerState
   // 处理滚动通知
   void _handleScrollNotification(ScrollNotification notification) {
     if (notification is ScrollStartNotification) {
-      _focus = true;
+      if (notification.dragDetails != null) {
+        _focus = true;
+      }
     } else if (notification is ScrollUpdateNotification) {
       if (_focusState && notification.dragDetails == null) _focus = false;
-    }else if (notification is ScrollEndNotification) {
+    } else if (notification is ScrollEndNotification) {
       if (_focusState) _focus = false;
     }
   }

@@ -142,7 +142,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
     assert(constraints.growthDirection == GrowthDirection.forward);
 
     // 判断是否触发无限刷新
-    if (enableInfiniteRefresh && constraints.scrollOffset != 0.0
+    if (enableInfiniteRefresh
         && constraints.scrollOffset < _refreshIndicatorExtent
         && constraints.userScrollDirection != ScrollDirection.idle) {
       if (!_triggerInfiniteRefresh) {
@@ -291,7 +291,9 @@ typedef FinishRefresh = void Function({
 });
 
 /// 绑定刷新指示剂
-typedef BindRefreshIndicator = void Function(FinishRefresh fnishRefresh,
+typedef BindRefreshIndicator = void Function(
+    FinishRefresh fnishRefresh,
+    VoidCallback resetRefreshState,
     ScrollFocusCallback onFocus);
 
 /// A sliver widget implementing the iOS-style pull to refresh content control.
@@ -469,10 +471,6 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   void initState() {
     super.initState();
     refreshState = RefreshIndicatorMode.inactive;
-    // 绑定刷新指示器
-    if (widget.bindRefreshIndicator != null) {
-      widget.bindRefreshIndicator(finishRefresh, onFocus);
-    }
   }
 
   // 完成刷新
@@ -489,6 +487,14 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
       setState(() => refreshTask = null);
       refreshState = transitionNextState();
     }
+  }
+
+  // 恢复状态
+  void resetRefreshState() {
+    setState(() {
+      _nomore = false;
+      refreshState = RefreshIndicatorMode.inactive;
+    });
   }
 
   // 滚动焦点变化
@@ -663,6 +669,10 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
   @override
   Widget build(BuildContext context) {
+    // 绑定刷新指示器
+    if (widget.bindRefreshIndicator != null) {
+      widget.bindRefreshIndicator(finishRefresh, resetRefreshState, onFocus);
+    }
     return _EasyRefreshSliverRefresh(
       refreshIndicatorLayoutExtent: widget.refreshIndicatorExtent,
       hasLayoutExtent: hasSliverLayoutExtent,
