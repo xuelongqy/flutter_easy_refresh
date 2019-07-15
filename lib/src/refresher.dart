@@ -122,11 +122,21 @@ class _EasyRefreshState extends State<EasyRefresh> {
     return widget.footer ?? EasyRefresh._defaultFooter;
   }
 
+  // 滚动状态
+  ValueNotifier<bool> _focusNotifier;
+
   // 初始化
   @override
   void initState() {
      super.initState();
+     _focusNotifier = ValueNotifier<bool>(false);
      _physics = EasyRefreshPhysics();
+  }
+
+  // 销毁
+  void dispose() {
+    super.dispose();
+    _focusNotifier.dispose();
   }
 
   // 更新依赖
@@ -161,8 +171,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
   @override
   Widget build(BuildContext context) {
     // 构建Header和Footer
-    var header = _header.builder(context, widget);
-    var footer = _footer.builder(context, widget);
+    var header = _header.builder(context, widget, _focusNotifier);
+    var footer = _footer.builder(context, widget, _focusNotifier);
     // 插入Header和Footer
     var slivers = widget.slivers;
     slivers.insert(0, header);
@@ -172,8 +182,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
         return true;
       },
       onFocus: (focus) {
-        _header.onFocus(focus);
-        _footer.onFocus(focus);
+        _focusNotifier.value = focus;
       },
       child: widget.builder == null ? CustomScrollView(
         physics: _physics,

@@ -9,8 +9,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import '../listener/scroll_notification_listener.dart';
-
 class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
   const _EasyRefreshSliverLoad({
     Key key,
@@ -299,8 +297,7 @@ typedef FinishLoad = void Function({
 /// 绑定加载指示剂
 typedef BindLoadIndicator = void Function(
     FinishLoad finishLoad,
-    VoidCallback resetLoadState,
-    ScrollFocusCallback onFocus);
+    VoidCallback resetLoadState);
 
 /// A sliver widget implementing the iOS-style pull to refresh content control.
 ///
@@ -362,6 +359,7 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     @required this.builder,
     this.completeDuration,
     this.onLoad,
+    this.focusNotifier,
     this.bindLoadIndicator,
     this.enableControlFinishLoad = false,
     this.enableInfiniteLoad = true,
@@ -430,6 +428,8 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   final bool enableInfiniteLoad;
   /// 开启震动反馈
   final bool enableHapticFeedback;
+  /// 滚动状态
+  final ValueNotifier<bool> focusNotifier;
 
   static const double _defaultloadTriggerPullDistance = 100.0;
   static const double _defaultloadIndicatorExtent = 60.0;
@@ -467,16 +467,27 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   bool hasSliverLayoutExtent = false;
 
   // 滚动焦点
-  bool _focus = false;
+  bool get _focus => widget.focusNotifier.value;
   // 刷新完成
   bool _success;
   // 没有更多数据
   bool _nomore;
 
+  // 初始化
   @override
   void initState() {
     super.initState();
     loadState = LoadIndicatorMode.inactive;
+    // 绑定加载指示器
+    if (widget.bindLoadIndicator != null) {
+      widget.bindLoadIndicator(finishLoad, resetLoadState);
+    }
+  }
+
+  // 销毁
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   // 完成刷新
@@ -501,11 +512,6 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
       _nomore = false;
       loadState = LoadIndicatorMode.inactive;
     });
-  }
-
-  // 滚动焦点变化
-  void onFocus(bool focus) {
-    _focus = focus;
   }
 
   // 无限加载
@@ -674,10 +680,6 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
   @override
   Widget build(BuildContext context) {
-    // 绑定加载指示器
-    if (widget.bindLoadIndicator != null) {
-      widget.bindLoadIndicator(finishLoad, resetLoadState, onFocus);
-    }
     return _EasyRefreshSliverLoad(
       loadIndicatorLayoutExtent: widget.loadIndicatorExtent,
       hasLayoutExtent: hasSliverLayoutExtent,

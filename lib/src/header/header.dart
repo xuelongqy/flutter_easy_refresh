@@ -17,8 +17,7 @@ abstract class Header {
   final bool enableInfiniteRefresh;
   /// 开启震动反馈
   final bool enableHapticFeedback;
-  /// 指示器滚动焦点变化回调
-  ScrollFocusCallback _onFocus;
+
 
   Header({
     this.extent = 60.0,
@@ -29,28 +28,24 @@ abstract class Header {
     this.enableHapticFeedback = false,
   });
 
-  // 滚动焦点变化
-  void onFocus(bool focus) {
-    if (_onFocus != null) _onFocus(focus);
-  }
-
   // 构造器
-  Widget builder(BuildContext context, EasyRefresh easyRefresh) {
+  Widget builder(BuildContext context, EasyRefresh easyRefresh,
+      ValueNotifier<bool> focusNotifier) {
     return EasyRefreshSliverRefreshControl(
       refreshIndicatorExtent: extent,
       refreshTriggerPullDistance: triggerDistance,
       builder: contentBuilder,
       completeDuration: completeDuration,
       onRefresh: easyRefresh.onRefresh,
+      focusNotifier: focusNotifier,
       enableControlFinishRefresh: easyRefresh.enableControlFinishRefresh,
       enableInfiniteRefresh: enableInfiniteRefresh,
       enableHapticFeedback: enableHapticFeedback,
-      bindRefreshIndicator: (finishRefresh, resetRefreshState, onFocus) {
+      bindRefreshIndicator: (finishRefresh, resetRefreshState) {
         if (easyRefresh.controller != null) {
           easyRefresh.controller.finishRefresh = finishRefresh;
           easyRefresh.controller.resetRefreshState = resetRefreshState;
         }
-        this._onFocus = onFocus;
       },
     );
   }

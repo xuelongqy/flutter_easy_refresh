@@ -17,8 +17,6 @@ abstract class Footer {
   final bool enableInfiniteLoad;
   /// 开启震动反馈
   final bool enableHapticFeedback;
-  /// 指示器滚动焦点变化回调
-  ScrollFocusCallback _onFocus;
 
   Footer({
     this.extent = 60.0,
@@ -29,28 +27,24 @@ abstract class Footer {
     this.enableHapticFeedback = false,
   });
 
-  // 滚动焦点变化
-  void onFocus(bool focus) {
-    if (_onFocus != null) _onFocus(focus);
-  }
-
   // 构造器
-  Widget builder(BuildContext context, EasyRefresh easyRefresh) {
+  Widget builder(BuildContext context, EasyRefresh easyRefresh,
+      ValueNotifier<bool> focusNotifier) {
     return EasyRefreshSliverLoadControl(
       loadIndicatorExtent: extent,
       loadTriggerPullDistance: triggerDistance,
       builder: contentBuilder,
       completeDuration: completeDuration,
       onLoad: easyRefresh.onLoad,
+      focusNotifier: focusNotifier,
       enableControlFinishLoad: easyRefresh.enableControlFinishLoad,
       enableInfiniteLoad: enableInfiniteLoad,
       enableHapticFeedback: enableHapticFeedback,
-      bindLoadIndicator: (finishLoad, resetLoadState, onFocus) {
+      bindLoadIndicator: (finishLoad, resetLoadState) {
         if (easyRefresh.controller != null) {
           easyRefresh.controller.finishLoad = finishLoad;
           easyRefresh.controller.resetLoadState = resetLoadState;
         }
-        this._onFocus = onFocus;
       },
     );
   }

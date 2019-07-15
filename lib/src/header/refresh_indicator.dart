@@ -292,9 +292,8 @@ typedef FinishRefresh = void Function({
 
 /// 绑定刷新指示剂
 typedef BindRefreshIndicator = void Function(
-    FinishRefresh fnishRefresh,
-    VoidCallback resetRefreshState,
-    ScrollFocusCallback onFocus);
+    FinishRefresh finishRefresh,
+    VoidCallback resetRefreshState);
 
 /// A sliver widget implementing the iOS-style pull to refresh content control.
 ///
@@ -356,6 +355,7 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
     @required this.builder,
     this.completeDuration,
     this.onRefresh,
+    this.focusNotifier,
     this.bindRefreshIndicator,
     this.enableControlFinishRefresh = false,
     this.enableInfiniteRefresh = false,
@@ -424,6 +424,8 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   final bool enableInfiniteRefresh;
   /// 开启震动反馈
   final bool enableHapticFeedback;
+  /// 滚动状态
+  final ValueNotifier<bool> focusNotifier;
 
   static const double _defaultRefreshTriggerPullDistance = 100.0;
   static const double _defaultRefreshIndicatorExtent = 60.0;
@@ -461,16 +463,27 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   bool hasSliverLayoutExtent = false;
 
   // 滚动焦点
-  bool _focus = false;
+  bool get _focus => widget.focusNotifier.value;
   // 刷新完成
   bool _success;
   // 没有更多数据
   bool _nomore;
 
+  // 初始化
   @override
   void initState() {
     super.initState();
     refreshState = RefreshIndicatorMode.inactive;
+    // 绑定刷新指示器
+    if (widget.bindRefreshIndicator != null) {
+      widget.bindRefreshIndicator(finishRefresh, resetRefreshState);
+    }
+  }
+
+  // 销毁
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   // 完成刷新
@@ -495,11 +508,6 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
       _nomore = false;
       refreshState = RefreshIndicatorMode.inactive;
     });
-  }
-
-  // 滚动焦点变化
-  void onFocus(bool focus) {
-    _focus = focus;
   }
 
   // 无限刷新
@@ -669,10 +677,6 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
   @override
   Widget build(BuildContext context) {
-    // 绑定刷新指示器
-    if (widget.bindRefreshIndicator != null) {
-      widget.bindRefreshIndicator(finishRefresh, resetRefreshState, onFocus);
-    }
     return _EasyRefreshSliverRefresh(
       refreshIndicatorLayoutExtent: widget.refreshIndicatorExtent,
       hasLayoutExtent: hasSliverLayoutExtent,
