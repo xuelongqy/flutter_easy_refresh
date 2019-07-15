@@ -551,6 +551,9 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         && loadState != LoadIndicatorMode.loaded
         && loadState != LoadIndicatorMode.done) {
       return loadState;
+    } else if (widget.enableInfiniteLoad
+        && loadState == LoadIndicatorMode.done) {
+      return LoadIndicatorMode.inactive;
     }
 
     // 完成
@@ -601,7 +604,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         } else if (latestIndicatorBoxExtent < widget.loadTriggerPullDistance) {
           return LoadIndicatorMode.drag;
         } else {
-          if (widget.onLoad != null && !widget.enableInfiniteLoad) {
+          if (widget.onLoad != null) {
             if (!_focus) {
               if (widget.enableHapticFeedback) {
                 HapticFeedback.mediumImpact();
@@ -611,13 +614,17 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
               // performLayout.
               SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
                 loadTask = widget.onLoad()..then((_) {
-                  if (mounted && !widget.enableControlFinishLoad) {
+                  if (mounted) {
+                    if (widget.enableInfiniteLoad) {
+                      loadState = LoadIndicatorMode.inactive;
+                    }
                     setState(() => loadTask = null);
                     // Trigger one more transition because by this time, BoxConstraint's
                     // maxHeight might already be resting at 0 in which case no
                     // calls to [transitionNextState] will occur anymore and the
                     // state may be stuck in a non-inactive state.
-                    loadState = transitionNextState();
+                    if (!widget.enableInfiniteLoad)
+                      loadState = transitionNextState();
                   }
                 });
                 setState(() => hasSliverLayoutExtent = true);

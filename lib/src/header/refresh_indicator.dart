@@ -9,8 +9,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import '../listener/scroll_notification_listener.dart';
-
 class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
   const _EasyRefreshSliverRefresh({
     Key key,
@@ -548,6 +546,9 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         && refreshState != RefreshIndicatorMode.refreshed
         && refreshState != RefreshIndicatorMode.done) {
       return refreshState;
+    } else if (widget.enableInfiniteRefresh
+        && refreshState == RefreshIndicatorMode.done) {
+      return RefreshIndicatorMode.inactive;
     }
 
     // 结束
@@ -598,7 +599,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         } else if (latestIndicatorBoxExtent < widget.refreshTriggerPullDistance) {
           return RefreshIndicatorMode.drag;
         } else {
-          if (widget.onRefresh != null && !widget.enableInfiniteRefresh) {
+          if (widget.onRefresh != null) {
             if (!_focus) {
               if (widget.enableHapticFeedback) {
                 HapticFeedback.mediumImpact();
@@ -608,13 +609,17 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
               // performLayout.
               SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
                 refreshTask = widget.onRefresh()..then((_) {
-                  if (mounted && !widget.enableControlFinishRefresh) {
+                  if (mounted) {
+                    if (widget.enableInfiniteRefresh) {
+                      refreshState = RefreshIndicatorMode.inactive;
+                    }
                     setState(() => refreshTask = null);
                     // Trigger one more transition because by this time, BoxConstraint's
                     // maxHeight might already be resting at 0 in which case no
                     // calls to [transitionNextState] will occur anymore and the
                     // state may be stuck in a non-inactive state.
-                    refreshState = transitionNextState();
+                    if (!widget.enableInfiniteRefresh)
+                      refreshState = transitionNextState();
                   }
                 });
                 setState(() => hasSliverLayoutExtent = true);

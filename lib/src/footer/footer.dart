@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-import '../listener/scroll_notification_listener.dart';
 import '../../easy_refresh.dart';
 
 /// Header
@@ -111,6 +110,7 @@ class ClassicalFooter extends Footer {
   Widget contentBuilder(BuildContext context, LoadIndicatorMode loadState,
       double pulledExtent, double refreshTriggerPullDistance,
       double refreshIndicatorExtent, bool success, bool nomore) {
+    print(loadState);
     return Container(
       width: double.infinity,
       height: double.infinity,

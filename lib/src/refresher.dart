@@ -122,6 +122,11 @@ class _EasyRefreshState extends State<EasyRefresh> {
     return widget.footer ?? EasyRefresh._defaultFooter;
   }
 
+  // ScrollController
+  ScrollController get _scrollerController {
+    return widget.scrollController ?? PrimaryScrollController.of(context);
+  }
+
   // 滚动状态
   ValueNotifier<bool> _focusNotifier;
 
@@ -150,22 +155,24 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
   // 触发刷新
   void callRefresh() {
-    print("callRefresh");
+    _focusNotifier.value = true;
+    _scrollerController.animateTo(-(_header.enableInfiniteRefresh ? 0 : 1)
+        * _header.triggerDistance - 20.0,
+        duration: Duration(milliseconds: 400), curve: Curves.linear)
+        .whenComplete((){
+      _focusNotifier.value = false;
+    });
   }
 
   // 触发加载
   void callLoadMore() {
-    print("callLoadMore");
-  }
-
-  // 完成刷新
-  void finishRefresh() {
-    print("finishRefresh");
-  }
-
-  // 完成加载
-  void finishLoadMore() {
-    print("finishLoadMore");
+    _focusNotifier.value = true;
+    _scrollerController.animateTo(_scrollerController.position.maxScrollExtent
+        + _footer.triggerDistance + 20.0,
+        duration: Duration(milliseconds: 400), curve: Curves.linear)
+        .whenComplete((){
+      _focusNotifier.value = false;
+    });
   }
 
   @override
