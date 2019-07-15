@@ -110,7 +110,6 @@ class ClassicalFooter extends Footer {
   Widget contentBuilder(BuildContext context, LoadIndicatorMode loadState,
       double pulledExtent, double refreshTriggerPullDistance,
       double refreshIndicatorExtent, bool success, bool nomore) {
-    print(loadState);
     return Container(
       width: double.infinity,
       height: double.infinity,

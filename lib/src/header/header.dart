@@ -111,7 +111,6 @@ class ClassicalHeader extends Header{
   Widget contentBuilder(BuildContext context, RefreshIndicatorMode refreshState,
       double pulledExtent, double refreshTriggerPullDistance,
       double refreshIndicatorExtent, bool success, bool nomore) {
-    //print(refreshState);
     return Container(
       width: double.infinity,
       height: double.infinity,
