@@ -15,6 +15,7 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
     this.loadIndicatorLayoutExtent = 0.0,
     this.hasLayoutExtent = false,
     this.enableInfiniteLoad = true,
+  @required this.scrollPositionNotifier,
     @required this.infiniteLoad,
     Widget child,
   }) : assert(loadIndicatorLayoutExtent != null),
@@ -37,6 +38,9 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
   /// 无限加载回调
   final VoidCallback infiniteLoad;
 
+  /// 滚动位置
+  final ValueNotifier<ScrollPosition> scrollPositionNotifier;
+
   @override
   _RenderEasyRefreshSliverLoad createRenderObject(BuildContext context) {
     return _RenderEasyRefreshSliverLoad(
@@ -44,6 +48,7 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
       hasLayoutExtent: hasLayoutExtent,
       enableInfiniteLoad: enableInfiniteLoad,
       infiniteLoad: infiniteLoad,
+      scrollPositionNotifier: scrollPositionNotifier,
     );
   }
 
@@ -69,6 +74,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
     @required bool hasLayoutExtent,
     @required bool enableInfiniteLoad,
     @required this.infiniteLoad,
+    @required this.scrollPositionNotifier,
     RenderBox child,
   }) : assert(loadIndicatorExtent != null),
         assert(loadIndicatorExtent >= 0.0),
@@ -118,6 +124,9 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
 
   /// 无限加载回调
   final VoidCallback infiniteLoad;
+
+  /// 滚动位置
+  final ValueNotifier<ScrollPosition> scrollPositionNotifier;
 
   // 触发无限加载
   bool _triggerInfiniteLoad = false;
@@ -196,7 +205,15 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
       ),
       parentUsesSize: true,
     );
-    if (active) {
+    if (scrollPositionNotifier.value == null) {
+      geometry = SliverGeometry.zero;
+    } else if (active) {
+      // 判断列表是否未暂满,去掉未暂满高度
+      double extraLength = 0.0;
+      if (scrollPositionNotifier.value.maxScrollExtent
+          < constraints.viewportMainAxisExtent) {
+        print(constraints);
+      }
       geometry = SliverGeometry(
         scrollExtent: layoutExtent,
         paintOrigin: - constraints.scrollOffset,
@@ -354,12 +371,13 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   /// a refresh.
   const EasyRefreshSliverLoadControl({
     Key key,
-    this.loadTriggerPullDistance = _defaultloadTriggerPullDistance,
-    this.loadIndicatorExtent = _defaultloadIndicatorExtent,
+    this.loadTriggerPullDistance = _defaultLoadTriggerPullDistance,
+    this.loadIndicatorExtent = _defaultLoadIndicatorExtent,
     @required this.builder,
     this.completeDuration,
     this.onLoad,
     this.focusNotifier,
+    this.scrollPositionNotifier,
     this.bindLoadIndicator,
     this.enableControlFinishLoad = false,
     this.enableInfiniteLoad = true,
@@ -430,9 +448,11 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   final bool enableHapticFeedback;
   /// 滚动状态
   final ValueNotifier<bool> focusNotifier;
+  /// 滚动位置
+  final ValueNotifier<ScrollPosition> scrollPositionNotifier;
 
-  static const double _defaultloadTriggerPullDistance = 100.0;
-  static const double _defaultloadIndicatorExtent = 60.0;
+  static const double _defaultLoadTriggerPullDistance = 100.0;
+  static const double _defaultLoadIndicatorExtent = 60.0;
 
   /// Retrieve the current state of the EasyRefreshSliverLoadControl. The same as the
   /// state that gets passed into the [builder] function. Used for testing.
@@ -692,6 +712,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
       hasLayoutExtent: hasSliverLayoutExtent,
       enableInfiniteLoad: widget.enableInfiniteLoad,
       infiniteLoad: _infiniteLoad,
+      scrollPositionNotifier: widget.scrollPositionNotifier,
       // A LayoutBuilder lets the sliver's layout changes be fed back out to
       // its owner to trigger state changes.
       child: OrientationBuilder(

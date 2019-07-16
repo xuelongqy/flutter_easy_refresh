@@ -1,4 +1,5 @@
 import 'package:flutter/gestures.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyrefresh/src/footer/load_indicator.dart';
 import 'package:flutter_easyrefresh/src/header/refresh_indicator.dart';
@@ -130,18 +131,31 @@ class _EasyRefreshState extends State<EasyRefresh> {
   // 滚动状态
   ValueNotifier<bool> _focusNotifier;
 
+  // 列表位置
+  ValueNotifier<ScrollPosition> _scrollPositionNotifier;
+
   // 初始化
   @override
   void initState() {
      super.initState();
      _focusNotifier = ValueNotifier<bool>(false);
      _physics = EasyRefreshPhysics();
+     // 初始化滚动位置
+     _scrollPositionNotifier = ValueNotifier<ScrollPosition>(null);
+     SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+       if (_scrollerController != null) {
+         _scrollPositionNotifier.value = _scrollerController.position;
+         _scrollerController.addListener(onScroll);
+       }
+     });
   }
 
   // 销毁
   void dispose() {
     super.dispose();
     _focusNotifier.dispose();
+    _scrollPositionNotifier.dispose();
+    _scrollerController?.removeListener(onScroll);
   }
 
   // 更新依赖
@@ -151,6 +165,11 @@ class _EasyRefreshState extends State<EasyRefresh> {
     // 绑定控制器
     if (widget.controller != null)
       widget.controller._bindEasyRefreshState(this);
+  }
+
+  // 滚动监听
+  void onScroll() {
+    _scrollPositionNotifier.value = _scrollerController.position;
   }
 
   // 触发刷新
@@ -179,7 +198,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
   Widget build(BuildContext context) {
     // 构建Header和Footer
     var header = _header.builder(context, widget, _focusNotifier);
-    var footer = _footer.builder(context, widget, _focusNotifier);
+    var footer = _footer.builder(context, widget,
+        _focusNotifier, _scrollPositionNotifier);
     // 插入Header和Footer
     var slivers = widget.slivers;
     slivers.insert(0, header);
