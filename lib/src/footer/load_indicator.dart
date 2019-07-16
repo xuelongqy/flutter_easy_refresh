@@ -15,8 +15,8 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
     this.loadIndicatorLayoutExtent = 0.0,
     this.hasLayoutExtent = false,
     this.enableInfiniteLoad = true,
-  @required this.scrollPositionNotifier,
     @required this.infiniteLoad,
+    @required this.extraExtentNotifier,
     Widget child,
   }) : assert(loadIndicatorLayoutExtent != null),
         assert(loadIndicatorLayoutExtent >= 0.0),
@@ -38,8 +38,8 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
   /// 无限加载回调
   final VoidCallback infiniteLoad;
 
-  /// 滚动位置
-  final ValueNotifier<ScrollPosition> scrollPositionNotifier;
+  // 列表为占满时多余长度
+  final ValueNotifier<double> extraExtentNotifier;
 
   @override
   _RenderEasyRefreshSliverLoad createRenderObject(BuildContext context) {
@@ -48,7 +48,7 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
       hasLayoutExtent: hasLayoutExtent,
       enableInfiniteLoad: enableInfiniteLoad,
       infiniteLoad: infiniteLoad,
-      scrollPositionNotifier: scrollPositionNotifier,
+      extraExtentNotifier: extraExtentNotifier,
     );
   }
 
@@ -74,7 +74,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
     @required bool hasLayoutExtent,
     @required bool enableInfiniteLoad,
     @required this.infiniteLoad,
-    @required this.scrollPositionNotifier,
+    @required this.extraExtentNotifier,
     RenderBox child,
   }) : assert(loadIndicatorExtent != null),
         assert(loadIndicatorExtent >= 0.0),
@@ -125,8 +125,8 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
   /// 无限加载回调
   final VoidCallback infiniteLoad;
 
-  /// 滚动位置
-  final ValueNotifier<ScrollPosition> scrollPositionNotifier;
+  // 列表为占满时多余长度
+  final ValueNotifier<double> extraExtentNotifier;
 
   // 触发无限加载
   bool _triggerInfiniteLoad = false;
@@ -205,33 +205,36 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
       ),
       parentUsesSize: true,
     );
-    if (scrollPositionNotifier.value == null) {
-      geometry = SliverGeometry.zero;
-    } else if (active) {
-      // 判断列表是否未暂满,去掉未暂满高度
-      double extraLength = 0.0;
-      if (scrollPositionNotifier.value.maxScrollExtent
+    if (active) {
+      // 判断列表是否未占满,去掉未占满高度
+      double extraExtent = 0.0;
+      if (constraints.precedingScrollExtent
           < constraints.viewportMainAxisExtent) {
-        print(constraints);
+        extraExtent = constraints.viewportMainAxisExtent
+            - constraints.precedingScrollExtent;
       }
+      extraExtentNotifier.value = extraExtent;
       geometry = SliverGeometry(
         scrollExtent: layoutExtent,
-        paintOrigin: - constraints.scrollOffset,
+        paintOrigin: constraints.scrollOffset + extraExtent,
         paintExtent: max(
           // Check child size (which can come from overscroll) because
           // layoutExtent may be zero. Check layoutExtent also since even
           // with a layoutExtent, the indicator builder may decide to not
           // build anything.
           min(max(childSize, layoutExtent),
-              constraints.remainingPaintExtent) - constraints.scrollOffset,
+              constraints.remainingPaintExtent)
+              - constraints.scrollOffset - extraExtent,
           0.0,
         ),
         maxPaintExtent: max(
           min(max(childSize, layoutExtent),
-              constraints.remainingPaintExtent) - constraints.scrollOffset,
+              constraints.remainingPaintExtent)
+              - constraints.scrollOffset - extraExtent,
           0.0,
         ),
-        layoutExtent: min(max(layoutExtent - constraints.scrollOffset, 0.0),
+        layoutExtent: min(max(layoutExtent - constraints.scrollOffset
+            - extraExtent, 0.0),
             constraints.remainingPaintExtent),
       );
     } else {
@@ -377,7 +380,6 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     this.completeDuration,
     this.onLoad,
     this.focusNotifier,
-    this.scrollPositionNotifier,
     this.bindLoadIndicator,
     this.enableControlFinishLoad = false,
     this.enableInfiniteLoad = true,
@@ -448,8 +450,6 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   final bool enableHapticFeedback;
   /// 滚动状态
   final ValueNotifier<bool> focusNotifier;
-  /// 滚动位置
-  final ValueNotifier<ScrollPosition> scrollPositionNotifier;
 
   static const double _defaultLoadTriggerPullDistance = 100.0;
   static const double _defaultLoadIndicatorExtent = 60.0;
@@ -492,12 +492,15 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   bool _success;
   // 没有更多数据
   bool _nomore;
+  // 列表为占满时多余长度
+  ValueNotifier<double> extraExtentNotifier;
 
   // 初始化
   @override
   void initState() {
     super.initState();
     loadState = LoadIndicatorMode.inactive;
+    extraExtentNotifier = ValueNotifier<double>(0.0);
     // 绑定加载指示器
     if (widget.bindLoadIndicator != null) {
       widget.bindLoadIndicator(finishLoad, resetLoadState);
@@ -508,6 +511,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   @override
   void dispose() {
     super.dispose();
+    extraExtentNotifier.dispose();
   }
 
   // 完成刷新
@@ -712,18 +716,25 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
       hasLayoutExtent: hasSliverLayoutExtent,
       enableInfiniteLoad: widget.enableInfiniteLoad,
       infiniteLoad: _infiniteLoad,
-      scrollPositionNotifier: widget.scrollPositionNotifier,
+      extraExtentNotifier: extraExtentNotifier,
       // A LayoutBuilder lets the sliver's layout changes be fed back out to
       // its owner to trigger state changes.
       child: OrientationBuilder(
         builder: (context, orientation) {
           return LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              latestIndicatorBoxExtent = orientation == Orientation.landscape
-                  ? constraints.maxHeight : constraints.maxWidth;
+              latestIndicatorBoxExtent = (orientation == Orientation.landscape
+                  ? constraints.maxHeight : constraints.maxWidth)
+                  - extraExtentNotifier.value;
+              // 列表未占满时恢复一下状态
+              if (extraExtentNotifier.value > 0.0
+                  && loadState == LoadIndicatorMode.load
+                  && loadTask == null) {
+                loadState = LoadIndicatorMode.inactive;
+              }
               loadState = transitionNextState();
               if (widget.builder != null && latestIndicatorBoxExtent > 0) {
-                return widget.builder(
+                Widget child = widget.builder(
                   context,
                   loadState,
                   latestIndicatorBoxExtent,
@@ -731,6 +742,24 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
                   widget.loadIndicatorExtent,
                   _success ?? true,
                   _nomore ?? false,
+                );
+                // 顶出列表未占满多余部分
+                return orientation == Orientation.landscape ? Column(
+                  children: <Widget>[
+                    Container(
+                      height: latestIndicatorBoxExtent,
+                      child: child,
+                    ),
+                    Expanded(flex: 1, child: SizedBox(),),
+                  ],
+                ) : Row(
+                  children: <Widget>[
+                    Container(
+                      width: latestIndicatorBoxExtent,
+                      child: child,
+                    ),
+                    Expanded(flex: 1, child: SizedBox(),),
+                  ],
                 );
               }
               return Container();
