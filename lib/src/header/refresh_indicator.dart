@@ -272,7 +272,7 @@ typedef RefreshControlIndicatorBuilder = Widget Function(
     double pulledExtent,
     double refreshTriggerPullDistance,
     double refreshIndicatorExtent,
-    bool success, bool nomore);
+    bool success, bool noMore);
 
 /// A callback function that's invoked when the [EasyRefreshSliverRefreshControl] is
 /// pulled a `refreshTriggerPullDistance`. Must return a [Future]. Upon
@@ -281,11 +281,11 @@ typedef RefreshControlIndicatorBuilder = Widget Function(
 typedef RefreshCallback = Future<void> Function();
 
 /// 结束刷新
-/// success 为是否成功(为false时，nomore无效)
-/// nomore 为是否有更多数据
+/// success 为是否成功(为false时，noMore无效)
+/// noMore 为是否有更多数据
 typedef FinishRefresh = void Function({
   bool success,
-  bool nomore,
+  bool noMore,
 });
 
 /// 绑定刷新指示剂
@@ -465,7 +465,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   // 刷新完成
   bool _success;
   // 没有更多数据
-  bool _nomore;
+  bool _noMore;
 
   // 初始化
   @override
@@ -487,10 +487,10 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   // 完成刷新
   void finishRefresh({
     bool success,
-    bool nomore,
+    bool noMore,
   }) {
     _success = success;
-    _nomore = nomore;
+    _noMore = noMore;
     if (widget.enableControlFinishRefresh && refreshTask != null) {
       if (widget.enableInfiniteRefresh) {
         refreshState = RefreshIndicatorMode.refreshed;
@@ -503,7 +503,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   // 恢复状态
   void resetRefreshState() {
     setState(() {
-      _nomore = false;
+      _noMore = false;
       refreshState = RefreshIndicatorMode.inactive;
     });
   }
@@ -511,7 +511,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   // 无限刷新
   void _infiniteRefresh() {
     if (refreshTask == null && widget.enableInfiniteRefresh
-        && _nomore != true) {
+        && _noMore != true) {
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
@@ -539,9 +539,9 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
     RefreshIndicatorMode nextState;
 
     // 判断是否没有更多
-    if (_nomore == true && widget.enableInfiniteRefresh) {
+    if (_noMore == true && widget.enableInfiniteRefresh) {
       return refreshState;
-    } else if (_nomore == true
+    } else if (_noMore == true
         && refreshState != RefreshIndicatorMode.refresh
         && refreshState != RefreshIndicatorMode.refreshed
         && refreshState != RefreshIndicatorMode.done) {
@@ -704,7 +704,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
                   widget.refreshTriggerPullDistance,
                   widget.refreshIndicatorExtent,
                   _success ?? true,
-                  _nomore ?? false,
+                  _noMore ?? false,
                 );
               }
               return Container();

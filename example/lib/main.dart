@@ -91,7 +91,7 @@ class _ExampleState extends State<_Example> {
                 setState(() {
                   _count += 10;
                 });
-                _controller.finishLoad(nomore: _count >= 40);
+                _controller.finishLoad(noMore: _count >= 40);
                 return 'stop';
               });
             },
