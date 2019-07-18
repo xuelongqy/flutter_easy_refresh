@@ -136,7 +136,10 @@ class _EasyRefreshState extends State<EasyRefresh> {
   void initState() {
      super.initState();
      _focusNotifier = ValueNotifier<bool>(false);
-     _physics = EasyRefreshPhysics();
+     _physics = EasyRefreshPhysics(
+       headerFloat: widget.onRefresh != null && _header.float,
+       footerFloat: widget.onLoad != null && _footer.float,
+     );
   }
 
   // 销毁

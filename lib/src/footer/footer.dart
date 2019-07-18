@@ -37,7 +37,7 @@ abstract class Footer {
       onLoad: easyRefresh.onLoad,
       focusNotifier: focusNotifier,
       enableControlFinishLoad: easyRefresh.enableControlFinishLoad,
-      enableInfiniteLoad: enableInfiniteLoad,
+      enableInfiniteLoad: enableInfiniteLoad && !float,
       enableHapticFeedback: enableHapticFeedback,
       bindLoadIndicator: (finishLoad, resetLoadState) {
         if (easyRefresh.controller != null) {

@@ -71,9 +71,11 @@ class _ExampleState extends State<_Example> {
             controller: _controller,
             header: ClassicalHeader(
               enableInfiniteRefresh: false,
+              //float: true,
             ),
             footer: ClassicalFooter(
               enableInfiniteLoad: true,
+              //float: true,
             ),
             onRefresh: () async {
               await Future.delayed(Duration(seconds: 2), () {

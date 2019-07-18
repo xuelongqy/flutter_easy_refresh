@@ -38,7 +38,7 @@ abstract class Header {
       onRefresh: easyRefresh.onRefresh,
       focusNotifier: focusNotifier,
       enableControlFinishRefresh: easyRefresh.enableControlFinishRefresh,
-      enableInfiniteRefresh: enableInfiniteRefresh,
+      enableInfiniteRefresh: enableInfiniteRefresh && !float,
       enableHapticFeedback: enableHapticFeedback,
       bindRefreshIndicator: (finishRefresh, resetRefreshState) {
         if (easyRefresh.controller != null) {
