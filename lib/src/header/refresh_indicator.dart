@@ -234,25 +234,37 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
       ),
       parentUsesSize: true,
     );
-    print(layoutExtent);
     if (active) {
-      geometry = SliverGeometry(
-        scrollExtent: layoutExtent,
-        paintOrigin: -overscrolledExtent - constraints.scrollOffset,
-        paintExtent: max(
-          // Check child size (which can come from overscroll) because
-          // layoutExtent may be zero. Check layoutExtent also since even
-          // with a layoutExtent, the indicator builder may decide to not
-          // build anything.
-          max(childSize, layoutExtent) - constraints.scrollOffset,
-          0.0,
-        ),
-        maxPaintExtent: max(
-          max(childSize, layoutExtent) - constraints.scrollOffset,
-          0.0,
-        ),
-        layoutExtent: max(layoutExtent - constraints.scrollOffset, 0.0),
-      );
+      // 判断Header是否浮动
+      if (headerFloat) {
+        geometry = SliverGeometry(
+          scrollExtent: 0.0,
+          paintOrigin: 0.0,
+          paintExtent: childSize,
+          maxPaintExtent: childSize,
+          layoutExtent: max(-constraints.scrollOffset, 0.0),
+          visible: true,
+          hasVisualOverflow: true,
+        );
+      } else {
+        geometry = SliverGeometry(
+          scrollExtent: layoutExtent,
+          paintOrigin: -overscrolledExtent - constraints.scrollOffset,
+          paintExtent: max(
+            // Check child size (which can come from overscroll) because
+            // layoutExtent may be zero. Check layoutExtent also since even
+            // with a layoutExtent, the indicator builder may decide to not
+            // build anything.
+            max(childSize, layoutExtent) - constraints.scrollOffset,
+            0.0,
+          ),
+          maxPaintExtent: max(
+            max(childSize, layoutExtent) - constraints.scrollOffset,
+            0.0,
+          ),
+          layoutExtent: max(layoutExtent - constraints.scrollOffset, 0.0),
+        );
+      }
     } else {
       // If we never started overscrolling, return no geometry.
       geometry = SliverGeometry.zero;
