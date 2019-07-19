@@ -47,6 +47,7 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
       enableInfiniteRefresh: enableInfiniteRefresh,
       infiniteRefresh: infiniteRefresh,
       headerFloat: headerFloat,
+      context: context,
     );
   }
 
@@ -56,7 +57,8 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
       ..refreshIndicatorLayoutExtent = refreshIndicatorLayoutExtent
       ..hasLayoutExtent = hasLayoutExtent
       ..enableInfiniteRefresh = enableInfiniteRefresh
-      ..headerFloat = headerFloat;
+      ..headerFloat = headerFloat
+      ..context = context;
   }
 }
 
@@ -74,6 +76,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
     @required bool enableInfiniteRefresh,
     @required this.infiniteRefresh,
     @required bool headerFloat,
+    @required BuildContext context,
     RenderBox child,
   }) : assert(refreshIndicatorExtent != null),
         assert(refreshIndicatorExtent >= 0.0),
@@ -81,7 +84,8 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
         _refreshIndicatorExtent = refreshIndicatorExtent,
         _enableInfiniteRefresh = enableInfiniteRefresh,
         _hasLayoutExtent = hasLayoutExtent,
-        _headerFloat = headerFloat {
+        _headerFloat = headerFloat,
+        context = context {
     this.child = child;
   }
 
@@ -108,6 +112,9 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
     if (value == _hasLayoutExtent)
       return;
     _hasLayoutExtent = value;
+    if (headerFloat && _hasLayoutExtent) {
+      Scrollable.of(context).position.jumpTo(-_refreshIndicatorExtent);
+    }
     markNeedsLayout();
   }
 
@@ -135,10 +142,10 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
 
   /// 无限加载回调
   final VoidCallback infiniteRefresh;
-
+  /// 上下文
+  BuildContext context;
   // 触发无限刷新
   bool _triggerInfiniteRefresh = false;
-
   // 获取子组件大小
   double get childSize =>
     constraints.axis == Axis.vertical ? child.size.height : child.size.width;
@@ -202,38 +209,53 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
 
     // The new layout extent this sliver should now have.
     final double layoutExtent =
-        (_hasLayoutExtent || enableInfiniteRefresh && !headerFloat
-            ? 1.0 : 0.0) * _refreshIndicatorExtent;
+        (_hasLayoutExtent || enableInfiniteRefresh ? 1.0 : 0.0)
+            * _refreshIndicatorExtent;
     // If the new layoutExtent instructive changed, the SliverGeometry's
     // layoutExtent will take that value (on the next performLayout run). Shift
     // the scroll offset first so it doesn't make the scroll position suddenly jump.
-    if (layoutExtent != layoutExtentOffsetCompensation) {
-      geometry = SliverGeometry(
-        scrollOffsetCorrection: layoutExtent - layoutExtentOffsetCompensation,
-      );
-      layoutExtentOffsetCompensation = layoutExtent;
-      // Return so we don't have to do temporary accounting and adjusting the
-      // child's constraints accounting for this one transient frame using a
-      // combination of existing layout extent, new layout extent change and
-      // the overlap.
-      return;
+    // 如果Header浮动则不用过渡
+    if (!headerFloat) {
+      if (layoutExtent != layoutExtentOffsetCompensation) {
+        geometry = SliverGeometry(
+          scrollOffsetCorrection: layoutExtent - layoutExtentOffsetCompensation,
+        );
+        layoutExtentOffsetCompensation = layoutExtent;
+        // Return so we don't have to do temporary accounting and adjusting the
+        // child's constraints accounting for this one transient frame using a
+        // combination of existing layout extent, new layout extent change and
+        // the overlap.
+        return;
+      }
     }
-    final bool active = constraints.overlap < 0.0
-        || layoutExtent > 0.0;
+    final bool active = constraints.overlap < 0.0 || layoutExtent > 0.0;
     final double overscrolledExtent =
     constraints.overlap < 0.0 ? constraints.overlap.abs() : 0.0;
     // Layout the child giving it the space of the currently dragged overscroll
     // which may or may not include a sliver layout extent space that it will
     // keep after the user lets go during the refresh process.
-    child.layout(
-      constraints.asBoxConstraints(
-        maxExtent: layoutExtent
-            // Plus only the overscrolled portion immediately preceding this
-            // sliver.
-            + overscrolledExtent,
-      ),
-      parentUsesSize: true,
-    );
+    // Header浮动时不用layoutExtent,不然会有跳动
+    if (headerFloat) {
+      child.layout(
+        constraints.asBoxConstraints(
+          maxExtent: _hasLayoutExtent ? overscrolledExtent >
+              _refreshIndicatorExtent ? overscrolledExtent
+              : _refreshIndicatorExtent
+              : overscrolledExtent,
+        ),
+        parentUsesSize: true,
+      );
+    } else {
+      child.layout(
+        constraints.asBoxConstraints(
+          maxExtent: layoutExtent
+              // Plus only the overscrolled portion immediately preceding this
+              // sliver.
+              + overscrolledExtent,
+        ),
+        parentUsesSize: true,
+      );
+    }
     if (active) {
       // 判断Header是否浮动
       if (headerFloat) {

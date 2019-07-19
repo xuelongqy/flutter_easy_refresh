@@ -70,8 +70,8 @@ class _ExampleState extends State<_Example> {
             enableControlFinishLoad: true,
             controller: _controller,
             header: ClassicalHeader(
-              enableInfiniteRefresh: false,
-              //float: true,
+              //enableInfiniteRefresh: false,
+              float: true,
             ),
             footer: ClassicalFooter(
               enableInfiniteLoad: true,
