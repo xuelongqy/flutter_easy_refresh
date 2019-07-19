@@ -15,6 +15,7 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
     this.refreshIndicatorLayoutExtent = 0.0,
     this.hasLayoutExtent = false,
     this.enableInfiniteRefresh = false,
+    this.headerFloat = false,
     @required this.infiniteRefresh,
     Widget child,
   }) : assert(refreshIndicatorLayoutExtent != null),
@@ -33,9 +34,10 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
 
   /// 是否开启无限刷新
   final bool enableInfiniteRefresh;
-
   /// 无限加载回调
   final VoidCallback infiniteRefresh;
+  /// Header浮动
+  final bool headerFloat;
 
   @override
   _RenderEasyRefreshSliverRefresh createRenderObject(BuildContext context) {
@@ -44,6 +46,7 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
       hasLayoutExtent: hasLayoutExtent,
       enableInfiniteRefresh: enableInfiniteRefresh,
       infiniteRefresh: infiniteRefresh,
+      headerFloat: headerFloat,
     );
   }
 
@@ -52,7 +55,8 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
     renderObject
       ..refreshIndicatorLayoutExtent = refreshIndicatorLayoutExtent
       ..hasLayoutExtent = hasLayoutExtent
-      ..enableInfiniteRefresh = enableInfiniteRefresh;
+      ..enableInfiniteRefresh = enableInfiniteRefresh
+      ..headerFloat = headerFloat;
   }
 }
 
@@ -69,13 +73,15 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
     @required bool hasLayoutExtent,
     @required bool enableInfiniteRefresh,
     @required this.infiniteRefresh,
+    @required bool headerFloat,
     RenderBox child,
   }) : assert(refreshIndicatorExtent != null),
         assert(refreshIndicatorExtent >= 0.0),
         assert(hasLayoutExtent != null),
         _refreshIndicatorExtent = refreshIndicatorExtent,
         _enableInfiniteRefresh = enableInfiniteRefresh,
-        _hasLayoutExtent = hasLayoutExtent {
+        _hasLayoutExtent = hasLayoutExtent,
+        _headerFloat = headerFloat {
     this.child = child;
   }
 
@@ -116,6 +122,17 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
     markNeedsLayout();
   }
 
+  /// Header是否浮动
+  bool get headerFloat => _headerFloat;
+  bool _headerFloat;
+  set headerFloat(bool value) {
+    assert(value != null);
+    if (value == _headerFloat)
+      return;
+    _headerFloat = value;
+    markNeedsLayout();
+  }
+
   /// 无限加载回调
   final VoidCallback infiniteRefresh;
 
@@ -131,6 +148,30 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
   // the appropriate delta can be applied to keep everything in the same place
   // visually.
   double layoutExtentOffsetCompensation = 0.0;
+
+  @override
+  double get centerOffsetAdjustment {
+    // Header浮动时去掉越界
+    if (headerFloat) {
+      final RenderViewportBase renderViewport = parent;
+      return max(0.0, -renderViewport.offset.pixels);
+    }
+    return super.centerOffsetAdjustment;
+  }
+
+  @override
+  void layout(Constraints constraints, {bool parentUsesSize = false}) {
+    // Header浮动时保持刷新
+    if (headerFloat) {
+      final RenderViewportBase renderViewport = parent;
+      super.layout(
+          (constraints as SliverConstraints)
+              .copyWith(overlap: min(0.0, renderViewport.offset.pixels)),
+          parentUsesSize: true);
+    } else {
+      super.layout(constraints, parentUsesSize: parentUsesSize);
+    }
+  }
 
   @override
   void performLayout() {
@@ -161,7 +202,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
 
     // The new layout extent this sliver should now have.
     final double layoutExtent =
-        (_hasLayoutExtent || enableInfiniteRefresh
+        (_hasLayoutExtent || enableInfiniteRefresh && !headerFloat
             ? 1.0 : 0.0) * _refreshIndicatorExtent;
     // If the new layoutExtent instructive changed, the SliverGeometry's
     // layoutExtent will take that value (on the next performLayout run). Shift
@@ -193,6 +234,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
       ),
       parentUsesSize: true,
     );
+    print(layoutExtent);
     if (active) {
       geometry = SliverGeometry(
         scrollExtent: layoutExtent,
@@ -358,6 +400,7 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
     this.enableControlFinishRefresh = false,
     this.enableInfiniteRefresh = false,
     this.enableHapticFeedback = false,
+    this.headerFloat = false,
   }) : assert(refreshTriggerPullDistance != null),
         assert(refreshTriggerPullDistance > 0.0),
         assert(refreshIndicatorExtent != null),
@@ -424,6 +467,8 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   final bool enableHapticFeedback;
   /// 滚动状态
   final ValueNotifier<bool> focusNotifier;
+  /// Header浮动
+  final bool headerFloat;
 
   static const double _defaultRefreshTriggerPullDistance = 100.0;
   static const double _defaultRefreshIndicatorExtent = 60.0;
@@ -687,6 +732,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
       hasLayoutExtent: hasSliverLayoutExtent,
       enableInfiniteRefresh: widget.enableInfiniteRefresh,
       infiniteRefresh: _infiniteRefresh,
+      headerFloat: widget.headerFloat,
       // A LayoutBuilder lets the sliver's layout changes be fed back out to
       // its owner to trigger state changes.
       child: OrientationBuilder(

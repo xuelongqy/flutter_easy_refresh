@@ -19,23 +19,11 @@ import 'dart:math' as math;
 class EasyRefreshPhysics extends ScrollPhysics {
   /// Creates scroll physics that bounce back from the edge.
   const EasyRefreshPhysics({
-    ScrollPhysics parent,
-    this.headerFloat = false,
-    this.footerFloat = false,
-  }) : super(parent: parent);
-
-  /// header浮动
-  final bool headerFloat;
-  /// footer浮动
-  final bool footerFloat;
+    ScrollPhysics parent,}) : super(parent: parent);
 
   @override
   EasyRefreshPhysics applyTo(ScrollPhysics ancestor) {
-    return EasyRefreshPhysics(
-      parent: buildParent(ancestor),
-      headerFloat: headerFloat,
-      footerFloat: footerFloat,
-    );
+    return EasyRefreshPhysics(parent: buildParent(ancestor),);
   }
 
   /// The multiple applied to overscroll to make it appear that scrolling past
@@ -91,21 +79,7 @@ class EasyRefreshPhysics extends ScrollPhysics {
   }
 
   @override
-  double applyBoundaryConditions(ScrollMetrics position, double value) {
-    if (value < position.pixels && position.pixels
-        <= position.minScrollExtent && headerFloat) // underscroll
-      return value - position.pixels;
-    if (position.maxScrollExtent <= position.pixels
-        && position.pixels < value && footerFloat) // overscroll
-      return value - position.pixels;
-    if (value < position.minScrollExtent && position.minScrollExtent
-        < position.pixels && headerFloat) // hit top edge
-      return value - position.minScrollExtent;
-    if (position.pixels < position.maxScrollExtent
-        && position.maxScrollExtent < value && footerFloat) // hit bottom edge
-      return value - position.maxScrollExtent;
-    return 0.0;
-  }
+  double applyBoundaryConditions(ScrollMetrics position, double value) => 0.0;
 
   @override
   Simulation createBallisticSimulation(ScrollMetrics position, double velocity) {

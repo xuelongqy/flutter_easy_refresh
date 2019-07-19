@@ -40,6 +40,7 @@ abstract class Header {
       enableControlFinishRefresh: easyRefresh.enableControlFinishRefresh,
       enableInfiniteRefresh: enableInfiniteRefresh && !float,
       enableHapticFeedback: enableHapticFeedback,
+      headerFloat: float,
       bindRefreshIndicator: (finishRefresh, resetRefreshState) {
         if (easyRefresh.controller != null) {
           easyRefresh.controller.finishRefresh = finishRefresh;

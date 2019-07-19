@@ -71,7 +71,7 @@ class _ExampleState extends State<_Example> {
             controller: _controller,
             header: ClassicalHeader(
               enableInfiniteRefresh: false,
-              //float: true,
+              float: true,
             ),
             footer: ClassicalFooter(
               enableInfiniteLoad: true,

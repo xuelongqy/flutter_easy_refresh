@@ -15,6 +15,7 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
     this.loadIndicatorLayoutExtent = 0.0,
     this.hasLayoutExtent = false,
     this.enableInfiniteLoad = true,
+    this.footerFloat = false,
     @required this.infiniteLoad,
     @required this.extraExtentNotifier,
     Widget child,
@@ -34,9 +35,10 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
 
   /// 是否开启无限加载
   final bool enableInfiniteLoad;
-
   /// 无限加载回调
   final VoidCallback infiniteLoad;
+  /// Footer浮动
+  final bool footerFloat;
 
   // 列表为占满时多余长度
   final ValueNotifier<double> extraExtentNotifier;
@@ -49,6 +51,7 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
       enableInfiniteLoad: enableInfiniteLoad,
       infiniteLoad: infiniteLoad,
       extraExtentNotifier: extraExtentNotifier,
+      footerFloat: footerFloat,
     );
   }
 
@@ -57,7 +60,8 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
     renderObject
       ..loadIndicatorLayoutExtent = loadIndicatorLayoutExtent
       ..hasLayoutExtent = hasLayoutExtent
-      ..enableInfiniteLoad = enableInfiniteLoad;
+      ..enableInfiniteLoad = enableInfiniteLoad
+      ..footerFloat = footerFloat;
   }
 }
 
@@ -75,13 +79,15 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
     @required bool enableInfiniteLoad,
     @required this.infiniteLoad,
     @required this.extraExtentNotifier,
+    @required bool footerFloat,
     RenderBox child,
   }) : assert(loadIndicatorExtent != null),
         assert(loadIndicatorExtent >= 0.0),
         assert(hasLayoutExtent != null),
         _loadIndicatorExtent = loadIndicatorExtent,
         _enableInfiniteLoad = enableInfiniteLoad,
-        _hasLayoutExtent = hasLayoutExtent {
+        _hasLayoutExtent = hasLayoutExtent,
+        _footerFloat = footerFloat {
     this.child = child;
   }
 
@@ -119,6 +125,17 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
     if (value == _enableInfiniteLoad)
       return;
     _enableInfiniteLoad = value;
+    markNeedsLayout();
+  }
+
+  /// Header是否浮动
+  bool get footerFloat => _footerFloat;
+  bool _footerFloat;
+  set footerFloat(bool value) {
+    assert(value != null);
+    if (value == _footerFloat)
+      return;
+    _footerFloat = value;
     markNeedsLayout();
   }
 
@@ -384,6 +401,7 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     this.enableControlFinishLoad = false,
     this.enableInfiniteLoad = true,
     this.enableHapticFeedback = false,
+    this.footerFloat = false,
   }) : assert(loadTriggerPullDistance != null),
         assert(loadTriggerPullDistance > 0.0),
         assert(loadIndicatorExtent != null),
@@ -450,6 +468,8 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   final bool enableHapticFeedback;
   /// 滚动状态
   final ValueNotifier<bool> focusNotifier;
+  /// Footer浮动
+  final bool footerFloat;
 
   static const double _defaultLoadTriggerPullDistance = 100.0;
   static const double _defaultLoadIndicatorExtent = 60.0;
@@ -716,6 +736,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
       enableInfiniteLoad: widget.enableInfiniteLoad,
       infiniteLoad: _infiniteLoad,
       extraExtentNotifier: extraExtentNotifier,
+      footerFloat: widget.footerFloat,
       // A LayoutBuilder lets the sliver's layout changes be fed back out to
       // its owner to trigger state changes.
       child: OrientationBuilder(
