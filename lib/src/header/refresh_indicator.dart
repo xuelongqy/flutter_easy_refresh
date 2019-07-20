@@ -427,6 +427,8 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
     this.completeDuration,
     this.onRefresh,
     this.focusNotifier,
+    this.taskNotifier,
+    this.taskIndependence,
     this.bindRefreshIndicator,
     this.enableControlFinishRefresh = false,
     this.enableInfiniteRefresh = false,
@@ -498,6 +500,10 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   final bool enableHapticFeedback;
   /// 滚动状态
   final ValueNotifier<bool> focusNotifier;
+  /// 任务状态
+  final ValueNotifier<bool> taskNotifier;
+  /// 是否任务独立
+  final bool taskIndependence;
   /// Header浮动
   final bool headerFloat;
 
@@ -524,7 +530,16 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
   RefreshIndicatorMode refreshState;
   // [Future] returned by the widget's `onRefresh`.
-  Future<void> refreshTask;
+  Future<void> _refreshTask;
+  Future<void> get refreshTask => _refreshTask;
+  bool get hasTask {
+    return widget.taskIndependence ? _refreshTask != null
+        : widget.taskNotifier.value;
+  }
+  set refreshTask (Future<void> task) {
+    _refreshTask = task;
+    if (!widget.taskIndependence) widget.taskNotifier.value = task != null;
+  }
   // The amount of space available from the inner indicator box's perspective.
   //
   // The value is the sum of the sliver's layout extent and the overscroll
@@ -586,7 +601,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
   // 无限刷新
   void _infiniteRefresh() {
-    if (refreshTask == null && widget.enableInfiniteRefresh
+    if (!hasTask && widget.enableInfiniteRefresh
         && _noMore != true) {
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
@@ -710,7 +725,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         // progress to the next state in one [computeNextState] call.
         break;
       case RefreshIndicatorMode.armed:
-        if (refreshState == RefreshIndicatorMode.armed && refreshTask == null) {
+        if (refreshState == RefreshIndicatorMode.armed && !hasTask) {
           // 完成
           var state = goToFinish();
           if (state != null) return state;

@@ -27,6 +27,8 @@ class EasyRefresh extends StatefulWidget {
   final bool enableControlFinishRefresh;
   /// 是否开启控制结束加载
   final bool enableControlFinishLoad;
+  /// 任务独立(刷新和加载状态独立)
+  final bool taskIndependence;
   /// Header
   final Header header;
   /// Footer
@@ -72,6 +74,7 @@ class EasyRefresh extends StatefulWidget {
     this.onLoad,
     this.enableControlFinishRefresh = false,
     this.enableControlFinishLoad = false,
+    this.taskIndependence = false,
     this.header,
     this.footer,
     this.scrollDirection = Axis.vertical,
@@ -94,6 +97,7 @@ class EasyRefresh extends StatefulWidget {
     this.onLoad,
     this.enableControlFinishRefresh = false,
     this.enableControlFinishLoad = false,
+    this.taskIndependence = false,
     this.header,
     this.footer,
     @required this.builder,
@@ -128,14 +132,17 @@ class _EasyRefreshState extends State<EasyRefresh> {
     return widget.scrollController ?? PrimaryScrollController.of(context);
   }
 
-  // 滚动状态
+  // 滚动焦点状态
   ValueNotifier<bool> _focusNotifier;
+  // 任务状态
+  ValueNotifier<bool> _taskNotifier;
 
   // 初始化
   @override
   void initState() {
      super.initState();
      _focusNotifier = ValueNotifier<bool>(false);
+     _taskNotifier = ValueNotifier<bool>(false);
      _physics = EasyRefreshPhysics();
   }
 
@@ -143,6 +150,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
   void dispose() {
     super.dispose();
     _focusNotifier.dispose();
+    _taskNotifier.dispose();
   }
 
   // 更新依赖
@@ -179,8 +187,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
   @override
   Widget build(BuildContext context) {
     // 构建Header和Footer
-    var header = _header.builder(context, widget, _focusNotifier);
-    var footer = _footer.builder(context, widget, _focusNotifier);
+    var header = _header.builder(context, widget, _focusNotifier, _taskNotifier);
+    var footer = _footer.builder(context, widget, _focusNotifier, _taskNotifier);
     // 插入Header和Footer
     var slivers = widget.slivers;
     slivers.insert(0, header);

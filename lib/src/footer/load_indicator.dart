@@ -397,6 +397,8 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     this.completeDuration,
     this.onLoad,
     this.focusNotifier,
+    this.taskNotifier,
+    this.taskIndependence,
     this.bindLoadIndicator,
     this.enableControlFinishLoad = false,
     this.enableInfiniteLoad = true,
@@ -468,6 +470,10 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   final bool enableHapticFeedback;
   /// 滚动状态
   final ValueNotifier<bool> focusNotifier;
+  /// 任务状态
+  final ValueNotifier<bool> taskNotifier;
+  /// 是否任务独立
+  final bool taskIndependence;
   /// Footer浮动
   final bool footerFloat;
 
@@ -494,7 +500,16 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
   LoadIndicatorMode loadState;
   // [Future] returned by the widget's `onLoad`.
-  Future<void> loadTask;
+  Future<void> _loadTask;
+  Future<void> get loadTask => _loadTask;
+  bool get hasTask {
+    return widget.taskIndependence ? _loadTask != null
+        : widget.taskNotifier.value;
+  }
+  set loadTask (Future<void> task) {
+    _loadTask = task;
+    if (!widget.taskIndependence) widget.taskNotifier.value = task != null;
+  }
   // The amount of space available from the inner indicator box's perspective.
   //
   // The value is the sum of the sliver's layout extent and the overscroll
@@ -560,7 +575,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
   // 无限加载
   void _infiniteLoad() {
-    if (loadTask == null && widget.enableInfiniteLoad && _noMore != true) {
+    if (!hasTask && widget.enableInfiniteLoad && _noMore != true) {
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
@@ -682,7 +697,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         // progress to the next state in one [computeNextState] call.
         break;
       case LoadIndicatorMode.armed:
-        if (loadState == LoadIndicatorMode.armed && loadTask == null) {
+        if (loadState == LoadIndicatorMode.armed && !hasTask) {
           // 结束
           var state = goToFinish();
           if (state != null) return state;

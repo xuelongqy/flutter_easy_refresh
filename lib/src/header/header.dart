@@ -29,7 +29,7 @@ abstract class Header {
 
   // 构造器
   Widget builder(BuildContext context, EasyRefresh easyRefresh,
-      ValueNotifier<bool> focusNotifier) {
+      ValueNotifier<bool> focusNotifier, ValueNotifier<bool> taskNotifier) {
     return EasyRefreshSliverRefreshControl(
       refreshIndicatorExtent: extent,
       refreshTriggerPullDistance: triggerDistance,
@@ -37,6 +37,8 @@ abstract class Header {
       completeDuration: completeDuration,
       onRefresh: easyRefresh.onRefresh,
       focusNotifier: focusNotifier,
+      taskNotifier: taskNotifier,
+      taskIndependence: easyRefresh.taskIndependence,
       enableControlFinishRefresh: easyRefresh.enableControlFinishRefresh,
       enableInfiniteRefresh: enableInfiniteRefresh && !float,
       enableHapticFeedback: enableHapticFeedback,

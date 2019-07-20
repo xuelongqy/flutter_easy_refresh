@@ -8,7 +8,7 @@ abstract class Footer {
   final double extent;
   /// 高度(超过这个高度出发刷新)
   final double triggerDistance;
-  /// 是否浮动
+  /// 是否浮动(目前还没有找到方案，设置无效)
   final bool float;
   // 完成延时
   final Duration completeDuration;
@@ -28,7 +28,7 @@ abstract class Footer {
 
   // 构造器
   Widget builder(BuildContext context, EasyRefresh easyRefresh,
-      ValueNotifier<bool> focusNotifier) {
+      ValueNotifier<bool> focusNotifier, ValueNotifier<bool> taskNotifier) {
     return EasyRefreshSliverLoadControl(
       loadIndicatorExtent: extent,
       loadTriggerPullDistance: triggerDistance,
@@ -36,8 +36,11 @@ abstract class Footer {
       completeDuration: completeDuration,
       onLoad: easyRefresh.onLoad,
       focusNotifier: focusNotifier,
+      taskNotifier: taskNotifier,
+      taskIndependence: easyRefresh.taskIndependence,
       enableControlFinishLoad: easyRefresh.enableControlFinishLoad,
-      enableInfiniteLoad: enableInfiniteLoad && !float,
+      enableInfiniteLoad: enableInfiniteLoad,
+      //enableInfiniteLoad: enableInfiniteLoad && !float,
       enableHapticFeedback: enableHapticFeedback,
       footerFloat: float,
       bindLoadIndicator: (finishLoad, resetLoadState) {
