@@ -111,10 +111,10 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
     assert(value != null);
     if (value == _hasLayoutExtent)
       return;
-    _hasLayoutExtent = value;
-    if (headerFloat && _hasLayoutExtent) {
+    if (headerFloat && _hasLayoutExtent != null && !value) {
       Scrollable.of(context).position.jumpTo(-_refreshIndicatorExtent);
     }
+    _hasLayoutExtent = value;
     markNeedsLayout();
   }
 
