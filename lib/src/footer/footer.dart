@@ -42,11 +42,11 @@ abstract class Footer {
       enableInfiniteLoad: enableInfiniteLoad,
       //enableInfiniteLoad: enableInfiniteLoad && !float,
       enableHapticFeedback: enableHapticFeedback,
-      footerFloat: float,
+      //footerFloat: float,
       bindLoadIndicator: (finishLoad, resetLoadState) {
         if (easyRefresh.controller != null) {
-          easyRefresh.controller.finishLoad = finishLoad;
-          easyRefresh.controller.resetLoadState = resetLoadState;
+          easyRefresh.controller.finishLoadCallBack = finishLoad;
+          easyRefresh.controller.resetLoadStateCallBack = resetLoadState;
         }
       },
     );

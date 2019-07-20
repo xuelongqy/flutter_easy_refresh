@@ -45,8 +45,8 @@ abstract class Header {
       headerFloat: float,
       bindRefreshIndicator: (finishRefresh, resetRefreshState) {
         if (easyRefresh.controller != null) {
-          easyRefresh.controller.finishRefresh = finishRefresh;
-          easyRefresh.controller.resetRefreshState = resetRefreshState;
+          easyRefresh.controller.finishRefreshCallBack = finishRefresh;
+          easyRefresh.controller.resetRefreshStateCallBack = resetRefreshState;
         }
       },
     );

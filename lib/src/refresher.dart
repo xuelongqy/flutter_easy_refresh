@@ -85,7 +85,7 @@ class EasyRefresh extends StatefulWidget {
     this.center,
     this.anchor = 0.0,
     this.cacheExtent,
-    this.slivers = const <Widget>[],
+    @required this.slivers,
     this.semanticChildCount,
     this.dragStartBehavior = DragStartBehavior.start,
   }) : builder = null;
@@ -187,12 +187,15 @@ class _EasyRefreshState extends State<EasyRefresh> {
   @override
   Widget build(BuildContext context) {
     // 构建Header和Footer
-    var header = _header.builder(context, widget, _focusNotifier, _taskNotifier);
-    var footer = _footer.builder(context, widget, _focusNotifier, _taskNotifier);
-    // 插入Header和Footer
-    var slivers = widget.slivers;
-    slivers.insert(0, header);
-    slivers.add(footer);
+    var header = widget.onRefresh == null ? null
+        : _header.builder(context, widget, _focusNotifier, _taskNotifier);
+    var footer = widget.onLoad == null ? null
+        : _footer.builder(context, widget, _focusNotifier, _taskNotifier);
+    if (widget.builder == null) {
+      // 插入Header和Footer
+      if (header != null) widget.slivers.insert(0, header);
+      if (footer != null) widget.slivers.add(footer);
+    }
     return ScrollNotificationListener(
       onNotification: (notification) {
         return true;
@@ -202,7 +205,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
       },
       child: widget.builder == null ? CustomScrollView(
         physics: _physics,
-        slivers: slivers,
+        slivers: widget.slivers,
         scrollDirection: widget.scrollDirection,
         reverse: widget.reverse,
         controller: widget.scrollController,
@@ -213,7 +216,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
         cacheExtent: widget.cacheExtent,
         semanticChildCount: widget.semanticChildCount,
         dragStartBehavior: widget.dragStartBehavior,
-      ) : widget.builder(context, _physics, header, null),
+      ) : widget.builder(context, _physics, header, footer),
     );
   }
 }
@@ -221,13 +224,39 @@ class _EasyRefreshState extends State<EasyRefresh> {
 /// EasyRefresh控制器
 class EasyRefreshController {
   /// 完成刷新
-  FinishRefresh finishRefresh;
+  FinishRefresh finishRefreshCallBack;
+  void finishRefresh({
+    bool success,
+    bool noMore,
+  }) {
+    if (finishRefreshCallBack != null) {
+      finishRefreshCallBack(success: success, noMore: noMore);
+    }
+  }
   /// 完成加载
-  FinishLoad finishLoad;
+  FinishLoad finishLoadCallBack;
+  void finishLoad({
+    bool success,
+    bool noMore,
+  }) {
+    if (finishLoadCallBack != null) {
+      finishLoadCallBack(success: success, noMore: noMore);
+    }
+  }
   /// 恢复刷新状态(用于没有更多后)
-  VoidCallback resetRefreshState;
+  VoidCallback resetRefreshStateCallBack;
+  void resetRefreshState() {
+    if (resetRefreshStateCallBack != null) {
+      resetRefreshStateCallBack();
+    }
+  }
   /// 恢复加载状态(用于没有更多后)
-  VoidCallback resetLoadState;
+  VoidCallback resetLoadStateCallBack;
+  void resetLoadState() {
+    if (resetLoadStateCallBack != null) {
+      resetLoadStateCallBack();
+    }
+  }
 
   // 状态
   _EasyRefreshState _easyRefreshState;
