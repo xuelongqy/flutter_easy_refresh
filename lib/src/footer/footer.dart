@@ -8,7 +8,7 @@ abstract class Footer {
   final double extent;
   /// 高度(超过这个高度出发刷新)
   final double triggerDistance;
-  /// 是否浮动(目前还没有找到方案，设置无效)
+  @Deprecated('目前还没有找到方案,设置无效')
   final bool float;
   // 完成延时
   final Duration completeDuration;
@@ -71,13 +71,11 @@ class CustomFooter extends Footer {
   CustomFooter({
     extent = 60.0,
     triggerDistance = 70.0,
-    float = false,
     completeDuration,
     @required this.footerBuilder,
   }) : super (
     extent: extent,
     triggerDistance: triggerDistance,
-    float: float,
     completeDuration: completeDuration,
   );
 
@@ -97,14 +95,12 @@ class ClassicalFooter extends Footer {
   ClassicalFooter({
     extent = 60.0,
     triggerDistance = 70.0,
-    float = false,
     completeDuration = const Duration(seconds: 1),
     enableInfiniteLoad = false,
     enableHapticFeedback = true,
   }): super(
     extent: extent,
     triggerDistance: triggerDistance,
-    float: float,
     completeDuration: completeDuration,
     enableInfiniteLoad: enableInfiniteLoad,
     enableHapticFeedback: enableHapticFeedback,
