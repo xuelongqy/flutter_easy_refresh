@@ -437,7 +437,7 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
         assert(refreshIndicatorExtent != null),
         assert(refreshIndicatorExtent >= 0.0),
         assert(
-        refreshTriggerPullDistance >= refreshIndicatorExtent,
+        headerFloat || refreshTriggerPullDistance >= refreshIndicatorExtent,
         'The refresh indicator cannot take more space in its final state '
             'than the amount initially created by overscrolling.'
         ),
@@ -717,7 +717,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
           continue done;
         }
 
-        if (latestIndicatorBoxExtent > widget.refreshIndicatorExtent) {
+        if (latestIndicatorBoxExtent != widget.refreshIndicatorExtent) {
           return RefreshIndicatorMode.armed;
         } else {
           nextState = RefreshIndicatorMode.refresh;
