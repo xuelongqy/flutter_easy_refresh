@@ -98,10 +98,11 @@ class EasyRefresh extends StatefulWidget {
     this.enableControlFinishRefresh = false,
     this.enableControlFinishLoad = false,
     this.taskIndependence = false,
+    this.scrollController,
     this.header,
     this.footer,
     @required this.builder,
-  }) : this.scrollDirection = null, this.reverse = null, this.scrollController = null,
+  }) : this.scrollDirection = null, this.reverse = null,
         this.primary = null, this.shrinkWrap = null, this.center = null,
         this.anchor = null, this.cacheExtent = null, this.slivers = null,
         this.semanticChildCount = null, this.dragStartBehavior = null;

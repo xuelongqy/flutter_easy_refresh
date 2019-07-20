@@ -59,6 +59,9 @@ abstract class Footer {
       double pulledExtent,
       double refreshTriggerPullDistance,
       double refreshIndicatorExtent,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteLoad,
       bool success, bool noMore);
 }
 
@@ -83,9 +86,13 @@ class CustomFooter extends Footer {
   Widget contentBuilder(BuildContext context,
       LoadIndicatorMode loadState, double pulledExtent,
       double refreshTriggerPullDistance, double refreshIndicatorExtent,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteLoad,
       bool success, bool noMore) {
     return footerBuilder(context, loadState, pulledExtent,
-        refreshTriggerPullDistance, refreshIndicatorExtent, success, noMore);
+        refreshTriggerPullDistance, refreshIndicatorExtent, float,
+        completeDuration, enableInfiniteLoad, success, noMore);
   }
 }
 
@@ -109,7 +116,8 @@ class ClassicalFooter extends Footer {
   @override
   Widget contentBuilder(BuildContext context, LoadIndicatorMode loadState,
       double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent, bool success, bool noMore) {
+      double refreshIndicatorExtent, bool float, Duration completeDuration,
+      bool enableInfiniteLoad, bool success, bool noMore) {
     return Container(
       width: double.infinity,
       height: double.infinity,

@@ -315,6 +315,9 @@ typedef LoadControlIndicatorBuilder = Widget Function(
     double pulledExtent,
     double loadTriggerPullDistance,
     double loadIndicatorExtent,
+    bool float,
+    Duration completeDuration,
+    bool enableInfiniteLoad,
     bool success, bool noMore);
 
 /// A callback function that's invoked when the [EasyRefreshSliverLoadControl] is
@@ -775,6 +778,9 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
                   latestIndicatorBoxExtent,
                   widget.loadTriggerPullDistance,
                   widget.loadIndicatorExtent,
+                  widget.footerFloat,
+                  widget.completeDuration,
+                  widget.enableInfiniteLoad,
                   _success ?? true,
                   _noMore ?? false,
                 );

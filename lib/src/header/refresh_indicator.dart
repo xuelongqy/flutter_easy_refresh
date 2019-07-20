@@ -345,6 +345,9 @@ typedef RefreshControlIndicatorBuilder = Widget Function(
     double pulledExtent,
     double refreshTriggerPullDistance,
     double refreshIndicatorExtent,
+    bool float,
+    Duration completeDuration,
+    bool enableInfiniteRefresh,
     bool success, bool noMore);
 
 /// A callback function that's invoked when the [EasyRefreshSliverRefreshControl] is
@@ -795,6 +798,9 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
                   latestIndicatorBoxExtent,
                   widget.refreshTriggerPullDistance,
                   widget.refreshIndicatorExtent,
+                  widget.headerFloat,
+                  widget.completeDuration,
+                  widget.enableInfiniteRefresh,
                   _success ?? true,
                   _noMore ?? false,
                 );

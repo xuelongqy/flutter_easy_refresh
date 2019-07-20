@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../easy_refresh.dart';
@@ -59,6 +60,9 @@ abstract class Header {
       double pulledExtent,
       double refreshTriggerPullDistance,
       double refreshIndicatorExtent,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteRefresh,
       bool success, bool noMore);
 }
 
@@ -85,9 +89,11 @@ class CustomHeader extends Header {
   Widget contentBuilder(BuildContext context,
       RefreshIndicatorMode refreshState, double pulledExtent,
       double refreshTriggerPullDistance, double refreshIndicatorExtent,
+      bool float, Duration completeDuration, bool enableInfiniteRefresh,
       bool success, bool noMore) {
     return headerBuilder(context, refreshState, pulledExtent,
-      refreshTriggerPullDistance, refreshIndicatorExtent, success, noMore);
+      refreshTriggerPullDistance, refreshIndicatorExtent, float,
+        completeDuration, enableInfiniteRefresh, success, noMore);
   }
 }
 
@@ -113,11 +119,122 @@ class ClassicalHeader extends Header{
   @override
   Widget contentBuilder(BuildContext context, RefreshIndicatorMode refreshState,
       double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent, bool success, bool noMore) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Color(0xFF000000),
+      double refreshIndicatorExtent, bool float,
+      Duration completeDuration,
+      bool enableInfiniteRefresh, bool success, bool noMore) {
+    return ClassicalHeaderWidget(
+      classicalHeader: this,
+      refreshState: refreshState,
+      pulledExtent: pulledExtent,
+      refreshTriggerPullDistance: refreshTriggerPullDistance,
+      refreshIndicatorExtent: refreshIndicatorExtent,
+      float: float,
+      completeDuration: completeDuration,
+      enableInfiniteRefresh: enableInfiniteRefresh,
+      success: success,
+      noMore: noMore,
+    );
+  }
+}
+
+/// 经典Header组件
+class ClassicalHeaderWidget extends StatefulWidget {
+  final ClassicalHeader classicalHeader;
+  final RefreshIndicatorMode refreshState;
+  final double pulledExtent;
+  final double refreshTriggerPullDistance;
+  final double refreshIndicatorExtent;
+  final bool float;
+  final Duration completeDuration;
+  final bool enableInfiniteRefresh;
+  final bool success;
+  final bool noMore;
+
+  const ClassicalHeaderWidget({Key key,
+    this.refreshState, this.classicalHeader,
+    this.pulledExtent, this.refreshTriggerPullDistance,
+    this.refreshIndicatorExtent, this.float,
+    this.completeDuration, this.enableInfiniteRefresh,
+    this.success, this.noMore}) : super(key: key);
+
+  @override
+  ClassicalHeaderWidgetState createState() => ClassicalHeaderWidgetState();
+}
+class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget> {
+  // 显示文字
+  String get _showText {
+    switch (widget.refreshState) {
+      case RefreshIndicatorMode.refresh:
+        return '正在刷新...';
+      case RefreshIndicatorMode.refreshed:
+        return '刷新完成';
+      case RefreshIndicatorMode.done:
+        return '刷新完成';
+      default:
+        return '下拉刷新';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Positioned(
+          bottom: 0.0,
+          left: 0.0,
+          right: 0.0,
+          child: Container(
+            width: double.infinity,
+            height: widget.refreshIndicatorExtent > widget.pulledExtent
+                ? widget.refreshIndicatorExtent : widget.pulledExtent,
+            child: Container(
+              height: widget.refreshIndicatorExtent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 10.0,),
+                      child: widget.refreshState == RefreshIndicatorMode.refresh
+                          ? Container(
+                        width: 20.0,
+                        height: 20.0,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.0,
+                          valueColor: AlwaysStoppedAnimation(Colors.black,),
+                        ),
+                      ) : Transform.rotate(
+                        child: Icon(
+                          widget.refreshState == RefreshIndicatorMode.refreshed
+                              ||  widget.refreshState == RefreshIndicatorMode.done
+                              ? Icons.done : Icons.arrow_downward,
+                        ),
+                        angle: 0.0,
+                      ),
+                    )
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: Text(_showText,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
