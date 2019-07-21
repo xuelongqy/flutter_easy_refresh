@@ -100,6 +100,9 @@ class CustomHeader extends Header {
 /// 经典Header
 class ClassicalHeader extends Header{
 
+  // 方位
+  final AlignmentGeometry alignment;
+
   ClassicalHeader({
     extent = 60.0,
     triggerDistance = 70.0,
@@ -107,6 +110,7 @@ class ClassicalHeader extends Header{
     completeDuration = const Duration(seconds: 1),
     enableInfiniteRefresh = false,
     enableHapticFeedback = true,
+    this.alignment = Alignment.bottomCenter,
   }): super(
     extent: extent,
     triggerDistance: triggerDistance,
@@ -184,10 +188,11 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget> {
           left: 0.0,
           right: 0.0,
           child: Container(
+            alignment: widget.classicalHeader.alignment,
             width: double.infinity,
             height: widget.refreshIndicatorExtent > widget.pulledExtent
                 ? widget.refreshIndicatorExtent : widget.pulledExtent,
-            child: Container(
+            child: SizedBox(
               height: widget.refreshIndicatorExtent,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
