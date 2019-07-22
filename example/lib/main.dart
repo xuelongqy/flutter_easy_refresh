@@ -50,7 +50,7 @@ class _ExampleState extends State<_Example> {
   EasyRefreshController _controller;
 
   // 条目总数
-  int _count = 20;
+  int _count = 10;
 
   @override
   void initState() {
@@ -102,10 +102,7 @@ class _ExampleState extends State<_Example> {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    return SampleListItem(
-                      text: '$index',
-                      bgColor: index%2==0 ? Colors.grey[300] : Colors.transparent,
-                    );
+                    return SampleListItem();
                   },
                   childCount: _count,
                 ),
