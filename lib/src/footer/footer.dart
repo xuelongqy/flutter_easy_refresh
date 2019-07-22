@@ -132,7 +132,7 @@ class ClassicalFooter extends Footer{
     triggerDistance = 70.0,
     float = false,
     completeDuration = const Duration(seconds: 1),
-    enableInfiniteLoad = false,
+    enableInfiniteLoad = true,
     enableHapticFeedback = true,
     this.alignment = Alignment.topCenter,
     this.loadText: "Push to load",
