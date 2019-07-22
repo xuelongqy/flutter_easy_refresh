@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -99,9 +102,31 @@ class CustomHeader extends Header {
 
 /// 经典Header
 class ClassicalHeader extends Header{
-
   // 方位
   final AlignmentGeometry alignment;
+
+  /// 提示刷新文字
+  final String refreshText;
+  /// 准备刷新文字
+  final String refreshReadyText;
+  /// 正在刷新文字
+  final String refreshingText;
+  /// 刷新完成文字
+  final String refreshedText;
+  /// 刷新失败文字
+  final String refreshFailedText;
+  /// 没有更多文字
+  final String noMoreText;
+  /// 显示额外信息(默认为时间)
+  final bool showInfo;
+  /// 更多信息
+  final String infoText;
+  /// 背景颜色
+  final Color bgColor;
+  /// 字体颜色
+  final Color textColor;
+  /// 更多信息文字颜色
+  final Color infoColor;
 
   ClassicalHeader({
     extent = 60.0,
@@ -111,11 +136,24 @@ class ClassicalHeader extends Header{
     enableInfiniteRefresh = false,
     enableHapticFeedback = true,
     this.alignment = Alignment.bottomCenter,
+    this.refreshText: "Pull to refresh",
+    this.refreshReadyText: "Release to refresh",
+    this.refreshingText: "Refreshing...",
+    this.refreshedText: "Refresh completed",
+    this.refreshFailedText: "Refresh failed",
+    this.noMoreText: "No more",
+    this.showInfo: true,
+    this.infoText: "Updated at %T",
+    this.bgColor: Colors.transparent,
+    this.textColor: Colors.black,
+    this.infoColor: Colors.teal,
   }): super(
     extent: extent,
     triggerDistance: triggerDistance,
     float: float,
-    completeDuration: completeDuration,
+    completeDuration: float ? completeDuration == null
+        ? Duration(milliseconds: 400,)
+        : completeDuration + Duration(milliseconds: 400,) : completeDuration,
     enableInfiniteRefresh: enableInfiniteRefresh,
     enableHapticFeedback: enableHapticFeedback,
   );
@@ -140,7 +178,6 @@ class ClassicalHeader extends Header{
     );
   }
 }
-
 /// 经典Header组件
 class ClassicalHeaderWidget extends StatefulWidget {
   final ClassicalHeader classicalHeader;
@@ -164,74 +201,255 @@ class ClassicalHeaderWidget extends StatefulWidget {
   @override
   ClassicalHeaderWidgetState createState() => ClassicalHeaderWidgetState();
 }
-class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget> {
+class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
+    with TickerProviderStateMixin<ClassicalHeaderWidget> {
+  // 是否到达触发刷新距离
+  bool _overTriggerDistance = false;
+  bool get overTriggerDistance => _overTriggerDistance;
+  set overTriggerDistance(bool over) {
+    if (_overTriggerDistance != over) {
+      _overTriggerDistance ? _readyController.forward()
+          : _restoreController.forward();
+      _overTriggerDistance = over;
+    }
+  }
+
+  // 是否刷新完成
+  bool _refreshFinish = false;
+  set refreshFinish(bool finish) {
+    if (_refreshFinish != finish) {
+      if (finish && widget.float) {
+        Future.delayed(widget.completeDuration
+            - Duration(milliseconds: 400), () {
+          if (mounted) {
+            _floatBackController.forward();
+          }
+        });
+        Future.delayed(widget.completeDuration, () {
+          _floatBackDistance = null;
+          _refreshFinish = false;
+        });
+      }
+      _refreshFinish = finish;
+    }
+  }
+
+  // 动画
+  AnimationController _readyController;
+  Animation<double> _readyAnimation;
+  AnimationController _restoreController;
+  Animation<double> _restoreAnimation;
+  AnimationController _floatBackController;
+  Animation<double> _floatBackAnimation;
+
+  // Icon旋转度
+  double _iconRotationValue = 1.0;
+
+  // 浮动时,收起距离
+  double _floatBackDistance;
+
   // 显示文字
   String get _showText {
+    if (widget.noMore) return widget.classicalHeader.noMoreText;
+    if (widget.enableInfiniteRefresh) {
+      if (widget.refreshState == RefreshIndicatorMode.refreshed) {
+        return widget.classicalHeader.refreshedText;
+      } else {
+        return widget.classicalHeader.refreshingText;
+      }
+    }
     switch (widget.refreshState) {
       case RefreshIndicatorMode.refresh:
-        return '正在刷新...';
+        return widget.classicalHeader.refreshingText;
+      case RefreshIndicatorMode.armed:
+        return widget.classicalHeader.refreshingText;
       case RefreshIndicatorMode.refreshed:
-        return '刷新完成';
+        return _finishedText;
       case RefreshIndicatorMode.done:
-        return '刷新完成';
+        return _finishedText;
       default:
-        return '下拉刷新';
+        if (overTriggerDistance) {
+          return widget.classicalHeader.refreshReadyText;
+        } else {
+          return widget.classicalHeader.refreshText;
+        }
     }
+  }
+  // 刷新结束文字
+  String get _finishedText {
+    if (!widget.success) return widget.classicalHeader.refreshFailedText;
+    if (widget.noMore) return widget.classicalHeader.noMoreText;
+    return widget.classicalHeader.refreshedText;
+  }
+  // 刷新结束图标
+  IconData get _finishedIcon {
+    if (!widget.success) return Icons.error_outline;
+    if (widget.noMore) return Icons.search;
+    return Icons.done;
+  }
+
+  // 更新时间
+  DateTime _dateTime;
+  // 获取更多信息
+  String get _infoText {
+    if (widget.refreshState == RefreshIndicatorMode.refreshed) {
+      _dateTime = DateTime.now();
+    }
+    String fillChar = _dateTime.minute < 10 ? "0" : "";
+    return widget.classicalHeader.infoText
+        .replaceAll("%T", "${_dateTime.hour}:$fillChar${_dateTime.minute}");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // 初始化时间
+    _dateTime = DateTime.now();
+    // 准备动画
+    _readyController = new AnimationController(
+        duration: const Duration(milliseconds: 200), vsync: this);
+    _readyAnimation = new Tween(begin: 0.5, end: 1.0).animate(_readyController)
+      ..addListener(() {
+        setState(() {
+          if (_readyAnimation.status != AnimationStatus.dismissed) {
+            _iconRotationValue = _readyAnimation.value;
+          }
+        });
+      });
+    _readyAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _readyController.reset();
+      }
+    });
+    // 恢复动画
+    _restoreController = new AnimationController(
+        duration: const Duration(milliseconds: 200), vsync: this);
+    _restoreAnimation =
+    new Tween(begin: 1.0, end: 0.5).animate(_restoreController)
+      ..addListener(() {
+        setState(() {
+          if (_restoreAnimation.status != AnimationStatus.dismissed) {
+            _iconRotationValue = _restoreAnimation.value;
+          }
+        });
+      });
+    _restoreAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _restoreController.reset();
+      }
+    });
+    // float收起动画
+    _floatBackController = new AnimationController(
+        duration: const Duration(milliseconds: 300), vsync: this);
+    _floatBackAnimation =
+    new Tween(begin: widget.refreshIndicatorExtent, end: 0.0)
+        .animate(_floatBackController)
+      ..addListener(() {
+        setState(() {
+          if (_floatBackAnimation.status != AnimationStatus.dismissed) {
+            _floatBackDistance = _floatBackAnimation.value;
+          }
+        });
+      });
+    _floatBackAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _floatBackController.reset();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _readyController.dispose();
+    _restoreController.dispose();
+    _floatBackController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // 是否到达触发刷新距离
+    overTriggerDistance = widget.refreshState != RefreshIndicatorMode.inactive
+        && widget.pulledExtent >= widget.refreshTriggerPullDistance;
+    if (widget.refreshState == RefreshIndicatorMode.refreshed) {
+      refreshFinish = true;
+    }
     return Stack(
       children: <Widget>[
         Positioned(
-          bottom: 0.0,
+          bottom: _floatBackDistance == null ? 0.0
+              : (widget.refreshIndicatorExtent - _floatBackDistance),
           left: 0.0,
           right: 0.0,
           child: Container(
             alignment: widget.classicalHeader.alignment,
             width: double.infinity,
-            height: widget.refreshIndicatorExtent > widget.pulledExtent
-                ? widget.refreshIndicatorExtent : widget.pulledExtent,
+            color: widget.classicalHeader.bgColor,
+            height: _floatBackDistance == null ? (widget.refreshIndicatorExtent
+                > widget.pulledExtent
+                ? widget.refreshIndicatorExtent : widget.pulledExtent)
+                : widget.refreshIndicatorExtent,
             child: SizedBox(
               height: widget.refreshIndicatorExtent,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Container(
                       alignment: Alignment.centerRight,
                       padding: EdgeInsets.only(right: 10.0,),
                       child: widget.refreshState == RefreshIndicatorMode.refresh
+                          || widget.refreshState == RefreshIndicatorMode.armed
                           ? Container(
                         width: 20.0,
                         height: 20.0,
                         child: CircularProgressIndicator(
                           strokeWidth: 2.0,
-                          valueColor: AlwaysStoppedAnimation(Colors.black,),
+                          valueColor: AlwaysStoppedAnimation(
+                            widget.classicalHeader.textColor,),
                         ),
-                      ) : Transform.rotate(
-                        child: Icon(
-                          widget.refreshState == RefreshIndicatorMode.refreshed
-                              ||  widget.refreshState == RefreshIndicatorMode.done
-                              ? Icons.done : Icons.arrow_downward,
-                        ),
-                        angle: 0.0,
+                      ) : widget.refreshState == RefreshIndicatorMode.refreshed
+                          ||  widget.refreshState == RefreshIndicatorMode.done
+                          || (widget.enableInfiniteRefresh &&
+                              widget.refreshState
+                                  != RefreshIndicatorMode.refreshed)
+                          || widget.noMore ?
+                      Icon(_finishedIcon,
+                        color: widget.classicalHeader.textColor,)
+                          : Transform.rotate(
+                        child: Icon( Icons.arrow_downward,
+                          color: widget.classicalHeader.textColor,),
+                        angle: 2 * pi * _iconRotationValue,
                       ),
                     )
                   ),
                   Expanded(
-                    flex: 1,
-                    child: Center(
-                      child: Text(_showText,
-                        style: TextStyle(
-                          fontSize: 16.0,
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(_showText,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: widget.classicalHeader.textColor,
+                          ),
                         ),
-                      ),
+                        widget.classicalHeader.showInfo ? Container(
+                          margin: EdgeInsets.only(top: 2.0,),
+                          child: Text(_infoText,
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              color: widget.classicalHeader.infoColor,
+                            ),
+                          ),
+                        ): Container(),
+                      ],
                     ),
                   ),
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: SizedBox(),
                   ),
                 ],

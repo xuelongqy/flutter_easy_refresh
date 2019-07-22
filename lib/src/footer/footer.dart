@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../easy_refresh.dart';
@@ -6,7 +9,7 @@ import '../../easy_refresh.dart';
 abstract class Footer {
   /// Footer容器高度
   final double extent;
-  /// 高度(超过这个高度出发刷新)
+  /// 高度(超过这个高度触发加载)
   final double triggerDistance;
   @Deprecated('目前还没有找到方案,设置无效')
   final bool float;
@@ -55,10 +58,10 @@ abstract class Footer {
   // Header构造器
   Widget contentBuilder(
       BuildContext context,
-      LoadIndicatorMode refreshState,
+      LoadIndicatorMode loadState,
       double pulledExtent,
-      double refreshTriggerPullDistance,
-      double refreshIndicatorExtent,
+      double loadTriggerPullDistance,
+      double loadIndicatorExtent,
       bool float,
       Duration completeDuration,
       bool enableInfiniteLoad,
@@ -85,29 +88,68 @@ class CustomFooter extends Footer {
   @override
   Widget contentBuilder(BuildContext context,
       LoadIndicatorMode loadState, double pulledExtent,
-      double refreshTriggerPullDistance, double refreshIndicatorExtent,
+      double loadTriggerPullDistance, double loadIndicatorExtent,
       bool float,
       Duration completeDuration,
       bool enableInfiniteLoad,
       bool success, bool noMore) {
     return footerBuilder(context, loadState, pulledExtent,
-        refreshTriggerPullDistance, refreshIndicatorExtent, float,
+        loadTriggerPullDistance, loadIndicatorExtent, float,
         completeDuration, enableInfiniteLoad, success, noMore);
   }
 }
 
 /// 经典Footer
-class ClassicalFooter extends Footer {
+class ClassicalFooter extends Footer{
+  // 方位
+  final AlignmentGeometry alignment;
+
+  /// 提示加载文字
+  final String loadText;
+  /// 准备加载文字
+  final String loadReadyText;
+  /// 正在加载文字
+  final String loadingText;
+  /// 加载完成文字
+  final String loadedText;
+  /// 加载失败文字
+  final String loadFailedText;
+  /// 没有更多文字
+  final String noMoreText;
+  /// 显示额外信息(默认为时间)
+  final bool showInfo;
+  /// 更多信息
+  final String infoText;
+  /// 背景颜色
+  final Color bgColor;
+  /// 字体颜色
+  final Color textColor;
+  /// 更多信息文字颜色
+  final Color infoColor;
 
   ClassicalFooter({
     extent = 60.0,
     triggerDistance = 70.0,
+    float = false,
     completeDuration = const Duration(seconds: 1),
     enableInfiniteLoad = false,
     enableHapticFeedback = true,
+    this.alignment = Alignment.topCenter,
+    this.loadText: "Push to load",
+    this.loadReadyText: "Release to load",
+    this.loadingText: "Loading...",
+    this.loadedText: "Load completed",
+    this.loadFailedText: "Load failed",
+    this.noMoreText: "No more",
+    this.showInfo: true,
+    this.infoText: "Updated at %T",
+    this.bgColor: Colors.transparent,
+    this.textColor: Colors.black,
+    this.infoColor: Colors.teal,
   }): super(
     extent: extent,
     triggerDistance: triggerDistance,
+    float: float,
     completeDuration: completeDuration,
     enableInfiniteLoad: enableInfiniteLoad,
     enableHapticFeedback: enableHapticFeedback,
@@ -115,13 +157,252 @@ class ClassicalFooter extends Footer {
 
   @override
   Widget contentBuilder(BuildContext context, LoadIndicatorMode loadState,
-      double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent, bool float, Duration completeDuration,
+      double pulledExtent, double loadTriggerPullDistance,
+      double loadIndicatorExtent, bool float, Duration completeDuration,
       bool enableInfiniteLoad, bool success, bool noMore) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Color(0xFF000000),
+    return ClassicalFooterWidget(
+      classicalFooter: this,
+      loadState: loadState,
+      pulledExtent: pulledExtent,
+      loadTriggerPullDistance: loadTriggerPullDistance,
+      loadIndicatorExtent: loadIndicatorExtent,
+      float: float,
+      completeDuration: completeDuration,
+      enableInfiniteLoad: enableInfiniteLoad,
+      success: success,
+      noMore: noMore,
+    );
+  }
+}
+/// 经典Footer组件
+class ClassicalFooterWidget extends StatefulWidget {
+  final ClassicalFooter classicalFooter;
+  final LoadIndicatorMode loadState;
+  final double pulledExtent;
+  final double loadTriggerPullDistance;
+  final double loadIndicatorExtent;
+  final bool float;
+  final Duration completeDuration;
+  final bool enableInfiniteLoad;
+  final bool success;
+  final bool noMore;
+
+  const ClassicalFooterWidget({Key key,
+    this.loadState, this.classicalFooter,
+    this.pulledExtent, this.loadTriggerPullDistance,
+    this.loadIndicatorExtent, this.float,
+    this.completeDuration, this.enableInfiniteLoad,
+    this.success, this.noMore}) : super(key: key);
+
+  @override
+  ClassicalFooterWidgetState createState() => ClassicalFooterWidgetState();
+}
+class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
+    with TickerProviderStateMixin<ClassicalFooterWidget> {
+  // 是否到达触发加载距离
+  bool _overTriggerDistance = false;
+  bool get overTriggerDistance => _overTriggerDistance;
+  set overTriggerDistance(bool over) {
+    if (_overTriggerDistance != over) {
+      _overTriggerDistance ? _readyController.forward()
+          : _restoreController.forward();
+    }
+    _overTriggerDistance = over;
+  }
+
+  // 动画
+  AnimationController _readyController;
+  Animation<double> _readyAnimation;
+  AnimationController _restoreController;
+  Animation<double> _restoreAnimation;
+
+  // Icon旋转度
+  double _iconRotationValue = 1.0;
+
+  // 显示文字
+  String get _showText {
+    if (widget.noMore) return widget.classicalFooter.noMoreText;
+    if (widget.enableInfiniteLoad) {
+      if (widget.loadState == LoadIndicatorMode.loaded) {
+        return widget.classicalFooter.loadedText;
+      } else {
+        return widget.classicalFooter.loadingText;
+      }
+    }
+    switch (widget.loadState) {
+      case LoadIndicatorMode.load:
+        return widget.classicalFooter.loadingText;
+      case LoadIndicatorMode.armed:
+        return widget.classicalFooter.loadingText;
+      case LoadIndicatorMode.loaded:
+        return _finishedText;
+      case LoadIndicatorMode.done:
+        return _finishedText;
+      default:
+        if (overTriggerDistance) {
+          return widget.classicalFooter.loadReadyText;
+        } else {
+          return widget.classicalFooter.loadText;
+        }
+    }
+  }
+  // 加载结束文字
+  String get _finishedText {
+    if (!widget.success) return widget.classicalFooter.loadFailedText;
+    if (widget.noMore) return widget.classicalFooter.noMoreText;
+    return widget.classicalFooter.loadedText;
+  }
+  // 加载结束图标
+  IconData get _finishedIcon {
+    if (!widget.success) return Icons.error_outline;
+    if (widget.noMore) return Icons.search;
+    return Icons.done;
+  }
+
+  // 更新时间
+  DateTime _dateTime;
+  // 获取更多信息
+  String get _infoText {
+    if (widget.loadState == LoadIndicatorMode.loaded) {
+      _dateTime = DateTime.now();
+    }
+    String fillChar = _dateTime.minute < 10 ? "0" : "";
+    return widget.classicalFooter.infoText
+        .replaceAll("%T", "${_dateTime.hour}:$fillChar${_dateTime.minute}");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // 初始化时间
+    _dateTime = DateTime.now();
+    // 初始化动画
+    _readyController = new AnimationController(
+        duration: const Duration(milliseconds: 200), vsync: this);
+    _readyAnimation = new Tween(begin: 0.5, end: 1.0).animate(_readyController)
+      ..addListener(() {
+        setState(() {
+          if (_readyAnimation.status != AnimationStatus.dismissed) {
+            _iconRotationValue = _readyAnimation.value;
+          }
+        });
+      });
+    _readyAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _readyController.reset();
+      }
+    });
+    _restoreController = new AnimationController(
+        duration: const Duration(milliseconds: 200), vsync: this);
+    _restoreAnimation =
+    new Tween(begin: 1.0, end: 0.5).animate(_restoreController)
+      ..addListener(() {
+        setState(() {
+          if (_restoreAnimation.status != AnimationStatus.dismissed) {
+            _iconRotationValue = _restoreAnimation.value;
+          }
+        });
+      });
+    _restoreAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _restoreController.reset();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _readyController.dispose();
+    _restoreController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 是否到达触发加载距离
+    overTriggerDistance = widget.loadState != LoadIndicatorMode.inactive
+        && widget.pulledExtent >= widget.loadTriggerPullDistance;
+    return Stack(
+      children: <Widget>[
+        Positioned(
+          top: 0.0,
+          left: 0.0,
+          right: 0.0,
+          child: Container(
+            alignment: widget.classicalFooter.alignment,
+            width: double.infinity,
+            color: widget.classicalFooter.bgColor,
+            height: widget.loadIndicatorExtent > widget.pulledExtent
+                ? widget.loadIndicatorExtent : widget.pulledExtent,
+            child: SizedBox(
+              height: widget.loadIndicatorExtent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                      flex: 2,
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(right: 10.0,),
+                        child: widget.loadState == LoadIndicatorMode.load
+                            || widget.loadState == LoadIndicatorMode.armed
+                            ? Container(
+                          width: 20.0,
+                          height: 20.0,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.0,
+                            valueColor: AlwaysStoppedAnimation(
+                              widget.classicalFooter.textColor,),
+                          ),
+                        ) : widget.loadState == LoadIndicatorMode.loaded
+                            ||  widget.loadState == LoadIndicatorMode.done
+                            || (widget.enableInfiniteLoad &&
+                                widget.loadState
+                                    != LoadIndicatorMode.loaded)
+                            || widget.noMore ?
+                        Icon(_finishedIcon,
+                          color: widget.classicalFooter.textColor,)
+                            : Transform.rotate(
+                          child: Icon( Icons.arrow_upward,
+                            color: widget.classicalFooter.textColor,),
+                          angle: 2 * pi * _iconRotationValue,
+                        ),
+                      )
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(_showText,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: widget.classicalFooter.textColor,
+                          ),
+                        ),
+                        widget.classicalFooter.showInfo ? Container(
+                          margin: EdgeInsets.only(top: 2.0,),
+                          child: Text(_infoText,
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              color: widget.classicalFooter.infoColor,
+                            ),
+                          ),
+                        ): Container(),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: SizedBox(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

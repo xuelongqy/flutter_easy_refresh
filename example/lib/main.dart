@@ -66,11 +66,12 @@ class _ExampleState extends State<_Example> {
       ),
       body: Center(
           child: EasyRefresh.custom(
-            //enableControlFinishRefresh: true,
+            enableControlFinishRefresh: false,
             enableControlFinishLoad: true,
             controller: _controller,
             header: ClassicalHeader(
               enableInfiniteRefresh: false,
+              //bgColor: Theme.of(context).primaryColor,
               //float: true,
             ),
             footer: ClassicalFooter(

@@ -584,7 +584,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
     bool noMore,
   }) {
     _success = success;
-    _noMore = noMore;
+    _noMore = _success == false ? false : noMore;
     if (widget.enableControlFinishRefresh && refreshTask != null) {
       if (widget.enableInfiniteRefresh) {
         refreshState = RefreshIndicatorMode.refreshed;
