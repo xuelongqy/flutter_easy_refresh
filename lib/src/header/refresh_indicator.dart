@@ -16,6 +16,7 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
     this.hasLayoutExtent = false,
     this.enableInfiniteRefresh = false,
     this.headerFloat = false,
+    this.axisDirectionNotifier,
     @required this.infiniteRefresh,
     Widget child,
   }) : assert(refreshIndicatorLayoutExtent != null),
@@ -38,6 +39,8 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
   final VoidCallback infiniteRefresh;
   /// Header浮动
   final bool headerFloat;
+  /// 列表方向
+  final ValueNotifier<AxisDirection> axisDirectionNotifier;
 
   @override
   _RenderEasyRefreshSliverRefresh createRenderObject(BuildContext context) {
@@ -47,7 +50,7 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
       enableInfiniteRefresh: enableInfiniteRefresh,
       infiniteRefresh: infiniteRefresh,
       headerFloat: headerFloat,
-      context: context,
+      axisDirectionNotifier: axisDirectionNotifier,
     );
   }
 
@@ -57,8 +60,7 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
       ..refreshIndicatorLayoutExtent = refreshIndicatorLayoutExtent
       ..hasLayoutExtent = hasLayoutExtent
       ..enableInfiniteRefresh = enableInfiniteRefresh
-      ..headerFloat = headerFloat
-      ..context = context;
+      ..headerFloat = headerFloat;
   }
 }
 
@@ -76,7 +78,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
     @required bool enableInfiniteRefresh,
     @required this.infiniteRefresh,
     @required bool headerFloat,
-    @required BuildContext context,
+    @required this.axisDirectionNotifier,
     RenderBox child,
   }) : assert(refreshIndicatorExtent != null),
         assert(refreshIndicatorExtent >= 0.0),
@@ -84,8 +86,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
         _refreshIndicatorExtent = refreshIndicatorExtent,
         _enableInfiniteRefresh = enableInfiniteRefresh,
         _hasLayoutExtent = hasLayoutExtent,
-        _headerFloat = headerFloat,
-        context = context {
+        _headerFloat = headerFloat {
     this.child = child;
   }
 
@@ -101,6 +102,9 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
     _refreshIndicatorExtent = value;
     markNeedsLayout();
   }
+
+  /// 列表方向
+  final ValueNotifier<AxisDirection> axisDirectionNotifier;
 
   // The child box will be laid out and painted in the available space either
   // way but this determines whether to also occupy any
@@ -139,8 +143,6 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
 
   /// 无限加载回调
   final VoidCallback infiniteRefresh;
-  /// 上下文
-  BuildContext context;
   // 触发无限刷新
   bool _triggerInfiniteRefresh = false;
   // 获取子组件大小
@@ -182,6 +184,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
     // Only pulling to refresh from the top is currently supported.
     // 注释以支持reverse
     // assert(constraints.axisDirection == AxisDirection.down);
+    axisDirectionNotifier.value = constraints.axisDirection;
     assert(constraints.growthDirection == GrowthDirection.forward);
 
     // 判断是否触发无限刷新
@@ -345,6 +348,7 @@ typedef RefreshControlIndicatorBuilder = Widget Function(
     double pulledExtent,
     double refreshTriggerPullDistance,
     double refreshIndicatorExtent,
+    AxisDirection axisDirection,
     bool float,
     Duration completeDuration,
     bool enableInfiniteRefresh,
@@ -561,11 +565,15 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   // 没有更多数据
   bool _noMore;
 
+  // 列表方向
+  ValueNotifier<AxisDirection> _axisDirectionNotifier;
+
   // 初始化
   @override
   void initState() {
     super.initState();
     refreshState = RefreshIndicatorMode.inactive;
+    _axisDirectionNotifier = ValueNotifier<AxisDirection>(AxisDirection.down);
     // 绑定刷新指示器
     if (widget.bindRefreshIndicator != null) {
       widget.bindRefreshIndicator(finishRefresh, resetRefreshState);
@@ -782,32 +790,33 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
       enableInfiniteRefresh: widget.enableInfiniteRefresh,
       infiniteRefresh: _infiniteRefresh,
       headerFloat: widget.headerFloat,
+      axisDirectionNotifier: _axisDirectionNotifier,
       // A LayoutBuilder lets the sliver's layout changes be fed back out to
       // its owner to trigger state changes.
-      child: OrientationBuilder(
-        builder: (context, orientation) {
-          return LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              latestIndicatorBoxExtent = orientation == Orientation.landscape
-                  ? constraints.maxHeight : constraints.maxWidth;
-              refreshState = transitionNextState();
-              if (widget.builder != null && latestIndicatorBoxExtent > 0) {
-                return widget.builder(
-                  context,
-                  refreshState,
-                  latestIndicatorBoxExtent,
-                  widget.refreshTriggerPullDistance,
-                  widget.refreshIndicatorExtent,
-                  widget.headerFloat,
-                  widget.completeDuration,
-                  widget.enableInfiniteRefresh,
-                  _success ?? true,
-                  _noMore ?? false,
-                );
-              }
-              return Container();
-            },
-          );
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          // 是否为垂直方向
+          bool isVertical = _axisDirectionNotifier.value == AxisDirection.down
+              || _axisDirectionNotifier.value == AxisDirection.up;
+          latestIndicatorBoxExtent = isVertical
+              ? constraints.maxHeight : constraints.maxWidth;
+          refreshState = transitionNextState();
+          if (widget.builder != null && latestIndicatorBoxExtent > 0) {
+            return widget.builder(
+              context,
+              refreshState,
+              latestIndicatorBoxExtent,
+              widget.refreshTriggerPullDistance,
+              widget.refreshIndicatorExtent,
+              _axisDirectionNotifier.value,
+              widget.headerFloat,
+              widget.completeDuration,
+              widget.enableInfiniteRefresh,
+              _success ?? true,
+              _noMore ?? false,
+            );
+          }
+          return Container();
         },
       ),
     );

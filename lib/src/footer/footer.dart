@@ -62,6 +62,7 @@ abstract class Footer {
       double pulledExtent,
       double loadTriggerPullDistance,
       double loadIndicatorExtent,
+      AxisDirection axisDirection,
       bool float,
       Duration completeDuration,
       bool enableInfiniteLoad,
@@ -89,12 +90,10 @@ class CustomFooter extends Footer {
   Widget contentBuilder(BuildContext context,
       LoadIndicatorMode loadState, double pulledExtent,
       double loadTriggerPullDistance, double loadIndicatorExtent,
-      bool float,
-      Duration completeDuration,
-      bool enableInfiniteLoad,
-      bool success, bool noMore) {
+      AxisDirection axisDirection, bool float, Duration completeDuration,
+      bool enableInfiniteLoad, bool success, bool noMore) {
     return footerBuilder(context, loadState, pulledExtent,
-        loadTriggerPullDistance, loadIndicatorExtent, float,
+        loadTriggerPullDistance, loadIndicatorExtent, axisDirection, float,
         completeDuration, enableInfiniteLoad, success, noMore);
   }
 }
@@ -158,7 +157,8 @@ class ClassicalFooter extends Footer{
   @override
   Widget contentBuilder(BuildContext context, LoadIndicatorMode loadState,
       double pulledExtent, double loadTriggerPullDistance,
-      double loadIndicatorExtent, bool float, Duration completeDuration,
+      double loadIndicatorExtent, AxisDirection axisDirection,
+      bool float, Duration completeDuration,
       bool enableInfiniteLoad, bool success, bool noMore) {
     return ClassicalFooterWidget(
       classicalFooter: this,
@@ -166,6 +166,7 @@ class ClassicalFooter extends Footer{
       pulledExtent: pulledExtent,
       loadTriggerPullDistance: loadTriggerPullDistance,
       loadIndicatorExtent: loadIndicatorExtent,
+      axisDirection: axisDirection,
       float: float,
       completeDuration: completeDuration,
       enableInfiniteLoad: enableInfiniteLoad,
@@ -181,18 +182,22 @@ class ClassicalFooterWidget extends StatefulWidget {
   final double pulledExtent;
   final double loadTriggerPullDistance;
   final double loadIndicatorExtent;
+  final AxisDirection axisDirection;
   final bool float;
   final Duration completeDuration;
   final bool enableInfiniteLoad;
   final bool success;
   final bool noMore;
 
-  const ClassicalFooterWidget({Key key,
+  ClassicalFooterWidget({Key key,
     this.loadState, this.classicalFooter,
     this.pulledExtent, this.loadTriggerPullDistance,
-    this.loadIndicatorExtent, this.float,
+    this.loadIndicatorExtent, this.axisDirection, this.float,
     this.completeDuration, this.enableInfiniteLoad,
-    this.success, this.noMore}) : super(key: key);
+    this.success, this.noMore}) : super(key: key) {
+    assert(axisDirection == AxisDirection.up
+        || axisDirection == AxisDirection.down);
+  }
 
   @override
   ClassicalFooterWidgetState createState() => ClassicalFooterWidgetState();
@@ -319,13 +324,16 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
 
   @override
   Widget build(BuildContext context) {
+    // 是否反向
+    bool isReverse = widget.axisDirection == AxisDirection.up;
     // 是否到达触发加载距离
     overTriggerDistance = widget.loadState != LoadIndicatorMode.inactive
         && widget.pulledExtent >= widget.loadTriggerPullDistance;
     return Stack(
       children: <Widget>[
         Positioned(
-          top: 0.0,
+          top: !isReverse ? 0.0 : null,
+          bottom: isReverse ? 0.0 : null,
           left: 0.0,
           right: 0.0,
           child: Container(

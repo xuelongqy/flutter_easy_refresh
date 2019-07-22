@@ -63,6 +63,7 @@ abstract class Header {
       double pulledExtent,
       double refreshTriggerPullDistance,
       double refreshIndicatorExtent,
+      AxisDirection axisDirection,
       bool float,
       Duration completeDuration,
       bool enableInfiniteRefresh,
@@ -92,10 +93,10 @@ class CustomHeader extends Header {
   Widget contentBuilder(BuildContext context,
       RefreshIndicatorMode refreshState, double pulledExtent,
       double refreshTriggerPullDistance, double refreshIndicatorExtent,
-      bool float, Duration completeDuration, bool enableInfiniteRefresh,
-      bool success, bool noMore) {
+      AxisDirection axisDirection, bool float, Duration completeDuration,
+      bool enableInfiniteRefresh, bool success, bool noMore) {
     return headerBuilder(context, refreshState, pulledExtent,
-      refreshTriggerPullDistance, refreshIndicatorExtent, float,
+      refreshTriggerPullDistance, refreshIndicatorExtent, axisDirection, float,
         completeDuration, enableInfiniteRefresh, success, noMore);
   }
 }
@@ -161,15 +162,16 @@ class ClassicalHeader extends Header{
   @override
   Widget contentBuilder(BuildContext context, RefreshIndicatorMode refreshState,
       double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent, bool float,
-      Duration completeDuration,
-      bool enableInfiniteRefresh, bool success, bool noMore) {
+      double refreshIndicatorExtent, AxisDirection axisDirection, bool float,
+      Duration completeDuration, bool enableInfiniteRefresh,
+      bool success, bool noMore) {
     return ClassicalHeaderWidget(
       classicalHeader: this,
       refreshState: refreshState,
       pulledExtent: pulledExtent,
       refreshTriggerPullDistance: refreshTriggerPullDistance,
       refreshIndicatorExtent: refreshIndicatorExtent,
+      axisDirection: axisDirection,
       float: float,
       completeDuration: completeDuration,
       enableInfiniteRefresh: enableInfiniteRefresh,
@@ -185,18 +187,22 @@ class ClassicalHeaderWidget extends StatefulWidget {
   final double pulledExtent;
   final double refreshTriggerPullDistance;
   final double refreshIndicatorExtent;
+  final AxisDirection axisDirection;
   final bool float;
   final Duration completeDuration;
   final bool enableInfiniteRefresh;
   final bool success;
   final bool noMore;
 
-  const ClassicalHeaderWidget({Key key,
+  ClassicalHeaderWidget({Key key,
     this.refreshState, this.classicalHeader,
     this.pulledExtent, this.refreshTriggerPullDistance,
-    this.refreshIndicatorExtent, this.float,
+    this.refreshIndicatorExtent, this.axisDirection, this.float,
     this.completeDuration, this.enableInfiniteRefresh,
-    this.success, this.noMore}) : super(key: key);
+    this.success, this.noMore}) : super(key: key) {
+    assert(axisDirection == AxisDirection.up
+        || axisDirection == AxisDirection.down);
+  }
 
   @override
   ClassicalHeaderWidgetState createState() => ClassicalHeaderWidgetState();
@@ -368,6 +374,8 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
 
   @override
   Widget build(BuildContext context) {
+    // 是否反向
+    bool isReverse = widget.axisDirection == AxisDirection.up;
     // 是否到达触发刷新距离
     overTriggerDistance = widget.refreshState != RefreshIndicatorMode.inactive
         && widget.pulledExtent >= widget.refreshTriggerPullDistance;
@@ -377,8 +385,10 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
     return Stack(
       children: <Widget>[
         Positioned(
-          bottom: _floatBackDistance == null ? 0.0
-              : (widget.refreshIndicatorExtent - _floatBackDistance),
+          top: isReverse ? _floatBackDistance == null ? 0.0
+              : (widget.refreshIndicatorExtent - _floatBackDistance) : null,
+          bottom: !isReverse ? _floatBackDistance == null ? 0.0
+              : (widget.refreshIndicatorExtent - _floatBackDistance) : null,
           left: 0.0,
           right: 0.0,
           child: Container(
