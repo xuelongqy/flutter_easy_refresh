@@ -167,7 +167,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
   void callRefresh() {
     _focusNotifier.value = true;
     _scrollerController.animateTo(-(_header.enableInfiniteRefresh ? 0 : 1)
-        * _header.triggerDistance - 20.0,
+        * _header.triggerDistance - 30.0,
         duration: Duration(milliseconds: 300), curve: Curves.linear)
         .whenComplete((){
       _focusNotifier.value = false;
@@ -178,7 +178,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
   void callLoadMore() {
     _focusNotifier.value = true;
     _scrollerController.animateTo(_scrollerController.position.maxScrollExtent
-        + _footer.triggerDistance + 20.0,
+        + _footer.triggerDistance + 30.0,
         duration: Duration(milliseconds: 300), curve: Curves.linear)
         .whenComplete((){
       _focusNotifier.value = false;

@@ -651,7 +651,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
       // 判断加载完成
       LoadIndicatorMode state = LoadIndicatorMode.loaded;
       // 添加延时
-      if (widget.completeDuration == null) {
+      if (widget.completeDuration == null || widget.enableInfiniteLoad) {
         goToDone();
         return null;
       } else {

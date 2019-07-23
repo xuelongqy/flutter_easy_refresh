@@ -673,7 +673,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
       // 判断刷新完成
       RefreshIndicatorMode state = RefreshIndicatorMode.refreshed;
       // 添加延时
-      if (widget.completeDuration == null) {
+      if (widget.completeDuration == null || widget.enableInfiniteRefresh) {
         goToDone();
         return null;
       } else {
