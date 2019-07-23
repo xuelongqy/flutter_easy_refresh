@@ -98,7 +98,7 @@ class _ListItemState extends State<ListItem> {
 
 /// 空图标
 class EmptyIcon extends Icon {
-  EmptyIcon() : super(Icons.hourglass_empty);
+  const EmptyIcon() : super(Icons.hourglass_empty);
   @override
   Widget build(BuildContext context) {
     return Container();

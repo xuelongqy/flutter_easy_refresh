@@ -25,6 +25,7 @@ dependencies:
   flutter_swiper: ^1.1.4
   flutter_spinkit: ^3.1.0
   flare_flutter: ^1.2.0
+  flutter_i18n: ^0.6.3
   flutter_easyrefresh:
     path: ../
 
