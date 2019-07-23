@@ -390,14 +390,14 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
               : (widget.refreshIndicatorExtent - _floatBackDistance) : null,
           bottom: !isVertical ? 0.0 : !isReverse ? _floatBackDistance == null ? 0.0
               : (widget.refreshIndicatorExtent - _floatBackDistance) : null,
-          left: isVertical ? 0.0 : isReverse ? _floatBackDistance == null ? 0.0
+          left: isVertical ? 0.0 : !isReverse ? _floatBackDistance == null ? 0.0
               : (widget.refreshIndicatorExtent - _floatBackDistance) : null,
-          right: isVertical ? 0.0 : !isReverse ? _floatBackDistance == null ? 0.0
+          right: isVertical ? 0.0 : isReverse ? _floatBackDistance == null ? 0.0
               : (widget.refreshIndicatorExtent - _floatBackDistance) : null,
           child: Container(
             alignment: widget.classicalHeader.alignment ??
                 isVertical ? isReverse ? Alignment.topCenter
-                : Alignment.bottomCenter : !isReverse
+                : Alignment.bottomCenter : isReverse
                 ? Alignment.centerRight : Alignment.centerLeft,
             width: isVertical ? double.infinity : _floatBackDistance == null
                 ? (widget.refreshIndicatorExtent > widget.pulledExtent
@@ -452,7 +452,7 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
           Icon(_finishedIcon,
             color: widget.classicalHeader.textColor,)
               : Transform.rotate(
-            child: Icon( Icons.arrow_downward,
+            child: Icon(isReverse ? Icons.arrow_upward : Icons.arrow_downward,
               color: widget.classicalHeader.textColor,),
             angle: 2 * pi * _iconRotationValue,
           ),
@@ -507,7 +507,7 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
         Icon(_finishedIcon,
           color: widget.classicalHeader.textColor,)
             : Transform.rotate(
-          child: Icon( Icons.arrow_forward,
+          child: Icon(isReverse ? Icons.arrow_back : Icons.arrow_forward,
             color: widget.classicalHeader.textColor,),
           angle: 2 * pi * _iconRotationValue,
         ),

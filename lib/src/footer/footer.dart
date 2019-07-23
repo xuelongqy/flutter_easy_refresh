@@ -335,12 +335,12 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
         Positioned(
           top: !isVertical ? 0.0 : !isReverse ? 0.0 : null,
           bottom: !isVertical ? 0.0 : isReverse ? 0.0 : null,
-          left: isVertical ? 0.0 : !isReverse ? 0.0 : null,
-          right: isVertical ? 0.0 : isReverse ? 0.0 : null,
+          left: isVertical ? 0.0 : isReverse ? 0.0 : null,
+          right: isVertical ? 0.0 : !isReverse ? 0.0 : null,
           child: Container(
             alignment: widget.classicalFooter.alignment ??
                 isVertical ? !isReverse ? Alignment.topCenter
-                : Alignment.bottomCenter : isReverse
+                : Alignment.bottomCenter : !isReverse
                 ? Alignment.centerRight : Alignment.centerLeft,
             width: !isVertical ? widget.loadIndicatorExtent
                 > widget.pulledExtent ? widget.loadIndicatorExtent
@@ -392,7 +392,7 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
           Icon(_finishedIcon,
             color: widget.classicalFooter.textColor,)
               : Transform.rotate(
-            child: Icon( Icons.arrow_upward,
+            child: Icon(!isReverse ? Icons.arrow_upward : Icons.arrow_downward,
               color: widget.classicalFooter.textColor,),
             angle: 2 * pi * _iconRotationValue,
           ),
@@ -447,7 +447,7 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
         Icon(_finishedIcon,
           color: widget.classicalFooter.textColor,)
             : Transform.rotate(
-          child: Icon(isVertical ? Icons.arrow_upward : Icons.arrow_back,
+          child: Icon(!isReverse ? Icons.arrow_back : Icons.arrow_forward,
             color: widget.classicalFooter.textColor,),
           angle: 2 * pi * _iconRotationValue,
         ),
