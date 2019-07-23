@@ -168,7 +168,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
     _focusNotifier.value = true;
     _scrollerController.animateTo(-(_header.enableInfiniteRefresh ? 0 : 1)
         * _header.triggerDistance - 20.0,
-        duration: Duration(milliseconds: 400), curve: Curves.linear)
+        duration: Duration(milliseconds: 300), curve: Curves.linear)
         .whenComplete((){
       _focusNotifier.value = false;
     });
@@ -179,7 +179,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
     _focusNotifier.value = true;
     _scrollerController.animateTo(_scrollerController.position.maxScrollExtent
         + _footer.triggerDistance + 20.0,
-        duration: Duration(milliseconds: 400), curve: Curves.linear)
+        duration: Duration(milliseconds: 300), curve: Curves.linear)
         .whenComplete((){
       _focusNotifier.value = false;
     });
@@ -224,6 +224,18 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
 /// EasyRefresh控制器
 class EasyRefreshController {
+  /// 触发刷新
+  void callRefresh() {
+    if (this._easyRefreshState != null) {
+      this._easyRefreshState.callRefresh();
+    }
+  }
+  /// 触发加载
+  void callLoad() {
+    if (this._easyRefreshState != null) {
+      this._easyRefreshState.callLoadMore();
+    }
+  }
   /// 完成刷新
   FinishRefresh finishRefreshCallBack;
   void finishRefresh({
@@ -265,19 +277,5 @@ class EasyRefreshController {
   // 绑定状态
   void _bindEasyRefreshState(_EasyRefreshState state) {
     this._easyRefreshState = state;
-  }
-
-  // 触发刷新
-  void callRefresh() {
-    if (this._easyRefreshState != null) {
-      this._easyRefreshState.callRefresh();
-    }
-  }
-
-  // 触发加载
-  void callLoad() {
-    if (this._easyRefreshState != null) {
-      this._easyRefreshState.callLoadMore();
-    }
   }
 }

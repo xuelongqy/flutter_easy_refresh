@@ -701,7 +701,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         } else if (latestIndicatorBoxExtent < widget.refreshTriggerPullDistance) {
           return RefreshIndicatorMode.drag;
         } else {
-          if (widget.onRefresh != null) {
+          if (widget.onRefresh != null && !hasTask) {
             if (!_focus) {
               if (widget.enableHapticFeedback) {
                 HapticFeedback.mediumImpact();

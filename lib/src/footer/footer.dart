@@ -228,7 +228,9 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
   String get _showText {
     if (widget.noMore) return widget.classicalFooter.noMoreText;
     if (widget.enableInfiniteLoad) {
-      if (widget.loadState == LoadIndicatorMode.loaded) {
+      if (widget.loadState == LoadIndicatorMode.loaded
+          || widget.loadState == LoadIndicatorMode.inactive
+          || widget.loadState == LoadIndicatorMode.drag) {
         return widget.classicalFooter.loadedText;
       } else {
         return widget.classicalFooter.loadingText;

@@ -258,7 +258,9 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
   String get _showText {
     if (widget.noMore) return widget.classicalHeader.noMoreText;
     if (widget.enableInfiniteRefresh) {
-      if (widget.refreshState == RefreshIndicatorMode.refreshed) {
+      if (widget.refreshState == RefreshIndicatorMode.refreshed
+          || widget.refreshState == RefreshIndicatorMode.inactive
+          || widget.refreshState == RefreshIndicatorMode.drag) {
         return widget.classicalHeader.refreshedText;
       } else {
         return widget.classicalHeader.refreshingText;
