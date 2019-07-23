@@ -607,6 +607,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
     setState(() {
       _noMore = false;
       refreshState = RefreshMode.inactive;
+      hasSliverLayoutExtent = false;
     });
   }
 
@@ -711,7 +712,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
               // performLayout.
               SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
                 refreshTask = widget.onRefresh()..then((_) {
-                  if (mounted) {
+                  if (mounted && !widget.enableControlFinishRefresh) {
                     if (widget.enableInfiniteRefresh) {
                       refreshState = RefreshMode.inactive;
                     }

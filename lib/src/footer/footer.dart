@@ -326,7 +326,8 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
     bool isVertical = widget.axisDirection == AxisDirection.down
         || widget.axisDirection == AxisDirection.up;
     // 是否反向
-    bool isReverse = widget.axisDirection == AxisDirection.up;
+    bool isReverse = widget.axisDirection == AxisDirection.up
+        || widget.axisDirection == AxisDirection.left;
     // 是否到达触发加载距离
     overTriggerDistance = widget.loadState != LoadMode.inactive
         && widget.pulledExtent >= widget.loadTriggerPullDistance;
@@ -335,12 +336,12 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
         Positioned(
           top: !isVertical ? 0.0 : !isReverse ? 0.0 : null,
           bottom: !isVertical ? 0.0 : isReverse ? 0.0 : null,
-          left: isVertical ? 0.0 : isReverse ? 0.0 : null,
-          right: isVertical ? 0.0 : !isReverse ? 0.0 : null,
+          left: isVertical ? 0.0 : !isReverse ? 0.0 : null,
+          right: isVertical ? 0.0 : isReverse ? 0.0 : null,
           child: Container(
             alignment: widget.classicalFooter.alignment ??
                 isVertical ? !isReverse ? Alignment.topCenter
-                : Alignment.bottomCenter : !isReverse
+                : Alignment.bottomCenter : isReverse
                 ? Alignment.centerRight : Alignment.centerLeft,
             width: !isVertical ? widget.loadIndicatorExtent
                 > widget.pulledExtent ? widget.loadIndicatorExtent

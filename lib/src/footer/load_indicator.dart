@@ -118,6 +118,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
   bool get hasLayoutExtent => _hasLayoutExtent;
   bool _hasLayoutExtent;
   set hasLayoutExtent(bool value) {
+    print(value);
     assert(value != null);
     if (value == _hasLayoutExtent)
       return;
@@ -586,6 +587,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     setState(() {
       _noMore = false;
       loadState = LoadMode.inactive;
+      hasSliverLayoutExtent = false;
     });
   }
 
@@ -688,7 +690,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
               // performLayout.
               SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
                 loadTask = widget.onLoad()..then((_) {
-                  if (mounted) {
+                  if (mounted && !widget.enableControlFinishLoad) {
                     if (widget.enableInfiniteLoad) {
                       loadState = LoadMode.inactive;
                     }

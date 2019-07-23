@@ -376,7 +376,8 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
     bool isVertical = widget.axisDirection == AxisDirection.down
         || widget.axisDirection == AxisDirection.up;
     // 是否反向
-    bool isReverse = widget.axisDirection == AxisDirection.up;
+    bool isReverse = widget.axisDirection == AxisDirection.up
+        || widget.axisDirection == AxisDirection.left;
     // 是否到达触发刷新距离
     overTriggerDistance = widget.refreshState != RefreshMode.inactive
         && widget.pulledExtent >= widget.refreshTriggerPullDistance;
@@ -390,14 +391,14 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
               : (widget.refreshIndicatorExtent - _floatBackDistance) : null,
           bottom: !isVertical ? 0.0 : !isReverse ? _floatBackDistance == null ? 0.0
               : (widget.refreshIndicatorExtent - _floatBackDistance) : null,
-          left: isVertical ? 0.0 : !isReverse ? _floatBackDistance == null ? 0.0
+          left: isVertical ? 0.0 : isReverse ? _floatBackDistance == null ? 0.0
               : (widget.refreshIndicatorExtent - _floatBackDistance) : null,
-          right: isVertical ? 0.0 : isReverse ? _floatBackDistance == null ? 0.0
+          right: isVertical ? 0.0 : !isReverse ? _floatBackDistance == null ? 0.0
               : (widget.refreshIndicatorExtent - _floatBackDistance) : null,
           child: Container(
             alignment: widget.classicalHeader.alignment ??
                 isVertical ? isReverse ? Alignment.topCenter
-                : Alignment.bottomCenter : isReverse
+                : Alignment.bottomCenter : !isReverse
                 ? Alignment.centerRight : Alignment.centerLeft,
             width: isVertical ? double.infinity : _floatBackDistance == null
                 ? (widget.refreshIndicatorExtent > widget.pulledExtent
