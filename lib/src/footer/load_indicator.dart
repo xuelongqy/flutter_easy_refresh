@@ -118,7 +118,6 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
   bool get hasLayoutExtent => _hasLayoutExtent;
   bool _hasLayoutExtent;
   set hasLayoutExtent(bool value) {
-    print(value);
     assert(value != null);
     if (value == _hasLayoutExtent)
       return;
