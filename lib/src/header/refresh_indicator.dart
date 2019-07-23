@@ -309,9 +309,9 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
 
 /// The current state of the refresh control.
 ///
-/// Passed into the [RefreshControlIndicatorBuilder] builder function so
+/// Passed into the [RefreshControlBuilder] builder function so
 /// users can show different UI in different modes.
-enum RefreshIndicatorMode {
+enum RefreshMode {
   /// Initial state, when not being overscrolled into, or after the overscroll
   /// is canceled or after done and the sliver retracted away.
   inactive,
@@ -342,9 +342,9 @@ enum RefreshIndicatorMode {
 ///
 /// The `pulledExtent` parameter is the currently available space either from
 /// overscrolling or as held by the sliver during refresh.
-typedef RefreshControlIndicatorBuilder = Widget Function(
+typedef RefreshControlBuilder = Widget Function(
     BuildContext context,
-    RefreshIndicatorMode refreshState,
+    RefreshMode refreshState,
     double pulledExtent,
     double refreshTriggerPullDistance,
     double refreshIndicatorExtent,
@@ -357,7 +357,7 @@ typedef RefreshControlIndicatorBuilder = Widget Function(
 /// A callback function that's invoked when the [EasyRefreshSliverRefreshControl] is
 /// pulled a `refreshTriggerPullDistance`. Must return a [Future]. Upon
 /// completion of the [Future], the [EasyRefreshSliverRefreshControl] enters the
-/// [RefreshIndicatorMode.done] state and will start to go away.
+/// [RefreshMode.done] state and will start to go away.
 typedef RefreshCallback = Future<void> Function();
 
 /// 结束刷新
@@ -386,8 +386,8 @@ typedef BindRefreshIndicator = void Function(
 ///    to keep drawing inside of as the [Future] returned by [onRefresh] processes.
 ///  * Scroll away once the [onRefresh] [Future] completes.
 ///
-/// The [builder] function will be informed of the current [RefreshIndicatorMode]
-/// when invoking it, except in the [RefreshIndicatorMode.inactive] state when
+/// The [builder] function will be informed of the current [RefreshMode]
+/// when invoking it, except in the [RefreshMode.inactive] state when
 /// no space is available and nothing needs to be built. The [builder] function
 /// will otherwise be continuously invoked as the amount of space available
 /// changes from overscroll, as the sliver scrolls away after the [onRefresh]
@@ -458,7 +458,7 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   /// [refreshIndicatorExtent]. Defaults to 100px when not specified.
   ///
   /// When overscrolled past this distance, [onRefresh] will be called if not
-  /// null and the [builder] will build in the [RefreshIndicatorMode.armed] state.
+  /// null and the [builder] will build in the [RefreshMode.armed] state.
   final double refreshTriggerPullDistance;
 
   /// The amount of space the refresh indicator sliver will keep holding while
@@ -483,15 +483,15 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   ///
   /// Will not be called when the available space is zero such as before any
   /// overscroll.
-  final RefreshControlIndicatorBuilder builder;
+  final RefreshControlBuilder builder;
 
   /// Callback invoked when pulled by [refreshTriggerPullDistance].
   ///
   /// If provided, must return a [Future] which will keep the indicator in the
-  /// [RefreshIndicatorMode.refresh] state until the [Future] completes.
+  /// [RefreshMode.refresh] state until the [Future] completes.
   ///
-  /// Can be null, in which case a single frame of [RefreshIndicatorMode.armed]
-  /// state will be drawn before going immediately to the [RefreshIndicatorMode.done]
+  /// Can be null, in which case a single frame of [RefreshMode.armed]
+  /// state will be drawn before going immediately to the [RefreshMode.done]
   /// where the sliver will start retracting.
   final RefreshCallback onRefresh;
 
@@ -520,7 +520,7 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   /// Retrieve the current state of the EasyRefreshSliverRefreshControl. The same as the
   /// state that gets passed into the [builder] function. Used for testing.
   @visibleForTesting
-  static RefreshIndicatorMode state(BuildContext context) {
+  static RefreshMode state(BuildContext context) {
     final _EasyRefreshSliverRefreshControlState state
     = context.ancestorStateOfType(const TypeMatcher<_EasyRefreshSliverRefreshControlState>());
     return state.refreshState;
@@ -535,7 +535,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   // original `refreshTriggerPullDistance` is left.
   static const double _inactiveResetOverscrollFraction = 0.1;
 
-  RefreshIndicatorMode refreshState;
+  RefreshMode refreshState;
   // [Future] returned by the widget's `onRefresh`.
   Future<void> _refreshTask;
   Future<void> get refreshTask => _refreshTask;
@@ -572,7 +572,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   @override
   void initState() {
     super.initState();
-    refreshState = RefreshIndicatorMode.inactive;
+    refreshState = RefreshMode.inactive;
     _axisDirectionNotifier = ValueNotifier<AxisDirection>(AxisDirection.down);
     // 绑定刷新指示器
     if (widget.bindRefreshIndicator != null) {
@@ -595,7 +595,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
     _noMore = _success == false ? false : noMore;
     if (widget.enableControlFinishRefresh && refreshTask != null) {
       if (widget.enableInfiniteRefresh) {
-        refreshState = RefreshIndicatorMode.refreshed;
+        refreshState = RefreshMode.refreshed;
       }
       setState(() => refreshTask = null);
       refreshState = transitionNextState();
@@ -606,7 +606,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   void resetRefreshState() {
     setState(() {
       _noMore = false;
-      refreshState = RefreshIndicatorMode.inactive;
+      refreshState = RefreshMode.inactive;
     });
   }
 
@@ -618,10 +618,10 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         HapticFeedback.mediumImpact();
       }
       SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-        refreshState = RefreshIndicatorMode.refresh;
+        refreshState = RefreshMode.refresh;
         refreshTask = widget.onRefresh()..then((_) {
           if (mounted && !widget.enableControlFinishRefresh) {
-            refreshState = RefreshIndicatorMode.refresh;
+            refreshState = RefreshMode.refresh;
             setState(() => refreshTask = null);
             // Trigger one more transition because by this time, BoxConstraint's
             // maxHeight might already be resting at 0 in which case no
@@ -637,26 +637,26 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
   // A state machine transition calculator. Multiple states can be transitioned
   // through per single call.
-  RefreshIndicatorMode transitionNextState() {
-    RefreshIndicatorMode nextState;
+  RefreshMode transitionNextState() {
+    RefreshMode nextState;
 
     // 判断是否没有更多
     if (_noMore == true && widget.enableInfiniteRefresh) {
       return refreshState;
     } else if (_noMore == true
-        && refreshState != RefreshIndicatorMode.refresh
-        && refreshState != RefreshIndicatorMode.refreshed
-        && refreshState != RefreshIndicatorMode.done) {
+        && refreshState != RefreshMode.refresh
+        && refreshState != RefreshMode.refreshed
+        && refreshState != RefreshMode.done) {
       return refreshState;
     } else if (widget.enableInfiniteRefresh
-        && refreshState == RefreshIndicatorMode.done) {
-      return RefreshIndicatorMode.inactive;
+        && refreshState == RefreshMode.done) {
+      return RefreshMode.inactive;
     }
 
     // 结束
     void goToDone() {
-      nextState = RefreshIndicatorMode.done;
-      refreshState = RefreshIndicatorMode.done;
+      nextState = RefreshMode.done;
+      refreshState = RefreshMode.done;
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
       if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
@@ -669,9 +669,9 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
     }
 
     // 完成
-    RefreshIndicatorMode goToFinish() {
+    RefreshMode goToFinish() {
       // 判断刷新完成
-      RefreshIndicatorMode state = RefreshIndicatorMode.refreshed;
+      RefreshMode state = RefreshMode.refreshed;
       // 添加延时
       if (widget.completeDuration == null || widget.enableInfiniteRefresh) {
         goToDone();
@@ -687,19 +687,19 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
     }
 
     switch (refreshState) {
-      case RefreshIndicatorMode.inactive:
+      case RefreshMode.inactive:
         if (latestIndicatorBoxExtent <= 0 || !_focus) {
-          return RefreshIndicatorMode.inactive;
+          return RefreshMode.inactive;
         } else {
-          nextState = RefreshIndicatorMode.drag;
+          nextState = RefreshMode.drag;
         }
         continue drag;
       drag:
-      case RefreshIndicatorMode.drag:
+      case RefreshMode.drag:
         if (latestIndicatorBoxExtent == 0) {
-          return RefreshIndicatorMode.inactive;
+          return RefreshMode.inactive;
         } else if (latestIndicatorBoxExtent < widget.refreshTriggerPullDistance) {
-          return RefreshIndicatorMode.drag;
+          return RefreshMode.drag;
         } else {
           if (widget.onRefresh != null && !hasTask) {
             if (!_focus) {
@@ -713,7 +713,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
                 refreshTask = widget.onRefresh()..then((_) {
                   if (mounted) {
                     if (widget.enableInfiniteRefresh) {
-                      refreshState = RefreshIndicatorMode.inactive;
+                      refreshState = RefreshMode.inactive;
                     }
                     setState(() => refreshTask = null);
                     // Trigger one more transition because by this time, BoxConstraint's
@@ -726,17 +726,17 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
                 });
                 setState(() => hasSliverLayoutExtent = true);
               });
-              return RefreshIndicatorMode.armed;
+              return RefreshMode.armed;
             }
-            return RefreshIndicatorMode.drag;
+            return RefreshMode.drag;
           }
-          return RefreshIndicatorMode.drag;
+          return RefreshMode.drag;
         }
         // Don't continue here. We can never possibly call onRefresh and
         // progress to the next state in one [computeNextState] call.
         break;
-      case RefreshIndicatorMode.armed:
-        if (refreshState == RefreshIndicatorMode.armed && !hasTask) {
+      case RefreshMode.armed:
+        if (refreshState == RefreshMode.armed && !hasTask) {
           // 完成
           var state = goToFinish();
           if (state != null) return state;
@@ -744,15 +744,15 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         }
 
         if (latestIndicatorBoxExtent != widget.refreshIndicatorExtent) {
-          return RefreshIndicatorMode.armed;
+          return RefreshMode.armed;
         } else {
-          nextState = RefreshIndicatorMode.refresh;
+          nextState = RefreshMode.refresh;
         }
         continue refresh;
       refresh:
-      case RefreshIndicatorMode.refresh:
+      case RefreshMode.refresh:
         if (refreshTask != null) {
-          return RefreshIndicatorMode.refresh;
+          return RefreshMode.refresh;
         } else {
           // 完成
           var state = goToFinish();
@@ -760,19 +760,19 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         }
         continue done;
       done:
-      case RefreshIndicatorMode.done:
+      case RefreshMode.done:
       // Let the transition back to inactive trigger before strictly going
       // to 0.0 since the last bit of the animation can take some time and
       // can feel sluggish if not going all the way back to 0.0 prevented
       // a subsequent pull-to-refresh from starting.
         if (latestIndicatorBoxExtent >
             widget.refreshTriggerPullDistance * _inactiveResetOverscrollFraction) {
-          return RefreshIndicatorMode.done;
+          return RefreshMode.done;
         } else {
-          nextState = RefreshIndicatorMode.inactive;
+          nextState = RefreshMode.inactive;
         }
         break;
-      case RefreshIndicatorMode.refreshed:
+      case RefreshMode.refreshed:
         nextState = refreshState;
         break;
       default:

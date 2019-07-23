@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../easy_refresh.dart';
 
@@ -58,7 +57,7 @@ abstract class Footer {
   // Header构造器
   Widget contentBuilder(
       BuildContext context,
-      LoadIndicatorMode loadState,
+      LoadMode loadState,
       double pulledExtent,
       double loadTriggerPullDistance,
       double loadIndicatorExtent,
@@ -73,7 +72,7 @@ abstract class Footer {
 class CustomFooter extends Footer {
 
   /// Header构造器
-  final LoadControlIndicatorBuilder footerBuilder;
+  final LoadControlBuilder footerBuilder;
 
   CustomFooter({
     extent = 60.0,
@@ -88,7 +87,7 @@ class CustomFooter extends Footer {
 
   @override
   Widget contentBuilder(BuildContext context,
-      LoadIndicatorMode loadState, double pulledExtent,
+      LoadMode loadState, double pulledExtent,
       double loadTriggerPullDistance, double loadIndicatorExtent,
       AxisDirection axisDirection, bool float, Duration completeDuration,
       bool enableInfiniteLoad, bool success, bool noMore) {
@@ -133,7 +132,7 @@ class ClassicalFooter extends Footer{
     completeDuration = const Duration(seconds: 1),
     enableInfiniteLoad = true,
     enableHapticFeedback = true,
-    this.alignment = Alignment.topCenter,
+    this.alignment,
     this.loadText: "Push to load",
     this.loadReadyText: "Release to load",
     this.loadingText: "Loading...",
@@ -155,7 +154,7 @@ class ClassicalFooter extends Footer{
   );
 
   @override
-  Widget contentBuilder(BuildContext context, LoadIndicatorMode loadState,
+  Widget contentBuilder(BuildContext context, LoadMode loadState,
       double pulledExtent, double loadTriggerPullDistance,
       double loadIndicatorExtent, AxisDirection axisDirection,
       bool float, Duration completeDuration,
@@ -178,7 +177,7 @@ class ClassicalFooter extends Footer{
 /// 经典Footer组件
 class ClassicalFooterWidget extends StatefulWidget {
   final ClassicalFooter classicalFooter;
-  final LoadIndicatorMode loadState;
+  final LoadMode loadState;
   final double pulledExtent;
   final double loadTriggerPullDistance;
   final double loadIndicatorExtent;
@@ -194,10 +193,7 @@ class ClassicalFooterWidget extends StatefulWidget {
     this.pulledExtent, this.loadTriggerPullDistance,
     this.loadIndicatorExtent, this.axisDirection, this.float,
     this.completeDuration, this.enableInfiniteLoad,
-    this.success, this.noMore}) : super(key: key) {
-    assert(axisDirection == AxisDirection.up
-        || axisDirection == AxisDirection.down);
-  }
+    this.success, this.noMore}) : super(key: key);
 
   @override
   ClassicalFooterWidgetState createState() => ClassicalFooterWidgetState();
@@ -228,22 +224,22 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
   String get _showText {
     if (widget.noMore) return widget.classicalFooter.noMoreText;
     if (widget.enableInfiniteLoad) {
-      if (widget.loadState == LoadIndicatorMode.loaded
-          || widget.loadState == LoadIndicatorMode.inactive
-          || widget.loadState == LoadIndicatorMode.drag) {
+      if (widget.loadState == LoadMode.loaded
+          || widget.loadState == LoadMode.inactive
+          || widget.loadState == LoadMode.drag) {
         return widget.classicalFooter.loadedText;
       } else {
         return widget.classicalFooter.loadingText;
       }
     }
     switch (widget.loadState) {
-      case LoadIndicatorMode.load:
+      case LoadMode.load:
         return widget.classicalFooter.loadingText;
-      case LoadIndicatorMode.armed:
+      case LoadMode.armed:
         return widget.classicalFooter.loadingText;
-      case LoadIndicatorMode.loaded:
+      case LoadMode.loaded:
         return _finishedText;
-      case LoadIndicatorMode.done:
+      case LoadMode.done:
         return _finishedText;
       default:
         if (overTriggerDistance) {
@@ -262,7 +258,7 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
   // 加载结束图标
   IconData get _finishedIcon {
     if (!widget.success) return Icons.error_outline;
-    if (widget.noMore) return Icons.search;
+    if (widget.noMore) return Icons.hourglass_empty;
     return Icons.done;
   }
 
@@ -270,7 +266,7 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
   DateTime _dateTime;
   // 获取更多信息
   String get _infoText {
-    if (widget.loadState == LoadIndicatorMode.loaded) {
+    if (widget.loadState == LoadMode.loaded) {
       _dateTime = DateTime.now();
     }
     String fillChar = _dateTime.minute < 10 ? "0" : "";
@@ -319,100 +315,143 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
 
   @override
   void dispose() {
-    super.dispose();
     _readyController.dispose();
     _restoreController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // 是否为垂直方向
+    bool isVertical = widget.axisDirection == AxisDirection.down
+        || widget.axisDirection == AxisDirection.up;
     // 是否反向
     bool isReverse = widget.axisDirection == AxisDirection.up;
     // 是否到达触发加载距离
-    overTriggerDistance = widget.loadState != LoadIndicatorMode.inactive
+    overTriggerDistance = widget.loadState != LoadMode.inactive
         && widget.pulledExtent >= widget.loadTriggerPullDistance;
     return Stack(
       children: <Widget>[
         Positioned(
-          top: !isReverse ? 0.0 : null,
-          bottom: isReverse ? 0.0 : null,
-          left: 0.0,
-          right: 0.0,
+          top: !isVertical ? 0.0 : !isReverse ? 0.0 : null,
+          bottom: !isVertical ? 0.0 : isReverse ? 0.0 : null,
+          left: isVertical ? 0.0 : !isReverse ? 0.0 : null,
+          right: isVertical ? 0.0 : isReverse ? 0.0 : null,
           child: Container(
-            alignment: widget.classicalFooter.alignment,
-            width: double.infinity,
-            color: widget.classicalFooter.bgColor,
-            height: widget.loadIndicatorExtent > widget.pulledExtent
-                ? widget.loadIndicatorExtent : widget.pulledExtent,
+            alignment: widget.classicalFooter.alignment ??
+                isVertical ? !isReverse ? Alignment.topCenter
+                : Alignment.bottomCenter : isReverse
+                ? Alignment.centerRight : Alignment.centerLeft,
+            width: !isVertical ? widget.loadIndicatorExtent
+                > widget.pulledExtent ? widget.loadIndicatorExtent
+                : widget.pulledExtent : double.infinity,
+            height: isVertical ? widget.loadIndicatorExtent
+                > widget.pulledExtent ? widget.loadIndicatorExtent
+                : widget.pulledExtent : double.infinity,
             child: SizedBox(
-              height: widget.loadIndicatorExtent,
-              child: Row(
+              height: isVertical ? widget.loadIndicatorExtent : double.infinity,
+              width: !isVertical ? widget.loadIndicatorExtent : double.infinity,
+              child: isVertical ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                      flex: 2,
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(right: 10.0,),
-                        child: widget.loadState == LoadIndicatorMode.load
-                            || widget.loadState == LoadIndicatorMode.armed
-                            ? Container(
-                          width: 20.0,
-                          height: 20.0,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.0,
-                            valueColor: AlwaysStoppedAnimation(
-                              widget.classicalFooter.textColor,),
-                          ),
-                        ) : widget.loadState == LoadIndicatorMode.loaded
-                            ||  widget.loadState == LoadIndicatorMode.done
-                            || (widget.enableInfiniteLoad &&
-                                widget.loadState
-                                    != LoadIndicatorMode.loaded)
-                            || widget.noMore ?
-                        Icon(_finishedIcon,
-                          color: widget.classicalFooter.textColor,)
-                            : Transform.rotate(
-                          child: Icon( Icons.arrow_upward,
-                            color: widget.classicalFooter.textColor,),
-                          angle: 2 * pi * _iconRotationValue,
-                        ),
-                      )
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(_showText,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: widget.classicalFooter.textColor,
-                          ),
-                        ),
-                        widget.classicalFooter.showInfo ? Container(
-                          margin: EdgeInsets.only(top: 2.0,),
-                          child: Text(_infoText,
-                            style: TextStyle(
-                              fontSize: 12.0,
-                              color: widget.classicalFooter.infoColor,
-                            ),
-                          ),
-                        ): Container(),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: SizedBox(),
-                  ),
-                ],
+                children: _buildContent(isVertical, isReverse),
+              ) : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: _buildContent(isVertical, isReverse),
               ),
             ),
           ),
         ),
       ],
     );
+  }
+
+  // 构建显示内容
+  List<Widget> _buildContent(bool isVertical, bool isReverse) {
+    return isVertical ? <Widget>[
+      Expanded(
+        flex: 2,
+        child: Container(
+          alignment: Alignment.centerRight,
+          padding: EdgeInsets.only(right: 10.0,),
+          child: widget.loadState == LoadMode.load
+              || widget.loadState == LoadMode.armed
+              ? Container(
+            width: 20.0,
+            height: 20.0,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.0,
+              valueColor: AlwaysStoppedAnimation(
+                widget.classicalFooter.textColor,),
+            ),
+          ) : widget.loadState == LoadMode.loaded
+              ||  widget.loadState == LoadMode.done
+              || (widget.enableInfiniteLoad &&
+                  widget.loadState
+                      != LoadMode.loaded)
+              || widget.noMore ?
+          Icon(_finishedIcon,
+            color: widget.classicalFooter.textColor,)
+              : Transform.rotate(
+            child: Icon( Icons.arrow_upward,
+              color: widget.classicalFooter.textColor,),
+            angle: 2 * pi * _iconRotationValue,
+          ),
+        ),
+      ),
+      Expanded(
+        flex: 3,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(_showText,
+              style: TextStyle(
+                fontSize: 16.0,
+                color: widget.classicalFooter.textColor,
+              ),
+            ),
+            widget.classicalFooter.showInfo ? Container(
+              margin: EdgeInsets.only(top: 2.0,),
+              child: Text(_infoText,
+                style: TextStyle(
+                  fontSize: 12.0,
+                  color: widget.classicalFooter.infoColor,
+                ),
+              ),
+            ): Container(),
+          ],
+        ),
+      ),
+      Expanded(
+        flex: 2,
+        child: SizedBox(),
+      ),
+    ] : <Widget>[
+      Container(
+        child: widget.loadState == LoadMode.load
+            || widget.loadState == LoadMode.armed
+            ? Container(
+          width: 20.0,
+          height: 20.0,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.0,
+            valueColor: AlwaysStoppedAnimation(
+              widget.classicalFooter.textColor,),
+          ),
+        ) : widget.loadState == LoadMode.loaded
+            ||  widget.loadState == LoadMode.done
+            || (widget.enableInfiniteLoad &&
+                widget.loadState
+                    != LoadMode.loaded)
+            || widget.noMore ?
+        Icon(_finishedIcon,
+          color: widget.classicalFooter.textColor,)
+            : Transform.rotate(
+          child: Icon(isVertical ? Icons.arrow_upward : Icons.arrow_back,
+            color: widget.classicalFooter.textColor,),
+          angle: 2 * pi * _iconRotationValue,
+        ),
+      ),
+    ];
   }
 }

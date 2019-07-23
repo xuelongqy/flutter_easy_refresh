@@ -165,6 +165,9 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
   // 触发刷新
   void callRefresh() {
+    // ignore: invalid_use_of_protected_member
+    if (_scrollerController == null || _scrollerController.positions.isEmpty)
+      return;
     _focusNotifier.value = true;
     _scrollerController.animateTo(-(_header.enableInfiniteRefresh ? 0 : 1)
         * _header.triggerDistance - 30.0,
@@ -176,6 +179,9 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
   // 触发加载
   void callLoadMore() {
+    // ignore: invalid_use_of_protected_member
+    if (_scrollerController == null || _scrollerController.positions.isEmpty)
+      return;
     _focusNotifier.value = true;
     _scrollerController.animateTo(_scrollerController.position.maxScrollExtent
         + _footer.triggerDistance + 30.0,

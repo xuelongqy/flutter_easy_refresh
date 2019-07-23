@@ -285,9 +285,9 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
 
 /// The current state of the refresh control.
 ///
-/// Passed into the [LoadControlIndicatorBuilder] builder function so
+/// Passed into the [LoadControlBuilder] builder function so
 /// users can show different UI in different modes.
-enum LoadIndicatorMode {
+enum LoadMode {
   /// Initial state, when not being overscrolled into, or after the overscroll
   /// is canceled or after done and the sliver retracted away.
   inactive,
@@ -318,9 +318,9 @@ enum LoadIndicatorMode {
 ///
 /// The `pulledExtent` parameter is the currently available space either from
 /// overscrolling or as held by the sliver during refresh.
-typedef LoadControlIndicatorBuilder = Widget Function(
+typedef LoadControlBuilder = Widget Function(
     BuildContext context,
-    LoadIndicatorMode loadState,
+    LoadMode loadState,
     double pulledExtent,
     double loadTriggerPullDistance,
     double loadIndicatorExtent,
@@ -333,7 +333,7 @@ typedef LoadControlIndicatorBuilder = Widget Function(
 /// A callback function that's invoked when the [EasyRefreshSliverLoadControl] is
 /// pulled a `loadTriggerPullDistance`. Must return a [Future]. Upon
 /// completion of the [Future], the [EasyRefreshSliverLoadControl] enters the
-/// [LoadIndicatorMode.done] state and will start to go away.
+/// [LoadMode.done] state and will start to go away.
 typedef LoadCallback = Future<void> Function();
 
 /// 结束加载
@@ -362,8 +362,8 @@ typedef BindLoadIndicator = void Function(
 ///    to keep drawing inside of as the [Future] returned by [onLoad] processes.
 ///  * Scroll away once the [onLoad] [Future] completes.
 ///
-/// The [builder] function will be informed of the current [LoadIndicatorMode]
-/// when invoking it, except in the [LoadIndicatorMode.inactive] state when
+/// The [builder] function will be informed of the current [LoadMode]
+/// when invoking it, except in the [LoadMode.inactive] state when
 /// no space is available and nothing needs to be built. The [builder] function
 /// will otherwise be continuously invoked as the amount of space available
 /// changes from overscroll, as the sliver scrolls away after the [onLoad]
@@ -434,7 +434,7 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   /// [loadIndicatorExtent]. Defaults to 100px when not specified.
   ///
   /// When overscrolled past this distance, [onLoad] will be called if not
-  /// null and the [builder] will build in the [LoadIndicatorMode.armed] state.
+  /// null and the [builder] will build in the [LoadMode.armed] state.
   final double loadTriggerPullDistance;
 
   /// The amount of space the refresh indicator sliver will keep holding while
@@ -459,15 +459,15 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   ///
   /// Will not be called when the available space is zero such as before any
   /// overscroll.
-  final LoadControlIndicatorBuilder builder;
+  final LoadControlBuilder builder;
 
   /// Callback invoked when pulled by [loadTriggerPullDistance].
   ///
   /// If provided, must return a [Future] which will keep the indicator in the
-  /// [LoadIndicatorMode.refresh] state until the [Future] completes.
+  /// [LoadMode.refresh] state until the [Future] completes.
   ///
-  /// Can be null, in which case a single frame of [LoadIndicatorMode.armed]
-  /// state will be drawn before going immediately to the [LoadIndicatorMode.done]
+  /// Can be null, in which case a single frame of [LoadMode.armed]
+  /// state will be drawn before going immediately to the [LoadMode.done]
   /// where the sliver will start retracting.
   final LoadCallback onLoad;
   
@@ -496,7 +496,7 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   /// Retrieve the current state of the EasyRefreshSliverLoadControl. The same as the
   /// state that gets passed into the [builder] function. Used for testing.
   @visibleForTesting
-  static LoadIndicatorMode state(BuildContext context) {
+  static LoadMode state(BuildContext context) {
     final _EasyRefreshSliverLoadControlState state
     = context.ancestorStateOfType(const TypeMatcher<_EasyRefreshSliverLoadControlState>());
     return state.loadState;
@@ -511,7 +511,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   // original `loadTriggerPullDistance` is left.
   static const double _inactiveResetOverscrollFraction = 0.1;
 
-  LoadIndicatorMode loadState;
+  LoadMode loadState;
   // [Future] returned by the widget's `onLoad`.
   Future<void> _loadTask;
   Future<void> get loadTask => _loadTask;
@@ -549,7 +549,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   @override
   void initState() {
     super.initState();
-    loadState = LoadIndicatorMode.inactive;
+    loadState = LoadMode.inactive;
     extraExtentNotifier = ValueNotifier<double>(0.0);
     _axisDirectionNotifier = ValueNotifier<AxisDirection>(AxisDirection.down);
     // 绑定加载指示器
@@ -574,7 +574,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     _noMore = _success == false ? false : noMore;
     if (widget.enableControlFinishLoad && loadTask != null) {
       if (widget.enableInfiniteLoad) {
-        loadState = LoadIndicatorMode.loaded;
+        loadState = LoadMode.loaded;
       }
       setState(() => loadTask = null);
       loadState = transitionNextState();
@@ -585,7 +585,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
   void resetLoadState() {
     setState(() {
       _noMore = false;
-      loadState = LoadIndicatorMode.inactive;
+      loadState = LoadMode.inactive;
     });
   }
 
@@ -596,10 +596,10 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         HapticFeedback.mediumImpact();
       }
       SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-        loadState = LoadIndicatorMode.load;
+        loadState = LoadMode.load;
         loadTask = widget.onLoad()..then((_) {
           if (mounted && !widget.enableControlFinishLoad) {
-            loadState = LoadIndicatorMode.load;
+            loadState = LoadMode.load;
             setState(() => loadTask = null);
             // Trigger one more transition because by this time, BoxConstraint's
             // maxHeight might already be resting at 0 in which case no
@@ -615,26 +615,26 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
   // A state machine transition calculator. Multiple states can be transitioned
   // through per single call.
-  LoadIndicatorMode transitionNextState() {
-    LoadIndicatorMode nextState;
+  LoadMode transitionNextState() {
+    LoadMode nextState;
 
     // 判断是否没有更多
     if (_noMore == true && widget.enableInfiniteLoad) {
       return loadState;
     } else if (_noMore == true
-        && loadState != LoadIndicatorMode.load
-        && loadState != LoadIndicatorMode.loaded
-        && loadState != LoadIndicatorMode.done) {
+        && loadState != LoadMode.load
+        && loadState != LoadMode.loaded
+        && loadState != LoadMode.done) {
       return loadState;
     } else if (widget.enableInfiniteLoad
-        && loadState == LoadIndicatorMode.done) {
-      return LoadIndicatorMode.inactive;
+        && loadState == LoadMode.done) {
+      return LoadMode.inactive;
     }
 
     // 完成
     void goToDone() {
-      nextState = LoadIndicatorMode.done;
-      loadState = LoadIndicatorMode.done;
+      nextState = LoadMode.done;
+      loadState = LoadMode.done;
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
       if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
@@ -647,9 +647,9 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     }
 
     // 结束
-    LoadIndicatorMode goToFinish() {
+    LoadMode goToFinish() {
       // 判断加载完成
-      LoadIndicatorMode state = LoadIndicatorMode.loaded;
+      LoadMode state = LoadMode.loaded;
       // 添加延时
       if (widget.completeDuration == null || widget.enableInfiniteLoad) {
         goToDone();
@@ -664,19 +664,19 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
       }
     }
     switch (loadState) {
-      case LoadIndicatorMode.inactive:
+      case LoadMode.inactive:
         if (latestIndicatorBoxExtent <= 0 || !_focus) {
-          return LoadIndicatorMode.inactive;
+          return LoadMode.inactive;
         } else {
-          nextState = LoadIndicatorMode.drag;
+          nextState = LoadMode.drag;
         }
         continue drag;
       drag:
-      case LoadIndicatorMode.drag:
+      case LoadMode.drag:
         if (latestIndicatorBoxExtent == 0) {
-          return LoadIndicatorMode.inactive;
+          return LoadMode.inactive;
         } else if (latestIndicatorBoxExtent < widget.loadTriggerPullDistance) {
-          return LoadIndicatorMode.drag;
+          return LoadMode.drag;
         } else {
           if (widget.onLoad != null && !hasTask) {
             if (!_focus) {
@@ -690,7 +690,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
                 loadTask = widget.onLoad()..then((_) {
                   if (mounted) {
                     if (widget.enableInfiniteLoad) {
-                      loadState = LoadIndicatorMode.inactive;
+                      loadState = LoadMode.inactive;
                     }
                     setState(() => loadTask = null);
                     // Trigger one more transition because by this time, BoxConstraint's
@@ -703,17 +703,17 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
                 });
                 setState(() => hasSliverLayoutExtent = true);
               });
-              return LoadIndicatorMode.armed;
+              return LoadMode.armed;
             }
-            return LoadIndicatorMode.drag;
+            return LoadMode.drag;
           }
-          return LoadIndicatorMode.drag;
+          return LoadMode.drag;
         }
         // Don't continue here. We can never possibly call onLoad and
         // progress to the next state in one [computeNextState] call.
         break;
-      case LoadIndicatorMode.armed:
-        if (loadState == LoadIndicatorMode.armed && !hasTask) {
+      case LoadMode.armed:
+        if (loadState == LoadMode.armed && !hasTask) {
           // 结束
           var state = goToFinish();
           if (state != null) return state;
@@ -721,15 +721,15 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         }
 
         if (latestIndicatorBoxExtent > widget.loadIndicatorExtent) {
-          return LoadIndicatorMode.armed;
+          return LoadMode.armed;
         } else {
-          nextState = LoadIndicatorMode.load;
+          nextState = LoadMode.load;
         }
         continue refresh;
       refresh:
-      case LoadIndicatorMode.load:
+      case LoadMode.load:
         if (loadTask != null) {
-          return LoadIndicatorMode.load;
+          return LoadMode.load;
         } else {
           // 结束
           var state = goToFinish();
@@ -737,19 +737,19 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         }
         continue done;
       done:
-      case LoadIndicatorMode.done:
+      case LoadMode.done:
       // Let the transition back to inactive trigger before strictly going
       // to 0.0 since the last bit of the animation can take some time and
       // can feel sluggish if not going all the way back to 0.0 prevented
       // a subsequent pull-to-refresh from starting.
         if (latestIndicatorBoxExtent >
             widget.loadTriggerPullDistance * _inactiveResetOverscrollFraction) {
-          return LoadIndicatorMode.done;
+          return LoadMode.done;
         } else {
-          nextState = LoadIndicatorMode.inactive;
+          nextState = LoadMode.inactive;
         }
         break;
-      case LoadIndicatorMode.loaded:
+      case LoadMode.loaded:
         nextState = loadState;
         break;
       default:
@@ -785,9 +785,9 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
           loadState = transitionNextState();
           // 列表未占满时恢复一下状态
           if (extraExtentNotifier.value > 0.0
-              && loadState == LoadIndicatorMode.loaded
+              && loadState == LoadMode.loaded
               && loadTask == null) {
-            loadState = LoadIndicatorMode.inactive;
+            loadState = LoadMode.inactive;
           }
           if (widget.builder != null && latestIndicatorBoxExtent > 0) {
             Widget child = widget.builder(
