@@ -8,6 +8,11 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 
 /// 基本示例页面
 class BasicPage extends StatefulWidget {
+  /// 标题
+  final String title;
+
+  const BasicPage(this.title, {Key key}) : super(key: key);
+
   @override
   _BasicPageState createState() => _BasicPageState();
 }
@@ -43,7 +48,7 @@ class _BasicPageState extends State<BasicPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(FlutterI18n.translate(context, 'basicUse')),
+        title: Text(widget.title),
         backgroundColor: Colors.white,
         actions: <Widget>[
           IconButton(

@@ -1,4 +1,6 @@
+import 'package:example/page/more/more.dart';
 import 'package:example/page/sample/sample.dart';
+import 'package:example/page/stype/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 
@@ -31,7 +33,7 @@ class _HomePageState extends State<HomePage>
     return Scaffold(
       body: TabBarView(
         controller: _tabController,
-        children: <Widget>[SamplePage(), Container(), Container()],
+        children: <Widget>[SamplePage(), StylePage(), MorePage()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _tabController.index,
