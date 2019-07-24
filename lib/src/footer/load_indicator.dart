@@ -574,7 +574,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     _noMore = _success == false ? false : noMore;
     if (widget.enableControlFinishLoad && loadTask != null) {
       if (widget.enableInfiniteLoad) {
-        loadState = LoadMode.loaded;
+        loadState = LoadMode.inactive;
       }
       setState(() => loadTask = null);
       loadState = transitionNextState();
