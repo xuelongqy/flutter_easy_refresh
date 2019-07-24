@@ -1,4 +1,5 @@
 import 'package:example/page/sample/basic.dart';
+import 'package:example/page/sample/nested_scroll_view.dart';
 import 'package:example/page/sample/user_profile.dart';
 import 'package:example/widget/circular_icon.dart';
 import 'package:example/widget/list_item.dart';
@@ -59,6 +60,21 @@ class _SamplePageState extends State<SamplePage>
                 icon: CircularIcon(
                   bgColor: Colors.red,
                   icon: Icons.person,
+                ),
+              ),
+              //  NestedScrollView
+              ListItem(
+                title: 'NestedScrollView',
+                describe: FlutterI18n.translate(context, 'nestedScrollViewDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return NestedScrollViewPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.green,
+                  icon: Icons.line_style,
                 ),
               ),
             ]),

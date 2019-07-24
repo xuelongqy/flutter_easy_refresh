@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 
-/// 基本示例页面
+/// 基本示例(经典样式)页面
 class BasicPage extends StatefulWidget {
   /// 标题
   final String title;
@@ -21,7 +21,7 @@ class _BasicPageState extends State<BasicPage> {
   ScrollController _scrollController;
 
   // 条目总数
-  int _count = 10;
+  int _count = 20;
   // 反向
   bool _reverse = false;
   // 方向
@@ -102,25 +102,23 @@ class _BasicPageState extends State<BasicPage> {
               await Future.delayed(Duration(seconds: 2), () {
                 print('onRefresh');
                 setState(() {
-                  _count = 10;
+                  _count = 20;
                 });
                 if (!_enableControlFinish) {
                   _controller.resetLoadState();
                   _controller.finishRefresh();
                 }
-                return 'stop';
               });
             },
             onLoad: () async {
               await Future.delayed(Duration(seconds: 2), () {
                 print('onLoad');
                 setState(() {
-                  _count += 10;
+                  _count += 20;
                 });
                 if (!_enableControlFinish) {
-                  _controller.finishLoad(noMore: _count >= 40);
+                  _controller.finishLoad(noMore: _count >= 80);
                 }
-                return 'stop';
               });
             },
             slivers: <Widget>[
@@ -129,6 +127,8 @@ class _BasicPageState extends State<BasicPage> {
                       (context, index) {
                     return SampleListItem(
                       direction: _direction,
+                      width: _direction == Axis.vertical
+                          ? double.infinity : 150.0,
                     );
                   },
                   childCount: _count,
@@ -149,7 +149,7 @@ class _BasicPageState extends State<BasicPage> {
             : SizedBox(width: 0.0, height: 0.0,),
         _enableControlFinish ? FlatButton(
             onPressed: () {
-              _controller.finishLoad(noMore: _count >= 40);
+              _controller.finishLoad(noMore: _count >= 80);
             },
             child: Text(FlutterI18n.translate(context, 'completeLoad'),
                 style: TextStyle(color: Colors.black)))

@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 class SampleListItem extends StatelessWidget {
   /// 方向
   final Axis direction;
+  /// 宽度
+  final double width;
 
   const SampleListItem({
     Key key,
     this.direction = Axis.vertical,
+    this.width = double.infinity,
   }) : super(key: key);
 
   @override
@@ -92,11 +95,11 @@ class SampleListItem extends StatelessWidget {
           children: <Widget>[
             Container(
               height: 100.0,
-              width: 150.0,
+              width: width,
               color: Colors.grey[200],
             ),
             Container(
-              width: 150.0,
+              width: width,
               padding: EdgeInsets.all(10.0),
               child: Column(
                 children: <Widget>[

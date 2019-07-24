@@ -26,6 +26,7 @@ dependencies:
   flutter_spinkit: ^3.1.0
   flare_flutter: ^1.2.0
   flutter_i18n: ^0.6.3
+  extended_nested_scroll_view: ^0.3.6
   flutter_easyrefresh:
     path: ../
 
