@@ -266,7 +266,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
     }
     return ScrollNotificationListener(
       onNotification: (notification) {
-        return true;
+        return false;
       },
       onFocus: (focus) {
         _focusNotifier.value = focus;
