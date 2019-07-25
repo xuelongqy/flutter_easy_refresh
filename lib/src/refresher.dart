@@ -196,6 +196,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
      _focusNotifier = ValueNotifier<bool>(false);
      _taskNotifier = ValueNotifier<bool>(false);
      _taskNotifier.addListener(() {
+       // 监听首次刷新是否结束
        if (_enableFirstRefresh && !_taskNotifier.value) {
          _scrollerController.jumpTo(0.0);
          setState(() {
