@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
@@ -162,11 +164,13 @@ class _EasyRefreshState extends State<EasyRefresh> {
   // Header
   Header get _header {
     if (_enableFirstRefresh && widget.firstRefreshWidget != null)
-      return FirstRefreshHeader(widget.firstRefreshWidget);
+      return _firstRefreshHeader;
     return widget.header ?? EasyRefresh._defaultHeader;
   }
   // 是否开启首次刷新
   bool _enableFirstRefresh = false;
+  // 首次刷新组件
+  Header _firstRefreshHeader;
   // Footer
   Footer get _footer {
     return widget.footer ?? EasyRefresh._defaultFooter;
@@ -191,18 +195,22 @@ class _EasyRefreshState extends State<EasyRefresh> {
      super.initState();
      _focusNotifier = ValueNotifier<bool>(false);
      _taskNotifier = ValueNotifier<bool>(false);
-     // 判断是否首次刷新结束
-     _taskNotifier.addListener((){
-       if (_enableFirstRefresh && !_taskNotifier.value) {
-         setState(() {
-           _enableFirstRefresh = false;
-         });
-       }
-     });
      _physics = EasyRefreshPhysics();
      // 判断是否开启首次刷新
      _enableFirstRefresh = widget.firstRefresh ?? false;
     if (_enableFirstRefresh) {
+      _firstRefreshHeader = FirstRefreshHeader(widget.firstRefreshWidget, (time) {
+        // 首次刷新完成,稍作延迟,防止Header替换出现跳动
+        Future.delayed(Duration(milliseconds: time), () {
+          if (mounted) {
+            SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+              setState(() {
+                _enableFirstRefresh = false;
+              });
+            });
+          }
+        });
+      });
       SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
         callRefresh();
       });
@@ -235,7 +243,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
         curve: Curves.linear).whenComplete((){
       _scrollerController.animateTo(-(_header.enableInfiniteRefresh ? 0 : 1)
           * _header.triggerDistance - EasyRefresh.callOverExtent,
-          duration: Duration(milliseconds: _enableFirstRefresh ? 100 : 300),
+          duration: Duration(milliseconds: _enableFirstRefresh ? 200 : 300),
           curve: Curves.linear)
           .whenComplete((){
         _focusNotifier.value = false;

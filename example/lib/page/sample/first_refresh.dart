@@ -68,7 +68,7 @@ class FirstRefreshPageState extends State<FirstRefreshPage> {
           ),
         ],
         onRefresh: () async {
-          await Future.delayed(Duration(seconds: 2), () {
+          await Future.delayed(Duration(milliseconds: 50), () {
             setState(() {
               _count = 20;
             });
