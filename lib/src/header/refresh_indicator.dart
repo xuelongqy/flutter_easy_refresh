@@ -240,7 +240,9 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
         constraints.asBoxConstraints(
           maxExtent: _hasLayoutExtent ? overscrolledExtent >
               _refreshIndicatorExtent ? overscrolledExtent
-              : _refreshIndicatorExtent
+              // 如果为double.infinity则占满列表
+              : _refreshIndicatorExtent == double.infinity
+              ? constraints.viewportMainAxisExtent : _refreshIndicatorExtent
               : overscrolledExtent,
         ),
         parentUsesSize: true,
@@ -445,8 +447,8 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
         assert(refreshTriggerPullDistance > 0.0),
         assert(refreshIndicatorExtent != null),
         assert(refreshIndicatorExtent >= 0.0),
-        assert(
-        headerFloat || refreshTriggerPullDistance >= refreshIndicatorExtent,
+        assert(headerFloat
+            || refreshTriggerPullDistance >= refreshIndicatorExtent,
         'The refresh indicator cannot take more space in its final state '
             'than the amount initially created by overscrolling.'
         ),

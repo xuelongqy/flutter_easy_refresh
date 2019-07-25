@@ -1,4 +1,5 @@
 import 'package:example/page/sample/basic.dart';
+import 'package:example/page/sample/first_refresh.dart';
 import 'package:example/page/sample/nested_scroll_view.dart';
 import 'package:example/page/sample/swiper.dart';
 import 'package:example/page/sample/user_profile.dart';
@@ -91,6 +92,22 @@ class _SamplePageState extends State<SamplePage>
                 icon: CircularIcon(
                   bgColor: Colors.deepOrangeAccent,
                   icon: Icons.view_array,
+                ),
+              ),
+              //  首次刷新
+              ListItem(
+                title: FlutterI18n.translate(context, 'firstRefresh'),
+                describe: FlutterI18n.translate(
+                    context, 'firstRefreshDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return FirstRefreshPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.blueGrey,
+                  icon: Icons.refresh,
                 ),
               ),
             ]),

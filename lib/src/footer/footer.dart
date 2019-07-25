@@ -99,9 +99,10 @@ class CustomFooter extends Footer {
 
 /// 经典Footer
 class ClassicalFooter extends Footer{
-  // 方位
+  /// Key
+  final Key key;
+  /// 方位
   final AlignmentGeometry alignment;
-
   /// 提示加载文字
   final String loadText;
   /// 准备加载文字
@@ -132,6 +133,7 @@ class ClassicalFooter extends Footer{
     completeDuration = const Duration(seconds: 1),
     enableInfiniteLoad = true,
     enableHapticFeedback = true,
+    this.key,
     this.alignment,
     this.loadText: "Push to load",
     this.loadReadyText: "Release to load",
@@ -160,6 +162,7 @@ class ClassicalFooter extends Footer{
       bool float, Duration completeDuration,
       bool enableInfiniteLoad, bool success, bool noMore) {
     return ClassicalFooterWidget(
+      key: key,
       classicalFooter: this,
       loadState: loadState,
       pulledExtent: pulledExtent,

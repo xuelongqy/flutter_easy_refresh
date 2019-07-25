@@ -102,9 +102,10 @@ class CustomHeader extends Header {
 
 /// 经典Header
 class ClassicalHeader extends Header{
-  // 方位
+  /// Key
+  final Key key;
+  /// 方位
   final AlignmentGeometry alignment;
-
   /// 提示刷新文字
   final String refreshText;
   /// 准备刷新文字
@@ -135,6 +136,7 @@ class ClassicalHeader extends Header{
     completeDuration = const Duration(seconds: 1),
     enableInfiniteRefresh = false,
     enableHapticFeedback = true,
+    this.key,
     this.alignment,
     this.refreshText: "Pull to refresh",
     this.refreshReadyText: "Release to refresh",
@@ -165,6 +167,7 @@ class ClassicalHeader extends Header{
       Duration completeDuration, bool enableInfiniteRefresh,
       bool success, bool noMore) {
     return ClassicalHeaderWidget(
+      key: key,
       classicalHeader: this,
       refreshState: refreshState,
       pulledExtent: pulledExtent,
@@ -514,5 +517,32 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
         ),
       )
     ];
+  }
+}
+
+/// 首次刷新Header
+class FirstRefreshHeader extends Header {
+  /// 子组件
+  final Widget child;
+
+  FirstRefreshHeader(this.child): super(
+    extent: double.infinity,
+    triggerDistance: 60.0,
+    float: true,
+    enableInfiniteRefresh: false,
+    enableHapticFeedback: false,
+  );
+
+  @override
+  Widget contentBuilder(BuildContext context, RefreshMode refreshState,
+      double pulledExtent, double refreshTriggerPullDistance,
+      double refreshIndicatorExtent, AxisDirection axisDirection,
+      bool float, Duration completeDuration, bool enableInfiniteRefresh,
+      bool success, bool noMore) {
+    return (refreshState == RefreshMode.armed
+        || refreshState == RefreshMode.refresh)
+        && pulledExtent > refreshTriggerPullDistance
+            + EasyRefresh.callOverExtent
+        ? child : Container();
   }
 }
