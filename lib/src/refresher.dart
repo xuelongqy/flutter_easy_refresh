@@ -195,22 +195,19 @@ class _EasyRefreshState extends State<EasyRefresh> {
      super.initState();
      _focusNotifier = ValueNotifier<bool>(false);
      _taskNotifier = ValueNotifier<bool>(false);
+     _taskNotifier.addListener(() {
+       if (_enableFirstRefresh && !_taskNotifier.value) {
+         _scrollerController.jumpTo(0.0);
+         setState(() {
+           _enableFirstRefresh = false;
+         });
+       }
+     });
      _physics = EasyRefreshPhysics();
      // 判断是否开启首次刷新
      _enableFirstRefresh = widget.firstRefresh ?? false;
     if (_enableFirstRefresh) {
-      _firstRefreshHeader = FirstRefreshHeader(widget.firstRefreshWidget, (time) {
-        // 首次刷新完成,稍作延迟,防止Header替换出现跳动
-        Future.delayed(Duration(milliseconds: time), () {
-          if (mounted) {
-            SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-              setState(() {
-                _enableFirstRefresh = false;
-              });
-            });
-          }
-        });
-      });
+      _firstRefreshHeader = FirstRefreshHeader(widget.firstRefreshWidget);
       SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
         callRefresh();
       });
@@ -279,7 +276,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
     // 生成slivers
     List<Widget> slivers;
     if (widget.builder == null) {
-      if (widget.slivers != null) slivers = widget.slivers;
+      if (widget.slivers != null) slivers = List.from(
+        widget.slivers, growable: true,);
       else if (widget.child != null) slivers = _buildSliversByChild();
       else slivers = [];
       // 插入Header和Footer

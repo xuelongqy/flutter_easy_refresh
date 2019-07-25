@@ -524,13 +524,8 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
 class FirstRefreshHeader extends Header {
   /// 子组件
   final Widget child;
-  /// 完成回调
-  final void Function(int time) done;
 
-  // 刷新状态
-  bool refreshStatus;
-
-  FirstRefreshHeader(this.child, this.done): super(
+  FirstRefreshHeader(this.child): super(
     extent: double.infinity,
     triggerDistance: 60.0,
     float: true,
@@ -544,19 +539,6 @@ class FirstRefreshHeader extends Header {
       double refreshIndicatorExtent, AxisDirection axisDirection,
       bool float, Duration completeDuration, bool enableInfiniteRefresh,
       bool success, bool noMore) {
-    if (refreshState == RefreshMode.armed) {
-      refreshStatus = true;
-    }
-    else if (refreshStatus == true
-        && (refreshState != RefreshMode.armed
-        || refreshState != RefreshMode.refresh)) {
-      refreshStatus = null;
-      if (refreshState == RefreshMode.done) {
-        done(500);
-      } else {
-        done(1);
-      }
-    }
     return (refreshState == RefreshMode.armed
         || refreshState == RefreshMode.refresh)
         && pulledExtent > refreshTriggerPullDistance
