@@ -96,5 +96,9 @@
   "headerFloat": "Header float",
   "headerFloatDescribe": "Header is displayed on the list",
   "vibration": "vibration",
-  "vibrationDescribe": "Triggered vibration feedback"
+  "vibrationDescribe": "Triggered vibration feedback",
+  "refreshSwitch": "Refresh switch",
+  "refreshSwitchDescribe": "Whether to turn on refresh",
+  "loadSwitch": "Load switch",
+  "loadSwitchDescribe": "Whether to turn on load"
 }

@@ -96,5 +96,9 @@
   "headerFloat": "Header浮动",
   "headerFloatDescribe": "Header显示在列表之上",
   "vibration": "震动",
-  "vibrationDescribe": "触发震动反馈"
+  "vibrationDescribe": "触发震动反馈",
+  "refreshSwitch": "刷新开关",
+  "refreshSwitchDescribe": "是否开启刷新",
+  "loadSwitch": "加载开关",
+  "loadSwitchDescribe": "是否开启加载"
 }

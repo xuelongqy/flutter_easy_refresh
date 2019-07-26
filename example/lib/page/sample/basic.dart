@@ -36,6 +36,10 @@ class _BasicPageState extends State<BasicPage> {
   bool _taskIndependence = false;
   // 震动
   bool _vibration = true;
+  // 是否开启刷新
+  bool _enableRefresh = true;
+  // 是否开启加载
+  bool _enableLoad = true;
 
   @override
   void initState() {
@@ -98,9 +102,8 @@ class _BasicPageState extends State<BasicPage> {
               infoText: FlutterI18n.translate(context, 'updateAt'),
               enableHapticFeedback: _vibration,
             ),
-            onRefresh: () async {
+            onRefresh: _enableRefresh ? () async {
               await Future.delayed(Duration(seconds: 2), () {
-                print('onRefresh');
                 setState(() {
                   _count = 20;
                 });
@@ -109,10 +112,9 @@ class _BasicPageState extends State<BasicPage> {
                   _controller.finishRefresh();
                 }
               });
-            },
-            onLoad: () async {
+            }: null,
+            onLoad: _enableLoad ? () async {
               await Future.delayed(Duration(seconds: 2), () {
-                print('onLoad');
                 setState(() {
                   _count += 20;
                 });
@@ -120,7 +122,7 @@ class _BasicPageState extends State<BasicPage> {
                   _controller.finishLoad(noMore: _count >= 80);
                 }
               });
-            },
+            }: null,
             slivers: <Widget>[
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -307,6 +309,40 @@ class _BasicPageState extends State<BasicPage> {
                       onChanged: (vibration) {
                         setState(() {
                           _vibration = vibration;
+                        });
+                        state((){});
+                      },
+                    ),
+                  ),
+                ),
+                // 刷新开关
+                ListItem(
+                  title: FlutterI18n.translate(context, 'refreshSwitch'),
+                  describe: FlutterI18n.translate(
+                      context, 'refreshSwitchDescribe'),
+                  rightWidget: Center(
+                    child: Switch(
+                      value: _enableRefresh,
+                      onChanged: (refresh) {
+                        setState(() {
+                          _enableRefresh = refresh;
+                        });
+                        state((){});
+                      },
+                    ),
+                  ),
+                ),
+                // 加载开关
+                ListItem(
+                  title: FlutterI18n.translate(context, 'loadSwitch'),
+                  describe: FlutterI18n.translate(
+                      context, 'loadSwitchDescribe'),
+                  rightWidget: Center(
+                    child: Switch(
+                      value: _enableLoad,
+                      onChanged: (load) {
+                        setState(() {
+                          _enableLoad = load;
                         });
                         state((){});
                       },

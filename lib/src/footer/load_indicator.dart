@@ -584,11 +584,13 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
   // 恢复状态
   void resetLoadState() {
-    setState(() {
-      _noMore = false;
-      loadState = LoadMode.inactive;
-      hasSliverLayoutExtent = false;
-    });
+    if (mounted) {
+      setState(() {
+        _noMore = false;
+        loadState = LoadMode.inactive;
+        hasSliverLayoutExtent = false;
+      });
+    }
   }
 
   // 无限加载

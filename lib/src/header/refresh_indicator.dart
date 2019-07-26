@@ -606,11 +606,13 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
   // 恢复状态
   void resetRefreshState() {
-    setState(() {
-      _noMore = false;
-      refreshState = RefreshMode.inactive;
-      hasSliverLayoutExtent = false;
-    });
+    if (mounted) {
+      setState(() {
+        _noMore = false;
+        refreshState = RefreshMode.inactive;
+        hasSliverLayoutExtent = false;
+      });
+    }
   }
 
   // 无限刷新
