@@ -806,7 +806,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
           latestIndicatorBoxExtent = isVertical
               ? constraints.maxHeight : constraints.maxWidth;
           refreshState = transitionNextState();
-          if (widget.builder != null && latestIndicatorBoxExtent > 0) {
+          if (widget.builder != null && latestIndicatorBoxExtent >= 0) {
             return widget.builder(
               context,
               refreshState,

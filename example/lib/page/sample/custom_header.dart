@@ -100,12 +100,13 @@ class CircleHeaderState extends State<CircleHeader> {
   void initState() {
     super.initState();
     widget.linkNotifier.addListener(() {
+      print(_refreshState);
       setState(() {
         if (_refreshState == RefreshMode.armed
             || _refreshState == RefreshMode.refresh) {
           _indicatorValue = null;
         } else {
-          if (_pulledExtent < 1.0) {
+          if (_refreshState == RefreshMode.inactive) {
             _indicatorValue = 0.0;
           } else {
             double indicatorValue = _pulledExtent / 70.0 * 0.9;

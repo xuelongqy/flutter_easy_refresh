@@ -790,7 +790,7 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
               && loadTask == null) {
             loadState = LoadMode.inactive;
           }
-          if (widget.builder != null && latestIndicatorBoxExtent > 0) {
+          if (widget.builder != null && latestIndicatorBoxExtent >= 0) {
             Widget child = widget.builder(
               context,
               loadState,
