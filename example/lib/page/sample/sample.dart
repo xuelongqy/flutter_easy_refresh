@@ -1,4 +1,5 @@
 import 'package:example/page/sample/basic.dart';
+import 'package:example/page/sample/custom_header.dart';
 import 'package:example/page/sample/empty.dart';
 import 'package:example/page/sample/first_refresh.dart';
 import 'package:example/page/sample/nested_scroll_view.dart';
@@ -125,6 +126,22 @@ class _SamplePageState extends State<SamplePage>
                 icon: CircularIcon(
                   bgColor: Colors.grey,
                   icon: Icons.inbox,
+                ),
+              ),
+              //  CustomHeader
+              ListItem(
+                title: 'CustomHeader',
+                describe: FlutterI18n.translate(
+                    context, 'customHeaderDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return CustomHeaderPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.amber[700],
+                  icon: Icons.format_line_spacing,
                 ),
               ),
             ]),

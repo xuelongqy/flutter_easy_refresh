@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../easy_refresh.dart';
 
@@ -97,6 +98,69 @@ class CustomHeader extends Header {
     return headerBuilder(context, refreshState, pulledExtent,
       refreshTriggerPullDistance, refreshIndicatorExtent, axisDirection, float,
         completeDuration, enableInfiniteRefresh, success, noMore);
+  }
+}
+
+/// 连接通知器
+class LinkHeaderNotifier extends ChangeNotifier {
+  BuildContext context;
+  RefreshMode refreshState;
+  double pulledExtent;
+  double refreshTriggerPullDistance;
+  double refreshIndicatorExtent;
+  AxisDirection axisDirection;
+  bool float;
+  Duration completeDuration;
+  bool enableInfiniteRefresh;
+  bool success;
+  bool noMore;
+
+  void contentBuilder(BuildContext context,
+      RefreshMode refreshState, double pulledExtent,
+      double refreshTriggerPullDistance, double refreshIndicatorExtent,
+      AxisDirection axisDirection, bool float, Duration completeDuration,
+      bool enableInfiniteRefresh, bool success, bool noMore) {
+    this.context = context;
+    this.refreshState = refreshState;
+    this.pulledExtent = pulledExtent;
+    this.refreshTriggerPullDistance = refreshTriggerPullDistance;
+    this.refreshIndicatorExtent = refreshIndicatorExtent;
+    this.axisDirection = axisDirection;
+    this.float = float;
+    this.completeDuration = completeDuration;
+    this.enableInfiniteRefresh = enableInfiniteRefresh;
+    this.success = success;
+    this.noMore = noMore;
+    SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+      notifyListeners();
+    });
+  }
+}
+/// 连接器Header
+class LinkHeader extends Header {
+  final LinkHeaderNotifier linkNotifier;
+
+  LinkHeader(this.linkNotifier,{
+    extent = 60.0,
+    triggerDistance = 70.0,
+    completeDuration,
+  }): super(
+    extent: extent,
+    triggerDistance: triggerDistance,
+    float: true,
+    completeDuration: completeDuration,
+  );
+
+  @override
+  Widget contentBuilder(BuildContext context,
+      RefreshMode refreshState, double pulledExtent,
+      double refreshTriggerPullDistance, double refreshIndicatorExtent,
+      AxisDirection axisDirection, bool float, Duration completeDuration,
+      bool enableInfiniteRefresh, bool success, bool noMore) {
+    linkNotifier.contentBuilder(context, refreshState, pulledExtent,
+        refreshTriggerPullDistance, refreshIndicatorExtent, axisDirection,
+        float, completeDuration, enableInfiniteRefresh, success, noMore);
+    return SizedBox(width: 0.0, height: 0.0,);
   }
 }
 
