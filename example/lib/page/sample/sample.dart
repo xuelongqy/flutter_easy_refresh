@@ -1,4 +1,5 @@
 import 'package:example/page/sample/basic.dart';
+import 'package:example/page/sample/empty.dart';
 import 'package:example/page/sample/first_refresh.dart';
 import 'package:example/page/sample/nested_scroll_view.dart';
 import 'package:example/page/sample/swiper.dart';
@@ -108,6 +109,22 @@ class _SamplePageState extends State<SamplePage>
                 icon: CircularIcon(
                   bgColor: Colors.blueGrey,
                   icon: Icons.refresh,
+                ),
+              ),
+              //  空视图
+              ListItem(
+                title: FlutterI18n.translate(context, 'emptyWidget'),
+                describe: FlutterI18n.translate(
+                    context, 'emptyWidgetDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return EmptyPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.grey,
+                  icon: Icons.inbox,
                 ),
               ),
             ]),

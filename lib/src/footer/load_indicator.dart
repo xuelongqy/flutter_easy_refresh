@@ -184,10 +184,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
     assert(constraints.growthDirection == GrowthDirection.forward);
 
     // 判断是否触发无限加载
-    if (enableInfiniteLoad && constraints.remainingPaintExtent > 0
-        && constraints.remainingPaintExtent != 5.684341886080802e-14
-        && constraints.remainingPaintExtent != 1.1368683772161603e-13
-        && constraints.remainingCacheExtent != 0.0
+    if (enableInfiniteLoad && constraints.remainingPaintExtent > 1.0
         //&& constraints.userScrollDirection != ScrollDirection.idle
         && extraExtentNotifier.value == 0.0) {
       if (!_triggerInfiniteLoad) {

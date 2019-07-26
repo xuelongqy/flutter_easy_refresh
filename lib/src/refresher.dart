@@ -9,6 +9,7 @@ import 'footer/footer.dart';
 import 'header/header.dart';
 import 'listener/scroll_notification_listener.dart';
 import 'physics/scroll_physics.dart';
+import 'widget/empty_widget.dart';
 
 /// 子组件构造器
 typedef EasyRefreshChildBuilder = Widget Function(
@@ -33,7 +34,7 @@ class EasyRefresh extends StatefulWidget {
   final bool taskIndependence;
   /// Header
   final Header header;
-  final double headerIndex;
+  final int headerIndex;
   /// Footer
   final Footer footer;
   /// 子组件构造器
@@ -46,6 +47,11 @@ class EasyRefresh extends StatefulWidget {
   /// 首次刷新组件
   /// 不设置时使用header
   final Widget firstRefreshWidget;
+
+  /// 空视图
+  /// 当不为null时,只会显示空视图
+  /// 保留[headerIndex]以上的内容
+  final emptyWidget;
 
   /// Slivers集合
   final List<Widget> slivers;
@@ -96,6 +102,7 @@ class EasyRefresh extends StatefulWidget {
     this.firstRefresh,
     this.firstRefreshWidget,
     this.headerIndex,
+    this.emptyWidget,
     @required this.child,
   }) : this.scrollDirection = null, this.reverse = null, this.builder = null,
         this.primary = null, this.shrinkWrap = null, this.center = null,
@@ -127,6 +134,7 @@ class EasyRefresh extends StatefulWidget {
     this.dragStartBehavior = DragStartBehavior.start,
     this.firstRefresh,
     this.firstRefreshWidget,
+    this.emptyWidget,
     @required this.slivers,
   }) : this.builder = null, this.child = null;
 
@@ -149,8 +157,8 @@ class EasyRefresh extends StatefulWidget {
         this.primary = null, this.shrinkWrap = null, this.center = null,
         this.anchor = null, this.cacheExtent = null, this.slivers = null,
         this.semanticChildCount = null, this.dragStartBehavior = null,
-        this.headerIndex = null,
-        this.firstRefreshWidget = null;
+        this.headerIndex = null, this.firstRefreshWidget = null,
+        this.emptyWidget = null;
 
   @override
   _EasyRefreshState createState() {
@@ -280,10 +288,17 @@ class _EasyRefreshState extends State<EasyRefresh> {
       if (widget.slivers != null) slivers = List.from(
         widget.slivers, growable: true,);
       else if (widget.child != null) slivers = _buildSliversByChild();
-      else slivers = [];
+      // 判断是否有空视图
+      if (widget.emptyWidget != null && slivers != null) {
+        slivers = slivers.sublist(0, widget.headerIndex ?? 0);
+        slivers.add(EmptyWidget(
+          child: widget.emptyWidget,
+        ));
+      }
       // 插入Header和Footer
-      if (header != null) slivers.insert(widget.headerIndex ?? 0, header);
-      if (footer != null) slivers.add(footer);
+      if (header != null && slivers != null)
+        slivers.insert(widget.headerIndex ?? 0, header);
+      if (footer != null && slivers != null) slivers.add(footer);
     }
     // 构建列表组件
     Widget listBody;
@@ -324,7 +339,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
   List<Widget> _buildSliversByChild() {
     Widget child = widget.child;
     List<Widget> slivers;
-    if (child == null) return [];
+    if (child == null) return slivers;
     if (child is ScrollView) {
       if (child is BoxScrollView) {
         // ignore: invalid_use_of_protected_member
@@ -387,6 +402,16 @@ class _EasyRefreshState extends State<EasyRefresh> {
         dragStartBehavior: child.dragStartBehavior,
         viewportBuilder: (context,offset){
           Viewport viewport = child.viewportBuilder(context,offset);
+          // 判断是否有空视图
+          if (widget.emptyWidget != null && slivers != null) {
+            if (viewport.children.length > (widget.headerIndex ?? 0) + 1) {
+              viewport.children.removeRange(widget.headerIndex,
+                  viewport.children.length - 1);
+              viewport.children.add(EmptyWidget(
+                child: widget.emptyWidget,
+              ));
+            }
+          }
           if (header != null) {
             viewport.children.insert(widget.headerIndex ?? 0, header);
           }
