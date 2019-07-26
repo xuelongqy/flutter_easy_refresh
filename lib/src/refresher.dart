@@ -95,12 +95,12 @@ class EasyRefresh extends StatefulWidget {
     this.footer,
     this.firstRefresh,
     this.firstRefreshWidget,
+    this.headerIndex,
     @required this.child,
   }) : this.scrollDirection = null, this.reverse = null, this.builder = null,
         this.primary = null, this.shrinkWrap = null, this.center = null,
         this.anchor = null, this.cacheExtent = null, this.slivers = null,
-        this.semanticChildCount = null, this.dragStartBehavior = null,
-        this.headerIndex = null;
+        this.semanticChildCount = null, this.dragStartBehavior = null;
 
   /// custom构造器(推荐)
   /// 直接使用CustomScrollView可用的slivers
@@ -388,7 +388,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
         viewportBuilder: (context,offset){
           Viewport viewport = child.viewportBuilder(context,offset);
           if (header != null) {
-            viewport.children.insert(0, header);
+            viewport.children.insert(widget.headerIndex ?? 0, header);
           }
           if (footer != null) {
             viewport.children.add(footer);

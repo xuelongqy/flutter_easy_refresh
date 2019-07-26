@@ -274,14 +274,14 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliver
         geometry = SliverGeometry(
           scrollExtent: layoutExtent,
           paintOrigin: -overscrolledExtent - constraints.scrollOffset,
-          paintExtent: max(
+          paintExtent: min(max(
             // Check child size (which can come from overscroll) because
             // layoutExtent may be zero. Check layoutExtent also since even
             // with a layoutExtent, the indicator builder may decide to not
             // build anything.
             max(childSize, layoutExtent) - constraints.scrollOffset,
             0.0,
-          ),
+          ), constraints.remainingPaintExtent),
           maxPaintExtent: max(
             max(childSize, layoutExtent) - constraints.scrollOffset,
             0.0,

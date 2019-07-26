@@ -29,7 +29,6 @@ class FirstRefreshPageState extends State<FirstRefreshPage> {
         firstRefreshWidget: Container(
           width: double.infinity,
           height: double.infinity,
-          color: Colors.black12,
           child: Center(
             child: SizedBox(
               height: 200.0,

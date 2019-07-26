@@ -21,6 +21,9 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(() {
+      setState(() {});
+    });
     SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
       // 设置EasyRefresh的默认样式
       EasyRefresh.defaultHeader = ClassicalHeader(
@@ -74,7 +77,7 @@ class _HomePageState extends State<HomePage>
               title: Text(FlutterI18n.translate(context, 'style'))),
           BottomNavigationBarItem(
               icon: Icon(Icons.more_vert),
-              title: Text(FlutterI18n.translate(context, 'more')))
+              title: Text(FlutterI18n.translate(context, 'more'))),
         ],
       ),
     );
