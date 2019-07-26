@@ -400,17 +400,17 @@ class _EasyRefreshState extends State<EasyRefresh> {
         axisDirection: child.axisDirection,
         semanticChildCount: child.semanticChildCount,
         dragStartBehavior: child.dragStartBehavior,
-        viewportBuilder: (context,offset){
-          Viewport viewport = child.viewportBuilder(context,offset);
+        viewportBuilder: (context, position){
+          Viewport viewport = child.viewportBuilder(context, position);
           // 判断是否有空视图
-          if (widget.emptyWidget != null && slivers != null) {
+          if (widget.emptyWidget != null) {
             if (viewport.children.length > (widget.headerIndex ?? 0) + 1) {
               viewport.children.removeRange(widget.headerIndex,
                   viewport.children.length - 1);
-              viewport.children.add(EmptyWidget(
-                child: widget.emptyWidget,
-              ));
             }
+            viewport.children.add(EmptyWidget(
+              child: widget.emptyWidget,
+            ));
           }
           if (header != null) {
             viewport.children.insert(widget.headerIndex ?? 0, header);
