@@ -40,6 +40,10 @@ class _BasicPageState extends State<BasicPage> {
   bool _enableRefresh = true;
   // 是否开启加载
   bool _enableLoad = true;
+  // 顶部回弹
+  bool _topBouncing = true;
+  // 底部回弹
+  bool _bottomBouncing = true;
 
   @override
   void initState() {
@@ -77,6 +81,8 @@ class _BasicPageState extends State<BasicPage> {
             scrollController: _scrollController,
             reverse: _reverse,
             scrollDirection: _direction,
+            topBouncing: _topBouncing,
+            bottomBouncing: _bottomBouncing,
             header: ClassicalHeader(
               enableInfiniteRefresh: false,
               refreshText: FlutterI18n.translate(context, 'pullToRefresh'),
@@ -326,6 +332,9 @@ class _BasicPageState extends State<BasicPage> {
                       onChanged: (refresh) {
                         setState(() {
                           _enableRefresh = refresh;
+                          if (!_topBouncing) {
+                            _topBouncing = true;
+                          }
                         });
                         state((){});
                       },
@@ -343,6 +352,43 @@ class _BasicPageState extends State<BasicPage> {
                       onChanged: (load) {
                         setState(() {
                           _enableLoad = load;
+                          if (!_bottomBouncing) {
+                            _bottomBouncing = true;
+                          }
+                        });
+                        state((){});
+                      },
+                    ),
+                  ),
+                ),
+                // 顶部回弹
+                ListItem(
+                  title: FlutterI18n.translate(context, 'topBouncing'),
+                  describe: FlutterI18n.translate(
+                      context, 'topBouncingDescribe'),
+                  rightWidget: Center(
+                    child: Switch(
+                      value: _topBouncing,
+                      onChanged: _enableRefresh ? null : (bouncing) {
+                        setState(() {
+                          _topBouncing = bouncing;
+                        });
+                        state((){});
+                      },
+                    ),
+                  ),
+                ),
+                // 底部回弹
+                ListItem(
+                  title: FlutterI18n.translate(context, 'bottomBouncing'),
+                  describe: FlutterI18n.translate(
+                      context, 'bottomBouncingDescribe'),
+                  rightWidget: Center(
+                    child: Switch(
+                      value: _bottomBouncing,
+                      onChanged: _enableLoad ? null : (bouncing) {
+                        setState(() {
+                          _bottomBouncing = bouncing;
                         });
                         state((){});
                       },

@@ -51,6 +51,11 @@ class EasyRefresh extends StatefulWidget {
   /// 保留[headerIndex]以上的内容
   final emptyWidget;
 
+  /// 顶部回弹(onRefresh为null时生效)
+  final bool topBouncing;
+  /// 底部回弹(onLoad为null时生效)
+  final bool bottomBouncing;
+
   /// Slivers集合
   final List<Widget> slivers;
   /// 列表方向
@@ -101,6 +106,8 @@ class EasyRefresh extends StatefulWidget {
     this.firstRefreshWidget,
     this.headerIndex,
     this.emptyWidget,
+    this.topBouncing = true,
+    this.bottomBouncing = true,
     @required this.child,
   }) : this.scrollDirection = null, this.reverse = null, this.builder = null,
         this.primary = null, this.shrinkWrap = null, this.center = null,
@@ -133,6 +140,8 @@ class EasyRefresh extends StatefulWidget {
     this.firstRefresh,
     this.firstRefreshWidget,
     this.emptyWidget,
+    this.topBouncing = true,
+    this.bottomBouncing = true,
     @required this.slivers,
   }) : this.builder = null, this.child = null;
 
@@ -150,6 +159,8 @@ class EasyRefresh extends StatefulWidget {
     this.header,
     this.footer,
     this.firstRefresh,
+    this.topBouncing = true,
+    this.bottomBouncing = true,
     @required this.builder,
   }) : this.scrollDirection = null, this.reverse = null, this.child = null,
         this.primary = null, this.shrinkWrap = null, this.center = null,
@@ -210,7 +221,6 @@ class _EasyRefreshState extends State<EasyRefresh> {
          });
        }
      });
-     _physics = EasyRefreshPhysics();
      // 判断是否开启首次刷新
      _enableFirstRefresh = widget.firstRefresh ?? false;
     if (_enableFirstRefresh) {
@@ -221,13 +231,6 @@ class _EasyRefreshState extends State<EasyRefresh> {
     }
   }
 
-  // 销毁
-  void dispose() {
-    super.dispose();
-    _focusNotifier.dispose();
-    _taskNotifier.dispose();
-  }
-
   // 更新依赖
   @override
   void didChangeDependencies() {
@@ -235,6 +238,18 @@ class _EasyRefreshState extends State<EasyRefresh> {
     // 绑定控制器
     if (widget.controller != null)
       widget.controller._bindEasyRefreshState(this);
+    // 列表物理形式
+    _physics = EasyRefreshPhysics(
+      topBouncing: widget.onRefresh == null ? widget.topBouncing : true,
+      bottomBouncing: widget.onLoad == null ? widget.bottomBouncing : true,
+    );
+  }
+
+  // 销毁
+  void dispose() {
+    super.dispose();
+    _focusNotifier.dispose();
+    _taskNotifier.dispose();
   }
 
   // 触发刷新
@@ -275,6 +290,16 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
   @override
   Widget build(BuildContext context) {
+    // 列表物理形式
+    bool topBouncing = widget.onRefresh == null ? widget.topBouncing : true;
+    bool bottomBouncing = widget.onLoad == null ? widget.bottomBouncing : true;
+    if (topBouncing != _physics.topBouncing
+        || bottomBouncing != _physics.bottomBouncing) {
+      _physics = EasyRefreshPhysics(
+        topBouncing: topBouncing,
+        bottomBouncing: bottomBouncing,
+      );
+    }
     // 构建Header和Footer
     var header = widget.onRefresh == null ? null
         : _header.builder(context, widget, _focusNotifier, _taskNotifier);

@@ -102,5 +102,9 @@
   "loadSwitch": "加载开关",
   "loadSwitchDescribe": "是否开启加载",
   "linkHeader": "Header连接器",
-  "linkHeaderDescribeDescribe": "使用连接器自定义Header"
+  "linkHeaderDescribeDescribe": "使用连接器自定义Header",
+  "topBouncing": "顶部回弹",
+  "topBouncingDescribe": "顶部可越界",
+  "bottomBouncing": "底部回弹",
+  "bottomBouncingDescribe": "底部可越界"
 }

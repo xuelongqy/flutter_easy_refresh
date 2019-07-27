@@ -17,13 +17,25 @@ import 'dart:math' as math;
 ///  * [ClampingScrollPhysics], which is the analogous physics for Android's
 ///    clamping behavior.
 class EasyRefreshPhysics extends ScrollPhysics {
+  /// 顶部回弹
+  final bool topBouncing;
+  /// 底部回弹
+  final bool bottomBouncing;
+
   /// Creates scroll physics that bounce back from the edge.
   const EasyRefreshPhysics({
-    ScrollPhysics parent,}) : super(parent: parent);
+    ScrollPhysics parent,
+    this.topBouncing = true,
+    this.bottomBouncing = true,
+  }) : super(parent: parent);
 
   @override
   EasyRefreshPhysics applyTo(ScrollPhysics ancestor) {
-    return EasyRefreshPhysics(parent: buildParent(ancestor),);
+    return EasyRefreshPhysics(
+      parent: buildParent(ancestor),
+      topBouncing: topBouncing,
+      bottomBouncing: bottomBouncing,
+    );
   }
 
   /// The multiple applied to overscroll to make it appear that scrolling past
@@ -79,7 +91,25 @@ class EasyRefreshPhysics extends ScrollPhysics {
   }
 
   @override
-  double applyBoundaryConditions(ScrollMetrics position, double value) => 0.0;
+  double applyBoundaryConditions(ScrollMetrics position, double value) {
+    if (!this.topBouncing) {
+      if (value < position.pixels && position.pixels
+          <= position.minScrollExtent) // underscroll
+        return value - position.pixels;
+      if (value < position.minScrollExtent
+          && position.minScrollExtent < position.pixels) // hit top edge
+        return value - position.minScrollExtent;
+    }
+    if (!this.bottomBouncing) {
+      if (position.maxScrollExtent <= position.pixels
+          && position.pixels < value) // overscroll
+        return value - position.pixels;
+      if (position.pixels < position.maxScrollExtent
+          && position.maxScrollExtent < value) // hit bottom edge
+        return value - position.maxScrollExtent;
+    }
+    return 0.0;
+  }
 
   @override
   Simulation createBallisticSimulation(ScrollMetrics position, double velocity) {
@@ -127,5 +157,15 @@ class EasyRefreshPhysics extends ScrollPhysics {
   // from the natural motion of lifting the finger after a scroll.
   @override
   double get dragStartDistanceMotionThreshold => 3.5;
+
+  /// 重新runtimeType,用于更新状态
+  @override
+  Type get runtimeType {
+    if (topBouncing && bottomBouncing) return EasyRefreshPhysics;
+    else if (!topBouncing && bottomBouncing) return ClampingScrollPhysics;
+    else if (topBouncing && !bottomBouncing)
+      return AlwaysScrollableScrollPhysics;
+    else return NeverScrollableScrollPhysics;
+  }
 }
 
