@@ -3,15 +3,16 @@ import 'dart:async';
 import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 
-/// CustomHeader示例
-class CustomHeaderPage extends StatefulWidget {
+/// LinkHeader示例
+class LinkHeaderPage extends StatefulWidget {
   @override
-  CustomHeaderPageState createState() {
-    return CustomHeaderPageState();
+  LinkHeaderPageState createState() {
+    return LinkHeaderPageState();
   }
 }
-class CustomHeaderPageState extends State<CustomHeaderPage> {
+class LinkHeaderPageState extends State<LinkHeaderPage> {
   // 总数
   int _count = 20;
   // 连接通知器
@@ -35,7 +36,8 @@ class CustomHeaderPageState extends State<CustomHeaderPage> {
       body: EasyRefresh.custom(
         header: LinkHeader(_headerNotifier,
           extent: 70.0,
-          triggerDistance: 71.0,
+          triggerDistance: 70.0,
+          completeDuration: Duration(milliseconds: 500),
         ),
         slivers: <Widget>[
           SliverAppBar(
@@ -44,7 +46,7 @@ class CustomHeaderPageState extends State<CustomHeaderPage> {
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: false,
-              title: Text('CustomHeader'),
+              title: Text(FlutterI18n.translate(context, 'linkHeader')),
             ),
             actions: <Widget>[
               CircleHeader(_headerNotifier,),
@@ -100,17 +102,19 @@ class CircleHeaderState extends State<CircleHeader> {
   void initState() {
     super.initState();
     widget.linkNotifier.addListener(() {
-      print(_refreshState);
       setState(() {
         if (_refreshState == RefreshMode.armed
             || _refreshState == RefreshMode.refresh) {
           _indicatorValue = null;
+        } else if (_refreshState == RefreshMode.refreshed
+            || _refreshState == RefreshMode.done) {
+          _indicatorValue = 1.0;
         } else {
           if (_refreshState == RefreshMode.inactive) {
             _indicatorValue = 0.0;
           } else {
-            double indicatorValue = _pulledExtent / 70.0 * 0.9;
-            _indicatorValue = indicatorValue < 0.9 ? indicatorValue : 0.9;
+            double indicatorValue = _pulledExtent / 70.0 * 0.8;
+            _indicatorValue = indicatorValue < 0.8 ? indicatorValue : 0.8;
           }
         }
       });

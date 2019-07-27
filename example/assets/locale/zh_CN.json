@@ -101,5 +101,6 @@
   "refreshSwitchDescribe": "是否开启刷新",
   "loadSwitch": "加载开关",
   "loadSwitchDescribe": "是否开启加载",
-  "customHeaderDescribe": "CustomScrollView自定义Header"
+  "linkHeader": "Header连接器",
+  "linkHeaderDescribeDescribe": "使用连接器自定义Header"
 }

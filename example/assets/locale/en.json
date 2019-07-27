@@ -100,5 +100,7 @@
   "refreshSwitch": "Refresh switch",
   "refreshSwitchDescribe": "Whether to turn on refresh",
   "loadSwitch": "Load switch",
-  "loadSwitchDescribe": "Whether to turn on load"
+  "loadSwitchDescribe": "Whether to turn on load",
+  "linkHeader": "Header linker",
+  "linkHeaderDescribeDescribe": "Customize Header with linker"
 }

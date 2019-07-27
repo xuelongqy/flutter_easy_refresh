@@ -130,13 +130,13 @@ class _SamplePageState extends State<SamplePage>
               ),
               //  CustomHeader
               ListItem(
-                title: 'CustomHeader',
+                title: FlutterI18n.translate(context, 'linkHeader'),
                 describe: FlutterI18n.translate(
-                    context, 'customHeaderDescribe'),
+                    context, 'linkHeaderDescribeDescribe'),
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (BuildContext context) {
-                        return CustomHeaderPage();
+                        return LinkHeaderPage();
                       },));
                 },
                 icon: CircularIcon(
