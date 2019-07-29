@@ -24,7 +24,7 @@ class MaterialFooter extends Footer {
   }): super(
     float: true,
     extent: 52.0,
-    triggerDistance: 53.0,
+    triggerDistance: 52.0,
     completeDuration: completeDuration == null
         ? Duration(milliseconds: 300,)
         : completeDuration + Duration(milliseconds: 300,),
