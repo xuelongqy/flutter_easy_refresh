@@ -7,9 +7,9 @@ import 'src/footer/footer.dart';
 class MaterialFooter extends Footer {
   final Key key;
   final double displacement;
-  // 颜色
+  /// 颜色
   final Animation<Color> valueColor;
-  // 背景颜色
+  /// 背景颜色
   final Color backgroundColor;
 
   final LinkFooterNotifier linkNotifier = LinkFooterNotifier();

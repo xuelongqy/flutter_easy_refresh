@@ -11,9 +11,9 @@ const Duration _kIndicatorScaleDuration = Duration(milliseconds: 200);
 class MaterialHeader extends Header {
   final Key key;
   final double displacement;
-  // 颜色
+  /// 颜色
   final Animation<Color> valueColor;
-  // 背景颜色
+  /// 背景颜色
   final Color backgroundColor;
 
   final LinkHeaderNotifier linkNotifier = LinkHeaderNotifier();
