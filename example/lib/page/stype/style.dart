@@ -1,4 +1,5 @@
 import 'package:example/page/sample/basic.dart';
+import 'package:example/page/stype/ball_pulse.dart';
 import 'package:example/page/stype/material.dart';
 import 'package:example/widget/circular_icon.dart';
 import 'package:example/widget/list_item.dart';
@@ -57,8 +58,23 @@ class _StylePageState extends State<StylePage>
                       },));
                 },
                 icon: CircularIcon(
-                  bgColor: Colors.blue,
+                  bgColor: Colors.pink,
                   icon: Icons.android,
+                ),
+              ),
+              // 球脉冲
+              ListItem(
+                title: 'BallPulse',
+                describe: FlutterI18n.translate(context, 'ballPulseDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return BallPulsePage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.blue,
+                  icon: Icons.lens,
                 ),
               ),
             ]),
