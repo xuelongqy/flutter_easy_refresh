@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../easy_refresh.dart';
 
@@ -94,6 +95,41 @@ class CustomFooter extends Footer {
     return footerBuilder(context, loadState, pulledExtent,
         loadTriggerPullDistance, loadIndicatorExtent, axisDirection, float,
         completeDuration, enableInfiniteLoad, success, noMore);
+  }
+}
+
+/// 连接通知器
+class LinkFooterNotifier extends ChangeNotifier {
+  BuildContext context;
+  LoadMode loadState;
+  double pulledExtent;
+  double loadTriggerPullDistance;
+  double loadIndicatorExtent;
+  AxisDirection axisDirection;
+  bool float;
+  Duration completeDuration;
+  bool enableInfiniteLoad;
+  bool success; bool noMore;
+
+  void contentBuilder(
+      BuildContext context, LoadMode loadState, double pulledExtent,
+      double loadTriggerPullDistance, double loadIndicatorExtent,
+      AxisDirection axisDirection, bool float, Duration completeDuration,
+      bool enableInfiniteLoad, bool success, bool noMore){
+    this.context = context;
+    this.loadState = loadState;
+    this.pulledExtent = pulledExtent;
+    this.loadTriggerPullDistance = loadTriggerPullDistance;
+    this.loadIndicatorExtent = loadIndicatorExtent;
+    this.axisDirection = axisDirection;
+    this.float = float;
+    this.completeDuration = completeDuration;
+    this.enableInfiniteLoad = enableInfiniteLoad;
+    this.success = success;
+    this.noMore = noMore;
+    SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+      notifyListeners();
+    });
   }
 }
 

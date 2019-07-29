@@ -1,4 +1,5 @@
 import 'package:example/page/sample/basic.dart';
+import 'package:example/page/stype/material.dart';
 import 'package:example/widget/circular_icon.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,21 @@ class _StylePageState extends State<StylePage>
                 icon: CircularIcon(
                   bgColor: Theme.of(context).primaryColor,
                   icon: Icons.format_list_bulleted,
+                ),
+              ),
+              // 质感设计
+              ListItem(
+                title: 'Material',
+                describe: FlutterI18n.translate(context, 'materialDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return MaterialPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.blue,
+                  icon: Icons.android,
                 ),
               ),
             ]),
