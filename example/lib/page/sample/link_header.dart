@@ -101,23 +101,25 @@ class CircleHeaderState extends State<CircleHeader> {
   @override
   void initState() {
     super.initState();
-    widget.linkNotifier.addListener(() {
-      setState(() {
-        if (_refreshState == RefreshMode.armed
-            || _refreshState == RefreshMode.refresh) {
-          _indicatorValue = null;
-        } else if (_refreshState == RefreshMode.refreshed
-            || _refreshState == RefreshMode.done) {
-          _indicatorValue = 1.0;
+    widget.linkNotifier.addListener(onLinkNotify);
+  }
+
+  void onLinkNotify() {
+    setState(() {
+      if (_refreshState == RefreshMode.armed
+          || _refreshState == RefreshMode.refresh) {
+        _indicatorValue = null;
+      } else if (_refreshState == RefreshMode.refreshed
+          || _refreshState == RefreshMode.done) {
+        _indicatorValue = 1.0;
+      } else {
+        if (_refreshState == RefreshMode.inactive) {
+          _indicatorValue = 0.0;
         } else {
-          if (_refreshState == RefreshMode.inactive) {
-            _indicatorValue = 0.0;
-          } else {
-            double indicatorValue = _pulledExtent / 70.0 * 0.8;
-            _indicatorValue = indicatorValue < 0.8 ? indicatorValue : 0.8;
-          }
+          double indicatorValue = _pulledExtent / 70.0 * 0.8;
+          _indicatorValue = indicatorValue < 0.8 ? indicatorValue : 0.8;
         }
-      });
+      }
     });
   }
 
