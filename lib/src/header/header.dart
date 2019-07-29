@@ -104,8 +104,8 @@ class CustomHeader extends Header {
 /// 连接通知器
 class LinkHeaderNotifier extends ChangeNotifier {
   BuildContext context;
-  RefreshMode refreshState;
-  double pulledExtent;
+  RefreshMode refreshState = RefreshMode.inactive;
+  double pulledExtent = 0.0;
   double refreshTriggerPullDistance;
   double refreshIndicatorExtent;
   AxisDirection axisDirection;

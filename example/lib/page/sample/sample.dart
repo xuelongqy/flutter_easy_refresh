@@ -1,8 +1,9 @@
 import 'package:example/page/sample/basic.dart';
-import 'package:example/page/sample/custom_header.dart';
+import 'package:example/page/sample/link_header.dart';
 import 'package:example/page/sample/empty.dart';
 import 'package:example/page/sample/first_refresh.dart';
 import 'package:example/page/sample/nested_scroll_view.dart';
+import 'package:example/page/sample/second_floor.dart';
 import 'package:example/page/sample/swiper.dart';
 import 'package:example/page/sample/user_profile.dart';
 import 'package:example/widget/circular_icon.dart';
@@ -142,6 +143,22 @@ class _SamplePageState extends State<SamplePage>
                 icon: CircularIcon(
                   bgColor: Colors.amber[700],
                   icon: Icons.format_line_spacing,
+                ),
+              ),
+              //  二楼
+              ListItem(
+                title: FlutterI18n.translate(context, 'secondFloor'),
+                describe: FlutterI18n.translate(
+                    context, 'secondFloorDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return SecondFloorPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.purple,
+                  icon: Icons.view_agenda,
                 ),
               ),
             ]),
