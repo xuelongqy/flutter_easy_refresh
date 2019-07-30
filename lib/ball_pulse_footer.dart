@@ -91,7 +91,7 @@ class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
   @override
   void initState() {
     super.initState();
-    _ballSize1 = _ballSize2 = _ballSize3 = 20.0;
+    _ballSize1 = _ballSize2 = _ballSize3 = 0.0;
   }
 
   // 循环动画
@@ -123,9 +123,9 @@ class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
         _loopAnimated();
       } else {
         setState(() {
-          _ballSize1 = 20.0;
-          _ballSize2 = 20.0;
-          _ballSize3 = 20.0;
+          _ballSize1 = 0.0;
+          _ballSize2 = 0.0;
+          _ballSize3 = 0.0;
         });
         animationPhase = 1;
       }
