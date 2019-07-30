@@ -1,5 +1,7 @@
 import 'package:example/page/sample/basic.dart';
 import 'package:example/page/stype/ball_pulse.dart';
+import 'package:example/page/stype/bezier_circle.dart';
+import 'package:example/page/stype/bezier_hour_glass.dart';
 import 'package:example/page/stype/material.dart';
 import 'package:example/widget/circular_icon.dart';
 import 'package:example/widget/list_item.dart';
@@ -75,6 +77,36 @@ class _StylePageState extends State<StylePage>
                 icon: CircularIcon(
                   bgColor: Colors.blue,
                   icon: Icons.lens,
+                ),
+              ),
+              // 弹出圆圈
+              ListItem(
+                title: 'BezierCircle',
+                describe: FlutterI18n.translate(context, 'bezierCircleDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return BezierCirclePage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.green,
+                  icon: Icons.radio_button_checked,
+                ),
+              ),
+              // 弹出圆圈
+              ListItem(
+                title: 'BezierHourGlass',
+                describe: FlutterI18n.translate(context, 'bezierHourGlassDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return BezierHourGlassPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.teal,
+                  icon: Icons.timelapse,
                 ),
               ),
             ]),
