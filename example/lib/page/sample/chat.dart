@@ -19,6 +19,8 @@ class ChatPageState extends State<ChatPage> {
 
   // 输入框
   TextEditingController _textEditingController;
+  // 滚动控制器
+  ScrollController _scrollController;
 
   @override
   void initState() {
@@ -31,6 +33,14 @@ class ChatPageState extends State<ChatPage> {
     _textEditingController.addListener(() {
       setState(() {});
     });
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _textEditingController.dispose();
+    _scrollController.dispose();
   }
 
   // 发送消息
@@ -38,6 +48,8 @@ class ChatPageState extends State<ChatPage> {
     setState(() {
       _msgList.insert(0, MessageEntity(true, msg));
     });
+    _scrollController.animateTo(
+        0.0, duration: Duration(milliseconds: 300), curve: Curves.linear);
   }
 
   @override
@@ -69,6 +81,7 @@ class ChatPageState extends State<ChatPage> {
           Expanded(
             flex: 1,
             child: EasyRefresh.custom(
+              scrollController: _scrollController,
               reverse: true,
               footer: CustomFooter(
                 enableInfiniteLoad: true,
