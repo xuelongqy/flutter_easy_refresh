@@ -2,6 +2,7 @@ import 'package:example/page/sample/basic.dart';
 import 'package:example/page/stype/ball_pulse.dart';
 import 'package:example/page/stype/bezier_circle.dart';
 import 'package:example/page/stype/bezier_hour_glass.dart';
+import 'package:example/page/stype/delivery.dart';
 import 'package:example/page/stype/material.dart';
 import 'package:example/page/stype/phoenix.dart';
 import 'package:example/page/stype/taurus.dart';
@@ -139,6 +140,21 @@ class _StylePageState extends State<StylePage>
                 icon: CircularIcon(
                   bgColor: Colors.amber[700],
                   icon: Icons.location_city,
+                ),
+              ),
+              // 快递气球
+              ListItem(
+                title: 'Delivery',
+                describe: FlutterI18n.translate(context, 'deliveryDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return DeliveryPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.red,
+                  icon: Icons.cloud,
                 ),
               ),
             ]),
