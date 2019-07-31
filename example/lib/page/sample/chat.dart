@@ -242,7 +242,7 @@ class ChatPageState extends State<ChatPage> {
         margin: EdgeInsets.all(10.0,),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Card(
               margin: EdgeInsets.only(right: 10.0,),
