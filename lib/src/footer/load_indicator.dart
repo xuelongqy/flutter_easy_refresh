@@ -227,14 +227,15 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
         && constraints.remainingCacheExtent != 0.0
         || layoutExtent > (enableInfiniteLoad ? 1.0 : 0.0)
             * _loadIndicatorExtent);
-    final double overscrolledExtent =
-    constraints.remainingPaintExtent > 0.0 ? constraints.remainingPaintExtent.abs() : 0.0;
+    final double overscrolledExtent = constraints.remainingPaintExtent > 0.0
+        ? constraints.remainingPaintExtent.abs() : 0.0;
     // Layout the child giving it the space of the currently dragged overscroll
     // which may or may not include a sliver layout extent space that it will
     // keep after the user lets go during the refresh process.
     child.layout(
       constraints.asBoxConstraints(
-        maxExtent: overscrolledExtent,
+        maxExtent: _hasLayoutExtent ? _loadIndicatorExtent > overscrolledExtent
+            ? _loadIndicatorExtent : overscrolledExtent : overscrolledExtent,
       ),
       parentUsesSize: true,
     );
