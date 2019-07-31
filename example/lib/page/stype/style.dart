@@ -3,6 +3,7 @@ import 'package:example/page/stype/ball_pulse.dart';
 import 'package:example/page/stype/bezier_circle.dart';
 import 'package:example/page/stype/bezier_hour_glass.dart';
 import 'package:example/page/stype/material.dart';
+import 'package:example/page/stype/phoenix.dart';
 import 'package:example/page/stype/taurus.dart';
 import 'package:example/widget/circular_icon.dart';
 import 'package:example/widget/list_item.dart';
@@ -123,6 +124,21 @@ class _StylePageState extends State<StylePage>
                 icon: CircularIcon(
                   bgColor: Colors.lightBlue,
                   icon: Icons.airplanemode_active,
+                ),
+              ),
+              // 金色校园
+              ListItem(
+                title: 'Phoenix',
+                describe: FlutterI18n.translate(context, 'phoenixDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return PhoenixPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.amber[700],
+                  icon: Icons.location_city,
                 ),
               ),
             ]),
