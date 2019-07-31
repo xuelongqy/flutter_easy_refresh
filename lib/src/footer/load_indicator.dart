@@ -220,10 +220,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
       // the overlap.
       return;
     }*/
-    final bool active = (constraints.remainingPaintExtent > 0.0
-        && constraints.remainingPaintExtent != 5.684341886080802e-14
-        && constraints.remainingPaintExtent != 1.1368683772161603e-13
-        && constraints.remainingCacheExtent != 0.0
+    final bool active = (constraints.remainingPaintExtent > 1.0
         || layoutExtent > (enableInfiniteLoad ? 1.0 : 0.0)
             * _loadIndicatorExtent);
     final double overscrolledExtent = constraints.remainingPaintExtent > 0.0
