@@ -1,4 +1,5 @@
 import 'package:example/page/sample/basic.dart';
+import 'package:example/page/sample/chat.dart';
 import 'package:example/page/sample/link_header.dart';
 import 'package:example/page/sample/empty.dart';
 import 'package:example/page/sample/first_refresh.dart';
@@ -159,6 +160,22 @@ class _SamplePageState extends State<SamplePage>
                 icon: CircularIcon(
                   bgColor: Colors.purple,
                   icon: Icons.view_agenda,
+                ),
+              ),
+              //  聊天页面
+              ListItem(
+                title: FlutterI18n.translate(context, 'chatPage'),
+                describe: FlutterI18n.translate(
+                    context, 'chatPageDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return ChatPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.blueAccent,
+                  icon: Icons.chat,
                 ),
               ),
             ]),

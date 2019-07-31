@@ -106,5 +106,9 @@
   "topBouncing": "顶部回弹",
   "topBouncingDescribe": "顶部可越界",
   "bottomBouncing": "底部回弹",
-  "bottomBouncingDescribe": "底部可越界"
+  "bottomBouncingDescribe": "底部可越界",
+  "chatPage": "聊天页面",
+  "chatPageDescribe": "模仿聊天页面",
+  "send": "发送",
+  "me": "我"
 }

@@ -106,5 +106,9 @@
   "topBouncing": "Top bouncing",
   "topBouncingDescribe": "Top can be crossed",
   "bottomBouncing": "Bottom bouncing",
-  "bottomBouncingDescribe": "Bottom can be crossed"
+  "bottomBouncingDescribe": "Bottom can be crossed",
+  "chatPage": "Chat page",
+  "chatPageDescribe": "Chat page example",
+  "send": "Send",
+  "me": "Me"
 }
