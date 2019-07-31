@@ -81,7 +81,7 @@ class CustomFooter extends Footer {
     float = false,
     completeDuration,
     enableInfiniteLoad = false,
-    enableHapticFeedback = true,
+    enableHapticFeedback = false,
     @required this.footerBuilder,
   }) : super (
     extent: extent,

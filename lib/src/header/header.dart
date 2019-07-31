@@ -82,7 +82,7 @@ class CustomHeader extends Header {
     float = false,
     completeDuration,
     enableInfiniteRefresh = false,
-    enableHapticFeedback = true,
+    enableHapticFeedback = false,
     @required this.headerBuilder,
   }) : super (
     extent: extent,
