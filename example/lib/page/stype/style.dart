@@ -3,6 +3,7 @@ import 'package:example/page/stype/ball_pulse.dart';
 import 'package:example/page/stype/bezier_circle.dart';
 import 'package:example/page/stype/bezier_hour_glass.dart';
 import 'package:example/page/stype/material.dart';
+import 'package:example/page/stype/taurus.dart';
 import 'package:example/widget/circular_icon.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +95,7 @@ class _StylePageState extends State<StylePage>
                   icon: Icons.radio_button_checked,
                 ),
               ),
-              // 弹出圆圈
+              // BezierHourGlass
               ListItem(
                 title: 'BezierHourGlass',
                 describe: FlutterI18n.translate(context, 'bezierHourGlassDescribe'),
@@ -107,6 +108,21 @@ class _StylePageState extends State<StylePage>
                 icon: CircularIcon(
                   bgColor: Colors.teal,
                   icon: Icons.timelapse,
+                ),
+              ),
+              // 冲上云霄
+              ListItem(
+                title: 'Taurus',
+                describe: FlutterI18n.translate(context, 'taurusDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return TaurusPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.lightBlue,
+                  icon: Icons.airplanemode_active,
                 ),
               ),
             ]),
