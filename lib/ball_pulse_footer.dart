@@ -134,9 +134,6 @@ class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // 是否反向
-    bool isReverse = _axisDirection == AxisDirection.up
-        || _axisDirection == AxisDirection.left;
     // 开启动画
     if (_refreshState == LoadMode.done
         || _refreshState == LoadMode.inactive) {
@@ -153,13 +150,13 @@ class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
     return Stack(
       children: <Widget>[
         Positioned(
-          top: !isReverse ? 0.0 : null,
-          bottom: isReverse ? 0.0 : null,
+          top: 0.0,
+          bottom: 0.0,
           left: 0.0,
           right: 0.0,
           child: Container(
-            height: _pulledExtent > _indicatorExtent
-                ? _pulledExtent : _indicatorExtent,
+            alignment: Alignment.center,
+            height: _indicatorExtent,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
