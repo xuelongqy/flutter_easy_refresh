@@ -180,7 +180,6 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
     // Only pulling to refresh from the top is currently supported.
     // 注释以支持reverse
     // assert(constraints.axisDirection == AxisDirection.down);
-    axisDirectionNotifier.value = constraints.axisDirection;
     assert(constraints.growthDirection == GrowthDirection.forward);
 
     // 判断是否触发无限加载
@@ -229,12 +228,17 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
             * _loadIndicatorExtent);
     final double overscrolledExtent = constraints.remainingPaintExtent > 0.0
         ? constraints.remainingPaintExtent.abs() : 0.0;
+    // 是否反向
+    bool isReverse = constraints.axisDirection == AxisDirection.up
+        || constraints.axisDirection == AxisDirection.left;
+    axisDirectionNotifier.value = constraints.axisDirection;
     // Layout the child giving it the space of the currently dragged overscroll
     // which may or may not include a sliver layout extent space that it will
     // keep after the user lets go during the refresh process.
     child.layout(
       constraints.asBoxConstraints(
-        maxExtent: _hasLayoutExtent ? _loadIndicatorExtent > overscrolledExtent
+        maxExtent: isReverse ? overscrolledExtent : _hasLayoutExtent
+            ? _loadIndicatorExtent > overscrolledExtent
             ? _loadIndicatorExtent : overscrolledExtent : overscrolledExtent,
       ),
       parentUsesSize: true,
