@@ -92,7 +92,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                       child: new Container(
                                         color: Colors.white,
                                         child:
-                                        new Image.asset('assets/image/head.jpg'),
+                                        new Image.asset('assets/image/head_knoyo.jpg'),
                                       ),
                                     ),
                                   ),
