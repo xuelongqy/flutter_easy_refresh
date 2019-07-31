@@ -277,42 +277,45 @@ class DeliveryHeaderWidgetState extends State<DeliveryHeaderWidget>
                 children: <Widget>[
                   // 盒子
                   new Positioned(
-                      left: 0.0,
-                      right: 0.0,
-                      top: null,
-                      bottom: _mergeAnimation.value * 10.0,
-                      child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Transform.rotate(
-                            child: Container(
-                              height: 50.0,
-                              width: 50.0,
-                              child: Image.memory(_boxBytes, fit: BoxFit.fill),
-                            ),
-                            angle: _umbrellaRotateValue,
-                            origin: Offset(0.0, -15.5),
-                          ))),
+                    left: 0.0,
+                    right: 0.0,
+                    top: null,
+                    bottom: _mergeAnimation.value * 10.0,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Transform.rotate(
+                        child: Container(
+                          height: 50.0,
+                          width: 50.0,
+                          child: Image.memory(_boxBytes, fit: BoxFit.fill),
+                        ),
+                        angle: _umbrellaRotateValue,
+                        origin: Offset(0.0, -15.5),
+                      ),
+                    ),
+                  ),
                   // 伞
                   new Positioned(
-                      left: 0.0,
-                      right: 0.0,
-                      top: null,
-                      bottom: 250.0 - _mergeAnimation.value * 200.0,
-                      child: Container(
-                        alignment: Alignment.bottomCenter,
-                        height: 300.0,
-                        width: 200.0,
-                        child: Transform.rotate(
-                          child: Container(
-                            height: 300.0,
-                            width: 200.0,
-                            child:
-                            Image.memory(_umbrellaBytes, fit: BoxFit.fill),
-                          ),
-                          angle: _umbrellaRotateValue,
-                          origin: Offset(0.0, 150.0),
+                    left: 0.0,
+                    right: 0.0,
+                    top: null,
+                    bottom: 250.0 - _mergeAnimation.value * 200.0,
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      height: 300.0,
+                      width: 200.0,
+                      child: Transform.rotate(
+                        child: Container(
+                          height: 300.0,
+                          width: 200.0,
+                          child:
+                          Image.memory(_umbrellaBytes, fit: BoxFit.fill),
                         ),
-                      ))
+                        angle: _umbrellaRotateValue,
+                        origin: Offset(0.0, 150.0),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
