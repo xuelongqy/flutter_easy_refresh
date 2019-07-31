@@ -78,12 +78,17 @@ class CustomFooter extends Footer {
   CustomFooter({
     extent = 60.0,
     triggerDistance = 70.0,
+    float = false,
     completeDuration,
+    enableInfiniteLoad = false,
+    enableHapticFeedback = true,
     @required this.footerBuilder,
   }) : super (
     extent: extent,
     triggerDistance: triggerDistance,
     completeDuration: completeDuration,
+    enableInfiniteLoad: enableInfiniteLoad,
+    enableHapticFeedback: enableHapticFeedback,
   );
 
   @override

@@ -81,12 +81,16 @@ class CustomHeader extends Header {
     triggerDistance = 70.0,
     float = false,
     completeDuration,
+    enableInfiniteRefresh = false,
+    enableHapticFeedback = true,
     @required this.headerBuilder,
   }) : super (
     extent: extent,
     triggerDistance: triggerDistance,
     float: float,
     completeDuration: completeDuration,
+    enableInfiniteRefresh: enableInfiniteRefresh,
+    enableHapticFeedback: enableHapticFeedback,
   );
 
   @override
