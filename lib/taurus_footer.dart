@@ -188,97 +188,102 @@ class TaurusFooterWidgetState extends State<TaurusFooterWidget> {
           width: double.infinity,
           color: Colors.blue,
         ),
-        Container(
-          width: double.infinity,
-          height: _pulledExtent > _indicatorExtent
-              ? _pulledExtent : _indicatorExtent,
-          child: Stack(
-            children: <Widget>[
-              // 左边云朵
-              Positioned(
-                bottom: -2.0,
-                left: 0.0,
-                right: 0.0,
-                child: Container(
-                  height: _indicatorExtent,
-                  alignment: Alignment.bottomLeft,
+        Positioned(
+          top: 0.0,
+          left: 0.0,
+          right: 0.0,
+          child: Container(
+            width: double.infinity,
+            height: _pulledExtent > _indicatorExtent
+                ? _pulledExtent : _indicatorExtent,
+            child: Stack(
+              children: <Widget>[
+                // 左边云朵
+                Positioned(
+                  bottom: -2.0,
+                  left: 0.0,
+                  right: 0.0,
                   child: Container(
-                    height: 38.0 + _cloudFloatCoefficient,
-                    width: 120.0,
-                    child: Image.memory(
-                      _cloudsLeftBytes,
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                ),
-              ),
-              // 右边云朵
-              Positioned(
-                bottom: -2.0,
-                left: 0.0,
-                right: 0.0,
-                child: Container(
-                  height: _indicatorExtent,
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    height: 38.0 + _cloudFloatCoefficient,
-                    width: 120.0,
-                    child: Image.memory(
-                      _cloudsRightBytes,
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                ),
-              ),
-              // 飞机
-              Positioned(
-                top: 0.0,
-                left: 0.0,
-                right: 0.0,
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    width: 300.0,
                     height: _indicatorExtent,
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned(
-                          bottom: airplaneBottom,
-                          left: airplaneLeft,
-                          child: Container(
-                            height: 17.5,
-                            width: 55.0,
-                            child: Image.memory(
-                              _airplaneBytes,
-                              fit: BoxFit.fill,
+                    alignment: Alignment.bottomLeft,
+                    child: Container(
+                      height: 38.0 + _cloudFloatCoefficient,
+                      width: 120.0,
+                      child: Image.memory(
+                        _cloudsLeftBytes,
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                  ),
+                ),
+                // 右边云朵
+                Positioned(
+                  bottom: -2.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: Container(
+                    height: _indicatorExtent,
+                    alignment: Alignment.bottomRight,
+                    child: Container(
+                      height: 38.0 + _cloudFloatCoefficient,
+                      width: 120.0,
+                      child: Image.memory(
+                        _cloudsRightBytes,
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                  ),
+                ),
+                // 飞机
+                Positioned(
+                  top: 0.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      width: 300.0,
+                      height: _indicatorExtent,
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned(
+                            bottom: airplaneBottom,
+                            left: airplaneLeft,
+                            child: Container(
+                              height: 17.5,
+                              width: 55.0,
+                              child: Image.memory(
+                                _airplaneBytes,
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              // 中间云朵
-              Positioned(
-                bottom: -2.0,
-                left: 0.0,
-                right: 0.0,
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  height: _indicatorExtent,
+                // 中间云朵
+                Positioned(
+                  bottom: -2.0,
+                  left: 0.0,
+                  right: 0.0,
                   child: Container(
-                    height: centerCloudHeight,
-                    child: Image.memory(
-                      _cloudsCenterBytes,
-                      fit: BoxFit.fitHeight,
+                    alignment: Alignment.bottomCenter,
+                    height: _indicatorExtent,
+                    child: Container(
+                      height: centerCloudHeight,
+                      child: Image.memory(
+                        _cloudsCenterBytes,
+                        fit: BoxFit.fitHeight,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        )
+        ),
       ],
     );
   }
