@@ -31,7 +31,7 @@ class BezierBounceFooter extends Footer{
   );
   
   @override
-  Widget contentBuilder(BuildContext context, LoadMode _loadState,
+  Widget contentBuilder(BuildContext context, LoadMode loadState,
       double pulledExtent, double loadTriggerPullDistance, 
       double loadIndicatorExtent, AxisDirection axisDirection,
       bool float, Duration completeDuration, bool enableInfiniteLoad,
@@ -40,7 +40,7 @@ class BezierBounceFooter extends Footer{
     assert(axisDirection == AxisDirection.down,
     'Widget can only be vertical and cannot be reversed'
     );
-    linkNotifier.contentBuilder(context, _loadState, pulledExtent,
+    linkNotifier.contentBuilder(context, loadState, pulledExtent,
         loadTriggerPullDistance, loadIndicatorExtent, axisDirection, float,
         completeDuration, enableInfiniteLoad, success, noMore);
     return BezierBounceFooterWidget(
