@@ -148,11 +148,13 @@ class LinkHeader extends Header {
     extent = 60.0,
     triggerDistance = 70.0,
     completeDuration,
+    enableHapticFeedback = false,
   }): super(
     extent: extent,
     triggerDistance: triggerDistance,
     float: true,
     completeDuration: completeDuration,
+    enableHapticFeedback: enableHapticFeedback,
   );
 
   @override
