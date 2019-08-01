@@ -5,6 +5,7 @@ import 'package:example/page/stype/bezier_hour_glass.dart';
 import 'package:example/page/stype/delivery.dart';
 import 'package:example/page/stype/material.dart';
 import 'package:example/page/stype/phoenix.dart';
+import 'package:example/page/stype/space.dart';
 import 'package:example/page/stype/taurus.dart';
 import 'package:example/widget/circular_icon.dart';
 import 'package:example/widget/list_item.dart';
@@ -155,6 +156,21 @@ class _StylePageState extends State<StylePage>
                 icon: CircularIcon(
                   bgColor: Colors.red,
                   icon: Icons.cloud,
+                ),
+              ),
+              // 星空
+              ListItem(
+                title: 'Space',
+                describe: FlutterI18n.translate(context, 'spaceDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return SpacePage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.blue,
+                  icon: Icons.stars,
                 ),
               ),
             ]),
