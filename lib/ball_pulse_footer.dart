@@ -75,9 +75,7 @@ class BallPulseFooterWidget extends StatefulWidget {
 }
 class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
   LoadMode get _refreshState => widget.linkNotifier.loadState;
-  double get _pulledExtent => widget.linkNotifier.pulledExtent;
   double get _indicatorExtent => widget.linkNotifier.loadIndicatorExtent;
-  AxisDirection get _axisDirection => widget.linkNotifier.axisDirection;
 
   // 球大小
   double _ballSize1, _ballSize2, _ballSize3;

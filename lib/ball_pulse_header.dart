@@ -75,9 +75,7 @@ class BallPulseHeaderWidget extends StatefulWidget {
 }
 class BallPulseHeaderWidgetState extends State<BallPulseHeaderWidget> {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
-  double get _pulledExtent => widget.linkNotifier.pulledExtent;
   double get _indicatorExtent => widget.linkNotifier.refreshIndicatorExtent;
-  AxisDirection get _axisDirection => widget.linkNotifier.axisDirection;
 
   // 球大小
   double _ballSize1, _ballSize2, _ballSize3;
