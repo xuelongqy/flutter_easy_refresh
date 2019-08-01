@@ -121,7 +121,7 @@ class _ExampleState extends State<Example> {
 ## 属性表格 - CustomHeader(自定义Header)
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
 |---------|--------------------------|:-----:|:-----:|:-----:|
-| extent | Header的限度  | double   |  60.0 |  可选 |
+| extent | Header的高度  | double   |  60.0 |  可选 |
 | triggerDistance | 触发刷新的距离 | double | 70.0 |  可选 |
 | float | 是否浮动   | bool   |  false |  可选 |
 | completeDuration | 完成延时 | Duration | null | 可选 |
@@ -133,7 +133,7 @@ class _ExampleState extends State<Example> {
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
 |---------|--------------------------|:-----:|:-----:|:-----:|
 | linkNotifier | 连接通知器 | LinkHeaderNotifier |   null |  必需 |
-| extent | Header的限度 | double | 60.0 | 可选 |
+| extent | Header的高度 | double | 60.0 | 可选 |
 | triggerDistance | 触发刷新的距离 | double | 70.0 | 可选 |
 | completeDuration | 完成延时 | Duration | null | 可选 |
 | enableHapticFeedback | 是否开启震动反馈 | bool | false | 可选 |
@@ -141,7 +141,7 @@ class _ExampleState extends State<Example> {
 ## 属性表格 - CustomFooter(自定义Footer)
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
 |---------|--------------------------|:-----:|:-----:|:-----:|
-| extent | Footer的限度 | double | 60.0 | 可选 |
+| extent | Footer的高度 | double | 60.0 | 可选 |
 | triggerDistance | 触发加载的距离 | double | 70.0 | 可选 |
 | completeDuration | 完成延时 | Duration | null | 可选 |
 | enableInfiniteLoad | 是否开启无限加载 | bool | false | 可选 |
