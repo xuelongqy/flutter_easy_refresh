@@ -127,6 +127,7 @@ class _ExampleState extends State<Example> {
 | completeDuration | 完成延时 | Duration | null | 可选 |
 | enableInfiniteRefresh | 是否开启无限刷新 | bool | false | 可选 |
 | enableHapticFeedback | 是否开启震动反馈 | bool | false | 可选 |
+| headerBuilder | Header构造器 | RefreshControlBuilder | null | 必需 |
 
 ## 属性表格 - LinkHeader(用于将Header放置到其他位置并做连接)
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
@@ -145,4 +146,5 @@ class _ExampleState extends State<Example> {
 | completeDuration | 完成延时 | Duration | null | 可选 |
 | enableInfiniteLoad | 是否开启无限加载 | bool | false | 可选 |
 | enableHapticFeedback | 是否开启震动反馈 | bool | false | 可选 |
+| footerBuilder | Footer构造器 | LoadControlBuilder | null | 必需 |
 

@@ -129,6 +129,7 @@ class _ExampleState extends State<Example> {
 | completeDuration | Completion delay | Duration | null | Optional |
 | enableInfiniteRefresh | Whether enable infinite refresh | bool | false | Optional |
 | enableHapticFeedback | Whether to enable vibration feedback | bool | false | Optional |
+| headerBuilder | Header builder| RefreshControlBuilder | null | Necessary |
 
 ## Props Table - LinkHeader(Used to place the Header to another location and make a connection)
 | Attribute Name |     Attribute Explain     | Parameter Type | Default Value | Requirement |
@@ -147,4 +148,5 @@ class _ExampleState extends State<Example> {
 | completeDuration |  Completion delay | Duration | null | Optional |
 | enableInfiniteLoad | Whether enable infinite load | bool | false | Optional |
 | enableHapticFeedback | Whether to enable vibration feedback | bool | false | Optional |
+| footerBuilder | Footer builder| LoadControlBuilder | null | Necessary |
 
