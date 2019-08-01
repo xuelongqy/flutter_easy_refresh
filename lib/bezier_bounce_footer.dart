@@ -121,7 +121,7 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
   Widget build(BuildContext context) {
     // 计算小球透明度
     double ballOpacity;
-    if (_loadState == LoadMode.armed || _loadState == LoadMode.load) {
+    if (_loadState != LoadMode.drag && _loadState != LoadMode.armed) {
       ballOpacity = 0.0;
     } else if (_pulledExtent > _indicatorExtent + 40.0) {
       ballOpacity = 1.0;
