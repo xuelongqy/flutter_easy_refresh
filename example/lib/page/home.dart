@@ -1,6 +1,6 @@
 import 'package:example/page/more/more.dart';
 import 'package:example/page/sample/sample.dart';
-import 'package:example/page/stype/style.dart';
+import 'package:example/page/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
