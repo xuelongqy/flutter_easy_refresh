@@ -2,13 +2,17 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v1.2.7-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/badge/pub-v2.0.0-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
 
-## English | [中文](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/README.md)
+## English | [中文](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/README.md)
 
-Just like the name, EasyRefresh can easily implement pull-down refresh and upload operations on Flutter applications. It supports almost all Flutter controls, but only if they are wrapped in ScrollView. Its functions are similar to Android's Smart Refresh Layout, and it also draws on the advantages of many tripartite libraries. EasyRefresh integrates various styles of Headers and Footers, but it has no limitations. You can easily customize it. Using Flutter's powerful animation, even a simple control can be done. EasyRefresh aims to build a strong, stable and mature drop-down refresh framework for Flutter.
+Just like the name, EasyRefresh can easily implement pull-down refresh and upload operations on Flutter applications. It supports almost all Flutter controls. Its functions are similar to Android's Smart Refresh Layout, and it also draws on the advantages of many tripartite libraries. EasyRefresh integrates various styles of Headers and Footers, but it has no limitations. You can easily customize it. Using Flutter's powerful animation, even a simple control can be done. EasyRefresh aims to build a strong, stable and mature drop-down refresh framework for Flutter.
 
 Web version: [vue-easyrefresh](https://github.com/xuelongqy/vue-easyrefresh)
+
+Demo：[Download APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/pkg/EasyRefresh.apk)
+
+![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/apk_QRCode.png)
 
 ## Features:
 
@@ -19,19 +23,14 @@ Web version: [vue-easyrefresh](https://github.com/xuelongqy/vue-easyrefresh)
  - Support the Header and Footer list embedded and view the floating two forms
  - Support list event listener, make any look of Header and Footer, and can be placed anywhere
  - Support for first refresh and custom view
- - Support for custom view when the view is empty, only for ScrollView
- 
+ - Support for custom list empty view
+
 ## Portal
 
  - [Properties document](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/en/PROPERTY.md)
  - [FAQ](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/en/FAQ.md)
  - [Change log](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/en/CHANGELOG.md)
  - [Custom Header and Footer](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/en/CUSTOM_HEADER_FOOTER.md)
-
-## Demo
-[Download APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/pkg/EasyRefresh.apk)
-
-![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/art/image/apk_QRCode.png)
 
 #### Project presentations
 |Basic styles|Auto load|
@@ -74,13 +73,13 @@ Web version: [vue-easyrefresh](https://github.com/xuelongqy/vue-easyrefresh)
 |:---:|:---:|
 |![](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/image/space.gif)|![](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/art/image/delivery.gif)|
 |[SpacePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/style/space_page.dart)|[DeliveryPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/example/lib/page/style/delivery_page.dart)|
- 
+
 ## Sample
 #### 1.Adding dependencies to pubspec. yaml
 ```
 //pub
 dependencies:
-  flutter_easyrefresh: ^1.2.7
+  flutter_easyrefresh: ^2.0.0
 
 //import
 dependencies:
@@ -91,42 +90,82 @@ dependencies:
 ```dart
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 ....
-  GlobalKey<EasyRefreshState> _easyRefreshKey = new GlobalKey<EasyRefreshState>();
-....
-  new EasyRefresh(
-    key: _easyRefreshKey,
+  // Way one
+  EasyRefresh(
     child: ScrollView(),
     onRefresh: () async{
       ....
     },
-    loadMore: () async {
+    onLoad: () async {
+      ....
+    },
+  )
+  // Way two
+  EasyRefresh.custom(
+    slivers: <Widget>[],
+    onRefresh: () async{
+      ....
+    },
+    onLoad: () async {
+      ....
+    },
+  )
+  // Way three
+  EasyRefresh.builder(
+    builder: (context, physics, header, footer) {
+      return CustomScrollView(
+        physics: physics,
+        slivers: <Widget>[
+          ...
+          header,
+          ...
+          footer,
+        ],
+      );
+    }
+    onRefresh: () async{
+      ....
+    },
+    onLoad: () async {
       ....
     },
   )
 ```
 #### 3.Trigger refresh and load action
 ```dart
-  // If you don't need to set the key of EasyRefresh
-  _easyRefreshKey.currentState.callRefresh();
-  _easyRefreshKey.currentState.callLoadMore();
+  EasyRefreshController _controller = EasyRefreshController();
+  ....
+  EasyRefresh(
+    controller: _controller,
+    ....
+  );
+  ....
+  _controller.callRefresh();
+  _controller.callLoad();
+```
+#### 4.Control loading and refreshing completed
+```dart
+  EasyRefreshController _controller = EasyRefreshController();
+  ....
+  EasyRefresh(
+	enableControlFinishRefresh: true,
+	enableControlFinishLoad: true,
+    ....
+  );
+  ....
+  _controller.finishRefresh(success: true);
+  _controller.callLoad(success： true, noMore: false);
 ```
 
 ## Use the specified Header and Footer
 ```dart
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_easyrefresh/material_header.dart';
+import 'package:flutter_easyrefresh/material_footer.dart';
 ....
-  GlobalKey<RefreshHeaderState> _headerKey = new GlobalKey<RefreshHeaderState>();
-  GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
-....
-  // For the Header and Footer EasyRefresh will update, in order to maintain unity with the user operating state, you must set up the key
-  // Different Header and Footer may have different parameter Settings
   new EasyRefresh(
-    refreshHeader: MaterialHeader(
-        key: _headerKey,
-    ),
-    refreshFooter: MaterialFooter(
-        key: _footerKey,
-    ),
+    header: MaterialHeader(),
+    footer: MaterialFooter(),
     child: ScrollView(),
     ....
   )
@@ -152,7 +191,7 @@ The group is not only solve the problem of EasyreFresh, any Flutter related issu
 [flutter_spinkit](https://github.com/jogboms/flutter_spinkit)  
 
 ## Open source licenses
- 
+
 ```
  
 MIT License
@@ -178,4 +217,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
  
- ```
+```
