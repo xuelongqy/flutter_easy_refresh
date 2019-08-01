@@ -110,5 +110,7 @@
   "chatPage": "聊天页面",
   "chatPageDescribe": "模仿聊天页面",
   "send": "发送",
-  "me": "我"
+  "me": "我",
+  "bobMinion": "Bob小黄人",
+  "bobMinionDescribe": "可爱的小黄人"
 }

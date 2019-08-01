@@ -2,6 +2,7 @@ import 'package:example/page/sample/basic.dart';
 import 'package:example/page/stype/ball_pulse.dart';
 import 'package:example/page/stype/bezier_circle.dart';
 import 'package:example/page/stype/bezier_hour_glass.dart';
+import 'package:example/page/stype/bob_minion.dart';
 import 'package:example/page/stype/delivery.dart';
 import 'package:example/page/stype/material.dart';
 import 'package:example/page/stype/phoenix.dart';
@@ -171,6 +172,21 @@ class _StylePageState extends State<StylePage>
                 icon: CircularIcon(
                   bgColor: Colors.blue,
                   icon: Icons.stars,
+                ),
+              ),
+              // 小黄人
+              ListItem(
+                title: FlutterI18n.translate(context, 'bobMinion'),
+                describe: FlutterI18n.translate(context, 'bobMinionDescribe'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return BobMinionPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.amber[600],
+                  icon: Icons.accessibility,
                 ),
               ),
             ]),

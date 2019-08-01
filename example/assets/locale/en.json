@@ -110,5 +110,7 @@
   "chatPage": "Chat page",
   "chatPageDescribe": "Chat page example",
   "send": "Send",
-  "me": "Me"
+  "me": "Me",
+  "bobMinion": "Bob minion",
+  "bobMinionDescribe": "Cute yellow Minions"
 }
