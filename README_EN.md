@@ -27,10 +27,10 @@ Demo：[Download APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/
 
 ## Portal
 
- - [Properties document](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/en/PROPERTY.md)
- - [FAQ](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/en/FAQ.md)
+ - [Properties document](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/en/PROPERTY.md)
+ - [FAQ](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/en/FQA.md)
  - [Change log](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/CHANGELOG_CN.md)
- - [Custom Header and Footer](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/en/CUSTOM_HEADER_FOOTER.md)
+ - [Custom Header and Footer](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/en/CUSTOM_HEADER_FOOTER.md)
 
 #### Project presentations
 |Basic styles|Auto load|

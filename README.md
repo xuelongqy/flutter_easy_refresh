@@ -27,10 +27,10 @@ Demo：[下载 APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/ma
 
 ## 传送门
 
- - [属性文档](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/cn/PROPERTY.md)
- - [常见问题](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/cn/FAQ.md)
+ - [属性文档](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/cn/PROPERTY.md)
+ - [常见问题](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/cn/FQA.md)
  - [更新日志](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/CHANGELOG_CN.md)
- - [自定义Header和Footer](https://github.com/xuelongqy/flutter_easyrefresh/blob/master/art/md/cn/CUSTOM_HEADER_FOOTER.md)
+ - [自定义Header和Footer](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/cn/CUSTOM_HEADER_FOOTER.md)
 
 
 #### 项目演示
