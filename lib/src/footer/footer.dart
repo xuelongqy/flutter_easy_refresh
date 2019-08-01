@@ -72,7 +72,7 @@ abstract class Footer {
 /// 通用Footer构造器
 class CustomFooter extends Footer {
 
-  /// Header构造器
+  /// Footer构造器
   final LoadControlBuilder footerBuilder;
 
   CustomFooter({
