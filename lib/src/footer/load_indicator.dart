@@ -334,7 +334,7 @@ typedef LoadControlBuilder = Widget Function(
 /// pulled a `loadTriggerPullDistance`. Must return a [Future]. Upon
 /// completion of the [Future], the [EasyRefreshSliverLoadControl] enters the
 /// [LoadMode.done] state and will start to go away.
-typedef LoadCallback = Future<void> Function();
+typedef OnLoadCallback = Future<void> Function();
 
 /// 结束加载
 /// success 为是否成功(为false时，noMore无效)
@@ -469,7 +469,7 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   /// Can be null, in which case a single frame of [LoadMode.armed]
   /// state will be drawn before going immediately to the [LoadMode.done]
   /// where the sliver will start retracting.
-  final LoadCallback onLoad;
+  final OnLoadCallback onLoad;
   
   /// 完成延时
   final Duration completeDuration;

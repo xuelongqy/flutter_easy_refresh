@@ -21,9 +21,9 @@ class EasyRefresh extends StatefulWidget {
   /// 控制器
   final EasyRefreshController controller;
   /// 刷新回调(null为不开启刷新)
-  final RefreshCallback onRefresh;
+  final OnRefreshCallback onRefresh;
   /// 加载回调(null为不开启加载)
-  final LoadCallback onLoad;
+  final OnLoadCallback onLoad;
   /// 是否开启控制结束刷新
   final bool enableControlFinishRefresh;
   /// 是否开启控制结束加载

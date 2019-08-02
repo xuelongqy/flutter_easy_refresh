@@ -360,7 +360,7 @@ typedef RefreshControlBuilder = Widget Function(
 /// pulled a `refreshTriggerPullDistance`. Must return a [Future]. Upon
 /// completion of the [Future], the [EasyRefreshSliverRefreshControl] enters the
 /// [RefreshMode.done] state and will start to go away.
-typedef RefreshCallback = Future<void> Function();
+typedef OnRefreshCallback = Future<void> Function();
 
 /// 结束刷新
 /// success 为是否成功(为false时，noMore无效)
@@ -495,7 +495,7 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   /// Can be null, in which case a single frame of [RefreshMode.armed]
   /// state will be drawn before going immediately to the [RefreshMode.done]
   /// where the sliver will start retracting.
-  final RefreshCallback onRefresh;
+  final OnRefreshCallback onRefresh;
 
   /// 完成延时
   final Duration completeDuration;
