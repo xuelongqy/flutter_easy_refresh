@@ -235,7 +235,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
     child.layout(
       constraints.asBoxConstraints(
         maxExtent: isReverse ? overscrolledExtent : _hasLayoutExtent
-            ? _loadIndicatorExtent > overscrolledExtent
+            || enableInfiniteLoad ? _loadIndicatorExtent > overscrolledExtent
             ? _loadIndicatorExtent : overscrolledExtent : overscrolledExtent,
       ),
       parentUsesSize: true,
