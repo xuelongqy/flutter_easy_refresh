@@ -116,8 +116,8 @@ class LinkHeaderNotifier extends ChangeNotifier {
   bool float;
   Duration completeDuration;
   bool enableInfiniteRefresh;
-  bool success;
-  bool noMore;
+  bool success = true;
+  bool noMore = false;
 
   void contentBuilder(BuildContext context,
       RefreshMode refreshState, double pulledExtent,

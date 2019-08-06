@@ -106,15 +106,16 @@ class CustomFooter extends Footer {
 /// 连接通知器
 class LinkFooterNotifier extends ChangeNotifier {
   BuildContext context;
-  LoadMode loadState;
-  double pulledExtent;
+  LoadMode loadState = LoadMode.inactive;
+  double pulledExtent = 0.0;
   double loadTriggerPullDistance;
   double loadIndicatorExtent;
   AxisDirection axisDirection;
   bool float;
   Duration completeDuration;
   bool enableInfiniteLoad;
-  bool success; bool noMore;
+  bool success = true;
+  bool noMore = false;
 
   void contentBuilder(
       BuildContext context, LoadMode loadState, double pulledExtent,
