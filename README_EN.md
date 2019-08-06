@@ -29,7 +29,7 @@ Demo：[Download APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/
 
  - [Properties document](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/en/PROPERTY.md)
  - [FAQ](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/en/FQA.md)
- - [Change log](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/CHANGELOG_CN.md)
+ - [Change log](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/CHANGELOG.md)
  - [Custom Header and Footer](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/en/CUSTOM_HEADER_FOOTER.md)
 
 #### Project presentations
