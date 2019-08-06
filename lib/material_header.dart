@@ -88,6 +88,7 @@ class MaterialHeaderWidgetState extends State<MaterialHeaderWidget>
   Duration get _completeDuration =>
       widget.linkNotifier.completeDuration;
   AxisDirection get _axisDirection => widget.linkNotifier.axisDirection;
+  bool get _noMore => widget.linkNotifier.noMore;
 
   // 动画
   AnimationController _scaleController;
@@ -128,6 +129,7 @@ class MaterialHeaderWidgetState extends State<MaterialHeaderWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (_noMore) return Container();
     // 是否为垂直方向
     bool isVertical = _axisDirection == AxisDirection.down
         || _axisDirection == AxisDirection.up;
@@ -135,8 +137,8 @@ class MaterialHeaderWidgetState extends State<MaterialHeaderWidget>
     bool isReverse = _axisDirection == AxisDirection.up
         || _axisDirection == AxisDirection.left;
     // 计算进度值
-    double indicatorValue = _pulledExtent / (_riggerPullDistance / 0.75);
-    indicatorValue = indicatorValue < 0.75 ? indicatorValue : 0.75;
+    double indicatorValue = _pulledExtent / _riggerPullDistance;
+    indicatorValue = indicatorValue < 1.0 ? indicatorValue : 1.0;
     // 判断是否刷新结束
     if (_refreshState == RefreshMode.refreshed) {
       refreshFinish = true;

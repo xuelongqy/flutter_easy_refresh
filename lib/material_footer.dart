@@ -78,9 +78,11 @@ class MaterialFooterWidgetState extends State<MaterialFooterWidget> {
   double get _riggerPullDistance =>
       widget.linkNotifier.loadTriggerPullDistance;
   AxisDirection get _axisDirection => widget.linkNotifier.axisDirection;
+  bool get _noMore => widget.linkNotifier.noMore;
 
   @override
   Widget build(BuildContext context) {
+    if (_noMore) return Container();
     // 是否为垂直方向
     bool isVertical = _axisDirection == AxisDirection.down
         || _axisDirection == AxisDirection.up;
@@ -88,8 +90,8 @@ class MaterialFooterWidgetState extends State<MaterialFooterWidget> {
     bool isReverse = _axisDirection == AxisDirection.up
         || _axisDirection == AxisDirection.left;
     // 计算进度值
-    double indicatorValue = _pulledExtent / (_riggerPullDistance / 0.75);
-    indicatorValue = indicatorValue < 0.75 ? indicatorValue : 0.75;
+    double indicatorValue = _pulledExtent / _riggerPullDistance;
+    indicatorValue = indicatorValue < 1.0 ? indicatorValue : 1.0;
     return Stack(
       children: <Widget>[
         Positioned(
