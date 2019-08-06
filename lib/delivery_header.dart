@@ -72,6 +72,7 @@ class DeliveryHeaderWidgetState extends State<DeliveryHeaderWidget>
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
   double get _indicatorExtent => widget.linkNotifier.refreshIndicatorExtent;
+  bool get _noMore => widget.linkNotifier.noMore;
 
   // 图片资源
   String _boxBase64 =
@@ -186,6 +187,7 @@ class DeliveryHeaderWidgetState extends State<DeliveryHeaderWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (_noMore) return Container();
     if (_refreshState == RefreshMode.armed
         || _refreshState == RefreshMode.refresh) {
       isRefresh = true;

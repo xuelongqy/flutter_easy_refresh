@@ -64,6 +64,7 @@ class PhoenixFooterWidgetState extends State<PhoenixFooterWidget> {
   LoadMode get _loadState => widget.linkNotifier.loadState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
   double get _indicatorExtent => widget.linkNotifier.loadIndicatorExtent;
+  bool get _noMore => widget.linkNotifier.noMore;
 
   // 图片资源
   String _buildingsBase64 =
@@ -126,6 +127,7 @@ class PhoenixFooterWidgetState extends State<PhoenixFooterWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (_noMore) return Container();
     if (_loadState == LoadMode.armed
         || _loadState == LoadMode.load) {
       isRotateSun = true;

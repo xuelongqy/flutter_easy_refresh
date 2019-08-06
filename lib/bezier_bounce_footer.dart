@@ -77,6 +77,7 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
   LoadMode get _loadState => widget.linkNotifier.loadState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
   double get _indicatorExtent => widget.linkNotifier.loadIndicatorExtent;
+  bool get _noMore => widget.linkNotifier.noMore;
 
   // 回弹动画
   AnimationController _backController;
@@ -119,6 +120,7 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (_noMore) return Container();
     // 计算小球透明度
     double ballOpacity;
     if (_loadState != LoadMode.drag && _loadState != LoadMode.armed) {

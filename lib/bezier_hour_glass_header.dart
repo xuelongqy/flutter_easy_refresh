@@ -77,6 +77,7 @@ class BezierHourGlassHeaderWidgetState extends State<BezierHourGlassHeaderWidget
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
   double get _indicatorExtent => widget.linkNotifier.refreshIndicatorExtent;
+  bool get _noMore => widget.linkNotifier.noMore;
 
   // 回弹动画
   AnimationController _backController;
@@ -121,6 +122,7 @@ class BezierHourGlassHeaderWidgetState extends State<BezierHourGlassHeaderWidget
 
   @override
   Widget build(BuildContext context) {
+    if (_noMore) return Container();
     // 计算小球透明度
     double ballOpacity;
     if (_refreshState != RefreshMode.drag
