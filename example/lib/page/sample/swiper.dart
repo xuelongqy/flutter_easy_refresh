@@ -38,14 +38,16 @@ class SwiperPageState extends State<SwiperPage> {
                 delegate: SliverChildListDelegate([
                   Container(
                     height: 210.0,
-                    child: Swiper(
-                      itemBuilder: (BuildContext context, int index) {
-                        return SampleListItem(direction: Axis.horizontal);
-                      },
-                      itemCount: 5,
-                      viewportFraction: 0.8,
-                      scale: 0.9,
-                      autoplay: true,
+                    child: ScrollNotificationInterceptor(
+                      child: Swiper(
+                        itemBuilder: (BuildContext context, int index) {
+                          return SampleListItem(direction: Axis.horizontal);
+                        },
+                        itemCount: 5,
+                        viewportFraction: 0.8,
+                        scale: 0.9,
+                        autoplay: true,
+                      ),
                     ),
                   ),
                 ]),
