@@ -155,7 +155,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
   );
   ....
   _controller.finishRefresh(success: true);
-  _controller.callLoad(success： true, noMore: false);
+  _controller.finishLoad(success： true, noMore: false);
 ```
 
 ## Use the specified Header and Footer
