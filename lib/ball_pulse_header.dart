@@ -76,6 +76,7 @@ class BallPulseHeaderWidget extends StatefulWidget {
 class BallPulseHeaderWidgetState extends State<BallPulseHeaderWidget> {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
   double get _indicatorExtent => widget.linkNotifier.refreshIndicatorExtent;
+  bool get _noMore => widget.linkNotifier.noMore;
 
   // 球大小
   double _ballSize1, _ballSize2, _ballSize3;
@@ -132,6 +133,7 @@ class BallPulseHeaderWidgetState extends State<BallPulseHeaderWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (_noMore) return Container();
     // 开启动画
     if (_refreshState == RefreshMode.done
         || _refreshState == RefreshMode.inactive) {
