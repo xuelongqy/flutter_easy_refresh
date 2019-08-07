@@ -9,3 +9,8 @@
 >Fix: RefreshCallback naming conflict issue issues#120   
 >Modify: Some styles have no more status   
 >Fix: Height is 0 after infinite loading is completed issues#123,issues#121   
+
+## V Next
+>Optimization: Trigger refresh and load   
+>Optimization: Infinite load trigger   
+>Support: Child is SingleChildScrollView type   
