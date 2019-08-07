@@ -377,7 +377,12 @@ class _EasyRefreshState extends State<EasyRefresh> {
         slivers = List.from(child.buildSlivers(context), growable: true);
       }
     } else if (child is SingleChildScrollView) {
-      slivers = [SliverPadding(sliver: child.child, padding: child.padding)];
+      slivers = [SliverPadding(
+        sliver: SliverList(
+          delegate: SliverChildListDelegate([child.child]),
+        ),
+        padding: child.padding ?? EdgeInsets.all(0.0),
+      ),];
     } else if(child is! Scrollable) {
       slivers = [
         SliverToBoxAdapter(
