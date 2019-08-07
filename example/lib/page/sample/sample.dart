@@ -6,6 +6,7 @@ import 'package:example/page/sample/first_refresh.dart';
 import 'package:example/page/sample/nested_scroll_view.dart';
 import 'package:example/page/sample/second_floor.dart';
 import 'package:example/page/sample/swiper.dart';
+import 'package:example/page/sample/test.dart';
 import 'package:example/page/sample/user_profile.dart';
 import 'package:example/widget/circular_icon.dart';
 import 'package:example/widget/list_item.dart';
@@ -176,6 +177,21 @@ class _SamplePageState extends State<SamplePage>
                 icon: CircularIcon(
                   bgColor: Colors.blueAccent,
                   icon: Icons.chat,
+                ),
+              ),
+              //  测试页面
+              ListItem(
+                title: 'Test',
+                describe: 'EasyRefresh test page',
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return TestPage();
+                      },));
+                },
+                icon: CircularIcon(
+                  bgColor: Colors.black,
+                  icon: Icons.build,
                 ),
               ),
             ]),
