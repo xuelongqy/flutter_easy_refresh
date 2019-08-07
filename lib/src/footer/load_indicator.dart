@@ -191,7 +191,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliver
         infiniteLoad();
       }
     } else {
-      if (constraints.remainingPaintExtent <= 0.0 || extraExtent > 0.0) {
+      if (constraints.remainingPaintExtent <= 1.0 || extraExtent > 0.0) {
         if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
           _triggerInfiniteLoad = false;
         } else {
