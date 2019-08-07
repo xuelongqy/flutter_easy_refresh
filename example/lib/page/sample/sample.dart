@@ -180,7 +180,7 @@ class _SamplePageState extends State<SamplePage>
                 ),
               ),
               //  测试页面
-              ListItem(
+              /*ListItem(
                 title: 'Test',
                 describe: 'EasyRefresh test page',
                 onPressed: () {
@@ -193,7 +193,7 @@ class _SamplePageState extends State<SamplePage>
                   bgColor: Colors.black,
                   icon: Icons.build,
                 ),
-              ),
+              ),*/
             ]),
           ),
         ],
