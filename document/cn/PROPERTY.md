@@ -115,6 +115,7 @@ class _ExampleState extends State<Example> {
 
 # 属性表格 - EasyRefreshController
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+|---------|--------------------------|:-----:|:-----:|:-----:|
 | callRefresh | 触发刷新     | void Function({Duration duration})  | Duration duration = const Duration(milliseconds: 300) | 可选 |
 | callLoad | 触发加载 | void Function({Duration duration})  | Duration duration = const Duration(milliseconds: 300) | 可选 |
 | finishRefresh | 完成刷新 | void Function({{bool success,bool noMore,}})  | success = true, noMore = false | 可选 |

@@ -117,6 +117,7 @@ class _ExampleState extends State<Example> {
 
 # Props Table - EasyRefreshController
 | Attribute Name |     Attribute Explain     | Parameter Type | Default Value | Requirement |
+|---------|--------------------------|:-----:|:-----:|:-----:|
 | callRefresh | Triggered refresh     | void Function({Duration duration})  | Duration duration = const Duration(milliseconds: 300) | Optional |
 | callLoad | Triggered Loading | void Function({Duration duration})  | Duration duration = const Duration(milliseconds: 300) | Optional |
 | finishRefresh | Finish refresh | void Function({{bool success,bool noMore,}})  | success = true, noMore = false | Optional |
