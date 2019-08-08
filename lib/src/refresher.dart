@@ -509,16 +509,16 @@ class _EasyRefreshState extends State<EasyRefresh> {
 /// EasyRefresh控制器
 class EasyRefreshController {
   /// 触发刷新
-  void callRefresh() {
+  void callRefresh({Duration duration = const Duration(milliseconds: 300)}) {
     if (this._easyRefreshState != null) {
-      this._easyRefreshState.callRefresh();
+      this._easyRefreshState.callRefresh(duration: duration);
     }
   }
 
   /// 触发加载
-  void callLoad() {
+  void callLoad({Duration duration = const Duration(milliseconds: 300)}) {
     if (this._easyRefreshState != null) {
-      this._easyRefreshState.callLoad();
+      this._easyRefreshState.callLoad(duration: duration);
     }
   }
 
