@@ -17,34 +17,50 @@ class TaurusFooter extends Footer {
   TaurusFooter({
     this.key,
     bool enableHapticFeedback = false,
-  }): super(
-    extent: 90.0,
-    triggerDistance: 90.0,
-    float: false,
-    enableHapticFeedback: enableHapticFeedback,
-    enableInfiniteLoad: false,
-    completeDuration: const Duration(seconds: 1),
-  );
+  }) : super(
+          extent: 90.0,
+          triggerDistance: 90.0,
+          float: false,
+          enableHapticFeedback: enableHapticFeedback,
+          enableInfiniteLoad: false,
+          completeDuration: const Duration(seconds: 1),
+        );
 
   @override
-  Widget contentBuilder(BuildContext context, LoadMode loadState,
-      double pulledExtent, double loadTriggerPullDistance,
-      double loadIndicatorExtent, AxisDirection axisDirection,
-      bool float, Duration completeDuration, bool enableInfiniteLoad,
-      bool success, bool noMore) {
+  Widget contentBuilder(
+      BuildContext context,
+      LoadMode loadState,
+      double pulledExtent,
+      double loadTriggerPullDistance,
+      double loadIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteLoad,
+      bool success,
+      bool noMore) {
     // 不能为水平方向以及反向
     assert(axisDirection == AxisDirection.down,
-    'Widget can only be vertical and cannot be reversed'
-    );
-    linkNotifier.contentBuilder(context, loadState, pulledExtent,
-        loadTriggerPullDistance, loadIndicatorExtent, axisDirection, float,
-        completeDuration, enableInfiniteLoad, success, noMore);
+        'Widget can only be vertical and cannot be reversed');
+    linkNotifier.contentBuilder(
+        context,
+        loadState,
+        pulledExtent,
+        loadTriggerPullDistance,
+        loadIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteLoad,
+        success,
+        noMore);
     return TaurusFooterWidget(
       key: key,
       linkNotifier: linkNotifier,
     );
   }
 }
+
 /// 冲上云霄组件
 class TaurusFooterWidget extends StatefulWidget {
   final LinkFooterNotifier linkNotifier;
@@ -59,6 +75,7 @@ class TaurusFooterWidget extends StatefulWidget {
     return TaurusFooterWidgetState();
   }
 }
+
 class TaurusFooterWidgetState extends State<TaurusFooterWidget> {
   LoadMode get _loadState => widget.linkNotifier.loadState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
@@ -94,6 +111,7 @@ class TaurusFooterWidgetState extends State<TaurusFooterWidget> {
       }
     }
   }
+
   // 刷新结束
   bool _isRefreshed;
 
@@ -136,8 +154,7 @@ class TaurusFooterWidgetState extends State<TaurusFooterWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loadState == LoadMode.armed
-        || _loadState == LoadMode.load) {
+    if (_loadState == LoadMode.armed || _loadState == LoadMode.load) {
       isCloudFloat = true;
     } else if (_loadState == LoadMode.loaded) {
       isCloudFloat = false;
@@ -171,16 +188,10 @@ class TaurusFooterWidgetState extends State<TaurusFooterWidget> {
     double airplaneLeft;
     if (_isRefreshed && _pulledExtent < _indicatorExtent) {
       airplaneBottom = _indicatorExtent / 2 +
-          (_indicatorExtent - _pulledExtent) *
-              22.5 /
-              _indicatorExtent *
-              5 +
+          (_indicatorExtent - _pulledExtent) * 22.5 / _indicatorExtent * 5 +
           _cloudFloatCoefficient;
       airplaneLeft = 122.5 +
-          (_indicatorExtent - _pulledExtent) *
-              122.5 /
-              _indicatorExtent *
-              3;
+          (_indicatorExtent - _pulledExtent) * 122.5 / _indicatorExtent * 3;
     } else {
       airplaneBottom = _pulledExtent < _indicatorExtent
           ? _pulledExtent / 2 + _cloudFloatCoefficient
@@ -203,7 +214,8 @@ class TaurusFooterWidgetState extends State<TaurusFooterWidget> {
           child: Container(
             width: double.infinity,
             height: _pulledExtent > _indicatorExtent
-                ? _pulledExtent : _indicatorExtent,
+                ? _pulledExtent
+                : _indicatorExtent,
             child: Stack(
               children: <Widget>[
                 // 左边云朵

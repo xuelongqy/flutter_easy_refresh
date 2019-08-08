@@ -9,8 +9,10 @@ import 'src/header/header.dart';
 class BallPulseHeader extends Header {
   /// Key
   final Key key;
+
   /// 颜色
   final Color color;
+
   /// 背景颜色
   final Color backgroundColor;
 
@@ -22,28 +24,44 @@ class BallPulseHeader extends Header {
     this.backgroundColor,
     bool enableHapticFeedback = true,
     bool enableInfiniteRefresh = false,
-  }): super(
-    extent: 70.0,
-    triggerDistance: 70.0,
-    float: false,
-    enableHapticFeedback: enableHapticFeedback,
-    enableInfiniteRefresh: enableInfiniteRefresh,
-  );
+  }) : super(
+          extent: 70.0,
+          triggerDistance: 70.0,
+          float: false,
+          enableHapticFeedback: enableHapticFeedback,
+          enableInfiniteRefresh: enableInfiniteRefresh,
+        );
 
   @override
-  Widget contentBuilder(BuildContext context, RefreshMode refreshState,
-      double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent, AxisDirection axisDirection,
-      bool float, Duration completeDuration, bool enableInfiniteRefresh,
-      bool success, bool noMore) {
+  Widget contentBuilder(
+      BuildContext context,
+      RefreshMode refreshState,
+      double pulledExtent,
+      double refreshTriggerPullDistance,
+      double refreshIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteRefresh,
+      bool success,
+      bool noMore) {
     // 不能为水平方向
-    assert(axisDirection == AxisDirection.down
-        || axisDirection == AxisDirection.up,
-      'Widget cannot be horizontal'
-    );
-    linkNotifier.contentBuilder(context, refreshState, pulledExtent,
-        refreshTriggerPullDistance, refreshIndicatorExtent, axisDirection,
-        float, completeDuration, enableInfiniteRefresh, success, noMore);
+    assert(
+        axisDirection == AxisDirection.down ||
+            axisDirection == AxisDirection.up,
+        'Widget cannot be horizontal');
+    linkNotifier.contentBuilder(
+        context,
+        refreshState,
+        pulledExtent,
+        refreshTriggerPullDistance,
+        refreshIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteRefresh,
+        success,
+        noMore);
     return BallPulseHeaderWidget(
       key: key,
       color: color,
@@ -52,10 +70,12 @@ class BallPulseHeader extends Header {
     );
   }
 }
+
 /// 球脉冲组件
 class BallPulseHeaderWidget extends StatefulWidget {
   /// 颜色
   final Color color;
+
   /// 背景颜色
   final Color backgroundColor;
 
@@ -73,6 +93,7 @@ class BallPulseHeaderWidget extends StatefulWidget {
     return BallPulseHeaderWidgetState();
   }
 }
+
 class BallPulseHeaderWidgetState extends State<BallPulseHeaderWidget> {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
   double get _indicatorExtent => widget.linkNotifier.refreshIndicatorExtent;
@@ -135,8 +156,8 @@ class BallPulseHeaderWidgetState extends State<BallPulseHeaderWidget> {
   Widget build(BuildContext context) {
     if (_noMore) return Container();
     // 开启动画
-    if (_refreshState == RefreshMode.done
-        || _refreshState == RefreshMode.inactive) {
+    if (_refreshState == RefreshMode.done ||
+        _refreshState == RefreshMode.inactive) {
       _isAnimated = false;
     } else if (!_isAnimated) {
       _isAnimated = true;

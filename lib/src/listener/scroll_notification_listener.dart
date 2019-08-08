@@ -26,9 +26,9 @@ class ScrollNotificationListener extends StatefulWidget {
     return ScrollNotificationListenerState();
   }
 }
+
 class ScrollNotificationListenerState
     extends State<ScrollNotificationListener> {
-
   // 焦点状态
   bool _focusState = false;
   set _focus(bool focus) {
@@ -50,13 +50,14 @@ class ScrollNotificationListenerState
   }
 
   @override
-  Widget build(BuildContext context)
-  => NotificationListener<ScrollNotification>(
-    onNotification: (ScrollNotification notification) {
-      _handleScrollNotification(notification);
-      return widget.onNotification == null
-          ? true : widget.onNotification(notification);
-    },
-    child: widget.child,
-  );
+  Widget build(BuildContext context) =>
+      NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification notification) {
+          _handleScrollNotification(notification);
+          return widget.onNotification == null
+              ? true
+              : widget.onNotification(notification);
+        },
+        child: widget.child,
+      );
 }

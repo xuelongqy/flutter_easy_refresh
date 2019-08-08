@@ -17,34 +17,50 @@ class TaurusHeader extends Header {
   TaurusHeader({
     this.key,
     bool enableHapticFeedback = false,
-  }): super(
-    extent: 90.0,
-    triggerDistance: 90.0,
-    float: false,
-    enableHapticFeedback: enableHapticFeedback,
-    enableInfiniteRefresh: false,
-    completeDuration: const Duration(seconds: 1),
-  );
+  }) : super(
+          extent: 90.0,
+          triggerDistance: 90.0,
+          float: false,
+          enableHapticFeedback: enableHapticFeedback,
+          enableInfiniteRefresh: false,
+          completeDuration: const Duration(seconds: 1),
+        );
 
   @override
-  Widget contentBuilder(BuildContext context, RefreshMode refreshState,
-      double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent, AxisDirection axisDirection,
-      bool float, Duration completeDuration, bool enableInfiniteRefresh,
-      bool success, bool noMore) {
+  Widget contentBuilder(
+      BuildContext context,
+      RefreshMode refreshState,
+      double pulledExtent,
+      double refreshTriggerPullDistance,
+      double refreshIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteRefresh,
+      bool success,
+      bool noMore) {
     // 不能为水平方向以及反向
     assert(axisDirection == AxisDirection.down,
-    'Widget can only be vertical and cannot be reversed'
-    );
-    linkNotifier.contentBuilder(context, refreshState, pulledExtent,
-        refreshTriggerPullDistance, refreshIndicatorExtent, axisDirection,
-        float, completeDuration, enableInfiniteRefresh, success, noMore);
+        'Widget can only be vertical and cannot be reversed');
+    linkNotifier.contentBuilder(
+        context,
+        refreshState,
+        pulledExtent,
+        refreshTriggerPullDistance,
+        refreshIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteRefresh,
+        success,
+        noMore);
     return TaurusHeaderWidget(
       key: key,
       linkNotifier: linkNotifier,
     );
   }
 }
+
 /// 冲上云霄组件
 class TaurusHeaderWidget extends StatefulWidget {
   final LinkHeaderNotifier linkNotifier;
@@ -59,6 +75,7 @@ class TaurusHeaderWidget extends StatefulWidget {
     return TaurusHeaderWidgetState();
   }
 }
+
 class TaurusHeaderWidgetState extends State<TaurusHeaderWidget> {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
@@ -94,6 +111,7 @@ class TaurusHeaderWidgetState extends State<TaurusHeaderWidget> {
       }
     }
   }
+
   // 刷新结束
   bool _isRefreshed;
 
@@ -136,8 +154,8 @@ class TaurusHeaderWidgetState extends State<TaurusHeaderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (_refreshState == RefreshMode.armed
-        || _refreshState == RefreshMode.refresh) {
+    if (_refreshState == RefreshMode.armed ||
+        _refreshState == RefreshMode.refresh) {
       isCloudFloat = true;
     } else if (_refreshState == RefreshMode.refreshed) {
       isCloudFloat = false;
@@ -171,16 +189,10 @@ class TaurusHeaderWidgetState extends State<TaurusHeaderWidget> {
     double airplaneLeft;
     if (_isRefreshed && _pulledExtent < _indicatorExtent) {
       airplaneBottom = _indicatorExtent / 2 +
-          (_indicatorExtent - _pulledExtent) *
-              22.5 /
-              _indicatorExtent *
-              5 +
+          (_indicatorExtent - _pulledExtent) * 22.5 / _indicatorExtent * 5 +
           _cloudFloatCoefficient;
       airplaneLeft = 122.5 +
-          (_indicatorExtent - _pulledExtent) *
-              122.5 /
-              _indicatorExtent *
-              3;
+          (_indicatorExtent - _pulledExtent) * 122.5 / _indicatorExtent * 3;
     } else {
       airplaneBottom = _pulledExtent < _indicatorExtent
           ? _pulledExtent / 2 + _cloudFloatCoefficient

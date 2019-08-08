@@ -9,8 +9,10 @@ import 'src/footer/footer.dart';
 class BallPulseFooter extends Footer {
   /// Key
   final Key key;
+
   /// 颜色
   final Color color;
+
   /// 背景颜色
   final Color backgroundColor;
 
@@ -22,28 +24,44 @@ class BallPulseFooter extends Footer {
     this.backgroundColor,
     bool enableHapticFeedback = true,
     bool enableInfiniteLoad = true,
-  }): super(
-    extent: 70.0,
-    triggerDistance: 70.0,
-    float: false,
-    enableHapticFeedback: enableHapticFeedback,
-    enableInfiniteLoad: enableInfiniteLoad,
-  );
+  }) : super(
+          extent: 70.0,
+          triggerDistance: 70.0,
+          float: false,
+          enableHapticFeedback: enableHapticFeedback,
+          enableInfiniteLoad: enableInfiniteLoad,
+        );
 
   @override
-  Widget contentBuilder(BuildContext context, LoadMode loadState,
-      double pulledExtent, double loadTriggerPullDistance,
-      double loadIndicatorExtent, AxisDirection axisDirection,
-      bool float, Duration completeDuration, bool enableInfiniteLoad,
-      bool success, bool noMore) {
+  Widget contentBuilder(
+      BuildContext context,
+      LoadMode loadState,
+      double pulledExtent,
+      double loadTriggerPullDistance,
+      double loadIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteLoad,
+      bool success,
+      bool noMore) {
     // 不能为水平方向
-    assert(axisDirection == AxisDirection.down
-        || axisDirection == AxisDirection.up,
-      'Widget cannot be horizontal'
-    );
-    linkNotifier.contentBuilder(context, loadState, pulledExtent,
-        loadTriggerPullDistance, loadIndicatorExtent, axisDirection, float,
-        completeDuration, enableInfiniteLoad, success, noMore);
+    assert(
+        axisDirection == AxisDirection.down ||
+            axisDirection == AxisDirection.up,
+        'Widget cannot be horizontal');
+    linkNotifier.contentBuilder(
+        context,
+        loadState,
+        pulledExtent,
+        loadTriggerPullDistance,
+        loadIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteLoad,
+        success,
+        noMore);
     return BallPulseFooterWidget(
       key: key,
       color: color,
@@ -52,10 +70,12 @@ class BallPulseFooter extends Footer {
     );
   }
 }
+
 /// 球脉冲组件
 class BallPulseFooterWidget extends StatefulWidget {
   /// 颜色
   final Color color;
+
   /// 背景颜色
   final Color backgroundColor;
 
@@ -73,6 +93,7 @@ class BallPulseFooterWidget extends StatefulWidget {
     return BallPulseFooterWidgetState();
   }
 }
+
 class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
   LoadMode get _refreshState => widget.linkNotifier.loadState;
   double get _indicatorExtent => widget.linkNotifier.loadIndicatorExtent;
@@ -135,8 +156,7 @@ class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
   Widget build(BuildContext context) {
     if (_noMore) return Container();
     // 开启动画
-    if (_refreshState == LoadMode.done
-        || _refreshState == LoadMode.inactive) {
+    if (_refreshState == LoadMode.done || _refreshState == LoadMode.inactive) {
       _isAnimated = false;
     } else if (!_isAnimated) {
       _isAnimated = true;

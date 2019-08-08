@@ -11,37 +11,45 @@ import 'widget/empty_widget.dart';
 
 /// 子组件构造器
 typedef EasyRefreshChildBuilder = Widget Function(
-    BuildContext context, ScrollPhysics physics,
-    Widget header, Widget footer);
-
+    BuildContext context, ScrollPhysics physics, Widget header, Widget footer);
 
 /// EasyRefresh
 /// 下拉刷新,上拉加载组件
 class EasyRefresh extends StatefulWidget {
   /// 控制器
   final EasyRefreshController controller;
+
   /// 刷新回调(null为不开启刷新)
   final OnRefreshCallback onRefresh;
+
   /// 加载回调(null为不开启加载)
   final OnLoadCallback onLoad;
+
   /// 是否开启控制结束刷新
   final bool enableControlFinishRefresh;
+
   /// 是否开启控制结束加载
   final bool enableControlFinishLoad;
+
   /// 任务独立(刷新和加载状态独立)
   final bool taskIndependence;
+
   /// Header
   final Header header;
   final int headerIndex;
+
   /// Footer
   final Footer footer;
+
   /// 子组件构造器
   final EasyRefreshChildBuilder builder;
+
   /// 子组件
   final Widget child;
 
   /// 首次刷新
   final bool firstRefresh;
+
   /// 首次刷新组件
   /// 不设置时使用header
   final Widget firstRefreshWidget;
@@ -53,13 +61,16 @@ class EasyRefresh extends StatefulWidget {
 
   /// 顶部回弹(onRefresh为null时生效)
   final bool topBouncing;
+
   /// 底部回弹(onLoad为null时生效)
   final bool bottomBouncing;
 
   /// Slivers集合
   final List<Widget> slivers;
+
   /// 列表方向
   final Axis scrollDirection;
+
   /// 反向
   final bool reverse;
   final ScrollController scrollController;
@@ -71,7 +82,6 @@ class EasyRefresh extends StatefulWidget {
   final int semanticChildCount;
   final DragStartBehavior dragStartBehavior;
 
-
   /// 全局默认Header
   static Header _defaultHeader = ClassicalHeader();
   static set defaultHeader(Header header) {
@@ -79,6 +89,7 @@ class EasyRefresh extends StatefulWidget {
       _defaultHeader = header;
     }
   }
+
   /// 全局默认Footer
   static Footer _defaultFooter = ClassicalFooter();
   static set defaultFooter(Footer footer) {
@@ -86,6 +97,7 @@ class EasyRefresh extends StatefulWidget {
       _defaultFooter = footer;
     }
   }
+
   /// 触发时超过距离
   static double callOverExtent = 30.0;
 
@@ -109,10 +121,17 @@ class EasyRefresh extends StatefulWidget {
     this.topBouncing = true,
     this.bottomBouncing = true,
     @required this.child,
-  }) : this.scrollDirection = null, this.reverse = null, this.builder = null,
-        this.primary = null, this.shrinkWrap = null, this.center = null,
-        this.anchor = null, this.cacheExtent = null, this.slivers = null,
-        this.semanticChildCount = null, this.dragStartBehavior = null;
+  })  : this.scrollDirection = null,
+        this.reverse = null,
+        this.builder = null,
+        this.primary = null,
+        this.shrinkWrap = null,
+        this.center = null,
+        this.anchor = null,
+        this.cacheExtent = null,
+        this.slivers = null,
+        this.semanticChildCount = null,
+        this.dragStartBehavior = null;
 
   /// custom构造器(推荐)
   /// 直接使用CustomScrollView可用的slivers
@@ -143,7 +162,8 @@ class EasyRefresh extends StatefulWidget {
     this.topBouncing = true,
     this.bottomBouncing = true,
     @required this.slivers,
-  }) : this.builder = null, this.child = null;
+  })  : this.builder = null,
+        this.child = null;
 
   /// 自定义构造器
   /// 用法灵活,但需将physics、header和footer放入列表中
@@ -162,11 +182,19 @@ class EasyRefresh extends StatefulWidget {
     this.topBouncing = true,
     this.bottomBouncing = true,
     @required this.builder,
-  }) : this.scrollDirection = null, this.reverse = null, this.child = null,
-        this.primary = null, this.shrinkWrap = null, this.center = null,
-        this.anchor = null, this.cacheExtent = null, this.slivers = null,
-        this.semanticChildCount = null, this.dragStartBehavior = null,
-        this.headerIndex = null, this.firstRefreshWidget = null,
+  })  : this.scrollDirection = null,
+        this.reverse = null,
+        this.child = null,
+        this.primary = null,
+        this.shrinkWrap = null,
+        this.center = null,
+        this.anchor = null,
+        this.cacheExtent = null,
+        this.slivers = null,
+        this.semanticChildCount = null,
+        this.dragStartBehavior = null,
+        this.headerIndex = null,
+        this.firstRefreshWidget = null,
         this.emptyWidget = null;
 
   @override
@@ -184,6 +212,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
       return _firstRefreshHeader;
     return widget.header ?? EasyRefresh._defaultHeader;
   }
+
   // 是否开启首次刷新
   bool _enableFirstRefresh = false;
   // 首次刷新组件
@@ -192,13 +221,15 @@ class _EasyRefreshState extends State<EasyRefresh> {
   Footer get _footer {
     return widget.footer ?? EasyRefresh._defaultFooter;
   }
+
   // 子组件的ScrollController
   ScrollController _childScrollController;
 
   // ScrollController
   ScrollController get _scrollerController {
-    return widget.scrollController ?? _childScrollController
-        ?? PrimaryScrollController.of(context);
+    return widget.scrollController ??
+        _childScrollController ??
+        PrimaryScrollController.of(context);
   }
 
   // 滚动焦点状态
@@ -213,22 +244,22 @@ class _EasyRefreshState extends State<EasyRefresh> {
   // 初始化
   @override
   void initState() {
-     super.initState();
-     _focusNotifier = ValueNotifier<bool>(false);
-     _taskNotifier = ValueNotifier<bool>(false);
-     _callRefreshNotifier = ValueNotifier<bool>(false);
-     _callLoadNotifier = ValueNotifier<bool>(false);
-     _taskNotifier.addListener(() {
-       // 监听首次刷新是否结束
-       if (_enableFirstRefresh && !_taskNotifier.value) {
-         _scrollerController.jumpTo(0.0);
-         setState(() {
-           _enableFirstRefresh = false;
-         });
-       }
-     });
-     // 判断是否开启首次刷新
-     _enableFirstRefresh = widget.firstRefresh ?? false;
+    super.initState();
+    _focusNotifier = ValueNotifier<bool>(false);
+    _taskNotifier = ValueNotifier<bool>(false);
+    _callRefreshNotifier = ValueNotifier<bool>(false);
+    _callLoadNotifier = ValueNotifier<bool>(false);
+    _taskNotifier.addListener(() {
+      // 监听首次刷新是否结束
+      if (_enableFirstRefresh && !_taskNotifier.value) {
+        _scrollerController.jumpTo(0.0);
+        setState(() {
+          _enableFirstRefresh = false;
+        });
+      }
+    });
+    // 判断是否开启首次刷新
+    _enableFirstRefresh = widget.firstRefresh ?? false;
     if (_enableFirstRefresh) {
       _firstRefreshHeader = FirstRefreshHeader(widget.firstRefreshWidget);
       SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
@@ -266,8 +297,9 @@ class _EasyRefreshState extends State<EasyRefresh> {
     if (_scrollerController == null || _scrollerController.positions.isEmpty)
       return;
     _callRefreshNotifier.value = true;
-    _scrollerController.animateTo(0.0, duration: duration,
-        curve: Curves.linear).whenComplete((){
+    _scrollerController
+        .animateTo(0.0, duration: duration, curve: Curves.linear)
+        .whenComplete(() {
       _scrollerController.animateTo(
           -(_header.triggerDistance + EasyRefresh.callOverExtent),
           duration: Duration(milliseconds: 200),
@@ -281,11 +313,14 @@ class _EasyRefreshState extends State<EasyRefresh> {
     if (_scrollerController == null || _scrollerController.positions.isEmpty)
       return;
     _callLoadNotifier.value = true;
-    _scrollerController.animateTo(_scrollerController.position.maxScrollExtent,
-        duration: duration, curve: Curves.linear)
-        .whenComplete((){
-      _scrollerController.animateTo(_scrollerController.position.maxScrollExtent
-          + _footer.triggerDistance + EasyRefresh.callOverExtent,
+    _scrollerController
+        .animateTo(_scrollerController.position.maxScrollExtent,
+            duration: duration, curve: Curves.linear)
+        .whenComplete(() {
+      _scrollerController.animateTo(
+          _scrollerController.position.maxScrollExtent +
+              _footer.triggerDistance +
+              EasyRefresh.callOverExtent,
           duration: Duration(milliseconds: 200),
           curve: Curves.linear);
     });
@@ -296,25 +331,30 @@ class _EasyRefreshState extends State<EasyRefresh> {
     // 列表物理形式
     bool topBouncing = widget.onRefresh == null ? widget.topBouncing : true;
     bool bottomBouncing = widget.onLoad == null ? widget.bottomBouncing : true;
-    if (topBouncing != _physics.topBouncing
-        || bottomBouncing != _physics.bottomBouncing) {
+    if (topBouncing != _physics.topBouncing ||
+        bottomBouncing != _physics.bottomBouncing) {
       _physics = EasyRefreshPhysics(
         topBouncing: topBouncing,
         bottomBouncing: bottomBouncing,
       );
     }
     // 构建Header和Footer
-    var header = widget.onRefresh == null ? null
-        : _header.builder(context, widget, _focusNotifier,
-        _taskNotifier, _callRefreshNotifier);
-    var footer = widget.onLoad == null ? null
-        : _footer.builder(context, widget, _focusNotifier,
-        _taskNotifier, _callLoadNotifier);
+    var header = widget.onRefresh == null
+        ? null
+        : _header.builder(context, widget, _focusNotifier, _taskNotifier,
+            _callRefreshNotifier);
+    var footer = widget.onLoad == null
+        ? null
+        : _footer.builder(
+            context, widget, _focusNotifier, _taskNotifier, _callLoadNotifier);
     // 生成slivers
     List<Widget> slivers;
     if (widget.builder == null) {
-      if (widget.slivers != null) slivers = List.from(
-        widget.slivers, growable: true,);
+      if (widget.slivers != null)
+        slivers = List.from(
+          widget.slivers,
+          growable: true,
+        );
       else if (widget.child != null) slivers = _buildSliversByChild();
       // 判断是否有空视图
       if (widget.emptyWidget != null && slivers != null) {
@@ -382,13 +422,15 @@ class _EasyRefreshState extends State<EasyRefresh> {
         slivers = List.from(child.buildSlivers(context), growable: true);
       }
     } else if (child is SingleChildScrollView) {
-      slivers = [SliverPadding(
-        sliver: SliverList(
-          delegate: SliverChildListDelegate([child.child]),
+      slivers = [
+        SliverPadding(
+          sliver: SliverList(
+            delegate: SliverChildListDelegate([child.child]),
+          ),
+          padding: child.padding ?? EdgeInsets.all(0.0),
         ),
-        padding: child.padding ?? EdgeInsets.all(0.0),
-      ),];
-    } else if(child is! Scrollable) {
+      ];
+    } else if (child is! Scrollable) {
       slivers = [
         SliverToBoxAdapter(
           child: child,
@@ -399,8 +441,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
   }
 
   // 通过child构建列表组件
-  Widget _buildListBodyByChild(List<Widget> slivers,
-      Widget header, Widget footer) {
+  Widget _buildListBodyByChild(
+      List<Widget> slivers, Widget header, Widget footer) {
     Widget child = widget.child;
     if (child is ScrollView) {
       _childScrollController = child.controller;
@@ -433,13 +475,13 @@ class _EasyRefreshState extends State<EasyRefresh> {
         axisDirection: child.axisDirection,
         semanticChildCount: child.semanticChildCount,
         dragStartBehavior: child.dragStartBehavior,
-        viewportBuilder: (context, position){
+        viewportBuilder: (context, position) {
           Viewport viewport = child.viewportBuilder(context, position);
           // 判断是否有空视图
           if (widget.emptyWidget != null) {
             if (viewport.children.length > (widget.headerIndex ?? 0) + 1) {
-              viewport.children.removeRange(widget.headerIndex,
-                  viewport.children.length - 1);
+              viewport.children.removeRange(
+                  widget.headerIndex, viewport.children.length - 1);
             }
             viewport.children.add(EmptyWidget(
               child: widget.emptyWidget,
@@ -472,12 +514,14 @@ class EasyRefreshController {
       this._easyRefreshState.callRefresh();
     }
   }
+
   /// 触发加载
   void callLoad() {
     if (this._easyRefreshState != null) {
       this._easyRefreshState.callLoad();
     }
   }
+
   /// 完成刷新
   FinishRefresh finishRefreshCallBack;
   void finishRefresh({
@@ -488,6 +532,7 @@ class EasyRefreshController {
       finishRefreshCallBack(success: success, noMore: noMore);
     }
   }
+
   /// 完成加载
   FinishLoad finishLoadCallBack;
   void finishLoad({
@@ -498,6 +543,7 @@ class EasyRefreshController {
       finishLoadCallBack(success: success, noMore: noMore);
     }
   }
+
   /// 恢复刷新状态(用于没有更多后)
   VoidCallback resetRefreshStateCallBack;
   void resetRefreshState() {
@@ -505,6 +551,7 @@ class EasyRefreshController {
       resetRefreshStateCallBack();
     }
   }
+
   /// 恢复加载状态(用于没有更多后)
   VoidCallback resetLoadStateCallBack;
   void resetLoadState() {

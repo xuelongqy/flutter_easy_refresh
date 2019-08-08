@@ -18,34 +18,50 @@ class PhoenixFooter extends Footer {
   PhoenixFooter({
     this.key,
     bool enableHapticFeedback = false,
-  }): super(
-    extent: 80.0,
-    triggerDistance: 80.0,
-    float: false,
-    enableHapticFeedback: enableHapticFeedback,
-    enableInfiniteLoad: false,
-    completeDuration: const Duration(seconds: 1),
-  );
+  }) : super(
+          extent: 80.0,
+          triggerDistance: 80.0,
+          float: false,
+          enableHapticFeedback: enableHapticFeedback,
+          enableInfiniteLoad: false,
+          completeDuration: const Duration(seconds: 1),
+        );
 
   @override
-  Widget contentBuilder(BuildContext context, LoadMode loadState,
-      double pulledExtent, double loadTriggerPullDistance,
-      double loadIndicatorExtent, AxisDirection axisDirection,
-      bool float, Duration completeDuration, bool enableInfiniteLoad,
-      bool success, bool noMore) {
+  Widget contentBuilder(
+      BuildContext context,
+      LoadMode loadState,
+      double pulledExtent,
+      double loadTriggerPullDistance,
+      double loadIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteLoad,
+      bool success,
+      bool noMore) {
     // 不能为水平方向以及反向
     assert(axisDirection == AxisDirection.down,
-    'Widget can only be vertical and cannot be reversed'
-    );
-    linkNotifier.contentBuilder(context, loadState, pulledExtent,
-        loadTriggerPullDistance, loadIndicatorExtent, axisDirection, float,
-        completeDuration, enableInfiniteLoad, success, noMore);
+        'Widget can only be vertical and cannot be reversed');
+    linkNotifier.contentBuilder(
+        context,
+        loadState,
+        pulledExtent,
+        loadTriggerPullDistance,
+        loadIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteLoad,
+        success,
+        noMore);
     return PhoenixFooterWidget(
       key: key,
       linkNotifier: linkNotifier,
     );
   }
 }
+
 /// 金色校园组件
 class PhoenixFooterWidget extends StatefulWidget {
   final LinkFooterNotifier linkNotifier;
@@ -60,6 +76,7 @@ class PhoenixFooterWidget extends StatefulWidget {
     return PhoenixFooterWidgetState();
   }
 }
+
 class PhoenixFooterWidgetState extends State<PhoenixFooterWidget> {
   LoadMode get _loadState => widget.linkNotifier.loadState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
@@ -128,11 +145,9 @@ class PhoenixFooterWidgetState extends State<PhoenixFooterWidget> {
   @override
   Widget build(BuildContext context) {
     if (_noMore) return Container();
-    if (_loadState == LoadMode.armed
-        || _loadState == LoadMode.load) {
+    if (_loadState == LoadMode.armed || _loadState == LoadMode.load) {
       isRotateSun = true;
-    } else if (_loadState == LoadMode.done
-        || _loadState == LoadMode.inactive) {
+    } else if (_loadState == LoadMode.done || _loadState == LoadMode.inactive) {
       isRotateSun = false;
     }
     return Stack(
@@ -144,7 +159,8 @@ class PhoenixFooterWidgetState extends State<PhoenixFooterWidget> {
           child: Container(
             width: double.infinity,
             height: _pulledExtent > _indicatorExtent
-                ? _pulledExtent : _indicatorExtent,
+                ? _pulledExtent
+                : _indicatorExtent,
             child: Stack(
               children: <Widget>[
                 // 天空
@@ -211,8 +227,11 @@ class PhoenixFooterWidgetState extends State<PhoenixFooterWidget> {
                                 fit: BoxFit.fill,
                               ),
                             ),
-                            angle: (_isRotateSun ? _sunRotateValue : _pulledExtent)
-                                / 8 / pi,
+                            angle: (_isRotateSun
+                                    ? _sunRotateValue
+                                    : _pulledExtent) /
+                                8 /
+                                pi,
                           ),
                         ),
                       ),

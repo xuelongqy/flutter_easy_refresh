@@ -11,8 +11,10 @@ const Duration _kIndicatorScaleDuration = Duration(milliseconds: 200);
 class MaterialHeader extends Header {
   final Key key;
   final double displacement;
+
   /// 颜色
   final Animation<Color> valueColor;
+
   /// 背景颜色
   final Color backgroundColor;
 
@@ -25,26 +27,47 @@ class MaterialHeader extends Header {
     this.backgroundColor,
     completeDuration = const Duration(seconds: 1),
     bool enableHapticFeedback = false,
-  }): super(
-    float: true,
-    extent: 70.0,
-    triggerDistance: 70.0,
-    completeDuration: completeDuration == null
-        ? Duration(milliseconds: 300,)
-        : completeDuration + Duration(milliseconds: 300,),
-    enableInfiniteRefresh: false,
-    enableHapticFeedback: enableHapticFeedback,
-  );
+  }) : super(
+          float: true,
+          extent: 70.0,
+          triggerDistance: 70.0,
+          completeDuration: completeDuration == null
+              ? Duration(
+                  milliseconds: 300,
+                )
+              : completeDuration +
+                  Duration(
+                    milliseconds: 300,
+                  ),
+          enableInfiniteRefresh: false,
+          enableHapticFeedback: enableHapticFeedback,
+        );
 
   @override
-  Widget contentBuilder(BuildContext context, RefreshMode refreshState,
-      double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent, AxisDirection axisDirection,
-      bool float, Duration completeDuration, bool enableInfiniteRefresh,
-      bool success, bool noMore) {
-    linkNotifier.contentBuilder(context, refreshState, pulledExtent,
-        refreshTriggerPullDistance, refreshIndicatorExtent, axisDirection,
-        float, completeDuration, enableInfiniteRefresh, success, noMore);
+  Widget contentBuilder(
+      BuildContext context,
+      RefreshMode refreshState,
+      double pulledExtent,
+      double refreshTriggerPullDistance,
+      double refreshIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteRefresh,
+      bool success,
+      bool noMore) {
+    linkNotifier.contentBuilder(
+        context,
+        refreshState,
+        pulledExtent,
+        refreshTriggerPullDistance,
+        refreshIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteRefresh,
+        success,
+        noMore);
     return MaterialHeaderWidget(
       key: key,
       displacement: displacement,
@@ -54,6 +77,7 @@ class MaterialHeader extends Header {
     );
   }
 }
+
 /// 质感设计Header组件
 class MaterialHeaderWidget extends StatefulWidget {
   final double displacement;
@@ -76,17 +100,17 @@ class MaterialHeaderWidget extends StatefulWidget {
     return MaterialHeaderWidgetState();
   }
 }
+
 class MaterialHeaderWidgetState extends State<MaterialHeaderWidget>
-    with TickerProviderStateMixin<MaterialHeaderWidget>{
+    with TickerProviderStateMixin<MaterialHeaderWidget> {
   static final Animatable<double> _oneToZeroTween =
-  Tween<double>(begin: 1.0, end: 0.0);
+      Tween<double>(begin: 1.0, end: 0.0);
 
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
   double get _riggerPullDistance =>
       widget.linkNotifier.refreshTriggerPullDistance;
-  Duration get _completeDuration =>
-      widget.linkNotifier.completeDuration;
+  Duration get _completeDuration => widget.linkNotifier.completeDuration;
   AxisDirection get _axisDirection => widget.linkNotifier.axisDirection;
   bool get _noMore => widget.linkNotifier.noMore;
 
@@ -112,8 +136,7 @@ class MaterialHeaderWidgetState extends State<MaterialHeaderWidget>
   set refreshFinish(bool finish) {
     if (_refreshFinish != finish) {
       if (finish) {
-        Future.delayed(_completeDuration
-            - Duration(milliseconds: 300), () {
+        Future.delayed(_completeDuration - Duration(milliseconds: 300), () {
           if (mounted) {
             _scaleController.animateTo(1.0, duration: _kIndicatorScaleDuration);
           }
@@ -131,11 +154,11 @@ class MaterialHeaderWidgetState extends State<MaterialHeaderWidget>
   Widget build(BuildContext context) {
     if (_noMore) return Container();
     // 是否为垂直方向
-    bool isVertical = _axisDirection == AxisDirection.down
-        || _axisDirection == AxisDirection.up;
+    bool isVertical = _axisDirection == AxisDirection.down ||
+        _axisDirection == AxisDirection.up;
     // 是否反向
-    bool isReverse = _axisDirection == AxisDirection.up
-        || _axisDirection == AxisDirection.left;
+    bool isReverse = _axisDirection == AxisDirection.up ||
+        _axisDirection == AxisDirection.left;
     // 计算进度值
     double indicatorValue = _pulledExtent / _riggerPullDistance;
     indicatorValue = indicatorValue < 1.0 ? indicatorValue : 1.0;
@@ -144,10 +167,12 @@ class MaterialHeaderWidgetState extends State<MaterialHeaderWidget>
       refreshFinish = true;
     }
     return Container(
-      height: isVertical ? _refreshState == RefreshMode.inactive
-          ? 0.0 : _pulledExtent : double.infinity,
-      width: !isVertical ? _refreshState == RefreshMode.inactive
-          ? 0.0 : _pulledExtent : double.infinity,
+      height: isVertical
+          ? _refreshState == RefreshMode.inactive ? 0.0 : _pulledExtent
+          : double.infinity,
+      width: !isVertical
+          ? _refreshState == RefreshMode.inactive ? 0.0 : _pulledExtent
+          : double.infinity,
       child: Stack(
         children: <Widget>[
           Positioned(
@@ -158,22 +183,22 @@ class MaterialHeaderWidgetState extends State<MaterialHeaderWidget>
             child: Container(
               padding: EdgeInsets.only(
                 top: isVertical ? isReverse ? 0.0 : widget.displacement : 0.0,
-                bottom: isVertical ? !isReverse ? 0.0
-                    : widget.displacement : 0.0,
+                bottom:
+                    isVertical ? !isReverse ? 0.0 : widget.displacement : 0.0,
                 left: !isVertical ? isReverse ? 0.0 : widget.displacement : 0.0,
-                right: !isVertical ? !isReverse ? 0.0
-                    : widget.displacement : 0.0,
+                right:
+                    !isVertical ? !isReverse ? 0.0 : widget.displacement : 0.0,
               ),
-              alignment: isVertical ? isReverse ? Alignment.topCenter
-                  : Alignment.bottomCenter : isReverse
-                  ? Alignment.centerLeft : Alignment.centerRight,
+              alignment: isVertical
+                  ? isReverse ? Alignment.topCenter : Alignment.bottomCenter
+                  : isReverse ? Alignment.centerLeft : Alignment.centerRight,
               child: ScaleTransition(
                 scale: _scaleFactor,
                 child: RefreshProgressIndicator(
-                  value: _refreshState == RefreshMode.armed
-                      || _refreshState == RefreshMode.refresh
-                      || _refreshState == RefreshMode.refreshed
-                      || _refreshState == RefreshMode.done
+                  value: _refreshState == RefreshMode.armed ||
+                          _refreshState == RefreshMode.refresh ||
+                          _refreshState == RefreshMode.refreshed ||
+                          _refreshState == RefreshMode.done
                       ? null
                       : indicatorValue,
                   valueColor: widget.valueColor,

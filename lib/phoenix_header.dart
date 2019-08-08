@@ -18,34 +18,50 @@ class PhoenixHeader extends Header {
   PhoenixHeader({
     this.key,
     bool enableHapticFeedback = false,
-  }): super(
-    extent: 80.0,
-    triggerDistance: 80.0,
-    float: false,
-    enableHapticFeedback: enableHapticFeedback,
-    enableInfiniteRefresh: false,
-    completeDuration: const Duration(seconds: 1),
-  );
+  }) : super(
+          extent: 80.0,
+          triggerDistance: 80.0,
+          float: false,
+          enableHapticFeedback: enableHapticFeedback,
+          enableInfiniteRefresh: false,
+          completeDuration: const Duration(seconds: 1),
+        );
 
   @override
-  Widget contentBuilder(BuildContext context, RefreshMode refreshState,
-      double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent, AxisDirection axisDirection,
-      bool float, Duration completeDuration, bool enableInfiniteRefresh,
-      bool success, bool noMore) {
+  Widget contentBuilder(
+      BuildContext context,
+      RefreshMode refreshState,
+      double pulledExtent,
+      double refreshTriggerPullDistance,
+      double refreshIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteRefresh,
+      bool success,
+      bool noMore) {
     // 不能为水平方向以及反向
     assert(axisDirection == AxisDirection.down,
-    'Widget can only be vertical and cannot be reversed'
-    );
-    linkNotifier.contentBuilder(context, refreshState, pulledExtent,
-        refreshTriggerPullDistance, refreshIndicatorExtent, axisDirection,
-        float, completeDuration, enableInfiniteRefresh, success, noMore);
+        'Widget can only be vertical and cannot be reversed');
+    linkNotifier.contentBuilder(
+        context,
+        refreshState,
+        pulledExtent,
+        refreshTriggerPullDistance,
+        refreshIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteRefresh,
+        success,
+        noMore);
     return PhoenixHeaderWidget(
       key: key,
       linkNotifier: linkNotifier,
     );
   }
 }
+
 /// 金色校园组件
 class PhoenixHeaderWidget extends StatefulWidget {
   final LinkHeaderNotifier linkNotifier;
@@ -60,6 +76,7 @@ class PhoenixHeaderWidget extends StatefulWidget {
     return PhoenixHeaderWidgetState();
   }
 }
+
 class PhoenixHeaderWidgetState extends State<PhoenixHeaderWidget> {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
@@ -128,11 +145,11 @@ class PhoenixHeaderWidgetState extends State<PhoenixHeaderWidget> {
   @override
   Widget build(BuildContext context) {
     if (_noMore) return Container();
-    if (_refreshState == RefreshMode.armed
-        || _refreshState == RefreshMode.refresh) {
+    if (_refreshState == RefreshMode.armed ||
+        _refreshState == RefreshMode.refresh) {
       isRotateSun = true;
-    } else if (_refreshState == RefreshMode.done
-        || _refreshState == RefreshMode.inactive) {
+    } else if (_refreshState == RefreshMode.done ||
+        _refreshState == RefreshMode.inactive) {
       isRotateSun = false;
     }
     return Stack(
@@ -201,8 +218,9 @@ class PhoenixHeaderWidgetState extends State<PhoenixHeaderWidget> {
                         fit: BoxFit.fill,
                       ),
                     ),
-                    angle: (_isRotateSun ? _sunRotateValue : _pulledExtent)
-                        / 8 / pi,
+                    angle: (_isRotateSun ? _sunRotateValue : _pulledExtent) /
+                        8 /
+                        pi,
                   ),
                 ),
               ),

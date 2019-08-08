@@ -9,8 +9,10 @@ import 'src/header/header.dart';
 class BezierHourGlassHeader extends Header {
   /// Key
   final Key key;
+
   /// 颜色
   final Color color;
+
   /// 背景颜色
   final Color backgroundColor;
 
@@ -21,28 +23,43 @@ class BezierHourGlassHeader extends Header {
     this.color = Colors.white,
     this.backgroundColor = Colors.blue,
     bool enableHapticFeedback = false,
-  }): super(
-    extent: 80.0,
-    triggerDistance: 80.0,
-    float: false,
-    enableHapticFeedback: enableHapticFeedback,
-    enableInfiniteRefresh: false,
-    completeDuration: const Duration(seconds: 1),
-  );
+  }) : super(
+          extent: 80.0,
+          triggerDistance: 80.0,
+          float: false,
+          enableHapticFeedback: enableHapticFeedback,
+          enableInfiniteRefresh: false,
+          completeDuration: const Duration(seconds: 1),
+        );
 
   @override
-  Widget contentBuilder(BuildContext context, RefreshMode refreshState,
-      double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent, AxisDirection axisDirection,
-      bool float, Duration completeDuration, bool enableInfiniteRefresh,
-      bool success, bool noMore) {
+  Widget contentBuilder(
+      BuildContext context,
+      RefreshMode refreshState,
+      double pulledExtent,
+      double refreshTriggerPullDistance,
+      double refreshIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteRefresh,
+      bool success,
+      bool noMore) {
     // 不能为水平方向以及反向
     assert(axisDirection == AxisDirection.down,
-    'Widget can only be vertical and cannot be reversed'
-    );
-    linkNotifier.contentBuilder(context, refreshState, pulledExtent,
-        refreshTriggerPullDistance, refreshIndicatorExtent, axisDirection,
-        float, completeDuration, enableInfiniteRefresh, success, noMore);
+        'Widget can only be vertical and cannot be reversed');
+    linkNotifier.contentBuilder(
+        context,
+        refreshState,
+        pulledExtent,
+        refreshTriggerPullDistance,
+        refreshIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteRefresh,
+        success,
+        noMore);
     return BezierHourGlassHeaderWidget(
       key: key,
       color: color,
@@ -51,10 +68,12 @@ class BezierHourGlassHeader extends Header {
     );
   }
 }
+
 /// BezierHourGlassHeader组件
 class BezierHourGlassHeaderWidget extends StatefulWidget {
   /// 颜色
   final Color color;
+
   /// 背景颜色
   final Color backgroundColor;
 
@@ -72,7 +91,9 @@ class BezierHourGlassHeaderWidget extends StatefulWidget {
     return BezierHourGlassHeaderWidgetState();
   }
 }
-class BezierHourGlassHeaderWidgetState extends State<BezierHourGlassHeaderWidget>
+
+class BezierHourGlassHeaderWidgetState
+    extends State<BezierHourGlassHeaderWidget>
     with TickerProviderStateMixin<BezierHourGlassHeaderWidget> {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
@@ -90,8 +111,9 @@ class BezierHourGlassHeaderWidgetState extends State<BezierHourGlassHeaderWidget
       _showBackAnimation = value;
       if (_showBackAnimation) {
         _backAnimationPulledExtent = _pulledExtent - _indicatorExtent;
-        _backAnimation = Tween(begin: 0.0,
-            end: _backAnimationLength + _backAnimationPulledExtent)
+        _backAnimation = Tween(
+                begin: 0.0,
+                end: _backAnimationLength + _backAnimationPulledExtent)
             .animate(_backController);
         _backController.reset();
         _backController.forward();
@@ -110,8 +132,8 @@ class BezierHourGlassHeaderWidgetState extends State<BezierHourGlassHeaderWidget
     // 回弹动画
     _backController = new AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    _backAnimation = Tween(begin: 0.0, end: _backAnimationLength)
-        .animate(_backController);
+    _backAnimation =
+        Tween(begin: 0.0, end: _backAnimationLength).animate(_backController);
   }
 
   @override
@@ -125,8 +147,8 @@ class BezierHourGlassHeaderWidgetState extends State<BezierHourGlassHeaderWidget
     if (_noMore) return Container();
     // 计算小球透明度
     double ballOpacity;
-    if (_refreshState != RefreshMode.drag
-        && _refreshState != RefreshMode.armed) {
+    if (_refreshState != RefreshMode.drag &&
+        _refreshState != RefreshMode.armed) {
       ballOpacity = 0.0;
     } else if (_pulledExtent > _indicatorExtent + 40.0) {
       ballOpacity = 1.0;
@@ -167,9 +189,10 @@ class BezierHourGlassHeaderWidgetState extends State<BezierHourGlassHeaderWidget
                       animation: _backAnimation,
                       builder: (context, child) {
                         double offset = 0.0;
-                        if (_backAnimation.value >= _backAnimationPulledExtent) {
-                          var animationValue = _backAnimation.value
-                              - _backAnimationPulledExtent;
+                        if (_backAnimation.value >=
+                            _backAnimationPulledExtent) {
+                          var animationValue =
+                              _backAnimation.value - _backAnimationPulledExtent;
                           if (animationValue <= 30.0) {
                             offset = animationValue;
                           } else if (animationValue > 30.0 &&
@@ -270,7 +293,8 @@ class BezierHourGlassHeaderWidgetState extends State<BezierHourGlassHeaderWidget
                         width: double.infinity,
                         height: _indicatorExtent,
                       ),
-                      crossFadeState: _showHourGlass ? CrossFadeState.showFirst
+                      crossFadeState: _showHourGlass
+                          ? CrossFadeState.showFirst
                           : CrossFadeState.showSecond,
                       duration: Duration(milliseconds: 400),
                     ),
@@ -286,7 +310,8 @@ class BezierHourGlassHeaderWidgetState extends State<BezierHourGlassHeaderWidget
                               height: _indicatorExtent,
                               width: _showRipple ? constraints.maxWidth : 0.0,
                               color: widget.color,
-                              duration: _showRipple ? Duration(milliseconds: 300)
+                              duration: _showRipple
+                                  ? Duration(milliseconds: 300)
                                   : Duration(milliseconds: 1),
                             ),
                           ),
@@ -303,15 +328,16 @@ class BezierHourGlassHeaderWidgetState extends State<BezierHourGlassHeaderWidget
                     : 0.0,
                 child: ClipPath(
                   clipper: CirclePainter(
-                    offset: _showBackAnimation ?
-                    _backAnimation.value < _backAnimationPulledExtent ?
-                    _backAnimationPulledExtent - _backAnimation.value
-                        : 0.0 : (_pulledExtent > _indicatorExtent
-                        && _refreshState != RefreshMode.refresh
-                        && _refreshState != RefreshMode.refreshed
-                        && _refreshState != RefreshMode.done
-                        ? _pulledExtent - _indicatorExtent
-                        : 0.0),
+                    offset: _showBackAnimation
+                        ? _backAnimation.value < _backAnimationPulledExtent
+                            ? _backAnimationPulledExtent - _backAnimation.value
+                            : 0.0
+                        : (_pulledExtent > _indicatorExtent &&
+                                _refreshState != RefreshMode.refresh &&
+                                _refreshState != RefreshMode.refreshed &&
+                                _refreshState != RefreshMode.done
+                            ? _pulledExtent - _indicatorExtent
+                            : 0.0),
                     up: true,
                   ),
                   child: Container(

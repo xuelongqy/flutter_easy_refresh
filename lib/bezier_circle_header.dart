@@ -9,8 +9,10 @@ import 'src/header/header.dart';
 class BezierCircleHeader extends Header {
   /// Key
   final Key key;
+
   /// 颜色
   final Color color;
+
   /// 背景颜色
   final Color backgroundColor;
 
@@ -21,28 +23,43 @@ class BezierCircleHeader extends Header {
     this.color = Colors.white,
     this.backgroundColor = Colors.blue,
     bool enableHapticFeedback = false,
-  }): super(
-    extent: 80.0,
-    triggerDistance: 80.0,
-    float: false,
-    enableHapticFeedback: enableHapticFeedback,
-    enableInfiniteRefresh: false,
-    completeDuration: const Duration(seconds: 1),
-  );
+  }) : super(
+          extent: 80.0,
+          triggerDistance: 80.0,
+          float: false,
+          enableHapticFeedback: enableHapticFeedback,
+          enableInfiniteRefresh: false,
+          completeDuration: const Duration(seconds: 1),
+        );
 
   @override
-  Widget contentBuilder(BuildContext context, RefreshMode refreshState,
-      double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent, AxisDirection axisDirection,
-      bool float, Duration completeDuration, bool enableInfiniteRefresh,
-      bool success, bool noMore) {
+  Widget contentBuilder(
+      BuildContext context,
+      RefreshMode refreshState,
+      double pulledExtent,
+      double refreshTriggerPullDistance,
+      double refreshIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteRefresh,
+      bool success,
+      bool noMore) {
     // 不能为水平方向以及反向
     assert(axisDirection == AxisDirection.down,
-    'Widget can only be vertical and cannot be reversed'
-    );
-    linkNotifier.contentBuilder(context, refreshState, pulledExtent,
-        refreshTriggerPullDistance, refreshIndicatorExtent, axisDirection,
-        float, completeDuration, enableInfiniteRefresh, success, noMore);
+        'Widget can only be vertical and cannot be reversed');
+    linkNotifier.contentBuilder(
+        context,
+        refreshState,
+        pulledExtent,
+        refreshTriggerPullDistance,
+        refreshIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteRefresh,
+        success,
+        noMore);
     return BezierCircleHeaderWidget(
       key: key,
       color: color,
@@ -51,10 +68,12 @@ class BezierCircleHeader extends Header {
     );
   }
 }
+
 /// 弹出小球组件
 class BezierCircleHeaderWidget extends StatefulWidget {
   /// 颜色
   final Color color;
+
   /// 背景颜色
   final Color backgroundColor;
 
@@ -72,6 +91,7 @@ class BezierCircleHeaderWidget extends StatefulWidget {
     return BezierCircleHeaderWidgetState();
   }
 }
+
 class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
     with TickerProviderStateMixin<BezierCircleHeaderWidget> {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
@@ -90,8 +110,9 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
       _showBackAnimation = value;
       if (_showBackAnimation) {
         _backAnimationPulledExtent = _pulledExtent - _indicatorExtent;
-        _backAnimation = Tween(begin: 0.0,
-            end: _backAnimationLength + _backAnimationPulledExtent)
+        _backAnimation = Tween(
+                begin: 0.0,
+                end: _backAnimationLength + _backAnimationPulledExtent)
             .animate(_backController);
         _backController.reset();
         _backController.forward();
@@ -115,6 +136,7 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
       }
     }
   }
+
   // 环形进度
   double _progressValue = 0.0;
 
@@ -124,8 +146,8 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
     // 回弹动画
     _backController = new AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    _backAnimation = Tween(begin: 0.0, end: _backAnimationLength)
-        .animate(_backController);
+    _backAnimation =
+        Tween(begin: 0.0, end: _backAnimationLength).animate(_backController);
   }
 
   @override
@@ -177,14 +199,15 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
                         alignment: Alignment.bottomCenter,
                         child: AnimatedContainer(
                           alignment: Alignment.center,
-                          margin: EdgeInsets.only(bottom: _toggleCircle
-                              ? 65.0 : 0.0),
+                          margin: EdgeInsets.only(
+                              bottom: _toggleCircle ? 65.0 : 0.0),
                           duration: Duration(milliseconds: 400),
                           width: 30.0,
                           height: 30.0,
                           decoration: BoxDecoration(
                             color: widget.color,
-                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
                           ),
                         ),
                       ),
@@ -200,9 +223,10 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
                       animation: _backAnimation,
                       builder: (context, child) {
                         double offset = 0.0;
-                        if (_backAnimation.value >= _backAnimationPulledExtent) {
-                          var animationValue = _backAnimation.value
-                              - _backAnimationPulledExtent;
+                        if (_backAnimation.value >=
+                            _backAnimationPulledExtent) {
+                          var animationValue =
+                              _backAnimation.value - _backAnimationPulledExtent;
                           if (animationValue > 0 && animationValue != 110.0) {
                             toggleCircle = true;
                           }
@@ -239,16 +263,17 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
                     : 0.0,
                 child: ClipPath(
                   clipper: CirclePainter(
-                      offset: _showBackAnimation ?
-                      _backAnimation.value < _backAnimationPulledExtent ?
-                      _backAnimationPulledExtent - _backAnimation.value
-                          : 0.0 : (_pulledExtent > _indicatorExtent
-                        && _refreshState != RefreshMode.refresh
-                        && _refreshState != RefreshMode.refreshed
-                        && _refreshState != RefreshMode.done
-                        ? _pulledExtent - _indicatorExtent
-                        : 0.0),
-                      up: true,
+                    offset: _showBackAnimation
+                        ? _backAnimation.value < _backAnimationPulledExtent
+                            ? _backAnimationPulledExtent - _backAnimation.value
+                            : 0.0
+                        : (_pulledExtent > _indicatorExtent &&
+                                _refreshState != RefreshMode.refresh &&
+                                _refreshState != RefreshMode.refreshed &&
+                                _refreshState != RefreshMode.done
+                            ? _pulledExtent - _indicatorExtent
+                            : 0.0),
+                    up: true,
                   ),
                   child: Container(
                     color: widget.backgroundColor,

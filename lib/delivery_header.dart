@@ -21,36 +21,52 @@ class DeliveryHeader extends Header {
     this.key,
     this.backgroundColor = Colors.transparent,
     bool enableHapticFeedback = false,
-  }): super(
-    extent: 130.0,
-    triggerDistance: 150.0,
-    float: false,
-    enableHapticFeedback: enableHapticFeedback,
-    enableInfiniteRefresh: false,
-    completeDuration: const Duration(seconds: 1),
-  );
+  }) : super(
+          extent: 130.0,
+          triggerDistance: 150.0,
+          float: false,
+          enableHapticFeedback: enableHapticFeedback,
+          enableInfiniteRefresh: false,
+          completeDuration: const Duration(seconds: 1),
+        );
 
   @override
-  Widget contentBuilder(BuildContext context, RefreshMode refreshState,
-      double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent, AxisDirection axisDirection,
-      bool float, Duration completeDuration, bool enableInfiniteRefresh,
-      bool success, bool noMore) {
+  Widget contentBuilder(
+      BuildContext context,
+      RefreshMode refreshState,
+      double pulledExtent,
+      double refreshTriggerPullDistance,
+      double refreshIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteRefresh,
+      bool success,
+      bool noMore) {
     // 不能为水平方向以及反向
     assert(axisDirection == AxisDirection.down,
-    'Widget can only be vertical and cannot be reversed'
-    );
-    linkNotifier.contentBuilder(context, refreshState, pulledExtent,
-        refreshTriggerPullDistance, refreshIndicatorExtent, axisDirection,
-        float, completeDuration, enableInfiniteRefresh, success, noMore);
+        'Widget can only be vertical and cannot be reversed');
+    linkNotifier.contentBuilder(
+        context,
+        refreshState,
+        pulledExtent,
+        refreshTriggerPullDistance,
+        refreshIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteRefresh,
+        success,
+        noMore);
     return DeliveryHeaderWidget(
       key: key,
       linkNotifier: linkNotifier,
     );
   }
 }
+
 /// 气球快递组件
-class DeliveryHeaderWidget extends  StatefulWidget {
+class DeliveryHeaderWidget extends StatefulWidget {
   // 背景颜色
   final Color backgroundColor;
 
@@ -67,6 +83,7 @@ class DeliveryHeaderWidget extends  StatefulWidget {
     return DeliveryHeaderWidgetState();
   }
 }
+
 class DeliveryHeaderWidgetState extends State<DeliveryHeaderWidget>
     with TickerProviderStateMixin<DeliveryHeaderWidget> {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
@@ -188,8 +205,8 @@ class DeliveryHeaderWidgetState extends State<DeliveryHeaderWidget>
   @override
   Widget build(BuildContext context) {
     if (_noMore) return Container();
-    if (_refreshState == RefreshMode.armed
-        || _refreshState == RefreshMode.refresh) {
+    if (_refreshState == RefreshMode.armed ||
+        _refreshState == RefreshMode.refresh) {
       isRefresh = true;
     } else if (_refreshState == RefreshMode.inactive) {
       isRefresh = false;
@@ -310,8 +327,7 @@ class DeliveryHeaderWidgetState extends State<DeliveryHeaderWidget>
                         child: Container(
                           height: 300.0,
                           width: 200.0,
-                          child:
-                          Image.memory(_umbrellaBytes, fit: BoxFit.fill),
+                          child: Image.memory(_umbrellaBytes, fit: BoxFit.fill),
                         ),
                         angle: _umbrellaRotateValue,
                         origin: Offset(0.0, 150.0),

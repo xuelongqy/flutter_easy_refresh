@@ -14,6 +14,7 @@ class EmptyWidget extends StatefulWidget {
     return EmptyWidgetState();
   }
 }
+
 class EmptyWidgetState extends State<EmptyWidget> {
   // 列表方向
   ValueNotifier<AxisDirection> _axisDirectionNotifier;
@@ -35,28 +36,31 @@ class EmptyWidgetState extends State<EmptyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _size == null ? _SliverEmpty(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          // 获取列表剩余区域大小
-          SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-            setState(() {
-              _size = Size(constraints.maxWidth, constraints.maxHeight);
-            });
-          });
-          return SizedBox();
-        },
-      ),
-      axisDirectionNotifier: _axisDirectionNotifier,
-    ): SliverList(
-      delegate: SliverChildListDelegate([
-        Container(
-          width: _size.width,
-          height: _size.height,
-          child: widget.child,
-        ),
-      ]),
-    );
+    return _size == null
+        ? _SliverEmpty(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // 获取列表剩余区域大小
+                SchedulerBinding.instance
+                    .addPostFrameCallback((Duration timestamp) {
+                  setState(() {
+                    _size = Size(constraints.maxWidth, constraints.maxHeight);
+                  });
+                });
+                return SizedBox();
+              },
+            ),
+            axisDirectionNotifier: _axisDirectionNotifier,
+          )
+        : SliverList(
+            delegate: SliverChildListDelegate([
+              Container(
+                width: _size.width,
+                height: _size.height,
+                child: widget.child,
+              ),
+            ]),
+          );
   }
 }
 
@@ -69,7 +73,7 @@ class _SliverEmpty extends SingleChildRenderObjectWidget {
     Key key,
     Widget child,
     this.axisDirectionNotifier,
-  }): super(key: key, child: child);
+  }) : super(key: key, child: child);
 
   @override
   RenderObject createRenderObject(BuildContext context) {
@@ -78,6 +82,7 @@ class _SliverEmpty extends SingleChildRenderObjectWidget {
     );
   }
 }
+
 class _RenderSliverEmpty extends RenderSliverSingleBoxAdapter {
   // 列表方向
   final ValueNotifier<AxisDirection> axisDirectionNotifier;
@@ -85,7 +90,7 @@ class _RenderSliverEmpty extends RenderSliverSingleBoxAdapter {
   _RenderSliverEmpty({
     RenderBox child,
     this.axisDirectionNotifier,
-  }){
+  }) {
     this.child = child;
   }
 
@@ -123,5 +128,5 @@ class _RenderSliverEmpty extends RenderSliverSingleBoxAdapter {
   // Nothing special done here because this sliver always paints its child
   // exactly between paintOrigin and paintExtent.
   @override
-  void applyPaintTransform(RenderObject child, Matrix4 transform) { }
+  void applyPaintTransform(RenderObject child, Matrix4 transform) {}
 }

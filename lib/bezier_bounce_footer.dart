@@ -6,11 +6,13 @@ import 'src/footer/load_indicator.dart';
 import 'src/footer/footer.dart';
 
 /// BezierBounceFooter
-class BezierBounceFooter extends Footer{
+class BezierBounceFooter extends Footer {
   /// Key
   final Key key;
+
   /// 颜色
   final Color color;
+
   /// 背景颜色
   final Color backgroundColor;
 
@@ -21,28 +23,43 @@ class BezierBounceFooter extends Footer{
     this.color = Colors.white,
     this.backgroundColor = Colors.blue,
     bool enableHapticFeedback = false,
-  }): super(
-    extent: 80.0,
-    triggerDistance: 80.0,
-    float: false,
-    enableHapticFeedback: enableHapticFeedback,
-    enableInfiniteLoad: false,
-    completeDuration: const Duration(seconds: 1),
-  );
-  
+  }) : super(
+          extent: 80.0,
+          triggerDistance: 80.0,
+          float: false,
+          enableHapticFeedback: enableHapticFeedback,
+          enableInfiniteLoad: false,
+          completeDuration: const Duration(seconds: 1),
+        );
+
   @override
-  Widget contentBuilder(BuildContext context, LoadMode loadState,
-      double pulledExtent, double loadTriggerPullDistance, 
-      double loadIndicatorExtent, AxisDirection axisDirection,
-      bool float, Duration completeDuration, bool enableInfiniteLoad,
-      bool success, bool noMore) {
+  Widget contentBuilder(
+      BuildContext context,
+      LoadMode loadState,
+      double pulledExtent,
+      double loadTriggerPullDistance,
+      double loadIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteLoad,
+      bool success,
+      bool noMore) {
     // 不能为水平方向以及反向
     assert(axisDirection == AxisDirection.down,
-    'Widget can only be vertical and cannot be reversed'
-    );
-    linkNotifier.contentBuilder(context, loadState, pulledExtent,
-        loadTriggerPullDistance, loadIndicatorExtent, axisDirection, float,
-        completeDuration, enableInfiniteLoad, success, noMore);
+        'Widget can only be vertical and cannot be reversed');
+    linkNotifier.contentBuilder(
+        context,
+        loadState,
+        pulledExtent,
+        loadTriggerPullDistance,
+        loadIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteLoad,
+        success,
+        noMore);
     return BezierBounceFooterWidget(
       key: key,
       color: color,
@@ -51,10 +68,12 @@ class BezierBounceFooter extends Footer{
     );
   }
 }
+
 /// BezierBounceFooter组件
 class BezierBounceFooterWidget extends StatefulWidget {
   /// 颜色
   final Color color;
+
   /// 背景颜色
   final Color backgroundColor;
 
@@ -72,6 +91,7 @@ class BezierBounceFooterWidget extends StatefulWidget {
     return BezierBounceFooterWidgetState();
   }
 }
+
 class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
     with TickerProviderStateMixin<BezierBounceFooterWidget> {
   LoadMode get _loadState => widget.linkNotifier.loadState;
@@ -90,8 +110,9 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
       _showBackAnimation = value;
       if (_showBackAnimation) {
         _backAnimationPulledExtent = _pulledExtent - _indicatorExtent;
-        _backAnimation = Tween(begin: 0.0,
-            end: _backAnimationLength + _backAnimationPulledExtent)
+        _backAnimation = Tween(
+                begin: 0.0,
+                end: _backAnimationLength + _backAnimationPulledExtent)
             .animate(_backController);
         _backController.reset();
         _backController.forward();
@@ -108,8 +129,8 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
     // 回弹动画
     _backController = new AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    _backAnimation = Tween(begin: 0.0, end: _backAnimationLength)
-        .animate(_backController);
+    _backAnimation =
+        Tween(begin: 0.0, end: _backAnimationLength).animate(_backController);
   }
 
   @override
@@ -155,15 +176,16 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
                     : 0.0,
                 child: ClipPath(
                   clipper: CirclePainter(
-                    offset: _showBackAnimation ?
-                    _backAnimation.value < _backAnimationPulledExtent ?
-                    _backAnimationPulledExtent - _backAnimation.value
-                        : 0.0 : (_pulledExtent > _indicatorExtent
-                        && _loadState != LoadMode.load
-                        && _loadState != LoadMode.loaded
-                        && _loadState != LoadMode.done
-                        ? _pulledExtent - _indicatorExtent
-                        : 0.0),
+                    offset: _showBackAnimation
+                        ? _backAnimation.value < _backAnimationPulledExtent
+                            ? _backAnimationPulledExtent - _backAnimation.value
+                            : 0.0
+                        : (_pulledExtent > _indicatorExtent &&
+                                _loadState != LoadMode.load &&
+                                _loadState != LoadMode.loaded &&
+                                _loadState != LoadMode.done
+                            ? _pulledExtent - _indicatorExtent
+                            : 0.0),
                     up: false,
                   ),
                   child: Container(
@@ -184,9 +206,10 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
                       animation: _backAnimation,
                       builder: (context, child) {
                         double offset = 0.0;
-                        if (_backAnimation.value >= _backAnimationPulledExtent) {
-                          var animationValue = _backAnimation.value
-                              - _backAnimationPulledExtent;
+                        if (_backAnimation.value >=
+                            _backAnimationPulledExtent) {
+                          var animationValue =
+                              _backAnimation.value - _backAnimationPulledExtent;
                           if (animationValue <= 30.0) {
                             offset = animationValue;
                           } else if (animationValue > 30.0 &&
@@ -287,7 +310,8 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
                         width: double.infinity,
                         height: _indicatorExtent,
                       ),
-                      crossFadeState: _showThreeBall ? CrossFadeState.showFirst
+                      crossFadeState: _showThreeBall
+                          ? CrossFadeState.showFirst
                           : CrossFadeState.showSecond,
                       duration: Duration(milliseconds: 400),
                     ),
@@ -351,9 +375,9 @@ class SpinKitThreeBounce extends StatefulWidget {
     this.size = 50.0,
     this.itemBuilder,
   })  : assert(
-  !(itemBuilder is IndexedWidgetBuilder && color is Color) &&
-      !(itemBuilder == null && color == null),
-  'You should specify either a itemBuilder or a color'),
+            !(itemBuilder is IndexedWidgetBuilder && color is Color) &&
+                !(itemBuilder == null && color == null),
+            'You should specify either a itemBuilder or a color'),
         assert(size != null),
         super(key: key);
 
@@ -413,11 +437,11 @@ class _SpinKitThreeBounceState extends State<SpinKitThreeBounce>
     return widget.itemBuilder != null
         ? widget.itemBuilder(context, index)
         : DecoratedBox(
-      decoration: BoxDecoration(
-        color: widget.color,
-        shape: BoxShape.circle,
-      ),
-    );
+            decoration: BoxDecoration(
+              color: widget.color,
+              shape: BoxShape.circle,
+            ),
+          );
   }
 }
 
