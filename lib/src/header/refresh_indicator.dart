@@ -437,6 +437,7 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
     this.onRefresh,
     this.focusNotifier,
     this.taskNotifier,
+    this.callRefreshNotifier,
     this.taskIndependence,
     this.bindRefreshIndicator,
     this.enableControlFinishRefresh = false,
@@ -509,6 +510,8 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   final bool enableHapticFeedback;
   /// 滚动状态
   final ValueNotifier<bool> focusNotifier;
+  /// 触发刷新状态
+  final ValueNotifier<bool> callRefreshNotifier;
   /// 任务状态
   final ValueNotifier<bool> taskNotifier;
   /// 是否任务独立
@@ -618,7 +621,7 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
   // 无限刷新
   void _infiniteRefresh() {
     if (!hasTask && widget.enableInfiniteRefresh
-        && _noMore != true) {
+        && _noMore != true && !widget.callRefreshNotifier.value) {
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
@@ -693,9 +696,13 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
 
     switch (refreshState) {
       case RefreshMode.inactive:
-        if (latestIndicatorBoxExtent <= 0 || !_focus) {
+        if (latestIndicatorBoxExtent <= 0
+            || (!_focus && !widget.callRefreshNotifier.value)) {
           return RefreshMode.inactive;
         } else {
+          if (widget.callRefreshNotifier.value) {
+            widget.callRefreshNotifier.value = false;
+          }
           nextState = RefreshMode.drag;
         }
         continue drag;
@@ -708,6 +715,9 @@ class _EasyRefreshSliverRefreshControlState extends State<EasyRefreshSliverRefre
         } else {
           if (widget.onRefresh != null && !hasTask) {
             if (!_focus) {
+              if (widget.callRefreshNotifier.value) {
+                widget.callRefreshNotifier.value = false;
+              }
               if (widget.enableHapticFeedback) {
                 HapticFeedback.mediumImpact();
               }

@@ -31,7 +31,8 @@ abstract class Footer {
 
   // 构造器
   Widget builder(BuildContext context, EasyRefresh easyRefresh,
-      ValueNotifier<bool> focusNotifier, ValueNotifier<bool> taskNotifier) {
+      ValueNotifier<bool> focusNotifier, ValueNotifier<bool> taskNotifier,
+      ValueNotifier<bool> callLoadNotifier) {
     return EasyRefreshSliverLoadControl(
       loadIndicatorExtent: extent,
       loadTriggerPullDistance: triggerDistance,
@@ -40,6 +41,7 @@ abstract class Footer {
       onLoad: easyRefresh.onLoad,
       focusNotifier: focusNotifier,
       taskNotifier: taskNotifier,
+      callLoadNotifier: callLoadNotifier,
       taskIndependence: easyRefresh.taskIndependence,
       enableControlFinishLoad: easyRefresh.enableControlFinishLoad,
       enableInfiniteLoad: enableInfiniteLoad,

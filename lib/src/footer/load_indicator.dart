@@ -411,6 +411,7 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     this.onLoad,
     this.focusNotifier,
     this.taskNotifier,
+    this.callLoadNotifier,
     this.taskIndependence,
     this.bindLoadIndicator,
     this.enableControlFinishLoad = false,
@@ -485,6 +486,8 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   final ValueNotifier<bool> focusNotifier;
   /// 任务状态
   final ValueNotifier<bool> taskNotifier;
+  // 触发加载状态
+  final ValueNotifier<bool> callLoadNotifier;
   /// 是否任务独立
   final bool taskIndependence;
   /// Footer浮动
@@ -594,7 +597,8 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
 
   // 无限加载
   void _infiniteLoad() {
-    if (!hasTask && widget.enableInfiniteLoad && _noMore != true) {
+    if (!hasTask && widget.enableInfiniteLoad
+        && _noMore != true && !widget.callLoadNotifier.value) {
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
@@ -668,7 +672,8 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
     }
     switch (loadState) {
       case LoadMode.inactive:
-        if (latestIndicatorBoxExtent <= 0 || !_focus) {
+        if (latestIndicatorBoxExtent <= 0
+            || (!_focus && !widget.callLoadNotifier.value)) {
           return LoadMode.inactive;
         } else {
           nextState = LoadMode.drag;
@@ -683,6 +688,9 @@ class _EasyRefreshSliverLoadControlState extends State<EasyRefreshSliverLoadCont
         } else {
           if (widget.onLoad != null && !hasTask) {
             if (!_focus) {
+              if (widget.callLoadNotifier.value) {
+                widget.callLoadNotifier.value = false;
+              }
               if (widget.enableHapticFeedback) {
                 HapticFeedback.mediumImpact();
               }

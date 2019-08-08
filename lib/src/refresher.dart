@@ -205,6 +205,10 @@ class _EasyRefreshState extends State<EasyRefresh> {
   ValueNotifier<bool> _focusNotifier;
   // 任务状态
   ValueNotifier<bool> _taskNotifier;
+  // 触发刷新状态
+  ValueNotifier<bool> _callRefreshNotifier;
+  // 触发加载状态
+  ValueNotifier<bool> _callLoadNotifier;
 
   // 初始化
   @override
@@ -212,6 +216,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
      super.initState();
      _focusNotifier = ValueNotifier<bool>(false);
      _taskNotifier = ValueNotifier<bool>(false);
+     _callRefreshNotifier = ValueNotifier<bool>(false);
+     _callLoadNotifier = ValueNotifier<bool>(false);
      _taskNotifier.addListener(() {
        // 监听首次刷新是否结束
        if (_enableFirstRefresh && !_taskNotifier.value) {
@@ -250,42 +256,38 @@ class _EasyRefreshState extends State<EasyRefresh> {
     super.dispose();
     _focusNotifier.dispose();
     _taskNotifier.dispose();
+    _callRefreshNotifier.dispose();
+    _callLoadNotifier.dispose();
   }
 
   // 触发刷新
-  void callRefresh() {
+  void callRefresh({Duration duration = const Duration(milliseconds: 300)}) {
     // ignore: invalid_use_of_protected_member
     if (_scrollerController == null || _scrollerController.positions.isEmpty)
       return;
-    _focusNotifier.value = true;
-    _scrollerController.animateTo(0.0, duration: Duration(milliseconds: 300),
+    _callRefreshNotifier.value = true;
+    _scrollerController.animateTo(0.0, duration: duration,
         curve: Curves.linear).whenComplete((){
-      _scrollerController.animateTo(-(_header.enableInfiniteRefresh ? 0 : 1)
-          * _header.triggerDistance - EasyRefresh.callOverExtent,
+      _scrollerController.animateTo(
+          -(_header.triggerDistance + EasyRefresh.callOverExtent),
           duration: Duration(milliseconds: 200),
-          curve: Curves.linear)
-          .whenComplete((){
-        _focusNotifier.value = false;
-      });
+          curve: Curves.linear);
     });
   }
 
   // 触发加载
-  void callLoadMore() {
+  void callLoad({Duration duration = const Duration(milliseconds: 300)}) {
     // ignore: invalid_use_of_protected_member
     if (_scrollerController == null || _scrollerController.positions.isEmpty)
       return;
-    _focusNotifier.value = true;
+    _callLoadNotifier.value = true;
     _scrollerController.animateTo(_scrollerController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 300), curve: Curves.linear)
+        duration: duration, curve: Curves.linear)
         .whenComplete((){
       _scrollerController.animateTo(_scrollerController.position.maxScrollExtent
           + _footer.triggerDistance + EasyRefresh.callOverExtent,
           duration: Duration(milliseconds: 200),
-          curve: Curves.linear)
-          .whenComplete((){
-        _focusNotifier.value = false;
-      });
+          curve: Curves.linear);
     });
   }
 
@@ -303,9 +305,11 @@ class _EasyRefreshState extends State<EasyRefresh> {
     }
     // 构建Header和Footer
     var header = widget.onRefresh == null ? null
-        : _header.builder(context, widget, _focusNotifier, _taskNotifier);
+        : _header.builder(context, widget, _focusNotifier,
+        _taskNotifier, _callRefreshNotifier);
     var footer = widget.onLoad == null ? null
-        : _footer.builder(context, widget, _focusNotifier, _taskNotifier);
+        : _footer.builder(context, widget, _focusNotifier,
+        _taskNotifier, _callLoadNotifier);
     // 生成slivers
     List<Widget> slivers;
     if (widget.builder == null) {
@@ -471,7 +475,7 @@ class EasyRefreshController {
   /// 触发加载
   void callLoad() {
     if (this._easyRefreshState != null) {
-      this._easyRefreshState.callLoadMore();
+      this._easyRefreshState.callLoad();
     }
   }
   /// 完成刷新
