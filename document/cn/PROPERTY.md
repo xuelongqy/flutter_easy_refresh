@@ -113,6 +113,13 @@ class _ExampleState extends State<Example> {
 | scrollController | 滚动控制器 | ScrollController | null | 可选 |
 | 其他参数 | 与CustomScrollView一致 | 与CustomScrollView参数一致 | null | 可选(EasyRefresh.custom) |
 
+# 属性表格 - EasyRefreshController
+| 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+| callRefresh | 触发刷新     | void Function({Duration duration})  | Duration duration = const Duration(milliseconds: 300) | 可选 |
+| callLoad | 触发加载 | void Function({Duration duration})  | Duration duration = const Duration(milliseconds: 300) | 可选 |
+| finishRefresh | 完成刷新 | void Function({{bool success,bool noMore,}})  | success = true, noMore = false | 可选 |
+| finishLoad | 完成加载 | void Function({Duration duration})  | success = true, noMore = false | 可选 |
+
 ## 属性表格 - ScrollNotificationInterceptor(用于包裹滚动冲突的Widget)
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
 |---------|--------------------------|:-----:|:-----:|:-----:|

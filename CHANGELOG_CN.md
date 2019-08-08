@@ -10,7 +10,7 @@
 >修改：部分样式没有更多状态  
 >修复：无限加载完成后高度为0 issues#123,issues#121  
 
-## V Next
+## V 2.0.2
 >优化：触发刷新与加载   
 >优化：无限加载触发   
 >支持：child为SingleChildScrollView类型   

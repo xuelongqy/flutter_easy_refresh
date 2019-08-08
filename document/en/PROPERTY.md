@@ -115,6 +115,13 @@ class _ExampleState extends State<Example> {
 | scrollController | Scroll controller | ScrollController | null | Optional |
 | Other parameters | Consistent with CustomScrollView | Consistent with CustomScrollView parameters | null | Optional(EasyRefresh.custom) |
 
+# Props Table - EasyRefreshController
+| Attribute Name |     Attribute Explain     | Parameter Type | Default Value | Requirement |
+| callRefresh | Triggered refresh     | void Function({Duration duration})  | Duration duration = const Duration(milliseconds: 300) | Optional |
+| callLoad | Triggered Loading | void Function({Duration duration})  | Duration duration = const Duration(milliseconds: 300) | Optional |
+| finishRefresh | Finish refresh | void Function({{bool success,bool noMore,}})  | success = true, noMore = false | Optional |
+| finishLoad | Finish load | void Function({Duration duration})  | success = true, noMore = false | Optional |
+
 ## Props Table - ScrollNotificationInterceptor(Widgets for wrapping scroll conflicts)
 | Attribute Name |     Attribute Explain     | Parameter Type | Default Value | Requirement |
 |---------|--------------------------|:-----:|:-----:|:-----:|
