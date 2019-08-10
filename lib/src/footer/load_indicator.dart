@@ -704,8 +704,20 @@ class _EasyRefreshSliverLoadControlState
         if (latestIndicatorBoxExtent == 0) {
           return LoadMode.inactive;
         } else if (latestIndicatorBoxExtent < widget.loadTriggerPullDistance) {
+          // 如果未触发加载则取消固定高度
+          if (hasSliverLayoutExtent && !hasTask) {
+            SchedulerBinding.instance
+                .addPostFrameCallback((Duration timestamp) {
+              setState(() => hasSliverLayoutExtent = false);
+            });
+          }
           return LoadMode.drag;
         } else {
+          // 提前固定高度，防止列表回弹
+          SchedulerBinding.instance
+              .addPostFrameCallback((Duration timestamp) {
+            setState(() => hasSliverLayoutExtent = true);
+          });
           if (widget.onLoad != null && !hasTask) {
             if (!_focus) {
               if (widget.callLoadNotifier.value) {
@@ -714,28 +726,18 @@ class _EasyRefreshSliverLoadControlState
               if (widget.enableHapticFeedback) {
                 HapticFeedback.mediumImpact();
               }
-              // Call onLoad after this frame finished since the function is
-              // user supplied and we're always here in the middle of the sliver's
-              // performLayout.
-              SchedulerBinding.instance
-                  .addPostFrameCallback((Duration timestamp) {
-                loadTask = widget.onLoad()
-                  ..then((_) {
-                    if (mounted && !widget.enableControlFinishLoad) {
-                      if (widget.enableInfiniteLoad) {
-                        loadState = LoadMode.inactive;
-                      }
-                      setState(() => loadTask = null);
-                      // Trigger one more transition because by this time, BoxConstraint's
-                      // maxHeight might already be resting at 0 in which case no
-                      // calls to [transitionNextState] will occur anymore and the
-                      // state may be stuck in a non-inactive state.
-                      if (!widget.enableInfiniteLoad)
-                        loadState = transitionNextState();
+              // 触发加载任务
+              loadTask = widget.onLoad()
+                ..then((_) {
+                  if (mounted && !widget.enableControlFinishLoad) {
+                    if (widget.enableInfiniteLoad) {
+                      loadState = LoadMode.inactive;
                     }
-                  });
-                setState(() => hasSliverLayoutExtent = true);
-              });
+                    setState(() => loadTask = null);
+                    if (!widget.enableInfiniteLoad)
+                      loadState = transitionNextState();
+                  }
+                });
               return LoadMode.armed;
             }
             return LoadMode.drag;

@@ -14,3 +14,6 @@
 >Optimization: Trigger refresh and load   
 >Optimization: Infinite load trigger   
 >Support: Child is SingleChildScrollView type   
+
+## V Next
+>Fix: Quick rebound after list refresh or load issues#130   

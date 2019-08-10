@@ -733,8 +733,22 @@ class _EasyRefreshSliverRefreshControlState
           return RefreshMode.inactive;
         } else if (latestIndicatorBoxExtent <
             widget.refreshTriggerPullDistance) {
+          // 如果未触发刷新则取消固定高度
+          if (hasSliverLayoutExtent && !hasTask) {
+            SchedulerBinding.instance
+                .addPostFrameCallback((Duration timestamp) {
+              setState(() => hasSliverLayoutExtent = false);
+            });
+          }
           return RefreshMode.drag;
         } else {
+          // 提前固定高度，防止列表回弹
+          SchedulerBinding.instance
+              .addPostFrameCallback((Duration timestamp) {
+            if (!hasSliverLayoutExtent) {
+              setState(() => hasSliverLayoutExtent = true);
+            }
+          });
           if (widget.onRefresh != null && !hasTask) {
             if (!_focus) {
               if (widget.callRefreshNotifier.value) {
@@ -743,28 +757,18 @@ class _EasyRefreshSliverRefreshControlState
               if (widget.enableHapticFeedback) {
                 HapticFeedback.mediumImpact();
               }
-              // Call onRefresh after this frame finished since the function is
-              // user supplied and we're always here in the middle of the sliver's
-              // performLayout.
-              SchedulerBinding.instance
-                  .addPostFrameCallback((Duration timestamp) {
-                refreshTask = widget.onRefresh()
-                  ..then((_) {
-                    if (mounted && !widget.enableControlFinishRefresh) {
-                      if (widget.enableInfiniteRefresh) {
-                        refreshState = RefreshMode.inactive;
-                      }
-                      setState(() => refreshTask = null);
-                      // Trigger one more transition because by this time, BoxConstraint's
-                      // maxHeight might already be resting at 0 in which case no
-                      // calls to [transitionNextState] will occur anymore and the
-                      // state may be stuck in a non-inactive state.
-                      if (!widget.enableInfiniteRefresh)
-                        refreshState = transitionNextState();
+              // 触发刷新任务
+              refreshTask = widget.onRefresh()
+                ..then((_) {
+                  if (mounted && !widget.enableControlFinishRefresh) {
+                    if (widget.enableInfiniteRefresh) {
+                      refreshState = RefreshMode.inactive;
                     }
-                  });
-                setState(() => hasSliverLayoutExtent = true);
-              });
+                    setState(() => refreshTask = null);
+                    if (!widget.enableInfiniteRefresh)
+                      refreshState = transitionNextState();
+                  }
+                });
               return RefreshMode.armed;
             }
             return RefreshMode.drag;

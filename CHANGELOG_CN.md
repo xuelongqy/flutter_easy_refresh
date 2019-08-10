@@ -14,3 +14,6 @@
 >优化：触发刷新与加载   
 >优化：无限加载触发   
 >支持：child为SingleChildScrollView类型   
+
+## V Next
+>修复：列表刷新或加载时快速回弹 issues#130   
