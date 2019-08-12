@@ -100,8 +100,8 @@ class _ExampleState extends State<Example> {
 | enableControlFinishRefresh | Whether to open control end refresh | bool |false | Optional |
 | enableControlFinishLoad | Whether to turn on control to end loading | bool |false | Optional |
 | taskIndependence | Task independence (refresh and load state independence) | bool  | false | Optional |
-| _defaultHeader | Global default header style | static Header | ClassicalHeader | Optional |
-| _defaultFooter | Global default Footer style | static Footer | ClassicalFooter | Optional |
+| defaultHeader | Global default header style | static Header | ClassicalHeader | Optional |
+| defaultFooter | Global default Footer style | static Footer | ClassicalFooter | Optional |
 | header | Header style | Header | _defaultHeader | Optional |
 | footer | Footer style| Footer | _defaultFooter | Optional |
 | builder | Child widget builder | EasyRefreshChildBuilder | null | EasyRefresh.builder necessary |
