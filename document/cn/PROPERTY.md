@@ -120,6 +120,8 @@ class _ExampleState extends State<Example> {
 | callLoad | 触发加载 | void Function({Duration duration})  | Duration duration = const Duration(milliseconds: 300) | 可选 |
 | finishRefresh | 完成刷新 | void Function({{bool success,bool noMore,}})  | success = true, noMore = false | 可选 |
 | finishLoad | 完成加载 | void Function({Duration duration})  | success = true, noMore = false | 可选 |
+| resetRefreshState | 重置刷新状态 | void Function()  | void | 可选 |
+| resetLoadState | 重置加载状态 | void Function()  | void | 可选 |
 
 ## 属性表格 - ScrollNotificationInterceptor(用于包裹滚动冲突的Widget)
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
