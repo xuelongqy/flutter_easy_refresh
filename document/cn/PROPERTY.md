@@ -98,8 +98,8 @@ class _ExampleState extends State<Example> {
 | enableControlFinishRefresh | 是否开启控制结束刷新 | bool |false | 可选 |
 | enableControlFinishLoad | 是否开启控制结束加载 | bool |false | 可选 |
 | taskIndependence | 任务独立(刷新和加载状态独立) | bool  | false | 可选 |
-| _defaultHeader | 全局默认Header样式 | static Header | ClassicalHeader | 可选 |
-| _defaultFooter | 全局默认Footer样式 | static Footer | ClassicalFooter | 可选 |
+| defaultHeader | 全局默认Header样式 | static Header | ClassicalHeader | 可选 |
+| defaultFooter | 全局默认Footer样式 | static Footer | ClassicalFooter | 可选 |
 | header | Header样式 | Header | _defaultHeader | 可选 |
 | footer | Footer样式 | Footer | _defaultFooter | 可选 |
 | builder | 子组件构造器 | EasyRefreshChildBuilder | null | EasyRefresh.builder必需 |
