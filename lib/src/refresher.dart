@@ -359,6 +359,10 @@ class _EasyRefreshState extends State<EasyRefresh> {
       // 判断是否有空视图
       if (widget.emptyWidget != null && slivers != null) {
         slivers = slivers.sublist(0, widget.headerIndex ?? 0);
+        // 添加空元素避免异常
+        slivers.add(SliverList(
+          delegate: SliverChildListDelegate([SizedBox()]),
+        ));
         slivers.add(EmptyWidget(
           child: widget.emptyWidget,
         ));
@@ -483,6 +487,10 @@ class _EasyRefreshState extends State<EasyRefresh> {
               viewport.children.removeRange(
                   widget.headerIndex, viewport.children.length - 1);
             }
+            // 添加空元素避免异常
+            viewport.children.add(SliverList(
+              delegate: SliverChildListDelegate([SizedBox()]),
+            ));
             viewport.children.add(EmptyWidget(
               child: widget.emptyWidget,
             ));
