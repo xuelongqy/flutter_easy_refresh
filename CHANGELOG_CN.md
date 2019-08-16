@@ -17,3 +17,4 @@
 
 ## V Next
 >修复：列表刷新或加载时快速回弹 issues#130   
+>修复：ClassicalFooter设置bgColor无效 issues#138   

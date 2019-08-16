@@ -460,6 +460,7 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
                     ? widget.loadIndicatorExtent
                     : widget.pulledExtent
                 : double.infinity,
+            color: widget.classicalFooter.bgColor,
             child: SizedBox(
               height: isVertical ? widget.loadIndicatorExtent : double.infinity,
               width: !isVertical ? widget.loadIndicatorExtent : double.infinity,

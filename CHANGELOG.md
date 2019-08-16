@@ -17,3 +17,4 @@
 
 ## V Next
 >Fix: Quick rebound after list refresh or load issues#130   
+>Fix: ClassicalFooter set bgColor is invalid issues#138   
