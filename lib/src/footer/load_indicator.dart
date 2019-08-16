@@ -605,6 +605,7 @@ class _EasyRefreshSliverLoadControlState
   void resetLoadState() {
     if (mounted) {
       setState(() {
+        _success = true;
         _noMore = false;
         loadState = LoadMode.inactive;
         hasSliverLayoutExtent = false;
