@@ -20,4 +20,4 @@
 >Fix: ClassicalFooter set bgColor is invalid issues#138   
 >Fix: success is not reset when reset state   
 >Fix: When onRefresh is null, empty attempt to report error issues#140   
-> Fix: When no more, the icon still loading issues # 137, issues # 142   
+>Fix: When no more, the icon still loading issues # 137, issues # 142   
