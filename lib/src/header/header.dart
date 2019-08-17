@@ -369,7 +369,9 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
     with TickerProviderStateMixin<ClassicalHeaderWidget> {
   // 是否到达触发刷新距离
   bool _overTriggerDistance = false;
+
   bool get overTriggerDistance => _overTriggerDistance;
+
   set overTriggerDistance(bool over) {
     if (_overTriggerDistance != over) {
       _overTriggerDistance
@@ -381,6 +383,7 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
 
   // 是否刷新完成
   bool _refreshFinish = false;
+
   set refreshFinish(bool finish) {
     if (_refreshFinish != finish) {
       if (finish && widget.float) {
@@ -459,6 +462,7 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
 
   // 更新时间
   DateTime _dateTime;
+
   // 获取更多信息
   String get _infoText {
     if (widget.refreshState == RefreshMode.refreshed) {
@@ -631,8 +635,9 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
                 padding: EdgeInsets.only(
                   right: 10.0,
                 ),
-                child: widget.refreshState == RefreshMode.refresh ||
-                        widget.refreshState == RefreshMode.armed
+                child: (widget.refreshState == RefreshMode.refresh ||
+                            widget.refreshState == RefreshMode.armed) &&
+                        !widget.noMore
                     ? Container(
                         width: 20.0,
                         height: 20.0,

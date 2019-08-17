@@ -20,3 +20,4 @@
 >修复：ClassicalFooter设置bgColor无效 issues#138   
 >修复：重置状态时success未重置   
 >修复：在onRefresh为null时,空试图报错 issues#140   
+>修复：没有更多时,图标依然为加载 issues#137,issues#142   

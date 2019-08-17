@@ -491,8 +491,8 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
                 padding: EdgeInsets.only(
                   right: 10.0,
                 ),
-                child: widget.loadState == LoadMode.load ||
-                        widget.loadState == LoadMode.armed
+                child: (widget.loadState == LoadMode.load ||
+                        widget.loadState == LoadMode.armed) && !widget.noMore
                     ? Container(
                         width: 20.0,
                         height: 20.0,
