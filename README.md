@@ -87,7 +87,7 @@ dependencies:
   flutter_easyrefresh:
     path: 项目路径
 
-//git
+//git方式
 dependencies:
   flutter_easyrefresh:
     git:
