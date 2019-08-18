@@ -15,7 +15,7 @@
 >优化：无限加载触发   
 >支持：child为SingleChildScrollView类型   
 
-## V Next
+## V 2.0.3
 >修复：列表刷新或加载时快速回弹 issues#130   
 >修复：ClassicalFooter设置bgColor无效 issues#138   
 >修复：重置状态时success未重置   

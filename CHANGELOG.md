@@ -15,7 +15,7 @@
 >Optimization: Infinite load trigger   
 >Support: Child is SingleChildScrollView type   
 
-## V Next
+## V 2.0.3
 >Fix: Quick rebound after list refresh or load issues#130   
 >Fix: ClassicalFooter set bgColor is invalid issues#138   
 >Fix: success is not reset when reset state   
