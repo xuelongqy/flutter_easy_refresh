@@ -21,3 +21,6 @@
 >Fix: success is not reset when reset state   
 >Fix: When onRefresh is null, empty attempt to report error issues#140   
 >Fix: When no more, the icon still loading issues # 137, issues # 142   
+
+## V Next
+>Fix: Quick rebound after list refresh or load issues#130   
