@@ -728,17 +728,20 @@ class _EasyRefreshSliverLoadControlState
                 HapticFeedback.mediumImpact();
               }
               // 触发加载任务
-              loadTask = widget.onLoad()
-                ..then((_) {
-                  if (mounted && !widget.enableControlFinishLoad) {
-                    if (widget.enableInfiniteLoad) {
-                      loadState = LoadMode.inactive;
+              SchedulerBinding.instance
+                  .addPostFrameCallback((Duration timestamp) {
+                loadTask = widget.onLoad()
+                  ..then((_) {
+                    if (mounted && !widget.enableControlFinishLoad) {
+                      if (widget.enableInfiniteLoad) {
+                        loadState = LoadMode.inactive;
+                      }
+                      setState(() => loadTask = null);
+                      if (!widget.enableInfiniteLoad)
+                        loadState = transitionNextState();
                     }
-                    setState(() => loadTask = null);
-                    if (!widget.enableInfiniteLoad)
-                      loadState = transitionNextState();
-                  }
-                });
+                  });
+              });
               return LoadMode.armed;
             }
             return LoadMode.drag;

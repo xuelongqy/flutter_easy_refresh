@@ -759,17 +759,20 @@ class _EasyRefreshSliverRefreshControlState
                 HapticFeedback.mediumImpact();
               }
               // 触发刷新任务
-              refreshTask = widget.onRefresh()
-                ..then((_) {
-                  if (mounted && !widget.enableControlFinishRefresh) {
-                    if (widget.enableInfiniteRefresh) {
-                      refreshState = RefreshMode.inactive;
+              SchedulerBinding.instance
+                  .addPostFrameCallback((Duration timestamp) {
+                refreshTask = widget.onRefresh()
+                  ..then((_) {
+                    if (mounted && !widget.enableControlFinishRefresh) {
+                      if (widget.enableInfiniteRefresh) {
+                        refreshState = RefreshMode.inactive;
+                      }
+                      setState(() => refreshTask = null);
+                      if (!widget.enableInfiniteRefresh)
+                        refreshState = transitionNextState();
                     }
-                    setState(() => refreshTask = null);
-                    if (!widget.enableInfiniteRefresh)
-                      refreshState = transitionNextState();
-                  }
-                });
+                  });
+              });
               return RefreshMode.armed;
             }
             return RefreshMode.drag;
