@@ -704,7 +704,7 @@ class _EasyRefreshSliverLoadControlState
       case LoadMode.drag:
         if (latestIndicatorBoxExtent == 0) {
           return LoadMode.inactive;
-        } else if (latestIndicatorBoxExtent < widget.loadTriggerPullDistance) {
+        } else if (latestIndicatorBoxExtent <= widget.loadTriggerPullDistance) {
           // 如果未触发加载则取消固定高度
           if (hasSliverLayoutExtent && !hasTask) {
             SchedulerBinding.instance

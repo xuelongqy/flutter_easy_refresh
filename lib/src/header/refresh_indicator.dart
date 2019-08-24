@@ -732,7 +732,7 @@ class _EasyRefreshSliverRefreshControlState
       case RefreshMode.drag:
         if (latestIndicatorBoxExtent == 0) {
           return RefreshMode.inactive;
-        } else if (latestIndicatorBoxExtent <
+        } else if (latestIndicatorBoxExtent <=
             widget.refreshTriggerPullDistance) {
           // 如果未触发刷新则取消固定高度
           if (hasSliverLayoutExtent && !hasTask) {

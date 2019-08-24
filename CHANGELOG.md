@@ -23,4 +23,5 @@
 >Fix: When no more, the icon still loading issues # 137, issues # 142   
 
 ## V Next
->Fix: Quick rebound after list refresh or load issues#130   
+>Fix: No delay using setState error   
+>Fixed: When the dwell height and the trigger height are the same, the pullback height is fixed issues#149   
