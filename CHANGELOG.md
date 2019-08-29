@@ -25,4 +25,4 @@
 ## V 2.0.4
 >Fix: No delay using setState error   
 >Fix: When the dwell height and the trigger height are the same, the pullback height is fixed issues#149   
->Fix: trigger refresh bounce   
+>Fix: Trigger refresh bounce   
