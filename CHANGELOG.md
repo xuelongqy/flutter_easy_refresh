@@ -22,7 +22,7 @@
 >Fix: When onRefresh is null, empty attempt to report error issues#140   
 >Fix: When no more, the icon still loading issues # 137, issues # 142   
 
-## V Next
+## V 2.0.4
 >Fix: No delay using setState error   
 >Fix: When the dwell height and the trigger height are the same, the pullback height is fixed issues#149   
 >Fix: trigger refresh bounce   

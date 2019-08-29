@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v2.0.3-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/badge/pub-v2.0.4-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
 
 ## English | [中文](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/README.md)
 
@@ -80,7 +80,7 @@ Demo：[Download APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/
 ```
 //pub
 dependencies:
-  flutter_easyrefresh: ^2.0.3
+  flutter_easyrefresh: ^2.0.4
 
 //import
 dependencies:
