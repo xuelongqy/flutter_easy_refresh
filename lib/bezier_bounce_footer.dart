@@ -237,60 +237,71 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
                     Container(
                       width: double.infinity,
                       height: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      child: Stack(
+                        alignment: Alignment.center,
                         children: <Widget>[
-                          Opacity(
-                            opacity: ballOpacity / 4,
-                            child: Icon(
-                              Icons.lens,
-                              size: 15.0,
-                              color: widget.color,
-                            ),
-                          ),
-                          Container(
-                            width: _pulledExtent / 3,
-                          ),
-                          Opacity(
-                            opacity: ballOpacity / 2,
-                            child: Icon(
-                              Icons.lens,
-                              size: 15.0,
-                              color: widget.color,
-                            ),
-                          ),
-                          Container(
-                            width: _pulledExtent / 3,
-                          ),
-                          Opacity(
-                            opacity: ballOpacity,
-                            child: Icon(
-                              Icons.lens,
-                              size: 15.0,
-                              color: widget.color,
-                            ),
-                          ),
-                          Container(
-                            width: _pulledExtent / 3,
-                          ),
-                          Opacity(
-                            opacity: ballOpacity / 2,
-                            child: Icon(
-                              Icons.lens,
-                              size: 15.0,
-                              color: widget.color,
-                            ),
-                          ),
-                          Container(
-                            width: _pulledExtent / 3,
-                          ),
-                          Opacity(
-                            opacity: ballOpacity / 4,
-                            child: Icon(
-                              Icons.lens,
-                              size: 15.0,
-                              color: widget.color,
+                          Positioned(
+                            top: 0.0,
+                            bottom: 0.0,
+                            left: -400.0,
+                            right: -400.0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Opacity(
+                                  opacity: ballOpacity / 4,
+                                  child: Icon(
+                                    Icons.lens,
+                                    size: 15.0,
+                                    color: widget.color,
+                                  ),
+                                ),
+                                Container(
+                                  width: _pulledExtent / 3,
+                                ),
+                                Opacity(
+                                  opacity: ballOpacity / 2,
+                                  child: Icon(
+                                    Icons.lens,
+                                    size: 15.0,
+                                    color: widget.color,
+                                  ),
+                                ),
+                                Container(
+                                  width: _pulledExtent / 3,
+                                ),
+                                Opacity(
+                                  opacity: ballOpacity,
+                                  child: Icon(
+                                    Icons.lens,
+                                    size: 15.0,
+                                    color: widget.color,
+                                  ),
+                                ),
+                                Container(
+                                  width: _pulledExtent / 3,
+                                ),
+                                Opacity(
+                                  opacity: ballOpacity / 2,
+                                  child: Icon(
+                                    Icons.lens,
+                                    size: 15.0,
+                                    color: widget.color,
+                                  ),
+                                ),
+                                Container(
+                                  width: _pulledExtent / 3,
+                                ),
+                                Opacity(
+                                  opacity: ballOpacity / 4,
+                                  child: Icon(
+                                    Icons.lens,
+                                    size: 15.0,
+                                    color: widget.color,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
