@@ -131,62 +131,64 @@ class ChatPageState extends State<ChatPage> {
               },
             ),
           ),
-          Container(
-            color: Colors.grey[100],
-            padding: EdgeInsets.only(
-              left: 15.0, right: 15.0, top: 8.0, bottom: 8.0,),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      left: 5.0, right: 5.0, top: 5.0, bottom: 5.0,),
-                    decoration: BoxDecoration(
+          SafeArea(
+            child: Container(
+              color: Colors.grey[100],
+              padding: EdgeInsets.only(
+                left: 15.0, right: 15.0, top: 8.0, bottom: 8.0,),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        left: 5.0, right: 5.0, top: 5.0, bottom: 5.0,),
+                      decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(4.0,)),
-                    ),
-                    child: TextField(
-                      controller: _textEditingController,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(top: 2.0, bottom: 2.0,),
-                        border: InputBorder.none,
                       ),
-                      onSubmitted: (value) {
-                        if (_textEditingController.text.isNotEmpty) {
-                          _sendMsg(_textEditingController.text);
-                          _textEditingController.text = '';
-                        }
-                      },
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    if (_textEditingController.text.isNotEmpty) {
-                      _sendMsg(_textEditingController.text);
-                      _textEditingController.text = '';
-                    }
-                  },
-                  child: Container(
-                    height: 30.0,
-                    width: 60.0,
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(left: 15.0,),
-                    decoration: BoxDecoration(
-                      color: _textEditingController.text.isEmpty
-                          ? Colors.grey : Colors.green,
-                      borderRadius: BorderRadius.all(Radius.circular(4.0,)),
-                    ),
-                    child: Text(FlutterI18n.translate(context, 'send'),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
+                      child: TextField(
+                        controller: _textEditingController,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(top: 2.0, bottom: 2.0,),
+                          border: InputBorder.none,
+                        ),
+                        onSubmitted: (value) {
+                          if (_textEditingController.text.isNotEmpty) {
+                            _sendMsg(_textEditingController.text);
+                            _textEditingController.text = '';
+                          }
+                        },
                       ),
                     ),
                   ),
-                ),
-              ],
+                  InkWell(
+                    onTap: () {
+                      if (_textEditingController.text.isNotEmpty) {
+                        _sendMsg(_textEditingController.text);
+                        _textEditingController.text = '';
+                      }
+                    },
+                    child: Container(
+                      height: 30.0,
+                      width: 60.0,
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(left: 15.0,),
+                      decoration: BoxDecoration(
+                        color: _textEditingController.text.isEmpty
+                            ? Colors.grey : Colors.green,
+                        borderRadius: BorderRadius.all(Radius.circular(4.0,)),
+                      ),
+                      child: Text(FlutterI18n.translate(context, 'send'),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

@@ -14,6 +14,23 @@ class TestPage extends StatefulWidget {
 class TestPageState extends State<TestPage> {
   // 总数
   int _count = 20;
+  // 控制器
+  EasyRefreshController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = EasyRefreshController();
+    Future.delayed(Duration(seconds: 1), () {
+      _controller.callRefresh();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +40,9 @@ class TestPageState extends State<TestPage> {
         backgroundColor: Colors.white,
       ),
       body: EasyRefresh(
+        controller: _controller,
         onRefresh: () async {
+          print('refresh');
           await Future.delayed(Duration(seconds: 2), () {
             setState(() {
               _count = 20;
@@ -31,21 +50,14 @@ class TestPageState extends State<TestPage> {
           });
         },
         onLoad: () async {
+          print('load');
           await Future.delayed(Duration(seconds: 2), () {
             setState(() {
               _count += 20;
             });
           });
         },
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Text('EasyRefresh'),
-              Text('EasyRefresh'),
-              Text('EasyRefresh'),
-            ],
-          ),
-        ),
+        child: Container(),
       ),
     );
   }

@@ -213,6 +213,10 @@ class SecondFloorWidgetState extends State<SecondFloorWidget> {
                 ),
               ),
             ),
+            _isOpen ? AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0.0,
+            ): Container(),
             Positioned(
               bottom: 0.0,
               left: 0.0,

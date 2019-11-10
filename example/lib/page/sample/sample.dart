@@ -13,6 +13,7 @@ import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter/foundation.dart';
 
 /// 示例页面
 class SamplePage extends StatefulWidget {
@@ -180,7 +181,7 @@ class _SamplePageState extends State<SamplePage>
                 ),
               ),
               //  测试页面
-              /*ListItem(
+              kDebugMode ? ListItem(
                 title: 'Test',
                 describe: 'EasyRefresh test page',
                 onPressed: () {
@@ -193,7 +194,7 @@ class _SamplePageState extends State<SamplePage>
                   bgColor: Colors.black,
                   icon: Icons.build,
                 ),
-              ),*/
+              ): SizedBox(),
             ]),
           ),
         ],
