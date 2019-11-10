@@ -36,6 +36,9 @@ class _MyAppState extends State<MyApp> {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
+      localeResolutionCallback: (local, supportedLocales) {
+        return local;
+      },
     );
   }
 }
