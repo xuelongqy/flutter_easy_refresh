@@ -25,8 +25,8 @@ class BallPulsePageState extends State<BallPulsePage> {
         backgroundColor: Colors.white,
       ),
       body: EasyRefresh.custom(
-        header: BallPulseHeader(),
-        footer: BallPulseFooter(),
+        header: BallPulseHeader(backgroundColor: Colors.amber),
+        footer: BallPulseFooter(backgroundColor: Colors.redAccent),
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 2), () {
             setState(() {
