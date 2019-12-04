@@ -177,6 +177,7 @@ class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
           child: Container(
             alignment: Alignment.center,
             height: _indicatorExtent,
+            color: widget.backgroundColor,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[

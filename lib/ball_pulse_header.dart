@@ -21,7 +21,7 @@ class BallPulseHeader extends Header {
   BallPulseHeader({
     this.key,
     this.color = Colors.blue,
-    this.backgroundColor,
+    this.backgroundColor = Colors.transparent,
     bool enableHapticFeedback = true,
     bool enableInfiniteRefresh = false,
   }) : super(
@@ -178,6 +178,7 @@ class BallPulseHeaderWidgetState extends State<BallPulseHeaderWidget> {
           child: Container(
             alignment: Alignment.center,
             height: _indicatorExtent,
+            color: widget.backgroundColor,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
