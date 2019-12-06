@@ -80,6 +80,71 @@ abstract class Header {
       bool noMore);
 }
 
+/// 通知器Header
+class NotificationHeader extends Header {
+  /// Header
+  final Header header;
+
+  /// 通知器
+  final LinkHeaderNotifier notifier;
+
+  NotificationHeader({
+    @required this.header,
+    this.notifier,
+  })  : assert(
+          header != null,
+          'A non-null Header must be provided to a NotifierHeader.',
+        ),
+        super(
+          extent: header.extent,
+          triggerDistance: header.triggerDistance,
+          float: header.float,
+          completeDuration: header.completeDuration,
+          enableInfiniteRefresh: header.enableInfiniteRefresh,
+          enableHapticFeedback: header.enableHapticFeedback,
+        );
+
+  @override
+  Widget contentBuilder(
+      BuildContext context,
+      RefreshMode refreshState,
+      double pulledExtent,
+      double refreshTriggerPullDistance,
+      double refreshIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteRefresh,
+      bool success,
+      bool noMore) {
+    // 发起通知
+    this.notifier?.contentBuilder(
+        context,
+        refreshState,
+        pulledExtent,
+        refreshTriggerPullDistance,
+        refreshIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteRefresh,
+        success,
+        noMore);
+    return header.contentBuilder(
+        context,
+        refreshState,
+        pulledExtent,
+        refreshTriggerPullDistance,
+        refreshIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteRefresh,
+        success,
+        noMore);
+  }
+}
+
 /// 通用Header
 class CustomHeader extends Header {
   /// Header构造器

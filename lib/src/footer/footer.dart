@@ -78,6 +78,70 @@ abstract class Footer {
       bool noMore);
 }
 
+/// 通知器Footer
+class NotificationFooter extends Footer {
+  /// Footer
+  final Footer footer;
+
+  /// 通知器
+  final LinkFooterNotifier notifier;
+
+  NotificationFooter({
+    @required this.footer,
+    this.notifier,
+  })  : assert(
+          footer != null,
+          'A non-null Footer must be provided to a NotifierFooter.',
+        ),
+        super(
+          extent: footer.extent,
+          triggerDistance: footer.triggerDistance,
+          completeDuration: footer.completeDuration,
+          enableInfiniteLoad: footer.enableInfiniteLoad,
+          enableHapticFeedback: footer.enableHapticFeedback,
+        );
+
+  @override
+  Widget contentBuilder(
+      BuildContext context,
+      LoadMode loadState,
+      double pulledExtent,
+      double loadTriggerPullDistance,
+      double loadIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteLoad,
+      bool success,
+      bool noMore) {
+    // 发起通知
+    this.notifier?.contentBuilder(
+        context,
+        loadState,
+        pulledExtent,
+        loadTriggerPullDistance,
+        loadIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteLoad,
+        success,
+        noMore);
+    return footer.contentBuilder(
+        context,
+        loadState,
+        pulledExtent,
+        loadTriggerPullDistance,
+        loadIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteLoad,
+        success,
+        noMore);
+  }
+}
+
 /// 通用Footer构造器
 class CustomFooter extends Footer {
   /// Footer构造器
@@ -492,7 +556,8 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
                   right: 10.0,
                 ),
                 child: (widget.loadState == LoadMode.load ||
-                        widget.loadState == LoadMode.armed) && !widget.noMore
+                            widget.loadState == LoadMode.armed) &&
+                        !widget.noMore
                     ? Container(
                         width: 20.0,
                         height: 20.0,

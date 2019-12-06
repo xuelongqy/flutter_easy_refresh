@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
@@ -17,12 +16,24 @@ class TestPageState extends State<TestPage> {
   // 控制器
   EasyRefreshController _controller;
 
+  // 通知器
+  LinkHeaderNotifier _headerNotifier;
+  LinkFooterNotifier _footerNotifier;
+
   @override
   void initState() {
     super.initState();
+    _headerNotifier = LinkHeaderNotifier();
+    _footerNotifier = LinkFooterNotifier();
     _controller = EasyRefreshController();
     Future.delayed(Duration(seconds: 1), () {
       _controller.callRefresh();
+    });
+    _headerNotifier.addListener(() {
+      print(_headerNotifier.refreshState);
+    });
+    _footerNotifier.addListener(() {
+      print(_footerNotifier.loadState);
     });
   }
 
@@ -30,6 +41,8 @@ class TestPageState extends State<TestPage> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+    _headerNotifier.dispose();
+    _footerNotifier.dispose();
   }
 
   @override
@@ -40,6 +53,14 @@ class TestPageState extends State<TestPage> {
         backgroundColor: Colors.white,
       ),
       body: EasyRefresh(
+        header: NotificationHeader(
+          header: ClassicalHeader(),
+          notifier: _headerNotifier,
+        ),
+        footer: NotificationFooter(
+          footer: ClassicalFooter(),
+          notifier: _footerNotifier,
+        ),
         controller: _controller,
         onRefresh: () async {
           print('refresh');
@@ -57,7 +78,19 @@ class TestPageState extends State<TestPage> {
             });
           });
         },
-        child: Container(),
+        child: ListView.builder(
+          itemCount: _count,
+          itemBuilder: (context, index) {
+            return Card(
+              child: Container(
+                alignment: Alignment.center,
+                width: double.infinity,
+                height: 60.0,
+                child: Text('$index'),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
