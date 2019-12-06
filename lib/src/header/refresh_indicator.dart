@@ -74,8 +74,7 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
 //
 // The [layoutExtentOffsetCompensation] field keeps internal accounting to
 // prevent scroll position jumps as the [layoutExtent] is set and unset.
-class _RenderEasyRefreshSliverRefresh extends RenderSliver
-    with RenderObjectWithChildMixin<RenderBox> {
+class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   _RenderEasyRefreshSliverRefresh({
     @required double refreshIndicatorExtent,
     @required bool hasLayoutExtent,

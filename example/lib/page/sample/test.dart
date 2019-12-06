@@ -12,7 +12,7 @@ class TestPage extends StatefulWidget {
 }
 class TestPageState extends State<TestPage> {
   // 总数
-  int _count = 20;
+  int _count = 2;
   // 控制器
   EasyRefreshController _controller;
 
@@ -26,9 +26,6 @@ class TestPageState extends State<TestPage> {
     _headerNotifier = LinkHeaderNotifier();
     _footerNotifier = LinkFooterNotifier();
     _controller = EasyRefreshController();
-    Future.delayed(Duration(seconds: 1), () {
-      _controller.callRefresh();
-    });
     _headerNotifier.addListener(() {
       print(_headerNotifier.refreshState);
     });
@@ -74,7 +71,7 @@ class TestPageState extends State<TestPage> {
           print('load');
           await Future.delayed(Duration(seconds: 2), () {
             setState(() {
-              _count += 20;
+              _count += 1;
             });
           });
         },
