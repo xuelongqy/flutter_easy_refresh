@@ -121,12 +121,14 @@ class ChatPageState extends State<ChatPage> {
               ],
               onLoad: () async {
                 await Future.delayed(Duration(seconds: 2), () {
-                  setState(() {
-                    _msgList.addAll([
-                      MessageEntity(true, "It's good!"),
-                      MessageEntity(false, 'EasyRefresh'),
-                    ]);
-                  });
+                  if (mounted) {
+                    setState(() {
+                      _msgList.addAll([
+                        MessageEntity(true, "It's good!"),
+                        MessageEntity(false, 'EasyRefresh'),
+                      ]);
+                    });
+                  }
                 });
               },
             ),
