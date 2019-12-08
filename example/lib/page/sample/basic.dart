@@ -16,6 +16,7 @@ class BasicPage extends StatefulWidget {
   @override
   _BasicPageState createState() => _BasicPageState();
 }
+
 class _BasicPageState extends State<BasicPage> {
   EasyRefreshController _controller;
   ScrollController _scrollController;
@@ -86,10 +87,12 @@ class _BasicPageState extends State<BasicPage> {
             header: ClassicalHeader(
               enableInfiniteRefresh: false,
               refreshText: FlutterI18n.translate(context, 'pullToRefresh'),
-              refreshReadyText: FlutterI18n.translate(context, 'releaseToRefresh'),
+              refreshReadyText:
+                  FlutterI18n.translate(context, 'releaseToRefresh'),
               refreshingText: FlutterI18n.translate(context, 'refreshing'),
               refreshedText: FlutterI18n.translate(context, 'refreshed'),
-              refreshFailedText: FlutterI18n.translate(context, 'refreshFailed'),
+              refreshFailedText:
+                  FlutterI18n.translate(context, 'refreshFailed'),
               noMoreText: FlutterI18n.translate(context, 'noMore'),
               infoText: FlutterI18n.translate(context, 'updateAt'),
               bgColor: _headerFloat ? Theme.of(context).primaryColor : null,
@@ -108,35 +111,39 @@ class _BasicPageState extends State<BasicPage> {
               infoText: FlutterI18n.translate(context, 'updateAt'),
               enableHapticFeedback: _vibration,
             ),
-            onRefresh: _enableRefresh ? () async {
-              await Future.delayed(Duration(seconds: 2), () {
-                setState(() {
-                  _count = 20;
-                });
-                if (!_enableControlFinish) {
-                  _controller.resetLoadState();
-                  _controller.finishRefresh();
-                }
-              });
-            }: null,
-            onLoad: _enableLoad ? () async {
-              await Future.delayed(Duration(seconds: 2), () {
-                setState(() {
-                  _count += 20;
-                });
-                if (!_enableControlFinish) {
-                  _controller.finishLoad(noMore: _count >= 80);
-                }
-              });
-            }: null,
+            onRefresh: _enableRefresh
+                ? () async {
+                    await Future.delayed(Duration(seconds: 2), () {
+                      setState(() {
+                        _count = 20;
+                      });
+                      if (!_enableControlFinish) {
+                        _controller.resetLoadState();
+                        _controller.finishRefresh();
+                      }
+                    });
+                  }
+                : null,
+            onLoad: _enableLoad
+                ? () async {
+                    await Future.delayed(Duration(seconds: 2), () {
+                      setState(() {
+                        _count += 20;
+                      });
+                      if (!_enableControlFinish) {
+                        _controller.finishLoad(noMore: _count >= 80);
+                      }
+                    });
+                  }
+                : null,
             slivers: <Widget>[
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                      (context, index) {
+                  (context, index) {
                     return SampleListItem(
                       direction: _direction,
-                      width: _direction == Axis.vertical
-                          ? double.infinity : 150.0,
+                      width:
+                          _direction == Axis.vertical ? double.infinity : 150.0,
                     );
                   },
                   childCount: _count,
@@ -147,21 +154,29 @@ class _BasicPageState extends State<BasicPage> {
         ),
       ),
       persistentFooterButtons: <Widget>[
-        _enableControlFinish ? FlatButton(
-            onPressed: () {
-              _controller.resetLoadState();
-              _controller.finishRefresh();
-            },
-            child: Text(FlutterI18n.translate(context, 'completeRefresh'),
-                style: TextStyle(color: Colors.black)))
-            : SizedBox(width: 0.0, height: 0.0,),
-        _enableControlFinish ? FlatButton(
-            onPressed: () {
-              _controller.finishLoad(noMore: _count >= 80);
-            },
-            child: Text(FlutterI18n.translate(context, 'completeLoad'),
-                style: TextStyle(color: Colors.black)))
-            : SizedBox(width: 0.0, height: 0.0,),
+        _enableControlFinish
+            ? FlatButton(
+                onPressed: () {
+                  _controller.resetLoadState();
+                  _controller.finishRefresh();
+                },
+                child: Text(FlutterI18n.translate(context, 'completeRefresh'),
+                    style: TextStyle(color: Colors.black)))
+            : SizedBox(
+                width: 0.0,
+                height: 0.0,
+              ),
+        _enableControlFinish
+            ? FlatButton(
+                onPressed: () {
+                  _controller.finishLoad(noMore: _count >= 80);
+                },
+                child: Text(FlutterI18n.translate(context, 'completeLoad'),
+                    style: TextStyle(color: Colors.black)))
+            : SizedBox(
+                width: 0.0,
+                height: 0.0,
+              ),
         FlatButton(
             onPressed: () {
               _controller.callRefresh();
@@ -201,7 +216,7 @@ class _BasicPageState extends State<BasicPage> {
                             setState(() {
                               _direction = Axis.vertical;
                             });
-                            state((){});
+                            state(() {});
                           },
                         ),
                         Text(FlutterI18n.translate(context, 'horizontal')),
@@ -212,7 +227,7 @@ class _BasicPageState extends State<BasicPage> {
                             setState(() {
                               _direction = Axis.horizontal;
                             });
-                            state((){});
+                            state(() {});
                           },
                         ),
                       ],
@@ -230,7 +245,7 @@ class _BasicPageState extends State<BasicPage> {
                         setState(() {
                           _reverse = reverse;
                         });
-                        state((){});
+                        state(() {});
                       },
                     ),
                   ),
@@ -238,8 +253,8 @@ class _BasicPageState extends State<BasicPage> {
                 // 无限加载
                 ListItem(
                   title: FlutterI18n.translate(context, 'infiniteLoad'),
-                  describe: FlutterI18n.translate(
-                      context, 'infiniteLoadDescribe'),
+                  describe:
+                      FlutterI18n.translate(context, 'infiniteLoadDescribe'),
                   rightWidget: Center(
                     child: Switch(
                       value: _enableInfiniteLoad,
@@ -247,7 +262,7 @@ class _BasicPageState extends State<BasicPage> {
                         setState(() {
                           _enableInfiniteLoad = infinite;
                         });
-                        state((){});
+                        state(() {});
                         _controller.resetLoadState();
                       },
                     ),
@@ -256,8 +271,8 @@ class _BasicPageState extends State<BasicPage> {
                 // 控制结束
                 ListItem(
                   title: FlutterI18n.translate(context, 'controlFinish'),
-                  describe: FlutterI18n.translate(
-                      context, 'controlFinishDescribe'),
+                  describe:
+                      FlutterI18n.translate(context, 'controlFinishDescribe'),
                   rightWidget: Center(
                     child: Switch(
                       value: _enableControlFinish,
@@ -265,7 +280,7 @@ class _BasicPageState extends State<BasicPage> {
                         setState(() {
                           _enableControlFinish = control;
                         });
-                        state((){});
+                        state(() {});
                       },
                     ),
                   ),
@@ -282,7 +297,7 @@ class _BasicPageState extends State<BasicPage> {
                         setState(() {
                           _taskIndependence = independence;
                         });
-                        state((){});
+                        state(() {});
                       },
                     ),
                   ),
@@ -290,8 +305,8 @@ class _BasicPageState extends State<BasicPage> {
                 // Header浮动
                 ListItem(
                   title: FlutterI18n.translate(context, 'headerFloat'),
-                  describe: FlutterI18n.translate(
-                      context, 'headerFloatDescribe'),
+                  describe:
+                      FlutterI18n.translate(context, 'headerFloatDescribe'),
                   rightWidget: Center(
                     child: Switch(
                       value: _headerFloat,
@@ -299,7 +314,7 @@ class _BasicPageState extends State<BasicPage> {
                         setState(() {
                           _headerFloat = float;
                         });
-                        state((){});
+                        state(() {});
                       },
                     ),
                   ),
@@ -307,8 +322,7 @@ class _BasicPageState extends State<BasicPage> {
                 // 震动
                 ListItem(
                   title: FlutterI18n.translate(context, 'vibration'),
-                  describe: FlutterI18n.translate(
-                      context, 'vibrationDescribe'),
+                  describe: FlutterI18n.translate(context, 'vibrationDescribe'),
                   rightWidget: Center(
                     child: Switch(
                       value: _vibration,
@@ -316,7 +330,7 @@ class _BasicPageState extends State<BasicPage> {
                         setState(() {
                           _vibration = vibration;
                         });
-                        state((){});
+                        state(() {});
                       },
                     ),
                   ),
@@ -324,8 +338,8 @@ class _BasicPageState extends State<BasicPage> {
                 // 刷新开关
                 ListItem(
                   title: FlutterI18n.translate(context, 'refreshSwitch'),
-                  describe: FlutterI18n.translate(
-                      context, 'refreshSwitchDescribe'),
+                  describe:
+                      FlutterI18n.translate(context, 'refreshSwitchDescribe'),
                   rightWidget: Center(
                     child: Switch(
                       value: _enableRefresh,
@@ -336,7 +350,7 @@ class _BasicPageState extends State<BasicPage> {
                             _topBouncing = true;
                           }
                         });
-                        state((){});
+                        state(() {});
                       },
                     ),
                   ),
@@ -344,8 +358,8 @@ class _BasicPageState extends State<BasicPage> {
                 // 加载开关
                 ListItem(
                   title: FlutterI18n.translate(context, 'loadSwitch'),
-                  describe: FlutterI18n.translate(
-                      context, 'loadSwitchDescribe'),
+                  describe:
+                      FlutterI18n.translate(context, 'loadSwitchDescribe'),
                   rightWidget: Center(
                     child: Switch(
                       value: _enableLoad,
@@ -356,7 +370,7 @@ class _BasicPageState extends State<BasicPage> {
                             _bottomBouncing = true;
                           }
                         });
-                        state((){});
+                        state(() {});
                       },
                     ),
                   ),
@@ -364,34 +378,38 @@ class _BasicPageState extends State<BasicPage> {
                 // 顶部回弹
                 ListItem(
                   title: FlutterI18n.translate(context, 'topBouncing'),
-                  describe: FlutterI18n.translate(
-                      context, 'topBouncingDescribe'),
+                  describe:
+                      FlutterI18n.translate(context, 'topBouncingDescribe'),
                   rightWidget: Center(
                     child: Switch(
                       value: _topBouncing,
-                      onChanged: _enableRefresh ? null : (bouncing) {
-                        setState(() {
-                          _topBouncing = bouncing;
-                        });
-                        state((){});
-                      },
+                      onChanged: _enableRefresh
+                          ? null
+                          : (bouncing) {
+                              setState(() {
+                                _topBouncing = bouncing;
+                              });
+                              state(() {});
+                            },
                     ),
                   ),
                 ),
                 // 底部回弹
                 ListItem(
                   title: FlutterI18n.translate(context, 'bottomBouncing'),
-                  describe: FlutterI18n.translate(
-                      context, 'bottomBouncingDescribe'),
+                  describe:
+                      FlutterI18n.translate(context, 'bottomBouncingDescribe'),
                   rightWidget: Center(
                     child: Switch(
                       value: _bottomBouncing,
-                      onChanged: _enableLoad ? null : (bouncing) {
-                        setState(() {
-                          _bottomBouncing = bouncing;
-                        });
-                        state((){});
-                      },
+                      onChanged: _enableLoad
+                          ? null
+                          : (bouncing) {
+                              setState(() {
+                                _bottomBouncing = bouncing;
+                              });
+                              state(() {});
+                            },
                     ),
                   ),
                 ),

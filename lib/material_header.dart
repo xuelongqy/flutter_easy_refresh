@@ -144,7 +144,8 @@ class MaterialHeaderWidgetState extends State<MaterialHeaderWidget>
         Future.delayed(_completeDuration, () {
           if (mounted) {
             _refreshFinish = false;
-            _scaleController.animateTo(0.0, duration: Duration(milliseconds: 10));
+            _scaleController.animateTo(0.0,
+                duration: Duration(milliseconds: 10));
           }
         });
       }

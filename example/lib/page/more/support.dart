@@ -86,7 +86,9 @@ class _SupportPageState extends State<SupportPage> {
               ListItem(
                 title: FlutterI18n.translate(context, 'payPal'),
                 icon: Container(
-                  padding: EdgeInsets.all(5.0,),
+                  padding: EdgeInsets.all(
+                    5.0,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.teal,
                     borderRadius: BorderRadius.all(Radius.circular(20.0)),

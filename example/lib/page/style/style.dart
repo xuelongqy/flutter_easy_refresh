@@ -19,8 +19,9 @@ class StylePage extends StatefulWidget {
   @override
   _StylePageState createState() => _StylePageState();
 }
+
 class _StylePageState extends State<StylePage>
-    with AutomaticKeepAliveClientMixin{
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -43,11 +44,12 @@ class _StylePageState extends State<StylePage>
                 title: FlutterI18n.translate(context, 'classic'),
                 describe: FlutterI18n.translate(context, 'classicDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return BasicPage(
-                            FlutterI18n.translate(context, 'classic'));
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return BasicPage(
+                          FlutterI18n.translate(context, 'classic'));
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Theme.of(context).primaryColor,
@@ -59,10 +61,11 @@ class _StylePageState extends State<StylePage>
                 title: 'Material',
                 describe: FlutterI18n.translate(context, 'materialDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return MaterialPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return MaterialPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.pink,
@@ -74,10 +77,11 @@ class _StylePageState extends State<StylePage>
                 title: 'BallPulse',
                 describe: FlutterI18n.translate(context, 'ballPulseDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return BallPulsePage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return BallPulsePage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.blue,
@@ -87,12 +91,14 @@ class _StylePageState extends State<StylePage>
               // 弹出圆圈
               ListItem(
                 title: 'BezierCircle',
-                describe: FlutterI18n.translate(context, 'bezierCircleDescribe'),
+                describe:
+                    FlutterI18n.translate(context, 'bezierCircleDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return BezierCirclePage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return BezierCirclePage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.green,
@@ -102,12 +108,14 @@ class _StylePageState extends State<StylePage>
               // BezierHourGlass
               ListItem(
                 title: 'BezierHourGlass',
-                describe: FlutterI18n.translate(context, 'bezierHourGlassDescribe'),
+                describe:
+                    FlutterI18n.translate(context, 'bezierHourGlassDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return BezierHourGlassPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return BezierHourGlassPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.teal,
@@ -119,10 +127,11 @@ class _StylePageState extends State<StylePage>
                 title: 'Taurus',
                 describe: FlutterI18n.translate(context, 'taurusDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return TaurusPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return TaurusPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.lightBlue,
@@ -134,10 +143,11 @@ class _StylePageState extends State<StylePage>
                 title: 'Phoenix',
                 describe: FlutterI18n.translate(context, 'phoenixDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return PhoenixPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return PhoenixPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.amber[700],
@@ -149,10 +159,11 @@ class _StylePageState extends State<StylePage>
                 title: 'Delivery',
                 describe: FlutterI18n.translate(context, 'deliveryDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return DeliveryPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return DeliveryPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.red,
@@ -164,10 +175,11 @@ class _StylePageState extends State<StylePage>
                 title: 'Space',
                 describe: FlutterI18n.translate(context, 'spaceDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return SpacePage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return SpacePage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.blue,
@@ -179,10 +191,11 @@ class _StylePageState extends State<StylePage>
                 title: FlutterI18n.translate(context, 'bobMinion'),
                 describe: FlutterI18n.translate(context, 'bobMinionDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return BobMinionPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return BobMinionPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.amber[600],

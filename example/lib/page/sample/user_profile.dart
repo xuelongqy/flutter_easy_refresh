@@ -84,21 +84,21 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           margin: new EdgeInsets.only(top: 100.0),
                           child: new Center(
                               child: new Container(
-                                width: 100.0,
-                                height: 100.0,
-                                child: new PreferredSize(
+                            width: 100.0,
+                            height: 100.0,
+                            child: new PreferredSize(
+                              child: new Container(
+                                child: new ClipOval(
                                   child: new Container(
-                                    child: new ClipOval(
-                                      child: new Container(
-                                        color: Colors.white,
-                                        child:
-                                        new Image.asset('assets/image/head_knoyo.jpg'),
-                                      ),
-                                    ),
+                                    color: Colors.white,
+                                    child: new Image.asset(
+                                        'assets/image/head_knoyo.jpg'),
                                   ),
-                                  preferredSize: new Size(80.0, 80.0),
                                 ),
-                              )),
+                              ),
+                              preferredSize: new Size(80.0, 80.0),
+                            ),
+                          )),
                         ),
                       ],
                     ),
@@ -118,7 +118,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.supervised_user_circle,
                                     color: Colors.white,
                                   ),
-                                  title: FlutterI18n.translate(context, 'qqGroup'),
+                                  title:
+                                      FlutterI18n.translate(context, 'qqGroup'),
                                   titleColor: Colors.white,
                                   describe: '554981921',
                                   describeColor: Colors.white,
@@ -132,7 +133,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.http,
                                     color: Colors.white,
                                   ),
-                                  title: FlutterI18n.translate(context, 'github'),
+                                  title:
+                                      FlutterI18n.translate(context, 'github'),
                                   titleColor: Colors.white,
                                   describe: 'https://github.com/xuelongqy',
                                   describeColor: Colors.white,
@@ -169,7 +171,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   title: FlutterI18n.translate(context, 'old'),
                                   titleColor: Colors.white,
                                   describe:
-                                  FlutterI18n.translate(context, 'noBald'),
+                                      FlutterI18n.translate(context, 'noBald'),
                                   describeColor: Colors.white,
                                 ),
                                 ListItem(
@@ -177,7 +179,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   title: FlutterI18n.translate(context, 'city'),
                                   titleColor: Colors.white,
                                   describe:
-                                  FlutterI18n.translate(context, 'chengdu'),
+                                      FlutterI18n.translate(context, 'chengdu'),
                                   describeColor: Colors.white,
                                 )
                               ],
@@ -199,7 +201,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.phone,
                                     color: Colors.white,
                                   ),
-                                  title: FlutterI18n.translate(context, 'phone'),
+                                  title:
+                                      FlutterI18n.translate(context, 'phone'),
                                   titleColor: Colors.white,
                                   describe: '18888888888',
                                   describeColor: Colors.white,
@@ -209,7 +212,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.email,
                                     color: Colors.white,
                                   ),
-                                  title: FlutterI18n.translate(context, 'email'),
+                                  title:
+                                      FlutterI18n.translate(context, 'email'),
                                   titleColor: Colors.white,
                                   describe: 'xuelongqy@foxmail.com',
                                   describeColor: Colors.white,

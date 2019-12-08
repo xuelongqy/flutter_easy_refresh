@@ -12,18 +12,19 @@ class LinkHeaderPage extends StatefulWidget {
     return LinkHeaderPageState();
   }
 }
+
 class LinkHeaderPageState extends State<LinkHeaderPage> {
   // 总数
   int _count = 20;
   // 连接通知器
   LinkHeaderNotifier _headerNotifier;
-  
+
   @override
   void initState() {
     super.initState();
     _headerNotifier = LinkHeaderNotifier();
   }
-  
+
   @override
   void dispose() {
     super.dispose();
@@ -34,7 +35,8 @@ class LinkHeaderPageState extends State<LinkHeaderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: EasyRefresh.custom(
-        header: LinkHeader(_headerNotifier,
+        header: LinkHeader(
+          _headerNotifier,
           extent: 70.0,
           triggerDistance: 70.0,
           completeDuration: Duration(milliseconds: 500),
@@ -49,12 +51,14 @@ class LinkHeaderPageState extends State<LinkHeaderPage> {
               title: Text(FlutterI18n.translate(context, 'linkHeader')),
             ),
             actions: <Widget>[
-              CircleHeader(_headerNotifier,),
+              CircleHeader(
+                _headerNotifier,
+              ),
             ],
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 return SampleListItem();
               },
               childCount: _count,
@@ -91,6 +95,7 @@ class CircleHeader extends StatefulWidget {
     return CircleHeaderState();
   }
 }
+
 class CircleHeaderState extends State<CircleHeader> {
   // 指示器值
   double _indicatorValue = 0.0;
@@ -106,11 +111,11 @@ class CircleHeaderState extends State<CircleHeader> {
 
   void onLinkNotify() {
     setState(() {
-      if (_refreshState == RefreshMode.armed
-          || _refreshState == RefreshMode.refresh) {
+      if (_refreshState == RefreshMode.armed ||
+          _refreshState == RefreshMode.refresh) {
         _indicatorValue = null;
-      } else if (_refreshState == RefreshMode.refreshed
-          || _refreshState == RefreshMode.done) {
+      } else if (_refreshState == RefreshMode.refreshed ||
+          _refreshState == RefreshMode.done) {
         _indicatorValue = 1.0;
       } else {
         if (_refreshState == RefreshMode.inactive) {
@@ -128,7 +133,9 @@ class CircleHeaderState extends State<CircleHeader> {
     return Center(
       child: Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.only(right: 20.0,),
+        margin: EdgeInsets.only(
+          right: 20.0,
+        ),
         width: 24.0,
         height: 24.0,
         child: CircularProgressIndicator(

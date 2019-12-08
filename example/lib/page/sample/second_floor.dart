@@ -12,6 +12,7 @@ class SecondFloorPage extends StatefulWidget {
     return SecondFloorPageState();
   }
 }
+
 class SecondFloorPageState extends State<SecondFloorPage> {
   // 总数
   int _count = 20;
@@ -40,7 +41,8 @@ class SecondFloorPageState extends State<SecondFloorPage> {
           SecondFloorWidget(_linkNotifier, _secondFloorOpen),
           Expanded(
             child: EasyRefresh.custom(
-              header: LinkHeader(_linkNotifier,
+              header: LinkHeader(
+                _linkNotifier,
                 extent: 70.0,
                 triggerDistance: 70.0,
                 completeDuration: Duration(milliseconds: 500),
@@ -72,7 +74,7 @@ class SecondFloorPageState extends State<SecondFloorPage> {
                 ),
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                        (context, index) {
+                    (context, index) {
                       return SampleListItem();
                     },
                     childCount: _count,
@@ -94,14 +96,15 @@ class SecondFloorWidget extends StatefulWidget {
   // 二楼开启状态
   final ValueNotifier<bool> secondFloorOpen;
 
-  const SecondFloorWidget(this.linkNotifier,
-      this.secondFloorOpen, {Key key}) : super(key: key);
+  const SecondFloorWidget(this.linkNotifier, this.secondFloorOpen, {Key key})
+      : super(key: key);
 
   @override
   SecondFloorWidgetState createState() {
     return SecondFloorWidgetState();
   }
 }
+
 class SecondFloorWidgetState extends State<SecondFloorWidget> {
   // 触发二楼高度
   final double _openSecondFloorExtent = 100.0;
@@ -127,8 +130,8 @@ class SecondFloorWidgetState extends State<SecondFloorWidget> {
 
   void onLinkNotify() {
     setState(() {
-      if (_refreshState == RefreshMode.armed
-          || _refreshState == RefreshMode.refresh) {
+      if (_refreshState == RefreshMode.armed ||
+          _refreshState == RefreshMode.refresh) {
         _indicatorValue = null;
         // 判断是否到展开二楼
         if (widget.secondFloorOpen.value && !_toggleAnimation) {
@@ -143,8 +146,8 @@ class SecondFloorWidgetState extends State<SecondFloorWidget> {
             }
           });
         }
-      } else if (_refreshState == RefreshMode.refreshed
-          || _refreshState == RefreshMode.done) {
+      } else if (_refreshState == RefreshMode.refreshed ||
+          _refreshState == RefreshMode.done) {
         _indicatorValue = 1.0;
       } else {
         if (_refreshState == RefreshMode.inactive) {
@@ -194,10 +197,12 @@ class SecondFloorWidgetState extends State<SecondFloorWidget> {
         return Future.value(true);
       },
       child: AnimatedContainer(
-        height: _isOpen ? _secondFloor
+        height: _isOpen
+            ? _secondFloor
             : _refreshState == RefreshMode.inactive ? 0.0 : _pulledExtent,
         color: Colors.white,
-        duration: _toggleAnimation ? _toggleAnimationDuration
+        duration: _toggleAnimation
+            ? _toggleAnimationDuration
             : Duration(milliseconds: 1),
         child: Stack(
           children: <Widget>[
@@ -208,15 +213,18 @@ class SecondFloorWidgetState extends State<SecondFloorWidget> {
               child: Container(
                 height: MediaQuery.of(context).size.height,
                 width: double.infinity,
-                child: Image.asset('assets/image/bg_second_floor.png',
+                child: Image.asset(
+                  'assets/image/bg_second_floor.png',
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            _isOpen ? AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0.0,
-            ): Container(),
+            _isOpen
+                ? AppBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0.0,
+                  )
+                : Container(),
             Positioned(
               bottom: 0.0,
               left: 0.0,
@@ -225,7 +233,10 @@ class SecondFloorWidgetState extends State<SecondFloorWidget> {
                 firstChild: Center(
                   child: Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(bottom: 20.0, top: 10.0,),
+                    margin: EdgeInsets.only(
+                      bottom: 20.0,
+                      top: 10.0,
+                    ),
                     width: 24.0,
                     height: 24.0,
                     child: Offstage(
@@ -241,21 +252,22 @@ class SecondFloorWidgetState extends State<SecondFloorWidget> {
                 secondChild: Center(
                   child: Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(bottom: 20.0, top: 10.0,),
+                    margin: EdgeInsets.only(
+                      bottom: 20.0,
+                      top: 10.0,
+                    ),
                     child: Offstage(
                       offstage: !widget.secondFloorOpen.value,
                       child: Text(
                         FlutterI18n.translate(context, 'welcomeToSecondFloor'),
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white
-                        ),
+                        style: TextStyle(fontSize: 18.0, color: Colors.white),
                       ),
                     ),
                   ),
                 ),
                 crossFadeState: widget.secondFloorOpen.value
-                    ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
                 duration: Duration(milliseconds: 300),
               ),
             ),

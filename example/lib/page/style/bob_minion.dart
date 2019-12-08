@@ -13,6 +13,7 @@ class BobMinionPage extends StatefulWidget {
     return BobMinionPageState();
   }
 }
+
 class BobMinionPageState extends State<BobMinionPage> {
   // 总数
   int _count = 20;
@@ -32,7 +33,8 @@ class BobMinionPageState extends State<BobMinionPage> {
                 _animation = value;
               });
             },
-            itemBuilder: (BuildContext context) => <PopupMenuItem<BobMinionAnimation>>[
+            itemBuilder: (BuildContext context) =>
+                <PopupMenuItem<BobMinionAnimation>>[
               const PopupMenuItem<BobMinionAnimation>(
                 value: BobMinionAnimation.Stand,
                 child: Text('Stand'),
@@ -54,9 +56,7 @@ class BobMinionPageState extends State<BobMinionPage> {
         ],
       ),
       body: EasyRefresh.custom(
-        header: BobMinionHeader(
-          animation: _animation
-        ),
+        header: BobMinionHeader(animation: _animation),
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 2), () {
             setState(() {
@@ -74,7 +74,7 @@ class BobMinionPageState extends State<BobMinionPage> {
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 return SampleListItem();
               },
               childCount: _count,

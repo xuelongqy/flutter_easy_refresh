@@ -29,10 +29,7 @@ class _MyAppState extends State<MyApp> {
       home: HomePage(),
       localizationsDelegates: [
         FlutterI18nDelegate(
-          useCountryCode: true,
-          fallbackFile: 'en',
-          path: 'assets/locale'
-        ),
+            useCountryCode: true, fallbackFile: 'en', path: 'assets/locale'),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],

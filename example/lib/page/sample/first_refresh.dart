@@ -13,6 +13,7 @@ class FirstRefreshPage extends StatefulWidget {
     return FirstRefreshPageState();
   }
 }
+
 class FirstRefreshPageState extends State<FirstRefreshPage> {
   // 总数
   int _count = 0;
@@ -30,31 +31,29 @@ class FirstRefreshPageState extends State<FirstRefreshPage> {
           width: double.infinity,
           height: double.infinity,
           child: Center(
-            child: SizedBox(
-              height: 200.0,
-              width: 300.0,
-              child: Card(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: 50.0,
-                      height: 50.0,
-                      child: SpinKitFadingCube(
-                        color: Theme.of(context).primaryColor,
-                        size: 25.0,
-                      ),
+              child: SizedBox(
+            height: 200.0,
+            width: 300.0,
+            child: Card(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: 50.0,
+                    height: 50.0,
+                    child: SpinKitFadingCube(
+                      color: Theme.of(context).primaryColor,
+                      size: 25.0,
                     ),
-                    Container(
-                      child:
-                      Text(FlutterI18n.translate(context, 'loading')),
-                    )
-                  ],
-                ),
+                  ),
+                  Container(
+                    child: Text(FlutterI18n.translate(context, 'loading')),
+                  )
+                ],
               ),
-            )
-          ),
+            ),
+          )),
         ),
         slivers: <Widget>[
           SliverList(

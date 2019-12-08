@@ -13,6 +13,7 @@ class MaterialPage extends StatefulWidget {
     return MaterialPageState();
   }
 }
+
 class MaterialPageState extends State<MaterialPage> {
   // 总数
   int _count = 20;
@@ -44,7 +45,7 @@ class MaterialPageState extends State<MaterialPage> {
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 return SampleListItem();
               },
               childCount: _count,

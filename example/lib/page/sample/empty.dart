@@ -12,6 +12,7 @@ class EmptyPage extends StatefulWidget {
     return EmptyPageState();
   }
 }
+
 class EmptyPageState extends State<EmptyPage> {
   // 总数
   int _count = 0;
@@ -24,30 +25,38 @@ class EmptyPageState extends State<EmptyPage> {
         backgroundColor: Colors.white,
       ),
       body: EasyRefresh.custom(
-        emptyWidget: _count == 0 ? Container(
-          height: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(child: SizedBox(), flex: 2,),
-              SizedBox(
-                width: 100.0,
-                height: 100.0,
-                child: Image.asset('assets/image/nodata.png'),
-              ),
-              Text(
-                FlutterI18n.translate(context, 'noData'),
-                style: TextStyle(fontSize: 16.0, color: Colors.grey[400]),
-              ),
-              Expanded(child: SizedBox(), flex: 3,),
-            ],
-          ),
-        ): null,
+        emptyWidget: _count == 0
+            ? Container(
+                height: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: SizedBox(),
+                      flex: 2,
+                    ),
+                    SizedBox(
+                      width: 100.0,
+                      height: 100.0,
+                      child: Image.asset('assets/image/nodata.png'),
+                    ),
+                    Text(
+                      FlutterI18n.translate(context, 'noData'),
+                      style: TextStyle(fontSize: 16.0, color: Colors.grey[400]),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                      flex: 3,
+                    ),
+                  ],
+                ),
+              )
+            : null,
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 return SampleListItem();
               },
               childCount: _count,

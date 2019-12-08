@@ -11,8 +11,9 @@ class MorePage extends StatefulWidget {
   @override
   _MorePageState createState() => _MorePageState();
 }
+
 class _MorePageState extends State<MorePage>
-    with AutomaticKeepAliveClientMixin{
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -32,7 +33,8 @@ class _MorePageState extends State<MorePage>
             delegate: SliverChildListDelegate([
               ListItem(
                 title: FlutterI18n.translate(context, 'joinDiscussion'),
-                describe: FlutterI18n.translate(context, 'joinDiscussionDescribe'),
+                describe:
+                    FlutterI18n.translate(context, 'joinDiscussionDescribe'),
                 icon: CircularIcon(
                   bgColor: Colors.blue,
                   icon: Icons.supervised_user_circle,
@@ -55,7 +57,8 @@ class _MorePageState extends State<MorePage>
               ),
               ListItem(
                 title: FlutterI18n.translate(context, 'supportAuthor'),
-                describe: FlutterI18n.translate(context, 'supportAuthorDescribe'),
+                describe:
+                    FlutterI18n.translate(context, 'supportAuthorDescribe'),
                 icon: CircularIcon(
                   bgColor: Colors.red,
                   icon: Icons.star,
@@ -63,8 +66,8 @@ class _MorePageState extends State<MorePage>
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (BuildContext context) {
-                        return SupportPage();
-                      }));
+                    return SupportPage();
+                  }));
                 },
               ),
               ListItem(

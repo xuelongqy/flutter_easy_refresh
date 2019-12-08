@@ -20,8 +20,9 @@ class SamplePage extends StatefulWidget {
   @override
   _SamplePageState createState() => _SamplePageState();
 }
+
 class _SamplePageState extends State<SamplePage>
-    with AutomaticKeepAliveClientMixin{
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -44,11 +45,12 @@ class _SamplePageState extends State<SamplePage>
                 title: FlutterI18n.translate(context, 'basicUse'),
                 describe: FlutterI18n.translate(context, 'basicUseDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
                       return BasicPage(
                           FlutterI18n.translate(context, 'basicUse'));
-                    },));
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Theme.of(context).primaryColor,
@@ -60,10 +62,11 @@ class _SamplePageState extends State<SamplePage>
                 title: FlutterI18n.translate(context, 'userProfile'),
                 describe: FlutterI18n.translate(context, 'userProfileDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return UserProfilePage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return UserProfilePage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.red,
@@ -73,12 +76,14 @@ class _SamplePageState extends State<SamplePage>
               //  NestedScrollView
               ListItem(
                 title: 'NestedScrollView',
-                describe: FlutterI18n.translate(context, 'nestedScrollViewDescribe'),
+                describe:
+                    FlutterI18n.translate(context, 'nestedScrollViewDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return NestedScrollViewPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return NestedScrollViewPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.green,
@@ -90,10 +95,11 @@ class _SamplePageState extends State<SamplePage>
                 title: 'Swiper',
                 describe: FlutterI18n.translate(context, 'swiperDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return SwiperPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return SwiperPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.deepOrangeAccent,
@@ -103,13 +109,14 @@ class _SamplePageState extends State<SamplePage>
               //  首次刷新
               ListItem(
                 title: FlutterI18n.translate(context, 'firstRefresh'),
-                describe: FlutterI18n.translate(
-                    context, 'firstRefreshDescribe'),
+                describe:
+                    FlutterI18n.translate(context, 'firstRefreshDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return FirstRefreshPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return FirstRefreshPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.blueGrey,
@@ -119,13 +126,13 @@ class _SamplePageState extends State<SamplePage>
               //  空视图
               ListItem(
                 title: FlutterI18n.translate(context, 'emptyWidget'),
-                describe: FlutterI18n.translate(
-                    context, 'emptyWidgetDescribe'),
+                describe: FlutterI18n.translate(context, 'emptyWidgetDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return EmptyPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return EmptyPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.grey,
@@ -138,10 +145,11 @@ class _SamplePageState extends State<SamplePage>
                 describe: FlutterI18n.translate(
                     context, 'linkHeaderDescribeDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return LinkHeaderPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return LinkHeaderPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.amber[700],
@@ -151,13 +159,13 @@ class _SamplePageState extends State<SamplePage>
               //  二楼
               ListItem(
                 title: FlutterI18n.translate(context, 'secondFloor'),
-                describe: FlutterI18n.translate(
-                    context, 'secondFloorDescribe'),
+                describe: FlutterI18n.translate(context, 'secondFloorDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return SecondFloorPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return SecondFloorPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.purple,
@@ -167,13 +175,13 @@ class _SamplePageState extends State<SamplePage>
               //  聊天页面
               ListItem(
                 title: FlutterI18n.translate(context, 'chatPage'),
-                describe: FlutterI18n.translate(
-                    context, 'chatPageDescribe'),
+                describe: FlutterI18n.translate(context, 'chatPageDescribe'),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return ChatPage();
-                      },));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return ChatPage();
+                    },
+                  ));
                 },
                 icon: CircularIcon(
                   bgColor: Colors.blueAccent,
@@ -181,20 +189,23 @@ class _SamplePageState extends State<SamplePage>
                 ),
               ),
               //  测试页面
-              kDebugMode ? ListItem(
-                title: 'Test',
-                describe: 'EasyRefresh test page',
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return TestPage();
-                      },));
-                },
-                icon: CircularIcon(
-                  bgColor: Colors.black,
-                  icon: Icons.build,
-                ),
-              ): SizedBox(),
+              kDebugMode
+                  ? ListItem(
+                      title: 'Test',
+                      describe: 'EasyRefresh test page',
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return TestPage();
+                          },
+                        ));
+                      },
+                      icon: CircularIcon(
+                        bgColor: Colors.black,
+                        icon: Icons.build,
+                      ),
+                    )
+                  : SizedBox(),
             ]),
           ),
         ],

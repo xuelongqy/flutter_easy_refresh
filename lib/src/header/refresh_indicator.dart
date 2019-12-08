@@ -743,8 +743,7 @@ class _EasyRefreshSliverRefreshControlState
           return RefreshMode.drag;
         } else {
           // 提前固定高度，防止列表回弹
-          SchedulerBinding.instance
-              .addPostFrameCallback((Duration timestamp) {
+          SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
             if (!hasSliverLayoutExtent) {
               setState(() => hasSliverLayoutExtent = true);
             }

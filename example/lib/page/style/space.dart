@@ -12,6 +12,7 @@ class SpacePage extends StatefulWidget {
     return SpacePageState();
   }
 }
+
 class SpacePageState extends State<SpacePage> {
   // 总数
   int _count = 20;
@@ -42,7 +43,7 @@ class SpacePageState extends State<SpacePage> {
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 return SampleListItem();
               },
               childCount: _count,

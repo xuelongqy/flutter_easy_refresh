@@ -12,6 +12,7 @@ class SwiperPage extends StatefulWidget {
     return SwiperPageState();
   }
 }
+
 class SwiperPageState extends State<SwiperPage> {
   // 条目总数
   int _count = 20;
@@ -20,7 +21,7 @@ class SwiperPageState extends State<SwiperPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: EasyRefresh.builder(
-        builder: (context, physics, header, footer){
+        builder: (context, physics, header, footer) {
           return CustomScrollView(
             physics: physics,
             slivers: <Widget>[
@@ -53,12 +54,9 @@ class SwiperPageState extends State<SwiperPage> {
                 ]),
               ),
               SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return SampleListItem();
-                  },
-                  childCount: _count
-                ),
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return SampleListItem();
+                }, childCount: _count),
               ),
               footer,
             ],
