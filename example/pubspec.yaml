@@ -80,5 +80,3 @@ flutter:
     - assets/image/
     - assets/locale/
     - assets/flare/
-
-enable-flutter-i18n: false

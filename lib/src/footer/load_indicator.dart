@@ -182,17 +182,18 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
     assert(constraints.growthDirection == GrowthDirection.forward);
 
     // 判断是否触发无限加载
-    if (enableInfiniteLoad &&
-        constraints.remainingPaintExtent > 1.0
-        //&& constraints.userScrollDirection != ScrollDirection.idle
-        &&
-        extraExtentNotifier.value == 0.0) {
+    if ((enableInfiniteLoad &&
+            extraExtentNotifier.value != constraints.remainingPaintExtent) &&
+        constraints.remainingPaintExtent > 1.0) {
       if (!_triggerInfiniteLoad) {
         _triggerInfiniteLoad = true;
         infiniteLoad();
       }
     } else {
-      if (constraints.remainingPaintExtent <= 1.0 || extraExtent > 0.0) {
+      if (constraints.remainingPaintExtent <= 1.0 ||
+          extraExtent > 0.0 ||
+          (enableInfiniteLoad &&
+              extraExtentNotifier.value == constraints.remainingPaintExtent)) {
         if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
           _triggerInfiniteLoad = false;
         } else {
@@ -223,9 +224,13 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
     }*/
     final bool active = (constraints.remainingPaintExtent > 1.0 ||
         layoutExtent > (enableInfiniteLoad ? 1.0 : 0.0) * _loadIndicatorExtent);
-    final double overscrolledExtent = constraints.remainingPaintExtent > 0.0
-        ? constraints.remainingPaintExtent.abs()
-        : 0.0;
+    // 如果列表已有范围不大于指示器的范围则加上滚动超出距离
+    final double overscrolledExtent = max(
+        constraints.remainingPaintExtent +
+            (constraints.precedingScrollExtent < _loadIndicatorExtent
+                ? constraints.scrollOffset
+                : 0.0),
+        0.0);
     // 是否反向
     bool isReverse = constraints.axisDirection == AxisDirection.up ||
         constraints.axisDirection == AxisDirection.left;
@@ -248,7 +253,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
     if (active) {
       geometry = SliverGeometry(
         scrollExtent: layoutExtent,
-        paintOrigin: constraints.scrollOffset,
+        paintOrigin: -constraints.scrollOffset,
         paintExtent: max(
           // Check child size (which can come from overscroll) because
           // layoutExtent may be zero. Check layoutExtent also since even
@@ -714,8 +719,7 @@ class _EasyRefreshSliverLoadControlState
           return LoadMode.drag;
         } else {
           // 提前固定高度，防止列表回弹
-          SchedulerBinding.instance
-              .addPostFrameCallback((Duration timestamp) {
+          SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
             setState(() => hasSliverLayoutExtent = true);
           });
           if (widget.onLoad != null && !hasTask) {

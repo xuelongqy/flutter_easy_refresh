@@ -75,18 +75,8 @@ class TestPageState extends State<TestPage> {
             });
           });
         },
-        child: ListView.builder(
-          itemCount: _count,
-          itemBuilder: (context, index) {
-            return Card(
-              child: Container(
-                alignment: Alignment.center,
-                width: double.infinity,
-                height: 60.0,
-                child: Text('$index'),
-              ),
-            );
-          },
+        child: Container(
+          child: Text('Text'),
         ),
       ),
     );
