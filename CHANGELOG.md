@@ -27,7 +27,7 @@
 >Fix: When the dwell height and the trigger height are the same, the pullback height is fixed issues #149   
 >Fix: Trigger refresh bounce
 
-## Next
+## V 2.0.5
 >Fix: 5 ball cross-border issues#156  
 >Fix: The background color of the ball pulse does not take effect pull#202  
 >Fix: MaterialHeader, animation error after dispose issues#199  
