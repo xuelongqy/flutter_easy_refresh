@@ -28,9 +28,9 @@
 >Fix: Trigger refresh bounce
 
 ## Next
->Fix: fix 5 small ball cross-border issues#156  
->Fix: Fix the background color of the ball pulse does not take effect pull#202  
+>Fix: 5 ball cross-border issues#156  
+>Fix: The background color of the ball pulse does not take effect pull#202  
 >Fix: MaterialHeader, animation error after dispose issues#199  
->Add: add Notifier Header and Footer issues#177,issues#186  
->Add: custom style support gesture issues#207  
+>Add: Notifier Header and Footer issues#177,issues#186  
+>Add: Custom style support gesture issues#207  
 >Fix: List height is not greater than indicator height, Footer reverse issues#160  
