@@ -28,9 +28,9 @@
 >修复：触发刷新跳动问题
 
 ## 下个版本
->修复：修复5个小球越界问题 issues#156  
->修复：修复球脉冲背景色不生效 pull#202  
+>修复：5个小球越界问题 issues#156  
+>修复：球脉冲背景色不生效 pull#202  
 >修复：MaterialHeader，dispose后动画报错 issues#199  
->添加：添加通知器Header和Footer issues#177,issues#186  
+>添加：通知器Header和Footer issues#177,issues#186  
 >添加：自定义样式支持手势 issues#207  
 >修复：列表高度不大于指示器高度，Footer反向问题 issues#160  
