@@ -183,7 +183,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
 
     // 判断是否触发无限加载
     if ((enableInfiniteLoad &&
-            extraExtentNotifier.value != constraints.remainingPaintExtent) &&
+            extraExtentNotifier.value < constraints.remainingPaintExtent) &&
         constraints.remainingPaintExtent > 1.0) {
       if (!_triggerInfiniteLoad) {
         _triggerInfiniteLoad = true;
