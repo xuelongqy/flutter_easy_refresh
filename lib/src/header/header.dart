@@ -195,7 +195,7 @@ class CustomHeader extends Header {
   }
 }
 
-/// 连接通知器
+/// 链接通知器
 class LinkHeaderNotifier extends ChangeNotifier {
   BuildContext context;
   RefreshMode refreshState = RefreshMode.inactive;
@@ -238,7 +238,7 @@ class LinkHeaderNotifier extends ChangeNotifier {
   }
 }
 
-/// 连接器Header
+/// 链接器Header
 class LinkHeader extends Header {
   final LinkHeaderNotifier linkNotifier;
 

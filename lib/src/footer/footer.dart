@@ -191,7 +191,7 @@ class CustomFooter extends Footer {
   }
 }
 
-/// 连接通知器
+/// 链接通知器
 class LinkFooterNotifier extends ChangeNotifier {
   BuildContext context;
   LoadMode loadState = LoadMode.inactive;
