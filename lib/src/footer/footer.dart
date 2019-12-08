@@ -276,12 +276,12 @@ class ClassicalFooter extends Footer {
   final Color infoColor;
 
   ClassicalFooter({
-    extent = 60.0,
-    triggerDistance = 70.0,
-    float = false,
-    completeDuration = const Duration(seconds: 1),
-    enableInfiniteLoad = true,
-    enableHapticFeedback = true,
+    double extent = 60.0,
+    double triggerDistance = 70.0,
+    bool float = false,
+    Duration completeDuration = const Duration(seconds: 1),
+    bool enableInfiniteLoad = true,
+    bool enableHapticFeedback = true,
     this.key,
     this.alignment,
     this.loadText: "Push to load",

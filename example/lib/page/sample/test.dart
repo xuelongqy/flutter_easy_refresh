@@ -12,7 +12,7 @@ class TestPage extends StatefulWidget {
 }
 class TestPageState extends State<TestPage> {
   // 总数
-  int _count = 20;
+  int _count = 2;
   // 控制器
   EasyRefreshController _controller;
 
