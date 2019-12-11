@@ -448,7 +448,7 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
       if (widget.loadState == LoadMode.loaded ||
           widget.loadState == LoadMode.inactive ||
           widget.loadState == LoadMode.drag) {
-        return _loadedText;
+        return _finishedText;
       } else {
         return _loadingText;
       }

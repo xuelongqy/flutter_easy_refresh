@@ -543,7 +543,7 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
       if (widget.refreshState == RefreshMode.refreshed ||
           widget.refreshState == RefreshMode.inactive ||
           widget.refreshState == RefreshMode.drag) {
-        return _refreshedText;
+        return _finishedText;
       } else {
         return _refreshingText;
       }
