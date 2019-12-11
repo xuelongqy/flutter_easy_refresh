@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:example/generated/i18n.dart';
 
 /// 二楼示例页面
 class SecondFloorPage extends StatefulWidget {
@@ -69,7 +69,7 @@ class SecondFloorPageState extends State<SecondFloorPage> {
                   backgroundColor: Colors.white,
                   flexibleSpace: FlexibleSpaceBar(
                     centerTitle: false,
-                    title: Text(FlutterI18n.translate(context, 'secondFloor')),
+                    title: Text(S.of(context).secondFloor),
                   ),
                 ),
                 SliverList(
@@ -259,7 +259,7 @@ class SecondFloorWidgetState extends State<SecondFloorWidget> {
                     child: Offstage(
                       offstage: !widget.secondFloorOpen.value,
                       child: Text(
-                        FlutterI18n.translate(context, 'welcomeToSecondFloor'),
+                        S.of(context).welcomeToSecondFloor,
                         style: TextStyle(fontSize: 18.0, color: Colors.white),
                       ),
                     ),

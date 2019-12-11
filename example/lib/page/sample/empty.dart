@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:example/generated/i18n.dart';
 
 /// 空视图示例
 class EmptyPage extends StatefulWidget {
@@ -21,7 +21,7 @@ class EmptyPageState extends State<EmptyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(FlutterI18n.translate(context, 'emptyWidget')),
+        title: Text(S.of(context).emptyWidget),
         backgroundColor: Colors.white,
       ),
       body: EasyRefresh.custom(
@@ -42,7 +42,7 @@ class EmptyPageState extends State<EmptyPage> {
                       child: Image.asset('assets/image/nodata.png'),
                     ),
                     Text(
-                      FlutterI18n.translate(context, 'noData'),
+                      S.of(context).noData,
                       style: TextStyle(fontSize: 16.0, color: Colors.grey[400]),
                     ),
                     Expanded(

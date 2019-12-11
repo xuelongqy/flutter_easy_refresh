@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:example/page/sample/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:example/generated/i18n.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 /// 聊天界面示例
@@ -212,7 +212,7 @@ class ChatPageState extends State<ChatPage> {
                         )),
                       ),
                       child: Text(
-                        FlutterI18n.translate(context, 'send'),
+                        S.of(context).send,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16.0,
@@ -247,7 +247,7 @@ class ChatPageState extends State<ChatPage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(
-                  FlutterI18n.translate(context, 'me'),
+                  S.of(context).me,
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 13.0,

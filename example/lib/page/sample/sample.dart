@@ -12,7 +12,7 @@ import 'package:example/widget/circular_icon.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:example/generated/i18n.dart';
 import 'package:flutter/foundation.dart';
 
 /// 示例页面
@@ -35,20 +35,20 @@ class _SamplePageState extends State<SamplePage>
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: false,
-              title: Text(FlutterI18n.translate(context, 'sample')),
+              title: Text(S.of(context).sample),
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate([
               // 基本使用
               ListItem(
-                title: FlutterI18n.translate(context, 'basicUse'),
-                describe: FlutterI18n.translate(context, 'basicUseDescribe'),
+                title: S.of(context).basicUse,
+                describe: S.of(context).basicUseDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
                       return BasicPage(
-                          FlutterI18n.translate(context, 'basicUse'));
+                          S.of(context).basicUse);
                     },
                   ));
                 },
@@ -59,8 +59,8 @@ class _SamplePageState extends State<SamplePage>
               ),
               // 个人中心
               ListItem(
-                title: FlutterI18n.translate(context, 'userProfile'),
-                describe: FlutterI18n.translate(context, 'userProfileDescribe'),
+                title: S.of(context).userProfile,
+                describe: S.of(context).userProfileDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -77,7 +77,7 @@ class _SamplePageState extends State<SamplePage>
               ListItem(
                 title: 'NestedScrollView',
                 describe:
-                    FlutterI18n.translate(context, 'nestedScrollViewDescribe'),
+                    S.of(context).nestedScrollViewDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -93,7 +93,7 @@ class _SamplePageState extends State<SamplePage>
               //  Swiper
               ListItem(
                 title: 'Swiper',
-                describe: FlutterI18n.translate(context, 'swiperDescribe'),
+                describe: S.of(context).swiperDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -108,9 +108,9 @@ class _SamplePageState extends State<SamplePage>
               ),
               //  首次刷新
               ListItem(
-                title: FlutterI18n.translate(context, 'firstRefresh'),
+                title: S.of(context).firstRefresh,
                 describe:
-                    FlutterI18n.translate(context, 'firstRefreshDescribe'),
+                    S.of(context).firstRefreshDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -125,8 +125,8 @@ class _SamplePageState extends State<SamplePage>
               ),
               //  空视图
               ListItem(
-                title: FlutterI18n.translate(context, 'emptyWidget'),
-                describe: FlutterI18n.translate(context, 'emptyWidgetDescribe'),
+                title: S.of(context).emptyWidget,
+                describe: S.of(context).emptyWidgetDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -141,9 +141,8 @@ class _SamplePageState extends State<SamplePage>
               ),
               //  CustomHeader
               ListItem(
-                title: FlutterI18n.translate(context, 'linkHeader'),
-                describe: FlutterI18n.translate(
-                    context, 'linkHeaderDescribeDescribe'),
+                title: S.of(context).linkHeader,
+                describe: S.of(context).linkHeaderDescribeDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -158,8 +157,8 @@ class _SamplePageState extends State<SamplePage>
               ),
               //  二楼
               ListItem(
-                title: FlutterI18n.translate(context, 'secondFloor'),
-                describe: FlutterI18n.translate(context, 'secondFloorDescribe'),
+                title: S.of(context).secondFloor,
+                describe: S.of(context).secondFloorDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -174,8 +173,8 @@ class _SamplePageState extends State<SamplePage>
               ),
               //  聊天页面
               ListItem(
-                title: FlutterI18n.translate(context, 'chatPage'),
-                describe: FlutterI18n.translate(context, 'chatPageDescribe'),
+                title: S.of(context).chatPage,
+                describe: S.of(context).chatPageDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {

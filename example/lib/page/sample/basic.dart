@@ -4,7 +4,7 @@ import 'package:example/widget/list_item.dart';
 import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:example/generated/i18n.dart';
 
 /// 基本示例(经典样式)页面
 class BasicPage extends StatefulWidget {
@@ -144,7 +144,7 @@ class _BasicPageState extends State<BasicPage> {
                   _controller.resetLoadState();
                   _controller.finishRefresh();
                 },
-                child: Text(FlutterI18n.translate(context, 'completeRefresh'),
+                child: Text(S.of(context).completeRefresh,
                     style: TextStyle(color: Colors.black)))
             : SizedBox(
                 width: 0.0,
@@ -155,7 +155,7 @@ class _BasicPageState extends State<BasicPage> {
                 onPressed: () {
                   _controller.finishLoad(noMore: _count >= 80);
                 },
-                child: Text(FlutterI18n.translate(context, 'completeLoad'),
+                child: Text(S.of(context).completeLoad,
                     style: TextStyle(color: Colors.black)))
             : SizedBox(
                 width: 0.0,
@@ -165,13 +165,13 @@ class _BasicPageState extends State<BasicPage> {
             onPressed: () {
               _controller.callRefresh();
             },
-            child: Text(FlutterI18n.translate(context, 'refresh'),
+            child: Text(S.of(context).refresh,
                 style: TextStyle(color: Colors.black))),
         FlatButton(
             onPressed: () {
               _controller.callLoad();
             },
-            child: Text(FlutterI18n.translate(context, 'loadMore'),
+            child: Text(S.of(context).loadMore,
                 style: TextStyle(color: Colors.black))),
       ],
     );
@@ -187,12 +187,12 @@ class _BasicPageState extends State<BasicPage> {
               delegate: SliverChildListDelegate([
                 // 列表方向
                 ListItem(
-                  title: FlutterI18n.translate(context, 'direction'),
-                  describe: FlutterI18n.translate(context, 'listDirection'),
+                  title: S.of(context).direction,
+                  describe: S.of(context).listDirection,
                   rightWidget: Container(
                     child: Row(
                       children: <Widget>[
-                        Text(FlutterI18n.translate(context, 'vertical')),
+                        Text(S.of(context).vertical),
                         Radio<Axis>(
                           groupValue: _direction,
                           value: Axis.vertical,
@@ -203,7 +203,7 @@ class _BasicPageState extends State<BasicPage> {
                             state(() {});
                           },
                         ),
-                        Text(FlutterI18n.translate(context, 'horizontal')),
+                        Text(S.of(context).horizontal),
                         Radio<Axis>(
                           groupValue: _direction,
                           value: Axis.horizontal,
@@ -220,8 +220,8 @@ class _BasicPageState extends State<BasicPage> {
                 ),
                 // 反向
                 ListItem(
-                  title: FlutterI18n.translate(context, 'reverse'),
-                  describe: FlutterI18n.translate(context, 'listReverse'),
+                  title: S.of(context).reverse,
+                  describe: S.of(context).listReverse,
                   rightWidget: Center(
                     child: Switch(
                       value: _reverse,
@@ -236,9 +236,9 @@ class _BasicPageState extends State<BasicPage> {
                 ),
                 // 无限加载
                 ListItem(
-                  title: FlutterI18n.translate(context, 'infiniteLoad'),
+                  title: S.of(context).infiniteLoad,
                   describe:
-                      FlutterI18n.translate(context, 'infiniteLoadDescribe'),
+                      S.of(context).infiniteLoadDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _enableInfiniteLoad,
@@ -254,9 +254,9 @@ class _BasicPageState extends State<BasicPage> {
                 ),
                 // 控制结束
                 ListItem(
-                  title: FlutterI18n.translate(context, 'controlFinish'),
+                  title: S.of(context).controlFinish,
                   describe:
-                      FlutterI18n.translate(context, 'controlFinishDescribe'),
+                      S.of(context).controlFinishDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _enableControlFinish,
@@ -271,9 +271,8 @@ class _BasicPageState extends State<BasicPage> {
                 ),
                 // 任务独立
                 ListItem(
-                  title: FlutterI18n.translate(context, 'taskIndependence'),
-                  describe: FlutterI18n.translate(
-                      context, 'taskIndependenceDescribe'),
+                  title: S.of(context).taskIndependence,
+                  describe: S.of(context).taskIndependenceDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _taskIndependence,
@@ -288,9 +287,9 @@ class _BasicPageState extends State<BasicPage> {
                 ),
                 // Header浮动
                 ListItem(
-                  title: FlutterI18n.translate(context, 'headerFloat'),
+                  title: S.of(context).headerFloat,
                   describe:
-                      FlutterI18n.translate(context, 'headerFloatDescribe'),
+                      S.of(context).headerFloatDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _headerFloat,
@@ -305,8 +304,8 @@ class _BasicPageState extends State<BasicPage> {
                 ),
                 // 震动
                 ListItem(
-                  title: FlutterI18n.translate(context, 'vibration'),
-                  describe: FlutterI18n.translate(context, 'vibrationDescribe'),
+                  title: S.of(context).vibration,
+                  describe: S.of(context).vibrationDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _vibration,
@@ -321,9 +320,9 @@ class _BasicPageState extends State<BasicPage> {
                 ),
                 // 刷新开关
                 ListItem(
-                  title: FlutterI18n.translate(context, 'refreshSwitch'),
+                  title: S.of(context).refreshSwitch,
                   describe:
-                      FlutterI18n.translate(context, 'refreshSwitchDescribe'),
+                      S.of(context).refreshSwitchDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _enableRefresh,
@@ -341,9 +340,9 @@ class _BasicPageState extends State<BasicPage> {
                 ),
                 // 加载开关
                 ListItem(
-                  title: FlutterI18n.translate(context, 'loadSwitch'),
+                  title: S.of(context).loadSwitch,
                   describe:
-                      FlutterI18n.translate(context, 'loadSwitchDescribe'),
+                      S.of(context).loadSwitchDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _enableLoad,
@@ -361,9 +360,9 @@ class _BasicPageState extends State<BasicPage> {
                 ),
                 // 顶部回弹
                 ListItem(
-                  title: FlutterI18n.translate(context, 'topBouncing'),
+                  title: S.of(context).topBouncing,
                   describe:
-                      FlutterI18n.translate(context, 'topBouncingDescribe'),
+                      S.of(context).topBouncingDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _topBouncing,
@@ -380,9 +379,9 @@ class _BasicPageState extends State<BasicPage> {
                 ),
                 // 底部回弹
                 ListItem(
-                  title: FlutterI18n.translate(context, 'bottomBouncing'),
+                  title: S.of(context).bottomBouncing,
                   describe:
-                      FlutterI18n.translate(context, 'bottomBouncingDescribe'),
+                      S.of(context).bottomBouncingDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _bottomBouncing,

@@ -3,7 +3,7 @@ import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:example/generated/i18n.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// 支持页面
@@ -38,13 +38,13 @@ class _SupportPageState extends State<SupportPage> {
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: false,
-              title: Text(FlutterI18n.translate(context, 'supportAuthor')),
+              title: Text(S.of(context).supportAuthor),
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate([
               ListItem(
-                title: FlutterI18n.translate(context, 'star'),
+                title: S.of(context).star,
                 icon: CircularIcon(
                   bgColor: Colors.green,
                   icon: Icons.star,
@@ -54,7 +54,7 @@ class _SupportPageState extends State<SupportPage> {
                 },
               ),
               ListItem(
-                title: FlutterI18n.translate(context, 'aliPay'),
+                title: S.of(context).aliPay,
                 icon: Container(
                   decoration: BoxDecoration(
                     color: Colors.blue,
@@ -72,19 +72,19 @@ class _SupportPageState extends State<SupportPage> {
                 },
               ),
 //            ListItem(
-//              title: FlutterI18n.translate(context, 'weiXinPay'),
+//              title: S.of(context).weiXinPay,
 //              icon: ImageIcon(AssetImage("assets/image/weixin.png"),
 //                color: Colors.orange,
 //              ),
 //            ),
 //            ListItem(
-//              title: FlutterI18n.translate(context, 'qqPay'),
+//              title: S.of(context).qqPay,
 //              icon: ImageIcon(AssetImage("assets/image/QQ.png"),
 //                color: Colors.orange,
 //              ),
 //            ),
               ListItem(
-                title: FlutterI18n.translate(context, 'payPal'),
+                title: S.of(context).payPal,
                 icon: Container(
                   padding: EdgeInsets.all(
                     5.0,

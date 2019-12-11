@@ -3,7 +3,7 @@ import 'package:example/widget/circular_icon.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:example/generated/i18n.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// 更多页面
@@ -26,15 +26,15 @@ class _MorePageState extends State<MorePage>
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: false,
-              title: Text(FlutterI18n.translate(context, 'more')),
+              title: Text(S.of(context).more),
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate([
               ListItem(
-                title: FlutterI18n.translate(context, 'joinDiscussion'),
+                title: S.of(context).joinDiscussion,
                 describe:
-                    FlutterI18n.translate(context, 'joinDiscussionDescribe'),
+                    S.of(context).joinDiscussionDescribe,
                 icon: CircularIcon(
                   bgColor: Colors.blue,
                   icon: Icons.supervised_user_circle,
@@ -45,7 +45,7 @@ class _MorePageState extends State<MorePage>
                 },
               ),
               ListItem(
-                title: FlutterI18n.translate(context, 'projectAddress'),
+                title: S.of(context).projectAddress,
                 describe: "https://github.com/xuelongqy/flutter_easyrefresh",
                 icon: CircularIcon(
                   bgColor: Colors.teal,
@@ -56,9 +56,9 @@ class _MorePageState extends State<MorePage>
                 },
               ),
               ListItem(
-                title: FlutterI18n.translate(context, 'supportAuthor'),
+                title: S.of(context).supportAuthor,
                 describe:
-                    FlutterI18n.translate(context, 'supportAuthorDescribe'),
+                    S.of(context).supportAuthorDescribe,
                 icon: CircularIcon(
                   bgColor: Colors.red,
                   icon: Icons.star,
@@ -71,7 +71,7 @@ class _MorePageState extends State<MorePage>
                 },
               ),
               ListItem(
-                title: FlutterI18n.translate(context, 'about'),
+                title: S.of(context).about,
                 icon: CircularIcon(
                   bgColor: Colors.green,
                   icon: Icons.info_outline,

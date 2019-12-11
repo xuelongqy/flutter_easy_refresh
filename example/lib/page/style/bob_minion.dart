@@ -4,7 +4,7 @@ import 'package:example/header/bob_minion_header.dart';
 import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:example/generated/i18n.dart';
 
 /// 小黄人(Bob)样式
 class BobMinionPage extends StatefulWidget {
@@ -24,7 +24,7 @@ class BobMinionPageState extends State<BobMinionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(FlutterI18n.translate(context, 'bobMinion')),
+        title: Text(S.of(context).bobMinion),
         backgroundColor: Colors.white,
         actions: <Widget>[
           PopupMenuButton<BobMinionAnimation>(

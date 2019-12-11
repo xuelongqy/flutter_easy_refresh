@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:example/generated/i18n.dart';
 
 /// LinkHeader示例
 class LinkHeaderPage extends StatefulWidget {
@@ -48,7 +48,7 @@ class LinkHeaderPageState extends State<LinkHeaderPage> {
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: false,
-              title: Text(FlutterI18n.translate(context, 'linkHeader')),
+              title: Text(S.of(context).linkHeader),
             ),
             actions: <Widget>[
               CircleHeader(

@@ -12,7 +12,7 @@ import 'package:example/widget/circular_icon.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:example/generated/i18n.dart';
 
 /// 样式页面
 class StylePage extends StatefulWidget {
@@ -34,20 +34,20 @@ class _StylePageState extends State<StylePage>
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: false,
-              title: Text(FlutterI18n.translate(context, 'style')),
+              title: Text(S.of(context).style),
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate([
               // 经典样式
               ListItem(
-                title: FlutterI18n.translate(context, 'classic'),
-                describe: FlutterI18n.translate(context, 'classicDescribe'),
+                title: S.of(context).classic,
+                describe: S.of(context).classicDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
                       return BasicPage(
-                          FlutterI18n.translate(context, 'classic'));
+                          S.of(context).classic);
                     },
                   ));
                 },
@@ -59,7 +59,7 @@ class _StylePageState extends State<StylePage>
               // 质感设计
               ListItem(
                 title: 'Material',
-                describe: FlutterI18n.translate(context, 'materialDescribe'),
+                describe: S.of(context).materialDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -75,7 +75,7 @@ class _StylePageState extends State<StylePage>
               // 球脉冲
               ListItem(
                 title: 'BallPulse',
-                describe: FlutterI18n.translate(context, 'ballPulseDescribe'),
+                describe: S.of(context).ballPulseDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -92,7 +92,7 @@ class _StylePageState extends State<StylePage>
               ListItem(
                 title: 'BezierCircle',
                 describe:
-                    FlutterI18n.translate(context, 'bezierCircleDescribe'),
+                    S.of(context).bezierCircleDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -109,7 +109,7 @@ class _StylePageState extends State<StylePage>
               ListItem(
                 title: 'BezierHourGlass',
                 describe:
-                    FlutterI18n.translate(context, 'bezierHourGlassDescribe'),
+                    S.of(context).bezierHourGlassDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -125,7 +125,7 @@ class _StylePageState extends State<StylePage>
               // 冲上云霄
               ListItem(
                 title: 'Taurus',
-                describe: FlutterI18n.translate(context, 'taurusDescribe'),
+                describe: S.of(context).taurusDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -141,7 +141,7 @@ class _StylePageState extends State<StylePage>
               // 金色校园
               ListItem(
                 title: 'Phoenix',
-                describe: FlutterI18n.translate(context, 'phoenixDescribe'),
+                describe: S.of(context).phoenixDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -157,7 +157,7 @@ class _StylePageState extends State<StylePage>
               // 快递气球
               ListItem(
                 title: 'Delivery',
-                describe: FlutterI18n.translate(context, 'deliveryDescribe'),
+                describe: S.of(context).deliveryDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -173,7 +173,7 @@ class _StylePageState extends State<StylePage>
               // 星空
               ListItem(
                 title: 'Space',
-                describe: FlutterI18n.translate(context, 'spaceDescribe'),
+                describe: S.of(context).spaceDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -188,8 +188,8 @@ class _StylePageState extends State<StylePage>
               ),
               // 小黄人
               ListItem(
-                title: FlutterI18n.translate(context, 'bobMinion'),
-                describe: FlutterI18n.translate(context, 'bobMinionDescribe'),
+                title: S.of(context).bobMinion,
+                describe: S.of(context).bobMinionDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
