@@ -39,6 +39,126 @@ class GlobalEasyRefreshLocalizations implements WidgetsLocalizations {
   String get updateAt => "Update at %T";
 }
 
+class $zh_HK extends GlobalEasyRefreshLocalizations {
+  const $zh_HK();
+
+  @override
+  TextDirection get textDirection => TextDirection.ltr;
+
+  @override
+  String get refreshed => "刷新完成";
+  @override
+  String get noMore => "沒有更多數據";
+  @override
+  String get pullToRefresh => "拉動刷新";
+  @override
+  String get loadFailed => "加載失敗";
+  @override
+  String get updateAt => "更新於 %T";
+  @override
+  String get loading => "正在加載...";
+  @override
+  String get refreshFinish => "刷新完成";
+  @override
+  String get releaseToLoad => "釋放加載";
+  @override
+  String get loadFinish => "加載完成";
+  @override
+  String get loaded => "加載完成";
+  @override
+  String get completeLoad => "完成加載";
+  @override
+  String get refreshFailed => "刷新失敗";
+  @override
+  String get pushToLoad => "拉動加載";
+  @override
+  String get releaseToRefresh => "釋放刷新";
+  @override
+  String get refreshing => "正在刷新...";
+  @override
+  String get completeRefresh => "完成刷新";
+}
+
+class $zh_TW extends GlobalEasyRefreshLocalizations {
+  const $zh_TW();
+
+  @override
+  TextDirection get textDirection => TextDirection.ltr;
+
+  @override
+  String get refreshed => "刷新完成";
+  @override
+  String get noMore => "沒有更多數據";
+  @override
+  String get pullToRefresh => "拉動刷新";
+  @override
+  String get loadFailed => "加載失敗";
+  @override
+  String get updateAt => "更新於 %T";
+  @override
+  String get loading => "正在加載...";
+  @override
+  String get refreshFinish => "刷新完成";
+  @override
+  String get releaseToLoad => "釋放加載";
+  @override
+  String get loadFinish => "加載完成";
+  @override
+  String get loaded => "加載完成";
+  @override
+  String get completeLoad => "完成加載";
+  @override
+  String get refreshFailed => "刷新失敗";
+  @override
+  String get pushToLoad => "拉動加載";
+  @override
+  String get releaseToRefresh => "釋放刷新";
+  @override
+  String get refreshing => "正在刷新...";
+  @override
+  String get completeRefresh => "完成刷新";
+}
+
+class $zh_MO extends GlobalEasyRefreshLocalizations {
+  const $zh_MO();
+
+  @override
+  TextDirection get textDirection => TextDirection.ltr;
+
+  @override
+  String get refreshed => "刷新完成";
+  @override
+  String get noMore => "沒有更多數據";
+  @override
+  String get pullToRefresh => "拉動刷新";
+  @override
+  String get loadFailed => "加載失敗";
+  @override
+  String get updateAt => "更新於 %T";
+  @override
+  String get loading => "正在加載...";
+  @override
+  String get refreshFinish => "刷新完成";
+  @override
+  String get releaseToLoad => "釋放加載";
+  @override
+  String get loadFinish => "加載完成";
+  @override
+  String get loaded => "加載完成";
+  @override
+  String get completeLoad => "完成加載";
+  @override
+  String get refreshFailed => "刷新失敗";
+  @override
+  String get pushToLoad => "拉動加載";
+  @override
+  String get releaseToRefresh => "釋放刷新";
+  @override
+  String get refreshing => "正在刷新...";
+  @override
+  String get completeRefresh => "完成刷新";
+}
+
 class $en extends GlobalEasyRefreshLocalizations {
   const $en();
 }
@@ -88,6 +208,9 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<GlobalEasyRef
 
   List<Locale> get supportedLocales {
     return const <Locale>[
+      Locale("zh", "HK"),
+      Locale("zh", "TW"),
+      Locale("zh", "MO"),
       Locale("en", ""),
       Locale("zh", "CN"),
     ];
@@ -114,6 +237,15 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<GlobalEasyRef
     final String lang = getLang(locale);
     if (lang != null) {
       switch (lang) {
+        case "zh_HK":
+          GlobalEasyRefreshLocalizations.current = const $zh_HK();
+          return SynchronousFuture<GlobalEasyRefreshLocalizations>(GlobalEasyRefreshLocalizations.current);
+        case "zh_TW":
+          GlobalEasyRefreshLocalizations.current = const $zh_TW();
+          return SynchronousFuture<GlobalEasyRefreshLocalizations>(GlobalEasyRefreshLocalizations.current);
+        case "zh_MO":
+          GlobalEasyRefreshLocalizations.current = const $zh_MO();
+          return SynchronousFuture<GlobalEasyRefreshLocalizations>(GlobalEasyRefreshLocalizations.current);
         case "en":
           GlobalEasyRefreshLocalizations.current = const $en();
           return SynchronousFuture<GlobalEasyRefreshLocalizations>(GlobalEasyRefreshLocalizations.current);

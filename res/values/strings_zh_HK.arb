@@ -1,0 +1,18 @@
+{
+  "pullToRefresh": "拉動刷新",
+  "releaseToRefresh": "釋放刷新",
+  "refreshing": "正在刷新...",
+  "refreshFinish": "刷新完成",
+  "refreshFailed": "刷新失敗",
+  "refreshed": "刷新完成",
+  "pushToLoad": "拉動加載",
+  "releaseToLoad": "釋放加載",
+  "loading": "正在加載...",
+  "loadFinish": "加載完成",
+  "loadFailed": "加載失敗",
+  "loaded": "加載完成",
+  "noMore": "沒有更多數據",
+  "completeRefresh": "完成刷新",
+  "completeLoad": "完成加載",
+  "updateAt": "更新於 %T"
+}
