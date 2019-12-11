@@ -35,5 +35,5 @@
 >Add: Custom style support gesture issues#207  
 >Fix: List height is not greater than indicator height, Footer reverse issues#160  
 
-## V 2.0.5
+## Next
 >Support: Flutter v1.12 and above
