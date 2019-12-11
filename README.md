@@ -183,7 +183,7 @@ import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 ....
   /// 如果没有您当前的语言支持
-  /// 您可以使用strings_en.arb进行翻译然后命名为strings_{languageCode}_{countryCode}.arb
+  /// 您可以使用strings_en.arb进行翻译并命名为strings_{languageCode}_{countryCode}.arb
   /// 然后进行Pull requests
   new MaterialApp(
     localizationsDelegates: [
