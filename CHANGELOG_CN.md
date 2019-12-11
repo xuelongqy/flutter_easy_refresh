@@ -33,4 +33,7 @@
 >修复：MaterialHeader，dispose后动画报错 issues#199  
 >添加：通知器Header和Footer issues#177,issues#186  
 >添加：自定义样式支持手势 issues#207  
->修复：列表高度不大于指示器高度，Footer反向问题 issues#160  
+>修复：列表高度不大于指示器高度，Footer反向问题 issues#160
+
+## V 2.0.5
+>支持：Flutter v1.12及其以上版本

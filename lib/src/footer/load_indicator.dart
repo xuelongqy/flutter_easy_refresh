@@ -513,13 +513,13 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
 
   /// Retrieve the current state of the EasyRefreshSliverLoadControl. The same as the
   /// state that gets passed into the [builder] function. Used for testing.
-  @visibleForTesting
+  /*@visibleForTesting
   static LoadMode state(BuildContext context) {
     final _EasyRefreshSliverLoadControlState state =
         context.ancestorStateOfType(
             const TypeMatcher<_EasyRefreshSliverLoadControlState>());
     return state.loadState;
-  }
+  }*/
 
   @override
   _EasyRefreshSliverLoadControlState createState() =>
