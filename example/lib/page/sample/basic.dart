@@ -86,15 +86,6 @@ class _BasicPageState extends State<BasicPage> {
             bottomBouncing: _bottomBouncing,
             header: ClassicalHeader(
               enableInfiniteRefresh: false,
-              refreshText: FlutterI18n.translate(context, 'pullToRefresh'),
-              refreshReadyText:
-                  FlutterI18n.translate(context, 'releaseToRefresh'),
-              refreshingText: FlutterI18n.translate(context, 'refreshing'),
-              refreshedText: FlutterI18n.translate(context, 'refreshed'),
-              refreshFailedText:
-                  FlutterI18n.translate(context, 'refreshFailed'),
-              noMoreText: FlutterI18n.translate(context, 'noMore'),
-              infoText: FlutterI18n.translate(context, 'updateAt'),
               bgColor: _headerFloat ? Theme.of(context).primaryColor : null,
               infoColor: _headerFloat ? Colors.black87 : Colors.teal,
               float: _headerFloat,
@@ -102,13 +93,6 @@ class _BasicPageState extends State<BasicPage> {
             ),
             footer: ClassicalFooter(
               enableInfiniteLoad: _enableInfiniteLoad,
-              loadText: FlutterI18n.translate(context, 'pushToLoad'),
-              loadReadyText: FlutterI18n.translate(context, 'releaseToLoad'),
-              loadingText: FlutterI18n.translate(context, 'loading'),
-              loadedText: FlutterI18n.translate(context, 'loaded'),
-              loadFailedText: FlutterI18n.translate(context, 'loadFailed'),
-              noMoreText: FlutterI18n.translate(context, 'noMore'),
-              infoText: FlutterI18n.translate(context, 'updateAt'),
               enableHapticFeedback: _vibration,
             ),
             onRefresh: _enableRefresh

@@ -36,4 +36,5 @@
 >Fix: List height is not greater than indicator height, Footer reverse issues#160  
 
 ## Next
->Support: Flutter v1.12 and above
+>Support: Flutter v1.12 and above  
+>Add: Globalization  

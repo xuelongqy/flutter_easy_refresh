@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../../easy_refresh.dart';
+import '../i18n/global_easy_refresh_localizations.dart';
 
 /// Header
 abstract class Footer {
@@ -284,14 +285,14 @@ class ClassicalFooter extends Footer {
     bool enableHapticFeedback = true,
     this.key,
     this.alignment,
-    this.loadText: "Push to load",
-    this.loadReadyText: "Release to load",
-    this.loadingText: "Loading...",
-    this.loadedText: "Load completed",
-    this.loadFailedText: "Load failed",
-    this.noMoreText: "No more",
+    this.loadText,
+    this.loadReadyText,
+    this.loadingText,
+    this.loadedText,
+    this.loadFailedText,
+    this.noMoreText,
     this.showInfo: true,
-    this.infoText: "Updated at %T",
+    this.infoText,
     this.bgColor: Colors.transparent,
     this.textColor: Colors.black,
     this.infoColor: Colors.teal,
@@ -381,6 +382,56 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
     _overTriggerDistance = over;
   }
 
+  /// 默认语言
+  GlobalEasyRefreshLocalizations _localizations =
+  GlobalEasyRefreshLocalizations();
+
+  /// 文本
+  String get _loadText {
+    return widget.classicalFooter.loadText ??
+        GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.pushToLoad
+        : GlobalEasyRefreshLocalizations.of(context).pushToLoad;
+  }
+  String get _loadReadyText {
+    return widget.classicalFooter.loadReadyText ??
+        GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.releaseToLoad
+        : GlobalEasyRefreshLocalizations.of(context).releaseToLoad;
+  }
+  String get _loadingText {
+    return widget.classicalFooter.loadingText ??
+        GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.loading
+        : GlobalEasyRefreshLocalizations.of(context).loading;
+  }
+  String get _loadedText {
+    return widget.classicalFooter.loadedText ??
+        GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.loaded
+        : GlobalEasyRefreshLocalizations.of(context).loaded;
+  }
+  String get _loadFailedText {
+    return widget.classicalFooter.loadFailedText ??
+        GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.loadFailed
+        : GlobalEasyRefreshLocalizations.of(context).loadFailed;
+  }
+
+  /// 没有更多文字
+  String get _noMoreText {
+    return widget.classicalFooter.noMoreText ??
+        GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.noMore
+        : GlobalEasyRefreshLocalizations.of(context).noMore;
+  }
+  String get _infoText {
+    return widget.classicalFooter.infoText ??
+        GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.updateAt
+        : GlobalEasyRefreshLocalizations.of(context).updateAt;
+  }
+  
   // 动画
   AnimationController _readyController;
   Animation<double> _readyAnimation;
@@ -392,39 +443,41 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
 
   // 显示文字
   String get _showText {
-    if (widget.noMore) return widget.classicalFooter.noMoreText;
+    if (widget.noMore) return _noMoreText;
     if (widget.enableInfiniteLoad) {
       if (widget.loadState == LoadMode.loaded ||
           widget.loadState == LoadMode.inactive ||
           widget.loadState == LoadMode.drag) {
-        return widget.classicalFooter.loadedText;
+        return _loadedText;
       } else {
-        return widget.classicalFooter.loadingText;
+        return _loadingText;
       }
     }
     switch (widget.loadState) {
       case LoadMode.load:
-        return widget.classicalFooter.loadingText;
+        return _loadingText;
       case LoadMode.armed:
-        return widget.classicalFooter.loadingText;
+        return _loadingText;
       case LoadMode.loaded:
         return _finishedText;
       case LoadMode.done:
         return _finishedText;
       default:
         if (overTriggerDistance) {
-          return widget.classicalFooter.loadReadyText;
+          return _loadReadyText;
         } else {
-          return widget.classicalFooter.loadText;
+          return _loadText;
         }
     }
   }
 
   // 加载结束文字
   String get _finishedText {
-    if (!widget.success) return widget.classicalFooter.loadFailedText;
-    if (widget.noMore) return widget.classicalFooter.noMoreText;
-    return widget.classicalFooter.loadedText;
+    if (!widget.success)
+      return _loadFailedText;
+    if (widget.noMore)
+      return _noMoreText;
+    return _loadedText;
   }
 
   // 加载结束图标
@@ -437,13 +490,12 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
   // 更新时间
   DateTime _dateTime;
   // 获取更多信息
-  String get _infoText {
+  String get _infoTextStr {
     if (widget.loadState == LoadMode.loaded) {
       _dateTime = DateTime.now();
     }
     String fillChar = _dateTime.minute < 10 ? "0" : "";
-    return widget.classicalFooter.infoText
-        .replaceAll("%T", "${_dateTime.hour}:$fillChar${_dateTime.minute}");
+    return _infoText.replaceAll("%T", "${_dateTime.hour}:$fillChar${_dateTime.minute}");
   }
 
   @override
@@ -607,7 +659,7 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
                             top: 2.0,
                           ),
                           child: Text(
-                            _infoText,
+                            _infoTextStr,
                             style: TextStyle(
                               fontSize: 12.0,
                               color: widget.classicalFooter.infoColor,

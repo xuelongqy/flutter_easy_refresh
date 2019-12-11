@@ -1,5 +1,6 @@
 import 'package:example/page/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -30,6 +31,8 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: [
         FlutterI18nDelegate(
             useCountryCode: true, fallbackFile: 'en', path: 'assets/locale'),
+        GlobalEasyRefreshLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
