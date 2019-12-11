@@ -178,6 +178,24 @@ import 'package:flutter_easyrefresh/material_footer.dart';
   )
 ```
 
+## 添加国际化支持
+```dart
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+....
+  new MaterialApp(
+    localizationsDelegates: [
+      GlobalEasyRefreshLocalizations.delegate,
+      ....
+    ],
+    supportedLocales: [
+        Locale("en", ""),
+        Locale("zh", "CN"),
+        ....
+    ]
+    ....
+  )
+```
+
 # 捐赠
 如果你喜欢我的项目，请在项目右上角 "Star" 一下。你的支持是我最大的鼓励！ ^_^
 你也还可以扫描下面的二维码，或者通过[![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=334PPRBZTY3J8&source=url)，对作者进行打赏。  

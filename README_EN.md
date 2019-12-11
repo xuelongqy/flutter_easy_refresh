@@ -178,6 +178,24 @@ import 'package:flutter_easyrefresh/material_footer.dart';
   )
 ```
 
+## Add globalization support
+```dart
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+....
+  new MaterialApp(
+    localizationsDelegates: [
+      GlobalEasyRefreshLocalizations.delegate,
+      ....
+    ],
+    supportedLocales: [
+        Locale("en", ""),
+        Locale("zh", "CN"),
+        ....
+    ]
+    ....
+  )
+```
+
 # Donation
 If you like my project, please in the upper right corner of the project "Star". Your support is my biggest encouragement! ^_^
 You can also scan the qr code below or [![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=334PPRBZTY3J8&source=url), donation to Author.
