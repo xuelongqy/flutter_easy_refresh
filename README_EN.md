@@ -182,14 +182,17 @@ import 'package:flutter_easyrefresh/material_footer.dart';
 ```dart
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 ....
+  /// Without your current language support
+  /// You can use strings_en.arb for translation and name it strings_{languageCode}_{countryCode}.arb
+  /// then pull requests
   new MaterialApp(
     localizationsDelegates: [
       GlobalEasyRefreshLocalizations.delegate,
       ....
     ],
     supportedLocales: [
-        Locale("en", ""),
-        Locale("zh", "CN"),
+        Locale('en', ''),
+        Locale('zh', 'CN'),
         ....
     ]
     ....
