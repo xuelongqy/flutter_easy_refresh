@@ -384,36 +384,40 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
 
   /// 默认语言
   GlobalEasyRefreshLocalizations _localizations =
-  GlobalEasyRefreshLocalizations();
+      GlobalEasyRefreshLocalizations();
 
   /// 文本
   String get _loadText {
     return widget.classicalFooter.loadText ??
-        GlobalEasyRefreshLocalizations.of(context) == null
+            GlobalEasyRefreshLocalizations.of(context) == null
         ? _localizations.pushToLoad
         : GlobalEasyRefreshLocalizations.of(context).pushToLoad;
   }
+
   String get _loadReadyText {
     return widget.classicalFooter.loadReadyText ??
-        GlobalEasyRefreshLocalizations.of(context) == null
+            GlobalEasyRefreshLocalizations.of(context) == null
         ? _localizations.releaseToLoad
         : GlobalEasyRefreshLocalizations.of(context).releaseToLoad;
   }
+
   String get _loadingText {
     return widget.classicalFooter.loadingText ??
-        GlobalEasyRefreshLocalizations.of(context) == null
+            GlobalEasyRefreshLocalizations.of(context) == null
         ? _localizations.loading
         : GlobalEasyRefreshLocalizations.of(context).loading;
   }
+
   String get _loadedText {
     return widget.classicalFooter.loadedText ??
-        GlobalEasyRefreshLocalizations.of(context) == null
+            GlobalEasyRefreshLocalizations.of(context) == null
         ? _localizations.loaded
         : GlobalEasyRefreshLocalizations.of(context).loaded;
   }
+
   String get _loadFailedText {
     return widget.classicalFooter.loadFailedText ??
-        GlobalEasyRefreshLocalizations.of(context) == null
+            GlobalEasyRefreshLocalizations.of(context) == null
         ? _localizations.loadFailed
         : GlobalEasyRefreshLocalizations.of(context).loadFailed;
   }
@@ -421,17 +425,18 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
   /// 没有更多文字
   String get _noMoreText {
     return widget.classicalFooter.noMoreText ??
-        GlobalEasyRefreshLocalizations.of(context) == null
+            GlobalEasyRefreshLocalizations.of(context) == null
         ? _localizations.noMore
         : GlobalEasyRefreshLocalizations.of(context).noMore;
   }
+
   String get _infoText {
     return widget.classicalFooter.infoText ??
-        GlobalEasyRefreshLocalizations.of(context) == null
+            GlobalEasyRefreshLocalizations.of(context) == null
         ? _localizations.updateAt
         : GlobalEasyRefreshLocalizations.of(context).updateAt;
   }
-  
+
   // 动画
   AnimationController _readyController;
   Animation<double> _readyAnimation;
@@ -473,10 +478,8 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
 
   // 加载结束文字
   String get _finishedText {
-    if (!widget.success)
-      return _loadFailedText;
-    if (widget.noMore)
-      return _noMoreText;
+    if (!widget.success) return _loadFailedText;
+    if (widget.noMore) return _noMoreText;
     return _loadedText;
   }
 
@@ -495,7 +498,8 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
       _dateTime = DateTime.now();
     }
     String fillChar = _dateTime.minute < 10 ? "0" : "";
-    return _infoText.replaceAll("%T", "${_dateTime.hour}:$fillChar${_dateTime.minute}");
+    return _infoText.replaceAll(
+        "%T", "${_dateTime.hour}:$fillChar${_dateTime.minute}");
   }
 
   @override

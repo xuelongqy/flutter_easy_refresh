@@ -118,8 +118,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.supervised_user_circle,
                                     color: Colors.white,
                                   ),
-                                  title:
-                                      S.of(context).qqGroup,
+                                  title: S.of(context).qqGroup,
                                   titleColor: Colors.white,
                                   describe: '554981921',
                                   describeColor: Colors.white,
@@ -133,8 +132,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.http,
                                     color: Colors.white,
                                   ),
-                                  title:
-                                      S.of(context).github,
+                                  title: S.of(context).github,
                                   titleColor: Colors.white,
                                   describe: 'https://github.com/xuelongqy',
                                   describeColor: Colors.white,
@@ -170,16 +168,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   icon: EmptyIcon(),
                                   title: S.of(context).old,
                                   titleColor: Colors.white,
-                                  describe:
-                                      S.of(context).noBald,
+                                  describe: S.of(context).noBald,
                                   describeColor: Colors.white,
                                 ),
                                 ListItem(
                                   icon: EmptyIcon(),
                                   title: S.of(context).city,
                                   titleColor: Colors.white,
-                                  describe:
-                                      S.of(context).chengdu,
+                                  describe: S.of(context).chengdu,
                                   describeColor: Colors.white,
                                 )
                               ],
@@ -201,8 +197,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.phone,
                                     color: Colors.white,
                                   ),
-                                  title:
-                                      S.of(context).phone,
+                                  title: S.of(context).phone,
                                   titleColor: Colors.white,
                                   describe: '18888888888',
                                   describeColor: Colors.white,
@@ -212,8 +207,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.email,
                                     color: Colors.white,
                                   ),
-                                  title:
-                                      S.of(context).email,
+                                  title: S.of(context).email,
                                   titleColor: Colors.white,
                                   describe: 'xuelongqy@foxmail.com',
                                   describeColor: Colors.white,

@@ -33,8 +33,7 @@ class _MorePageState extends State<MorePage>
             delegate: SliverChildListDelegate([
               ListItem(
                 title: S.of(context).joinDiscussion,
-                describe:
-                    S.of(context).joinDiscussionDescribe,
+                describe: S.of(context).joinDiscussionDescribe,
                 icon: CircularIcon(
                   bgColor: Colors.blue,
                   icon: Icons.supervised_user_circle,
@@ -57,8 +56,7 @@ class _MorePageState extends State<MorePage>
               ),
               ListItem(
                 title: S.of(context).supportAuthor,
-                describe:
-                    S.of(context).supportAuthorDescribe,
+                describe: S.of(context).supportAuthorDescribe,
                 icon: CircularIcon(
                   bgColor: Colors.red,
                   icon: Icons.star,

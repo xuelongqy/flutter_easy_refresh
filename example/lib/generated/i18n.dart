@@ -14,7 +14,7 @@ class S implements WidgetsLocalizations {
   static S current;
 
   static const GeneratedLocalizationsDelegate delegate =
-    GeneratedLocalizationsDelegate();
+      GeneratedLocalizationsDelegate();
 
   static S of(BuildContext context) => Localizations.of<S>(context, S);
 
@@ -25,7 +25,8 @@ class S implements WidgetsLocalizations {
   String get aliPay => "AliPay";
   String get appName => "EasyRefresh";
   String get autoLoad => "Auto load";
-  String get autoLoadDescribe => "Automatically refresh the slide to the bottom";
+  String get autoLoadDescribe =>
+      "Automatically refresh the slide to the bottom";
   String get ballPulseDescribe => "Ball pulse style";
   String get basicUse => "BasicUse";
   String get basicUseDescribe => "Basic use of EasyRefresh";
@@ -44,9 +45,11 @@ class S implements WidgetsLocalizations {
   String get completeLoad => "Load done";
   String get completeRefresh => "Refresh done";
   String get controlFinish => "Control finish";
-  String get controlFinishDescribe => "Using Controller to End Asynchronous Tasks";
+  String get controlFinishDescribe =>
+      "Using Controller to End Asynchronous Tasks";
   String get cupertinoDescribe => "ios style";
-  String get customScrollViewDescribe => "List with AppBar Folding, listener example";
+  String get customScrollViewDescribe =>
+      "List with AppBar Folding, listener example";
   String get deliveryDescribe => "Express balloon";
   String get direction => "Direction";
   String get email => "E-Mail";
@@ -55,7 +58,8 @@ class S implements WidgetsLocalizations {
   String get firstRefresh => "First refresh";
   String get firstRefreshDescribe => "First refresh widget";
   String get floatView => "Floating view";
-  String get floatViewDescribe => "At the top or bottom view floating on the list";
+  String get floatViewDescribe =>
+      "At the top or bottom view floating on the list";
   String get github => "Github";
   String get hangzhou => "China - HangZhou";
   String get headerFloat => "Header float";
@@ -69,7 +73,8 @@ class S implements WidgetsLocalizations {
   String get linkHeaderDescribeDescribe => "Customize Header with linker";
   String get listDirection => "List direction";
   String get listEmbed => "List embed";
-  String get listEmbedDescribe => "Use the connector to set the Header and Footer positions";
+  String get listEmbedDescribe =>
+      "Use the connector to set the Header and Footer positions";
   String get listReverse => "List reverse";
   String get loadFailed => "Load failed";
   String get loadFinish => "Load completed";
@@ -79,12 +84,14 @@ class S implements WidgetsLocalizations {
   String get loaded => "Load completed";
   String get loading => "Loading...";
   String get manualControl => "Manual control";
-  String get manualControlDescribe => "Control the timing of completion of refresh and load";
+  String get manualControlDescribe =>
+      "Control the timing of completion of refresh and load";
   String get materialDescribe => "Material design, Android style";
   String get me => "Me";
   String get more => "More";
   String get moreStyle => "More style";
-  String get moreStyleDescribe => "Come soon! You can also refer to the source code customization";
+  String get moreStyleDescribe =>
+      "Come soon! You can also refer to the source code customization";
   String get name => "Name";
   String get nestedScrollViewDescribe => "NestedScrollView example";
   String get noBald => "Has not the bald";
@@ -123,7 +130,8 @@ class S implements WidgetsLocalizations {
   String get swiperDescribe => "Swiper example, resolve sliding conflicts";
   String get tabViewWidgetDescribe => "List and Grid consist of TabBarView";
   String get taskIndependence => "Task independence";
-  String get taskIndependenceDescribe => "Refresh and load tasks are not affected by each other";
+  String get taskIndependenceDescribe =>
+      "Refresh and load tasks are not affected by each other";
   String get taurusDescribe => "Rushing into the sky";
   String get topBouncing => "Top bouncing";
   String get topBouncingDescribe => "Top can be crossed";
@@ -387,7 +395,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
     ];
   }
 
-  LocaleListResolutionCallback listResolution({Locale fallback, bool withCountry = true}) {
+  LocaleListResolutionCallback listResolution(
+      {Locale fallback, bool withCountry = true}) {
     return (List<Locale> locales, Iterable<Locale> supported) {
       if (locales == null || locales.isEmpty) {
         return fallback ?? supported.first;
@@ -397,7 +406,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
     };
   }
 
-  LocaleResolutionCallback resolution({Locale fallback, bool withCountry = true}) {
+  LocaleResolutionCallback resolution(
+      {Locale fallback, bool withCountry = true}) {
     return (Locale locale, Iterable<Locale> supported) {
       return _resolve(locale, fallback, supported, withCountry);
     };
@@ -415,7 +425,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
           S.current = const $zh_CN();
           return SynchronousFuture<S>(S.current);
         default:
-          // NO-OP.
+        // NO-OP.
       }
     }
     S.current = const S();
@@ -431,7 +441,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
   ///
   /// Internal method to resolve a locale from a list of locales.
   ///
-  Locale _resolve(Locale locale, Locale fallback, Iterable<Locale> supported, bool withCountry) {
+  Locale _resolve(Locale locale, Locale fallback, Iterable<Locale> supported,
+      bool withCountry) {
     if (locale == null || !_isSupported(locale, withCountry)) {
       return fallback ?? supported.first;
     }
@@ -464,7 +475,9 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
         }
 
         // If no country requirement is requested, check if this locale has no country.
-        if (true != withCountry && (supportedLocale.countryCode == null || supportedLocale.countryCode.isEmpty)) {
+        if (true != withCountry &&
+            (supportedLocale.countryCode == null ||
+                supportedLocale.countryCode.isEmpty)) {
           return true;
         }
       }
@@ -474,7 +487,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
 }
 
 String getLang(Locale l) => l == null
-  ? null
-  : l.countryCode != null && l.countryCode.isEmpty
-    ? l.languageCode
-    : l.toString();
+    ? null
+    : l.countryCode != null && l.countryCode.isEmpty
+        ? l.languageCode
+        : l.toString();

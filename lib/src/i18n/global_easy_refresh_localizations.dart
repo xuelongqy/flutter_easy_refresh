@@ -14,9 +14,11 @@ class GlobalEasyRefreshLocalizations implements WidgetsLocalizations {
   static GlobalEasyRefreshLocalizations current;
 
   static const GeneratedLocalizationsDelegate delegate =
-  GeneratedLocalizationsDelegate();
+      GeneratedLocalizationsDelegate();
 
-  static GlobalEasyRefreshLocalizations of(BuildContext context) => Localizations.of<GlobalEasyRefreshLocalizations>(context, GlobalEasyRefreshLocalizations);
+  static GlobalEasyRefreshLocalizations of(BuildContext context) =>
+      Localizations.of<GlobalEasyRefreshLocalizations>(
+          context, GlobalEasyRefreshLocalizations);
 
   @override
   TextDirection get textDirection => TextDirection.ltr;
@@ -203,7 +205,8 @@ class $zh_CN extends GlobalEasyRefreshLocalizations {
   String get completeRefresh => "完成刷新";
 }
 
-class GeneratedLocalizationsDelegate extends LocalizationsDelegate<GlobalEasyRefreshLocalizations> {
+class GeneratedLocalizationsDelegate
+    extends LocalizationsDelegate<GlobalEasyRefreshLocalizations> {
   const GeneratedLocalizationsDelegate();
 
   List<Locale> get supportedLocales {
@@ -216,7 +219,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<GlobalEasyRef
     ];
   }
 
-  LocaleListResolutionCallback listResolution({Locale fallback, bool withCountry = true}) {
+  LocaleListResolutionCallback listResolution(
+      {Locale fallback, bool withCountry = true}) {
     return (List<Locale> locales, Iterable<Locale> supported) {
       if (locales == null || locales.isEmpty) {
         return fallback ?? supported.first;
@@ -226,7 +230,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<GlobalEasyRef
     };
   }
 
-  LocaleResolutionCallback resolution({Locale fallback, bool withCountry = true}) {
+  LocaleResolutionCallback resolution(
+      {Locale fallback, bool withCountry = true}) {
     return (Locale locale, Iterable<Locale> supported) {
       return _resolve(locale, fallback, supported, withCountry);
     };
@@ -239,25 +244,32 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<GlobalEasyRef
       switch (lang) {
         case "zh_HK":
           GlobalEasyRefreshLocalizations.current = const $zh_HK();
-          return SynchronousFuture<GlobalEasyRefreshLocalizations>(GlobalEasyRefreshLocalizations.current);
+          return SynchronousFuture<GlobalEasyRefreshLocalizations>(
+              GlobalEasyRefreshLocalizations.current);
         case "zh_TW":
           GlobalEasyRefreshLocalizations.current = const $zh_TW();
-          return SynchronousFuture<GlobalEasyRefreshLocalizations>(GlobalEasyRefreshLocalizations.current);
+          return SynchronousFuture<GlobalEasyRefreshLocalizations>(
+              GlobalEasyRefreshLocalizations.current);
         case "zh_MO":
           GlobalEasyRefreshLocalizations.current = const $zh_MO();
-          return SynchronousFuture<GlobalEasyRefreshLocalizations>(GlobalEasyRefreshLocalizations.current);
+          return SynchronousFuture<GlobalEasyRefreshLocalizations>(
+              GlobalEasyRefreshLocalizations.current);
         case "en":
           GlobalEasyRefreshLocalizations.current = const $en();
-          return SynchronousFuture<GlobalEasyRefreshLocalizations>(GlobalEasyRefreshLocalizations.current);
+          return SynchronousFuture<GlobalEasyRefreshLocalizations>(
+              GlobalEasyRefreshLocalizations.current);
         case "zh_CN":
           GlobalEasyRefreshLocalizations.current = const $zh_CN();
-          return SynchronousFuture<GlobalEasyRefreshLocalizations>(GlobalEasyRefreshLocalizations.current);
+          return SynchronousFuture<GlobalEasyRefreshLocalizations>(
+              GlobalEasyRefreshLocalizations.current);
         default:
         // NO-OP.
       }
     }
-    GlobalEasyRefreshLocalizations.current = const GlobalEasyRefreshLocalizations();
-    return SynchronousFuture<GlobalEasyRefreshLocalizations>(GlobalEasyRefreshLocalizations.current);
+    GlobalEasyRefreshLocalizations.current =
+        const GlobalEasyRefreshLocalizations();
+    return SynchronousFuture<GlobalEasyRefreshLocalizations>(
+        GlobalEasyRefreshLocalizations.current);
   }
 
   @override
@@ -269,7 +281,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<GlobalEasyRef
   ///
   /// Internal method to resolve a locale from a list of locales.
   ///
-  Locale _resolve(Locale locale, Locale fallback, Iterable<Locale> supported, bool withCountry) {
+  Locale _resolve(Locale locale, Locale fallback, Iterable<Locale> supported,
+      bool withCountry) {
     if (locale == null || !_isSupported(locale, withCountry)) {
       return fallback ?? supported.first;
     }
@@ -302,7 +315,9 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<GlobalEasyRef
         }
 
         // If no country requirement is requested, check if this locale has no country.
-        if (true != withCountry && (supportedLocale.countryCode == null || supportedLocale.countryCode.isEmpty)) {
+        if (true != withCountry &&
+            (supportedLocale.countryCode == null ||
+                supportedLocale.countryCode.isEmpty)) {
           return true;
         }
       }
@@ -314,5 +329,5 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<GlobalEasyRef
 String getLang(Locale l) => l == null
     ? null
     : l.countryCode != null && l.countryCode.isEmpty
-    ? l.languageCode
-    : l.toString();
+        ? l.languageCode
+        : l.toString();

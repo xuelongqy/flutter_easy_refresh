@@ -237,8 +237,7 @@ class _BasicPageState extends State<BasicPage> {
                 // 无限加载
                 ListItem(
                   title: S.of(context).infiniteLoad,
-                  describe:
-                      S.of(context).infiniteLoadDescribe,
+                  describe: S.of(context).infiniteLoadDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _enableInfiniteLoad,
@@ -255,8 +254,7 @@ class _BasicPageState extends State<BasicPage> {
                 // 控制结束
                 ListItem(
                   title: S.of(context).controlFinish,
-                  describe:
-                      S.of(context).controlFinishDescribe,
+                  describe: S.of(context).controlFinishDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _enableControlFinish,
@@ -288,8 +286,7 @@ class _BasicPageState extends State<BasicPage> {
                 // Header浮动
                 ListItem(
                   title: S.of(context).headerFloat,
-                  describe:
-                      S.of(context).headerFloatDescribe,
+                  describe: S.of(context).headerFloatDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _headerFloat,
@@ -321,8 +318,7 @@ class _BasicPageState extends State<BasicPage> {
                 // 刷新开关
                 ListItem(
                   title: S.of(context).refreshSwitch,
-                  describe:
-                      S.of(context).refreshSwitchDescribe,
+                  describe: S.of(context).refreshSwitchDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _enableRefresh,
@@ -341,8 +337,7 @@ class _BasicPageState extends State<BasicPage> {
                 // 加载开关
                 ListItem(
                   title: S.of(context).loadSwitch,
-                  describe:
-                      S.of(context).loadSwitchDescribe,
+                  describe: S.of(context).loadSwitchDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _enableLoad,
@@ -361,8 +356,7 @@ class _BasicPageState extends State<BasicPage> {
                 // 顶部回弹
                 ListItem(
                   title: S.of(context).topBouncing,
-                  describe:
-                      S.of(context).topBouncingDescribe,
+                  describe: S.of(context).topBouncingDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _topBouncing,
@@ -380,8 +374,7 @@ class _BasicPageState extends State<BasicPage> {
                 // 底部回弹
                 ListItem(
                   title: S.of(context).bottomBouncing,
-                  describe:
-                      S.of(context).bottomBouncingDescribe,
+                  describe: S.of(context).bottomBouncingDescribe,
                   rightWidget: Center(
                     child: Switch(
                       value: _bottomBouncing,

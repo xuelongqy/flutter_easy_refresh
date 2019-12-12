@@ -46,8 +46,7 @@ class _StylePageState extends State<StylePage>
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return BasicPage(
-                          S.of(context).classic);
+                      return BasicPage(S.of(context).classic);
                     },
                   ));
                 },
@@ -91,8 +90,7 @@ class _StylePageState extends State<StylePage>
               // 弹出圆圈
               ListItem(
                 title: 'BezierCircle',
-                describe:
-                    S.of(context).bezierCircleDescribe,
+                describe: S.of(context).bezierCircleDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -108,8 +106,7 @@ class _StylePageState extends State<StylePage>
               // BezierHourGlass
               ListItem(
                 title: 'BezierHourGlass',
-                describe:
-                    S.of(context).bezierHourGlassDescribe,
+                describe: S.of(context).bezierHourGlassDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {

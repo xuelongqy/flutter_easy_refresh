@@ -35,7 +35,7 @@
 >Add: Custom style support gesture issues#207  
 >Fix: List height is not greater than indicator height, Footer reverse issues#160  
 
-## Next
+## V 2.0.6
 >Support: Flutter v1.12 and above  
 >Add: Globalization  
 >Fix: success setting to false in case of infinite loading  

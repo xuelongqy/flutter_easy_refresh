@@ -47,8 +47,7 @@ class _SamplePageState extends State<SamplePage>
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return BasicPage(
-                          S.of(context).basicUse);
+                      return BasicPage(S.of(context).basicUse);
                     },
                   ));
                 },
@@ -76,8 +75,7 @@ class _SamplePageState extends State<SamplePage>
               //  NestedScrollView
               ListItem(
                 title: 'NestedScrollView',
-                describe:
-                    S.of(context).nestedScrollViewDescribe,
+                describe: S.of(context).nestedScrollViewDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -109,8 +107,7 @@ class _SamplePageState extends State<SamplePage>
               //  首次刷新
               ListItem(
                 title: S.of(context).firstRefresh,
-                describe:
-                    S.of(context).firstRefreshDescribe,
+                describe: S.of(context).firstRefreshDescribe,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
