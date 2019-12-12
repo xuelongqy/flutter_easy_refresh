@@ -79,5 +79,4 @@ flutter:
   # see https://flutter.io/custom-fonts/#from-packages
   assets:
     - assets/image/
-    - assets/locale/
     - assets/flare/
