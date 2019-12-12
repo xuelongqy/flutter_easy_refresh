@@ -388,53 +388,60 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
 
   /// 文本
   String get _loadText {
-    return widget.classicalFooter.loadText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.pushToLoad
-        : GlobalEasyRefreshLocalizations.of(context).pushToLoad;
+    return widget.classicalFooter.loadText != null
+        ? widget.classicalFooter.loadText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.pushToLoad
+            : GlobalEasyRefreshLocalizations.of(context).pushToLoad;
   }
 
   String get _loadReadyText {
-    return widget.classicalFooter.loadReadyText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.releaseToLoad
-        : GlobalEasyRefreshLocalizations.of(context).releaseToLoad;
+    return widget.classicalFooter.loadReadyText != null
+        ? widget.classicalFooter.loadReadyText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.releaseToLoad
+            : GlobalEasyRefreshLocalizations.of(context).releaseToLoad;
   }
 
   String get _loadingText {
-    return widget.classicalFooter.loadingText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.loading
-        : GlobalEasyRefreshLocalizations.of(context).loading;
+    return widget.classicalFooter.loadingText != null
+        ? widget.classicalFooter.loadingText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.loading
+            : GlobalEasyRefreshLocalizations.of(context).loading;
   }
 
   String get _loadedText {
-    return widget.classicalFooter.loadedText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.loaded
-        : GlobalEasyRefreshLocalizations.of(context).loaded;
+    return widget.classicalFooter.loadedText != null
+        ? widget.classicalFooter.loadedText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.loaded
+            : GlobalEasyRefreshLocalizations.of(context).loaded;
   }
 
   String get _loadFailedText {
-    return widget.classicalFooter.loadFailedText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.loadFailed
-        : GlobalEasyRefreshLocalizations.of(context).loadFailed;
+    return widget.classicalFooter.loadFailedText != null
+        ? widget.classicalFooter.loadFailedText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.loadFailed
+            : GlobalEasyRefreshLocalizations.of(context).loadFailed;
   }
 
   /// 没有更多文字
   String get _noMoreText {
-    return widget.classicalFooter.noMoreText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.noMore
-        : GlobalEasyRefreshLocalizations.of(context).noMore;
+    return widget.classicalFooter.noMoreText != null
+        ? widget.classicalFooter.noMoreText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.noMore
+            : GlobalEasyRefreshLocalizations.of(context).noMore;
   }
 
   String get _infoText {
-    return widget.classicalFooter.infoText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.updateAt
-        : GlobalEasyRefreshLocalizations.of(context).updateAt;
+    return widget.classicalFooter.infoText != null
+        ? widget.classicalFooter.infoText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.updateAt
+            : GlobalEasyRefreshLocalizations.of(context).updateAt;
   }
 
   // 动画
