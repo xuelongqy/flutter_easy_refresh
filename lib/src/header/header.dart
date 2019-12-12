@@ -453,52 +453,59 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
 
   /// 文本
   String get _refreshText {
-    return widget.classicalHeader.refreshText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.pullToRefresh
-        : GlobalEasyRefreshLocalizations.of(context).pullToRefresh;
+    return widget.classicalHeader.refreshText != null
+        ? widget.classicalHeader.refreshText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.pullToRefresh
+            : GlobalEasyRefreshLocalizations.of(context).pullToRefresh;
   }
 
   String get _refreshReadyText {
-    return widget.classicalHeader.refreshReadyText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.releaseToRefresh
-        : GlobalEasyRefreshLocalizations.of(context).releaseToRefresh;
+    return widget.classicalHeader.refreshReadyText != null
+        ? widget.classicalHeader.refreshReadyText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.releaseToRefresh
+            : GlobalEasyRefreshLocalizations.of(context).releaseToRefresh;
   }
 
   String get _refreshingText {
-    return widget.classicalHeader.refreshingText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.refreshing
-        : GlobalEasyRefreshLocalizations.of(context).refreshing;
+    return widget.classicalHeader.refreshingText != null
+        ? widget.classicalHeader.refreshingText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.refreshing
+            : GlobalEasyRefreshLocalizations.of(context).refreshing;
   }
 
   String get _refreshedText {
-    return widget.classicalHeader.refreshedText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.refreshed
-        : GlobalEasyRefreshLocalizations.of(context).refreshed;
+    return widget.classicalHeader.refreshedText != null
+        ? widget.classicalHeader.refreshedText != null
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.refreshed
+            : GlobalEasyRefreshLocalizations.of(context).refreshed;
   }
 
   String get _refreshFailedText {
-    return widget.classicalHeader.refreshFailedText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.refreshFailed
-        : GlobalEasyRefreshLocalizations.of(context).refreshFailed;
+    return widget.classicalHeader.refreshFailedText != null
+        ? widget.classicalHeader.refreshFailedText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.refreshFailed
+            : GlobalEasyRefreshLocalizations.of(context).refreshFailed;
   }
 
   String get _noMoreText {
-    return widget.classicalHeader.noMoreText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.noMore
-        : GlobalEasyRefreshLocalizations.of(context).noMore;
+    return widget.classicalHeader.noMoreText != null
+        ? widget.classicalHeader.noMoreText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.noMore
+            : GlobalEasyRefreshLocalizations.of(context).noMore;
   }
 
   String get _infoText {
-    return widget.classicalHeader.infoText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.updateAt
-        : GlobalEasyRefreshLocalizations.of(context).updateAt;
+    return widget.classicalHeader.infoText != null
+        ? widget.classicalHeader.infoText
+        : GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.updateAt
+            : GlobalEasyRefreshLocalizations.of(context).updateAt;
   }
 
   // 是否刷新完成
