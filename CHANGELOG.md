@@ -39,3 +39,6 @@
 >Support: Flutter v1.12 and above  
 >Add: Globalization  
 >Fix: success setting to false in case of infinite loading  
+
+## V 2.0.7
+>Fixed: Type error after setting text in classic style issues#217  
