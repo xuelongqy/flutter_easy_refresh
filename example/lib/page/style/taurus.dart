@@ -13,6 +13,7 @@ class TaurusPage extends StatefulWidget {
     return TaurusPageState();
   }
 }
+
 class TaurusPageState extends State<TaurusPage> {
   // 总数
   int _count = 20;
@@ -44,7 +45,7 @@ class TaurusPageState extends State<TaurusPage> {
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 return SampleListItem();
               },
               childCount: _count,

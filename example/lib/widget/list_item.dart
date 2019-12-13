@@ -49,16 +49,16 @@ class _ListItemState extends State<ListItem> {
             children: <Widget>[
               widget.icon != null
                   ? Container(
-                padding: EdgeInsets.all(14.0),
-                child: SizedBox(
-                  height: 32.0,
-                  width: 32.0,
-                  child: widget.icon,
-                ),
-              )
+                      padding: EdgeInsets.all(14.0),
+                      child: SizedBox(
+                        height: 32.0,
+                        width: 32.0,
+                        child: widget.icon,
+                      ),
+                    )
                   : Container(
-                width: 14.0,
-              ),
+                      width: 14.0,
+                    ),
               Expanded(
                 flex: 1,
                 child: Column(
@@ -67,21 +67,21 @@ class _ListItemState extends State<ListItem> {
                   children: <Widget>[
                     widget.title != null
                         ? Text(
-                      widget.title,
-                      style: TextStyle(
-                        color: widget.titleColor,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
+                            widget.title,
+                            style: TextStyle(
+                              color: widget.titleColor,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
                         : Container(),
                     widget.describe != null
                         ? Text(
-                      widget.describe,
-                      maxLines: 2,
-                      style: TextStyle(
-                          color: widget.describeColor, fontSize: 12.0),
-                    )
+                            widget.describe,
+                            maxLines: 2,
+                            style: TextStyle(
+                                color: widget.describeColor, fontSize: 12.0),
+                          )
                         : Container(),
                   ],
                 ),

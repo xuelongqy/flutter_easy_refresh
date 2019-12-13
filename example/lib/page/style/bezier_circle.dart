@@ -13,6 +13,7 @@ class BezierCirclePage extends StatefulWidget {
     return BezierCirclePageState();
   }
 }
+
 class BezierCirclePageState extends State<BezierCirclePage> {
   // 总数
   int _count = 20;
@@ -44,7 +45,7 @@ class BezierCirclePageState extends State<BezierCirclePage> {
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 return SampleListItem();
               },
               childCount: _count,

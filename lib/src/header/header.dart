@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../../easy_refresh.dart';
+import '../i18n/global_easy_refresh_localizations.dart';
 
 /// Header
 abstract class Header {
@@ -80,6 +81,71 @@ abstract class Header {
       bool noMore);
 }
 
+/// 通知器Header
+class NotificationHeader extends Header {
+  /// Header
+  final Header header;
+
+  /// 通知器
+  final LinkHeaderNotifier notifier;
+
+  NotificationHeader({
+    @required this.header,
+    this.notifier,
+  })  : assert(
+          header != null,
+          'A non-null Header must be provided to a NotifierHeader.',
+        ),
+        super(
+          extent: header.extent,
+          triggerDistance: header.triggerDistance,
+          float: header.float,
+          completeDuration: header.completeDuration,
+          enableInfiniteRefresh: header.enableInfiniteRefresh,
+          enableHapticFeedback: header.enableHapticFeedback,
+        );
+
+  @override
+  Widget contentBuilder(
+      BuildContext context,
+      RefreshMode refreshState,
+      double pulledExtent,
+      double refreshTriggerPullDistance,
+      double refreshIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteRefresh,
+      bool success,
+      bool noMore) {
+    // 发起通知
+    this.notifier?.contentBuilder(
+        context,
+        refreshState,
+        pulledExtent,
+        refreshTriggerPullDistance,
+        refreshIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteRefresh,
+        success,
+        noMore);
+    return header.contentBuilder(
+        context,
+        refreshState,
+        pulledExtent,
+        refreshTriggerPullDistance,
+        refreshIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteRefresh,
+        success,
+        noMore);
+  }
+}
+
 /// 通用Header
 class CustomHeader extends Header {
   /// Header构造器
@@ -130,7 +196,7 @@ class CustomHeader extends Header {
   }
 }
 
-/// 连接通知器
+/// 链接通知器
 class LinkHeaderNotifier extends ChangeNotifier {
   BuildContext context;
   RefreshMode refreshState = RefreshMode.inactive;
@@ -173,7 +239,7 @@ class LinkHeaderNotifier extends ChangeNotifier {
   }
 }
 
-/// 连接器Header
+/// 链接器Header
 class LinkHeader extends Header {
   final LinkHeaderNotifier linkNotifier;
 
@@ -265,22 +331,22 @@ class ClassicalHeader extends Header {
   final Color infoColor;
 
   ClassicalHeader({
-    extent = 60.0,
-    triggerDistance = 70.0,
-    float = false,
-    completeDuration = const Duration(seconds: 1),
-    enableInfiniteRefresh = false,
-    enableHapticFeedback = true,
+    double extent = 60.0,
+    double triggerDistance = 70.0,
+    bool float = false,
+    Duration completeDuration = const Duration(seconds: 1),
+    bool enableInfiniteRefresh = false,
+    bool enableHapticFeedback = true,
     this.key,
     this.alignment,
-    this.refreshText: "Pull to refresh",
-    this.refreshReadyText: "Release to refresh",
-    this.refreshingText: "Refreshing...",
-    this.refreshedText: "Refresh completed",
-    this.refreshFailedText: "Refresh failed",
-    this.noMoreText: "No more",
+    this.refreshText,
+    this.refreshReadyText,
+    this.refreshingText,
+    this.refreshedText,
+    this.refreshFailedText,
+    this.noMoreText,
     this.showInfo: true,
-    this.infoText: "Updated at %T",
+    this.infoText,
     this.bgColor: Colors.transparent,
     this.textColor: Colors.black,
     this.infoColor: Colors.teal,
@@ -381,6 +447,60 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
     }
   }
 
+  /// 默认语言
+  GlobalEasyRefreshLocalizations _localizations =
+      GlobalEasyRefreshLocalizations();
+
+  /// 文本
+  String get _refreshText {
+    return widget.classicalHeader.refreshText ??
+            GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.pullToRefresh
+        : GlobalEasyRefreshLocalizations.of(context).pullToRefresh;
+  }
+
+  String get _refreshReadyText {
+    return widget.classicalHeader.refreshReadyText ??
+            GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.releaseToRefresh
+        : GlobalEasyRefreshLocalizations.of(context).releaseToRefresh;
+  }
+
+  String get _refreshingText {
+    return widget.classicalHeader.refreshingText ??
+            GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.refreshing
+        : GlobalEasyRefreshLocalizations.of(context).refreshing;
+  }
+
+  String get _refreshedText {
+    return widget.classicalHeader.refreshedText ??
+            GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.refreshed
+        : GlobalEasyRefreshLocalizations.of(context).refreshed;
+  }
+
+  String get _refreshFailedText {
+    return widget.classicalHeader.refreshFailedText ??
+            GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.refreshFailed
+        : GlobalEasyRefreshLocalizations.of(context).refreshFailed;
+  }
+
+  String get _noMoreText {
+    return widget.classicalHeader.noMoreText ??
+            GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.noMore
+        : GlobalEasyRefreshLocalizations.of(context).noMore;
+  }
+
+  String get _infoText {
+    return widget.classicalHeader.infoText ??
+            GlobalEasyRefreshLocalizations.of(context) == null
+        ? _localizations.updateAt
+        : GlobalEasyRefreshLocalizations.of(context).updateAt;
+  }
+
   // 是否刷新完成
   bool _refreshFinish = false;
 
@@ -418,39 +538,39 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
 
   // 显示文字
   String get _showText {
-    if (widget.noMore) return widget.classicalHeader.noMoreText;
+    if (widget.noMore) return _noMoreText;
     if (widget.enableInfiniteRefresh) {
       if (widget.refreshState == RefreshMode.refreshed ||
           widget.refreshState == RefreshMode.inactive ||
           widget.refreshState == RefreshMode.drag) {
-        return widget.classicalHeader.refreshedText;
+        return _finishedText;
       } else {
-        return widget.classicalHeader.refreshingText;
+        return _refreshingText;
       }
     }
     switch (widget.refreshState) {
       case RefreshMode.refresh:
-        return widget.classicalHeader.refreshingText;
+        return _refreshingText;
       case RefreshMode.armed:
-        return widget.classicalHeader.refreshingText;
+        return _refreshingText;
       case RefreshMode.refreshed:
         return _finishedText;
       case RefreshMode.done:
         return _finishedText;
       default:
         if (overTriggerDistance) {
-          return widget.classicalHeader.refreshReadyText;
+          return _refreshReadyText;
         } else {
-          return widget.classicalHeader.refreshText;
+          return _refreshText;
         }
     }
   }
 
   // 刷新结束文字
   String get _finishedText {
-    if (!widget.success) return widget.classicalHeader.refreshFailedText;
-    if (widget.noMore) return widget.classicalHeader.noMoreText;
-    return widget.classicalHeader.refreshedText;
+    if (!widget.success) return _refreshFailedText;
+    if (widget.noMore) return _noMoreText;
+    return _refreshedText;
   }
 
   // 刷新结束图标
@@ -464,13 +584,13 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
   DateTime _dateTime;
 
   // 获取更多信息
-  String get _infoText {
+  String get _infoTextStr {
     if (widget.refreshState == RefreshMode.refreshed) {
       _dateTime = DateTime.now();
     }
     String fillChar = _dateTime.minute < 10 ? "0" : "";
-    return widget.classicalHeader.infoText
-        .replaceAll("%T", "${_dateTime.hour}:$fillChar${_dateTime.minute}");
+    return _infoText.replaceAll(
+        "%T", "${_dateTime.hour}:$fillChar${_dateTime.minute}");
   }
 
   @override
@@ -687,7 +807,7 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
                             top: 2.0,
                           ),
                           child: Text(
-                            _infoText,
+                            _infoTextStr,
                             style: TextStyle(
                               fontSize: 12.0,
                               color: widget.classicalHeader.infoColor,

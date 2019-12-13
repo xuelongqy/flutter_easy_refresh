@@ -13,6 +13,7 @@ class BallPulsePage extends StatefulWidget {
     return BallPulsePageState();
   }
 }
+
 class BallPulsePageState extends State<BallPulsePage> {
   // 总数
   int _count = 20;
@@ -25,8 +26,8 @@ class BallPulsePageState extends State<BallPulsePage> {
         backgroundColor: Colors.white,
       ),
       body: EasyRefresh.custom(
-        header: BallPulseHeader(backgroundColor: Colors.amber),
-        footer: BallPulseFooter(backgroundColor: Colors.redAccent),
+        header: BallPulseHeader(),
+        footer: BallPulseFooter(),
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 2), () {
             setState(() {
@@ -44,7 +45,7 @@ class BallPulsePageState extends State<BallPulsePage> {
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 return SampleListItem();
               },
               childCount: _count,

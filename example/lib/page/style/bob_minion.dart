@@ -4,7 +4,7 @@ import 'package:example/header/bob_minion_header.dart';
 import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:example/generated/i18n.dart';
 
 /// 小黄人(Bob)样式
 class BobMinionPage extends StatefulWidget {
@@ -13,6 +13,7 @@ class BobMinionPage extends StatefulWidget {
     return BobMinionPageState();
   }
 }
+
 class BobMinionPageState extends State<BobMinionPage> {
   // 总数
   int _count = 20;
@@ -23,7 +24,7 @@ class BobMinionPageState extends State<BobMinionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(FlutterI18n.translate(context, 'bobMinion')),
+        title: Text(S.of(context).bobMinion),
         backgroundColor: Colors.white,
         actions: <Widget>[
           PopupMenuButton<BobMinionAnimation>(
@@ -32,7 +33,8 @@ class BobMinionPageState extends State<BobMinionPage> {
                 _animation = value;
               });
             },
-            itemBuilder: (BuildContext context) => <PopupMenuItem<BobMinionAnimation>>[
+            itemBuilder: (BuildContext context) =>
+                <PopupMenuItem<BobMinionAnimation>>[
               const PopupMenuItem<BobMinionAnimation>(
                 value: BobMinionAnimation.Stand,
                 child: Text('Stand'),
@@ -54,9 +56,7 @@ class BobMinionPageState extends State<BobMinionPage> {
         ],
       ),
       body: EasyRefresh.custom(
-        header: BobMinionHeader(
-          animation: _animation
-        ),
+        header: BobMinionHeader(animation: _animation),
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 2), () {
             setState(() {
@@ -74,7 +74,7 @@ class BobMinionPageState extends State<BobMinionPage> {
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 return SampleListItem();
               },
               childCount: _count,

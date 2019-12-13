@@ -35,34 +35,50 @@ class SpaceHeader extends Header {
   SpaceHeader({
     this.key,
     bool enableHapticFeedback = false,
-  }): super(
-    extent: 140.0,
-    triggerDistance: 160.0,
-    float: false,
-    enableHapticFeedback: enableHapticFeedback,
-    enableInfiniteRefresh: false,
-    completeDuration: const Duration(seconds: 1),
-  );
+  }) : super(
+          extent: 140.0,
+          triggerDistance: 160.0,
+          float: false,
+          enableHapticFeedback: enableHapticFeedback,
+          enableInfiniteRefresh: false,
+          completeDuration: const Duration(seconds: 1),
+        );
 
   @override
-  Widget contentBuilder(BuildContext context, RefreshMode refreshState,
-      double pulledExtent, double refreshTriggerPullDistance,
-      double refreshIndicatorExtent, AxisDirection axisDirection,
-      bool float, Duration completeDuration, bool enableInfiniteRefresh,
-      bool success, bool noMore) {
+  Widget contentBuilder(
+      BuildContext context,
+      RefreshMode refreshState,
+      double pulledExtent,
+      double refreshTriggerPullDistance,
+      double refreshIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteRefresh,
+      bool success,
+      bool noMore) {
     // 不能为水平方向以及反向
     assert(axisDirection == AxisDirection.down,
-    'Widget can only be vertical and cannot be reversed'
-    );
-    linkNotifier.contentBuilder(context, refreshState, pulledExtent,
-        refreshTriggerPullDistance, refreshIndicatorExtent, axisDirection,
-        float, completeDuration, enableInfiniteRefresh, success, noMore);
+        'Widget can only be vertical and cannot be reversed');
+    linkNotifier.contentBuilder(
+        context,
+        refreshState,
+        pulledExtent,
+        refreshTriggerPullDistance,
+        refreshIndicatorExtent,
+        axisDirection,
+        float,
+        completeDuration,
+        enableInfiniteRefresh,
+        success,
+        noMore);
     return SpaceHeaderWidget(
       key: key,
       linkNotifier: linkNotifier,
     );
   }
 }
+
 /// 星空组件
 class SpaceHeaderWidget extends StatefulWidget {
   final LinkHeaderNotifier linkNotifier;
@@ -77,8 +93,9 @@ class SpaceHeaderWidget extends StatefulWidget {
     return SpaceHeaderWidgetState();
   }
 }
+
 class SpaceHeaderWidgetState extends State<SpaceHeaderWidget>
-    with FlareController{
+    with FlareController {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
   double get _indicatorExtent => widget.linkNotifier.refreshIndicatorExtent;
@@ -97,7 +114,6 @@ class SpaceHeaderWidgetState extends State<SpaceHeaderWidget>
   void initState() {
     super.initState();
   }
-
 
   @override
   bool advance(FlutterActorArtboard artboard, double elapsed) {
@@ -128,16 +144,16 @@ class SpaceHeaderWidgetState extends State<SpaceHeaderWidget>
     }
     return true;
   }
-  
+
   void initialize(FlutterActorArtboard actor) {
     _pullAnimation = actor.getAnimation("pull");
     _successAnimation = actor.getAnimation("success");
     _loadingAnimation = actor.getAnimation("loading");
     _cometAnimation = actor.getAnimation("idle comet");
   }
-  
+
   @override
-  void setViewTransform(Mat2D viewTransform) { }
+  void setViewTransform(Mat2D viewTransform) {}
 
   @override
   Widget build(BuildContext context) {

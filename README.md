@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v2.0.4-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/badge/pub-v2.0.6-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
 
 ## [English](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/README_EN.md) | 中文
 
@@ -80,7 +80,7 @@ Demo：[下载 APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/ma
 ```
 //pub方式
 dependencies:
-  flutter_easyrefresh: ^2.0.4
+  flutter_easyrefresh: ^2.0.6
 
 //导入方式
 dependencies:
@@ -174,6 +174,27 @@ import 'package:flutter_easyrefresh/material_footer.dart';
     header: MaterialHeader(),
     footer: MaterialFooter(),
     child: ScrollView(),
+    ....
+  )
+```
+
+## 添加国际化支持
+```dart
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+....
+  /// 如果没有您当前的语言支持
+  /// 您可以使用strings_en.arb进行翻译并命名为strings_{languageCode}_{countryCode}.arb
+  /// 然后进行Pull requests
+  new MaterialApp(
+    localizationsDelegates: [
+      GlobalEasyRefreshLocalizations.delegate,
+      ....
+    ],
+    supportedLocales: [
+        Locale('en', ''),
+        Locale('zh', 'CN'),
+        ....
+    ]
     ....
   )
 ```

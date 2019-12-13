@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.qingyi.easyrefresh.example">
 
     <!-- The INTERNET permission is required for development. Specifically,
@@ -19,7 +20,8 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="EasyRefresh"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -39,5 +41,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
     </application>
 </manifest>
