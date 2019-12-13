@@ -389,52 +389,52 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
   /// 文本
   String get _loadText {
     return widget.classicalFooter.loadText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.pushToLoad
-        : GlobalEasyRefreshLocalizations.of(context).pushToLoad;
+        (GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.pushToLoad
+            : GlobalEasyRefreshLocalizations.of(context).pushToLoad);
   }
 
   String get _loadReadyText {
     return widget.classicalFooter.loadReadyText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.releaseToLoad
-        : GlobalEasyRefreshLocalizations.of(context).releaseToLoad;
+        (GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.releaseToLoad
+            : GlobalEasyRefreshLocalizations.of(context).releaseToLoad);
   }
 
   String get _loadingText {
     return widget.classicalFooter.loadingText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.loading
-        : GlobalEasyRefreshLocalizations.of(context).loading;
+        (GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.loading
+            : GlobalEasyRefreshLocalizations.of(context).loading);
   }
 
   String get _loadedText {
     return widget.classicalFooter.loadedText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.loaded
-        : GlobalEasyRefreshLocalizations.of(context).loaded;
+        (GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.loaded
+            : GlobalEasyRefreshLocalizations.of(context).loaded);
   }
 
   String get _loadFailedText {
     return widget.classicalFooter.loadFailedText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.loadFailed
-        : GlobalEasyRefreshLocalizations.of(context).loadFailed;
+        (GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.loadFailed
+            : GlobalEasyRefreshLocalizations.of(context).loadFailed);
   }
 
   /// 没有更多文字
   String get _noMoreText {
     return widget.classicalFooter.noMoreText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.noMore
-        : GlobalEasyRefreshLocalizations.of(context).noMore;
+        (GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.noMore
+            : GlobalEasyRefreshLocalizations.of(context).noMore);
   }
 
   String get _infoText {
     return widget.classicalFooter.infoText ??
-            GlobalEasyRefreshLocalizations.of(context) == null
-        ? _localizations.updateAt
-        : GlobalEasyRefreshLocalizations.of(context).updateAt;
+        (GlobalEasyRefreshLocalizations.of(context) == null
+            ? _localizations.updateAt
+            : GlobalEasyRefreshLocalizations.of(context).updateAt);
   }
 
   // 动画
