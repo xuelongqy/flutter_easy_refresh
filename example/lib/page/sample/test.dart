@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
@@ -11,18 +10,28 @@ class TestPage extends StatefulWidget {
     return TestPageState();
   }
 }
+
 class TestPageState extends State<TestPage> {
   // 总数
-  int _count = 20;
+  int _count = 2;
   // 控制器
   EasyRefreshController _controller;
+
+  // 通知器
+  LinkHeaderNotifier _headerNotifier;
+  LinkFooterNotifier _footerNotifier;
 
   @override
   void initState() {
     super.initState();
+    _headerNotifier = LinkHeaderNotifier();
+    _footerNotifier = LinkFooterNotifier();
     _controller = EasyRefreshController();
-    Future.delayed(Duration(seconds: 1), () {
-      _controller.callRefresh();
+    _headerNotifier.addListener(() {
+      print(_headerNotifier.refreshState);
+    });
+    _footerNotifier.addListener(() {
+      print(_footerNotifier.loadState);
     });
   }
 
@@ -30,6 +39,8 @@ class TestPageState extends State<TestPage> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+    _headerNotifier.dispose();
+    _footerNotifier.dispose();
   }
 
   @override
@@ -40,6 +51,14 @@ class TestPageState extends State<TestPage> {
         backgroundColor: Colors.white,
       ),
       body: EasyRefresh(
+        header: NotificationHeader(
+          header: ClassicalHeader(),
+          notifier: _headerNotifier,
+        ),
+        footer: NotificationFooter(
+          footer: ClassicalFooter(),
+          notifier: _footerNotifier,
+        ),
         controller: _controller,
         onRefresh: () async {
           print('refresh');
@@ -53,11 +72,13 @@ class TestPageState extends State<TestPage> {
           print('load');
           await Future.delayed(Duration(seconds: 2), () {
             setState(() {
-              _count += 20;
+              _count += 1;
             });
           });
         },
-        child: Container(),
+        child: Container(
+          child: Text('Text'),
+        ),
       ),
     );
   }

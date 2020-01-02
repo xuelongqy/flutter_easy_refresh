@@ -1,0 +1,18 @@
+{
+  "pullToRefresh": "Pull to refresh",
+  "releaseToRefresh": "Release to refresh",
+  "refreshing": "Refreshing...",
+  "refreshFinish": "Refresh completed",
+  "refreshFailed": "Refresh failed",
+  "refreshed": "Refresh completed",
+  "pushToLoad": "Pull to load",
+  "releaseToLoad": "Release to load",
+  "loading": "Loading...",
+  "loadFinish": "Load completed",
+  "loaded": "Load completed",
+  "loadFailed": "Load failed",
+  "completeRefresh": "Refresh done",
+  "completeLoad": "Load done",
+  "noMore": "No more",
+  "updateAt": "Update at %T"
+}

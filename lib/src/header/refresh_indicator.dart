@@ -74,8 +74,7 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
 //
 // The [layoutExtentOffsetCompensation] field keeps internal accounting to
 // prevent scroll position jumps as the [layoutExtent] is set and unset.
-class _RenderEasyRefreshSliverRefresh extends RenderSliver
-    with RenderObjectWithChildMixin<RenderBox> {
+class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   _RenderEasyRefreshSliverRefresh({
     @required double refreshIndicatorExtent,
     @required bool hasLayoutExtent,
@@ -536,13 +535,12 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
 
   /// Retrieve the current state of the EasyRefreshSliverRefreshControl. The same as the
   /// state that gets passed into the [builder] function. Used for testing.
-  @visibleForTesting
+  /*@visibleForTesting
   static RefreshMode state(BuildContext context) {
-    final _EasyRefreshSliverRefreshControlState state =
-        context.ancestorStateOfType(
-            const TypeMatcher<_EasyRefreshSliverRefreshControlState>());
+    final _EasyRefreshSliverRefreshControlState state = context
+        .findAncestorStateOfType<_EasyRefreshSliverRefreshControlState>();
     return state.refreshState;
-  }
+  }*/
 
   @override
   _EasyRefreshSliverRefreshControlState createState() =>
@@ -744,8 +742,7 @@ class _EasyRefreshSliverRefreshControlState
           return RefreshMode.drag;
         } else {
           // 提前固定高度，防止列表回弹
-          SchedulerBinding.instance
-              .addPostFrameCallback((Duration timestamp) {
+          SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
             if (!hasSliverLayoutExtent) {
               setState(() => hasSliverLayoutExtent = true);
             }

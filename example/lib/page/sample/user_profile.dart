@@ -1,7 +1,7 @@
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:example/generated/i18n.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// 个人中心页面
@@ -16,7 +16,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            FlutterI18n.translate(context, 'userProfile'),
+            S.of(context).userProfile,
             style: TextStyle(color: Colors.white),
           ),
           iconTheme: IconThemeData(color: Colors.white),
@@ -84,21 +84,21 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           margin: new EdgeInsets.only(top: 100.0),
                           child: new Center(
                               child: new Container(
-                                width: 100.0,
-                                height: 100.0,
-                                child: new PreferredSize(
+                            width: 100.0,
+                            height: 100.0,
+                            child: new PreferredSize(
+                              child: new Container(
+                                child: new ClipOval(
                                   child: new Container(
-                                    child: new ClipOval(
-                                      child: new Container(
-                                        color: Colors.white,
-                                        child:
-                                        new Image.asset('assets/image/head_knoyo.jpg'),
-                                      ),
-                                    ),
+                                    color: Colors.white,
+                                    child: new Image.asset(
+                                        'assets/image/head_knoyo.jpg'),
                                   ),
-                                  preferredSize: new Size(80.0, 80.0),
                                 ),
-                              )),
+                              ),
+                              preferredSize: new Size(80.0, 80.0),
+                            ),
+                          )),
                         ),
                       ],
                     ),
@@ -118,7 +118,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.supervised_user_circle,
                                     color: Colors.white,
                                   ),
-                                  title: FlutterI18n.translate(context, 'qqGroup'),
+                                  title: S.of(context).qqGroup,
                                   titleColor: Colors.white,
                                   describe: '554981921',
                                   describeColor: Colors.white,
@@ -132,7 +132,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.http,
                                     color: Colors.white,
                                   ),
-                                  title: FlutterI18n.translate(context, 'github'),
+                                  title: S.of(context).github,
                                   titleColor: Colors.white,
                                   describe: 'https://github.com/xuelongqy',
                                   describeColor: Colors.white,
@@ -159,25 +159,23 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.person,
                                     color: Colors.white,
                                   ),
-                                  title: FlutterI18n.translate(context, 'name'),
+                                  title: S.of(context).name,
                                   titleColor: Colors.white,
                                   describe: 'KnoYo',
                                   describeColor: Colors.white,
                                 ),
                                 ListItem(
                                   icon: EmptyIcon(),
-                                  title: FlutterI18n.translate(context, 'old'),
+                                  title: S.of(context).old,
                                   titleColor: Colors.white,
-                                  describe:
-                                  FlutterI18n.translate(context, 'noBald'),
+                                  describe: S.of(context).noBald,
                                   describeColor: Colors.white,
                                 ),
                                 ListItem(
                                   icon: EmptyIcon(),
-                                  title: FlutterI18n.translate(context, 'city'),
+                                  title: S.of(context).city,
                                   titleColor: Colors.white,
-                                  describe:
-                                  FlutterI18n.translate(context, 'chengdu'),
+                                  describe: S.of(context).chengdu,
                                   describeColor: Colors.white,
                                 )
                               ],
@@ -199,7 +197,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.phone,
                                     color: Colors.white,
                                   ),
-                                  title: FlutterI18n.translate(context, 'phone'),
+                                  title: S.of(context).phone,
                                   titleColor: Colors.white,
                                   describe: '18888888888',
                                   describeColor: Colors.white,
@@ -209,7 +207,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Icons.email,
                                     color: Colors.white,
                                   ),
-                                  title: FlutterI18n.translate(context, 'email'),
+                                  title: S.of(context).email,
                                   titleColor: Colors.white,
                                   describe: 'xuelongqy@foxmail.com',
                                   describeColor: Colors.white,

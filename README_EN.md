@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v2.0.4-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/badge/pub-v2.0.8-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
 
 ## English | [中文](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/README.md)
 
@@ -80,7 +80,7 @@ Demo：[Download APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/
 ```
 //pub
 dependencies:
-  flutter_easyrefresh: ^2.0.4
+  flutter_easyrefresh: ^2.0.8
 
 //import
 dependencies:
@@ -174,6 +174,27 @@ import 'package:flutter_easyrefresh/material_footer.dart';
     header: MaterialHeader(),
     footer: MaterialFooter(),
     child: ScrollView(),
+    ....
+  )
+```
+
+## Add globalization support
+```dart
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+....
+  /// Without your current language support
+  /// You can use strings_en.arb for translation and name it strings_{languageCode}_{countryCode}.arb
+  /// then pull requests
+  new MaterialApp(
+    localizationsDelegates: [
+      GlobalEasyRefreshLocalizations.delegate,
+      ....
+    ],
+    supportedLocales: [
+        Locale('en', ''),
+        Locale('zh', 'CN'),
+        ....
+    ]
     ....
   )
 ```

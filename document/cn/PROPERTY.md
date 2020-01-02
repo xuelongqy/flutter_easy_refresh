@@ -139,10 +139,10 @@ class _ExampleState extends State<Example> {
 | enableHapticFeedback | 是否开启震动反馈 | bool | false | 可选 |
 | headerBuilder | Header构造器 | RefreshControlBuilder | null | 必需 |
 
-## 属性表格 - LinkHeader(用于将Header放置到其他位置并做连接)
+## 属性表格 - LinkHeader(用于将Header放置到其他位置并做链接)
 | 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
 |---------|--------------------------|:-----:|:-----:|:-----:|
-| linkNotifier | 连接通知器 | LinkHeaderNotifier |   null |  必需 |
+| linkNotifier | 链接通知器 | LinkHeaderNotifier |   null |  必需 |
 | extent | Header的高度 | double | 60.0 | 可选 |
 | triggerDistance | 触发刷新的距离 | double | 70.0 | 可选 |
 | completeDuration | 完成延时 | Duration | null | 可选 |
@@ -157,4 +157,16 @@ class _ExampleState extends State<Example> {
 | enableInfiniteLoad | 是否开启无限加载 | bool | false | 可选 |
 | enableHapticFeedback | 是否开启震动反馈 | bool | false | 可选 |
 | footerBuilder | Footer构造器 | LoadControlBuilder | null | 必需 |
+
+## 属性表格 - NotificationHeader(通知器Header)
+| 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| header | Header | Header | null | 必须 |
+| notifier | 链接通知器 | LinkHeaderNotifier | null | 可选 |
+
+## 属性表格 - NotificationFooter(通知器Footer)
+| 属性名称     |     属性描述     | 参数类型 | 默认值  | 要求 |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| footer | Footer | Footer | null | 必须 |
+| notifier | 链接通知器 | LinkFooterNotifier | null | 可选 |
 

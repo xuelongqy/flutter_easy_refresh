@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart' as extended;
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
+    as extended;
 
 /// NestedScrollView示例页面
 class NestedScrollViewPage extends StatefulWidget {
@@ -12,6 +13,7 @@ class NestedScrollViewPage extends StatefulWidget {
     return NestedScrollViewPageState();
   }
 }
+
 class NestedScrollViewPageState extends State<NestedScrollViewPage>
     with SingleTickerProviderStateMixin {
   // 滚动控制器
@@ -23,7 +25,7 @@ class NestedScrollViewPageState extends State<NestedScrollViewPage>
   int _listCount = 20;
   // 表格
   int _gridCount = 30;
-  
+
   // 初始化
   @override
   void initState() {
@@ -133,7 +135,9 @@ class NestedScrollViewPageState extends State<NestedScrollViewPage>
                     childAspectRatio: 6 / 7,
                   ),
                   itemBuilder: (context, index) {
-                    return SampleListItem(direction: Axis.horizontal,);
+                    return SampleListItem(
+                      direction: Axis.horizontal,
+                    );
                   },
                   itemCount: _gridCount,
                 ),

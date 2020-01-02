@@ -21,7 +21,7 @@ class BallPulseFooter extends Footer {
   BallPulseFooter({
     this.key,
     this.color = Colors.blue,
-    this.backgroundColor,
+    this.backgroundColor = Colors.transparent,
     bool enableHapticFeedback = true,
     bool enableInfiniteLoad = true,
   }) : super(

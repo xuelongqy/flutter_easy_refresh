@@ -160,3 +160,14 @@ class _ExampleState extends State<Example> {
 | enableHapticFeedback | Whether to enable vibration feedback | bool | false | Optional |
 | footerBuilder | Footer builder| LoadControlBuilder | null | Necessary |
 
+## Props Table - NotificationHeader
+| Attribute Name |     Attribute Explain     | Parameter Type | Default Value | Requirement |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| header | Header | Header | null | Requirement |
+| notifier | Linked Notifier | LinkHeaderNotifier | null | Optional |
+
+## Props Table - NotificationFooter
+| Attribute Name |     Attribute Explain     | Parameter Type | Default Value | Requirement |
+|---------|--------------------------|:-----:|:-----:|:-----:|
+| footer | Footer | Footer | null | Requirement |
+| notifier | Linked Notifier | LinkFooterNotifier | null | Optional |
