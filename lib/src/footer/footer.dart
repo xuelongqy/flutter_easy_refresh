@@ -196,6 +196,9 @@ class ClassicalFooter extends Footer {
   /// 没有更多文字
   final String noMoreText;
 
+  /// 没有更多组件
+  final IconData onMoreIcon;
+
   /// 显示额外信息(默认为时间)
   final bool showInfo;
 
@@ -226,6 +229,7 @@ class ClassicalFooter extends Footer {
     this.loadedText: "Load completed",
     this.loadFailedText: "Load failed",
     this.noMoreText: "No more",
+    this.onMoreIcon: Icons.hourglass_empty,
     this.showInfo: true,
     this.infoText: "Updated at %T",
     this.bgColor: Colors.transparent,
@@ -366,7 +370,7 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
   // 加载结束图标
   IconData get _finishedIcon {
     if (!widget.success) return Icons.error_outline;
-    if (widget.noMore) return Icons.hourglass_empty;
+    if (widget.noMore) return widget.classicalFooter.onMoreIcon;
     return Icons.done;
   }
 
