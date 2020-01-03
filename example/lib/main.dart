@@ -17,7 +17,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     // 设置EasyRefresh的默认样式
     EasyRefresh.defaultHeader = ClassicalHeader(
-      enableInfiniteRefresh: true,
+      enableInfiniteRefresh: false,
     );
     EasyRefresh.defaultFooter = ClassicalFooter(
       enableInfiniteLoad: true,
