@@ -829,6 +829,7 @@ class _EasyRefreshSliverRefreshControlState
 
   @override
   Widget build(BuildContext context) {
+    // 判断是否有刷新任务
     return _EasyRefreshSliverRefresh(
       refreshIndicatorLayoutExtent: widget.refreshIndicatorExtent,
       hasLayoutExtent: hasSliverLayoutExtent,

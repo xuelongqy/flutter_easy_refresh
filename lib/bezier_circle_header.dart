@@ -152,8 +152,8 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
 
   @override
   void dispose() {
-    super.dispose();
     _backController.dispose();
+    super.dispose();
   }
 
   @override

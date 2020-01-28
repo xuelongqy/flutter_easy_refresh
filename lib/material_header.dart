@@ -127,8 +127,8 @@ class MaterialHeaderWidgetState extends State<MaterialHeaderWidget>
 
   @override
   void dispose() {
-    super.dispose();
     _scaleController.dispose();
+    super.dispose();
   }
 
   // 是否刷新完成

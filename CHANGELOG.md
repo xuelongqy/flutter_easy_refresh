@@ -44,4 +44,8 @@
 >Fixed: Type error after setting text in classic style issues#217  
 
 ## V 2.0.8
-Fix: Compatible with Flutter 1.9 and previous versions  
+>Fix: Compatible with Flutter 1.9 and previous versions  
+
+## Next
+>Fix: EmptyView size does not change after ScrollView size changes issues#241  
+>Fix: Animation throws exception when dispose issues#233  

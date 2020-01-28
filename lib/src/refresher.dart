@@ -7,7 +7,6 @@ import 'footer/footer.dart';
 import 'header/header.dart';
 import 'listener/scroll_notification_listener.dart';
 import 'physics/scroll_physics.dart';
-import 'widget/empty_widget.dart';
 
 /// 子组件构造器
 typedef EasyRefreshChildBuilder = Widget Function(
@@ -57,7 +56,7 @@ class EasyRefresh extends StatefulWidget {
   /// 空视图
   /// 当不为null时,只会显示空视图
   /// 保留[headerIndex]以上的内容
-  final emptyWidget;
+  final Widget emptyWidget;
 
   /// 顶部回弹(onRefresh为null时生效)
   final bool topBouncing;
@@ -363,8 +362,10 @@ class _EasyRefreshState extends State<EasyRefresh> {
         slivers.add(SliverList(
           delegate: SliverChildListDelegate([SizedBox()]),
         ));
-        slivers.add(EmptyWidget(
-          child: widget.emptyWidget,
+        slivers.add(SliverFillViewport(
+          delegate: SliverChildListDelegate([
+            widget.emptyWidget,
+          ]),
         ));
       }
       // 插入Header和Footer
@@ -491,8 +492,10 @@ class _EasyRefreshState extends State<EasyRefresh> {
             viewport.children.add(SliverList(
               delegate: SliverChildListDelegate([SizedBox()]),
             ));
-            viewport.children.add(EmptyWidget(
-              child: widget.emptyWidget,
+            viewport.children.add(SliverFillViewport(
+              delegate: SliverChildListDelegate([
+                widget.emptyWidget,
+              ]),
             ));
           }
           if (header != null) {

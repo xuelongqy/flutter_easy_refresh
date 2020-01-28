@@ -126,10 +126,10 @@ class PhoenixHeaderWidgetState extends State<PhoenixHeaderWidget> {
 
   @override
   void dispose() {
-    super.dispose();
     if (_sunRotateTimer != null && _sunRotateTimer.isActive) {
       _sunRotateTimer.cancel();
     }
+    super.dispose();
   }
 
   // 旋转太阳

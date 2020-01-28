@@ -45,3 +45,7 @@
 
 ## V 2.0.8
 >修复：兼容Flutter1.9及其以前版本  
+
+## 下个版本
+>修复：修复ScrollView大小改变后EmptyView大小不改变 issues#241  
+>修复：dispose时动画抛出异常 issues#233  

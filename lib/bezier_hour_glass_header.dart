@@ -138,8 +138,8 @@ class BezierHourGlassHeaderWidgetState
 
   @override
   void dispose() {
-    super.dispose();
     _backController.dispose();
+    super.dispose();
   }
 
   @override

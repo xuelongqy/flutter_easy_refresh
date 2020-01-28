@@ -164,10 +164,10 @@ class DeliveryHeaderWidgetState extends State<DeliveryHeaderWidget>
 
   @override
   void dispose() {
-    super.dispose();
     if (_timer != null && _timer.isActive) {
       _timer.cancel();
     }
+    super.dispose();
   }
 
   // 计时
