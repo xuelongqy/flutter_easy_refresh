@@ -160,7 +160,7 @@ class SpaceHeaderWidgetState extends State<SpaceHeaderWidget>
     return Container(
       width: double.infinity,
       height: _pulledExtent,
-      child: FlareActor("assets/flare/Space Demo.flr",
+      child: FlareActor("assets/flare/SpaceDemo.flr",
           alignment: Alignment.center,
           animation: "idle",
           fit: BoxFit.cover,

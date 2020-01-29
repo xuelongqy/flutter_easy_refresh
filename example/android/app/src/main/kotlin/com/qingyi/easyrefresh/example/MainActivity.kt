@@ -9,7 +9,6 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 import io.flutter.plugin.common.MethodChannel
 import moe.feng.alipay.zerosdk.AlipayZeroSdk
 
-
 class MainActivity: FlutterActivity() {
   // 伴生对象
   companion object {

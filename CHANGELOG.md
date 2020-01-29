@@ -49,3 +49,4 @@
 ## Next
 >Fix: EmptyView size does not change after ScrollView size changes issues#241  
 >Fix: Animation throws exception when dispose issues#233  
+>Fix: Flare animation throws exception issues#245  
