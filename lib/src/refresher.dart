@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyrefresh/src/footer/load_indicator.dart';
 import 'package:flutter_easyrefresh/src/header/refresh_indicator.dart';
+import 'package:flutter_easyrefresh/src/widget/empty_widget.dart';
 import 'footer/footer.dart';
 import 'header/header.dart';
 import 'listener/scroll_notification_listener.dart';
@@ -362,10 +363,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
         slivers.add(SliverList(
           delegate: SliverChildListDelegate([SizedBox()]),
         ));
-        slivers.add(SliverFillViewport(
-          delegate: SliverChildListDelegate([
-            widget.emptyWidget,
-          ]),
+        slivers.add(EmptyWidget(
+          child: widget.emptyWidget,
         ));
       }
       // 插入Header和Footer
@@ -492,10 +491,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
             viewport.children.add(SliverList(
               delegate: SliverChildListDelegate([SizedBox()]),
             ));
-            viewport.children.add(SliverFillViewport(
-              delegate: SliverChildListDelegate([
-                widget.emptyWidget,
-              ]),
+            viewport.children.add(EmptyWidget(
+              child: widget.emptyWidget,
             ));
           }
           if (header != null) {
