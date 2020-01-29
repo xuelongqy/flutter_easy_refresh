@@ -50,3 +50,4 @@
 >修复：修复ScrollView大小改变后EmptyView大小不改变 issues#241  
 >修复：dispose时动画抛出异常 issues#233  
 >修复：Flare动画报错 issues#245  
+>添加：Header和Footer独立显示  

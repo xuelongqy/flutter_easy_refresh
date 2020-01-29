@@ -235,7 +235,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
   // 滚动焦点状态
   ValueNotifier<bool> _focusNotifier;
   // 任务状态
-  ValueNotifier<bool> _taskNotifier;
+  ValueNotifier<TaskState> _taskNotifier;
   // 触发刷新状态
   ValueNotifier<bool> _callRefreshNotifier;
   // 触发加载状态
@@ -246,12 +246,12 @@ class _EasyRefreshState extends State<EasyRefresh> {
   void initState() {
     super.initState();
     _focusNotifier = ValueNotifier<bool>(false);
-    _taskNotifier = ValueNotifier<bool>(false);
+    _taskNotifier = ValueNotifier(TaskState());
     _callRefreshNotifier = ValueNotifier<bool>(false);
     _callLoadNotifier = ValueNotifier<bool>(false);
     _taskNotifier.addListener(() {
       // 监听首次刷新是否结束
-      if (_enableFirstRefresh && !_taskNotifier.value) {
+      if (_enableFirstRefresh && !_taskNotifier.value.refreshing) {
         _scrollerController.jumpTo(0.0);
         setState(() {
           _enableFirstRefresh = false;
@@ -512,6 +512,14 @@ class _EasyRefreshState extends State<EasyRefresh> {
       );
     }
   }
+}
+
+/// 任务状态
+class TaskState {
+  bool refreshing;
+  bool loading;
+
+  TaskState({this.refreshing = false, this.loading = false});
 }
 
 /// EasyRefresh控制器

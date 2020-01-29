@@ -38,7 +38,7 @@ abstract class Footer {
       BuildContext context,
       EasyRefresh easyRefresh,
       ValueNotifier<bool> focusNotifier,
-      ValueNotifier<bool> taskNotifier,
+      ValueNotifier<TaskState> taskNotifier,
       ValueNotifier<bool> callLoadNotifier) {
     return EasyRefreshSliverLoadControl(
       loadIndicatorExtent: extent,

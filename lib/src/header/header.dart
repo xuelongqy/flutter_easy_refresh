@@ -41,7 +41,7 @@ abstract class Header {
       BuildContext context,
       EasyRefresh easyRefresh,
       ValueNotifier<bool> focusNotifier,
-      ValueNotifier<bool> taskNotifier,
+      ValueNotifier<TaskState> taskNotifier,
       ValueNotifier<bool> callRefreshNotifier) {
     return EasyRefreshSliverRefreshControl(
       refreshIndicatorExtent: extent,
