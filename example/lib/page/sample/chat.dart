@@ -162,8 +162,10 @@ class ChatPageState extends State<ChatPage> {
                       padding: EdgeInsets.only(
                         left: 5.0,
                         right: 5.0,
-                        top: 5.0,
-                        bottom: 5.0,
+                      ),
+                      margin: EdgeInsets.only(
+                        top: 2.0,
+                        bottom: 2.0,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -174,10 +176,6 @@ class ChatPageState extends State<ChatPage> {
                       child: TextField(
                         controller: _textEditingController,
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(
-                            top: 2.0,
-                            bottom: 2.0,
-                          ),
                           border: InputBorder.none,
                         ),
                         onSubmitted: (value) {
