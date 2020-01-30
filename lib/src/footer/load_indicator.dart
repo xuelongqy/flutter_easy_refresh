@@ -185,7 +185,9 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
 
     // 判断是否触发无限加载
     if ((enableInfiniteLoad &&
-            extraExtentNotifier.value < constraints.remainingPaintExtent) &&
+                extraExtentNotifier.value < constraints.remainingPaintExtent ||
+            (extraExtentNotifier.value == constraints.remainingPaintExtent &&
+                constraints.cacheOrigin < 0.0)) &&
         constraints.remainingPaintExtent > 1.0) {
       if (!_triggerInfiniteLoad) {
         _triggerInfiniteLoad = true;
@@ -819,7 +821,8 @@ class _EasyRefreshSliverLoadControlState
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           // 判断是否有刷新任务
-          if (!widget.taskIndependence && widget.taskNotifier.value.refreshing) {
+          if (!widget.taskIndependence &&
+              widget.taskNotifier.value.refreshing) {
             return SizedBox();
           }
           // 是否为垂直方向

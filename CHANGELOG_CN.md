@@ -51,3 +51,4 @@
 >修复：dispose时动画抛出异常 issues#233  
 >修复：Flare动画报错 issues#245  
 >添加：Header和Footer独立显示  
+>修复：无内容时，无限加载不生效  

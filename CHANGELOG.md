@@ -51,3 +51,4 @@
 >Fix: Animation throws exception when dispose issues#233  
 >Fix: Flare animation throws exception issues#245  
 >Add: Header and Footer display independently  
+>Fix: When the list is empty, infinite loading has no effect  
