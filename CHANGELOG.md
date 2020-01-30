@@ -46,7 +46,7 @@
 ## V 2.0.8
 >Fix: Compatible with Flutter 1.9 and previous versions  
 
-## Next
+## V 2.0.9
 >Fix: EmptyView size does not change after ScrollView size changes issues#241  
 >Fix: Animation throws exception when dispose issues#233  
 >Fix: Flare animation throws exception issues#245  
