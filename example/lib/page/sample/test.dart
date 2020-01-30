@@ -77,15 +77,14 @@ class TestPageState extends State<TestPage> {
           });
         },
         slivers: <Widget>[
-          if (_count > 0) SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.6
+          if (_count > 0)
+            SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, childAspectRatio: 0.6),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return Card();
+              }, childCount: _count),
             ),
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return Card();
-            }, childCount: _count),
-          ),
         ],
       ),
     );

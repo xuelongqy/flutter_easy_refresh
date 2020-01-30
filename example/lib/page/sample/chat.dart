@@ -91,7 +91,8 @@ class ChatPageState extends State<ChatPage> {
                 bool overflow = false;
                 double heightTmp = 0.0;
                 for (MessageEntity entity in _msgList) {
-                  heightTmp += _calculateMsgHeight(context, constraints, entity);
+                  heightTmp +=
+                      _calculateMsgHeight(context, constraints, entity);
                   if (heightTmp > constraints.maxHeight) {
                     overflow = true;
                   }
@@ -136,7 +137,7 @@ class ChatPageState extends State<ChatPage> {
                     if (overflow)
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
-                              (context, index) {
+                          (context, index) {
                             return _buildMsg(_msgList[index]);
                           },
                           childCount: _msgList.length,
