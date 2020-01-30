@@ -43,8 +43,11 @@ class EmptyWidgetState extends State<EmptyWidget> {
 class _SliverEmpty extends SingleChildRenderObjectWidget {
   final ValueNotifier<SliverConfig> notifier;
 
-  const _SliverEmpty({Key key, Widget child, @required this.notifier})
-      : super(key: key, child: child);
+  const _SliverEmpty({
+    Key key,
+    @required Widget child,
+    @required this.notifier,
+  }) : super(key: key, child: child);
 
   @override
   RenderObject createRenderObject(BuildContext context) {
