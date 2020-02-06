@@ -45,3 +45,10 @@
 
 ## V 2.0.8
 >修复：兼容Flutter1.9及其以前版本  
+
+## V 2.0.9
+>修复：修复ScrollView大小改变后EmptyView大小不改变 issues#241  
+>修复：dispose时动画抛出异常 issues#233  
+>修复：Flare动画报错 issues#245  
+>添加：Header和Footer独立显示  
+>修复：无内容时，无限加载不生效  

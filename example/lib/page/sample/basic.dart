@@ -98,12 +98,14 @@ class _BasicPageState extends State<BasicPage> {
             onRefresh: _enableRefresh
                 ? () async {
                     await Future.delayed(Duration(seconds: 2), () {
-                      setState(() {
-                        _count = 20;
-                      });
-                      if (!_enableControlFinish) {
-                        _controller.resetLoadState();
-                        _controller.finishRefresh();
+                      if (mounted) {
+                        setState(() {
+                          _count = 20;
+                        });
+                        if (!_enableControlFinish) {
+                          _controller.resetLoadState();
+                          _controller.finishRefresh();
+                        }
                       }
                     });
                   }
@@ -111,11 +113,13 @@ class _BasicPageState extends State<BasicPage> {
             onLoad: _enableLoad
                 ? () async {
                     await Future.delayed(Duration(seconds: 2), () {
-                      setState(() {
-                        _count += 20;
-                      });
-                      if (!_enableControlFinish) {
-                        _controller.finishLoad(noMore: _count >= 80);
+                      if (mounted) {
+                        setState(() {
+                          _count += 20;
+                        });
+                        if (!_enableControlFinish) {
+                          _controller.finishLoad(noMore: _count >= 80);
+                        }
                       }
                     });
                   }

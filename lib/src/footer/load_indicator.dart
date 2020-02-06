@@ -9,6 +9,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../easy_refresh.dart';
+
 class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
   const _EasyRefreshSliverLoad({
     Key key,
@@ -183,7 +185,9 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
 
     // 判断是否触发无限加载
     if ((enableInfiniteLoad &&
-            extraExtentNotifier.value < constraints.remainingPaintExtent) &&
+                extraExtentNotifier.value < constraints.remainingPaintExtent ||
+            (extraExtentNotifier.value == constraints.remainingPaintExtent &&
+                constraints.cacheOrigin < 0.0)) &&
         constraints.remainingPaintExtent > 1.0) {
       if (!_triggerInfiniteLoad) {
         _triggerInfiniteLoad = true;
@@ -498,7 +502,7 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   final ValueNotifier<bool> focusNotifier;
 
   /// 任务状态
-  final ValueNotifier<bool> taskNotifier;
+  final ValueNotifier<TaskState> taskNotifier;
   // 触发加载状态
   final ValueNotifier<bool> callLoadNotifier;
 
@@ -538,12 +542,14 @@ class _EasyRefreshSliverLoadControlState
   bool get hasTask {
     return widget.taskIndependence
         ? _loadTask != null
-        : widget.taskNotifier.value;
+        : widget.taskNotifier.value.refreshing ||
+            widget.taskNotifier.value.loading;
   }
 
   set loadTask(Future<void> task) {
     _loadTask = task;
-    if (!widget.taskIndependence) widget.taskNotifier.value = task != null;
+    if (!widget.taskIndependence)
+      widget.taskNotifier.value.loading = task != null;
   }
 
   // The amount of space available from the inner indicator box's perspective.
@@ -814,6 +820,11 @@ class _EasyRefreshSliverLoadControlState
       // its owner to trigger state changes.
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
+          // 判断是否有刷新任务
+          if (!widget.taskIndependence &&
+              widget.taskNotifier.value.refreshing) {
+            return SizedBox();
+          }
           // 是否为垂直方向
           bool isVertical =
               _axisDirectionNotifier.value == AxisDirection.down ||

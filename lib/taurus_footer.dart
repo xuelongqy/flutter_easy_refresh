@@ -129,10 +129,10 @@ class TaurusFooterWidgetState extends State<TaurusFooterWidget> {
 
   @override
   void dispose() {
-    super.dispose();
     if (_cloudFloatTimer != null && _cloudFloatTimer.isActive) {
       _cloudFloatTimer.cancel();
     }
+    super.dispose();
   }
 
   // 云朵漂浮

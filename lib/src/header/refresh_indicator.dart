@@ -9,6 +9,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../easy_refresh.dart';
+
 class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
   const _EasyRefreshSliverRefresh({
     Key key,
@@ -522,7 +524,7 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
   final ValueNotifier<bool> callRefreshNotifier;
 
   /// 任务状态
-  final ValueNotifier<bool> taskNotifier;
+  final ValueNotifier<TaskState> taskNotifier;
 
   /// 是否任务独立
   final bool taskIndependence;
@@ -560,12 +562,14 @@ class _EasyRefreshSliverRefreshControlState
   bool get hasTask {
     return widget.taskIndependence
         ? _refreshTask != null
-        : widget.taskNotifier.value;
+        : widget.taskNotifier.value.loading ||
+            widget.taskNotifier.value.refreshing;
   }
 
   set refreshTask(Future<void> task) {
     _refreshTask = task;
-    if (!widget.taskIndependence) widget.taskNotifier.value = task != null;
+    if (!widget.taskIndependence)
+      widget.taskNotifier.value.refreshing = task != null;
   }
 
   // The amount of space available from the inner indicator box's perspective.
@@ -840,6 +844,10 @@ class _EasyRefreshSliverRefreshControlState
       // its owner to trigger state changes.
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
+          // 判断是否有加载任务
+          if (!widget.taskIndependence && widget.taskNotifier.value.loading) {
+            return SizedBox();
+          }
           // 是否为垂直方向
           bool isVertical =
               _axisDirectionNotifier.value == AxisDirection.down ||

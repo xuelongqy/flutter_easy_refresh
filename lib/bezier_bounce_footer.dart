@@ -135,8 +135,8 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
 
   @override
   void dispose() {
-    super.dispose();
     _backController.dispose();
+    super.dispose();
   }
 
   @override

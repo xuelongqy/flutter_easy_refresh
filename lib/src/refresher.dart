@@ -3,11 +3,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyrefresh/src/footer/load_indicator.dart';
 import 'package:flutter_easyrefresh/src/header/refresh_indicator.dart';
+import 'package:flutter_easyrefresh/src/widget/empty_widget.dart';
 import 'footer/footer.dart';
 import 'header/header.dart';
 import 'listener/scroll_notification_listener.dart';
 import 'physics/scroll_physics.dart';
-import 'widget/empty_widget.dart';
 
 /// 子组件构造器
 typedef EasyRefreshChildBuilder = Widget Function(
@@ -57,7 +57,7 @@ class EasyRefresh extends StatefulWidget {
   /// 空视图
   /// 当不为null时,只会显示空视图
   /// 保留[headerIndex]以上的内容
-  final emptyWidget;
+  final Widget emptyWidget;
 
   /// 顶部回弹(onRefresh为null时生效)
   final bool topBouncing;
@@ -235,7 +235,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
   // 滚动焦点状态
   ValueNotifier<bool> _focusNotifier;
   // 任务状态
-  ValueNotifier<bool> _taskNotifier;
+  ValueNotifier<TaskState> _taskNotifier;
   // 触发刷新状态
   ValueNotifier<bool> _callRefreshNotifier;
   // 触发加载状态
@@ -246,12 +246,12 @@ class _EasyRefreshState extends State<EasyRefresh> {
   void initState() {
     super.initState();
     _focusNotifier = ValueNotifier<bool>(false);
-    _taskNotifier = ValueNotifier<bool>(false);
+    _taskNotifier = ValueNotifier(TaskState());
     _callRefreshNotifier = ValueNotifier<bool>(false);
     _callLoadNotifier = ValueNotifier<bool>(false);
     _taskNotifier.addListener(() {
       // 监听首次刷新是否结束
-      if (_enableFirstRefresh && !_taskNotifier.value) {
+      if (_enableFirstRefresh && !_taskNotifier.value.refreshing) {
         _scrollerController.jumpTo(0.0);
         setState(() {
           _enableFirstRefresh = false;
@@ -512,6 +512,14 @@ class _EasyRefreshState extends State<EasyRefresh> {
       );
     }
   }
+}
+
+/// 任务状态
+class TaskState {
+  bool refreshing;
+  bool loading;
+
+  TaskState({this.refreshing = false, this.loading = false});
 }
 
 /// EasyRefresh控制器

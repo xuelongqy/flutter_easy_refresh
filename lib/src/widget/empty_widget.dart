@@ -1,5 +1,4 @@
 import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
 /// 空视图
@@ -16,117 +15,122 @@ class EmptyWidget extends StatefulWidget {
 }
 
 class EmptyWidgetState extends State<EmptyWidget> {
-  // 列表方向
-  ValueNotifier<AxisDirection> _axisDirectionNotifier;
-
-  // 获取宽高
-  Size _size;
+  // 列表配置通知器
+  ValueNotifier<SliverConfig> _notifier;
 
   @override
   void initState() {
+    _notifier = ValueNotifier(null);
     super.initState();
-    _axisDirectionNotifier = ValueNotifier<AxisDirection>(null);
   }
 
   @override
   void dispose() {
+    _notifier.dispose();
     super.dispose();
-    _axisDirectionNotifier.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _size == null
-        ? _SliverEmpty(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                // 获取列表剩余区域大小
-                SchedulerBinding.instance
-                    .addPostFrameCallback((Duration timestamp) {
-                  setState(() {
-                    _size = Size(constraints.maxWidth, constraints.maxHeight);
-                  });
-                });
-                return SizedBox();
-              },
-            ),
-            axisDirectionNotifier: _axisDirectionNotifier,
-          )
-        : SliverList(
-            delegate: SliverChildListDelegate([
-              Container(
-                width: _size.width,
-                height: _size.height,
-                child: widget.child,
-              ),
-            ]),
-          );
+    return _SliverEmpty(
+      child: widget.child,
+      notifier: _notifier,
+    );
   }
 }
 
 /// 空视图Sliver组件
 class _SliverEmpty extends SingleChildRenderObjectWidget {
-  // 列表方向
-  final ValueNotifier<AxisDirection> axisDirectionNotifier;
+  final ValueNotifier<SliverConfig> notifier;
 
   const _SliverEmpty({
     Key key,
-    Widget child,
-    this.axisDirectionNotifier,
+    @required Widget child,
+    @required this.notifier,
   }) : super(key: key, child: child);
 
   @override
   RenderObject createRenderObject(BuildContext context) {
     return _RenderSliverEmpty(
-      axisDirectionNotifier: axisDirectionNotifier,
+      notifier: this.notifier,
     );
   }
 }
 
 class _RenderSliverEmpty extends RenderSliverSingleBoxAdapter {
-  // 列表方向
-  final ValueNotifier<AxisDirection> axisDirectionNotifier;
-
+  final ValueNotifier<SliverConfig> notifier;
   _RenderSliverEmpty({
     RenderBox child,
-    this.axisDirectionNotifier,
+    @required this.notifier,
   }) {
     this.child = child;
   }
 
-  // 获取子组件大小
-  double get childSize =>
-      constraints.axis == Axis.vertical ? child.size.height : child.size.width;
-
-  // 空视图大小
-  double extent;
-
   @override
   void performLayout() {
-    axisDirectionNotifier.value = constraints.axisDirection;
-    child.layout(
-      constraints.asBoxConstraints(
-        maxExtent: constraints.remainingPaintExtent,
-      ),
-      parentUsesSize: true,
+    // 判断Sliver配置是否改变
+    SliverConfig sliverConfig = SliverConfig(
+      remainingPaintExtent: constraints.remainingPaintExtent,
+      crossAxisExtent: constraints.crossAxisExtent,
+      axis: constraints.axis,
     );
-    geometry = SliverGeometry(
-      paintExtent: constraints.remainingPaintExtent,
-      maxPaintExtent: constraints.remainingPaintExtent,
-      layoutExtent: constraints.remainingPaintExtent,
-    );
-  }
-
-  @override
-  void paint(PaintingContext paintContext, Offset offset) {
-    if (constraints.remainingPaintExtent > 0.0 ||
-        constraints.scrollOffset + childSize > 0) {
-      paintContext.paintChild(child, offset);
+    if (notifier.value != sliverConfig) {
+      notifier.value = sliverConfig;
+      child.layout(
+        constraints.asBoxConstraints(
+          maxExtent: constraints.remainingPaintExtent,
+        ),
+        parentUsesSize: true,
+      );
+      geometry = SliverGeometry(
+        paintExtent: constraints.remainingPaintExtent,
+        maxPaintExtent: constraints.remainingPaintExtent,
+        layoutExtent: constraints.remainingPaintExtent,
+      );
+    } else {
+      double remainingPaintExtent = notifier.value.remainingPaintExtent;
+      double childExtent = remainingPaintExtent;
+      final double paintedChildSize =
+          calculatePaintOffset(constraints, from: 0.0, to: childExtent);
+      final double cacheExtent =
+          calculateCacheOffset(constraints, from: 0.0, to: childExtent);
+      child.layout(
+        constraints.asBoxConstraints(
+          maxExtent: remainingPaintExtent,
+        ),
+        parentUsesSize: true,
+      );
+      geometry = SliverGeometry(
+        scrollExtent: childExtent,
+        paintExtent: paintedChildSize,
+        cacheExtent: cacheExtent,
+        maxPaintExtent: remainingPaintExtent,
+        layoutExtent: paintedChildSize,
+        hitTestExtent: paintedChildSize,
+        hasVisualOverflow: childExtent > constraints.remainingPaintExtent ||
+            constraints.scrollOffset > 0.0,
+      );
+      setChildParentData(child, constraints, geometry);
     }
   }
+}
 
-  // Nothing special done here because this sliver always paints its child
-  // exactly between paintOrigin and paintExtent.
+// 列表属性
+class SliverConfig {
+  final double remainingPaintExtent;
+  final double crossAxisExtent;
+  final Axis axis;
+
+  SliverConfig({this.remainingPaintExtent, this.crossAxisExtent, this.axis});
+
   @override
-  void applyPaintTransform(RenderObject child, Matrix4 transform) {}
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SliverConfig &&
+          runtimeType == other.runtimeType &&
+          crossAxisExtent == other.crossAxisExtent &&
+          axis == other.axis;
+
+  @override
+  int get hashCode => crossAxisExtent.hashCode ^ axis.hashCode;
 }

@@ -112,16 +112,20 @@ class NestedScrollViewPageState extends State<NestedScrollViewPage>
                 ),
                 onRefresh: () async {
                   await Future.delayed(Duration(seconds: 2), () {
-                    setState(() {
-                      _listCount = 20;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        _listCount = 20;
+                      });
+                    }
                   });
                 },
                 onLoad: () async {
                   await Future.delayed(Duration(seconds: 2), () {
-                    setState(() {
-                      _listCount += 10;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        _listCount += 10;
+                      });
+                    }
                   });
                 },
               ),
@@ -143,16 +147,20 @@ class NestedScrollViewPageState extends State<NestedScrollViewPage>
                 ),
                 onRefresh: () async {
                   await Future.delayed(Duration(seconds: 2), () {
-                    setState(() {
-                      _gridCount = 30;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        _gridCount = 30;
+                      });
+                    }
                   });
                 },
                 onLoad: () async {
                   await Future.delayed(Duration(seconds: 2), () {
-                    setState(() {
-                      _gridCount += 10;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        _gridCount += 10;
+                      });
+                    }
                   });
                 },
               ),

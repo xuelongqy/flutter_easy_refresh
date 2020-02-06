@@ -28,7 +28,7 @@ class TestPageState extends State<TestPage> {
     _footerNotifier = LinkFooterNotifier();
     _controller = EasyRefreshController();
     _headerNotifier.addListener(() {
-      print(_headerNotifier.refreshState);
+      //print(_headerNotifier.refreshState);
     });
     _footerNotifier.addListener(() {
       print(_footerNotifier.loadState);
@@ -50,7 +50,7 @@ class TestPageState extends State<TestPage> {
         title: Text('Test'),
         backgroundColor: Colors.white,
       ),
-      body: EasyRefresh(
+      body: EasyRefresh.custom(
         header: NotificationHeader(
           header: ClassicalHeader(),
           notifier: _headerNotifier,
@@ -76,9 +76,16 @@ class TestPageState extends State<TestPage> {
             });
           });
         },
-        child: Container(
-          child: Text('Text'),
-        ),
+        slivers: <Widget>[
+          if (_count > 0)
+            SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, childAspectRatio: 0.6),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return Card();
+              }, childCount: _count),
+            ),
+        ],
       ),
     );
   }

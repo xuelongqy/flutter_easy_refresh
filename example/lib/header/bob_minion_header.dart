@@ -155,7 +155,7 @@ class BobMinionHeaderWidgetState extends State<BobMinionHeaderWidget> {
             child: Container(
               height: 80.0,
               child: FlareActor(
-                "assets/flare/Bob (Minion).flr",
+                "assets/flare/Bob(Minion).flr",
                 alignment: Alignment.center,
                 animation: 'idle',
                 fit: BoxFit.fitHeight,

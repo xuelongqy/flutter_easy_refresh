@@ -85,63 +85,91 @@ class ChatPageState extends State<ChatPage> {
           ),
           Expanded(
             flex: 1,
-            child: EasyRefresh.custom(
-              scrollController: _scrollController,
-              reverse: true,
-              footer: CustomFooter(
-                  enableInfiniteLoad: true,
-                  extent: 40.0,
-                  triggerDistance: 50.0,
-                  footerBuilder: (context,
-                      loadState,
-                      pulledExtent,
-                      loadTriggerPullDistance,
-                      loadIndicatorExtent,
-                      axisDirection,
-                      float,
-                      completeDuration,
-                      enableInfiniteLoad,
-                      success,
-                      noMore) {
-                    return Stack(
-                      children: <Widget>[
-                        Positioned(
-                          bottom: 0.0,
-                          left: 0.0,
-                          right: 0.0,
-                          child: Container(
-                            width: 30.0,
-                            height: 30.0,
-                            child: SpinKitCircle(
-                              color: Colors.green,
-                              size: 30.0,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // 判断列表内容是否大于展示区域
+                bool overflow = false;
+                double heightTmp = 0.0;
+                for (MessageEntity entity in _msgList) {
+                  heightTmp +=
+                      _calculateMsgHeight(context, constraints, entity);
+                  if (heightTmp > constraints.maxHeight) {
+                    overflow = true;
+                  }
+                }
+                return EasyRefresh.custom(
+                  scrollController: _scrollController,
+                  reverse: true,
+                  footer: CustomFooter(
+                      enableInfiniteLoad: false,
+                      extent: 40.0,
+                      triggerDistance: 50.0,
+                      footerBuilder: (context,
+                          loadState,
+                          pulledExtent,
+                          loadTriggerPullDistance,
+                          loadIndicatorExtent,
+                          axisDirection,
+                          float,
+                          completeDuration,
+                          enableInfiniteLoad,
+                          success,
+                          noMore) {
+                        return Stack(
+                          children: <Widget>[
+                            Positioned(
+                              bottom: 0.0,
+                              left: 0.0,
+                              right: 0.0,
+                              child: Container(
+                                width: 30.0,
+                                height: 30.0,
+                                child: SpinKitCircle(
+                                  color: Colors.green,
+                                  size: 30.0,
+                                ),
+                              ),
                             ),
+                          ],
+                        );
+                      }),
+                  slivers: <Widget>[
+                    if (overflow)
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return _buildMsg(_msgList[index]);
+                          },
+                          childCount: _msgList.length,
+                        ),
+                      ),
+                    if (!overflow)
+                      SliverToBoxAdapter(
+                        child: Container(
+                          height: constraints.maxHeight,
+                          width: double.infinity,
+                          child: Column(
+                            children: <Widget>[
+                              for (MessageEntity entity in _msgList.reversed)
+                                _buildMsg(entity),
+                            ],
                           ),
                         ),
-                      ],
-                    );
-                  }),
-              slivers: <Widget>[
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return _buildMsg(_msgList[index]);
-                    },
-                    childCount: _msgList.length,
-                  ),
-                ),
-              ],
-              onLoad: () async {
-                await Future.delayed(Duration(seconds: 2), () {
-                  if (mounted) {
-                    setState(() {
-                      _msgList.addAll([
-                        MessageEntity(true, "It's good!"),
-                        MessageEntity(false, 'EasyRefresh'),
-                      ]);
+                      ),
+                  ],
+                  onLoad: () async {
+                    await Future.delayed(Duration(seconds: 2), () {
+                      if (mounted) {
+                        setState(() {
+                          _msgList.addAll([
+                            MessageEntity(true, "It's good!"),
+                            MessageEntity(false, 'EasyRefresh'),
+                          ]);
+                        });
+                      }
                     });
-                  }
-                });
+                  },
+                );
               },
             ),
           ),
@@ -151,8 +179,8 @@ class ChatPageState extends State<ChatPage> {
               padding: EdgeInsets.only(
                 left: 15.0,
                 right: 15.0,
-                top: 8.0,
-                bottom: 8.0,
+                top: 10.0,
+                bottom: 10.0,
               ),
               child: Row(
                 children: <Widget>[
@@ -162,8 +190,8 @@ class ChatPageState extends State<ChatPage> {
                       padding: EdgeInsets.only(
                         left: 5.0,
                         right: 5.0,
-                        top: 5.0,
-                        bottom: 5.0,
+                        top: 10.0,
+                        bottom: 10.0,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -173,13 +201,7 @@ class ChatPageState extends State<ChatPage> {
                       ),
                       child: TextField(
                         controller: _textEditingController,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(
-                            top: 2.0,
-                            bottom: 2.0,
-                          ),
-                          border: InputBorder.none,
-                        ),
+                        decoration: null,
                         onSubmitted: (value) {
                           if (_textEditingController.text.isNotEmpty) {
                             _sendMsg(_textEditingController.text);
@@ -357,6 +379,46 @@ class ChatPageState extends State<ChatPage> {
         ),
       );
     }
+  }
+
+  // 计算内容的高度
+  double _calculateMsgHeight(
+      BuildContext context, BoxConstraints constraints, MessageEntity entity) {
+    return 45.0 +
+        _calculateTextHeight(
+          context,
+          constraints,
+          text: '我',
+          textStyle: TextStyle(
+            fontSize: 13.0,
+          ),
+        ) +
+        _calculateTextHeight(
+          context,
+          constraints.copyWith(
+            maxWidth: 200.0,
+          ),
+          text: entity.msg ?? '',
+          textStyle: TextStyle(
+            fontSize: 16.0,
+          ),
+        );
+  }
+
+  /// 计算Text的高度
+  double _calculateTextHeight(
+    BuildContext context,
+    BoxConstraints constraints, {
+    String text = '',
+    @required TextStyle textStyle,
+    List<InlineSpan> children = const [],
+  }) {
+    final span = TextSpan(text: text, style: textStyle, children: children);
+
+    final richTextWidget = Text.rich(span).build(context) as RichText;
+    final renderObject = richTextWidget.createRenderObject(context);
+    renderObject.layout(constraints);
+    return renderObject.computeMinIntrinsicHeight(constraints.maxWidth);
   }
 }
 

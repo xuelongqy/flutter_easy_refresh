@@ -2,13 +2,13 @@ package com.qingyi.easyrefresh.example
 
 import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugins.GeneratedPluginRegistrant
 import io.flutter.plugin.common.MethodChannel
 import moe.feng.alipay.zerosdk.AlipayZeroSdk
-
 
 class MainActivity: FlutterActivity() {
   // 伴生对象
@@ -20,6 +20,8 @@ class MainActivity: FlutterActivity() {
   }
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    // 取消全屏
+    window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       //API>21,设置状态栏颜色透明
       window.statusBarColor = 0
