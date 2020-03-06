@@ -570,7 +570,6 @@ class _EasyRefreshSliverRefreshControlState
     _refreshTask = task;
     if (!widget.taskIndependence)
        // 这里改变的不是ValueNotifier.value，所以没法执行回到
-//      widget.taskNotifier.value.refreshing = task != null;
       // 这样才行，具体原因查看ValueNotifier源码
       widget.taskNotifier.value = TaskState(refreshing: task != null, loading: widget.taskNotifier.value.loading);
   }
