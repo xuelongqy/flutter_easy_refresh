@@ -1,6 +1,6 @@
 # 更新日志
 
-## 下个版本
+## V 2.1.0
 >修复：使用firstRefreshWidget后，下拉刷新不生效 [issues#250](https://github.com/xuelongqy/flutter_easyrefresh/issues/250),[issues#256](https://github.com/xuelongqy/flutter_easyrefresh/issues/256)  
 
 ## V 2.0.9

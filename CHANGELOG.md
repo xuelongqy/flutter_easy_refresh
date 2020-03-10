@@ -1,6 +1,6 @@
 # Change log
 
-## Next
+## V 2.1.0
 >Fix: After using firstRefreshWidget, pull down refresh does not take effect [issues#250](https://github.com/xuelongqy/flutter_easyrefresh/issues/250),[issues#256](https://github.com/xuelongqy/flutter_easyrefresh/issues/256)  
 
 ## V 2.0.9
