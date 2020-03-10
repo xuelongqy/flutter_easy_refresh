@@ -1,5 +1,8 @@
 # Change log
 
+## Next
+>Fix: After using firstRefreshWidget, pull down refresh does not take effect [issues#250](https://github.com/xuelongqy/flutter_easyrefresh/issues/250),[issues#256](https://github.com/xuelongqy/flutter_easyrefresh/issues/256)  
+
 ## V 2.0.9
 >Fix: EmptyView size does not change after ScrollView size changes [issues#241](https://github.com/xuelongqy/flutter_easyrefresh/issues/241)  
 >Fix: Animation throws exception when dispose [issues#233](https://github.com/xuelongqy/flutter_easyrefresh/issues/233)  

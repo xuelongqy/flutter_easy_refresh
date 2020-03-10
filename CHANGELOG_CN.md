@@ -1,7 +1,10 @@
 # 更新日志
 
+## 下个版本
+>修复：使用firstRefreshWidget后，下拉刷新不生效 [issues#250](https://github.com/xuelongqy/flutter_easyrefresh/issues/250),[issues#256](https://github.com/xuelongqy/flutter_easyrefresh/issues/256)  
+
 ## V 2.0.9
->修复：修复ScrollView大小改变后EmptyView大小不改变 [issues#241](https://github.com/xuelongqy/flutter_easyrefresh/issues/241)  
+>修复：ScrollView大小改变后EmptyView大小不改变 [issues#241](https://github.com/xuelongqy/flutter_easyrefresh/issues/241)  
 >修复：dispose时动画抛出异常 [issues#233](https://github.com/xuelongqy/flutter_easyrefresh/issues/233)  
 >修复：Flare动画报错 [issues#245](https://github.com/xuelongqy/flutter_easyrefresh/issues/245)  
 >添加：Header和Footer独立显示  
