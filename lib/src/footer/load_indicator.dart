@@ -549,7 +549,8 @@ class _EasyRefreshSliverLoadControlState
   set loadTask(Future<void> task) {
     _loadTask = task;
     if (!widget.taskIndependence)
-      widget.taskNotifier.value.loading = task != null;
+      widget.taskNotifier.value =
+          widget.taskNotifier.value.copy(loading: task != null);
   }
 
   // The amount of space available from the inner indicator box's perspective.
