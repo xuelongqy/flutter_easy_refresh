@@ -10,7 +10,7 @@
 
 Web版本移步：[vue-easyrefresh](https://github.com/xuelongqy/vue-easyrefresh)
 
-Demo：[下载 apk](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/v2/art/pkg/EasyRefresh.apk)    [web](https://xuelongqy.github.io/flutter_easyrefresh/)
+Demo：[下载 apk](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/v2/art/pkg/EasyRefresh.apk) | [web](https://xuelongqy.github.io/flutter_easyrefresh/)
 
 ![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/apk_QRCode.png)
 
