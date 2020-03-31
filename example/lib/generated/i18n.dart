@@ -28,7 +28,7 @@ class S implements WidgetsLocalizations {
   String get autoLoadDescribe =>
       "Automatically refresh the slide to the bottom";
   String get ballPulseDescribe => "Ball pulse style";
-  String get basicUse => "BasicUse";
+  String get basicUse => "Basic";
   String get basicUseDescribe => "Basic use of EasyRefresh";
   String get bezierCircleDescribe => "Popup circle style";
   String get bezierHourGlassDescribe => "Popup HourGlass style";

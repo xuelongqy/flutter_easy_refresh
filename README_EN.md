@@ -10,7 +10,7 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and uploa
 
 Web version: [vue-easyrefresh](https://github.com/xuelongqy/vue-easyrefresh)
 
-Demo：[Download APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/v2/art/pkg/EasyRefresh.apk)
+Demo：[Download apk](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/v2/art/pkg/EasyRefresh.apk) [web](https://xuelongqy.github.io/flutter_easyrefresh/)
 
 ![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/apk_QRCode.png)
 

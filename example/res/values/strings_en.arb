@@ -3,7 +3,7 @@
   "sample": "Sample",
   "style": "Style",
   "more": "More",
-  "basicUse": "BasicUse",
+  "basicUse": "Basic",
   "basicUseDescribe": "Basic use of EasyRefresh",
   "manualControl": "Manual control",
   "manualControlDescribe": "Control the timing of completion of refresh and load",
