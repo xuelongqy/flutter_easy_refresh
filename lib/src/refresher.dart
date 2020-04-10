@@ -520,6 +520,13 @@ class TaskState {
   bool loading;
 
   TaskState({this.refreshing = false, this.loading = false});
+
+  TaskState copy({bool refreshing, bool loading}) {
+    return TaskState(
+      refreshing: refreshing ?? this.refreshing,
+      loading: loading ?? this.loading,
+    );
+  }
 }
 
 /// EasyRefresh控制器

@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v2.0.9-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/badge/pub-v2.1.0-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
 
 ## English | [中文](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/README.md)
 
@@ -10,16 +10,15 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and uploa
 
 Web version: [vue-easyrefresh](https://github.com/xuelongqy/vue-easyrefresh)
 
-Demo：[Download APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/v2/art/pkg/EasyRefresh.apk)
+Demo：[Download apk](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/v2/art/pkg/EasyRefresh.apk) | [web](https://xuelongqy.github.io/flutter_easyrefresh/)
 
 ![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/apk_QRCode.png)
 
 ## Features:
 
- - Support android (halo), ios (cross springback) effect
  - Support for most Widgets
  - Support custom and has integrated a lot of cool Header and Footer
- - Support pull refresh, on the load (automatically)
+ - Support pull refresh, on the load (controllable trigger)
  - Support the Header and Footer list embedded and view the floating two forms
  - Support list event listener, make any look of Header and Footer, and can be placed anywhere
  - Support for first refresh and custom view
@@ -80,7 +79,7 @@ Demo：[Download APK-Demo](https://github.com/xuelongqy/flutter_easyrefresh/raw/
 ```
 //pub
 dependencies:
-  flutter_easyrefresh: ^2.0.9
+  flutter_easyrefresh: ^2.1.0
 
 //import
 dependencies:

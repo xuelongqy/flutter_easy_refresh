@@ -568,8 +568,10 @@ class _EasyRefreshSliverRefreshControlState
 
   set refreshTask(Future<void> task) {
     _refreshTask = task;
-    if (!widget.taskIndependence)
-      widget.taskNotifier.value.refreshing = task != null;
+    if (!widget.taskIndependence) {
+      widget.taskNotifier.value =
+          widget.taskNotifier.value.copy(refreshing: task != null);
+    }
   }
 
   // The amount of space available from the inner indicator box's perspective.

@@ -43,6 +43,7 @@ class _MyAppState extends State<MyApp> {
         GlobalWidgetsLocalizations.delegate
       ],
       supportedLocales: S.delegate.supportedLocales,
+      localeResolutionCallback: S.delegate.resolution(),
     );
   }
 }
