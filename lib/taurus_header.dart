@@ -12,10 +12,14 @@ class TaurusHeader extends Header {
   /// Key
   final Key key;
 
+  /// 背景色
+  final Color backgroundColor;
+
   final LinkHeaderNotifier linkNotifier = LinkHeaderNotifier();
 
   TaurusHeader({
     this.key,
+    this.backgroundColor = Colors.blue,
     bool enableHapticFeedback = false,
   }) : super(
           extent: 90.0,
@@ -56,6 +60,7 @@ class TaurusHeader extends Header {
         noMore);
     return TaurusHeaderWidget(
       key: key,
+      backgroundColor: backgroundColor,
       linkNotifier: linkNotifier,
     );
   }
@@ -63,10 +68,14 @@ class TaurusHeader extends Header {
 
 /// 冲上云霄组件
 class TaurusHeaderWidget extends StatefulWidget {
+  /// 背景色
+  final Color backgroundColor;
+
   final LinkHeaderNotifier linkNotifier;
 
   const TaurusHeaderWidget({
     Key key,
+    this.backgroundColor = Colors.blue,
     this.linkNotifier,
   }) : super(key: key);
 
@@ -203,10 +212,10 @@ class TaurusHeaderWidgetState extends State<TaurusHeaderWidget> {
     }
     return Stack(
       children: <Widget>[
-        // 蓝天
+        // 蓝天(背景)
         Container(
           width: double.infinity,
-          color: Colors.blue,
+          color: widget.backgroundColor,
         ),
         // 左边云朵
         Positioned(
