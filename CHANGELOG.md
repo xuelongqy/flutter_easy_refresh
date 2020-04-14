@@ -1,6 +1,6 @@
 # Change log
 
-## Next
+## V 2.1.1
 >Fix: BezierCircleHeader progress bar is occasionally not hidden  
 >Update: TaurusHeader add backgroundColor parameter [issues#269](https://github.com/xuelongqy/flutter_easyrefresh/issues/269)   
 >Add: key and EasyRefresh.custom listKey [issues#273](https://github.com/xuelongqy/flutter_easyrefresh/issues/273)   
