@@ -21,13 +21,14 @@ class TaurusHeader extends Header {
     this.key,
     this.backgroundColor = Colors.blue,
     bool enableHapticFeedback = false,
+    Duration completeDuration: const Duration(seconds: 1),
   }) : super(
           extent: 90.0,
           triggerDistance: 90.0,
           float: false,
           enableHapticFeedback: enableHapticFeedback,
           enableInfiniteRefresh: false,
-          completeDuration: const Duration(seconds: 1),
+          completeDuration: completeDuration,
         );
 
   @override
