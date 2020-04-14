@@ -65,6 +65,9 @@ class EasyRefresh extends StatefulWidget {
   /// 底部回弹(onLoad为null时生效)
   final bool bottomBouncing;
 
+  /// CustomListView Key
+  final Key listKey;
+
   /// Slivers集合
   final List<Widget> slivers;
 
@@ -104,7 +107,7 @@ class EasyRefresh extends StatefulWidget {
   /// 默认构造器
   /// 将child转换为CustomScrollView可用的slivers
   EasyRefresh({
-    key,
+    Key key,
     this.controller,
     this.onRefresh,
     this.onLoad,
@@ -131,12 +134,15 @@ class EasyRefresh extends StatefulWidget {
         this.cacheExtent = null,
         this.slivers = null,
         this.semanticChildCount = null,
-        this.dragStartBehavior = null;
+        this.dragStartBehavior = null,
+        this.listKey = null,
+        super(key: key);
 
   /// custom构造器(推荐)
   /// 直接使用CustomScrollView可用的slivers
   EasyRefresh.custom({
-    key,
+    Key key,
+    this.listKey,
     this.controller,
     this.onRefresh,
     this.onLoad,
@@ -163,12 +169,13 @@ class EasyRefresh extends StatefulWidget {
     this.bottomBouncing = true,
     @required this.slivers,
   })  : this.builder = null,
-        this.child = null;
+        this.child = null,
+        super(key: key);
 
   /// 自定义构造器
   /// 用法灵活,但需将physics、header和footer放入列表中
   EasyRefresh.builder({
-    key,
+    Key key,
     this.controller,
     this.onRefresh,
     this.onLoad,
@@ -195,7 +202,9 @@ class EasyRefresh extends StatefulWidget {
         this.dragStartBehavior = null,
         this.headerIndex = null,
         this.firstRefreshWidget = null,
-        this.emptyWidget = null;
+        this.emptyWidget = null,
+        this.listKey = null,
+        super(key: key);
 
   @override
   _EasyRefreshState createState() {
@@ -378,6 +387,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
       listBody = widget.builder(context, _physics, header, footer);
     } else if (widget.slivers != null) {
       listBody = CustomScrollView(
+        key: widget.listKey,
         physics: _physics,
         slivers: slivers,
         scrollDirection: widget.scrollDirection,
