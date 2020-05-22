@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../../easy_refresh.dart';
-import '../i18n/global_easy_refresh_localizations.dart';
 
 /// Header
 abstract class Footer {
@@ -382,59 +381,34 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
     _overTriggerDistance = over;
   }
 
-  /// 默认语言
-  GlobalEasyRefreshLocalizations _localizations =
-      GlobalEasyRefreshLocalizations();
-
   /// 文本
   String get _loadText {
-    return widget.classicalFooter.loadText ??
-        (GlobalEasyRefreshLocalizations.of(context) == null
-            ? _localizations.pushToLoad
-            : GlobalEasyRefreshLocalizations.of(context).pushToLoad);
+    return widget.classicalFooter.loadText ?? 'Push to load';
   }
 
   String get _loadReadyText {
-    return widget.classicalFooter.loadReadyText ??
-        (GlobalEasyRefreshLocalizations.of(context) == null
-            ? _localizations.releaseToLoad
-            : GlobalEasyRefreshLocalizations.of(context).releaseToLoad);
+    return widget.classicalFooter.loadReadyText ?? 'Release to load';
   }
 
   String get _loadingText {
-    return widget.classicalFooter.loadingText ??
-        (GlobalEasyRefreshLocalizations.of(context) == null
-            ? _localizations.loading
-            : GlobalEasyRefreshLocalizations.of(context).loading);
+    return widget.classicalFooter.loadingText ?? 'Loading...';
   }
 
   String get _loadedText {
-    return widget.classicalFooter.loadedText ??
-        (GlobalEasyRefreshLocalizations.of(context) == null
-            ? _localizations.loaded
-            : GlobalEasyRefreshLocalizations.of(context).loaded);
+    return widget.classicalFooter.loadedText ?? 'Load completed';
   }
 
   String get _loadFailedText {
-    return widget.classicalFooter.loadFailedText ??
-        (GlobalEasyRefreshLocalizations.of(context) == null
-            ? _localizations.loadFailed
-            : GlobalEasyRefreshLocalizations.of(context).loadFailed);
+    return widget.classicalFooter.loadFailedText ?? 'Load failed';
   }
 
   /// 没有更多文字
   String get _noMoreText {
-    return widget.classicalFooter.noMoreText ??
-        (GlobalEasyRefreshLocalizations.of(context) == null
-            ? _localizations.noMore
-            : GlobalEasyRefreshLocalizations.of(context).noMore);
+    return widget.classicalFooter.noMoreText ?? 'No more';
   }
 
   String get _infoText {
-    return widget.classicalFooter.infoText ??
-        (GlobalEasyRefreshLocalizations.of(context) == null
-            ? _localizations.updateAt
-            : GlobalEasyRefreshLocalizations.of(context).updateAt);
+    return widget.classicalFooter.infoText ?? 'Update at %T';
   }
 
   // 动画

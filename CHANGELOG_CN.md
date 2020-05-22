@@ -1,5 +1,9 @@
 # 更新日志
 
+## 下个版本
+>修改：自定义首次刷新视图时不显示空视图  
+>去除：国际化支持  
+
 ## V 2.1.1
 >修复：BezierCircleHeader进度条偶尔不隐藏  
 >更新：TaurusHeader添加背景色设置 [issues#269](https://github.com/xuelongqy/flutter_easyrefresh/issues/269)  

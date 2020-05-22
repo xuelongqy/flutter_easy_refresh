@@ -3,6 +3,8 @@ import 'package:example/page/sample/sample.dart';
 import 'package:example/page/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:example/generated/i18n.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 /// 主页面
 class HomePage extends StatefulWidget {
@@ -21,6 +23,29 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+      // 设置EasyRefresh的默认样式
+      EasyRefresh.defaultHeader = ClassicalHeader(
+        enableInfiniteRefresh: false,
+        refreshText: S.of(context).pullToRefresh,
+        refreshReadyText: S.of(context).releaseToRefresh,
+        refreshingText: S.of(context).refreshing,
+        refreshedText: S.of(context).refreshed,
+        refreshFailedText: S.of(context).refreshFailed,
+        noMoreText: S.of(context).noMore,
+        infoText: S.of(context).updateAt,
+      );
+      EasyRefresh.defaultFooter = ClassicalFooter(
+        enableInfiniteLoad: true,
+        loadText: S.of(context).pushToLoad,
+        loadReadyText: S.of(context).releaseToLoad,
+        loadingText: S.of(context).loading,
+        loadedText: S.of(context).loaded,
+        loadFailedText: S.of(context).loadFailed,
+        noMoreText: S.of(context).noMore,
+        infoText: S.of(context).updateAt,
+      );
+    });
   }
 
   @override

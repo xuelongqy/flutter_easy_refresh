@@ -1,5 +1,9 @@
 # Change log
 
+## Next
+>Modify: emptyWidget is not displayed when customizing firstRefreshWidget  
+>Removal: Internationalization support  
+
 ## V 2.1.1
 >Fix: BezierCircleHeader progress bar is occasionally not hidden  
 >Update: TaurusHeader add backgroundColor parameter [issues#269](https://github.com/xuelongqy/flutter_easyrefresh/issues/269)   
