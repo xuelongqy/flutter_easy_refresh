@@ -21,13 +21,14 @@ class DeliveryHeader extends Header {
     this.key,
     this.backgroundColor = Colors.transparent,
     bool enableHapticFeedback = false,
+    Duration completeDuration = const Duration(seconds: 1),
   }) : super(
           extent: 130.0,
           triggerDistance: 150.0,
           float: false,
           enableHapticFeedback: enableHapticFeedback,
           enableInfiniteRefresh: false,
-          completeDuration: const Duration(seconds: 1),
+          completeDuration: completeDuration,
         );
 
   @override

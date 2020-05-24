@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
       // 主页
       home: _Example(),
       localizationsDelegates: [
-        GlobalEasyRefreshLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate

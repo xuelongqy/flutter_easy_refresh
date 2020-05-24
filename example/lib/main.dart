@@ -1,7 +1,6 @@
 import 'package:example/generated/i18n.dart';
 import 'package:example/page/home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(MyApp());
@@ -15,13 +14,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // 设置EasyRefresh的默认样式
-    EasyRefresh.defaultHeader = ClassicalHeader(
-      enableInfiniteRefresh: false,
-    );
-    EasyRefresh.defaultFooter = ClassicalFooter(
-      enableInfiniteLoad: true,
-    );
   }
 
   @override
@@ -37,7 +29,6 @@ class _MyAppState extends State<MyApp> {
       home: HomePage(),
       localizationsDelegates: [
         S.delegate,
-        GlobalEasyRefreshLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate

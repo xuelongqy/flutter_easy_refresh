@@ -174,8 +174,13 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
           }
         });
       }
+    } else if (_refreshState == RefreshMode.done) {
+      _progressValue = 0.0;
+      toggleCircle = false;
     } else if (_refreshState == RefreshMode.inactive) {
       showBackAnimation = false;
+      _progressValue = 0.0;
+      toggleCircle = false;
     }
     return Stack(
       children: <Widget>[

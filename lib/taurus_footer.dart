@@ -12,18 +12,23 @@ class TaurusFooter extends Footer {
   /// Key
   final Key key;
 
+  /// 背景色
+  final Color backgroundColor;
+
   final LinkFooterNotifier linkNotifier = LinkFooterNotifier();
 
   TaurusFooter({
     this.key,
+    this.backgroundColor = Colors.blue,
     bool enableHapticFeedback = false,
+    Duration completeDuration: const Duration(seconds: 1),
   }) : super(
           extent: 90.0,
           triggerDistance: 90.0,
           float: false,
           enableHapticFeedback: enableHapticFeedback,
           enableInfiniteLoad: false,
-          completeDuration: const Duration(seconds: 1),
+          completeDuration: completeDuration,
         );
 
   @override
@@ -56,6 +61,7 @@ class TaurusFooter extends Footer {
         noMore);
     return TaurusFooterWidget(
       key: key,
+      backgroundColor: backgroundColor,
       linkNotifier: linkNotifier,
     );
   }
@@ -63,10 +69,14 @@ class TaurusFooter extends Footer {
 
 /// 冲上云霄组件
 class TaurusFooterWidget extends StatefulWidget {
+  /// 背景色
+  final Color backgroundColor;
+
   final LinkFooterNotifier linkNotifier;
 
   const TaurusFooterWidget({
     Key key,
+    this.backgroundColor = Colors.blue,
     this.linkNotifier,
   }) : super(key: key);
 
@@ -205,7 +215,7 @@ class TaurusFooterWidgetState extends State<TaurusFooterWidget> {
         // 蓝天
         Container(
           width: double.infinity,
-          color: Colors.blue,
+          color: widget.backgroundColor,
         ),
         Positioned(
           top: 0.0,
