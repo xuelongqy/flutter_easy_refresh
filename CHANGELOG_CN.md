@@ -3,6 +3,7 @@
 ## 下个版本
 >修改：自定义首次刷新视图时不显示空视图  
 >去除：国际化支持  
+>添加：在无限滚动的情况下Header和Footer设置越界回弹(overScroll)  
 
 ## V 2.1.1
 >修复：BezierCircleHeader进度条偶尔不隐藏  

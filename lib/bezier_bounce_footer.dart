@@ -175,7 +175,7 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
                     ? _pulledExtent - _indicatorExtent
                     : 0.0,
                 child: ClipPath(
-                  clipper: CirclePainter(
+                  clipper: _CirclePainter(
                     offset: _showBackAnimation
                         ? _backAnimation.value < _backAnimationPulledExtent
                             ? _backAnimationPulledExtent - _backAnimation.value
@@ -223,7 +223,7 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
                           }
                         }
                         return ClipPath(
-                          clipper: CirclePainter(offset: offset, up: true),
+                          clipper: _CirclePainter(offset: offset, up: true),
                           child: child,
                         );
                       },
@@ -312,7 +312,7 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
                       firstChild: SizedBox(
                         width: double.infinity,
                         height: _indicatorExtent,
-                        child: SpinKitThreeBounce(
+                        child: _SpinKitThreeBounce(
                           color: widget.color,
                           size: 30.0,
                         ),
@@ -338,11 +338,11 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
 }
 
 /// 圆面切割
-class CirclePainter extends CustomClipper<Path> {
+class _CirclePainter extends CustomClipper<Path> {
   final double offset;
   final bool up;
 
-  CirclePainter({this.offset, this.up});
+  _CirclePainter({this.offset, this.up});
 
   @override
   Path getClip(Size size) {
@@ -375,12 +375,12 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-class SpinKitThreeBounce extends StatefulWidget {
+class _SpinKitThreeBounce extends StatefulWidget {
   final Color color;
   final double size;
   final IndexedWidgetBuilder itemBuilder;
 
-  SpinKitThreeBounce({
+  _SpinKitThreeBounce({
     Key key,
     this.color,
     this.size = 50.0,
@@ -396,7 +396,7 @@ class SpinKitThreeBounce extends StatefulWidget {
   _SpinKitThreeBounceState createState() => _SpinKitThreeBounceState();
 }
 
-class _SpinKitThreeBounceState extends State<SpinKitThreeBounce>
+class _SpinKitThreeBounceState extends State<_SpinKitThreeBounce>
     with SingleTickerProviderStateMixin {
   AnimationController _scaleCtrl;
   final _duration = const Duration(milliseconds: 1400);

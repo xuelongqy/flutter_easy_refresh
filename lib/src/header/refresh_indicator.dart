@@ -99,6 +99,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   // resting state when in the refreshing mode.
   double get refreshIndicatorLayoutExtent => _refreshIndicatorExtent;
   double _refreshIndicatorExtent;
+
   set refreshIndicatorLayoutExtent(double value) {
     assert(value != null);
     assert(value >= 0.0);
@@ -115,6 +116,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   // [SliverGeometry.layoutExtent] space or not.
   bool get hasLayoutExtent => _hasLayoutExtent;
   bool _hasLayoutExtent;
+
   set hasLayoutExtent(bool value) {
     assert(value != null);
     if (value == _hasLayoutExtent) return;
@@ -125,6 +127,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   /// 是否开启无限刷新
   bool get enableInfiniteRefresh => _enableInfiniteRefresh;
   bool _enableInfiniteRefresh;
+
   set enableInfiniteRefresh(bool value) {
     assert(value != null);
     if (value == _enableInfiniteRefresh) return;
@@ -135,6 +138,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   /// Header是否浮动
   bool get headerFloat => _headerFloat;
   bool _headerFloat;
+
   set headerFloat(bool value) {
     assert(value != null);
     if (value == _headerFloat) return;
@@ -144,8 +148,10 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
 
   /// 无限加载回调
   final VoidCallback infiniteRefresh;
+
   // 触发无限刷新
   bool _triggerInfiniteRefresh = false;
+
   // 获取子组件大小
   double get childSize =>
       constraints.axis == Axis.vertical ? child.size.height : child.size.width;
@@ -556,9 +562,12 @@ class _EasyRefreshSliverRefreshControlState
   static const double _inactiveResetOverscrollFraction = 0.1;
 
   RefreshMode refreshState;
+
   // [Future] returned by the widget's `onRefresh`.
   Future<void> _refreshTask;
+
   Future<void> get refreshTask => _refreshTask;
+
   bool get hasTask {
     return widget.taskIndependence
         ? _refreshTask != null
@@ -587,8 +596,10 @@ class _EasyRefreshSliverRefreshControlState
 
   // 滚动焦点
   bool get _focus => widget.focusNotifier.value;
+
   // 刷新完成
   bool _success;
+
   // 没有更多数据
   bool _noMore;
 
@@ -620,6 +631,8 @@ class _EasyRefreshSliverRefreshControlState
   }) {
     _success = success;
     _noMore = _success == false ? false : noMore;
+    widget.taskNotifier.value =
+        widget.taskNotifier.value.copy(refreshNoMore: _noMore);
     if (widget.enableControlFinishRefresh && refreshTask != null) {
       if (widget.enableInfiniteRefresh) {
         refreshState = RefreshMode.inactive;

@@ -3,6 +3,7 @@
 ## Next
 >Modify: emptyWidget is not displayed when customizing firstRefreshWidget  
 >Removal: Internationalization support  
+>Add: Header and Footer set rebound in case of infinite scroll (overScroll)  
 
 ## V 2.1.1
 >Fix: BezierCircleHeader progress bar is occasionally not hidden  

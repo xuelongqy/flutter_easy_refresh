@@ -3,6 +3,8 @@ import 'package:flutter/physics.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
 
+import '../../easy_refresh.dart';
+
 /// EasyRefresh滚动形式
 /// Scroll physics for environments that allow the scroll offset to go beyond
 /// the bounds of the content, but then bounce the content back to the edge of
@@ -17,27 +19,54 @@ import 'dart:math' as math;
 ///  * [ClampingScrollPhysics], which is the analogous physics for Android's
 ///    clamping behavior.
 class EasyRefreshPhysics extends ScrollPhysics {
-  /// 顶部回弹
-  final bool topBouncing;
+  /// 任务状态
+  final ValueNotifier<TaskState> taskNotifier;
 
-  /// 底部回弹
-  final bool bottomBouncing;
+  // 回弹设置
+  final ValueNotifier<BouncingSettings> bouncingNotifier;
+
+  // 指示器越界
+  final ValueNotifier<RefreshIndicator> indicatorNotifier;
 
   /// Creates scroll physics that bounce back from the edge.
   const EasyRefreshPhysics({
     ScrollPhysics parent,
-    this.topBouncing = true,
-    this.bottomBouncing = true,
+    this.taskNotifier,
+    this.bouncingNotifier,
+    this.indicatorNotifier,
   }) : super(parent: parent);
 
   @override
   EasyRefreshPhysics applyTo(ScrollPhysics ancestor) {
     return EasyRefreshPhysics(
       parent: buildParent(ancestor),
-      topBouncing: topBouncing,
-      bottomBouncing: bottomBouncing,
+      taskNotifier: taskNotifier,
+      bouncingNotifier: bouncingNotifier,
+      indicatorNotifier: indicatorNotifier,
     );
   }
+
+  Header get header => indicatorNotifier.value.header;
+
+  bool get headerOverScroll {
+    if (header != null) {
+      return !header.enableInfiniteRefresh || header.overScroll;
+    }
+    return true;
+  }
+
+  double get headerExtent => header.extent;
+
+  Footer get footer => indicatorNotifier.value.footer;
+
+  bool get footerOverScroll {
+    if (footer != null) {
+      return !footer.enableInfiniteLoad || footer.overScroll;
+    }
+    return true;
+  }
+
+  double get footerExtent => footer.extent;
 
   /// The multiple applied to overscroll to make it appear that scrolling past
   /// the edge of the scrollable contents is harder than scrolling the list.
@@ -97,7 +126,10 @@ class EasyRefreshPhysics extends ScrollPhysics {
 
   @override
   double applyBoundaryConditions(ScrollMetrics position, double value) {
-    if (!this.topBouncing) {
+    if (!bouncingNotifier.value.top ||
+        (!headerOverScroll &&
+            (taskNotifier.value.refreshing ||
+                taskNotifier.value.refreshNoMore))) {
       if (value < position.pixels &&
           position.pixels <= position.minScrollExtent) // underscroll
         return value - position.pixels;
@@ -105,13 +137,25 @@ class EasyRefreshPhysics extends ScrollPhysics {
           position.minScrollExtent < position.pixels) // hit top edge
         return value - position.minScrollExtent;
     }
-    if (!this.bottomBouncing) {
+    if (!headerOverScroll && value - position.minScrollExtent < 0.0) {
+      // 防止越界超过header高度
+      return value - position.minScrollExtent;
+    }
+    if (!bouncingNotifier.value.bottom ||
+        (!footerOverScroll &&
+            (taskNotifier.value.loading || taskNotifier.value.loadNoMore))) {
       if (position.maxScrollExtent <= position.pixels &&
-          position.pixels < value) // overscroll
+          position.pixels < value) {
+        // overscroll
         return value - position.pixels;
+      }
       if (position.pixels < position.maxScrollExtent &&
           position.maxScrollExtent < value) // hit bottom edge
         return value - position.maxScrollExtent;
+    }
+    if (!footerOverScroll && value - position.maxScrollExtent > 0.0) {
+      // 防止越界超过footer高度
+      return value - position.maxScrollExtent;
     }
     return 0.0;
   }
@@ -124,8 +168,8 @@ class EasyRefreshPhysics extends ScrollPhysics {
       return BouncingScrollSimulation(
         spring: spring,
         position: position.pixels,
-        velocity: velocity *
-            0.91, // TODO(abarth): We should move this constant closer to the drag end.
+        velocity: velocity * 0.91,
+        // TODO(abarth): We should move this constant closer to the drag end.
         leadingExtent: position.minScrollExtent,
         trailingExtent: position.maxScrollExtent,
         tolerance: tolerance,
@@ -165,17 +209,19 @@ class EasyRefreshPhysics extends ScrollPhysics {
   // from the natural motion of lifting the finger after a scroll.
   @override
   double get dragStartDistanceMotionThreshold => 3.5;
+}
 
-  /// 重新runtimeType,用于更新状态
-  @override
-  Type get runtimeType {
-    if (topBouncing && bottomBouncing)
-      return EasyRefreshPhysics;
-    else if (!topBouncing && bottomBouncing)
-      return ClampingScrollPhysics;
-    else if (topBouncing && !bottomBouncing)
-      return AlwaysScrollableScrollPhysics;
-    else
-      return NeverScrollableScrollPhysics;
+/// 回弹设置
+class BouncingSettings {
+  bool top;
+  bool bottom;
+
+  BouncingSettings({this.top = true, this.bottom = true});
+
+  BouncingSettings copy({bool top, bool bottom}) {
+    return BouncingSettings(
+      top: top ?? this.top,
+      bottom: bottom ?? this.bottom,
+    );
   }
 }

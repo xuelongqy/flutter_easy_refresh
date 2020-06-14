@@ -84,7 +84,7 @@ class _BasicPageState extends State<BasicPage> {
             scrollDirection: _direction,
             topBouncing: _topBouncing,
             bottomBouncing: _bottomBouncing,
-            header: ClassicalHeader(
+            header: _enableRefresh ? ClassicalHeader(
               enableInfiniteRefresh: false,
               bgColor: _headerFloat ? Theme.of(context).primaryColor : null,
               infoColor: _headerFloat ? Colors.black87 : Colors.teal,
@@ -97,8 +97,8 @@ class _BasicPageState extends State<BasicPage> {
               refreshFailedText: S.of(context).refreshFailed,
               noMoreText: S.of(context).noMore,
               infoText: S.of(context).updateAt,
-            ),
-            footer: ClassicalFooter(
+            ) : null,
+            footer: _enableLoad ? ClassicalFooter(
               enableInfiniteLoad: _enableInfiniteLoad,
               enableHapticFeedback: _vibration,
               loadText: S.of(context).pushToLoad,
@@ -108,7 +108,7 @@ class _BasicPageState extends State<BasicPage> {
               loadFailedText: S.of(context).loadFailed,
               noMoreText: S.of(context).noMore,
               infoText: S.of(context).updateAt,
-            ),
+            ) : null,
             onRefresh: _enableRefresh
                 ? () async {
                     await Future.delayed(Duration(seconds: 2), () {
@@ -406,6 +406,9 @@ class _BasicPageState extends State<BasicPage> {
                             },
                     ),
                   ),
+                ),
+                SafeArea(
+                  child: SizedBox(),
                 ),
               ]),
             ),

@@ -23,6 +23,9 @@ abstract class Footer {
   /// 开启震动反馈
   final bool enableHapticFeedback;
 
+  /// 越界滚动(enableInfiniteLoad为true生效)
+  final bool overScroll;
+
   Footer({
     this.extent = 60.0,
     this.triggerDistance = 70.0,
@@ -30,6 +33,7 @@ abstract class Footer {
     this.completeDuration,
     this.enableInfiniteLoad = true,
     this.enableHapticFeedback = false,
+    this.overScroll = false,
   });
 
   // 构造器

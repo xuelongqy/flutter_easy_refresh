@@ -26,6 +26,9 @@ abstract class Header {
   /// 开启震动反馈
   final bool enableHapticFeedback;
 
+  /// 越界滚动(enableInfiniteRefresh为true生效)
+  final bool overScroll;
+
   Header({
     this.extent = 60.0,
     this.triggerDistance = 70.0,
@@ -33,6 +36,7 @@ abstract class Header {
     this.completeDuration,
     this.enableInfiniteRefresh = false,
     this.enableHapticFeedback = false,
+    this.overScroll = true,
   });
 
   // 构造器

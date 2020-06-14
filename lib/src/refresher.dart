@@ -59,10 +59,10 @@ class EasyRefresh extends StatefulWidget {
   /// 保留[headerIndex]以上的内容
   final Widget emptyWidget;
 
-  /// 顶部回弹(onRefresh为null时生效)
+  /// 顶部回弹(onRefresh和header都为null时生效)
   final bool topBouncing;
 
-  /// 底部回弹(onLoad为null时生效)
+  /// 底部回弹(onLoad和footer都为null时生效)
   final bool bottomBouncing;
 
   /// CustomListView Key
@@ -232,9 +232,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
   Header _firstRefreshHeader;
 
   // Footer
-  Footer get _footer {
-    return widget.footer ?? EasyRefresh._defaultFooter;
-  }
+  Footer get _footer => widget.footer ?? EasyRefresh._defaultFooter;
 
   // 子组件的ScrollController
   ScrollController _childScrollController;
@@ -258,6 +256,12 @@ class _EasyRefreshState extends State<EasyRefresh> {
   // 触发加载状态
   ValueNotifier<bool> _callLoadNotifier;
 
+  // 回弹设置
+  ValueNotifier<BouncingSettings> _bouncingNotifier;
+
+  // 指示器越界
+  ValueNotifier<RefreshIndicator> _indicatorNotifier;
+
   // 初始化
   @override
   void initState() {
@@ -266,6 +270,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
     _taskNotifier = ValueNotifier(TaskState());
     _callRefreshNotifier = ValueNotifier<bool>(false);
     _callLoadNotifier = ValueNotifier<bool>(false);
+    _bouncingNotifier = ValueNotifier<BouncingSettings>(BouncingSettings());
+    _indicatorNotifier = ValueNotifier<RefreshIndicator>(RefreshIndicator());
     _taskNotifier.addListener(() {
       // 监听首次刷新是否结束
       if (_enableFirstRefresh && !_taskNotifier.value.refreshing) {
@@ -283,29 +289,67 @@ class _EasyRefreshState extends State<EasyRefresh> {
         callRefresh();
       });
     }
+    _bindController();
+    _createPhysics();
   }
 
-  // 更新依赖
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // 绑定控制器
-    if (widget.controller != null)
-      widget.controller._bindEasyRefreshState(this);
-    // 列表物理形式
-    _physics = EasyRefreshPhysics(
-      topBouncing: widget.onRefresh == null ? widget.topBouncing : true,
-      bottomBouncing: widget.onLoad == null ? widget.bottomBouncing : true,
-    );
+  void didUpdateWidget(EasyRefresh oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      _bindController();
+    }
+    if (oldWidget.onRefresh != widget.onRefresh ||
+        oldWidget.onLoad != widget.onLoad ||
+        oldWidget.topBouncing != widget.topBouncing ||
+        oldWidget.bottomBouncing != widget.bottomBouncing ||
+        oldWidget.header != widget.header ||
+        oldWidget.footer != widget.footer) {
+      _createPhysics();
+    }
   }
 
   // 销毁
   void dispose() {
-    super.dispose();
     _focusNotifier.dispose();
     _taskNotifier.dispose();
     _callRefreshNotifier.dispose();
     _callLoadNotifier.dispose();
+    _bouncingNotifier.dispose();
+    _indicatorNotifier.dispose();
+    super.dispose();
+  }
+
+  // 绑定Controller
+  void _bindController() {
+    // 绑定控制器
+    if (widget.controller != null)
+      widget.controller._bindEasyRefreshState(this);
+  }
+
+  // 生成滚动物理形式
+  void _createPhysics() {
+    _bouncingNotifier.value = BouncingSettings(
+      top: widget.onRefresh == null
+          ? widget.header == null
+              ? widget.topBouncing
+              : widget.header.overScroll
+          : true,
+      bottom: widget.onLoad == null
+          ? widget.footer == null
+              ? widget.bottomBouncing
+              : widget.footer.overScroll
+          : true,
+    );
+    _indicatorNotifier.value = RefreshIndicator(
+      header: widget.header == null ? null : _header,
+      footer: widget.footer == null ? null : _footer,
+    );
+    _physics = EasyRefreshPhysics(
+      taskNotifier: _taskNotifier,
+      bouncingNotifier: _bouncingNotifier,
+      indicatorNotifier: _indicatorNotifier,
+    );
   }
 
   // 触发刷新
@@ -345,16 +389,6 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
   @override
   Widget build(BuildContext context) {
-    // 列表物理形式
-    bool topBouncing = widget.onRefresh == null ? widget.topBouncing : true;
-    bool bottomBouncing = widget.onLoad == null ? widget.bottomBouncing : true;
-    if (topBouncing != _physics.topBouncing ||
-        bottomBouncing != _physics.bottomBouncing) {
-      _physics = EasyRefreshPhysics(
-        topBouncing: topBouncing,
-        bottomBouncing: bottomBouncing,
-      );
-    }
     // 构建Header和Footer
     var header = widget.onRefresh == null
         ? null
@@ -538,13 +572,37 @@ class _EasyRefreshState extends State<EasyRefresh> {
 class TaskState {
   bool refreshing;
   bool loading;
+  bool refreshNoMore;
+  bool loadNoMore;
 
-  TaskState({this.refreshing = false, this.loading = false});
+  TaskState(
+      {this.refreshing = false,
+      this.loading = false,
+      this.refreshNoMore = false,
+      this.loadNoMore = false});
 
-  TaskState copy({bool refreshing, bool loading}) {
+  TaskState copy(
+      {bool refreshing, bool loading, bool refreshNoMore, bool loadNoMore}) {
     return TaskState(
       refreshing: refreshing ?? this.refreshing,
       loading: loading ?? this.loading,
+      refreshNoMore: refreshNoMore ?? this.refreshNoMore,
+      loadNoMore: loadNoMore ?? this.loadNoMore,
+    );
+  }
+}
+
+/// 指示器越界
+class RefreshIndicator {
+  Header header;
+  Footer footer;
+
+  RefreshIndicator({this.header, this.footer});
+
+  RefreshIndicator copy({Header header, Footer footer}) {
+    return RefreshIndicator(
+      header: header ?? this.header,
+      footer: footer ?? this.footer,
     );
   }
 }

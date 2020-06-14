@@ -108,6 +108,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
   // resting state when in the refreshing mode.
   double get loadIndicatorLayoutExtent => _loadIndicatorExtent;
   double _loadIndicatorExtent;
+
   set loadIndicatorLayoutExtent(double value) {
     assert(value != null);
     assert(value >= 0.0);
@@ -121,6 +122,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
   // [SliverGeometry.layoutExtent] space or not.
   bool get hasLayoutExtent => _hasLayoutExtent;
   bool _hasLayoutExtent;
+
   set hasLayoutExtent(bool value) {
     assert(value != null);
     if (value == _hasLayoutExtent) return;
@@ -131,6 +133,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
   /// 是否开启无限加载
   bool get enableInfiniteLoad => _enableInfiniteLoad;
   bool _enableInfiniteLoad;
+
   set enableInfiniteLoad(bool value) {
     assert(value != null);
     if (value == _enableInfiniteLoad) return;
@@ -141,6 +144,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
   /// Header是否浮动
   bool get footerFloat => _footerFloat;
   bool _footerFloat;
+
   set footerFloat(bool value) {
     assert(value != null);
     if (value == _footerFloat) return;
@@ -227,7 +231,8 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
       return;
     }*/
     final bool active = (constraints.remainingPaintExtent > 1.0 ||
-        layoutExtent > (enableInfiniteLoad ? 1.0 : 0.0) * _loadIndicatorExtent);
+        layoutExtent >=
+            (enableInfiniteLoad ? 1.0 : 0.0) * _loadIndicatorExtent);
     // 如果列表已有范围不大于指示器的范围则加上滚动超出距离
     final double overscrolledExtent = max(
         constraints.remainingPaintExtent +
@@ -503,6 +508,7 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
 
   /// 任务状态
   final ValueNotifier<TaskState> taskNotifier;
+
   // 触发加载状态
   final ValueNotifier<bool> callLoadNotifier;
 
@@ -536,9 +542,12 @@ class _EasyRefreshSliverLoadControlState
   static const double _inactiveResetOverscrollFraction = 0.1;
 
   LoadMode loadState;
+
   // [Future] returned by the widget's `onLoad`.
   Future<void> _loadTask;
+
   Future<void> get loadTask => _loadTask;
+
   bool get hasTask {
     return widget.taskIndependence
         ? _loadTask != null
@@ -566,12 +575,16 @@ class _EasyRefreshSliverLoadControlState
 
   // 滚动焦点
   bool get _focus => widget.focusNotifier.value;
+
   // 刷新完成
   bool _success;
+
   // 没有更多数据
   bool _noMore;
+
   // 列表为占满时多余长度
   ValueNotifier<double> extraExtentNotifier;
+
   // 列表方向
   ValueNotifier<AxisDirection> _axisDirectionNotifier;
 
@@ -602,6 +615,8 @@ class _EasyRefreshSliverLoadControlState
   }) {
     _success = success;
     _noMore = _success == false ? false : noMore;
+    widget.taskNotifier.value =
+        widget.taskNotifier.value.copy(loadNoMore: _noMore);
     if (widget.enableControlFinishLoad && loadTask != null) {
       if (widget.enableInfiniteLoad) {
         loadState = LoadMode.inactive;

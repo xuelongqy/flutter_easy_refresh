@@ -248,7 +248,7 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
                           }
                         }
                         return ClipPath(
-                          clipper: CirclePainter(offset: offset, up: false),
+                          clipper: _CirclePainter(offset: offset, up: false),
                           child: child,
                         );
                       },
@@ -267,7 +267,7 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
                     ? _pulledExtent - _indicatorExtent
                     : 0.0,
                 child: ClipPath(
-                  clipper: CirclePainter(
+                  clipper: _CirclePainter(
                     offset: _showBackAnimation
                         ? _backAnimation.value < _backAnimationPulledExtent
                             ? _backAnimationPulledExtent - _backAnimation.value
@@ -296,11 +296,11 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
 }
 
 /// 圆面切割
-class CirclePainter extends CustomClipper<Path> {
+class _CirclePainter extends CustomClipper<Path> {
   final double offset;
   final bool up;
 
-  CirclePainter({this.offset, this.up});
+  _CirclePainter({this.offset, this.up});
 
   @override
   Path getClip(Size size) {
