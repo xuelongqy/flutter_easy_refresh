@@ -353,14 +353,18 @@ class _EasyRefreshState extends State<EasyRefresh> {
   }
 
   // 触发刷新
-  void callRefresh({Duration duration = const Duration(milliseconds: 300)}) {
+  void callRefresh({Duration duration = const Duration(milliseconds: 400)}) {
+    assert(duration.inMilliseconds > 100,
+        "duration must be greater than 100 milliseconds");
     if (_scrollerController == null ||
         // ignore: invalid_use_of_protected_member
         _scrollerController.positions.isEmpty ||
         _taskNotifier.value.refreshing) return;
     _callRefreshNotifier.value = true;
     _scrollerController
-        .animateTo(-0.0001, duration: duration, curve: Curves.linear)
+        .animateTo(-0.0001,
+            duration: Duration(milliseconds: duration.inMilliseconds - 100),
+            curve: Curves.linear)
         .whenComplete(() {
       _scrollerController.animateTo(
           -(_header.triggerDistance + EasyRefresh.callOverExtent),
@@ -370,7 +374,9 @@ class _EasyRefreshState extends State<EasyRefresh> {
   }
 
   // 触发加载
-  void callLoad({Duration duration = const Duration(milliseconds: 300)}) {
+  void callLoad({Duration duration = const Duration(milliseconds: 400)}) {
+    assert(duration.inMilliseconds > 100,
+        "duration must be greater than 100 milliseconds");
     if (_scrollerController == null ||
         // ignore: invalid_use_of_protected_member
         _scrollerController.positions.isEmpty ||
@@ -383,7 +389,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
     _callLoadNotifier.value = true;
     _scrollerController
         .animateTo(position.maxScrollExtent,
-            duration: duration, curve: Curves.linear)
+            duration: Duration(milliseconds: duration.inMilliseconds - 100),
+            curve: Curves.linear)
         .whenComplete(() {
       _scrollerController.animateTo(
           position.maxScrollExtent +
