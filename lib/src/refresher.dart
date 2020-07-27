@@ -359,7 +359,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
       return;
     _callRefreshNotifier.value = true;
     _scrollerController
-        .animateTo(0.0, duration: duration, curve: Curves.linear)
+        .animateTo(-0.0001, duration: duration, curve: Curves.linear)
         .whenComplete(() {
       _scrollerController.animateTo(
           -(_header.triggerDistance + EasyRefresh.callOverExtent),

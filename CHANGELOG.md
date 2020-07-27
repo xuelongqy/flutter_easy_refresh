@@ -4,6 +4,7 @@
 >Modify: emptyWidget is not displayed when customizing firstRefreshWidget  
 >Removal: Internationalization support  
 >Add: Header and Footer set rebound in case of infinite scroll (overScroll)  
+>Fix: callRefresh in NestedScrollView collapsed [issues#172](https://github.com/xuelongqy/flutter_easyrefresh/issues/172)  
 
 ## V 2.1.1
 >Fix: BezierCircleHeader progress bar is occasionally not hidden  
