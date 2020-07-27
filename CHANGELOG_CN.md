@@ -5,6 +5,7 @@
 >去除：国际化支持  
 >添加：在无限滚动的情况下Header和Footer设置越界回弹(overScroll)  
 >修复：NestedScrollView中调用callRefresh出现折叠 [issues#172](https://github.com/xuelongqy/flutter_easyrefresh/issues/172)  
+>修复：Header未收起，再次调用callRefresh不会触发刷新 [issues#313](https://github.com/xuelongqy/flutter_easyrefresh/issues/313)  
 
 ## V 2.1.1
 >修复：BezierCircleHeader进度条偶尔不隐藏  

@@ -616,6 +616,11 @@ class _EasyRefreshSliverRefreshControlState
     if (widget.bindRefreshIndicator != null) {
       widget.bindRefreshIndicator(finishRefresh, resetRefreshState);
     }
+    widget.callRefreshNotifier.addListener(() {
+      if (widget.callRefreshNotifier.value) {
+        refreshState = RefreshMode.inactive;
+      }
+    });
   }
 
   // 销毁
@@ -725,7 +730,7 @@ class _EasyRefreshSliverRefreshControlState
         return null;
       } else {
         Future.delayed(widget.completeDuration, () {
-          if (mounted) {
+          if (mounted && !hasTask) {
             goToDone();
           }
         });

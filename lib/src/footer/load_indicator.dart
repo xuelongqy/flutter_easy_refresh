@@ -599,6 +599,11 @@ class _EasyRefreshSliverLoadControlState
     if (widget.bindLoadIndicator != null) {
       widget.bindLoadIndicator(finishLoad, resetLoadState);
     }
+    widget.callLoadNotifier.addListener(() {
+      if (widget.callLoadNotifier.value) {
+        loadState = LoadMode.inactive;
+      }
+    });
   }
 
   // 销毁
@@ -708,7 +713,7 @@ class _EasyRefreshSliverLoadControlState
         return null;
       } else {
         Future.delayed(widget.completeDuration, () {
-          if (mounted) {
+          if (mounted && !hasTask) {
             goToDone();
           }
         });

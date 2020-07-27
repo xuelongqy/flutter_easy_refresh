@@ -354,9 +354,10 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
   // 触发刷新
   void callRefresh({Duration duration = const Duration(milliseconds: 300)}) {
-    // ignore: invalid_use_of_protected_member
-    if (_scrollerController == null || _scrollerController.positions.isEmpty)
-      return;
+    if (_scrollerController == null ||
+        // ignore: invalid_use_of_protected_member
+        _scrollerController.positions.isEmpty ||
+        _taskNotifier.value.refreshing) return;
     _callRefreshNotifier.value = true;
     _scrollerController
         .animateTo(-0.0001, duration: duration, curve: Curves.linear)
@@ -370,16 +371,22 @@ class _EasyRefreshState extends State<EasyRefresh> {
 
   // 触发加载
   void callLoad({Duration duration = const Duration(milliseconds: 300)}) {
+    if (_scrollerController == null ||
+        // ignore: invalid_use_of_protected_member
+        _scrollerController.positions.isEmpty ||
+        _taskNotifier.value.loading) return;
     // ignore: invalid_use_of_protected_member
-    if (_scrollerController == null || _scrollerController.positions.isEmpty)
-      return;
+    ScrollPosition position = _scrollerController.positions.length > 1
+        // ignore: invalid_use_of_protected_member
+        ? _scrollerController.positions.elementAt(0)
+        : _scrollerController.position;
     _callLoadNotifier.value = true;
     _scrollerController
-        .animateTo(_scrollerController.position.maxScrollExtent,
+        .animateTo(position.maxScrollExtent,
             duration: duration, curve: Curves.linear)
         .whenComplete(() {
       _scrollerController.animateTo(
-          _scrollerController.position.maxScrollExtent +
+          position.maxScrollExtent +
               _footer.triggerDistance +
               EasyRefresh.callOverExtent,
           duration: Duration(milliseconds: 100),
