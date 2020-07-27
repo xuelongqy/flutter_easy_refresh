@@ -710,7 +710,7 @@ class _EasyRefreshSliverRefreshControlState
         setState(() => hasSliverLayoutExtent = false);
       } else {
         SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-          setState(() => hasSliverLayoutExtent = false);
+          if (mounted) setState(() => hasSliverLayoutExtent = false);
         });
       }
     }
@@ -763,7 +763,7 @@ class _EasyRefreshSliverRefreshControlState
           // 提前固定高度，防止列表回弹
           SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
             if (!hasSliverLayoutExtent) {
-              setState(() => hasSliverLayoutExtent = true);
+              if (mounted) setState(() => hasSliverLayoutExtent = true);
             }
           });
           if (widget.onRefresh != null && !hasTask) {
