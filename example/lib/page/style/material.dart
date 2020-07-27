@@ -7,14 +7,14 @@ import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
 
 /// 质感设计样式
-class MaterialPage extends StatefulWidget {
+class MaterialStylePage extends StatefulWidget {
   @override
   MaterialPageState createState() {
     return MaterialPageState();
   }
 }
 
-class MaterialPageState extends State<MaterialPage> {
+class MaterialPageState extends State<MaterialStylePage> {
   // 总数
   int _count = 20;
 
