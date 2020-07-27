@@ -661,10 +661,10 @@ class _EasyRefreshSliverRefreshControlState
 
   // 无限刷新
   void _infiniteRefresh() {
-    if (!hasTask &&
-        widget.enableInfiniteRefresh &&
-        _noMore != true &&
-        !widget.callRefreshNotifier.value) {
+    if (widget.callRefreshNotifier.value) {
+      widget.callRefreshNotifier.value = false;
+    }
+    if (!hasTask && widget.enableInfiniteRefresh && _noMore != true) {
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
@@ -744,9 +744,6 @@ class _EasyRefreshSliverRefreshControlState
             (!_focus && !widget.callRefreshNotifier.value)) {
           return RefreshMode.inactive;
         } else {
-          if (widget.callRefreshNotifier.value) {
-            widget.callRefreshNotifier.value = false;
-          }
           nextState = RefreshMode.drag;
         }
         continue drag;

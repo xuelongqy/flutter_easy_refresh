@@ -645,10 +645,10 @@ class _EasyRefreshSliverLoadControlState
 
   // 无限加载
   void _infiniteLoad() {
-    if (!hasTask &&
-        widget.enableInfiniteLoad &&
-        _noMore != true &&
-        !widget.callLoadNotifier.value) {
+    if (widget.callLoadNotifier.value) {
+      widget.callLoadNotifier.value = false;
+    }
+    if (!hasTask && widget.enableInfiniteLoad && _noMore != true) {
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
@@ -750,9 +750,6 @@ class _EasyRefreshSliverLoadControlState
           });
           if (widget.onLoad != null && !hasTask) {
             if (!_focus) {
-              if (widget.callLoadNotifier.value) {
-                widget.callLoadNotifier.value = false;
-              }
               if (widget.enableHapticFeedback) {
                 HapticFeedback.mediumImpact();
               }
