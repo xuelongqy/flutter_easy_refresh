@@ -24,12 +24,14 @@ class BallPulseFooter extends Footer {
     this.backgroundColor = Colors.transparent,
     bool enableHapticFeedback = true,
     bool enableInfiniteLoad = true,
+    bool overScroll = false,
   }) : super(
           extent: 70.0,
           triggerDistance: 70.0,
           float: false,
           enableHapticFeedback: enableHapticFeedback,
           enableInfiniteLoad: enableInfiniteLoad,
+          overScroll: overScroll,
         );
 
   @override
@@ -96,15 +98,20 @@ class BallPulseFooterWidget extends StatefulWidget {
 
 class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
   LoadMode get _refreshState => widget.linkNotifier.loadState;
+
   double get _indicatorExtent => widget.linkNotifier.loadIndicatorExtent;
+
   bool get _noMore => widget.linkNotifier.noMore;
 
   // 球大小
   double _ballSize1, _ballSize2, _ballSize3;
+
   // 动画阶段
   int animationPhase = 1;
+
   // 动画过渡时间
   Duration _ballSizeDuration = Duration(milliseconds: 200);
+
   // 是否运行动画
   bool _isAnimated = false;
 

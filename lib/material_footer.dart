@@ -24,6 +24,7 @@ class MaterialFooter extends Footer {
     completeDuration = const Duration(seconds: 1),
     bool enableHapticFeedback = false,
     bool enableInfiniteLoad = true,
+    bool overScroll = false,
   }) : super(
           float: true,
           extent: 52.0,
@@ -38,6 +39,7 @@ class MaterialFooter extends Footer {
                   ),
           enableHapticFeedback: enableHapticFeedback,
           enableInfiniteLoad: enableInfiniteLoad,
+          overScroll: overScroll,
         );
 
   @override
