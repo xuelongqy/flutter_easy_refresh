@@ -55,8 +55,6 @@ class EasyRefreshPhysics extends ScrollPhysics {
     return true;
   }
 
-  double get headerExtent => header.extent;
-
   Footer get footer => indicatorNotifier.value.footer;
 
   bool get footerOverScroll {
