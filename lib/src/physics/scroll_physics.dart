@@ -139,7 +139,7 @@ class EasyRefreshPhysics extends ScrollPhysics {
     }
     if (!headerOverScroll && value - position.minScrollExtent < 0.0) {
       // 防止越界超过header高度
-      return value - position.minScrollExtent;
+      return value - position.minScrollExtent + 0.0001;
     }
     if (!bouncingNotifier.value.bottom ||
         (!footerOverScroll &&

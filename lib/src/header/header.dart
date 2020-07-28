@@ -340,6 +340,7 @@ class ClassicalHeader extends Header {
     Duration completeDuration = const Duration(seconds: 1),
     bool enableInfiniteRefresh = false,
     bool enableHapticFeedback = true,
+    bool overScroll = true,
     this.key,
     this.alignment,
     this.refreshText,
@@ -369,6 +370,7 @@ class ClassicalHeader extends Header {
               : completeDuration,
           enableInfiniteRefresh: enableInfiniteRefresh,
           enableHapticFeedback: enableHapticFeedback,
+          overScroll: overScroll,
         );
 
   @override

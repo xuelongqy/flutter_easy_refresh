@@ -14,6 +14,7 @@ abstract class Footer {
   final double triggerDistance;
   @Deprecated('目前还没有找到方案,设置无效')
   final bool float;
+
   // 完成延时
   final Duration completeDuration;
 
@@ -286,6 +287,7 @@ class ClassicalFooter extends Footer {
     Duration completeDuration = const Duration(seconds: 1),
     bool enableInfiniteLoad = true,
     bool enableHapticFeedback = true,
+    bool overScroll = false,
     this.key,
     this.alignment,
     this.loadText,
@@ -306,6 +308,7 @@ class ClassicalFooter extends Footer {
           completeDuration: completeDuration,
           enableInfiniteLoad: enableInfiniteLoad,
           enableHapticFeedback: enableHapticFeedback,
+          overScroll: overScroll,
         );
 
   @override
@@ -375,7 +378,9 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
     with TickerProviderStateMixin<ClassicalFooterWidget> {
   // 是否到达触发加载距离
   bool _overTriggerDistance = false;
+
   bool get overTriggerDistance => _overTriggerDistance;
+
   set overTriggerDistance(bool over) {
     if (_overTriggerDistance != over) {
       _overTriggerDistance
@@ -470,6 +475,7 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
 
   // 更新时间
   DateTime _dateTime;
+
   // 获取更多信息
   String get _infoTextStr {
     if (widget.loadState == LoadMode.loaded) {

@@ -197,7 +197,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
     // 判断是否触发无限刷新
     if (enableInfiniteRefresh &&
         constraints.scrollOffset < _refreshIndicatorExtent &&
-        constraints.userScrollDirection != ScrollDirection.idle) {
+        constraints.scrollOffset > 0.0) {
       if (!_triggerInfiniteRefresh) {
         _triggerInfiniteRefresh = true;
         infiniteRefresh();
