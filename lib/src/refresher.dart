@@ -333,13 +333,13 @@ class _EasyRefreshState extends State<EasyRefresh> {
       top: widget.onRefresh == null
           ? widget.header == null
               ? widget.topBouncing
-              : widget.header.overScroll
-          : true,
+              : widget.header.overScroll || !widget.header.enableInfiniteRefresh
+          : _header.overScroll || !_header.enableInfiniteRefresh,
       bottom: widget.onLoad == null
           ? widget.footer == null
               ? widget.bottomBouncing
-              : widget.footer.overScroll
-          : true,
+              : widget.footer.overScroll || !widget.footer.enableInfiniteLoad
+          : _footer.overScroll || !_footer.enableInfiniteLoad,
     );
     _indicatorNotifier.value = RefreshIndicator(
       header: widget.header == null ? null : _header,

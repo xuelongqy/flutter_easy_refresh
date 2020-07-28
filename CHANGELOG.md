@@ -2,7 +2,7 @@
 
 ## Next
 >Modify: emptyWidget is not displayed when customizing firstRefreshWidget  
->Removal: Internationalization support  
+>Remove: Internationalization support  
 >Add: Header and Footer set rebound in case of infinite scroll (overScroll)  
 >Fix: callRefresh in NestedScrollView collapsed [issues#172](https://github.com/xuelongqy/flutter_easyrefresh/issues/172)  
 >Fix：Header is not retracted, calling callRefresh again will not trigger refresh [issues#313](https://github.com/xuelongqy/flutter_easyrefresh/issues/313)  
