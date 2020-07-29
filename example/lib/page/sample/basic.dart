@@ -84,31 +84,36 @@ class _BasicPageState extends State<BasicPage> {
             scrollDirection: _direction,
             topBouncing: _topBouncing,
             bottomBouncing: _bottomBouncing,
-            header: _enableRefresh ? ClassicalHeader(
-              enableInfiniteRefresh: false,
-              bgColor: _headerFloat ? Theme.of(context).primaryColor : null,
-              infoColor: _headerFloat ? Colors.black87 : Colors.teal,
-              float: _headerFloat,
-              enableHapticFeedback: _vibration,
-              refreshText: S.of(context).pullToRefresh,
-              refreshReadyText: S.of(context).releaseToRefresh,
-              refreshingText: S.of(context).refreshing,
-              refreshedText: S.of(context).refreshed,
-              refreshFailedText: S.of(context).refreshFailed,
-              noMoreText: S.of(context).noMore,
-              infoText: S.of(context).updateAt,
-            ) : null,
-            footer: _enableLoad ? ClassicalFooter(
-              enableInfiniteLoad: _enableInfiniteLoad,
-              enableHapticFeedback: _vibration,
-              loadText: S.of(context).pushToLoad,
-              loadReadyText: S.of(context).releaseToLoad,
-              loadingText: S.of(context).loading,
-              loadedText: S.of(context).loaded,
-              loadFailedText: S.of(context).loadFailed,
-              noMoreText: S.of(context).noMore,
-              infoText: S.of(context).updateAt,
-            ) : null,
+            header: _enableRefresh
+                ? ClassicalHeader(
+                    enableInfiniteRefresh: false,
+                    bgColor:
+                        _headerFloat ? Theme.of(context).primaryColor : null,
+                    infoColor: _headerFloat ? Colors.black87 : Colors.teal,
+                    float: _headerFloat,
+                    enableHapticFeedback: _vibration,
+                    refreshText: S.of(context).pullToRefresh,
+                    refreshReadyText: S.of(context).releaseToRefresh,
+                    refreshingText: S.of(context).refreshing,
+                    refreshedText: S.of(context).refreshed,
+                    refreshFailedText: S.of(context).refreshFailed,
+                    noMoreText: S.of(context).noMore,
+                    infoText: S.of(context).updateAt,
+                  )
+                : null,
+            footer: _enableLoad
+                ? ClassicalFooter(
+                    enableInfiniteLoad: _enableInfiniteLoad,
+                    enableHapticFeedback: _vibration,
+                    loadText: S.of(context).pushToLoad,
+                    loadReadyText: S.of(context).releaseToLoad,
+                    loadingText: S.of(context).loading,
+                    loadedText: S.of(context).loaded,
+                    loadFailedText: S.of(context).loadFailed,
+                    noMoreText: S.of(context).noMore,
+                    infoText: S.of(context).updateAt,
+                  )
+                : null,
             onRefresh: _enableRefresh
                 ? () async {
                     await Future.delayed(Duration(seconds: 2), () {

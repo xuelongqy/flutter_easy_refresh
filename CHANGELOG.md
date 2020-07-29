@@ -1,6 +1,6 @@
 # Change log
 
-## Next
+## V 2.1.2
 >Modify: emptyWidget is not displayed when customizing firstRefreshWidget  
 >Remove: Internationalization support  
 >Add: Header and Footer set rebound in case of infinite scroll (overScroll)  
