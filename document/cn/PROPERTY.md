@@ -111,6 +111,7 @@ class _ExampleState extends State<Example> {
 | topBouncing | 顶部回弹(onRefresh为null时生效) | bool | true | 可选 |
 | bottomBouncing | 底部回弹(onLoad为null时生效) | bool     | true | 可选 |
 | scrollController | 滚动控制器 | ScrollController | null | 可选 |
+| behavior | 滚动行为 | Behavior | EmptyOverScrollScrollBehavior | 可选 |
 | 其他参数 | 与CustomScrollView一致 | 与CustomScrollView参数一致 | null | 可选(EasyRefresh.custom) |
 
 # 属性表格 - EasyRefreshController

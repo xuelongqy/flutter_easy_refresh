@@ -1,9 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_easyrefresh/src/footer/load_indicator.dart';
-import 'package:flutter_easyrefresh/src/header/refresh_indicator.dart';
-import 'package:flutter_easyrefresh/src/widget/empty_widget.dart';
+import 'footer/load_indicator.dart';
+import 'header/refresh_indicator.dart';
+import 'widget/empty_widget.dart';
+import 'behavior/scroll_behavior.dart';
 import 'footer/footer.dart';
 import 'header/header.dart';
 import 'listener/scroll_notification_listener.dart';
@@ -68,6 +69,9 @@ class EasyRefresh extends StatefulWidget {
   /// CustomListView Key
   final Key listKey;
 
+  /// 滚动行为
+  final ScrollBehavior behavior;
+
   /// Slivers集合
   final List<Widget> slivers;
 
@@ -125,6 +129,7 @@ class EasyRefresh extends StatefulWidget {
     this.emptyWidget,
     this.topBouncing = true,
     this.bottomBouncing = true,
+    this.behavior = const EmptyOverScrollScrollBehavior(),
     @required this.child,
   })  : this.scrollDirection = null,
         this.reverse = null,
@@ -169,6 +174,7 @@ class EasyRefresh extends StatefulWidget {
     this.emptyWidget,
     this.topBouncing = true,
     this.bottomBouncing = true,
+    this.behavior = const EmptyOverScrollScrollBehavior(),
     @required this.slivers,
   })  : this.builder = null,
         this.child = null,
@@ -190,6 +196,7 @@ class EasyRefresh extends StatefulWidget {
     this.firstRefresh,
     this.topBouncing = true,
     this.bottomBouncing = true,
+    this.behavior = const EmptyOverScrollScrollBehavior(),
     @required this.builder,
   })  : this.scrollDirection = null,
         this.reverse = null,
@@ -461,7 +468,10 @@ class _EasyRefreshState extends State<EasyRefresh> {
       onFocus: (focus) {
         _focusNotifier.value = focus;
       },
-      child: listBody,
+      child: ScrollConfiguration(
+        behavior: widget.behavior ?? ScrollConfiguration.of(context),
+        child: listBody,
+      ),
     );
   }
 
