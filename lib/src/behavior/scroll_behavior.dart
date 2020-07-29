@@ -9,7 +9,4 @@ class EmptyOverScrollScrollBehavior extends ScrollBehavior {
       BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
   }
-
-  @override
-  String toString() => objectRuntimeType(this, 'EmptyScrollBehavior');
 }
