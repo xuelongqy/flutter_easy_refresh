@@ -41,6 +41,9 @@ class EasyRefreshPhysics extends ScrollPhysics {
     );
   }
 
+  /// 是否允许Bottom越界(列表未占满)
+  bool get bottomOverScroll => taskNotifier.value.extraExtent > 0.0;
+
   /// The multiple applied to overscroll to make it appear that scrolling past
   /// the edge of the scrollable contents is harder than scrolling the list.
   /// This is done by reducing the ratio of the scroll effect output vs the
@@ -111,7 +114,7 @@ class EasyRefreshPhysics extends ScrollPhysics {
       // 防止越界超过header高度
       return value - position.minScrollExtent + 0.0001;
     }
-    if (!bouncingNotifier.value.bottom) {
+    if (!bouncingNotifier.value.bottom && !bottomOverScroll) {
       if (position.maxScrollExtent <= position.pixels &&
           position.pixels < value) {
         // overscroll
@@ -122,7 +125,8 @@ class EasyRefreshPhysics extends ScrollPhysics {
         return value - position.maxScrollExtent;
     }
     if (!bouncingNotifier.value.bottom &&
-        value - position.maxScrollExtent > 0.0) {
+        value - position.maxScrollExtent > 0.0 &&
+        !bottomOverScroll) {
       // 防止越界超过footer高度
       return value - position.maxScrollExtent;
     }
@@ -185,9 +189,16 @@ class BouncingSettings {
   bool top;
   bool bottom;
 
-  BouncingSettings({this.top = true, this.bottom = true});
+  BouncingSettings({
+    this.top = true,
+    this.bottom = true,
+  });
 
-  BouncingSettings copy({bool top, bool bottom}) {
+  BouncingSettings copy({
+    bool top,
+    bool bottom,
+    bool hasFooter,
+  }) {
     return BouncingSettings(
       top: top ?? this.top,
       bottom: bottom ?? this.bottom,

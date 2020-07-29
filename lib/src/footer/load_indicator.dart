@@ -593,7 +593,6 @@ class _EasyRefreshSliverLoadControlState
   void initState() {
     super.initState();
     loadState = LoadMode.inactive;
-    extraExtentNotifier = ValueNotifier<double>(0.0);
     _axisDirectionNotifier = ValueNotifier<AxisDirection>(AxisDirection.down);
     // 绑定加载指示器
     if (widget.bindLoadIndicator != null) {
@@ -602,6 +601,14 @@ class _EasyRefreshSliverLoadControlState
     widget.callLoadNotifier.addListener(() {
       if (widget.callLoadNotifier.value) {
         loadState = LoadMode.inactive;
+      }
+    });
+    // 列表未占满长度监听
+    extraExtentNotifier = ValueNotifier<double>(0.0);
+    extraExtentNotifier.addListener(() {
+      if (extraExtentNotifier.value != widget.taskNotifier.value.extraExtent) {
+        widget.taskNotifier.value = widget.taskNotifier.value
+            .copy(extraExtent: extraExtentNotifier.value);
       }
     });
   }

@@ -589,19 +589,29 @@ class TaskState {
   bool refreshNoMore;
   bool loadNoMore;
 
-  TaskState(
-      {this.refreshing = false,
-      this.loading = false,
-      this.refreshNoMore = false,
-      this.loadNoMore = false});
+  // 列表未占满长度(用于列表未占满时出发加载)
+  double extraExtent;
+
+  TaskState({
+    this.refreshing = false,
+    this.loading = false,
+    this.refreshNoMore = false,
+    this.loadNoMore = false,
+    this.extraExtent = 0.0,
+  });
 
   TaskState copy(
-      {bool refreshing, bool loading, bool refreshNoMore, bool loadNoMore}) {
+      {bool refreshing,
+      bool loading,
+      bool refreshNoMore,
+      bool loadNoMore,
+      double extraExtent}) {
     return TaskState(
       refreshing: refreshing ?? this.refreshing,
       loading: loading ?? this.loading,
       refreshNoMore: refreshNoMore ?? this.refreshNoMore,
       loadNoMore: loadNoMore ?? this.loadNoMore,
+      extraExtent: extraExtent ?? this.extraExtent,
     );
   }
 }
