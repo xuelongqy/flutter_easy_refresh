@@ -1,5 +1,8 @@
 # 更新日志
 
+## V 2.1.4
+>修复：无限加载时，列表未暂满无法触发 [issues#337](https://github.com/xuelongqy/flutter_easyrefresh/issues/337)  
+
 ## V 2.1.2
 >修改：自定义首次刷新视图时不显示空视图  
 >去除：国际化支持  

@@ -1,5 +1,8 @@
 # Change log
 
+## V 2.1.4
+>Fix：When infinite loading, onLoad cannot be triggered if the list is not full yet [issues#377](https://github.com/xuelongqy/flutter_easyrefresh/issues/337)  
+
 ## V 2.1.2
 >Modify: emptyWidget is not displayed when customizing firstRefreshWidget  
 >Remove: Internationalization support  
