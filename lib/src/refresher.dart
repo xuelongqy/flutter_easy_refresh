@@ -59,10 +59,10 @@ class EasyRefresh extends StatefulWidget {
   /// 保留[headerIndex]以上的内容
   final Widget emptyWidget;
 
-  /// 顶部回弹(onRefresh和header都为null时生效)
+  /// 顶部回弹(Header的overScroll属性优先，且onRefresh和header都为null时生效)
   final bool topBouncing;
 
-  /// 底部回弹(onLoad和footer都为null时生效)
+  /// 底部回弹(Footer的overScroll属性优先，且onLoad和footer都为null时生效)
   final bool bottomBouncing;
 
   /// CustomListView Key
@@ -259,9 +259,6 @@ class _EasyRefreshState extends State<EasyRefresh> {
   // 回弹设置
   ValueNotifier<BouncingSettings> _bouncingNotifier;
 
-  // 指示器越界
-  ValueNotifier<RefreshIndicator> _indicatorNotifier;
-
   // 初始化
   @override
   void initState() {
@@ -271,7 +268,6 @@ class _EasyRefreshState extends State<EasyRefresh> {
     _callRefreshNotifier = ValueNotifier<bool>(false);
     _callLoadNotifier = ValueNotifier<bool>(false);
     _bouncingNotifier = ValueNotifier<BouncingSettings>(BouncingSettings());
-    _indicatorNotifier = ValueNotifier<RefreshIndicator>(RefreshIndicator());
     _taskNotifier.addListener(() {
       // 监听首次刷新是否结束
       if (_enableFirstRefresh && !_taskNotifier.value.refreshing) {
@@ -316,7 +312,6 @@ class _EasyRefreshState extends State<EasyRefresh> {
     _callRefreshNotifier.dispose();
     _callLoadNotifier.dispose();
     _bouncingNotifier.dispose();
-    _indicatorNotifier.dispose();
     super.dispose();
   }
 
@@ -341,14 +336,9 @@ class _EasyRefreshState extends State<EasyRefresh> {
               : widget.footer.overScroll || !widget.footer.enableInfiniteLoad
           : _footer.overScroll || !_footer.enableInfiniteLoad,
     );
-    _indicatorNotifier.value = RefreshIndicator(
-      header: widget.header == null ? null : _header,
-      footer: widget.footer == null ? null : _footer,
-    );
     _physics = EasyRefreshPhysics(
       taskNotifier: _taskNotifier,
       bouncingNotifier: _bouncingNotifier,
-      indicatorNotifier: _indicatorNotifier,
     );
   }
 
@@ -602,21 +592,6 @@ class TaskState {
       loading: loading ?? this.loading,
       refreshNoMore: refreshNoMore ?? this.refreshNoMore,
       loadNoMore: loadNoMore ?? this.loadNoMore,
-    );
-  }
-}
-
-/// 指示器越界
-class RefreshIndicator {
-  Header header;
-  Footer footer;
-
-  RefreshIndicator({this.header, this.footer});
-
-  RefreshIndicator copy({Header header, Footer footer}) {
-    return RefreshIndicator(
-      header: header ?? this.header,
-      footer: footer ?? this.footer,
     );
   }
 }

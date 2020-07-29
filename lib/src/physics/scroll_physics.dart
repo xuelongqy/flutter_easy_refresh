@@ -25,15 +25,11 @@ class EasyRefreshPhysics extends ScrollPhysics {
   // 回弹设置
   final ValueNotifier<BouncingSettings> bouncingNotifier;
 
-  // 指示器越界
-  final ValueNotifier<RefreshIndicator> indicatorNotifier;
-
   /// Creates scroll physics that bounce back from the edge.
   const EasyRefreshPhysics({
     ScrollPhysics parent,
     this.taskNotifier,
     this.bouncingNotifier,
-    this.indicatorNotifier,
   }) : super(parent: parent);
 
   @override
@@ -42,29 +38,8 @@ class EasyRefreshPhysics extends ScrollPhysics {
       parent: buildParent(ancestor),
       taskNotifier: taskNotifier,
       bouncingNotifier: bouncingNotifier,
-      indicatorNotifier: indicatorNotifier,
     );
   }
-
-  Header get header => indicatorNotifier.value.header;
-
-  bool get headerOverScroll {
-    if (header != null) {
-      return !header.enableInfiniteRefresh || header.overScroll;
-    }
-    return true;
-  }
-
-  Footer get footer => indicatorNotifier.value.footer;
-
-  bool get footerOverScroll {
-    if (footer != null) {
-      return !footer.enableInfiniteLoad || footer.overScroll;
-    }
-    return true;
-  }
-
-  double get footerExtent => footer.extent;
 
   /// The multiple applied to overscroll to make it appear that scrolling past
   /// the edge of the scrollable contents is harder than scrolling the list.
@@ -124,10 +99,7 @@ class EasyRefreshPhysics extends ScrollPhysics {
 
   @override
   double applyBoundaryConditions(ScrollMetrics position, double value) {
-    if (!bouncingNotifier.value.top ||
-        (!headerOverScroll &&
-            (taskNotifier.value.refreshing ||
-                taskNotifier.value.refreshNoMore))) {
+    if (!bouncingNotifier.value.top) {
       if (value < position.pixels &&
           position.pixels <= position.minScrollExtent) // underscroll
         return value - position.pixels;
@@ -135,13 +107,11 @@ class EasyRefreshPhysics extends ScrollPhysics {
           position.minScrollExtent < position.pixels) // hit top edge
         return value - position.minScrollExtent;
     }
-    if (!headerOverScroll && value - position.minScrollExtent < 0.0) {
+    if (!bouncingNotifier.value.top && value - position.minScrollExtent < 0.0) {
       // 防止越界超过header高度
       return value - position.minScrollExtent + 0.0001;
     }
-    if (!bouncingNotifier.value.bottom ||
-        (!footerOverScroll &&
-            (taskNotifier.value.loading || taskNotifier.value.loadNoMore))) {
+    if (!bouncingNotifier.value.bottom) {
       if (position.maxScrollExtent <= position.pixels &&
           position.pixels < value) {
         // overscroll
@@ -151,7 +121,8 @@ class EasyRefreshPhysics extends ScrollPhysics {
           position.maxScrollExtent < value) // hit bottom edge
         return value - position.maxScrollExtent;
     }
-    if (!footerOverScroll && value - position.maxScrollExtent > 0.0) {
+    if (!bouncingNotifier.value.bottom &&
+        value - position.maxScrollExtent > 0.0) {
       // 防止越界超过footer高度
       return value - position.maxScrollExtent;
     }
