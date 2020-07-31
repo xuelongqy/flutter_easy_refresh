@@ -27,6 +27,12 @@ abstract class Footer {
   /// 越界滚动(enableInfiniteLoad为true生效)
   final bool overScroll;
 
+  /// 安全区域
+  final bool safeArea;
+
+  /// 内边距(根据布局合理使用，设置后safeArea无效)
+  final EdgeInsets padding;
+
   Footer({
     this.extent = 60.0,
     this.triggerDistance = 70.0,
@@ -35,6 +41,8 @@ abstract class Footer {
     this.enableInfiniteLoad = true,
     this.enableHapticFeedback = false,
     this.overScroll = false,
+    this.safeArea = false,
+    this.padding,
   });
 
   // 构造器
@@ -61,6 +69,8 @@ abstract class Footer {
       //enableInfiniteLoad: enableInfiniteLoad && !float,
       enableHapticFeedback: enableHapticFeedback,
       //footerFloat: float,
+      safeArea: safeArea,
+      padding: padding,
       bindLoadIndicator: (finishLoad, resetLoadState) {
         if (easyRefresh.controller != null) {
           easyRefresh.controller.finishLoadCallBack = finishLoad;
@@ -290,6 +300,8 @@ class ClassicalFooter extends Footer {
     bool enableInfiniteLoad = true,
     bool enableHapticFeedback = true,
     bool overScroll = false,
+    bool safeArea = true,
+    EdgeInsets padding,
     this.key,
     this.alignment,
     this.loadText,
@@ -311,6 +323,8 @@ class ClassicalFooter extends Footer {
           enableInfiniteLoad: enableInfiniteLoad,
           enableHapticFeedback: enableHapticFeedback,
           overScroll: overScroll,
+          safeArea: safeArea,
+          padding: padding,
         );
 
   @override

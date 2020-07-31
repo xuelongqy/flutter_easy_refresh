@@ -626,6 +626,7 @@ class _EasyRefreshSliverRefreshControlState
   // 销毁
   @override
   void dispose() {
+    _axisDirectionNotifier.dispose();
     super.dispose();
   }
 
