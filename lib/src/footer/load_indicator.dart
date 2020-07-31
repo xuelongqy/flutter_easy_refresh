@@ -430,6 +430,7 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     this.taskNotifier,
     this.callLoadNotifier,
     this.taskIndependence,
+    this.extraExtentNotifier,
     this.bindLoadIndicator,
     this.enableControlFinishLoad = false,
     this.enableInfiniteLoad = true,
@@ -509,8 +510,11 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
   /// 任务状态
   final ValueNotifier<TaskState> taskNotifier;
 
-  // 触发加载状态
+  /// 触发加载状态
   final ValueNotifier<bool> callLoadNotifier;
+
+  /// 列表未占满时多余长度
+  final ValueNotifier<double> extraExtentNotifier;
 
   /// 是否任务独立
   final bool taskIndependence;
@@ -582,9 +586,6 @@ class _EasyRefreshSliverLoadControlState
   // 没有更多数据
   bool _noMore;
 
-  // 列表为占满时多余长度
-  ValueNotifier<double> extraExtentNotifier;
-
   // 列表方向
   ValueNotifier<AxisDirection> _axisDirectionNotifier;
 
@@ -603,21 +604,6 @@ class _EasyRefreshSliverLoadControlState
         loadState = LoadMode.inactive;
       }
     });
-    // 列表未占满长度监听
-    extraExtentNotifier = ValueNotifier<double>(0.0);
-    extraExtentNotifier.addListener(() {
-      if (extraExtentNotifier.value != widget.taskNotifier.value.extraExtent) {
-        widget.taskNotifier.value = widget.taskNotifier.value
-            .copy(extraExtent: extraExtentNotifier.value);
-      }
-    });
-  }
-
-  // 销毁
-  @override
-  void dispose() {
-    super.dispose();
-    extraExtentNotifier.dispose();
   }
 
   // 完成刷新
@@ -838,7 +824,7 @@ class _EasyRefreshSliverLoadControlState
       hasLayoutExtent: hasSliverLayoutExtent,
       enableInfiniteLoad: widget.enableInfiniteLoad,
       infiniteLoad: _infiniteLoad,
-      extraExtentNotifier: extraExtentNotifier,
+      extraExtentNotifier: widget.extraExtentNotifier,
       footerFloat: widget.footerFloat,
       axisDirectionNotifier: _axisDirectionNotifier,
       // A LayoutBuilder lets the sliver's layout changes be fed back out to
@@ -859,10 +845,10 @@ class _EasyRefreshSliverLoadControlState
               _axisDirectionNotifier.value == AxisDirection.left;
           latestIndicatorBoxExtent =
               (isVertical ? constraints.maxHeight : constraints.maxWidth) -
-                  extraExtentNotifier.value;
+                  widget.extraExtentNotifier.value;
           loadState = transitionNextState();
           // 列表未占满时恢复一下状态
-          if (extraExtentNotifier.value > 0.0 &&
+          if (widget.extraExtentNotifier.value > 0.0 &&
               loadState == LoadMode.loaded &&
               loadTask == null) {
             loadState = LoadMode.inactive;

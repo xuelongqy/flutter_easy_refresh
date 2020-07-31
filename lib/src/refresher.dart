@@ -266,6 +266,9 @@ class _EasyRefreshState extends State<EasyRefresh> {
   // 回弹设置
   ValueNotifier<BouncingSettings> _bouncingNotifier;
 
+  // 列表未占满时多余长度
+  ValueNotifier<double> _extraExtentNotifier;
+
   // 初始化
   @override
   void initState() {
@@ -275,6 +278,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
     _callRefreshNotifier = ValueNotifier<bool>(false);
     _callLoadNotifier = ValueNotifier<bool>(false);
     _bouncingNotifier = ValueNotifier<BouncingSettings>(BouncingSettings());
+    _extraExtentNotifier = ValueNotifier<double>(0.0);
     _taskNotifier.addListener(() {
       // 监听首次刷新是否结束
       if (_enableFirstRefresh && !_taskNotifier.value.refreshing) {
@@ -319,6 +323,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
     _callRefreshNotifier.dispose();
     _callLoadNotifier.dispose();
     _bouncingNotifier.dispose();
+    _extraExtentNotifier.dispose();
     super.dispose();
   }
 
@@ -346,6 +351,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
     _physics = EasyRefreshPhysics(
       taskNotifier: _taskNotifier,
       bouncingNotifier: _bouncingNotifier,
+      extraExtentNotifier: _extraExtentNotifier,
     );
   }
 
@@ -407,8 +413,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
             _callRefreshNotifier);
     var footer = widget.onLoad == null
         ? null
-        : _footer.builder(
-            context, widget, _focusNotifier, _taskNotifier, _callLoadNotifier);
+        : _footer.builder(context, widget, _focusNotifier, _taskNotifier,
+            _callLoadNotifier, _extraExtentNotifier);
     // 生成slivers
     List<Widget> slivers;
     if (widget.builder == null) {
@@ -589,29 +595,20 @@ class TaskState {
   bool refreshNoMore;
   bool loadNoMore;
 
-  // 列表未占满长度(用于列表未占满时出发加载)
-  double extraExtent;
-
   TaskState({
     this.refreshing = false,
     this.loading = false,
     this.refreshNoMore = false,
     this.loadNoMore = false,
-    this.extraExtent = 0.0,
   });
 
   TaskState copy(
-      {bool refreshing,
-      bool loading,
-      bool refreshNoMore,
-      bool loadNoMore,
-      double extraExtent}) {
+      {bool refreshing, bool loading, bool refreshNoMore, bool loadNoMore}) {
     return TaskState(
       refreshing: refreshing ?? this.refreshing,
       loading: loading ?? this.loading,
       refreshNoMore: refreshNoMore ?? this.refreshNoMore,
       loadNoMore: loadNoMore ?? this.loadNoMore,
-      extraExtent: extraExtent ?? this.extraExtent,
     );
   }
 }

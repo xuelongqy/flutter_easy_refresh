@@ -25,11 +25,15 @@ class EasyRefreshPhysics extends ScrollPhysics {
   // 回弹设置
   final ValueNotifier<BouncingSettings> bouncingNotifier;
 
+  // 列表未占满时多余长度
+  final ValueNotifier<double> extraExtentNotifier;
+
   /// Creates scroll physics that bounce back from the edge.
   const EasyRefreshPhysics({
     ScrollPhysics parent,
     this.taskNotifier,
     this.bouncingNotifier,
+    this.extraExtentNotifier,
   }) : super(parent: parent);
 
   @override
@@ -38,11 +42,12 @@ class EasyRefreshPhysics extends ScrollPhysics {
       parent: buildParent(ancestor),
       taskNotifier: taskNotifier,
       bouncingNotifier: bouncingNotifier,
+      extraExtentNotifier: extraExtentNotifier,
     );
   }
 
   /// 是否允许Bottom越界(列表未占满)
-  bool get bottomOverScroll => taskNotifier.value.extraExtent > 0.0;
+  bool get bottomOverScroll => extraExtentNotifier.value > 0.0;
 
   /// The multiple applied to overscroll to make it appear that scrolling past
   /// the edge of the scrollable contents is harder than scrolling the list.

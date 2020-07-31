@@ -43,7 +43,8 @@ abstract class Footer {
       EasyRefresh easyRefresh,
       ValueNotifier<bool> focusNotifier,
       ValueNotifier<TaskState> taskNotifier,
-      ValueNotifier<bool> callLoadNotifier) {
+      ValueNotifier<bool> callLoadNotifier,
+      ValueNotifier<double> extraExtentNotifier) {
     return EasyRefreshSliverLoadControl(
       loadIndicatorExtent: extent,
       loadTriggerPullDistance: triggerDistance,
@@ -52,6 +53,7 @@ abstract class Footer {
       onLoad: easyRefresh.onLoad,
       focusNotifier: focusNotifier,
       taskNotifier: taskNotifier,
+      extraExtentNotifier: extraExtentNotifier,
       callLoadNotifier: callLoadNotifier,
       taskIndependence: easyRefresh.taskIndependence,
       enableControlFinishLoad: easyRefresh.enableControlFinishLoad,
