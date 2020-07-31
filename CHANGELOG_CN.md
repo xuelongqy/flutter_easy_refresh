@@ -1,5 +1,8 @@
 # 更新日志
 
+## 下个版本
+>修复：首次刷新报错 [issues#341](https://github.com/xuelongqy/flutter_easyrefresh/issues/341)  
+
 ## V 2.1.4
 >修复：无限加载时，列表未暂满无法触发 [issues#337](https://github.com/xuelongqy/flutter_easyrefresh/issues/337)  
 
