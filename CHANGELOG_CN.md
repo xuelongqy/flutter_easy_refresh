@@ -1,6 +1,6 @@
 # 更新日志
 
-## 下个版本
+## V 2.1.5
 >修复：首次刷新报错 [issues#341](https://github.com/xuelongqy/flutter_easyrefresh/issues/341)  
 >添加：Footer的safeArea和padding参数 [issues#332](https://github.com/xuelongqy/flutter_easyrefresh/issues/332)  
 

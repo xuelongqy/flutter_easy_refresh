@@ -1,6 +1,6 @@
 # Change log
 
-## Next
+## V 2.1.5
 >Fix：firstRefresh error [issues#341](https://github.com/xuelongqy/flutter_easyrefresh/issues/341)  
 >Add: safeArea and padding parameters of Footer [issues#332](https://github.com/xuelongqy/flutter_easyrefresh/issues/332)  
 
