@@ -252,9 +252,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
         maxExtent: isReverse
             ? overscrolledExtent
             : _hasLayoutExtent || enableInfiniteLoad
-                ? _loadIndicatorExtent > overscrolledExtent
-                    ? _loadIndicatorExtent
-                    : overscrolledExtent
+                ? max(_loadIndicatorExtent, overscrolledExtent)
                 : overscrolledExtent,
       ),
       parentUsesSize: true,
@@ -758,7 +756,9 @@ class _EasyRefreshSliverLoadControlState
         } else {
           // 提前固定高度，防止列表回弹
           SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-            if (mounted) setState(() => hasSliverLayoutExtent = true);
+            if (!hasSliverLayoutExtent) {
+              if (mounted) setState(() => hasSliverLayoutExtent = true);
+            }
           });
           if (widget.onLoad != null && !hasTask) {
             if (!_focus) {
