@@ -177,26 +177,8 @@ import 'package:flutter_easyrefresh/material_footer.dart';
   )
 ```
 
-## Add globalization support
-```dart
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-....
-  /// Without your current language support
-  /// You can use strings_en.arb for translation and name it strings_{languageCode}_{countryCode}.arb
-  /// then pull requests
-  new MaterialApp(
-    localizationsDelegates: [
-      GlobalEasyRefreshLocalizations.delegate,
-      ....
-    ],
-    supportedLocales: [
-        Locale('en', ''),
-        Locale('zh', 'CN'),
-        ....
-    ]
-    ....
-  )
-```
+## Add internationalization support
+No built-in internationalization support is provided. Please set the text that needs to be displayed in ClassicalHeader and ClassicalFooter.
 
 # Donation
 If you like my project, please in the upper right corner of the project "Star". Your support is my biggest encouragement! ^_^
