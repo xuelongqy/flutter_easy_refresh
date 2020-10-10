@@ -581,6 +581,12 @@ class _EasyRefreshSliverRefreshControlState
       widget.taskNotifier.value =
           widget.taskNotifier.value.copy(refreshing: true);
     }
+    if (!widget.taskIndependence &&
+        task == null &&
+        widget.refreshIndicatorExtent == double.infinity) {
+      widget.taskNotifier.value =
+          widget.taskNotifier.value.copy(refreshing: false);
+    }
   }
 
   // The amount of space available from the inner indicator box's perspective.
