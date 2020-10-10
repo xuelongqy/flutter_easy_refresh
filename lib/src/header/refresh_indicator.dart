@@ -577,9 +577,9 @@ class _EasyRefreshSliverRefreshControlState
 
   set refreshTask(Future<void> task) {
     _refreshTask = task;
-    if (!widget.taskIndependence) {
+    if (!widget.taskIndependence && task != null) {
       widget.taskNotifier.value =
-          widget.taskNotifier.value.copy(refreshing: task != null);
+          widget.taskNotifier.value.copy(refreshing: true);
     }
   }
 
@@ -619,6 +619,12 @@ class _EasyRefreshSliverRefreshControlState
     widget.callRefreshNotifier.addListener(() {
       if (widget.callRefreshNotifier.value) {
         refreshState = RefreshMode.inactive;
+      }
+    });
+    // 监听是否触发加载
+    widget.taskNotifier.addListener(() {
+      if (widget.taskNotifier.value.loading && !widget.taskIndependence) {
+        setState(() {});
       }
     });
   }
@@ -719,6 +725,10 @@ class _EasyRefreshSliverRefreshControlState
           if (mounted) setState(() => hasSliverLayoutExtent = false);
         });
       }
+      if (!widget.taskIndependence) {
+        widget.taskNotifier.value =
+            widget.taskNotifier.value.copy(refreshing: false);
+      }
     }
 
     // 完成
@@ -731,7 +741,7 @@ class _EasyRefreshSliverRefreshControlState
         return null;
       } else {
         Future.delayed(widget.completeDuration, () {
-          if (mounted && !hasTask) {
+          if (mounted) {
             goToDone();
           }
         });

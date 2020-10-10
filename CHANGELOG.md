@@ -1,5 +1,9 @@
 # Change log
 
+## Next
+>Fix: refresh will not end [issues#355](https://github.com/xuelongqy/flutter_easyrefresh/issues/355)  
+>Remove: cupertino_icons dependency [issues#373](https://github.com/xuelongqy/flutter_easyrefresh/issues/373)  
+
 ## V 2.1.5
 >Fix：firstRefresh error [issues#341](https://github.com/xuelongqy/flutter_easyrefresh/issues/341)  
 >Add: safeArea and padding parameters of Footer [issues#332](https://github.com/xuelongqy/flutter_easyrefresh/issues/332)  

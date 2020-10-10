@@ -567,9 +567,6 @@ class _EasyRefreshSliverLoadControlState
 
   set loadTask(Future<void> task) {
     _loadTask = task;
-    if (!widget.taskIndependence)
-      widget.taskNotifier.value =
-          widget.taskNotifier.value.copy(loading: task != null);
   }
 
   // The amount of space available from the inner indicator box's perspective.
@@ -613,6 +610,12 @@ class _EasyRefreshSliverLoadControlState
     widget.callLoadNotifier.addListener(() {
       if (widget.callLoadNotifier.value) {
         loadState = LoadMode.inactive;
+      }
+    });
+    // 监听是否触发刷新
+    widget.taskNotifier.addListener(() {
+      if (widget.taskNotifier.value.refreshing && !widget.taskIndependence) {
+        setState(() {});
       }
     });
   }
@@ -711,6 +714,9 @@ class _EasyRefreshSliverLoadControlState
           if (mounted) setState(() => hasSliverLayoutExtent = false);
         });
       }
+      if (!widget.taskIndependence)
+        widget.taskNotifier.value =
+            widget.taskNotifier.value.copy(loading: loadTask != null);
     }
 
     // 结束
@@ -723,7 +729,7 @@ class _EasyRefreshSliverLoadControlState
         return null;
       } else {
         Future.delayed(widget.completeDuration, () {
-          if (mounted && !hasTask) {
+          if (mounted) {
             goToDone();
           }
         });
