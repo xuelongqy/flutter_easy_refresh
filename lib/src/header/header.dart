@@ -686,8 +686,12 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
                   : null,
           child: Container(
             alignment: widget.classicalHeader.alignment ?? isVertical
-                ? isReverse ? Alignment.topCenter : Alignment.bottomCenter
-                : !isReverse ? Alignment.centerRight : Alignment.centerLeft,
+                ? isReverse
+                    ? Alignment.topCenter
+                    : Alignment.bottomCenter
+                : !isReverse
+                    ? Alignment.centerRight
+                    : Alignment.centerLeft,
             width: isVertical
                 ? double.infinity
                 : _floatBackDistance == null

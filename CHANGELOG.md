@@ -1,6 +1,6 @@
 # Change log
 
-## Next
+## V 2.1.6
 >Fix: refresh will not end [issues#355](https://github.com/xuelongqy/flutter_easyrefresh/issues/355)  
 >Remove: cupertino_icons dependency [issues#373](https://github.com/xuelongqy/flutter_easyrefresh/issues/373)  
 

@@ -562,14 +562,34 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
     return Stack(
       children: <Widget>[
         Positioned(
-          top: !isVertical ? 0.0 : !isReverse ? 0.0 : null,
-          bottom: !isVertical ? 0.0 : isReverse ? 0.0 : null,
-          left: isVertical ? 0.0 : !isReverse ? 0.0 : null,
-          right: isVertical ? 0.0 : isReverse ? 0.0 : null,
+          top: !isVertical
+              ? 0.0
+              : !isReverse
+                  ? 0.0
+                  : null,
+          bottom: !isVertical
+              ? 0.0
+              : isReverse
+                  ? 0.0
+                  : null,
+          left: isVertical
+              ? 0.0
+              : !isReverse
+                  ? 0.0
+                  : null,
+          right: isVertical
+              ? 0.0
+              : isReverse
+                  ? 0.0
+                  : null,
           child: Container(
             alignment: widget.classicalFooter.alignment ?? isVertical
-                ? !isReverse ? Alignment.topCenter : Alignment.bottomCenter
-                : isReverse ? Alignment.centerRight : Alignment.centerLeft,
+                ? !isReverse
+                    ? Alignment.topCenter
+                    : Alignment.bottomCenter
+                : isReverse
+                    ? Alignment.centerRight
+                    : Alignment.centerLeft,
             width: !isVertical
                 ? widget.loadIndicatorExtent > widget.pulledExtent
                     ? widget.loadIndicatorExtent

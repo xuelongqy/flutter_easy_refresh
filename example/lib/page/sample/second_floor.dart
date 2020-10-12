@@ -203,7 +203,9 @@ class SecondFloorWidgetState extends State<SecondFloorWidget> {
       child: AnimatedContainer(
         height: _isOpen
             ? _secondFloor
-            : _refreshState == RefreshMode.inactive ? 0.0 : _pulledExtent,
+            : _refreshState == RefreshMode.inactive
+                ? 0.0
+                : _pulledExtent,
         color: Colors.white,
         duration: _toggleAnimation
             ? _toggleAnimationDuration

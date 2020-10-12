@@ -122,14 +122,34 @@ class MaterialFooterWidgetState extends State<MaterialFooterWidget> {
     return Stack(
       children: <Widget>[
         Positioned(
-          top: isVertical ? !isReverse ? 0.0 : null : 0.0,
-          bottom: isVertical ? isReverse ? 0.0 : null : 0.0,
-          left: !isVertical ? !isReverse ? 0.0 : null : 0.0,
-          right: !isVertical ? isReverse ? 0.0 : null : 0.0,
+          top: isVertical
+              ? !isReverse
+                  ? 0.0
+                  : null
+              : 0.0,
+          bottom: isVertical
+              ? isReverse
+                  ? 0.0
+                  : null
+              : 0.0,
+          left: !isVertical
+              ? !isReverse
+                  ? 0.0
+                  : null
+              : 0.0,
+          right: !isVertical
+              ? isReverse
+                  ? 0.0
+                  : null
+              : 0.0,
           child: Container(
             alignment: isVertical
-                ? !isReverse ? Alignment.topCenter : Alignment.bottomCenter
-                : !isReverse ? Alignment.centerLeft : Alignment.centerRight,
+                ? !isReverse
+                    ? Alignment.topCenter
+                    : Alignment.bottomCenter
+                : !isReverse
+                    ? Alignment.centerLeft
+                    : Alignment.centerRight,
             child: RefreshProgressIndicator(
               value: _refreshState == LoadMode.armed ||
                       _refreshState == LoadMode.load ||

@@ -171,30 +171,68 @@ class MaterialHeaderWidgetState extends State<MaterialHeaderWidget>
     }
     return Container(
       height: isVertical
-          ? _refreshState == RefreshMode.inactive ? 0.0 : _pulledExtent
+          ? _refreshState == RefreshMode.inactive
+              ? 0.0
+              : _pulledExtent
           : double.infinity,
       width: !isVertical
-          ? _refreshState == RefreshMode.inactive ? 0.0 : _pulledExtent
+          ? _refreshState == RefreshMode.inactive
+              ? 0.0
+              : _pulledExtent
           : double.infinity,
       child: Stack(
         children: <Widget>[
           Positioned(
-            top: isVertical ? isReverse ? 0.0 : null : 0.0,
-            bottom: isVertical ? !isReverse ? 0.0 : null : 0.0,
-            left: !isVertical ? isReverse ? 0.0 : null : 0.0,
-            right: !isVertical ? !isReverse ? 0.0 : null : 0.0,
+            top: isVertical
+                ? isReverse
+                    ? 0.0
+                    : null
+                : 0.0,
+            bottom: isVertical
+                ? !isReverse
+                    ? 0.0
+                    : null
+                : 0.0,
+            left: !isVertical
+                ? isReverse
+                    ? 0.0
+                    : null
+                : 0.0,
+            right: !isVertical
+                ? !isReverse
+                    ? 0.0
+                    : null
+                : 0.0,
             child: Container(
               padding: EdgeInsets.only(
-                top: isVertical ? isReverse ? 0.0 : widget.displacement : 0.0,
-                bottom:
-                    isVertical ? !isReverse ? 0.0 : widget.displacement : 0.0,
-                left: !isVertical ? isReverse ? 0.0 : widget.displacement : 0.0,
-                right:
-                    !isVertical ? !isReverse ? 0.0 : widget.displacement : 0.0,
+                top: isVertical
+                    ? isReverse
+                        ? 0.0
+                        : widget.displacement
+                    : 0.0,
+                bottom: isVertical
+                    ? !isReverse
+                        ? 0.0
+                        : widget.displacement
+                    : 0.0,
+                left: !isVertical
+                    ? isReverse
+                        ? 0.0
+                        : widget.displacement
+                    : 0.0,
+                right: !isVertical
+                    ? !isReverse
+                        ? 0.0
+                        : widget.displacement
+                    : 0.0,
               ),
               alignment: isVertical
-                  ? isReverse ? Alignment.topCenter : Alignment.bottomCenter
-                  : isReverse ? Alignment.centerLeft : Alignment.centerRight,
+                  ? isReverse
+                      ? Alignment.topCenter
+                      : Alignment.bottomCenter
+                  : isReverse
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
               child: ScaleTransition(
                 scale: _scaleFactor,
                 child: RefreshProgressIndicator(

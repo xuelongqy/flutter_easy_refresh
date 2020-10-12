@@ -855,15 +855,15 @@ class _EasyRefreshSliverLoadControlState
             ? MediaQuery.of(context).padding.top
             : 0.0,
         bottom: widget.safeArea &&
-            _axisDirectionNotifier.value == AxisDirection.down
+                _axisDirectionNotifier.value == AxisDirection.down
             ? MediaQuery.of(context).padding.bottom
             : 0.0,
         left: widget.safeArea &&
-            _axisDirectionNotifier.value == AxisDirection.left
+                _axisDirectionNotifier.value == AxisDirection.left
             ? MediaQuery.of(context).padding.left
             : 0.0,
         right: widget.safeArea &&
-            _axisDirectionNotifier.value == AxisDirection.right
+                _axisDirectionNotifier.value == AxisDirection.right
             ? MediaQuery.of(context).padding.right
             : 0.0,
       );
