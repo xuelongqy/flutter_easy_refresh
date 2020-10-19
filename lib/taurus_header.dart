@@ -12,7 +12,7 @@ class TaurusHeader extends Header {
   /// Key
   final Key key;
 
-/// 背景色
+  /// 背景色
   final Color backgroundColor;
 
   final LinkHeaderNotifier linkNotifier = LinkHeaderNotifier();
@@ -68,7 +68,7 @@ class TaurusHeader extends Header {
 
 /// 冲上云霄组件
 class TaurusHeaderWidget extends StatefulWidget {
-    /// 背景色
+  /// 背景色
   final Color backgroundColor;
 
   final LinkHeaderNotifier linkNotifier;
