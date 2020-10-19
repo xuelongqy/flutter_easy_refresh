@@ -212,7 +212,7 @@ class TaurusHeaderWidgetState extends State<TaurusHeaderWidget> {
     }
     return Stack(
       children: <Widget>[
-        // 蓝天
+        // 蓝天(背景)
         Container(
           width: double.infinity,
           color: widget.backgroundColor,
