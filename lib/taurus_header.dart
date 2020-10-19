@@ -207,6 +207,11 @@ class TaurusHeaderWidgetState extends State<TaurusHeaderWidget> {
         Container(
           width: double.infinity,
           color: Colors.blue,
+          transform: Matrix4.translationValues(
+            0.0,
+            -1.0,
+            0.0,
+          ),
         ),
         // 左边云朵
         Positioned(
@@ -268,15 +273,17 @@ class TaurusHeaderWidgetState extends State<TaurusHeaderWidget> {
           bottom: -2.0,
           left: 0.0,
           right: 0.0,
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: centerCloudHeight,
-              child: Image.memory(
-                _cloudsCenterBytes,
-                fit: BoxFit.fitHeight,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                height: centerCloudHeight,
+                child: Image.memory(
+                  _cloudsCenterBytes,
+                  fit: BoxFit.fitHeight,
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ],
