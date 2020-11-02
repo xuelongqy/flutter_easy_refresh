@@ -630,7 +630,9 @@ class _EasyRefreshSliverRefreshControlState
     // 监听是否触发加载
     widget.taskNotifier.addListener(() {
       if (widget.taskNotifier.value.loading && !widget.taskIndependence) {
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
     });
   }

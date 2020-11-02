@@ -1,5 +1,8 @@
 # 更新日志
 
+## 下个版本
+>修复：销毁时任务监听器报错 [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/382)  
+
 ## V 2.1.6
 >修复：下拉刷新不会结束 [issues#355](https://github.com/xuelongqy/flutter_easyrefresh/issues/355)  
 >移除：cupertino_icons依赖 [issues#373](https://github.com/xuelongqy/flutter_easyrefresh/issues/373)  
