@@ -63,102 +63,108 @@ class NestedScrollViewPageState extends State<NestedScrollViewPage>
               ),
               floating: false,
               pinned: true,
-              bottom: new PreferredSize(
-                child: new Card(
-                  color: Theme.of(context).primaryColor,
-                  elevation: 0.0,
-                  margin: new EdgeInsets.all(0.0),
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(0.0)),
-                  ),
-                  child: new TabBar(
-                    controller: _tabController,
-                    onTap: (index) {
-                      setState(() {
-                        _tabIndex = index;
-                      });
-                    },
-                    tabs: <Widget>[
-                      new Tab(
-                        text: 'List',
-                      ),
-                      new Tab(
-                        text: 'Grid',
-                      ),
-                    ],
-                  ),
-                ),
-                preferredSize: new Size(double.infinity, 46.0),
-              ),
             ),
           ];
         },
-        body: IndexedStack(
-          index: _tabIndex,
+        body: Column(
           children: <Widget>[
-            extended.NestedScrollViewInnerScrollPositionKeyWidget(
-              Key('Tab0'),
-              EasyRefresh(
-                child: ListView.builder(
-                  padding: EdgeInsets.all(0.0),
-                  itemBuilder: (context, index) {
-                    return SampleListItem();
-                  },
-                  itemCount: _listCount,
+            PreferredSize(
+              child: new Card(
+                color: Theme.of(context).primaryColor,
+                elevation: 0.0,
+                margin: new EdgeInsets.all(0.0),
+                shape: new RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(0.0)),
                 ),
-                onRefresh: () async {
-                  await Future.delayed(Duration(seconds: 2), () {
-                    if (mounted) {
-                      setState(() {
-                        _listCount = 20;
-                      });
-                    }
-                  });
-                },
-                onLoad: () async {
-                  await Future.delayed(Duration(seconds: 2), () {
-                    if (mounted) {
-                      setState(() {
-                        _listCount += 10;
-                      });
-                    }
-                  });
-                },
+                child: new TabBar(
+                  controller: _tabController,
+                  onTap: (index) {
+                    setState(() {
+                      _tabIndex = index;
+                    });
+                  },
+                  tabs: <Widget>[
+                    new Tab(
+                      text: 'List',
+                    ),
+                    new Tab(
+                      text: 'Grid',
+                    ),
+                  ],
+                ),
               ),
+              preferredSize: new Size(double.infinity, 46.0),
             ),
-            extended.NestedScrollViewInnerScrollPositionKeyWidget(
-              Key('Tab1'),
-              EasyRefresh(
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 6 / 7,
+            Expanded(
+              child: IndexedStack(
+                index: _tabIndex,
+                children: <Widget>[
+                  extended.NestedScrollViewInnerScrollPositionKeyWidget(
+                    Key('Tab0'),
+                    EasyRefresh(
+                      child: ListView.builder(
+                        padding: EdgeInsets.all(0.0),
+                        itemBuilder: (context, index) {
+                          return SampleListItem();
+                        },
+                        itemCount: _listCount,
+                      ),
+                      onRefresh: () async {
+                        await Future.delayed(Duration(seconds: 2), () {
+                          if (mounted) {
+                            setState(() {
+                              _listCount = 20;
+                            });
+                          }
+                        });
+                      },
+                      onLoad: () async {
+                        await Future.delayed(Duration(seconds: 2), () {
+                          if (mounted) {
+                            setState(() {
+                              _listCount += 10;
+                            });
+                          }
+                        });
+                      },
+                    ),
                   ),
-                  itemBuilder: (context, index) {
-                    return SampleListItem(
-                      direction: Axis.horizontal,
-                    );
-                  },
-                  itemCount: _gridCount,
-                ),
-                onRefresh: () async {
-                  await Future.delayed(Duration(seconds: 2), () {
-                    if (mounted) {
-                      setState(() {
-                        _gridCount = 30;
-                      });
-                    }
-                  });
-                },
-                onLoad: () async {
-                  await Future.delayed(Duration(seconds: 2), () {
-                    if (mounted) {
-                      setState(() {
-                        _gridCount += 10;
-                      });
-                    }
-                  });
-                },
+                  extended.NestedScrollViewInnerScrollPositionKeyWidget(
+                    Key('Tab1'),
+                    EasyRefresh(
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 6 / 7,
+                        ),
+                        itemBuilder: (context, index) {
+                          return SampleListItem(
+                            direction: Axis.horizontal,
+                          );
+                        },
+                        itemCount: _gridCount,
+                      ),
+                      onRefresh: () async {
+                        await Future.delayed(Duration(seconds: 2), () {
+                          if (mounted) {
+                            setState(() {
+                              _gridCount = 30;
+                            });
+                          }
+                        });
+                      },
+                      onLoad: () async {
+                        await Future.delayed(Duration(seconds: 2), () {
+                          if (mounted) {
+                            setState(() {
+                              _gridCount += 10;
+                            });
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
