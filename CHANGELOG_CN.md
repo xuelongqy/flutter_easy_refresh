@@ -1,8 +1,25 @@
 # 更新日志
 
 ## 下个版本
+>修复：销毁时任务监听器报错 [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/382)  
+
+## V 2.1.6
+>修复：下拉刷新不会结束 [issues#355](https://github.com/xuelongqy/flutter_easyrefresh/issues/355)  
+>移除：cupertino_icons依赖 [issues#373](https://github.com/xuelongqy/flutter_easyrefresh/issues/373)  
+
+## V 2.1.5
+>修复：首次刷新报错 [issues#341](https://github.com/xuelongqy/flutter_easyrefresh/issues/341)  
+>添加：Footer的safeArea和padding参数 [issues#332](https://github.com/xuelongqy/flutter_easyrefresh/issues/332)  
+
+## V 2.1.4
+>修复：无限加载时，列表未暂满无法触发 [issues#337](https://github.com/xuelongqy/flutter_easyrefresh/issues/337)  
+
+## V 2.1.2
 >修改：自定义首次刷新视图时不显示空视图  
 >去除：国际化支持  
+>添加：在无限滚动的情况下Header和Footer设置越界回弹(overScroll)  
+>修复：NestedScrollView中调用callRefresh出现折叠 [issues#172](https://github.com/xuelongqy/flutter_easyrefresh/issues/172)  
+>修复：Header未收起，再次调用callRefresh不会触发刷新 [issues#313](https://github.com/xuelongqy/flutter_easyrefresh/issues/313)  
 
 ## V 2.1.1
 >修复：BezierCircleHeader进度条偶尔不隐藏  

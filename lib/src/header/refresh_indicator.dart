@@ -99,6 +99,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   // resting state when in the refreshing mode.
   double get refreshIndicatorLayoutExtent => _refreshIndicatorExtent;
   double _refreshIndicatorExtent;
+
   set refreshIndicatorLayoutExtent(double value) {
     assert(value != null);
     assert(value >= 0.0);
@@ -115,6 +116,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   // [SliverGeometry.layoutExtent] space or not.
   bool get hasLayoutExtent => _hasLayoutExtent;
   bool _hasLayoutExtent;
+
   set hasLayoutExtent(bool value) {
     assert(value != null);
     if (value == _hasLayoutExtent) return;
@@ -125,6 +127,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   /// 是否开启无限刷新
   bool get enableInfiniteRefresh => _enableInfiniteRefresh;
   bool _enableInfiniteRefresh;
+
   set enableInfiniteRefresh(bool value) {
     assert(value != null);
     if (value == _enableInfiniteRefresh) return;
@@ -135,6 +138,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   /// Header是否浮动
   bool get headerFloat => _headerFloat;
   bool _headerFloat;
+
   set headerFloat(bool value) {
     assert(value != null);
     if (value == _headerFloat) return;
@@ -144,8 +148,10 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
 
   /// 无限加载回调
   final VoidCallback infiniteRefresh;
+
   // 触发无限刷新
   bool _triggerInfiniteRefresh = false;
+
   // 获取子组件大小
   double get childSize =>
       constraints.axis == Axis.vertical ? child.size.height : child.size.width;
@@ -191,7 +197,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
     // 判断是否触发无限刷新
     if (enableInfiniteRefresh &&
         constraints.scrollOffset < _refreshIndicatorExtent &&
-        constraints.userScrollDirection != ScrollDirection.idle) {
+        constraints.scrollOffset > 0.0) {
       if (!_triggerInfiniteRefresh) {
         _triggerInfiniteRefresh = true;
         infiniteRefresh();
@@ -556,9 +562,12 @@ class _EasyRefreshSliverRefreshControlState
   static const double _inactiveResetOverscrollFraction = 0.1;
 
   RefreshMode refreshState;
+
   // [Future] returned by the widget's `onRefresh`.
   Future<void> _refreshTask;
+
   Future<void> get refreshTask => _refreshTask;
+
   bool get hasTask {
     return widget.taskIndependence
         ? _refreshTask != null
@@ -568,9 +577,15 @@ class _EasyRefreshSliverRefreshControlState
 
   set refreshTask(Future<void> task) {
     _refreshTask = task;
-    if (!widget.taskIndependence) {
+    if (!widget.taskIndependence && task != null) {
       widget.taskNotifier.value =
-          widget.taskNotifier.value.copy(refreshing: task != null);
+          widget.taskNotifier.value.copy(refreshing: true);
+    }
+    if (!widget.taskIndependence &&
+        task == null &&
+        widget.refreshIndicatorExtent == double.infinity) {
+      widget.taskNotifier.value =
+          widget.taskNotifier.value.copy(refreshing: false);
     }
   }
 
@@ -587,8 +602,10 @@ class _EasyRefreshSliverRefreshControlState
 
   // 滚动焦点
   bool get _focus => widget.focusNotifier.value;
+
   // 刷新完成
   bool _success;
+
   // 没有更多数据
   bool _noMore;
 
@@ -605,11 +622,25 @@ class _EasyRefreshSliverRefreshControlState
     if (widget.bindRefreshIndicator != null) {
       widget.bindRefreshIndicator(finishRefresh, resetRefreshState);
     }
+    widget.callRefreshNotifier.addListener(() {
+      if (widget.callRefreshNotifier.value) {
+        refreshState = RefreshMode.inactive;
+      }
+    });
+    // 监听是否触发加载
+    widget.taskNotifier.addListener(() {
+      if (widget.taskNotifier.value.loading && !widget.taskIndependence) {
+        if (mounted) {
+          setState(() {});
+        }
+      }
+    });
   }
 
   // 销毁
   @override
   void dispose() {
+    _axisDirectionNotifier.dispose();
     super.dispose();
   }
 
@@ -620,6 +651,8 @@ class _EasyRefreshSliverRefreshControlState
   }) {
     _success = success;
     _noMore = _success == false ? false : noMore;
+    widget.taskNotifier.value =
+        widget.taskNotifier.value.copy(refreshNoMore: _noMore);
     if (widget.enableControlFinishRefresh && refreshTask != null) {
       if (widget.enableInfiniteRefresh) {
         refreshState = RefreshMode.inactive;
@@ -643,10 +676,10 @@ class _EasyRefreshSliverRefreshControlState
 
   // 无限刷新
   void _infiniteRefresh() {
-    if (!hasTask &&
-        widget.enableInfiniteRefresh &&
-        _noMore != true &&
-        !widget.callRefreshNotifier.value) {
+    if (widget.callRefreshNotifier.value) {
+      widget.callRefreshNotifier.value = false;
+    }
+    if (!hasTask && widget.enableInfiniteRefresh && _noMore != true) {
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
@@ -697,8 +730,12 @@ class _EasyRefreshSliverRefreshControlState
         setState(() => hasSliverLayoutExtent = false);
       } else {
         SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-          setState(() => hasSliverLayoutExtent = false);
+          if (mounted) setState(() => hasSliverLayoutExtent = false);
         });
+      }
+      if (!widget.taskIndependence) {
+        widget.taskNotifier.value =
+            widget.taskNotifier.value.copy(refreshing: false);
       }
     }
 
@@ -726,9 +763,6 @@ class _EasyRefreshSliverRefreshControlState
             (!_focus && !widget.callRefreshNotifier.value)) {
           return RefreshMode.inactive;
         } else {
-          if (widget.callRefreshNotifier.value) {
-            widget.callRefreshNotifier.value = false;
-          }
           nextState = RefreshMode.drag;
         }
         continue drag;
@@ -750,7 +784,7 @@ class _EasyRefreshSliverRefreshControlState
           // 提前固定高度，防止列表回弹
           SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
             if (!hasSliverLayoutExtent) {
-              setState(() => hasSliverLayoutExtent = true);
+              if (mounted) setState(() => hasSliverLayoutExtent = true);
             }
           });
           if (widget.onRefresh != null && !hasTask) {

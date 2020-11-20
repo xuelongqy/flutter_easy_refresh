@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
@@ -13,7 +14,7 @@ class TestPage extends StatefulWidget {
 
 class TestPageState extends State<TestPage> {
   // 总数
-  int _count = 2;
+  int _count = 20;
   // 控制器
   EasyRefreshController _controller;
 
@@ -31,7 +32,7 @@ class TestPageState extends State<TestPage> {
       //print(_headerNotifier.refreshState);
     });
     _footerNotifier.addListener(() {
-      print(_footerNotifier.loadState);
+      //print(_footerNotifier.loadState);
     });
   }
 
@@ -52,39 +53,47 @@ class TestPageState extends State<TestPage> {
       ),
       body: EasyRefresh.custom(
         header: NotificationHeader(
-          header: ClassicalHeader(),
+          header: ClassicalHeader(
+            enableInfiniteRefresh: true,
+          ),
           notifier: _headerNotifier,
         ),
         footer: NotificationFooter(
-          footer: ClassicalFooter(),
+          footer: ClassicalFooter(
+            enableInfiniteLoad: true,
+          ),
           notifier: _footerNotifier,
         ),
         controller: _controller,
         onRefresh: () async {
           print('refresh');
           await Future.delayed(Duration(seconds: 2), () {
-            setState(() {
-              _count = 20;
-            });
+            if (mounted) {
+              setState(() {
+                _count = 20;
+              });
+            }
           });
         },
         onLoad: () async {
           print('load');
           await Future.delayed(Duration(seconds: 2), () {
-            setState(() {
-              _count += 1;
-            });
+            if (mounted) {
+              setState(() {
+                _count += 1;
+              });
+            }
           });
         },
         slivers: <Widget>[
-          if (_count > 0)
-            SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 0.6),
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return Card();
-              }, childCount: _count),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return SampleListItem();
+              },
+              childCount: _count,
             ),
+          ),
         ],
       ),
     );

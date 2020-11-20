@@ -24,6 +24,7 @@ class MaterialFooter extends Footer {
     completeDuration = const Duration(seconds: 1),
     bool enableHapticFeedback = false,
     bool enableInfiniteLoad = true,
+    bool overScroll = false,
   }) : super(
           float: true,
           extent: 52.0,
@@ -38,6 +39,7 @@ class MaterialFooter extends Footer {
                   ),
           enableHapticFeedback: enableHapticFeedback,
           enableInfiniteLoad: enableInfiniteLoad,
+          overScroll: overScroll,
         );
 
   @override
@@ -120,14 +122,34 @@ class MaterialFooterWidgetState extends State<MaterialFooterWidget> {
     return Stack(
       children: <Widget>[
         Positioned(
-          top: isVertical ? !isReverse ? 0.0 : null : 0.0,
-          bottom: isVertical ? isReverse ? 0.0 : null : 0.0,
-          left: !isVertical ? !isReverse ? 0.0 : null : 0.0,
-          right: !isVertical ? isReverse ? 0.0 : null : 0.0,
+          top: isVertical
+              ? !isReverse
+                  ? 0.0
+                  : null
+              : 0.0,
+          bottom: isVertical
+              ? isReverse
+                  ? 0.0
+                  : null
+              : 0.0,
+          left: !isVertical
+              ? !isReverse
+                  ? 0.0
+                  : null
+              : 0.0,
+          right: !isVertical
+              ? isReverse
+                  ? 0.0
+                  : null
+              : 0.0,
           child: Container(
             alignment: isVertical
-                ? !isReverse ? Alignment.topCenter : Alignment.bottomCenter
-                : !isReverse ? Alignment.centerLeft : Alignment.centerRight,
+                ? !isReverse
+                    ? Alignment.topCenter
+                    : Alignment.bottomCenter
+                : !isReverse
+                    ? Alignment.centerLeft
+                    : Alignment.centerRight,
             child: RefreshProgressIndicator(
               value: _refreshState == LoadMode.armed ||
                       _refreshState == LoadMode.load ||

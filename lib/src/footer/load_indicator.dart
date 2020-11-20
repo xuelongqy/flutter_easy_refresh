@@ -108,6 +108,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
   // resting state when in the refreshing mode.
   double get loadIndicatorLayoutExtent => _loadIndicatorExtent;
   double _loadIndicatorExtent;
+
   set loadIndicatorLayoutExtent(double value) {
     assert(value != null);
     assert(value >= 0.0);
@@ -121,6 +122,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
   // [SliverGeometry.layoutExtent] space or not.
   bool get hasLayoutExtent => _hasLayoutExtent;
   bool _hasLayoutExtent;
+
   set hasLayoutExtent(bool value) {
     assert(value != null);
     if (value == _hasLayoutExtent) return;
@@ -131,6 +133,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
   /// 是否开启无限加载
   bool get enableInfiniteLoad => _enableInfiniteLoad;
   bool _enableInfiniteLoad;
+
   set enableInfiniteLoad(bool value) {
     assert(value != null);
     if (value == _enableInfiniteLoad) return;
@@ -141,6 +144,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
   /// Header是否浮动
   bool get footerFloat => _footerFloat;
   bool _footerFloat;
+
   set footerFloat(bool value) {
     assert(value != null);
     if (value == _footerFloat) return;
@@ -227,7 +231,8 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
       return;
     }*/
     final bool active = (constraints.remainingPaintExtent > 1.0 ||
-        layoutExtent > (enableInfiniteLoad ? 1.0 : 0.0) * _loadIndicatorExtent);
+        layoutExtent >=
+            (enableInfiniteLoad ? 1.0 : 0.0) * _loadIndicatorExtent);
     // 如果列表已有范围不大于指示器的范围则加上滚动超出距离
     final double overscrolledExtent = max(
         constraints.remainingPaintExtent +
@@ -247,9 +252,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
         maxExtent: isReverse
             ? overscrolledExtent
             : _hasLayoutExtent || enableInfiniteLoad
-                ? _loadIndicatorExtent > overscrolledExtent
-                    ? _loadIndicatorExtent
-                    : overscrolledExtent
+                ? max(_loadIndicatorExtent, overscrolledExtent)
                 : overscrolledExtent,
       ),
       parentUsesSize: true,
@@ -425,11 +428,14 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     this.taskNotifier,
     this.callLoadNotifier,
     this.taskIndependence,
+    this.extraExtentNotifier,
     this.bindLoadIndicator,
     this.enableControlFinishLoad = false,
     this.enableInfiniteLoad = true,
     this.enableHapticFeedback = false,
     this.footerFloat = false,
+    this.safeArea = false,
+    this.padding,
   })  : assert(loadTriggerPullDistance != null),
         assert(loadTriggerPullDistance > 0.0),
         assert(loadIndicatorExtent != null),
@@ -503,14 +509,24 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
 
   /// 任务状态
   final ValueNotifier<TaskState> taskNotifier;
-  // 触发加载状态
+
+  /// 触发加载状态
   final ValueNotifier<bool> callLoadNotifier;
+
+  /// 列表未占满时多余长度
+  final ValueNotifier<double> extraExtentNotifier;
 
   /// 是否任务独立
   final bool taskIndependence;
 
   /// Footer浮动
   final bool footerFloat;
+
+  /// 安全区域
+  final bool safeArea;
+
+  /// 内边距(根据布局合理使用，设置后safeArea无效)
+  final EdgeInsets padding;
 
   static const double _defaultLoadTriggerPullDistance = 100.0;
   static const double _defaultLoadIndicatorExtent = 60.0;
@@ -536,9 +552,12 @@ class _EasyRefreshSliverLoadControlState
   static const double _inactiveResetOverscrollFraction = 0.1;
 
   LoadMode loadState;
+
   // [Future] returned by the widget's `onLoad`.
   Future<void> _loadTask;
+
   Future<void> get loadTask => _loadTask;
+
   bool get hasTask {
     return widget.taskIndependence
         ? _loadTask != null
@@ -548,9 +567,6 @@ class _EasyRefreshSliverLoadControlState
 
   set loadTask(Future<void> task) {
     _loadTask = task;
-    if (!widget.taskIndependence)
-      widget.taskNotifier.value =
-          widget.taskNotifier.value.copy(loading: task != null);
   }
 
   // The amount of space available from the inner indicator box's perspective.
@@ -566,12 +582,13 @@ class _EasyRefreshSliverLoadControlState
 
   // 滚动焦点
   bool get _focus => widget.focusNotifier.value;
+
   // 刷新完成
   bool _success;
+
   // 没有更多数据
   bool _noMore;
-  // 列表为占满时多余长度
-  ValueNotifier<double> extraExtentNotifier;
+
   // 列表方向
   ValueNotifier<AxisDirection> _axisDirectionNotifier;
 
@@ -580,19 +597,35 @@ class _EasyRefreshSliverLoadControlState
   void initState() {
     super.initState();
     loadState = LoadMode.inactive;
-    extraExtentNotifier = ValueNotifier<double>(0.0);
     _axisDirectionNotifier = ValueNotifier<AxisDirection>(AxisDirection.down);
+    _axisDirectionNotifier.addListener(() {
+      SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+        if (mounted) setState(() {});
+      });
+    });
     // 绑定加载指示器
     if (widget.bindLoadIndicator != null) {
       widget.bindLoadIndicator(finishLoad, resetLoadState);
     }
+    widget.callLoadNotifier.addListener(() {
+      if (widget.callLoadNotifier.value) {
+        loadState = LoadMode.inactive;
+      }
+    });
+    // 监听是否触发刷新
+    widget.taskNotifier.addListener(() {
+      if (widget.taskNotifier.value.refreshing && !widget.taskIndependence) {
+        if (mounted) {
+          setState(() {});
+        }
+      }
+    });
   }
 
-  // 销毁
   @override
   void dispose() {
+    _axisDirectionNotifier.dispose();
     super.dispose();
-    extraExtentNotifier.dispose();
   }
 
   // 完成刷新
@@ -602,6 +635,8 @@ class _EasyRefreshSliverLoadControlState
   }) {
     _success = success;
     _noMore = _success == false ? false : noMore;
+    widget.taskNotifier.value =
+        widget.taskNotifier.value.copy(loadNoMore: _noMore);
     if (widget.enableControlFinishLoad && loadTask != null) {
       if (widget.enableInfiniteLoad) {
         loadState = LoadMode.inactive;
@@ -625,10 +660,10 @@ class _EasyRefreshSliverLoadControlState
 
   // 无限加载
   void _infiniteLoad() {
-    if (!hasTask &&
-        widget.enableInfiniteLoad &&
-        _noMore != true &&
-        !widget.callLoadNotifier.value) {
+    if (widget.callLoadNotifier.value) {
+      widget.callLoadNotifier.value = false;
+    }
+    if (!hasTask && widget.enableInfiniteLoad && _noMore != true) {
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
@@ -678,9 +713,12 @@ class _EasyRefreshSliverLoadControlState
         setState(() => hasSliverLayoutExtent = false);
       } else {
         SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-          setState(() => hasSliverLayoutExtent = false);
+          if (mounted) setState(() => hasSliverLayoutExtent = false);
         });
       }
+      if (!widget.taskIndependence)
+        widget.taskNotifier.value =
+            widget.taskNotifier.value.copy(loading: loadTask != null);
     }
 
     // 结束
@@ -726,13 +764,12 @@ class _EasyRefreshSliverLoadControlState
         } else {
           // 提前固定高度，防止列表回弹
           SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
-            setState(() => hasSliverLayoutExtent = true);
+            if (!hasSliverLayoutExtent) {
+              if (mounted) setState(() => hasSliverLayoutExtent = true);
+            }
           });
           if (widget.onLoad != null && !hasTask) {
             if (!_focus) {
-              if (widget.callLoadNotifier.value) {
-                widget.callLoadNotifier.value = false;
-              }
               if (widget.enableHapticFeedback) {
                 HapticFeedback.mediumImpact();
               }
@@ -807,101 +844,132 @@ class _EasyRefreshSliverLoadControlState
     return nextState;
   }
 
+  /// 内边距
+  EdgeInsets get _padding {
+    if (widget.padding != null) {
+      return widget.padding;
+    }
+    if (!widget.safeArea) {
+      return EdgeInsets.zero;
+    } else {
+      return EdgeInsets.only(
+        top: widget.safeArea && _axisDirectionNotifier.value == AxisDirection.up
+            ? MediaQuery.of(context).padding.top
+            : 0.0,
+        bottom: widget.safeArea &&
+                _axisDirectionNotifier.value == AxisDirection.down
+            ? MediaQuery.of(context).padding.bottom
+            : 0.0,
+        left: widget.safeArea &&
+                _axisDirectionNotifier.value == AxisDirection.left
+            ? MediaQuery.of(context).padding.left
+            : 0.0,
+        right: widget.safeArea &&
+                _axisDirectionNotifier.value == AxisDirection.right
+            ? MediaQuery.of(context).padding.right
+            : 0.0,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return _EasyRefreshSliverLoad(
-      loadIndicatorLayoutExtent: widget.loadIndicatorExtent,
-      hasLayoutExtent: hasSliverLayoutExtent,
-      enableInfiniteLoad: widget.enableInfiniteLoad,
-      infiniteLoad: _infiniteLoad,
-      extraExtentNotifier: extraExtentNotifier,
-      footerFloat: widget.footerFloat,
-      axisDirectionNotifier: _axisDirectionNotifier,
-      // A LayoutBuilder lets the sliver's layout changes be fed back out to
-      // its owner to trigger state changes.
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          // 判断是否有刷新任务
-          if (!widget.taskIndependence &&
-              widget.taskNotifier.value.refreshing) {
-            return SizedBox();
-          }
-          // 是否为垂直方向
-          bool isVertical =
-              _axisDirectionNotifier.value == AxisDirection.down ||
-                  _axisDirectionNotifier.value == AxisDirection.up;
-          // 是否反向
-          bool isReverse = _axisDirectionNotifier.value == AxisDirection.up ||
-              _axisDirectionNotifier.value == AxisDirection.left;
-          latestIndicatorBoxExtent =
-              (isVertical ? constraints.maxHeight : constraints.maxWidth) -
-                  extraExtentNotifier.value;
-          loadState = transitionNextState();
-          // 列表未占满时恢复一下状态
-          if (extraExtentNotifier.value > 0.0 &&
-              loadState == LoadMode.loaded &&
-              loadTask == null) {
-            loadState = LoadMode.inactive;
-          }
-          if (widget.builder != null && latestIndicatorBoxExtent >= 0) {
-            Widget child = widget.builder(
-              context,
-              loadState,
-              latestIndicatorBoxExtent,
-              widget.loadTriggerPullDistance,
-              widget.loadIndicatorExtent,
-              _axisDirectionNotifier.value,
-              widget.footerFloat,
-              widget.completeDuration,
-              widget.enableInfiniteLoad,
-              _success ?? true,
-              _noMore ?? false,
-            );
-            // 顶出列表未占满多余部分
-            return isVertical
-                ? Column(
-                    children: <Widget>[
-                      isReverse
-                          ? SizedBox()
-                          : Expanded(
-                              flex: 1,
-                              child: SizedBox(),
-                            ),
-                      Container(
-                        height: latestIndicatorBoxExtent,
-                        child: child,
-                      ),
-                      !isReverse
-                          ? SizedBox()
-                          : Expanded(
-                              flex: 1,
-                              child: SizedBox(),
-                            ),
-                    ],
-                  )
-                : Row(
-                    children: <Widget>[
-                      isReverse
-                          ? SizedBox()
-                          : Expanded(
-                              flex: 1,
-                              child: SizedBox(),
-                            ),
-                      Container(
-                        width: latestIndicatorBoxExtent,
-                        child: child,
-                      ),
-                      !isReverse
-                          ? SizedBox()
-                          : Expanded(
-                              flex: 1,
-                              child: SizedBox(),
-                            ),
-                    ],
-                  );
-          }
-          return Container();
-        },
+    return SliverPadding(
+      padding: _padding,
+      sliver: _EasyRefreshSliverLoad(
+        loadIndicatorLayoutExtent: widget.loadIndicatorExtent,
+        hasLayoutExtent: hasSliverLayoutExtent,
+        enableInfiniteLoad: widget.enableInfiniteLoad,
+        infiniteLoad: _infiniteLoad,
+        extraExtentNotifier: widget.extraExtentNotifier,
+        footerFloat: widget.footerFloat,
+        axisDirectionNotifier: _axisDirectionNotifier,
+        // A LayoutBuilder lets the sliver's layout changes be fed back out to
+        // its owner to trigger state changes.
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            // 判断是否有刷新任务
+            if (!widget.taskIndependence &&
+                widget.taskNotifier.value.refreshing) {
+              return SizedBox();
+            }
+            // 是否为垂直方向
+            bool isVertical =
+                _axisDirectionNotifier.value == AxisDirection.down ||
+                    _axisDirectionNotifier.value == AxisDirection.up;
+            // 是否反向
+            bool isReverse = _axisDirectionNotifier.value == AxisDirection.up ||
+                _axisDirectionNotifier.value == AxisDirection.left;
+            latestIndicatorBoxExtent =
+                (isVertical ? constraints.maxHeight : constraints.maxWidth) -
+                    widget.extraExtentNotifier.value;
+            loadState = transitionNextState();
+            // 列表未占满时恢复一下状态
+            if (widget.extraExtentNotifier.value > 0.0 &&
+                loadState == LoadMode.loaded &&
+                loadTask == null) {
+              loadState = LoadMode.inactive;
+            }
+            if (widget.builder != null && latestIndicatorBoxExtent >= 0) {
+              Widget child = widget.builder(
+                context,
+                loadState,
+                latestIndicatorBoxExtent,
+                widget.loadTriggerPullDistance,
+                widget.loadIndicatorExtent,
+                _axisDirectionNotifier.value,
+                widget.footerFloat,
+                widget.completeDuration,
+                widget.enableInfiniteLoad,
+                _success ?? true,
+                _noMore ?? false,
+              );
+              // 顶出列表未占满多余部分
+              return isVertical
+                  ? Column(
+                      children: <Widget>[
+                        isReverse
+                            ? SizedBox()
+                            : Expanded(
+                                flex: 1,
+                                child: SizedBox(),
+                              ),
+                        Container(
+                          height: latestIndicatorBoxExtent,
+                          child: child,
+                        ),
+                        !isReverse
+                            ? SizedBox()
+                            : Expanded(
+                                flex: 1,
+                                child: SizedBox(),
+                              ),
+                      ],
+                    )
+                  : Row(
+                      children: <Widget>[
+                        isReverse
+                            ? SizedBox()
+                            : Expanded(
+                                flex: 1,
+                                child: SizedBox(),
+                              ),
+                        Container(
+                          width: latestIndicatorBoxExtent,
+                          child: child,
+                        ),
+                        !isReverse
+                            ? SizedBox()
+                            : Expanded(
+                                flex: 1,
+                                child: SizedBox(),
+                              ),
+                      ],
+                    );
+            }
+            return Container();
+          },
+        ),
       ),
     );
   }

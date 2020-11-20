@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v2.1.1-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/badge/pub-v2.1.6-orange.svg)](https://pub.dartlang.org/packages/flutter_easyrefresh)
 
 ## [English](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/README_EN.md) | 中文
 
@@ -79,7 +79,7 @@ Demo：[下载 apk](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/
 ```
 //pub方式
 dependencies:
-  flutter_easyrefresh: ^2.1.1
+  flutter_easyrefresh: ^2.1.6
 
 //导入方式
 dependencies:
@@ -178,25 +178,7 @@ import 'package:flutter_easyrefresh/material_footer.dart';
 ```
 
 ## 添加国际化支持
-```dart
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-....
-  /// 如果没有您当前的语言支持
-  /// 您可以使用strings_en.arb进行翻译并命名为strings_{languageCode}_{countryCode}.arb
-  /// 然后进行Pull requests
-  new MaterialApp(
-    localizationsDelegates: [
-      GlobalEasyRefreshLocalizations.delegate,
-      ....
-    ],
-    supportedLocales: [
-        Locale('en', ''),
-        Locale('zh', 'CN'),
-        ....
-    ]
-    ....
-  )
-```
+不提供自带国际化支持，请自行设置ClassicalHeader和ClassicalFooter中需要展示的文字。
 
 # 捐赠
 如果你喜欢我的项目，请在项目右上角 "Star" 一下。你的支持是我最大的鼓励！ ^_^

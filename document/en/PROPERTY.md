@@ -113,6 +113,7 @@ class _ExampleState extends State<Example> {
 | topBouncing | Top rebound (onRefresh takes effect when null) | bool | true | Optional |
 | bottomBouncing | Bottom rebound (onLoad takes effect when null) | bool     | true | Optional |
 | scrollController | Scroll controller | ScrollController | null | Optional |
+| behavior | Scroll behavior | Behavior | EmptyOverScrollScrollBehavior | Optional |
 | Other parameters | Consistent with CustomScrollView | Consistent with CustomScrollView parameters | null | Optional(EasyRefresh.custom) |
 
 # Props Table - EasyRefreshController

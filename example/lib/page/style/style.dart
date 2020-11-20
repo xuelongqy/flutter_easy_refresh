@@ -62,7 +62,7 @@ class _StylePageState extends State<StylePage>
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return MaterialPage();
+                      return MaterialStylePage();
                     },
                   ));
                 },

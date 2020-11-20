@@ -1,8 +1,25 @@
 # Change log
 
 ## Next
+>Fix: taskNotifier reported an error when disposed [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/382)  
+
+## V 2.1.6
+>Fix: refresh will not end [issues#355](https://github.com/xuelongqy/flutter_easyrefresh/issues/355)  
+>Remove: cupertino_icons dependency [issues#373](https://github.com/xuelongqy/flutter_easyrefresh/issues/373)  
+
+## V 2.1.5
+>Fix：firstRefresh error [issues#341](https://github.com/xuelongqy/flutter_easyrefresh/issues/341)  
+>Add: safeArea and padding parameters of Footer [issues#332](https://github.com/xuelongqy/flutter_easyrefresh/issues/332)  
+
+## V 2.1.4
+>Fix：When infinite loading, onLoad cannot be triggered if the list is not full yet [issues#377](https://github.com/xuelongqy/flutter_easyrefresh/issues/337)  
+
+## V 2.1.2
 >Modify: emptyWidget is not displayed when customizing firstRefreshWidget  
->Removal: Internationalization support  
+>Remove: Internationalization support  
+>Add: Header and Footer set rebound in case of infinite scroll (overScroll)  
+>Fix: callRefresh in NestedScrollView collapsed [issues#172](https://github.com/xuelongqy/flutter_easyrefresh/issues/172)  
+>Fix：Header is not retracted, calling callRefresh again will not trigger refresh [issues#313](https://github.com/xuelongqy/flutter_easyrefresh/issues/313)  
 
 ## V 2.1.1
 >Fix: BezierCircleHeader progress bar is occasionally not hidden  

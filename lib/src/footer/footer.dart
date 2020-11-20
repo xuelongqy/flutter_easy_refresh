@@ -14,6 +14,7 @@ abstract class Footer {
   final double triggerDistance;
   @Deprecated('目前还没有找到方案,设置无效')
   final bool float;
+
   // 完成延时
   final Duration completeDuration;
 
@@ -23,6 +24,15 @@ abstract class Footer {
   /// 开启震动反馈
   final bool enableHapticFeedback;
 
+  /// 越界滚动(enableInfiniteLoad为true生效)
+  final bool overScroll;
+
+  /// 安全区域
+  final bool safeArea;
+
+  /// 内边距(根据布局合理使用，设置后safeArea无效)
+  final EdgeInsets padding;
+
   Footer({
     this.extent = 60.0,
     this.triggerDistance = 70.0,
@@ -30,6 +40,9 @@ abstract class Footer {
     this.completeDuration,
     this.enableInfiniteLoad = true,
     this.enableHapticFeedback = false,
+    this.overScroll = false,
+    this.safeArea = false,
+    this.padding,
   });
 
   // 构造器
@@ -38,7 +51,8 @@ abstract class Footer {
       EasyRefresh easyRefresh,
       ValueNotifier<bool> focusNotifier,
       ValueNotifier<TaskState> taskNotifier,
-      ValueNotifier<bool> callLoadNotifier) {
+      ValueNotifier<bool> callLoadNotifier,
+      ValueNotifier<double> extraExtentNotifier) {
     return EasyRefreshSliverLoadControl(
       loadIndicatorExtent: extent,
       loadTriggerPullDistance: triggerDistance,
@@ -47,6 +61,7 @@ abstract class Footer {
       onLoad: easyRefresh.onLoad,
       focusNotifier: focusNotifier,
       taskNotifier: taskNotifier,
+      extraExtentNotifier: extraExtentNotifier,
       callLoadNotifier: callLoadNotifier,
       taskIndependence: easyRefresh.taskIndependence,
       enableControlFinishLoad: easyRefresh.enableControlFinishLoad,
@@ -54,6 +69,8 @@ abstract class Footer {
       //enableInfiniteLoad: enableInfiniteLoad && !float,
       enableHapticFeedback: enableHapticFeedback,
       //footerFloat: float,
+      safeArea: safeArea,
+      padding: padding,
       bindLoadIndicator: (finishLoad, resetLoadState) {
         if (easyRefresh.controller != null) {
           easyRefresh.controller.finishLoadCallBack = finishLoad;
@@ -285,6 +302,9 @@ class ClassicalFooter extends Footer {
     Duration completeDuration = const Duration(seconds: 1),
     bool enableInfiniteLoad = true,
     bool enableHapticFeedback = true,
+    bool overScroll = false,
+    bool safeArea = true,
+    EdgeInsets padding,
     this.key,
     this.alignment,
     this.loadText,
@@ -306,6 +326,9 @@ class ClassicalFooter extends Footer {
           completeDuration: completeDuration,
           enableInfiniteLoad: enableInfiniteLoad,
           enableHapticFeedback: enableHapticFeedback,
+          overScroll: overScroll,
+          safeArea: safeArea,
+          padding: padding,
         );
 
   @override
@@ -375,7 +398,9 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
     with TickerProviderStateMixin<ClassicalFooterWidget> {
   // 是否到达触发加载距离
   bool _overTriggerDistance = false;
+
   bool get overTriggerDistance => _overTriggerDistance;
+
   set overTriggerDistance(bool over) {
     if (_overTriggerDistance != over) {
       _overTriggerDistance
@@ -470,6 +495,7 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
 
   // 更新时间
   DateTime _dateTime;
+
   // 获取更多信息
   String get _infoTextStr {
     if (widget.loadState == LoadMode.loaded) {
@@ -540,14 +566,34 @@ class ClassicalFooterWidgetState extends State<ClassicalFooterWidget>
     return Stack(
       children: <Widget>[
         Positioned(
-          top: !isVertical ? 0.0 : !isReverse ? 0.0 : null,
-          bottom: !isVertical ? 0.0 : isReverse ? 0.0 : null,
-          left: isVertical ? 0.0 : !isReverse ? 0.0 : null,
-          right: isVertical ? 0.0 : isReverse ? 0.0 : null,
+          top: !isVertical
+              ? 0.0
+              : !isReverse
+                  ? 0.0
+                  : null,
+          bottom: !isVertical
+              ? 0.0
+              : isReverse
+                  ? 0.0
+                  : null,
+          left: isVertical
+              ? 0.0
+              : !isReverse
+                  ? 0.0
+                  : null,
+          right: isVertical
+              ? 0.0
+              : isReverse
+                  ? 0.0
+                  : null,
           child: Container(
             alignment: widget.classicalFooter.alignment ?? isVertical
-                ? !isReverse ? Alignment.topCenter : Alignment.bottomCenter
-                : isReverse ? Alignment.centerRight : Alignment.centerLeft,
+                ? !isReverse
+                    ? Alignment.topCenter
+                    : Alignment.bottomCenter
+                : isReverse
+                    ? Alignment.centerRight
+                    : Alignment.centerLeft,
             width: !isVertical
                 ? widget.loadIndicatorExtent > widget.pulledExtent
                     ? widget.loadIndicatorExtent
