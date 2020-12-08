@@ -554,19 +554,13 @@ class _EasyRefreshSliverLoadControlState
   LoadMode loadState;
 
   // [Future] returned by the widget's `onLoad`.
-  Future<void> _loadTask;
-
-  Future<void> get loadTask => _loadTask;
+  Future<void> loadTask;
 
   bool get hasTask {
     return widget.taskIndependence
-        ? _loadTask != null
+        ? loadTask != null
         : widget.taskNotifier.value.refreshing ||
             widget.taskNotifier.value.loading;
-  }
-
-  set loadTask(Future<void> task) {
-    _loadTask = task;
   }
 
   // The amount of space available from the inner indicator box's perspective.
