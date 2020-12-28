@@ -1,7 +1,10 @@
 # 更新日志
 
+## V 2.1.8
+>修复：上拉加载不消失 [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/392)
+
 ## V 2.1.7
->修复：销毁时任务监听器报错 [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/382)  
+>修复：销毁时任务监听器报错 [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/382)
 >修复：NestedScrollViewPage，TabBar列表上划影响其他列表 [pull#357](https://github.com/xuelongqy/flutter_easyrefresh/pull/357)
 
 ## V 2.1.6

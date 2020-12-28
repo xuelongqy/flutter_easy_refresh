@@ -554,7 +554,15 @@ class _EasyRefreshSliverLoadControlState
   LoadMode loadState;
 
   // [Future] returned by the widget's `onLoad`.
-  Future<void> loadTask;
+  Future<void> _loadTask;
+  set loadTask(Future<void> task) {
+    _loadTask = task;
+    if (!widget.taskIndependence) {
+      widget.taskNotifier.value =
+          widget.taskNotifier.value.copy(loading: task != null);
+    }
+  }
+  Future<void> get loadTask => _loadTask;
 
   bool get hasTask {
     return widget.taskIndependence
