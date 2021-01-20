@@ -1,11 +1,11 @@
 # Change log
 
 ## V 2.1.8
->Fix: loading does not disappear [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/392)
+>Fix: loading does not disappear [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/392)  
 
 ## V 2.1.7
->Fix: taskNotifier reported an error when disposed [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/382)
->Fix: NestedScrollViewPage, TabBar list scrolling affects other lists [pull#357](https://github.com/xuelongqy/flutter_easyrefresh/pull/357)
+>Fix: taskNotifier reported an error when disposed [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/382)  
+>Fix: NestedScrollViewPage, TabBar list scrolling affects other lists [pull#357](https://github.com/xuelongqy/flutter_easyrefresh/pull/357)  
 
 ## V 2.1.6
 >Fix: refresh will not end [issues#355](https://github.com/xuelongqy/flutter_easyrefresh/issues/355)  
