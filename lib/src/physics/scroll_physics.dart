@@ -30,14 +30,14 @@ class EasyRefreshPhysics extends ScrollPhysics {
 
   /// Creates scroll physics that bounce back from the edge.
   const EasyRefreshPhysics({
-    ScrollPhysics parent,
-    this.taskNotifier,
-    this.bouncingNotifier,
-    this.extraExtentNotifier,
+    ScrollPhysics? parent,
+    required this.taskNotifier,
+    required this.bouncingNotifier,
+    required this.extraExtentNotifier,
   }) : super(parent: parent);
 
   @override
-  EasyRefreshPhysics applyTo(ScrollPhysics ancestor) {
+  EasyRefreshPhysics applyTo(ScrollPhysics? ancestor) {
     return EasyRefreshPhysics(
       parent: buildParent(ancestor),
       taskNotifier: taskNotifier,
@@ -139,7 +139,7 @@ class EasyRefreshPhysics extends ScrollPhysics {
   }
 
   @override
-  Simulation createBallisticSimulation(
+  Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
     final Tolerance tolerance = this.tolerance;
     if (velocity.abs() >= tolerance.velocity || position.outOfRange) {
@@ -200,9 +200,9 @@ class BouncingSettings {
   });
 
   BouncingSettings copy({
-    bool top,
-    bool bottom,
-    bool hasFooter,
+    bool? top,
+    bool? bottom,
+    bool? hasFooter,
   }) {
     return BouncingSettings(
       top: top ?? this.top,

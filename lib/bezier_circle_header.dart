@@ -8,7 +8,7 @@ import 'src/header/header.dart';
 /// 弹出圆圈Header
 class BezierCircleHeader extends Header {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 颜色
   final Color color;
@@ -80,10 +80,10 @@ class BezierCircleHeaderWidget extends StatefulWidget {
   final LinkHeaderNotifier linkNotifier;
 
   const BezierCircleHeaderWidget({
-    Key key,
-    this.color,
-    this.backgroundColor,
-    this.linkNotifier,
+    Key? key,
+    required this.color,
+    required this.backgroundColor,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -100,8 +100,8 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
   bool get _noMore => widget.linkNotifier.noMore;
 
   // 回弹动画
-  AnimationController _backController;
-  Animation<double> _backAnimation;
+  late AnimationController _backController;
+  late  Animation<double> _backAnimation;
   double _backAnimationLength = 110.0;
   double _backAnimationPulledExtent = 0.0;
   bool _showBackAnimation = false;
@@ -138,7 +138,7 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
   }
 
   // 环形进度
-  double _progressValue = 0.0;
+  double? _progressValue = 0.0;
 
   @override
   void initState() {
@@ -300,7 +300,7 @@ class _CirclePainter extends CustomClipper<Path> {
   final double offset;
   final bool up;
 
-  _CirclePainter({this.offset, this.up});
+  _CirclePainter({required this.offset, required this.up});
 
   @override
   Path getClip(Size size) {

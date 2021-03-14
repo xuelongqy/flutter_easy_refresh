@@ -13,10 +13,10 @@ class CircularIcon extends StatelessWidget {
   final IconData icon;
 
   const CircularIcon({
-    Key key,
+    Key? key,
     this.color = Colors.white,
     this.bgColor = Colors.orange,
-    this.icon,
+    required this.icon,
   }) : super(key: key);
 
   @override

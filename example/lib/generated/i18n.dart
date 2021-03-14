@@ -11,12 +11,12 @@ import 'package:flutter/material.dart';
 class S implements WidgetsLocalizations {
   const S();
 
-  static S current;
+  static late S current;
 
   static const GeneratedLocalizationsDelegate delegate =
       GeneratedLocalizationsDelegate();
 
-  static S of(BuildContext context) => Localizations.of<S>(context, S);
+  static S of(BuildContext context) => Localizations.of<S>(context, S) ?? current;
 
   @override
   TextDirection get textDirection => TextDirection.ltr;
@@ -396,8 +396,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
   }
 
   LocaleListResolutionCallback listResolution(
-      {Locale fallback, bool withCountry = true}) {
-    return (List<Locale> locales, Iterable<Locale> supported) {
+      {Locale? fallback, bool withCountry = true}) {
+    return (List<Locale>? locales, Iterable<Locale> supported) {
       if (locales == null || locales.isEmpty) {
         return fallback ?? supported.first;
       } else {
@@ -407,15 +407,15 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
   }
 
   LocaleResolutionCallback resolution(
-      {Locale fallback, bool withCountry = true}) {
-    return (Locale locale, Iterable<Locale> supported) {
+      {Locale? fallback, bool withCountry = true}) {
+    return (Locale? locale, Iterable<Locale> supported) {
       return _resolve(locale, fallback, supported, withCountry);
     };
   }
 
   @override
   Future<S> load(Locale locale) {
-    final String lang = getLang(locale);
+    final String? lang = getLang(locale);
     if (lang != null) {
       switch (lang) {
         case "en":
@@ -441,7 +441,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
   ///
   /// Internal method to resolve a locale from a list of locales.
   ///
-  Locale _resolve(Locale locale, Locale fallback, Iterable<Locale> supported,
+  Locale _resolve(Locale? locale, Locale? fallback, Iterable<Locale> supported,
       bool withCountry) {
     if (locale == null || !_isSupported(locale, withCountry)) {
       return fallback ?? supported.first;
@@ -461,7 +461,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
   ///
   /// Returns true if the specified locale is supported, false otherwise.
   ///
-  bool _isSupported(Locale locale, bool withCountry) {
+  bool _isSupported(Locale? locale, bool withCountry) {
     if (locale != null) {
       for (Locale supportedLocale in supportedLocales) {
         // Language must always match both locales.
@@ -477,7 +477,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
         // If no country requirement is requested, check if this locale has no country.
         if (true != withCountry &&
             (supportedLocale.countryCode == null ||
-                supportedLocale.countryCode.isEmpty)) {
+                supportedLocale.countryCode!.isEmpty)) {
           return true;
         }
       }
@@ -486,8 +486,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
   }
 }
 
-String getLang(Locale l) => l == null
+String? getLang(Locale? l) => l == null
     ? null
-    : l.countryCode != null && l.countryCode.isEmpty
+    : l.countryCode != null && l.countryCode!.isEmpty
         ? l.languageCode
         : l.toString();

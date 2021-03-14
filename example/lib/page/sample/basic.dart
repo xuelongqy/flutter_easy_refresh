@@ -11,15 +11,15 @@ class BasicPage extends StatefulWidget {
   /// 标题
   final String title;
 
-  const BasicPage(this.title, {Key key}) : super(key: key);
+  const BasicPage(this.title, {Key? key}) : super(key: key);
 
   @override
   _BasicPageState createState() => _BasicPageState();
 }
 
 class _BasicPageState extends State<BasicPage> {
-  EasyRefreshController _controller;
-  ScrollController _scrollController;
+  late EasyRefreshController _controller;
+  late ScrollController _scrollController;
 
   // 条目总数
   int _count = 20;
@@ -62,7 +62,7 @@ class _BasicPageState extends State<BasicPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.menu),
-            onPressed: () => showModalBottomSheet(
+            onPressed: () => showModalBottomSheet<dynamic>(
               context: context,
               builder: (context) {
                 return _buildModalMenu();
@@ -84,65 +84,65 @@ class _BasicPageState extends State<BasicPage> {
             scrollDirection: _direction,
             topBouncing: _topBouncing,
             bottomBouncing: _bottomBouncing,
-            header: _enableRefresh
-                ? ClassicalHeader(
-                    enableInfiniteRefresh: false,
-                    bgColor:
-                        _headerFloat ? Theme.of(context).primaryColor : null,
-                    infoColor: _headerFloat ? Colors.black87 : Colors.teal,
-                    float: _headerFloat,
-                    enableHapticFeedback: _vibration,
-                    refreshText: S.of(context).pullToRefresh,
-                    refreshReadyText: S.of(context).releaseToRefresh,
-                    refreshingText: S.of(context).refreshing,
-                    refreshedText: S.of(context).refreshed,
-                    refreshFailedText: S.of(context).refreshFailed,
-                    noMoreText: S.of(context).noMore,
-                    infoText: S.of(context).updateAt,
-                  )
-                : null,
-            footer: _enableLoad
-                ? ClassicalFooter(
-                    enableInfiniteLoad: _enableInfiniteLoad,
-                    enableHapticFeedback: _vibration,
-                    loadText: S.of(context).pushToLoad,
-                    loadReadyText: S.of(context).releaseToLoad,
-                    loadingText: S.of(context).loading,
-                    loadedText: S.of(context).loaded,
-                    loadFailedText: S.of(context).loadFailed,
-                    noMoreText: S.of(context).noMore,
-                    infoText: S.of(context).updateAt,
-                  )
-                : null,
-            onRefresh: _enableRefresh
-                ? () async {
-                    await Future.delayed(Duration(seconds: 2), () {
-                      if (mounted) {
-                        setState(() {
-                          _count = 20;
-                        });
-                        if (!_enableControlFinish) {
-                          _controller.resetLoadState();
-                          _controller.finishRefresh();
-                        }
-                      }
-                    });
-                  }
-                : null,
-            onLoad: _enableLoad
-                ? () async {
-                    await Future.delayed(Duration(seconds: 2), () {
-                      if (mounted) {
-                        setState(() {
-                          _count += 20;
-                        });
-                        if (!_enableControlFinish) {
-                          _controller.finishLoad(noMore: _count >= 80);
-                        }
-                      }
-                    });
-                  }
-                : null,
+            // header: _enableRefresh
+            //     ? ClassicalHeader(
+            //         enableInfiniteRefresh: false,
+            //         bgColor:
+            //             _headerFloat ? Theme.of(context).primaryColor : null,
+            //         infoColor: _headerFloat ? Colors.black87 : Colors.teal,
+            //         float: _headerFloat,
+            //         enableHapticFeedback: _vibration,
+            //         refreshText: S.of(context).pullToRefresh,
+            //         refreshReadyText: S.of(context).releaseToRefresh,
+            //         refreshingText: S.of(context).refreshing,
+            //         refreshedText: S.of(context).refreshed,
+            //         refreshFailedText: S.of(context).refreshFailed,
+            //         noMoreText: S.of(context).noMore,
+            //         infoText: S.of(context).updateAt,
+            //       )
+            //     : null,
+            // footer: _enableLoad
+            //     ? ClassicalFooter(
+            //         enableInfiniteLoad: _enableInfiniteLoad,
+            //         enableHapticFeedback: _vibration,
+            //         loadText: S.of(context).pushToLoad,
+            //         loadReadyText: S.of(context).releaseToLoad,
+            //         loadingText: S.of(context).loading,
+            //         loadedText: S.of(context).loaded,
+            //         loadFailedText: S.of(context).loadFailed,
+            //         noMoreText: S.of(context).noMore,
+            //         infoText: S.of(context).updateAt,
+            //       )
+            //     : null,
+            // onRefresh: _enableRefresh
+            //     ? () async {
+            //         await Future.delayed(Duration(seconds: 2), () {
+            //           if (mounted) {
+            //             setState(() {
+            //               _count = 20;
+            //             });
+            //             if (!_enableControlFinish) {
+            //               _controller.resetLoadState();
+            //               _controller.finishRefresh();
+            //             }
+            //           }
+            //         });
+            //       }
+            //     : null,
+            // onLoad: _enableLoad
+            //     ? () async {
+            //         await Future.delayed(Duration(seconds: 2), () {
+            //           if (mounted) {
+            //             setState(() {
+            //               _count += 20;
+            //             });
+            //             if (!_enableControlFinish) {
+            //               _controller.finishLoad(noMore: _count >= 80);
+            //             }
+            //           }
+            //         });
+            //       }
+            //     : null,
             slivers: <Widget>[
               SliverList(
                 delegate: SliverChildBuilderDelegate(

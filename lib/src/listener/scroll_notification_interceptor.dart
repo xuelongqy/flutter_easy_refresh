@@ -6,8 +6,8 @@ class ScrollNotificationInterceptor extends StatelessWidget {
 
   // 构造函数
   ScrollNotificationInterceptor({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
   }) : super(key: key);
 
   @override

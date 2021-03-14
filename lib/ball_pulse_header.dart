@@ -8,7 +8,7 @@ import 'src/header/header.dart';
 /// 球脉冲Header
 class BallPulseHeader extends Header {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 颜色
   final Color color;
@@ -82,10 +82,10 @@ class BallPulseHeaderWidget extends StatefulWidget {
   final LinkHeaderNotifier linkNotifier;
 
   const BallPulseHeaderWidget({
-    Key key,
-    this.color,
-    this.backgroundColor,
-    this.linkNotifier,
+    Key? key,
+    required this.color,
+    required this.backgroundColor,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -100,7 +100,7 @@ class BallPulseHeaderWidgetState extends State<BallPulseHeaderWidget> {
   bool get _noMore => widget.linkNotifier.noMore;
 
   // 球大小
-  double _ballSize1, _ballSize2, _ballSize3;
+  late double _ballSize1, _ballSize2, _ballSize3;
   // 动画阶段
   int animationPhase = 1;
   // 动画过渡时间

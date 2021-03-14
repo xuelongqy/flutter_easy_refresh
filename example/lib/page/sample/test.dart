@@ -16,11 +16,11 @@ class TestPageState extends State<TestPage> {
   // 总数
   int _count = 20;
   // 控制器
-  EasyRefreshController _controller;
+  late EasyRefreshController _controller;
 
   // 通知器
-  LinkHeaderNotifier _headerNotifier;
-  LinkFooterNotifier _footerNotifier;
+  late LinkHeaderNotifier _headerNotifier;
+  late LinkFooterNotifier _footerNotifier;
 
   @override
   void initState() {

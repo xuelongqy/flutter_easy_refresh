@@ -17,7 +17,7 @@ class LinkHeaderPageState extends State<LinkHeaderPage> {
   // 总数
   int _count = 20;
   // 连接通知器
-  LinkHeaderNotifier _headerNotifier;
+  late LinkHeaderNotifier _headerNotifier;
 
   @override
   void initState() {
@@ -92,7 +92,7 @@ class LinkHeaderPageState extends State<LinkHeaderPage> {
 class CircleHeader extends StatefulWidget {
   final LinkHeaderNotifier linkNotifier;
 
-  const CircleHeader(this.linkNotifier, {Key key}) : super(key: key);
+  const CircleHeader(this.linkNotifier, {Key? key}) : super(key: key);
 
   @override
   CircleHeaderState createState() {
@@ -102,7 +102,7 @@ class CircleHeader extends StatefulWidget {
 
 class CircleHeaderState extends State<CircleHeader> {
   // 指示器值
-  double _indicatorValue = 0.0;
+  double? _indicatorValue = 0.0;
 
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;

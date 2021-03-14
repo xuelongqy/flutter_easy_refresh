@@ -16,12 +16,12 @@ class ChatPage extends StatefulWidget {
 
 class ChatPageState extends State<ChatPage> {
   // 信息列表
-  List<MessageEntity> _msgList;
+  late List<MessageEntity> _msgList;
 
   // 输入框
-  TextEditingController _textEditingController;
+  late TextEditingController _textEditingController;
   // 滚动控制器
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
@@ -65,9 +65,9 @@ class ChatPageState extends State<ChatPage> {
           IconButton(
             icon: Icon(Icons.more_horiz),
             onPressed: () {
-              Navigator.push(
+              Navigator.push<dynamic>(
                 context,
-                MaterialPageRoute(
+                MaterialPageRoute<dynamic>(
                   builder: (BuildContext context) {
                     return UserProfilePage();
                   },
@@ -290,7 +290,7 @@ class ChatPageState extends State<ChatPage> {
                     maxWidth: 200.0,
                   ),
                   child: Text(
-                    entity.msg ?? '',
+                    entity.msg,
                     overflow: TextOverflow.clip,
                     style: TextStyle(
                       fontSize: 16.0,
@@ -366,7 +366,7 @@ class ChatPageState extends State<ChatPage> {
                     maxWidth: 200.0,
                   ),
                   child: Text(
-                    entity.msg ?? '',
+                    entity.msg,
                     overflow: TextOverflow.clip,
                     style: TextStyle(
                       fontSize: 16.0,
@@ -398,7 +398,7 @@ class ChatPageState extends State<ChatPage> {
           constraints.copyWith(
             maxWidth: 200.0,
           ),
-          text: entity.msg ?? '',
+          text: entity.msg,
           textStyle: TextStyle(
             fontSize: 16.0,
           ),
@@ -410,7 +410,7 @@ class ChatPageState extends State<ChatPage> {
     BuildContext context,
     BoxConstraints constraints, {
     String text = '',
-    @required TextStyle textStyle,
+    required TextStyle textStyle,
     List<InlineSpan> children = const [],
   }) {
     final span = TextSpan(text: text, style: textStyle, children: children);

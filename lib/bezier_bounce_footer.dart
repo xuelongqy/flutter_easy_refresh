@@ -8,7 +8,7 @@ import 'src/footer/footer.dart';
 /// BezierBounceFooter
 class BezierBounceFooter extends Footer {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 颜色
   final Color color;
@@ -80,10 +80,10 @@ class BezierBounceFooterWidget extends StatefulWidget {
   final LinkFooterNotifier linkNotifier;
 
   const BezierBounceFooterWidget({
-    Key key,
-    this.color,
-    this.backgroundColor,
-    this.linkNotifier,
+    Key? key,
+    required this.color,
+    required this.backgroundColor,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -100,8 +100,8 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
   bool get _noMore => widget.linkNotifier.noMore;
 
   // 回弹动画
-  AnimationController _backController;
-  Animation<double> _backAnimation;
+  late AnimationController _backController;
+  late  Animation<double> _backAnimation;
   double _backAnimationLength = 110.0;
   double _backAnimationPulledExtent = 0.0;
   bool _showBackAnimation = false;
@@ -342,7 +342,7 @@ class _CirclePainter extends CustomClipper<Path> {
   final double offset;
   final bool up;
 
-  _CirclePainter({this.offset, this.up});
+  _CirclePainter({required this.offset, required this.up});
 
   @override
   Path getClip(Size size) {
@@ -378,11 +378,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 class _SpinKitThreeBounce extends StatefulWidget {
   final Color color;
   final double size;
-  final IndexedWidgetBuilder itemBuilder;
+  final IndexedWidgetBuilder? itemBuilder;
 
   _SpinKitThreeBounce({
-    Key key,
-    this.color,
+    Key? key,
+    required this.color,
     this.size = 50.0,
     this.itemBuilder,
   })  : assert(
@@ -398,7 +398,7 @@ class _SpinKitThreeBounce extends StatefulWidget {
 
 class _SpinKitThreeBounceState extends State<_SpinKitThreeBounce>
     with SingleTickerProviderStateMixin {
-  AnimationController _scaleCtrl;
+  late AnimationController _scaleCtrl;
   final _duration = const Duration(milliseconds: 1400);
 
   @override
@@ -446,7 +446,7 @@ class _SpinKitThreeBounceState extends State<_SpinKitThreeBounce>
 
   Widget _itemBuilder(int index) {
     return widget.itemBuilder != null
-        ? widget.itemBuilder(context, index)
+        ? widget.itemBuilder!(context, index)
         : DecoratedBox(
             decoration: BoxDecoration(
               color: widget.color,
@@ -460,9 +460,9 @@ class DelayTween extends Tween<double> {
   final double delay;
 
   DelayTween({
-    double begin,
-    double end,
-    this.delay,
+    required double begin,
+    required double end,
+    required this.delay,
   }) : super(begin: begin, end: end);
 
   @override
@@ -478,9 +478,9 @@ class AngleDelayTween extends Tween<double> {
   final double delay;
 
   AngleDelayTween({
-    double begin,
-    double end,
-    this.delay,
+    required double begin,
+    required double end,
+    required this.delay,
   }) : super(begin: begin, end: end);
 
   @override

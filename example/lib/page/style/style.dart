@@ -44,7 +44,7 @@ class _StylePageState extends State<StylePage>
                 title: S.of(context).classic,
                 describe: S.of(context).classicDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return BasicPage(S.of(context).classic);
                     },
@@ -60,7 +60,7 @@ class _StylePageState extends State<StylePage>
                 title: 'Material',
                 describe: S.of(context).materialDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return MaterialStylePage();
                     },
@@ -76,7 +76,7 @@ class _StylePageState extends State<StylePage>
                 title: 'BallPulse',
                 describe: S.of(context).ballPulseDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return BallPulsePage();
                     },
@@ -92,7 +92,7 @@ class _StylePageState extends State<StylePage>
                 title: 'BezierCircle',
                 describe: S.of(context).bezierCircleDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return BezierCirclePage();
                     },
@@ -108,7 +108,7 @@ class _StylePageState extends State<StylePage>
                 title: 'BezierHourGlass',
                 describe: S.of(context).bezierHourGlassDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return BezierHourGlassPage();
                     },
@@ -124,7 +124,7 @@ class _StylePageState extends State<StylePage>
                 title: 'Taurus',
                 describe: S.of(context).taurusDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return TaurusPage();
                     },
@@ -140,14 +140,14 @@ class _StylePageState extends State<StylePage>
                 title: 'Phoenix',
                 describe: S.of(context).phoenixDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return PhoenixPage();
                     },
                   ));
                 },
                 icon: CircularIcon(
-                  bgColor: Colors.amber[700],
+                  bgColor: Colors.amber[700]!,
                   icon: Icons.location_city,
                 ),
               ),
@@ -156,7 +156,7 @@ class _StylePageState extends State<StylePage>
                 title: 'Delivery',
                 describe: S.of(context).deliveryDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return DeliveryPage();
                     },
@@ -172,7 +172,7 @@ class _StylePageState extends State<StylePage>
                 title: 'Space',
                 describe: S.of(context).spaceDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return SpacePage();
                     },
@@ -188,14 +188,14 @@ class _StylePageState extends State<StylePage>
                 title: S.of(context).bobMinion,
                 describe: S.of(context).bobMinionDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return BobMinionPage();
                     },
                   ));
                 },
                 icon: CircularIcon(
-                  bgColor: Colors.amber[600],
+                  bgColor: Colors.amber[600]!,
                   icon: Icons.accessibility,
                 ),
               ),

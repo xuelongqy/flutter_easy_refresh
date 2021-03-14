@@ -8,7 +8,7 @@ import 'src/footer/footer.dart';
 /// 球脉冲Footer
 class BallPulseFooter extends Footer {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 颜色
   final Color color;
@@ -84,10 +84,10 @@ class BallPulseFooterWidget extends StatefulWidget {
   final LinkFooterNotifier linkNotifier;
 
   const BallPulseFooterWidget({
-    Key key,
-    this.color,
-    this.backgroundColor,
-    this.linkNotifier,
+    Key? key,
+    required this.color,
+    required this.backgroundColor,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -104,7 +104,7 @@ class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
   bool get _noMore => widget.linkNotifier.noMore;
 
   // 球大小
-  double _ballSize1, _ballSize2, _ballSize3;
+  late double _ballSize1, _ballSize2, _ballSize3;
 
   // 动画阶段
   int animationPhase = 1;

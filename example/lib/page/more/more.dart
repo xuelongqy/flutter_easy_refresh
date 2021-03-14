@@ -62,8 +62,8 @@ class _MorePageState extends State<MorePage>
                   icon: Icons.star,
                 ),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
+                  Navigator.push<dynamic>(context,
+                      MaterialPageRoute<dynamic>(builder: (BuildContext context) {
                     return SupportPage();
                   }));
                 },

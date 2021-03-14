@@ -8,7 +8,7 @@ import 'src/header/header.dart';
 /// BezierHourGlassHeader
 class BezierHourGlassHeader extends Header {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 颜色
   final Color color;
@@ -80,10 +80,10 @@ class BezierHourGlassHeaderWidget extends StatefulWidget {
   final LinkHeaderNotifier linkNotifier;
 
   const BezierHourGlassHeaderWidget({
-    Key key,
-    this.color,
-    this.backgroundColor,
-    this.linkNotifier,
+    Key? key,
+    required this.color,
+    required this.backgroundColor,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -101,8 +101,8 @@ class BezierHourGlassHeaderWidgetState
   bool get _noMore => widget.linkNotifier.noMore;
 
   // 回弹动画
-  AnimationController _backController;
-  Animation<double> _backAnimation;
+  late AnimationController _backController;
+  late  Animation<double> _backAnimation;
   double _backAnimationLength = 110.0;
   double _backAnimationPulledExtent = 0.0;
   bool _showBackAnimation = false;
@@ -371,7 +371,7 @@ class CirclePainter extends CustomClipper<Path> {
   final double offset;
   final bool up;
 
-  CirclePainter({this.offset, this.up});
+  CirclePainter({required this.offset, required this.up});
 
   @override
   Path getClip(Size size) {
@@ -409,8 +409,8 @@ class SpinKitHourGlass extends StatefulWidget {
   final double size;
 
   const SpinKitHourGlass({
-    Key key,
-    @required this.color,
+    Key? key,
+    required this.color,
     this.size = 50.0,
   })  : assert(color != null),
         assert(size != null),
@@ -422,8 +422,8 @@ class SpinKitHourGlass extends StatefulWidget {
 
 class _SpinKitHourGlassState extends State<SpinKitHourGlass>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _animation1;
+  late AnimationController _controller;
+  late Animation<double> _animation1;
 
   @override
   void initState() {
@@ -470,7 +470,7 @@ class _HourGlassPainter extends CustomPainter {
   Paint p = Paint();
   final double weight;
 
-  _HourGlassPainter({this.weight = 90.0, Color color}) {
+  _HourGlassPainter({this.weight = 90.0, required Color color}) {
     p.color = color;
     p.strokeWidth = 1.0;
   }

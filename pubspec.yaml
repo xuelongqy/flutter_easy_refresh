@@ -6,8 +6,9 @@ repository: https://github.com/xuelongqy/flutter_easyrefresh
 issue_tracker: https://github.com/xuelongqy/flutter_easyrefresh/issues
 
 environment:
-  sdk: ">=2.3.0 <3.0.0"
-  flutter: ">=0.1.4 <2.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
+#  sdk: ">=2.3.0 <3.0.0"
+#  flutter: ">=0.1.4 <2.0.0"
 
 dependencies:
   flutter:

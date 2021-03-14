@@ -1,0 +1,23 @@
+linter:
+  rules:
+
+analyzer:
+  strong-mode:
+    # 不允许隐式转换
+    implicit-casts: false
+    # 不允许隐式 dynamic
+    implicit-dynamic: false
+
+  errors:
+
+  # 排除项
+  exclude:
+    - "android/**"
+    - "ios/**"
+    - "build/**"
+    - "vendors/**"
+    - "resources/**"
+    - "**/*.g.dart"
+    - "**/*.gr.dart"
+    - "**/intl_*.dart"
+    - "**/generated/*.dart"

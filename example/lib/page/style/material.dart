@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_easyrefresh/material_header.dart';
-import 'package:flutter_easyrefresh/material_footer.dart';
+// import 'package:flutter_easyrefresh/material_header.dart';
+// import 'package:flutter_easyrefresh/material_footer.dart';
 
 /// 质感设计样式
 class MaterialStylePage extends StatefulWidget {
@@ -26,8 +26,8 @@ class MaterialPageState extends State<MaterialStylePage> {
         backgroundColor: Colors.white,
       ),
       body: EasyRefresh.custom(
-        header: MaterialHeader(),
-        footer: MaterialFooter(),
+        // header: MaterialHeader(),
+        // footer: MaterialFooter(),
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 2), () {
             if (mounted) {

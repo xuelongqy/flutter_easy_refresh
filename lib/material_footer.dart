@@ -5,7 +5,7 @@ import 'src/footer/footer.dart';
 
 /// 质感设计Footer
 class MaterialFooter extends Footer {
-  final Key key;
+  final Key? key;
   final double displacement;
 
   /// 颜色
@@ -19,9 +19,9 @@ class MaterialFooter extends Footer {
   MaterialFooter({
     this.key,
     this.displacement = 40.0,
-    this.valueColor,
-    this.backgroundColor,
-    completeDuration = const Duration(seconds: 1),
+    required this.valueColor,
+    required this.backgroundColor,
+    Duration completeDuration = const Duration(seconds: 1),
     bool enableHapticFeedback = false,
     bool enableInfiniteLoad = true,
     bool overScroll = false,
@@ -87,11 +87,11 @@ class MaterialFooterWidget extends StatefulWidget {
   final LinkFooterNotifier linkNotifier;
 
   const MaterialFooterWidget({
-    Key key,
-    this.displacement,
-    this.valueColor,
-    this.backgroundColor,
-    this.linkNotifier,
+    Key? key,
+    required this.displacement,
+    required this.valueColor,
+    required this.backgroundColor,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override

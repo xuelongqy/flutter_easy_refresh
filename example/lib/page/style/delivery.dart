@@ -27,7 +27,7 @@ class DeliveryPageState extends State<DeliveryPage> {
       ),
       body: EasyRefresh.custom(
         header: DeliveryHeader(
-          backgroundColor: Colors.grey[100],
+          backgroundColor: Colors.grey[100]!,
         ),
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 2), () {

@@ -9,7 +9,7 @@ const Duration _kIndicatorScaleDuration = Duration(milliseconds: 200);
 
 /// 质感设计Header
 class MaterialHeader extends Header {
-  final Key key;
+  final Key? key;
   final double displacement;
 
   /// 颜色
@@ -23,9 +23,9 @@ class MaterialHeader extends Header {
   MaterialHeader({
     this.key,
     this.displacement = 40.0,
-    this.valueColor,
-    this.backgroundColor,
-    completeDuration = const Duration(seconds: 1),
+    required this.valueColor,
+    required this.backgroundColor,
+    Duration completeDuration = const Duration(seconds: 1),
     bool enableHapticFeedback = false,
   }) : super(
           float: true,
@@ -88,11 +88,11 @@ class MaterialHeaderWidget extends StatefulWidget {
   final LinkHeaderNotifier linkNotifier;
 
   const MaterialHeaderWidget({
-    Key key,
-    this.displacement,
-    this.valueColor,
-    this.backgroundColor,
-    this.linkNotifier,
+    Key? key,
+    required this.displacement,
+    required this.valueColor,
+    required this.backgroundColor,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -115,8 +115,8 @@ class MaterialHeaderWidgetState extends State<MaterialHeaderWidget>
   bool get _noMore => widget.linkNotifier.noMore;
 
   // 动画
-  AnimationController _scaleController;
-  Animation<double> _scaleFactor;
+  late AnimationController _scaleController;
+  late Animation<double> _scaleFactor;
 
   @override
   void initState() {

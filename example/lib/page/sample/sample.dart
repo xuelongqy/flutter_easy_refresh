@@ -45,7 +45,7 @@ class _SamplePageState extends State<SamplePage>
                 title: S.of(context).basicUse,
                 describe: S.of(context).basicUseDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return BasicPage(S.of(context).basicUse);
                     },
@@ -61,7 +61,7 @@ class _SamplePageState extends State<SamplePage>
                 title: S.of(context).userProfile,
                 describe: S.of(context).userProfileDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return UserProfilePage();
                     },
@@ -77,7 +77,7 @@ class _SamplePageState extends State<SamplePage>
                 title: 'NestedScrollView',
                 describe: S.of(context).nestedScrollViewDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return NestedScrollViewPage();
                     },
@@ -93,7 +93,7 @@ class _SamplePageState extends State<SamplePage>
                 title: 'Swiper',
                 describe: S.of(context).swiperDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return SwiperPage();
                     },
@@ -109,7 +109,7 @@ class _SamplePageState extends State<SamplePage>
                 title: S.of(context).firstRefresh,
                 describe: S.of(context).firstRefreshDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return FirstRefreshPage();
                     },
@@ -125,7 +125,7 @@ class _SamplePageState extends State<SamplePage>
                 title: S.of(context).emptyWidget,
                 describe: S.of(context).emptyWidgetDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return EmptyPage();
                     },
@@ -141,14 +141,14 @@ class _SamplePageState extends State<SamplePage>
                 title: S.of(context).linkHeader,
                 describe: S.of(context).linkHeaderDescribeDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return LinkHeaderPage();
                     },
                   ));
                 },
                 icon: CircularIcon(
-                  bgColor: Colors.amber[700],
+                  bgColor: Colors.amber[700]!,
                   icon: Icons.format_line_spacing,
                 ),
               ),
@@ -157,7 +157,7 @@ class _SamplePageState extends State<SamplePage>
                 title: S.of(context).secondFloor,
                 describe: S.of(context).secondFloorDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return SecondFloorPage();
                     },
@@ -173,7 +173,7 @@ class _SamplePageState extends State<SamplePage>
                 title: S.of(context).chatPage,
                 describe: S.of(context).chatPageDescribe,
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
+                  Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) {
                       return ChatPage();
                     },
@@ -190,7 +190,7 @@ class _SamplePageState extends State<SamplePage>
                       title: 'Test',
                       describe: 'EasyRefresh test page',
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(
+                        Navigator.push<dynamic>(context, MaterialPageRoute<dynamic>(
                           builder: (BuildContext context) {
                             return TestPage();
                           },

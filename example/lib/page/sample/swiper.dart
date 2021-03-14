@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+// import 'package:flutter_swiper/flutter_swiper.dart';
 
 /// Swiper示例
 class SwiperPage extends StatefulWidget {
@@ -34,31 +34,31 @@ class SwiperPageState extends State<SwiperPage> {
                   title: Text('Swiper'),
                 ),
               ),
-              header,
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  Container(
-                    height: 210.0,
-                    child: ScrollNotificationInterceptor(
-                      child: Swiper(
-                        itemBuilder: (BuildContext context, int index) {
-                          return SampleListItem(direction: Axis.horizontal);
-                        },
-                        itemCount: 5,
-                        viewportFraction: 0.8,
-                        scale: 0.9,
-                        autoplay: true,
-                      ),
-                    ),
-                  ),
-                ]),
-              ),
+              if (header != null) header,
+              // SliverList(
+              //   delegate: SliverChildListDelegate([
+              //     Container(
+              //       height: 210.0,
+              //       child: ScrollNotificationInterceptor(
+              //         child: Swiper(
+              //           itemBuilder: (BuildContext context, int index) {
+              //             return SampleListItem(direction: Axis.horizontal);
+              //           },
+              //           itemCount: 5,
+              //           viewportFraction: 0.8,
+              //           scale: 0.9,
+              //           autoplay: true,
+              //         ),
+              //       ),
+              //     ),
+              //   ]),
+              // ),
               SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
                   return SampleListItem();
                 }, childCount: _count),
               ),
-              footer,
+              if (footer != null) footer,
             ],
           );
         },
