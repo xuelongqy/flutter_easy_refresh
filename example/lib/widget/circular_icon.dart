@@ -1,4 +1,3 @@
-import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 
 /// 圆形边框Icon
@@ -27,13 +26,11 @@ class CircularIcon extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
       ),
       child: Center(
-        child: icon == null
-            ? EmptyIcon()
-            : Icon(
-                icon,
-                size: 20.0,
-                color: color,
-              ),
+        child: Icon(
+          icon,
+          size: 20.0,
+          color: color,
+        ),
       ),
     );
   }

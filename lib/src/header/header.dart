@@ -95,11 +95,7 @@ class NotificationHeader extends Header {
   NotificationHeader({
     required this.header,
     this.notifier,
-  })  : assert(
-          header != null,
-          'A non-null Header must be provided to a NotifierHeader.',
-        ),
-        super(
+  })  : super(
           extent: header.extent,
           triggerDistance: header.triggerDistance,
           float: header.float,
@@ -359,14 +355,7 @@ class ClassicalHeader extends Header {
           triggerDistance: triggerDistance,
           float: float,
           completeDuration: float
-              ? completeDuration == null
-                  ? Duration(
-                      milliseconds: 400,
-                    )
-                  : completeDuration +
-                      Duration(
-                        milliseconds: 400,
-                      )
+              ? completeDuration + Duration(milliseconds: 400)
               : completeDuration,
           enableInfiniteRefresh: enableInfiniteRefresh,
           enableHapticFeedback: enableHapticFeedback,

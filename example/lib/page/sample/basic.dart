@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:example/widget/list_item.dart';
 import 'package:example/widget/sample_list_item.dart';

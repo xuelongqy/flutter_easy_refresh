@@ -93,9 +93,7 @@ class EasyRefresh extends StatefulWidget {
   static Header _defaultHeader = ClassicalHeader();
 
   static set defaultHeader(Header header) {
-    if (header != null) {
-      _defaultHeader = header;
-    }
+    _defaultHeader = header;
   }
 
   /// 全局默认Footer

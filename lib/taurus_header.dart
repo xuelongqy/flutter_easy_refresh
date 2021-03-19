@@ -109,7 +109,7 @@ class TaurusHeaderWidgetState extends State<TaurusHeaderWidget> {
   // 云朵漂浮值
   late int _cloudFloatValue;
   // 漂浮计时器
-  late Timer _cloudFloatTimer;
+  late Timer? _cloudFloatTimer;
   // 是否漂浮
   late bool _isCloudFloat;
   set isCloudFloat(bool value) {
@@ -139,8 +139,8 @@ class TaurusHeaderWidgetState extends State<TaurusHeaderWidget> {
 
   @override
   void dispose() {
-    if (_cloudFloatTimer != null && _cloudFloatTimer.isActive) {
-      _cloudFloatTimer.cancel();
+    if (_cloudFloatTimer?.isActive == true) {
+      _cloudFloatTimer?.cancel();
     }
     super.dispose();
   }
@@ -151,7 +151,7 @@ class TaurusHeaderWidgetState extends State<TaurusHeaderWidget> {
         _cloudFloatValue ~/ 20 % 2 == 0 &&
         _cloudFloatValue % 20 == 0) {
       _cloudFloatValue = 0;
-      _cloudFloatTimer.cancel();
+      _cloudFloatTimer?.cancel();
       return;
     }
     _cloudFloatTimer = Timer(Duration(milliseconds: 40), () {

@@ -97,7 +97,7 @@ class PhoenixHeaderWidgetState extends State<PhoenixHeaderWidget> {
   // 太阳旋转值
   late double _sunRotateValue;
   // 旋转计时器
-  late Timer _sunRotateTimer;
+  late Timer? _sunRotateTimer;
   // 是否旋转太阳
   late bool _isRotateSun;
   set isRotateSun(bool value) {
@@ -107,9 +107,7 @@ class PhoenixHeaderWidgetState extends State<PhoenixHeaderWidget> {
         _sunRotateValue = _pulledExtent;
         rotateSun();
       } else {
-        if (_sunRotateTimer != null) {
-          _sunRotateTimer.cancel();
-        }
+        _sunRotateTimer?.cancel();
       }
     }
   }
@@ -126,8 +124,8 @@ class PhoenixHeaderWidgetState extends State<PhoenixHeaderWidget> {
 
   @override
   void dispose() {
-    if (_sunRotateTimer != null && _sunRotateTimer.isActive) {
-      _sunRotateTimer.cancel();
+    if (_sunRotateTimer?.isActive == true) {
+      _sunRotateTimer?.cancel();
     }
     super.dispose();
   }

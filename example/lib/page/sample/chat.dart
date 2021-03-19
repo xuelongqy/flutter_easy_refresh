@@ -253,9 +253,6 @@ class ChatPageState extends State<ChatPage> {
 
   // 构建消息视图
   Widget _buildMsg(MessageEntity entity) {
-    if (entity == null || entity.own == null) {
-      return Container();
-    }
     if (entity.own) {
       return Container(
         margin: EdgeInsets.all(

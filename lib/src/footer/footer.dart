@@ -106,11 +106,7 @@ class NotificationFooter extends Footer {
   NotificationFooter({
     required this.footer,
     this.notifier,
-  })  : assert(
-          footer != null,
-          'A non-null Footer must be provided to a NotifierFooter.',
-        ),
-        super(
+  })  : super(
           extent: footer.extent,
           triggerDistance: footer.triggerDistance,
           completeDuration: footer.completeDuration,

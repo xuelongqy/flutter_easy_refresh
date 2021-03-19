@@ -29,14 +29,7 @@ class MaterialFooter extends Footer {
           float: true,
           extent: 52.0,
           triggerDistance: 52.0,
-          completeDuration: completeDuration == null
-              ? Duration(
-                  milliseconds: 300,
-                )
-              : completeDuration +
-                  Duration(
-                    milliseconds: 300,
-                  ),
+          completeDuration: completeDuration + Duration(milliseconds: 300),
           enableHapticFeedback: enableHapticFeedback,
           enableInfiniteLoad: enableInfiniteLoad,
           overScroll: overScroll,

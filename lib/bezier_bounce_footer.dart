@@ -387,9 +387,8 @@ class _SpinKitThreeBounce extends StatefulWidget {
     this.itemBuilder,
   })  : assert(
             !(itemBuilder is IndexedWidgetBuilder && color is Color) &&
-                !(itemBuilder == null && color == null),
+                !(itemBuilder == null),
             'You should specify either a itemBuilder or a color'),
-        assert(size != null),
         super(key: key);
 
   @override

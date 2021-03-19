@@ -239,7 +239,7 @@ class BobMinionController extends FlareController {
         layer.mix += elapsed;
         layer.time += elapsed;
 
-        lastMix = (_mixSeconds == null || _mixSeconds == 0.0)
+        lastMix = (_mixSeconds == 0.0)
             ? 1.0
             : min(1.0, layer.mix / _mixSeconds);
 

@@ -21,9 +21,7 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
     required this.axisDirectionNotifier,
     required this.infiniteRefresh,
     Widget? child,
-  })  : assert(refreshIndicatorLayoutExtent != null),
-        assert(refreshIndicatorLayoutExtent >= 0.0),
-        assert(hasLayoutExtent != null),
+  })  : assert(refreshIndicatorLayoutExtent >= 0.0),
         super(key: key, child: child);
 
   // The amount of space the indicator should occupy in the sliver in a
@@ -85,9 +83,7 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
     required bool headerFloat,
     required this.axisDirectionNotifier,
     RenderBox? child,
-  })  : assert(refreshIndicatorExtent != null),
-        assert(refreshIndicatorExtent >= 0.0),
-        assert(hasLayoutExtent != null),
+  })  : assert(refreshIndicatorExtent >= 0.0),
         _refreshIndicatorExtent = refreshIndicatorExtent,
         _enableInfiniteRefresh = enableInfiniteRefresh,
         _hasLayoutExtent = hasLayoutExtent,
@@ -101,7 +97,6 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   double _refreshIndicatorExtent;
 
   set refreshIndicatorLayoutExtent(double value) {
-    assert(value != null);
     assert(value >= 0.0);
     if (value == _refreshIndicatorExtent) return;
     _refreshIndicatorExtent = value;
@@ -118,7 +113,6 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   bool _hasLayoutExtent;
 
   set hasLayoutExtent(bool value) {
-    assert(value != null);
     if (value == _hasLayoutExtent) return;
     _hasLayoutExtent = value;
     markNeedsLayout();
@@ -129,7 +123,6 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   bool _enableInfiniteRefresh;
 
   set enableInfiniteRefresh(bool value) {
-    assert(value != null);
     if (value == _enableInfiniteRefresh) return;
     _enableInfiniteRefresh = value;
     markNeedsLayout();
@@ -140,7 +133,6 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
   bool _headerFloat;
 
   set headerFloat(bool value) {
-    assert(value != null);
     if (value == _headerFloat) return;
     _headerFloat = value;
     markNeedsLayout();
@@ -460,9 +452,7 @@ class EasyRefreshSliverRefreshControl extends StatefulWidget {
     this.enableInfiniteRefresh = false,
     this.enableHapticFeedback = false,
     this.headerFloat = false,
-  })  : assert(refreshTriggerPullDistance != null),
-        assert(refreshTriggerPullDistance > 0.0),
-        assert(refreshIndicatorExtent != null),
+  })  : assert(refreshTriggerPullDistance > 0.0),
         assert(refreshIndicatorExtent >= 0.0),
         assert(
             headerFloat || refreshTriggerPullDistance >= refreshIndicatorExtent,

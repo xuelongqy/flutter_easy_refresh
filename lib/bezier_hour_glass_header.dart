@@ -412,9 +412,7 @@ class SpinKitHourGlass extends StatefulWidget {
     Key? key,
     required this.color,
     this.size = 50.0,
-  })  : assert(color != null),
-        assert(size != null),
-        super(key: key);
+  })  : super(key: key);
 
   @override
   _SpinKitHourGlassState createState() => _SpinKitHourGlassState();

@@ -31,14 +31,7 @@ class MaterialHeader extends Header {
           float: true,
           extent: 70.0,
           triggerDistance: 70.0,
-          completeDuration: completeDuration == null
-              ? Duration(
-                  milliseconds: 300,
-                )
-              : completeDuration +
-                  Duration(
-                    milliseconds: 300,
-                  ),
+          completeDuration: completeDuration + Duration(milliseconds: 300),
           enableInfiniteRefresh: false,
           enableHapticFeedback: enableHapticFeedback,
         );

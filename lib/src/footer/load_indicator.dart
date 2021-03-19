@@ -22,9 +22,7 @@ class _EasyRefreshSliverLoad extends SingleChildRenderObjectWidget {
     required this.infiniteLoad,
     required this.extraExtentNotifier,
     Widget? child,
-  })  : assert(loadIndicatorLayoutExtent != null),
-        assert(loadIndicatorLayoutExtent >= 0.0),
-        assert(hasLayoutExtent != null),
+  })  : assert(loadIndicatorLayoutExtent >= 0.0),
         super(key: key, child: child);
 
   // The amount of space the indicator should occupy in the sliver in a
@@ -91,9 +89,7 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
     required this.axisDirectionNotifier,
     required bool footerFloat,
     RenderBox? child,
-  })  : assert(loadIndicatorExtent != null),
-        assert(loadIndicatorExtent >= 0.0),
-        assert(hasLayoutExtent != null),
+  })  : assert(loadIndicatorExtent >= 0.0),
         _loadIndicatorExtent = loadIndicatorExtent,
         _enableInfiniteLoad = enableInfiniteLoad,
         _hasLayoutExtent = hasLayoutExtent,
@@ -110,7 +106,6 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
   double _loadIndicatorExtent;
 
   set loadIndicatorLayoutExtent(double value) {
-    assert(value != null);
     assert(value >= 0.0);
     if (value == _loadIndicatorExtent) return;
     _loadIndicatorExtent = value;
@@ -124,7 +119,6 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
   bool _hasLayoutExtent;
 
   set hasLayoutExtent(bool value) {
-    assert(value != null);
     if (value == _hasLayoutExtent) return;
     _hasLayoutExtent = value;
     markNeedsLayout();
@@ -135,7 +129,6 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
   bool _enableInfiniteLoad;
 
   set enableInfiniteLoad(bool value) {
-    assert(value != null);
     if (value == _enableInfiniteLoad) return;
     _enableInfiniteLoad = value;
     markNeedsLayout();
@@ -146,7 +139,6 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
   bool _footerFloat;
 
   set footerFloat(bool value) {
-    assert(value != null);
     if (value == _footerFloat) return;
     _footerFloat = value;
     markNeedsLayout();
@@ -440,9 +432,7 @@ class EasyRefreshSliverLoadControl extends StatefulWidget {
     this.footerFloat = false,
     this.safeArea = false,
     this.padding,
-  })  : assert(loadTriggerPullDistance != null),
-        assert(loadTriggerPullDistance > 0.0),
-        assert(loadIndicatorExtent != null),
+  })  : assert(loadTriggerPullDistance > 0.0),
         assert(loadIndicatorExtent >= 0.0),
         assert(
             loadTriggerPullDistance >= loadIndicatorExtent,
@@ -917,7 +907,7 @@ class _EasyRefreshSliverLoadControlState
                 loadTask == null) {
               loadState = LoadMode.inactive;
             }
-            if (widget.builder != null && latestIndicatorBoxExtent >= 0) {
+            if (latestIndicatorBoxExtent >= 0) {
               Widget child = widget.builder(
                 context,
                 loadState,

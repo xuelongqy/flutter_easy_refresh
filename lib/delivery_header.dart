@@ -108,7 +108,7 @@ class DeliveryHeaderWidgetState extends State<DeliveryHeaderWidget>
   late Animation<double> _mergeAnimation;
 
   // 计时器
-  late Timer _timer;
+  Timer? _timer;
   double _timerValue = 0.0;
   // 云朵偏移量
   final double _cloudDefaultOffset = -60.0;
@@ -165,8 +165,8 @@ class DeliveryHeaderWidgetState extends State<DeliveryHeaderWidget>
 
   @override
   void dispose() {
-    if (_timer != null && _timer.isActive) {
-      _timer.cancel();
+    if (_timer?.isActive == true) {
+      _timer?.cancel();
     }
     super.dispose();
   }
@@ -184,7 +184,7 @@ class DeliveryHeaderWidgetState extends State<DeliveryHeaderWidget>
   // 关闭计时
   void _timerStop() {
     if (_timer != null) {
-      _timer.cancel();
+      _timer?.cancel();
     }
   }
 
