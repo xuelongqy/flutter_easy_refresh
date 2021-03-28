@@ -18,11 +18,11 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  url_launcher: ^5.7.2
+  url_launcher: ^6.0.3
   flutter_swiper: ^1.1.6
-  flutter_spinkit: ^4.1.2+1
+  flutter_spinkit: ^5.0.0
   flare_flutter: ^2.0.6
-  extended_nested_scroll_view: ^1.0.1
+  extended_nested_scroll_view: ^3.0.0
   flutter_easyrefresh:
     path: ../
 
