@@ -8,13 +8,13 @@ import 'src/footer/footer.dart';
 /// 球脉冲Footer
 class BallPulseFooter extends Footer {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 颜色
-  final Color color;
+  final Color? color;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   final LinkFooterNotifier linkNotifier = LinkFooterNotifier();
 
@@ -43,7 +43,7 @@ class BallPulseFooter extends Footer {
       double loadIndicatorExtent,
       AxisDirection axisDirection,
       bool float,
-      Duration completeDuration,
+      Duration? completeDuration,
       bool enableInfiniteLoad,
       bool success,
       bool noMore) {
@@ -76,18 +76,18 @@ class BallPulseFooter extends Footer {
 /// 球脉冲组件
 class BallPulseFooterWidget extends StatefulWidget {
   /// 颜色
-  final Color color;
+  final Color? color;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   final LinkFooterNotifier linkNotifier;
 
   const BallPulseFooterWidget({
-    Key key,
+    Key? key,
     this.color,
     this.backgroundColor,
-    this.linkNotifier,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -104,7 +104,7 @@ class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
   bool get _noMore => widget.linkNotifier.noMore;
 
   // 球大小
-  double _ballSize1, _ballSize2, _ballSize3;
+  double _ballSize1 = 0.0, _ballSize2 = 0.0, _ballSize3 = 0.0;
 
   // 动画阶段
   int animationPhase = 1;
@@ -118,7 +118,6 @@ class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
   @override
   void initState() {
     super.initState();
-    _ballSize1 = _ballSize2 = _ballSize3 = 0.0;
   }
 
   // 循环动画

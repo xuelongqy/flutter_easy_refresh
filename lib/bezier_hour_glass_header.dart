@@ -8,13 +8,13 @@ import 'src/header/header.dart';
 /// BezierHourGlassHeader
 class BezierHourGlassHeader extends Header {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 颜色
   final Color color;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   final LinkHeaderNotifier linkNotifier = LinkHeaderNotifier();
 
@@ -41,7 +41,7 @@ class BezierHourGlassHeader extends Header {
       double refreshIndicatorExtent,
       AxisDirection axisDirection,
       bool float,
-      Duration completeDuration,
+      Duration? completeDuration,
       bool enableInfiniteRefresh,
       bool success,
       bool noMore) {
@@ -75,15 +75,15 @@ class BezierHourGlassHeaderWidget extends StatefulWidget {
   final Color color;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   final LinkHeaderNotifier linkNotifier;
 
   const BezierHourGlassHeaderWidget({
-    Key key,
-    this.color,
+    Key? key,
+    required this.color,
     this.backgroundColor,
-    this.linkNotifier,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -96,16 +96,20 @@ class BezierHourGlassHeaderWidgetState
     extends State<BezierHourGlassHeaderWidget>
     with TickerProviderStateMixin<BezierHourGlassHeaderWidget> {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
+
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
+
   double get _indicatorExtent => widget.linkNotifier.refreshIndicatorExtent;
+
   bool get _noMore => widget.linkNotifier.noMore;
 
   // 回弹动画
-  AnimationController _backController;
-  Animation<double> _backAnimation;
+  late AnimationController _backController;
+  late Animation<double> _backAnimation;
   double _backAnimationLength = 110.0;
   double _backAnimationPulledExtent = 0.0;
   bool _showBackAnimation = false;
+
   set showBackAnimation(bool value) {
     if (_showBackAnimation != value) {
       _showBackAnimation = value;
@@ -123,6 +127,7 @@ class BezierHourGlassHeaderWidgetState
 
   // 是否显示HourGlass
   bool _showHourGlass = false;
+
   // 是否显示水波纹
   bool _showRipple = false;
 
@@ -371,7 +376,7 @@ class CirclePainter extends CustomClipper<Path> {
   final double offset;
   final bool up;
 
-  CirclePainter({this.offset, this.up});
+  CirclePainter({required this.offset, required this.up});
 
   @override
   Path getClip(Size size) {
@@ -409,12 +414,10 @@ class SpinKitHourGlass extends StatefulWidget {
   final double size;
 
   const SpinKitHourGlass({
-    Key key,
-    @required this.color,
+    Key? key,
+    required this.color,
     this.size = 50.0,
-  })  : assert(color != null),
-        assert(size != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _SpinKitHourGlassState createState() => _SpinKitHourGlassState();
@@ -422,8 +425,8 @@ class SpinKitHourGlass extends StatefulWidget {
 
 class _SpinKitHourGlassState extends State<SpinKitHourGlass>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _animation1;
+  late AnimationController _controller;
+  late Animation<double> _animation1;
 
   @override
   void initState() {
@@ -470,7 +473,7 @@ class _HourGlassPainter extends CustomPainter {
   Paint p = Paint();
   final double weight;
 
-  _HourGlassPainter({this.weight = 90.0, Color color}) {
+  _HourGlassPainter({this.weight = 90.0, required Color color}) {
     p.color = color;
     p.strokeWidth = 1.0;
   }

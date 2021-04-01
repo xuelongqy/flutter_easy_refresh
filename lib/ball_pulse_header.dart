@@ -8,13 +8,13 @@ import 'src/header/header.dart';
 /// 球脉冲Header
 class BallPulseHeader extends Header {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 颜色
-  final Color color;
+  final Color? color;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   final LinkHeaderNotifier linkNotifier = LinkHeaderNotifier();
 
@@ -41,7 +41,7 @@ class BallPulseHeader extends Header {
       double refreshIndicatorExtent,
       AxisDirection axisDirection,
       bool float,
-      Duration completeDuration,
+      Duration? completeDuration,
       bool enableInfiniteRefresh,
       bool success,
       bool noMore) {
@@ -74,18 +74,18 @@ class BallPulseHeader extends Header {
 /// 球脉冲组件
 class BallPulseHeaderWidget extends StatefulWidget {
   /// 颜色
-  final Color color;
+  final Color? color;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   final LinkHeaderNotifier linkNotifier;
 
   const BallPulseHeaderWidget({
-    Key key,
+    Key? key,
     this.color,
     this.backgroundColor,
-    this.linkNotifier,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -96,22 +96,26 @@ class BallPulseHeaderWidget extends StatefulWidget {
 
 class BallPulseHeaderWidgetState extends State<BallPulseHeaderWidget> {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
+
   double get _indicatorExtent => widget.linkNotifier.refreshIndicatorExtent;
+
   bool get _noMore => widget.linkNotifier.noMore;
 
   // 球大小
-  double _ballSize1, _ballSize2, _ballSize3;
+  double _ballSize1 = 0.0, _ballSize2 = 0.0, _ballSize3 = 0.0;
+
   // 动画阶段
   int animationPhase = 1;
+
   // 动画过渡时间
   Duration _ballSizeDuration = Duration(milliseconds: 200);
+
   // 是否运行动画
   bool _isAnimated = false;
 
   @override
   void initState() {
     super.initState();
-    _ballSize1 = _ballSize2 = _ballSize3 = 0.0;
   }
 
   // 循环动画

@@ -8,13 +8,13 @@ import 'src/footer/footer.dart';
 /// BezierBounceFooter
 class BezierBounceFooter extends Footer {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 颜色
-  final Color color;
+  final Color? color;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   final LinkFooterNotifier linkNotifier = LinkFooterNotifier();
 
@@ -41,7 +41,7 @@ class BezierBounceFooter extends Footer {
       double loadIndicatorExtent,
       AxisDirection axisDirection,
       bool float,
-      Duration completeDuration,
+      Duration? completeDuration,
       bool enableInfiniteLoad,
       bool success,
       bool noMore) {
@@ -72,18 +72,18 @@ class BezierBounceFooter extends Footer {
 /// BezierBounceFooter组件
 class BezierBounceFooterWidget extends StatefulWidget {
   /// 颜色
-  final Color color;
+  final Color? color;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   final LinkFooterNotifier linkNotifier;
 
   const BezierBounceFooterWidget({
-    Key key,
+    Key? key,
     this.color,
     this.backgroundColor,
-    this.linkNotifier,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -95,16 +95,20 @@ class BezierBounceFooterWidget extends StatefulWidget {
 class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
     with TickerProviderStateMixin<BezierBounceFooterWidget> {
   LoadMode get _loadState => widget.linkNotifier.loadState;
+
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
+
   double get _indicatorExtent => widget.linkNotifier.loadIndicatorExtent;
+
   bool get _noMore => widget.linkNotifier.noMore;
 
   // 回弹动画
-  AnimationController _backController;
-  Animation<double> _backAnimation;
+  late AnimationController _backController;
+  late Animation<double> _backAnimation;
   double _backAnimationLength = 110.0;
   double _backAnimationPulledExtent = 0.0;
   bool _showBackAnimation = false;
+
   set showBackAnimation(bool value) {
     if (_showBackAnimation != value) {
       _showBackAnimation = value;
@@ -127,7 +131,7 @@ class BezierBounceFooterWidgetState extends State<BezierBounceFooterWidget>
   void initState() {
     super.initState();
     // 回弹动画
-    _backController = new AnimationController(
+    _backController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
     _backAnimation =
         Tween(begin: 0.0, end: _backAnimationLength).animate(_backController);
@@ -342,7 +346,7 @@ class _CirclePainter extends CustomClipper<Path> {
   final double offset;
   final bool up;
 
-  _CirclePainter({this.offset, this.up});
+  _CirclePainter({required this.offset, required this.up});
 
   @override
   Path getClip(Size size) {
@@ -376,12 +380,12 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 class _SpinKitThreeBounce extends StatefulWidget {
-  final Color color;
+  final Color? color;
   final double size;
-  final IndexedWidgetBuilder itemBuilder;
+  final IndexedWidgetBuilder? itemBuilder;
 
   _SpinKitThreeBounce({
-    Key key,
+    Key? key,
     this.color,
     this.size = 50.0,
     this.itemBuilder,
@@ -389,7 +393,6 @@ class _SpinKitThreeBounce extends StatefulWidget {
             !(itemBuilder is IndexedWidgetBuilder && color is Color) &&
                 !(itemBuilder == null && color == null),
             'You should specify either a itemBuilder or a color'),
-        assert(size != null),
         super(key: key);
 
   @override
@@ -398,7 +401,7 @@ class _SpinKitThreeBounce extends StatefulWidget {
 
 class _SpinKitThreeBounceState extends State<_SpinKitThreeBounce>
     with SingleTickerProviderStateMixin {
-  AnimationController _scaleCtrl;
+  late AnimationController _scaleCtrl;
   final _duration = const Duration(milliseconds: 1400);
 
   @override
@@ -446,7 +449,7 @@ class _SpinKitThreeBounceState extends State<_SpinKitThreeBounce>
 
   Widget _itemBuilder(int index) {
     return widget.itemBuilder != null
-        ? widget.itemBuilder(context, index)
+        ? widget.itemBuilder!(context, index)
         : DecoratedBox(
             decoration: BoxDecoration(
               color: widget.color,
@@ -460,31 +463,15 @@ class DelayTween extends Tween<double> {
   final double delay;
 
   DelayTween({
-    double begin,
-    double end,
-    this.delay,
+    required double begin,
+    required double end,
+    required this.delay,
   }) : super(begin: begin, end: end);
 
   @override
   double lerp(double t) {
     return super.lerp((math.sin((t - delay) * 2 * math.pi) + 1) / 2);
   }
-
-  @override
-  double evaluate(Animation<double> animation) => lerp(animation.value);
-}
-
-class AngleDelayTween extends Tween<double> {
-  final double delay;
-
-  AngleDelayTween({
-    double begin,
-    double end,
-    this.delay,
-  }) : super(begin: begin, end: end);
-
-  @override
-  double lerp(double t) => super.lerp(math.sin((t - delay) * math.pi * 0.5));
 
   @override
   double evaluate(Animation<double> animation) => lerp(animation.value);

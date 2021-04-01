@@ -8,13 +8,13 @@ import 'src/header/header.dart';
 /// 弹出圆圈Header
 class BezierCircleHeader extends Header {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 颜色
-  final Color color;
+  final Color? color;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   final LinkHeaderNotifier linkNotifier = LinkHeaderNotifier();
 
@@ -41,7 +41,7 @@ class BezierCircleHeader extends Header {
       double refreshIndicatorExtent,
       AxisDirection axisDirection,
       bool float,
-      Duration completeDuration,
+      Duration? completeDuration,
       bool enableInfiniteRefresh,
       bool success,
       bool noMore) {
@@ -72,18 +72,18 @@ class BezierCircleHeader extends Header {
 /// 弹出小球组件
 class BezierCircleHeaderWidget extends StatefulWidget {
   /// 颜色
-  final Color color;
+  final Color? color;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   final LinkHeaderNotifier linkNotifier;
 
   const BezierCircleHeaderWidget({
-    Key key,
+    Key? key,
     this.color,
     this.backgroundColor,
-    this.linkNotifier,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -95,16 +95,20 @@ class BezierCircleHeaderWidget extends StatefulWidget {
 class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
     with TickerProviderStateMixin<BezierCircleHeaderWidget> {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
+
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
+
   double get _indicatorExtent => widget.linkNotifier.refreshIndicatorExtent;
+
   bool get _noMore => widget.linkNotifier.noMore;
 
   // 回弹动画
-  AnimationController _backController;
-  Animation<double> _backAnimation;
+  late AnimationController _backController;
+  late Animation<double> _backAnimation;
   double _backAnimationLength = 110.0;
   double _backAnimationPulledExtent = 0.0;
   bool _showBackAnimation = false;
+
   set showBackAnimation(bool value) {
     if (_showBackAnimation != value) {
       _showBackAnimation = value;
@@ -122,6 +126,7 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
 
   // 弹出圆圈动画
   bool _toggleCircle = false;
+
   set toggleCircle(bool value) {
     if (_toggleCircle != value) {
       _toggleCircle = value;
@@ -138,7 +143,7 @@ class BezierCircleHeaderWidgetState extends State<BezierCircleHeaderWidget>
   }
 
   // 环形进度
-  double _progressValue = 0.0;
+  double? _progressValue = 0.0;
 
   @override
   void initState() {
@@ -300,7 +305,7 @@ class _CirclePainter extends CustomClipper<Path> {
   final double offset;
   final bool up;
 
-  _CirclePainter({this.offset, this.up});
+  _CirclePainter({required this.offset, required this.up});
 
   @override
   Path getClip(Size size) {

@@ -6,7 +6,7 @@ class EmptyWidget extends StatefulWidget {
   /// 子组件
   final Widget child;
 
-  EmptyWidget({Key key, this.child}) : super(key: key);
+  EmptyWidget({Key? key, required this.child}) : super(key: key);
 
   @override
   EmptyWidgetState createState() {
@@ -16,7 +16,7 @@ class EmptyWidget extends StatefulWidget {
 
 class EmptyWidgetState extends State<EmptyWidget> {
   // 列表配置通知器
-  ValueNotifier<SliverConfig> _notifier;
+  late ValueNotifier<SliverConfig?> _notifier;
 
   @override
   void initState() {
@@ -41,12 +41,12 @@ class EmptyWidgetState extends State<EmptyWidget> {
 
 /// 空视图Sliver组件
 class _SliverEmpty extends SingleChildRenderObjectWidget {
-  final ValueNotifier<SliverConfig> notifier;
+  final ValueNotifier<SliverConfig?> notifier;
 
   const _SliverEmpty({
-    Key key,
-    @required Widget child,
-    @required this.notifier,
+    Key? key,
+    required Widget child,
+    required this.notifier,
   }) : super(key: key, child: child);
 
   @override
@@ -58,10 +58,11 @@ class _SliverEmpty extends SingleChildRenderObjectWidget {
 }
 
 class _RenderSliverEmpty extends RenderSliverSingleBoxAdapter {
-  final ValueNotifier<SliverConfig> notifier;
+  final ValueNotifier<SliverConfig?> notifier;
+
   _RenderSliverEmpty({
-    RenderBox child,
-    @required this.notifier,
+    RenderBox? child,
+    required this.notifier,
   }) {
     this.child = child;
   }
@@ -76,7 +77,7 @@ class _RenderSliverEmpty extends RenderSliverSingleBoxAdapter {
     );
     if (notifier.value != sliverConfig) {
       notifier.value = sliverConfig;
-      child.layout(
+      child!.layout(
         constraints.asBoxConstraints(
           maxExtent: constraints.remainingPaintExtent,
         ),
@@ -88,13 +89,13 @@ class _RenderSliverEmpty extends RenderSliverSingleBoxAdapter {
         layoutExtent: constraints.remainingPaintExtent,
       );
     } else {
-      double remainingPaintExtent = notifier.value.remainingPaintExtent;
+      double remainingPaintExtent = notifier.value!.remainingPaintExtent;
       double childExtent = remainingPaintExtent;
       final double paintedChildSize =
           calculatePaintOffset(constraints, from: 0.0, to: childExtent);
       final double cacheExtent =
           calculateCacheOffset(constraints, from: 0.0, to: childExtent);
-      child.layout(
+      child!.layout(
         constraints.asBoxConstraints(
           maxExtent: remainingPaintExtent,
         ),
@@ -110,7 +111,7 @@ class _RenderSliverEmpty extends RenderSliverSingleBoxAdapter {
         hasVisualOverflow: childExtent > constraints.remainingPaintExtent ||
             constraints.scrollOffset > 0.0,
       );
-      setChildParentData(child, constraints, geometry);
+      setChildParentData(child!, constraints, geometry!);
     }
   }
 }
@@ -121,7 +122,10 @@ class SliverConfig {
   final double crossAxisExtent;
   final Axis axis;
 
-  SliverConfig({this.remainingPaintExtent, this.crossAxisExtent, this.axis});
+  SliverConfig(
+      {required this.remainingPaintExtent,
+      required this.crossAxisExtent,
+      required this.axis});
 
   @override
   bool operator ==(Object other) =>

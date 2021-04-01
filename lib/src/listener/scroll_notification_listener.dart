@@ -7,8 +7,8 @@ typedef ScrollFocusCallback = void Function(bool focus);
 /// 滚动事件监听器
 class ScrollNotificationListener extends StatefulWidget {
   const ScrollNotificationListener({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.onNotification,
     this.onFocus,
   }) : super(key: key);
@@ -16,10 +16,10 @@ class ScrollNotificationListener extends StatefulWidget {
   final Widget child;
 
   // 通知回调
-  final NotificationListenerCallback<ScrollNotification> onNotification;
+  final NotificationListenerCallback<ScrollNotification>? onNotification;
 
   // 滚动焦点回调
-  final ScrollFocusCallback onFocus;
+  final ScrollFocusCallback? onFocus;
 
   @override
   ScrollNotificationListenerState createState() {
@@ -33,7 +33,7 @@ class ScrollNotificationListenerState
   bool _focusState = false;
   set _focus(bool focus) {
     _focusState = focus;
-    if (widget.onFocus != null) widget.onFocus(_focusState);
+    if (widget.onFocus != null) widget.onFocus!(_focusState);
   }
 
   // 处理滚动通知
@@ -56,7 +56,7 @@ class ScrollNotificationListenerState
           _handleScrollNotification(notification);
           return widget.onNotification == null
               ? true
-              : widget.onNotification(notification);
+              : widget.onNotification!(notification);
         },
         child: widget.child,
       );

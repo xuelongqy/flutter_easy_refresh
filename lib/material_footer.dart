@@ -5,20 +5,18 @@ import 'src/footer/footer.dart';
 
 /// 质感设计Footer
 class MaterialFooter extends Footer {
-  final Key key;
-  final double displacement;
+  final Key? key;
 
   /// 颜色
-  final Animation<Color> valueColor;
+  final Animation<Color?>? valueColor;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   final LinkFooterNotifier linkNotifier = LinkFooterNotifier();
 
   MaterialFooter({
     this.key,
-    this.displacement = 40.0,
     this.valueColor,
     this.backgroundColor,
     completeDuration = const Duration(seconds: 1),
@@ -51,7 +49,7 @@ class MaterialFooter extends Footer {
       double loadIndicatorExtent,
       AxisDirection axisDirection,
       bool float,
-      Duration completeDuration,
+      Duration? completeDuration,
       bool enableInfiniteLoad,
       bool success,
       bool noMore) {
@@ -69,7 +67,6 @@ class MaterialFooter extends Footer {
         noMore);
     return MaterialFooterWidget(
       key: key,
-      displacement: displacement,
       valueColor: valueColor,
       backgroundColor: backgroundColor,
       linkNotifier: linkNotifier,
@@ -79,19 +76,18 @@ class MaterialFooter extends Footer {
 
 /// 质感设计Footer组件
 class MaterialFooterWidget extends StatefulWidget {
-  final double displacement;
   // 颜色
-  final Animation<Color> valueColor;
+  final Animation<Color?>? valueColor;
+
   // 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final LinkFooterNotifier linkNotifier;
 
   const MaterialFooterWidget({
-    Key key,
-    this.displacement,
+    Key? key,
     this.valueColor,
     this.backgroundColor,
-    this.linkNotifier,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -102,9 +98,13 @@ class MaterialFooterWidget extends StatefulWidget {
 
 class MaterialFooterWidgetState extends State<MaterialFooterWidget> {
   LoadMode get _refreshState => widget.linkNotifier.loadState;
+
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
+
   double get _riggerPullDistance => widget.linkNotifier.loadTriggerPullDistance;
+
   AxisDirection get _axisDirection => widget.linkNotifier.axisDirection;
+
   bool get _noMore => widget.linkNotifier.noMore;
 
   @override
