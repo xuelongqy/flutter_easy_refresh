@@ -35,7 +35,7 @@ class _Example extends StatefulWidget {
 }
 
 class _ExampleState extends State<_Example> {
-  EasyRefreshController _controller;
+  late EasyRefreshController _controller;
 
   // 条目总数
   int _count = 20;

@@ -18,7 +18,7 @@ class _SupportPageState extends State<SupportPage> {
   // 支付宝捐赠
   final String _alipayDonation = "aliPayDonation";
   // 交互通道
-  MethodChannel _nativeChannel;
+  late MethodChannel _nativeChannel;
 
   // 初始化
   @override

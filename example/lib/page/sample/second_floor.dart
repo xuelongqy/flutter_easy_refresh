@@ -16,8 +16,8 @@ class SecondFloorPage extends StatefulWidget {
 class SecondFloorPageState extends State<SecondFloorPage> {
   // 总数
   int _count = 20;
-  LinkHeaderNotifier _linkNotifier;
-  ValueNotifier<bool> _secondFloorOpen;
+  late LinkHeaderNotifier _linkNotifier;
+  late ValueNotifier<bool> _secondFloorOpen;
 
   @override
   void initState() {
@@ -100,7 +100,7 @@ class SecondFloorWidget extends StatefulWidget {
   // 二楼开启状态
   final ValueNotifier<bool> secondFloorOpen;
 
-  const SecondFloorWidget(this.linkNotifier, this.secondFloorOpen, {Key key})
+  const SecondFloorWidget(this.linkNotifier, this.secondFloorOpen, {Key? key})
       : super(key: key);
 
   @override
@@ -113,7 +113,7 @@ class SecondFloorWidgetState extends State<SecondFloorWidget> {
   // 触发二楼高度
   final double _openSecondFloorExtent = 100.0;
   // 指示器值
-  double _indicatorValue = 0.0;
+  double? _indicatorValue = 0.0;
 
   // 二楼高度
   double _secondFloor = 0.0;

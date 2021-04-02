@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flare_dart/math/mat2d.dart';
 import 'package:flare_flutter/flare.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controller.dart';
@@ -13,7 +12,7 @@ enum BobMinionAnimation { Stand, Dance, Jump, Wave }
 /// 小黄人(Bob)样式
 class BobMinionHeader extends Header {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 动画类型
   final BobMinionAnimation animation;
@@ -46,7 +45,7 @@ class BobMinionHeader extends Header {
       double refreshIndicatorExtent,
       AxisDirection axisDirection,
       bool float,
-      Duration completeDuration,
+      Duration? completeDuration,
       bool enableInfiniteRefresh,
       bool success,
       bool noMore) {
@@ -103,10 +102,10 @@ class BobMinionHeaderWidget extends StatefulWidget {
   final Color backgroundColor;
 
   const BobMinionHeaderWidget({
-    Key key,
-    this.linkNotifier,
-    this.animation,
-    this.backgroundColor,
+    Key? key,
+    required this.linkNotifier,
+    required this.animation,
+    required this.backgroundColor,
   }) : super(key: key);
 
   @override
@@ -117,11 +116,13 @@ class BobMinionHeaderWidget extends StatefulWidget {
 
 class BobMinionHeaderWidgetState extends State<BobMinionHeaderWidget> {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
+
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
+
   double get _indicatorExtent => widget.linkNotifier.refreshIndicatorExtent;
 
   // 动画控制器
-  BobMinionController _flareControls;
+  late BobMinionController _flareControls;
 
   @override
   void initState() {
@@ -172,13 +173,13 @@ class BobMinionHeaderWidgetState extends State<BobMinionHeaderWidget> {
 /// 小黄人动画控制器
 class BobMinionController extends FlareController {
   /// The current [FlutterActorArtboard].
-  FlutterActorArtboard _artboard;
+  late FlutterActorArtboard _artboard;
 
   /// 动画列表
   List<String> _animationList = ["Stand", "Dance", "Jump", "Wave"];
 
   /// The current [ActorAnimation].
-  String _animationName;
+  late String _animationName;
   double _mixSeconds = 0.1;
 
   /// The [FlareAnimationLayer]s currently active.
@@ -189,10 +190,8 @@ class BobMinionController extends FlareController {
   void initialize(FlutterActorArtboard artboard) {
     _artboard = artboard;
     _animationLayers = _animationList.map<FlareAnimationLayer>((animationName) {
-      var animation = artboard.getAnimation(animationName);
-      return FlareAnimationLayer()
-        ..name = animationName
-        ..animation = animation
+      var animation = artboard.getAnimation(animationName)!;
+      return FlareAnimationLayer(animationName, animation)
         ..mix = 1.0
         ..mixSeconds = 0.2;
     }).toList();
@@ -239,9 +238,8 @@ class BobMinionController extends FlareController {
         layer.mix += elapsed;
         layer.time += elapsed;
 
-        lastMix = (_mixSeconds == null || _mixSeconds == 0.0)
-            ? 1.0
-            : min(1.0, layer.mix / _mixSeconds);
+        lastMix =
+            (_mixSeconds == 0.0) ? 1.0 : min(1.0, layer.mix / _mixSeconds);
 
         /// Loop the time if needed.
         if (layer.animation.isLooping) {

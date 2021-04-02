@@ -3,21 +3,25 @@ import 'package:flutter/material.dart';
 /// 列表项
 class ListItem extends StatefulWidget {
   // 点击事件
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
+
   // 图标
-  final Widget icon;
+  final Widget? icon;
+
   // 标题
-  final String title;
+  final String? title;
   final Color titleColor;
+
   // 描述
-  final String describe;
+  final String? describe;
   final Color describeColor;
+
   // 右侧控件
-  final Widget rightWidget;
+  final Widget? rightWidget;
 
   // 构造函数
   ListItem({
-    Key key,
+    Key? key,
     this.onPressed,
     this.icon,
     this.title,
@@ -67,7 +71,7 @@ class _ListItemState extends State<ListItem> {
                   children: <Widget>[
                     widget.title != null
                         ? Text(
-                            widget.title,
+                            widget.title!,
                             style: TextStyle(
                               color: widget.titleColor,
                               fontSize: 14.0,
@@ -77,7 +81,7 @@ class _ListItemState extends State<ListItem> {
                         : Container(),
                     widget.describe != null
                         ? Text(
-                            widget.describe,
+                            widget.describe!,
                             maxLines: 2,
                             style: TextStyle(
                                 color: widget.describeColor, fontSize: 12.0),
@@ -86,7 +90,7 @@ class _ListItemState extends State<ListItem> {
                   ],
                 ),
               ),
-              widget.rightWidget == null ? Container() : widget.rightWidget,
+              widget.rightWidget ?? Container(),
               Container(
                 width: 14.0,
               ),
@@ -99,6 +103,7 @@ class _ListItemState extends State<ListItem> {
 /// 空图标
 class EmptyIcon extends Icon {
   const EmptyIcon() : super(Icons.hourglass_empty);
+
   @override
   Widget build(BuildContext context) {
     return Container();

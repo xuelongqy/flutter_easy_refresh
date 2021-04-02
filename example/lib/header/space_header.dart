@@ -1,4 +1,4 @@
-import 'package:flare_dart/math/mat2d.dart';
+import 'package:flare_flutter/base/animation/actor_animation.dart';
 import 'package:flare_flutter/flare.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controller.dart';
@@ -28,7 +28,7 @@ SOFTWARE.
 
 class SpaceHeader extends Header {
   /// Key
-  final Key key;
+  final Key? key;
 
   final LinkHeaderNotifier linkNotifier = LinkHeaderNotifier();
 
@@ -53,7 +53,7 @@ class SpaceHeader extends Header {
       double refreshIndicatorExtent,
       AxisDirection axisDirection,
       bool float,
-      Duration completeDuration,
+      Duration? completeDuration,
       bool enableInfiniteRefresh,
       bool success,
       bool noMore) {
@@ -84,8 +84,8 @@ class SpaceHeaderWidget extends StatefulWidget {
   final LinkHeaderNotifier linkNotifier;
 
   const SpaceHeaderWidget({
-    Key key,
-    this.linkNotifier,
+    Key? key,
+    required this.linkNotifier,
   }) : super(key: key);
 
   @override
@@ -97,15 +97,15 @@ class SpaceHeaderWidget extends StatefulWidget {
 class SpaceHeaderWidgetState extends State<SpaceHeaderWidget>
     with FlareController {
   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
+
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
+
   double get _indicatorExtent => widget.linkNotifier.refreshIndicatorExtent;
 
-  List<List<String>> randomizedContacts;
-
-  ActorAnimation _loadingAnimation;
-  ActorAnimation _successAnimation;
-  ActorAnimation _pullAnimation;
-  ActorAnimation _cometAnimation;
+  late ActorAnimation _loadingAnimation;
+  late ActorAnimation _successAnimation;
+  late ActorAnimation _pullAnimation;
+  late ActorAnimation _cometAnimation;
   double _successTime = 0.0;
   double _loadingTime = 0.0;
   double _cometTime = 0.0;
@@ -146,10 +146,10 @@ class SpaceHeaderWidgetState extends State<SpaceHeaderWidget>
   }
 
   void initialize(FlutterActorArtboard actor) {
-    _pullAnimation = actor.getAnimation("pull");
-    _successAnimation = actor.getAnimation("success");
-    _loadingAnimation = actor.getAnimation("loading");
-    _cometAnimation = actor.getAnimation("idle comet");
+    _pullAnimation = actor.getAnimation("pull")!;
+    _successAnimation = actor.getAnimation("success")!;
+    _loadingAnimation = actor.getAnimation("loading")!;
+    _cometAnimation = actor.getAnimation("idle comet")!;
   }
 
   @override

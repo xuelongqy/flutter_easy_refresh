@@ -7,13 +7,13 @@ class CircularIcon extends StatelessWidget {
   final Color color;
 
   /// 背景颜色
-  final Color bgColor;
+  final Color? bgColor;
 
   /// Icon
-  final IconData icon;
+  final IconData? icon;
 
   const CircularIcon({
-    Key key,
+    Key? key,
     this.color = Colors.white,
     this.bgColor = Colors.orange,
     this.icon,

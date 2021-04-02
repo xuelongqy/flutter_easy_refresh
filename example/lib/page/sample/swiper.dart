@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 /// Swiper示例
 class SwiperPage extends StatefulWidget {
@@ -34,7 +34,7 @@ class SwiperPageState extends State<SwiperPage> {
                   title: Text('Swiper'),
                 ),
               ),
-              header,
+              header!,
               SliverList(
                 delegate: SliverChildListDelegate([
                   Container(
@@ -58,7 +58,7 @@ class SwiperPageState extends State<SwiperPage> {
                   return SampleListItem();
                 }, childCount: _count),
               ),
-              footer,
+              footer!,
             ],
           );
         },

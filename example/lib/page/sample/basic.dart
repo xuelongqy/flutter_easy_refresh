@@ -11,15 +11,15 @@ class BasicPage extends StatefulWidget {
   /// 标题
   final String title;
 
-  const BasicPage(this.title, {Key key}) : super(key: key);
+  const BasicPage(this.title, {Key? key}) : super(key: key);
 
   @override
   _BasicPageState createState() => _BasicPageState();
 }
 
 class _BasicPageState extends State<BasicPage> {
-  EasyRefreshController _controller;
-  ScrollController _scrollController;
+  late EasyRefreshController _controller;
+  late ScrollController _scrollController;
 
   // 条目总数
   int _count = 20;
@@ -88,7 +88,7 @@ class _BasicPageState extends State<BasicPage> {
                 ? ClassicalHeader(
                     enableInfiniteRefresh: false,
                     bgColor:
-                        _headerFloat ? Theme.of(context).primaryColor : null,
+                        _headerFloat ? Theme.of(context).primaryColor : Colors.transparent,
                     infoColor: _headerFloat ? Colors.black87 : Colors.teal,
                     float: _headerFloat,
                     enableHapticFeedback: _vibration,
