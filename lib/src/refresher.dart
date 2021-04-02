@@ -11,8 +11,8 @@ import 'listener/scroll_notification_listener.dart';
 import 'physics/scroll_physics.dart';
 
 /// 子组件构造器
-typedef EasyRefreshChildBuilder = Widget Function(
-    BuildContext context, ScrollPhysics physics, Widget? header, Widget? footer);
+typedef EasyRefreshChildBuilder = Widget Function(BuildContext context,
+    ScrollPhysics physics, Widget? header, Widget? footer);
 
 /// EasyRefresh
 /// 下拉刷新,上拉加载组件
@@ -127,7 +127,7 @@ class EasyRefresh extends StatefulWidget {
     this.bottomBouncing = true,
     this.behavior = const EmptyOverScrollScrollBehavior(),
     required this.child,
-  })  : this.scrollDirection = Axis.vertical,
+  })   : this.scrollDirection = Axis.vertical,
         this.reverse = false,
         this.builder = null,
         this.primary = null,
@@ -172,7 +172,7 @@ class EasyRefresh extends StatefulWidget {
     this.bottomBouncing = true,
     this.behavior = const EmptyOverScrollScrollBehavior(),
     required this.slivers,
-  })  : this.builder = null,
+  })   : this.builder = null,
         this.child = null,
         super(key: key);
 
@@ -194,7 +194,7 @@ class EasyRefresh extends StatefulWidget {
     this.bottomBouncing = true,
     this.behavior = const EmptyOverScrollScrollBehavior(),
     required this.builder,
-  })  : this.scrollDirection = Axis.vertical,
+  })   : this.scrollDirection = Axis.vertical,
         this.reverse = false,
         this.child = null,
         this.primary = null,
@@ -335,7 +335,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
       top: widget.onRefresh == null
           ? widget.header == null
               ? widget.topBouncing
-              : widget.header!.overScroll || !widget.header!.enableInfiniteRefresh
+              : widget.header!.overScroll ||
+                  !widget.header!.enableInfiniteRefresh
           : _header.overScroll || !_header.enableInfiniteRefresh,
       bottom: widget.onLoad == null
           ? widget.footer == null
@@ -495,14 +496,16 @@ class _EasyRefreshState extends State<EasyRefresh> {
         slivers = List.from(child.buildSlivers(context), growable: true);
       }
     } else if (child is SingleChildScrollView) {
-      slivers = child.child != null ? [
-        SliverPadding(
-          sliver: SliverList(
-            delegate: SliverChildListDelegate([child.child!]),
-          ),
-          padding: child.padding ?? EdgeInsets.zero,
-        ),
-      ] : [];
+      slivers = child.child != null
+          ? [
+              SliverPadding(
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([child.child!]),
+                ),
+                padding: child.padding ?? EdgeInsets.zero,
+              ),
+            ]
+          : [];
     } else if (child is! Scrollable) {
       slivers = [
         SliverToBoxAdapter(
@@ -549,7 +552,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
         semanticChildCount: child.semanticChildCount,
         dragStartBehavior: child.dragStartBehavior,
         viewportBuilder: (context, position) {
-          Viewport viewport = child.viewportBuilder(context, position) as Viewport;
+          Viewport viewport =
+              child.viewportBuilder(context, position) as Viewport;
           // 判断是否有空视图
           if (widget.emptyWidget != null) {
             if (viewport.children.length > (widget.headerIndex) + 1) {
@@ -598,7 +602,10 @@ class TaskState {
   });
 
   TaskState copy(
-      {bool? refreshing, bool? loading, bool? refreshNoMore, bool? loadNoMore}) {
+      {bool? refreshing,
+      bool? loading,
+      bool? refreshNoMore,
+      bool? loadNoMore}) {
     return TaskState(
       refreshing: refreshing ?? this.refreshing,
       loading: loading ?? this.loading,
