@@ -1,5 +1,9 @@
 # 更新日志
 
+## V 2.2.0
+>兼容：example示例ios中文支持  
+>添加：空安全(null safety)支持，不需要请使用2.1.8版本  
+
 ## V 2.1.8
 >修复：上拉加载不消失 [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/392)  
 
