@@ -2,7 +2,7 @@
 
 ## V 2.2.0
 >Add：iOS example supports Chinese  
->Add：null safety。If you don't need, please use a version 2.1.8 version.  
+>Add：null safety。If you don't need, please use a version 2.1.8 version  
 
 ## V 2.1.8
 >Fix: loading does not disappear [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/392)  
