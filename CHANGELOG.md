@@ -1,11 +1,14 @@
 # Change log
 
+## Next
+>Fix: firstRefresh is true, and firstRefreshWidget is null to report an error [issues#457](https://github.com/xuelongqy/flutter_easyrefresh/issues/457)
+
 ## V 2.2.0
 >Add：iOS example supports Chinese  
 >Add：null safety。If you don't need, please use a version 2.1.8 version  
 
 ## V 2.1.8
->Fix: loading does not disappear [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/392)  
+>Fix: loading does not disappear [issues#392](https://github.com/xuelongqy/flutter_easyrefresh/issues/392)  
 
 ## V 2.1.7
 >Fix: taskNotifier reported an error when disposed [issues#382](https://github.com/xuelongqy/flutter_easyrefresh/issues/382)  

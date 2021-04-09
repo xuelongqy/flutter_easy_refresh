@@ -287,7 +287,9 @@ class _EasyRefreshState extends State<EasyRefresh> {
     // 判断是否开启首次刷新
     _enableFirstRefresh = widget.firstRefresh;
     if (_enableFirstRefresh) {
-      _firstRefreshHeader = FirstRefreshHeader(widget.firstRefreshWidget!);
+      if (widget.firstRefreshWidget != null) {
+        _firstRefreshHeader = FirstRefreshHeader(widget.firstRefreshWidget!);
+      }
       SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
         callRefresh();
       });
