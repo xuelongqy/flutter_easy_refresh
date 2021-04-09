@@ -1,10 +1,10 @@
 # 更新日志
 
 ## 下个版本
->修复：firstRefresh为true时，不设置firstRefreshWidget报错[issues#457](https://github.com/xuelongqy/flutter_easyrefresh/issues/457)
+>修复：firstRefresh为true时，不设置firstRefreshWidget报错[issues#457](https://github.com/xuelongqy/flutter_easyrefresh/issues/457)  
 
 ## V 2.2.0
->兼容：example示例ios中文支持    
+>兼容：example示例ios中文支持  
 >添加：空安全(null safety)支持，不需要请使用2.1.8版本  
 
 ## V 2.1.8
