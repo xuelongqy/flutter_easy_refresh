@@ -1,6 +1,6 @@
 # Change log
 
-## Next
+## V 2.2.1
 >Fix: firstRefresh is true, and firstRefreshWidget is null to report an error [issues#457](https://github.com/xuelongqy/flutter_easyrefresh/issues/457)  
 
 ## V 2.2.0

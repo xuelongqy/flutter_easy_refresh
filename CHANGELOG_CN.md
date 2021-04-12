@@ -1,6 +1,6 @@
 # 更新日志
 
-## 下个版本
+## V 2.2.1
 >修复：firstRefresh为true时，不设置firstRefreshWidget报错[issues#457](https://github.com/xuelongqy/flutter_easyrefresh/issues/457)  
 
 ## V 2.2.0

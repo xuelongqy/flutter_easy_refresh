@@ -76,3 +76,4 @@ ios/.generated/
 ios/Flutter/Generated.xcconfig
 ios/Runner/GeneratedPluginRegistrant.*
 /lib/generated_plugin_registrant.dart
+.flutter-plugins-dependencies
