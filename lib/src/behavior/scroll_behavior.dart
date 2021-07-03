@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class EmptyOverScrollScrollBehavior extends ScrollBehavior {
-  const EmptyOverScrollScrollBehavior();
+class ERScrollBehavior extends ScrollBehavior {
+  final ScrollPhysics _physics;
+
+  ERScrollBehavior(this._physics);
 
   @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child;
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return _physics;
   }
 }

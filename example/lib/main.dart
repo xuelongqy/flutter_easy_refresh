@@ -1,5 +1,5 @@
-import 'package:example/generated/i18n.dart';
 import 'package:example/page/home.dart';
+import 'package:example/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -26,15 +26,12 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.orange,
       ),
       // 主页
-      home: HomePage(),
+      home: TestPage(),
       localizationsDelegates: [
-        S.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
-      supportedLocales: S.delegate.supportedLocales,
-      localeResolutionCallback: S.delegate.resolution(),
     );
   }
 }
