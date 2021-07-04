@@ -8,8 +8,10 @@ import './behavior/scroll_behavior.dart';
 class EasyRefresh extends StatefulWidget {
   /// 子组件
   final Widget child;
+
   /// 刷新回调
   final FutureOr Function()? onRefresh;
+
   /// 加载回调
   final FutureOr Function()? onLoad;
 
@@ -55,25 +57,21 @@ class _EasyRefreshState extends State<EasyRefresh> {
       print(_userOffsetNotifier.value);
     });
     _headerNotifier.addListener(() {
-      print(_headerNotifier.offset);
-      setState(() {});
       if (_headerNotifier.state == IndicatorState.processing) {
         Future.sync(widget.onRefresh!).whenComplete(() {
           _headerNotifier.updateState(IndicatorState.done);
         });
       }
+      setState(() {});
     });
     _footerNotifier.addListener(() {
-      print(_footerNotifier.offset);
-      setState(() {});
-      print(_footerNotifier.state);
       if (_footerNotifier.state == IndicatorState.processing) {
         Future.sync(widget.onLoad!).whenComplete(() {
           _footerNotifier.updateState(IndicatorState.done);
         });
       }
+      setState(() {});
     });
-    widget.onRefresh!;
   }
 
   @override
@@ -82,34 +80,90 @@ class _EasyRefreshState extends State<EasyRefresh> {
     _userOffsetNotifier.dispose();
   }
 
+  /// 构建Header容器
+  Widget _buildHeaderView() {
+    if (_headerNotifier.axis == null || _headerNotifier.axisDirection == null) {
+      return SizedBox();
+    }
+    // 方向
+    final axis = _headerNotifier.axis!;
+    final axisDirection = _headerNotifier.axisDirection!;
+    return Positioned(
+      top: axis == Axis.vertical
+          ? axisDirection == AxisDirection.down
+              ? 0
+              : null
+          : 0,
+      bottom: axis == Axis.vertical
+          ? axisDirection == AxisDirection.up
+              ? 0
+              : null
+          : 0,
+      left: axis == Axis.horizontal
+          ? axisDirection == AxisDirection.right
+              ? 0
+              : null
+          : 0,
+      right: axis == Axis.horizontal
+          ? axisDirection == AxisDirection.left
+              ? 0
+              : null
+          : 0,
+      child: Container(
+        color: Colors.blue,
+        width: double.infinity,
+        height: _headerNotifier.offset,
+      ),
+    );
+  }
+
+  /// 构建Footer容器
+  Widget _buildFooterView() {
+    if (_headerNotifier.axis == null || _headerNotifier.axisDirection == null) {
+      return SizedBox();
+    }
+    // 方向
+    final axis = _headerNotifier.axis!;
+    final axisDirection = _headerNotifier.axisDirection!;
+    return Positioned(
+      top: axis == Axis.vertical
+          ? axisDirection == AxisDirection.up
+              ? 0
+              : null
+          : 0,
+      bottom: axis == Axis.vertical
+          ? axisDirection == AxisDirection.down
+              ? 0
+              : null
+          : 0,
+      left: axis == Axis.horizontal
+          ? axisDirection == AxisDirection.left
+              ? 0
+              : null
+          : 0,
+      right: axis == Axis.horizontal
+          ? axisDirection == AxisDirection.right
+              ? 0
+              : null
+          : 0,
+      child: Container(
+        color: Colors.blue,
+        width: double.infinity,
+        height: _footerNotifier.offset,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            color: Colors.blue,
-            width: double.infinity,
-            height: _headerNotifier.offset,
-          ),
-        ),
-        Positioned(
-          bottom: MediaQuery.of(context).padding.bottom,
-          left: 0,
-          right: 0,
-          child: Container(
-            color: Colors.blue,
-            width: double.infinity,
-            height: _footerNotifier.offset,
-          ),
-        ),
         ScrollConfiguration(
           behavior: _scrollBehavior,
           child: widget.child,
         ),
+        _buildHeaderView(),
+        _buildFooterView(),
       ],
     );
   }

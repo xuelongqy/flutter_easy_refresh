@@ -25,6 +25,7 @@ class _TestPageState extends State<TestPage> {
           await Future.delayed(Duration(seconds: 5));
         },
         child: ListView(
+          padding: EdgeInsets.zero,
           children: [
             Container(
               width: double.infinity,
@@ -37,4 +38,3 @@ class _TestPageState extends State<TestPage> {
     );
   }
 }
-

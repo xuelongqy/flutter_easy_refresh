@@ -10,46 +10,56 @@ class ERScrollPhysics extends ScrollPhysics {
   final HeaderNotifier headerNotifier;
   final FooterNotifier footerNotifier;
 
-  ERScrollPhysics({ ScrollPhysics? parent, required this.userOffsetNotifier, required this.headerNotifier, required this.footerNotifier }) : super(parent: parent);
+  ERScrollPhysics(
+      {ScrollPhysics? parent,
+      required this.userOffsetNotifier,
+      required this.headerNotifier,
+      required this.footerNotifier})
+      : super(parent: parent);
 
   @override
   BouncingScrollPhysics applyTo(ScrollPhysics? ancestor) {
     return BouncingScrollPhysics(parent: buildParent(ancestor));
   }
 
-  double frictionFactor(double overscrollFraction) => 0.52 * math.pow(1 - overscrollFraction, 2);
+  double frictionFactor(double overscrollFraction) =>
+      0.52 * math.pow(1 - overscrollFraction, 2);
 
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
+    /// 用户开始滚动
     userOffsetNotifier.value = true;
     assert(offset != 0.0);
     assert(position.minScrollExtent <= position.maxScrollExtent);
 
-    if (!position.outOfRange)
-      return offset;
+    if (!position.outOfRange) return offset;
 
-    final double overscrollPastStart = math.max(position.minScrollExtent - position.pixels, 0.0);
-    final double overscrollPastEnd = math.max(position.pixels - position.maxScrollExtent, 0.0);
-    final double overscrollPast = math.max(overscrollPastStart, overscrollPastEnd);
-    final bool easing = (overscrollPastStart > 0.0 && offset < 0.0)
-        || (overscrollPastEnd > 0.0 && offset > 0.0);
+    final double overscrollPastStart =
+        math.max(position.minScrollExtent - position.pixels, 0.0);
+    final double overscrollPastEnd =
+        math.max(position.pixels - position.maxScrollExtent, 0.0);
+    final double overscrollPast =
+        math.max(overscrollPastStart, overscrollPastEnd);
+    final bool easing = (overscrollPastStart > 0.0 && offset < 0.0) ||
+        (overscrollPastEnd > 0.0 && offset > 0.0);
 
     final double friction = easing
-    // Apply less resistance when easing the overscroll vs tensioning.
-        ? frictionFactor((overscrollPast - offset.abs()) / position.viewportDimension)
+        // Apply less resistance when easing the overscroll vs tensioning.
+        ? frictionFactor(
+            (overscrollPast - offset.abs()) / position.viewportDimension)
         : frictionFactor(overscrollPast / position.viewportDimension);
     final double direction = offset.sign;
 
     return direction * _applyFriction(overscrollPast, offset.abs(), friction);
   }
 
-  static double _applyFriction(double extentOutside, double absDelta, double gamma) {
+  static double _applyFriction(
+      double extentOutside, double absDelta, double gamma) {
     assert(absDelta > 0);
     double total = 0.0;
     if (extentOutside > 0) {
       final double deltaToLimit = extentOutside / gamma;
-      if (absDelta < deltaToLimit)
-        return absDelta * gamma;
+      if (absDelta < deltaToLimit) return absDelta * gamma;
       total += extentOutside;
       absDelta -= deltaToLimit;
     }
@@ -58,8 +68,9 @@ class ERScrollPhysics extends ScrollPhysics {
 
   @override
   double applyBoundaryConditions(ScrollMetrics position, double value) {
-    headerNotifier.update(position, value);
-    footerNotifier.update(position, value);
+    /// 更新偏移量
+    headerNotifier.updateOffset(position, value);
+    footerNotifier.updateOffset(position, value);
     // if (value < position.pixels && position.pixels <= position.minScrollExtent) // underscroll
     //   return value - position.pixels;
     // if (position.maxScrollExtent <= position.pixels && position.pixels < value) // overscroll
@@ -72,7 +83,13 @@ class ERScrollPhysics extends ScrollPhysics {
   }
 
   @override
-  Simulation? createBallisticSimulation(ScrollMetrics position, double velocity) {
+  Simulation? createBallisticSimulation(
+      ScrollMetrics position, double velocity) {
+    /// 更新方向
+    headerNotifier.updateAxis(position);
+    footerNotifier.updateAxis(position);
+
+    /// 用户停止滚动
     userOffsetNotifier.value = false;
     final Tolerance tolerance = this.tolerance;
     if (velocity.abs() >= tolerance.velocity || position.outOfRange) {
@@ -94,7 +111,8 @@ class ERScrollPhysics extends ScrollPhysics {
   @override
   double carriedMomentum(double existingVelocity) {
     return existingVelocity.sign *
-        math.min(0.000816 * math.pow(existingVelocity.abs(), 1.967).toDouble(), 40000.0);
+        math.min(0.000816 * math.pow(existingVelocity.abs(), 1.967).toDouble(),
+            40000.0);
   }
 
   @override

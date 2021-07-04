@@ -39,6 +39,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   @protected
   final ValueNotifier<bool> userOffsetNotifier;
 
+  /// 方向
+  Axis? axis;
+  AxisDirection? axisDirection;
+
   /// 偏移量
   double offset = 0;
 
@@ -60,8 +64,16 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// 计算偏移量
   double calculateOffset(ScrollMetrics position, double value);
 
-  /// 更新
-  void update(ScrollMetrics position, double value) {
+  /// 更新方向
+  void updateAxis(ScrollMetrics position) {
+    if (this.axis != position.axis && axisDirection != position.axisDirection) {
+      axis = position.axis;
+      axisDirection = position.axisDirection;
+    }
+  }
+
+  /// 更新偏移量
+  void updateOffset(ScrollMetrics position, double value) {
     // 如果没有越界则不操作
     double nextOffset = calculateOffset(position, value);
     if (nextOffset == 0 && this.offset == 0) {
