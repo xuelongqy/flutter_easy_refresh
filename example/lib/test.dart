@@ -14,6 +14,14 @@ class _TestPageState extends State<TestPage> {
   final scrollDirection = Axis.vertical;
 
   @override
+  void initState() {
+    super.initState();
+    // Future.delayed(Duration(seconds: 1), () {
+    //   PrimaryScrollController.of(context)!.position.jumpTo(-120);
+    // });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

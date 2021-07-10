@@ -36,7 +36,6 @@ enum IndicatorMode {
 /// 指示通知器
 abstract class IndicatorNotifier extends ChangeNotifier {
   /// 触发偏移量
-  @protected
   final double triggerOffset;
 
   /// 用户触发通知器
@@ -61,7 +60,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// 列表越界范围
   double get overExtent {
-    if ((this.mode == IndicatorMode.armed && !userOffsetNotifier.value) ||
+    if (this.mode == IndicatorMode.ready ||
         this.mode == IndicatorMode.processing ||
         this.mode == IndicatorMode.processed) {
       return triggerOffset;
@@ -78,13 +77,15 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// 计算偏移量
   double calculateOffset(ScrollMetrics position, double value);
 
-  /// 更新方向
-  void updateAxis(ScrollMetrics position) {
+  /// 模拟器更新
+  void updateBySimulation(ScrollMetrics position) {
     this.position = position;
+    // 更新方向
     if (this.axis != position.axis && axisDirection != position.axisDirection) {
       axis = position.axis;
       axisDirection = position.axisDirection;
     }
+    this.updateOffset(position, position.pixels);
   }
 
   /// 更新偏移量
@@ -105,11 +106,11 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       } else if (this.offset < 70) {
         this.mode = IndicatorMode.drag;
       } else if (this.offset == 70) {
-        // 如果是用户在滑动(未释放则不执行任务)
-        this.mode = userOffsetNotifier.value
+        this.mode = this.mode != IndicatorMode.ready
             ? IndicatorMode.armed
             : IndicatorMode.processing;
       } else if (this.offset > 70) {
+        // 如果是用户在滑动(未释放则不执行任务)
         this.mode = userOffsetNotifier.value
             ? IndicatorMode.armed
             : IndicatorMode.ready;

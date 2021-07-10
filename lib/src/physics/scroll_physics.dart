@@ -89,12 +89,11 @@ class ERScrollPhysics extends ScrollPhysics {
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
-    /// 更新方向
-    headerNotifier.updateAxis(position);
-    footerNotifier.updateAxis(position);
-
     /// 用户停止滚动
     userOffsetNotifier.value = false;
+    /// 更新方向
+    headerNotifier.updateBySimulation(position);
+    footerNotifier.updateBySimulation(position);
     final Tolerance tolerance = this.tolerance;
     if ((velocity.abs() >= tolerance.velocity || position.outOfRange) &&
         headerNotifier.mode != IndicatorMode.processing &&
