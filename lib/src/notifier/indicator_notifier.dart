@@ -103,13 +103,14 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         this.mode != IndicatorMode.processed) {
       if (this.offset == 0) {
         this.mode = IndicatorMode.inactive;
-      } else if (this.offset < 70) {
+      } else if (this.offset < this.triggerOffset) {
         this.mode = IndicatorMode.drag;
-      } else if (this.offset == 70) {
+      } else if (this.offset == this.triggerOffset) {
+        // 必须超过才能触发任务
         this.mode = this.mode != IndicatorMode.ready
             ? IndicatorMode.armed
             : IndicatorMode.processing;
-      } else if (this.offset > 70) {
+      } else if (this.offset > this.triggerOffset) {
         // 如果是用户在滑动(未释放则不执行任务)
         this.mode = userOffsetNotifier.value
             ? IndicatorMode.armed
@@ -127,7 +128,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     final oldMode = this.mode;
     this.mode = mode;
     notifyListeners();
-    if (oldMode == IndicatorMode.processing && position is ScrollActivityDelegate) {
+    if (oldMode == IndicatorMode.processing &&
+        position is ScrollActivityDelegate) {
       (position as ScrollActivityDelegate).goBallistic(0);
     }
   }
