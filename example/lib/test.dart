@@ -11,6 +11,8 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
+  final scrollDirection = Axis.vertical;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,10 +28,11 @@ class _TestPageState extends State<TestPage> {
         },
         child: ListView(
           padding: EdgeInsets.zero,
+          scrollDirection: scrollDirection,
           children: [
             Container(
-              width: double.infinity,
-              height: 1000,
+              width: scrollDirection == Axis.vertical ? double.infinity : 400,
+              height: scrollDirection == Axis.vertical ? 1000 : double.infinity,
               color: Colors.red,
             ),
           ],

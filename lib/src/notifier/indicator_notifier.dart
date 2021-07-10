@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// 指示器状态
-enum IndicatorState {
+enum IndicatorMode {
   /// 默认状态，不具备任何触发条件
   /// 此时[Header]或者[Footer]不显示
   /// 刷新完成后回归此状态
@@ -14,6 +14,10 @@ enum IndicatorState {
   /// 超出列表并达到触发任务距离
   /// 此状态松开，列表触发任务
   armed,
+
+  /// 超出列表并达到触发任务距离
+  /// 此状态表示用户已经松开
+  ready,
 
   /// 任务执行中
   /// 进行中，直到完成任务
@@ -39,6 +43,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   @protected
   final ValueNotifier<bool> userOffsetNotifier;
 
+  /// 定住让列表不越界
+  final bool clamping;
+
   /// 方向
   Axis? axis;
   AxisDirection? axisDirection;
@@ -46,26 +53,34 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// 偏移量
   double offset = 0;
 
+  /// 位置
+  late ScrollMetrics position;
+
   /// 状态
-  IndicatorState state = IndicatorState.inactive;
+  IndicatorMode mode = IndicatorMode.inactive;
 
   /// 列表越界范围
   double get overExtent {
-    if ((this.state == IndicatorState.armed && !userOffsetNotifier.value) ||
-        this.state == IndicatorState.processing ||
-        this.state == IndicatorState.processed) {
+    if ((this.mode == IndicatorMode.armed && !userOffsetNotifier.value) ||
+        this.mode == IndicatorMode.processing ||
+        this.mode == IndicatorMode.processed) {
       return triggerOffset;
     }
     return 0;
   }
 
-  IndicatorNotifier(this.triggerOffset, this.userOffsetNotifier);
+  IndicatorNotifier({
+    required this.triggerOffset,
+    required this.clamping,
+    required this.userOffsetNotifier,
+  });
 
   /// 计算偏移量
   double calculateOffset(ScrollMetrics position, double value);
 
   /// 更新方向
   void updateAxis(ScrollMetrics position) {
+    this.position = position;
     if (this.axis != position.axis && axisDirection != position.axisDirection) {
       axis = position.axis;
       axisDirection = position.axisDirection;
@@ -74,6 +89,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// 更新偏移量
   void updateOffset(ScrollMetrics position, double value) {
+    this.position = position;
     // 如果没有越界则不操作
     double nextOffset = calculateOffset(position, value);
     if (nextOffset == 0 && this.offset == 0) {
@@ -82,35 +98,51 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     // 更新偏移量
     this.offset = nextOffset;
     // 更新状态(任务执行中和任务完成中不更新)
-    if (this.state != IndicatorState.processing &&
-        this.state != IndicatorState.processed) {
+    if (this.mode != IndicatorMode.processing &&
+        this.mode != IndicatorMode.processed) {
       if (this.offset == 0) {
-        this.state = IndicatorState.inactive;
+        this.mode = IndicatorMode.inactive;
       } else if (this.offset < 70) {
-        this.state = IndicatorState.drag;
+        this.mode = IndicatorMode.drag;
       } else if (this.offset == 70) {
         // 如果是用户在滑动(未释放则不执行任务)
-        this.state = userOffsetNotifier.value
-            ? IndicatorState.armed
-            : IndicatorState.processing;
+        this.mode = userOffsetNotifier.value
+            ? IndicatorMode.armed
+            : IndicatorMode.processing;
       } else if (this.offset > 70) {
-        this.state = IndicatorState.armed;
+        this.mode = userOffsetNotifier.value
+            ? IndicatorMode.armed
+            : IndicatorMode.ready;
       }
     }
     notifyListeners();
   }
 
   /// 更新状态
-  void updateState(IndicatorState state) {
-    this.state = state;
+  void updateMode(IndicatorMode mode) {
+    if (this.mode == mode) {
+      return;
+    }
+    final oldMode = this.mode;
+    this.mode = mode;
     notifyListeners();
+    if (oldMode == IndicatorMode.processing && position is ScrollActivityDelegate) {
+      (position as ScrollActivityDelegate).goBallistic(0);
+    }
   }
 }
 
 /// Header通知器
 class HeaderNotifier extends IndicatorNotifier {
-  HeaderNotifier(double triggerOffset, ValueNotifier<bool> userOffsetNotifier)
-      : super(triggerOffset, userOffsetNotifier);
+  HeaderNotifier({
+    required double triggerOffset,
+    required bool clamping,
+    required ValueNotifier<bool> userOffsetNotifier,
+  }) : super(
+          triggerOffset: triggerOffset,
+          clamping: clamping,
+          userOffsetNotifier: userOffsetNotifier,
+        );
 
   @override
   double calculateOffset(ScrollMetrics position, double value) {
@@ -123,8 +155,15 @@ class HeaderNotifier extends IndicatorNotifier {
 
 /// Footer通知器
 class FooterNotifier extends IndicatorNotifier {
-  FooterNotifier(double triggerOffset, ValueNotifier<bool> userOffsetNotifier)
-      : super(triggerOffset, userOffsetNotifier);
+  FooterNotifier({
+    required double triggerOffset,
+    required bool clamping,
+    required ValueNotifier<bool> userOffsetNotifier,
+  }) : super(
+          triggerOffset: triggerOffset,
+          clamping: clamping,
+          userOffsetNotifier: userOffsetNotifier,
+        );
 
   @override
   double calculateOffset(ScrollMetrics position, double value) {

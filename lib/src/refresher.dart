@@ -41,8 +41,16 @@ class _EasyRefreshState extends State<EasyRefresh> {
   @override
   void initState() {
     super.initState();
-    _headerNotifier = HeaderNotifier(70, _userOffsetNotifier);
-    _footerNotifier = FooterNotifier(70, _userOffsetNotifier);
+    _headerNotifier = HeaderNotifier(
+      triggerOffset: 70,
+      clamping: true,
+      userOffsetNotifier: _userOffsetNotifier,
+    );
+    _footerNotifier = FooterNotifier(
+      triggerOffset: 70,
+      clamping: false,
+      userOffsetNotifier: _userOffsetNotifier,
+    );
     _scrollBehavior = ERScrollBehavior(ERScrollPhysics(
       userOffsetNotifier: _userOffsetNotifier,
       headerNotifier: _headerNotifier,
@@ -57,17 +65,17 @@ class _EasyRefreshState extends State<EasyRefresh> {
       print(_userOffsetNotifier.value);
     });
     _headerNotifier.addListener(() {
-      if (_headerNotifier.state == IndicatorState.processing) {
+      if (_headerNotifier.mode == IndicatorMode.processing) {
         Future.sync(widget.onRefresh!).whenComplete(() {
-          _headerNotifier.updateState(IndicatorState.done);
+          _headerNotifier.updateMode(IndicatorMode.done);
         });
       }
       setState(() {});
     });
     _footerNotifier.addListener(() {
-      if (_footerNotifier.state == IndicatorState.processing) {
+      if (_footerNotifier.mode == IndicatorMode.processing) {
         Future.sync(widget.onLoad!).whenComplete(() {
-          _footerNotifier.updateState(IndicatorState.done);
+          _footerNotifier.updateMode(IndicatorMode.done);
         });
       }
       setState(() {});
@@ -111,8 +119,9 @@ class _EasyRefreshState extends State<EasyRefresh> {
           : 0,
       child: Container(
         color: Colors.blue,
-        width: double.infinity,
-        height: _headerNotifier.offset,
+        width: axis == Axis.vertical ? double.infinity : _headerNotifier.offset,
+        height:
+            axis == Axis.vertical ? _headerNotifier.offset : double.infinity,
       ),
     );
   }
@@ -148,8 +157,9 @@ class _EasyRefreshState extends State<EasyRefresh> {
           : 0,
       child: Container(
         color: Colors.blue,
-        width: double.infinity,
-        height: _footerNotifier.offset,
+        width: axis == Axis.vertical ? double.infinity : _footerNotifier.offset,
+        height:
+            axis == Axis.vertical ? _footerNotifier.offset : double.infinity,
       ),
     );
   }

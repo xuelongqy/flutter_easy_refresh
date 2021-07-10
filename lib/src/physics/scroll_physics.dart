@@ -10,12 +10,12 @@ class ERScrollPhysics extends ScrollPhysics {
   final HeaderNotifier headerNotifier;
   final FooterNotifier footerNotifier;
 
-  ERScrollPhysics(
-      {ScrollPhysics? parent,
-      required this.userOffsetNotifier,
-      required this.headerNotifier,
-      required this.footerNotifier})
-      : super(parent: parent);
+  ERScrollPhysics({
+    ScrollPhysics parent = const AlwaysScrollableScrollPhysics(),
+    required this.userOffsetNotifier,
+    required this.headerNotifier,
+    required this.footerNotifier,
+  }) : super(parent: parent);
 
   @override
   BouncingScrollPhysics applyTo(ScrollPhysics? ancestor) {
@@ -71,14 +71,18 @@ class ERScrollPhysics extends ScrollPhysics {
     /// 更新偏移量
     headerNotifier.updateOffset(position, value);
     footerNotifier.updateOffset(position, value);
-    // if (value < position.pixels && position.pixels <= position.minScrollExtent) // underscroll
-    //   return value - position.pixels;
-    // if (position.maxScrollExtent <= position.pixels && position.pixels < value) // overscroll
-    //   return value - position.pixels;
-    // if (value < position.minScrollExtent && position.minScrollExtent < position.pixels) // hit top edge
-    //   return value - position.minScrollExtent;
-    // if (position.pixels < position.maxScrollExtent && position.maxScrollExtent < value) // hit bottom edge
-    //   return value - position.maxScrollExtent;
+    // if (headerNotifier.clamping == true) {
+    //   if (value < position.pixels && position.pixels <= position.minScrollExtent) // underscroll
+    //     return value - position.pixels;
+    //   if (value < position.minScrollExtent && position.minScrollExtent < position.pixels) // hit top edge
+    //     return value - position.minScrollExtent;
+    // }
+    // if (footerNotifier.clamping == true) {
+    //   if (position.maxScrollExtent <= position.pixels && position.pixels < value) // overscroll
+    //     return value - position.pixels;
+    //   if (position.pixels < position.maxScrollExtent && position.maxScrollExtent < value) // hit bottom edge
+    //     return value - position.maxScrollExtent;
+    // }
     return 0.0;
   }
 
@@ -92,7 +96,9 @@ class ERScrollPhysics extends ScrollPhysics {
     /// 用户停止滚动
     userOffsetNotifier.value = false;
     final Tolerance tolerance = this.tolerance;
-    if (velocity.abs() >= tolerance.velocity || position.outOfRange) {
+    if ((velocity.abs() >= tolerance.velocity || position.outOfRange) &&
+        headerNotifier.mode != IndicatorMode.processing &&
+        footerNotifier.mode != IndicatorMode.processing) {
       return BouncingScrollSimulation(
         spring: spring,
         position: position.pixels,
