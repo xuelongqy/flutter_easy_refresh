@@ -37,8 +37,8 @@ class ERScrollPhysics extends BouncingScrollPhysics {
   @override
   double applyBoundaryConditions(ScrollMetrics position, double value) {
     /// 更新偏移量
-    headerNotifier.updateOffset(position, value);
-    footerNotifier.updateOffset(position, value);
+    headerNotifier.updateOffset(position, value, false);
+    footerNotifier.updateOffset(position, value, false);
     // if (headerNotifier.clamping == true) {
     //   if (value < position.pixels && position.pixels <= position.minScrollExtent) // underscroll
     //     return value - position.pixels;
@@ -59,16 +59,10 @@ class ERScrollPhysics extends BouncingScrollPhysics {
       ScrollMetrics position, double velocity) {
     // 用户停止滚动
     userOffsetNotifier.value = false;
-
     // 模拟器更新
     headerNotifier.updateBySimulation(position);
     footerNotifier.updateBySimulation(position);
-
-    // 如果正在刷新则不更新
-    if (headerNotifier.mode == IndicatorMode.processing ||
-        footerNotifier.mode == IndicatorMode.processing) {
-      return null;
-    }
+    // 模拟器
     final Tolerance tolerance = this.tolerance;
     if (velocity.abs() >= tolerance.velocity || position.outOfRange) {
       return BouncingScrollSimulation(

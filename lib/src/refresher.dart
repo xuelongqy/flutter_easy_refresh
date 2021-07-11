@@ -38,6 +38,12 @@ class _EasyRefreshState extends State<EasyRefresh> {
   /// Footer通知器
   late FooterNotifier _footerNotifier;
 
+  /// 更新中
+  bool _refreshing = false;
+
+  /// 加载中
+  bool _loading = false;
+
   @override
   void initState() {
     super.initState();
@@ -65,18 +71,28 @@ class _EasyRefreshState extends State<EasyRefresh> {
       print(_userOffsetNotifier.value);
     });
     _headerNotifier.addListener(() {
+      // 执行刷新任务
       if (_headerNotifier.mode == IndicatorMode.processing) {
-        Future.sync(widget.onRefresh!).whenComplete(() {
-          _headerNotifier.updateMode(IndicatorMode.done);
-        });
+        if (!_refreshing) {
+          _refreshing = true;
+          Future.sync(widget.onRefresh!).whenComplete(() {
+            _refreshing = false;
+            _headerNotifier.updateMode(IndicatorMode.done);
+          });
+        }
       }
       setState(() {});
     });
     _footerNotifier.addListener(() {
+      // 执行加载任务
       if (_footerNotifier.mode == IndicatorMode.processing) {
-        Future.sync(widget.onLoad!).whenComplete(() {
-          _footerNotifier.updateMode(IndicatorMode.done);
-        });
+        if (!_loading) {
+          _loading = true;
+          Future.sync(widget.onLoad!).whenComplete(() {
+            _loading = false;
+            _footerNotifier.updateMode(IndicatorMode.done);
+          });
+        }
       }
       setState(() {});
     });

@@ -85,19 +85,21 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       axis = position.axis;
       axisDirection = position.axisDirection;
     }
-    this.updateOffset(position, position.pixels);
+    this.updateOffset(position, position.pixels, true);
   }
 
   /// 更新偏移量
-  void updateOffset(ScrollMetrics position, double value) {
+  void updateOffset(ScrollMetrics position, double value, bool bySimulation) {
     this.position = position;
+    // 记录旧状态
+    final oldOffset = this.offset;
+    final oldMode = this.mode;
+    // 更新偏移量
+    this.offset = calculateOffset(position, value);
     // 如果没有越界则不操作
-    double nextOffset = calculateOffset(position, value);
-    if (nextOffset == 0 && this.offset == 0) {
+    if (oldOffset == 0 && this.offset == 0) {
       return;
     }
-    // 更新偏移量
-    this.offset = nextOffset;
     // 更新状态(任务执行中和任务完成中不更新)
     if (this.mode != IndicatorMode.processing &&
         this.mode != IndicatorMode.processed) {
@@ -116,6 +118,14 @@ abstract class IndicatorNotifier extends ChangeNotifier {
             ? IndicatorMode.armed
             : IndicatorMode.ready;
       }
+    }
+    // 是否需要通知
+    if (oldOffset == this.offset && oldMode == this.mode) {
+      return;
+    }
+    // 避免绘制过程中setState()
+    if (bySimulation) {
+      return;
     }
     notifyListeners();
   }

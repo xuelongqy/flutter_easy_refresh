@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:example/widget/sample_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
@@ -30,20 +31,22 @@ class _TestPageState extends State<TestPage> {
       body: EasyRefresh(
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 5));
+          print('Refreshed');
         },
         onLoad: () async {
           await Future.delayed(Duration(seconds: 5));
+          print('Loaded');
         },
-        child: ListView(
+        child: ListView.builder(
           padding: EdgeInsets.zero,
           scrollDirection: scrollDirection,
-          children: [
-            Container(
-              width: scrollDirection == Axis.vertical ? double.infinity : 400,
-              height: scrollDirection == Axis.vertical ? 1000 : double.infinity,
-              color: Colors.red,
-            ),
-          ],
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return SampleListItem(
+              direction: scrollDirection,
+              width: scrollDirection == Axis.vertical ? double.infinity : 200,
+            );
+          },
         ),
       ),
     );
