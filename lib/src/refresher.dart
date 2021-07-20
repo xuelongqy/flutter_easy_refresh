@@ -135,9 +135,9 @@ class _EasyRefreshState extends State<EasyRefresh> {
           : 0,
       child: Container(
         color: Colors.blue,
-        width: axis == Axis.vertical ? double.infinity : _headerNotifier.offset,
+        width: axis == Axis.vertical ? double.infinity : _headerNotifier.extent,
         height:
-            axis == Axis.vertical ? _headerNotifier.offset : double.infinity,
+            axis == Axis.vertical ? _headerNotifier.extent : double.infinity,
       ),
     );
   }
@@ -173,9 +173,9 @@ class _EasyRefreshState extends State<EasyRefresh> {
           : 0,
       child: Container(
         color: Colors.blue,
-        width: axis == Axis.vertical ? double.infinity : _footerNotifier.offset,
+        width: axis == Axis.vertical ? double.infinity : _footerNotifier.extent,
         height:
-            axis == Axis.vertical ? _footerNotifier.offset : double.infinity,
+            axis == Axis.vertical ? _footerNotifier.extent : double.infinity,
       ),
     );
   }

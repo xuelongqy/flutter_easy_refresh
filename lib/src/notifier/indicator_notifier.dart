@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 /// 指示器状态
@@ -61,11 +63,22 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// 列表越界范围
   double get overExtent {
     if (this.mode == IndicatorMode.ready ||
-        this.mode == IndicatorMode.processing ||
-        this.mode == IndicatorMode.processed) {
+        (!this.clamping &&
+            (this.mode == IndicatorMode.processing ||
+                this.mode == IndicatorMode.processed))) {
       return triggerOffset;
     }
     return 0;
+  }
+
+  /// 指示器范围
+  double get extent {
+    if (this.clamping &&
+        (this.mode == IndicatorMode.processing ||
+            this.mode == IndicatorMode.processed)) {
+      return max(this.offset, this.triggerOffset);
+    }
+    return offset;
   }
 
   IndicatorNotifier({
