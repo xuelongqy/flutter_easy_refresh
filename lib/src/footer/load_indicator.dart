@@ -750,7 +750,7 @@ class _EasyRefreshSliverLoadControlState
           if (hasSliverLayoutExtent && !hasTask) {
             SchedulerBinding.instance!
                 .addPostFrameCallback((Duration timestamp) {
-              setState(() => hasSliverLayoutExtent = false);
+              if (mounted) setState(() => hasSliverLayoutExtent = false);
             });
           }
           return LoadMode.drag;
