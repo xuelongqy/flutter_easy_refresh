@@ -1,8 +1,5 @@
-import 'dart:math' as math;
-
 import 'package:flutter/widgets.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter_easyrefresh/src/notifier/indicator_notifier.dart';
+import '../notifier/indicator_notifier.dart';
 
 /// 滚动物理形式
 class ERScrollPhysics extends BouncingScrollPhysics {
@@ -39,18 +36,18 @@ class ERScrollPhysics extends BouncingScrollPhysics {
     /// 更新偏移量
     headerNotifier.updateOffset(position, value, false);
     footerNotifier.updateOffset(position, value, false);
-    // if (headerNotifier.clamping == true) {
-    //   if (value < position.pixels && position.pixels <= position.minScrollExtent) // underscroll
-    //     return value - position.pixels;
-    //   if (value < position.minScrollExtent && position.minScrollExtent < position.pixels) // hit top edge
-    //     return value - position.minScrollExtent;
-    // }
-    // if (footerNotifier.clamping == true) {
-    //   if (position.maxScrollExtent <= position.pixels && position.pixels < value) // overscroll
-    //     return value - position.pixels;
-    //   if (position.pixels < position.maxScrollExtent && position.maxScrollExtent < value) // hit bottom edge
-    //     return value - position.maxScrollExtent;
-    // }
+    if (headerNotifier.clamping == true) {
+      if (value < position.pixels && position.pixels <= position.minScrollExtent) // underscroll
+        return value - position.pixels;
+      if (value < position.minScrollExtent && position.minScrollExtent < position.pixels) // hit top edge
+        return value - position.minScrollExtent;
+    }
+    if (footerNotifier.clamping == true) {
+      if (position.maxScrollExtent <= position.pixels && position.pixels < value) // overscroll
+        return value - position.pixels;
+      if (position.pixels < position.maxScrollExtent && position.maxScrollExtent < value) // hit bottom edge
+        return value - position.maxScrollExtent;
+    }
     return 0.0;
   }
 

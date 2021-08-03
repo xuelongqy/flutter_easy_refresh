@@ -54,7 +54,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
     );
     _footerNotifier = FooterNotifier(
       triggerOffset: 70,
-      clamping: false,
+      clamping: true,
       userOffsetNotifier: _userOffsetNotifier,
     );
     _scrollBehavior = ERScrollBehavior(ERScrollPhysics(
@@ -186,42 +186,43 @@ class _EasyRefreshState extends State<EasyRefresh> {
       behavior: _scrollBehavior,
       child: widget.child,
     );
-    if (!_headerNotifier.clamping && !_footerNotifier.clamping ||
-        _headerNotifier.axis == null ||
-        _headerNotifier.axisDirection == null) {
-      return child;
-    }
-    // 方向
-    final axis = _headerNotifier.axis!;
-    final axisDirection = _headerNotifier.axisDirection!;
-    // 当有固定指示器时，需要越界固定列表位置(不越界)
-    final headerClamping = _headerNotifier.clamping;
-    final footerClamping = _footerNotifier.clamping;
-    final double headerOffset = headerClamping ? -_headerNotifier.offset : 0;
-    final double footerOffset = footerClamping ? -_footerNotifier.offset : 0;
-    return Positioned(
-      top: axis == Axis.vertical
-          ? axisDirection == AxisDirection.down
-              ? headerOffset
-              : footerOffset
-          : 0,
-      bottom: axis == Axis.vertical
-          ? axisDirection == AxisDirection.up
-          ? headerOffset
-          : footerOffset
-          : 0,
-      left: axis == Axis.horizontal
-          ? axisDirection == AxisDirection.right
-          ? headerOffset
-          : footerOffset
-          : 0,
-      right: axis == Axis.horizontal
-          ? axisDirection == AxisDirection.left
-          ? headerOffset
-          : footerOffset
-          : 0,
-      child: child,
-    );
+    return child;
+    // if (!_headerNotifier.clamping && !_footerNotifier.clamping ||
+    //     _headerNotifier.axis == null ||
+    //     _headerNotifier.axisDirection == null) {
+    //   return child;
+    // }
+    // // 方向
+    // final axis = _headerNotifier.axis!;
+    // final axisDirection = _headerNotifier.axisDirection!;
+    // // 当有固定指示器时，需要越界固定列表位置(不越界)
+    // final headerClamping = _headerNotifier.clamping;
+    // final footerClamping = _footerNotifier.clamping;
+    // final double headerOffset = headerClamping ? -_headerNotifier.offset : 0;
+    // final double footerOffset = footerClamping ? -_footerNotifier.offset : 0;
+    // return Positioned(
+    //   top: axis == Axis.vertical
+    //       ? axisDirection == AxisDirection.down
+    //           ? headerOffset
+    //           : footerOffset
+    //       : 0,
+    //   bottom: axis == Axis.vertical
+    //       ? axisDirection == AxisDirection.up
+    //       ? headerOffset
+    //       : footerOffset
+    //       : 0,
+    //   left: axis == Axis.horizontal
+    //       ? axisDirection == AxisDirection.right
+    //       ? headerOffset
+    //       : footerOffset
+    //       : 0,
+    //   right: axis == Axis.horizontal
+    //       ? axisDirection == AxisDirection.left
+    //       ? headerOffset
+    //       : footerOffset
+    //       : 0,
+    //   child: child,
+    // );
   }
 
   @override

@@ -63,9 +63,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// 列表越界范围
   double get overExtent {
     if (this.mode == IndicatorMode.ready ||
-        (!this.clamping &&
-            (this.mode == IndicatorMode.processing ||
-                this.mode == IndicatorMode.processed))) {
+        this.mode == IndicatorMode.processing ||
+        this.mode == IndicatorMode.processed) {
       return triggerOffset;
     }
     return 0;
@@ -73,11 +72,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// 指示器范围
   double get extent {
-    if (this.clamping &&
-        (this.mode == IndicatorMode.processing ||
-            this.mode == IndicatorMode.processed)) {
-      return max(this.offset, this.triggerOffset);
-    }
     return offset;
   }
 
@@ -175,7 +169,10 @@ class HeaderNotifier extends IndicatorNotifier {
     if (value >= position.minScrollExtent && offset != 0) {
       return 0;
     }
-    return value > position.minScrollExtent ? 0 : value.abs();
+    print(value);
+    return value >= position.minScrollExtent
+        ? 0
+        : value.abs() + (this.clamping ? this.offset : 0);
   }
 }
 
@@ -196,8 +193,8 @@ class FooterNotifier extends IndicatorNotifier {
     if (value <= position.maxScrollExtent && offset != 0) {
       return 0;
     }
-    return value < position.maxScrollExtent
+    return value <= position.maxScrollExtent
         ? 0
-        : value - position.maxScrollExtent;
+        : value - position.maxScrollExtent + (this.clamping ? this.offset : 0);
   }
 }
