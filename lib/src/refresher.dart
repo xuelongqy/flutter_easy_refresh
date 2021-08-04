@@ -54,7 +54,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
     );
     _footerNotifier = FooterNotifier(
       triggerOffset: 70,
-      clamping: true,
+      clamping: false,
       userOffsetNotifier: _userOffsetNotifier,
     );
     _scrollBehavior = ERScrollBehavior(ERScrollPhysics(

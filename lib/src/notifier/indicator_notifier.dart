@@ -169,7 +169,6 @@ class HeaderNotifier extends IndicatorNotifier {
     if (value >= position.minScrollExtent && offset != 0) {
       return 0;
     }
-    print(value);
     return value >= position.minScrollExtent
         ? 0
         : value.abs() + (this.clamping ? this.offset : 0);

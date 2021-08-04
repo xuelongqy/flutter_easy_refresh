@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/widgets.dart';
 import '../notifier/indicator_notifier.dart';
 
@@ -28,7 +30,38 @@ class ERScrollPhysics extends BouncingScrollPhysics {
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
     /// 用户开始滚动
     userOffsetNotifier.value = true;
-    return super.applyPhysicsToUserOffset(position, offset);
+    assert(offset != 0.0);
+    assert(position.minScrollExtent <= position.maxScrollExtent);
+
+    if (!(position.pixels - headerNotifier.offset < position.minScrollExtent || position.pixels + footerNotifier.offset > position.maxScrollExtent))
+      return offset;
+    final double pixels = position.pixels - headerNotifier.offset;
+    final double overscrollPastStart = math.max(position.minScrollExtent - pixels, 0.0);
+    final double overscrollPastEnd = math.max(pixels - position.maxScrollExtent, 0.0);
+    final double overscrollPast = math.max(overscrollPastStart, overscrollPastEnd);
+    final bool easing = (overscrollPastStart > 0.0 && offset < 0.0)
+        || (overscrollPastEnd > 0.0 && offset > 0.0);
+
+    final double friction = easing
+    // Apply less resistance when easing the overscroll vs tensioning.
+        ? frictionFactor((overscrollPast - offset.abs()) / position.viewportDimension)
+        : frictionFactor(overscrollPast / position.viewportDimension);
+    final double direction = offset.sign;
+
+    return direction * _applyFriction(overscrollPast, offset.abs(), friction);
+  }
+
+  static double _applyFriction(double extentOutside, double absDelta, double gamma) {
+    assert(absDelta > 0);
+    double total = 0.0;
+    if (extentOutside > 0) {
+      final double deltaToLimit = extentOutside / gamma;
+      if (absDelta < deltaToLimit)
+        return absDelta * gamma;
+      total += extentOutside;
+      absDelta -= deltaToLimit;
+    }
+    return total + absDelta;
   }
 
   @override
