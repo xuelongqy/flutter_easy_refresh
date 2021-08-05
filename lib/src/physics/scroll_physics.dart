@@ -28,36 +28,45 @@ class ERScrollPhysics extends BouncingScrollPhysics {
 
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
-    /// 用户开始滚动
+    // 用户开始滚动
     userOffsetNotifier.value = true;
     assert(offset != 0.0);
     assert(position.minScrollExtent <= position.maxScrollExtent);
 
-    if (!(position.pixels - headerNotifier.offset < position.minScrollExtent || position.pixels + footerNotifier.offset > position.maxScrollExtent))
-      return offset;
-    final double pixels = position.pixels - headerNotifier.offset;
-    final double overscrollPastStart = math.max(position.minScrollExtent - pixels, 0.0);
-    final double overscrollPastEnd = math.max(pixels - position.maxScrollExtent, 0.0);
-    final double overscrollPast = math.max(overscrollPastStart, overscrollPastEnd);
-    final bool easing = (overscrollPastStart > 0.0 && offset < 0.0)
-        || (overscrollPastEnd > 0.0 && offset > 0.0);
+    // 判断是否越界，clamping时以指示器偏移量为准
+    if (!(position.outOfRange ||
+        (headerNotifier.clamping && headerNotifier.offset > 0) ||
+        (footerNotifier.clamping && footerNotifier.offset > 0))) return offset;
+    // 计算实际位置
+    final double pixels =
+        position.pixels - headerNotifier.offset + footerNotifier.offset;
+
+    final double overscrollPastStart =
+        math.max(position.minScrollExtent - pixels, 0.0);
+    final double overscrollPastEnd =
+        math.max(pixels - position.maxScrollExtent, 0.0);
+    final double overscrollPast =
+        math.max(overscrollPastStart, overscrollPastEnd);
+    final bool easing = (overscrollPastStart > 0.0 && offset < 0.0) ||
+        (overscrollPastEnd > 0.0 && offset > 0.0);
 
     final double friction = easing
-    // Apply less resistance when easing the overscroll vs tensioning.
-        ? frictionFactor((overscrollPast - offset.abs()) / position.viewportDimension)
+        // Apply less resistance when easing the overscroll vs tensioning.
+        ? frictionFactor(
+            (overscrollPast - offset.abs()) / position.viewportDimension)
         : frictionFactor(overscrollPast / position.viewportDimension);
     final double direction = offset.sign;
 
     return direction * _applyFriction(overscrollPast, offset.abs(), friction);
   }
 
-  static double _applyFriction(double extentOutside, double absDelta, double gamma) {
+  static double _applyFriction(
+      double extentOutside, double absDelta, double gamma) {
     assert(absDelta > 0);
     double total = 0.0;
     if (extentOutside > 0) {
       final double deltaToLimit = extentOutside / gamma;
-      if (absDelta < deltaToLimit)
-        return absDelta * gamma;
+      if (absDelta < deltaToLimit) return absDelta * gamma;
       total += extentOutside;
       absDelta -= deltaToLimit;
     }
@@ -66,22 +75,32 @@ class ERScrollPhysics extends BouncingScrollPhysics {
 
   @override
   double applyBoundaryConditions(ScrollMetrics position, double value) {
+    // 抵消越界量
+    double bounds = 0;
+
+    if (headerNotifier.clamping == true) {
+      if (value < position.pixels &&
+          position.pixels <= position.minScrollExtent) // underscroll
+        bounds = value - position.pixels;
+      else if (value < position.minScrollExtent &&
+          position.minScrollExtent < position.pixels) // hit top edge
+        return value - position.minScrollExtent;
+      else if (headerNotifier.offset > 0) bounds = value - position.pixels;
+    }
+    if (footerNotifier.clamping == true) {
+      if (position.maxScrollExtent <= position.pixels &&
+          position.pixels < value) // overscroll
+        bounds = value - position.pixels;
+      else if (position.pixels < position.maxScrollExtent &&
+          position.maxScrollExtent < value) // hit bottom edge
+        return value - position.maxScrollExtent;
+      else if (footerNotifier.offset > 0) bounds = value - position.pixels;
+    }
+
     /// 更新偏移量
     headerNotifier.updateOffset(position, value, false);
     footerNotifier.updateOffset(position, value, false);
-    if (headerNotifier.clamping == true) {
-      if (value < position.pixels && position.pixels <= position.minScrollExtent) // underscroll
-        return value - position.pixels;
-      if (value < position.minScrollExtent && position.minScrollExtent < position.pixels) // hit top edge
-        return value - position.minScrollExtent;
-    }
-    if (footerNotifier.clamping == true) {
-      if (position.maxScrollExtent <= position.pixels && position.pixels < value) // overscroll
-        return value - position.pixels;
-      if (position.pixels < position.maxScrollExtent && position.maxScrollExtent < value) // hit bottom edge
-        return value - position.maxScrollExtent;
-    }
-    return 0.0;
+    return bounds;
   }
 
   @override

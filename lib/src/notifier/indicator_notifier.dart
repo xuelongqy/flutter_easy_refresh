@@ -166,12 +166,22 @@ class HeaderNotifier extends IndicatorNotifier {
 
   @override
   double calculateOffset(ScrollMetrics position, double value) {
-    if (value >= position.minScrollExtent && offset != 0) {
+    if (value >= position.minScrollExtent &&
+        offset != 0 &&
+        !(this.clamping && this.offset > 0)) {
       return 0;
     }
-    return value >= position.minScrollExtent
-        ? 0
-        : value.abs() + (this.clamping ? this.offset : 0);
+    if (this.clamping) {
+      if (value > position.minScrollExtent) {
+        // 回收先减去偏移量
+        return max(this.offset > 0 ? (-value + this.offset) : 0, 0);
+      } else {
+        // 越界累加偏移量
+        return -value + this.offset;
+      }
+    } else {
+      return value > position.minScrollExtent ? 0 : -value;
+    }
   }
 }
 
@@ -189,11 +199,23 @@ class FooterNotifier extends IndicatorNotifier {
 
   @override
   double calculateOffset(ScrollMetrics position, double value) {
-    if (value <= position.maxScrollExtent && offset != 0) {
+    if (value <= position.maxScrollExtent &&
+        offset != 0 &&
+        !(this.clamping && this.offset > 0)) {
       return 0;
     }
-    return value <= position.maxScrollExtent
-        ? 0
-        : value - position.maxScrollExtent + (this.clamping ? this.offset : 0);
+    // 移动量
+    final moveValue = value - position.maxScrollExtent;
+    if (this.clamping) {
+      if (value < position.maxScrollExtent) {
+        // 回收先减去偏移量
+        return max(this.offset > 0 ? (moveValue + this.offset) : 0, 0);
+      } else {
+        // 越界累加偏移量
+        return moveValue + this.offset;
+      }
+    } else {
+      return value < position.maxScrollExtent ? 0 : moveValue;
+    }
   }
 }
