@@ -26,7 +26,10 @@ class EasyRefresh extends StatefulWidget {
   _EasyRefreshState createState() => _EasyRefreshState();
 }
 
-class _EasyRefreshState extends State<EasyRefresh> {
+class _EasyRefreshState extends State<EasyRefresh>
+    with TickerProviderStateMixin {
+
+  /// 滚动行为
   late ERScrollBehavior _scrollBehavior;
 
   /// 用户偏移通知器(记录是否为用户滚动)
@@ -51,11 +54,13 @@ class _EasyRefreshState extends State<EasyRefresh> {
       triggerOffset: 70,
       clamping: true,
       userOffsetNotifier: _userOffsetNotifier,
+      vsync: this,
     );
     _footerNotifier = FooterNotifier(
       triggerOffset: 70,
       clamping: false,
       userOffsetNotifier: _userOffsetNotifier,
+      vsync: this,
     );
     _scrollBehavior = ERScrollBehavior(ERScrollPhysics(
       userOffsetNotifier: _userOffsetNotifier,
@@ -67,9 +72,6 @@ class _EasyRefreshState extends State<EasyRefresh> {
     //     print(PrimaryScrollController.of(context)!.position.pixels);
     //   });
     // });
-    _userOffsetNotifier.addListener(() {
-      print(_userOffsetNotifier.value);
-    });
     _headerNotifier.addListener(() {
       // 执行刷新任务
       if (_headerNotifier.mode == IndicatorMode.processing) {
@@ -77,7 +79,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
           _refreshing = true;
           Future.sync(widget.onRefresh!).whenComplete(() {
             _refreshing = false;
-            _headerNotifier.updateMode(IndicatorMode.done);
+            _headerNotifier.setMode(IndicatorMode.done);
           });
         }
       }
@@ -90,7 +92,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
           _loading = true;
           Future.sync(widget.onLoad!).whenComplete(() {
             _loading = false;
-            _footerNotifier.updateMode(IndicatorMode.done);
+            _footerNotifier.setMode(IndicatorMode.done);
           });
         }
       }
@@ -187,42 +189,6 @@ class _EasyRefreshState extends State<EasyRefresh> {
       child: widget.child,
     );
     return child;
-    // if (!_headerNotifier.clamping && !_footerNotifier.clamping ||
-    //     _headerNotifier.axis == null ||
-    //     _headerNotifier.axisDirection == null) {
-    //   return child;
-    // }
-    // // 方向
-    // final axis = _headerNotifier.axis!;
-    // final axisDirection = _headerNotifier.axisDirection!;
-    // // 当有固定指示器时，需要越界固定列表位置(不越界)
-    // final headerClamping = _headerNotifier.clamping;
-    // final footerClamping = _footerNotifier.clamping;
-    // final double headerOffset = headerClamping ? -_headerNotifier.offset : 0;
-    // final double footerOffset = footerClamping ? -_footerNotifier.offset : 0;
-    // return Positioned(
-    //   top: axis == Axis.vertical
-    //       ? axisDirection == AxisDirection.down
-    //           ? headerOffset
-    //           : footerOffset
-    //       : 0,
-    //   bottom: axis == Axis.vertical
-    //       ? axisDirection == AxisDirection.up
-    //       ? headerOffset
-    //       : footerOffset
-    //       : 0,
-    //   left: axis == Axis.horizontal
-    //       ? axisDirection == AxisDirection.right
-    //       ? headerOffset
-    //       : footerOffset
-    //       : 0,
-    //   right: axis == Axis.horizontal
-    //       ? axisDirection == AxisDirection.left
-    //       ? headerOffset
-    //       : footerOffset
-    //       : 0,
-    //   child: child,
-    // );
   }
 
   @override

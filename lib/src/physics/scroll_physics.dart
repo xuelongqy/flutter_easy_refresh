@@ -14,7 +14,10 @@ class ERScrollPhysics extends BouncingScrollPhysics {
     required this.userOffsetNotifier,
     required this.headerNotifier,
     required this.footerNotifier,
-  }) : super(parent: parent);
+  }) : super(parent: parent) {
+    headerNotifier.bindPhysics(this);
+    footerNotifier.bindPhysics(this);
+  }
 
   @override
   ERScrollPhysics applyTo(ScrollPhysics? ancestor) {
@@ -85,7 +88,8 @@ class ERScrollPhysics extends BouncingScrollPhysics {
       else if (value < position.minScrollExtent &&
           position.minScrollExtent < position.pixels) // hit top edge
         return value - position.minScrollExtent;
-      else if (headerNotifier.offset > 0) bounds = value - position.pixels;
+      else if (headerNotifier.offset > 0 && !headerNotifier.modeLocked)
+        bounds = value - position.pixels;
     }
     if (footerNotifier.clamping == true) {
       if (position.maxScrollExtent <= position.pixels &&
@@ -94,7 +98,8 @@ class ERScrollPhysics extends BouncingScrollPhysics {
       else if (position.pixels < position.maxScrollExtent &&
           position.maxScrollExtent < value) // hit bottom edge
         return value - position.maxScrollExtent;
-      else if (footerNotifier.offset > 0) bounds = value - position.pixels;
+      else if (footerNotifier.offset > 0 && !footerNotifier.modeLocked)
+        bounds = value - position.pixels;
     }
 
     /// 更新偏移量
@@ -109,10 +114,9 @@ class ERScrollPhysics extends BouncingScrollPhysics {
     // 用户停止滚动
     userOffsetNotifier.value = false;
     // 模拟器更新
-    headerNotifier.updateBySimulation(position);
-    footerNotifier.updateBySimulation(position);
+    headerNotifier.updateBySimulation(position, velocity);
+    footerNotifier.updateBySimulation(position, velocity);
     // 模拟器
-    final Tolerance tolerance = this.tolerance;
     if (velocity.abs() >= tolerance.velocity || position.outOfRange) {
       return BouncingScrollSimulation(
         spring: spring,
