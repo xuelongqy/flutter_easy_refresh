@@ -1,9 +1,4 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/src/notifier/indicator_notifier.dart';
-import './physics/scroll_physics.dart';
-import './behavior/scroll_behavior.dart';
+part of easyrefresh;
 
 class EasyRefresh extends StatefulWidget {
   /// 子组件
@@ -74,7 +69,7 @@ class _EasyRefreshState extends State<EasyRefresh>
     // });
     _headerNotifier.addListener(() {
       // 执行刷新任务
-      if (_headerNotifier.mode == IndicatorMode.processing) {
+      if (_headerNotifier._mode == IndicatorMode.processing) {
         if (!_refreshing) {
           _refreshing = true;
           Future.sync(widget.onRefresh!).whenComplete(() {
@@ -87,7 +82,7 @@ class _EasyRefreshState extends State<EasyRefresh>
     });
     _footerNotifier.addListener(() {
       // 执行加载任务
-      if (_footerNotifier.mode == IndicatorMode.processing) {
+      if (_footerNotifier._mode == IndicatorMode.processing) {
         if (!_loading) {
           _loading = true;
           Future.sync(widget.onLoad!).whenComplete(() {
@@ -108,12 +103,12 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   /// 构建Header容器
   Widget _buildHeaderView() {
-    if (_headerNotifier.axis == null || _headerNotifier.axisDirection == null) {
+    if (_headerNotifier._axis == null || _headerNotifier._axisDirection == null) {
       return SizedBox();
     }
     // 方向
-    final axis = _headerNotifier.axis!;
-    final axisDirection = _headerNotifier.axisDirection!;
+    final axis = _headerNotifier._axis!;
+    final axisDirection = _headerNotifier._axisDirection!;
     return Positioned(
       top: axis == Axis.vertical
           ? axisDirection == AxisDirection.down
@@ -137,21 +132,21 @@ class _EasyRefreshState extends State<EasyRefresh>
           : 0,
       child: Container(
         color: Colors.blue,
-        width: axis == Axis.vertical ? double.infinity : _headerNotifier.extent,
+        width: axis == Axis.vertical ? double.infinity : _headerNotifier._offset,
         height:
-            axis == Axis.vertical ? _headerNotifier.extent : double.infinity,
+            axis == Axis.vertical ? _headerNotifier._offset : double.infinity,
       ),
     );
   }
 
   /// 构建Footer容器
   Widget _buildFooterView() {
-    if (_headerNotifier.axis == null || _headerNotifier.axisDirection == null) {
+    if (_headerNotifier._axis == null || _headerNotifier._axisDirection == null) {
       return SizedBox();
     }
     // 方向
-    final axis = _headerNotifier.axis!;
-    final axisDirection = _headerNotifier.axisDirection!;
+    final axis = _headerNotifier._axis!;
+    final axisDirection = _headerNotifier._axisDirection!;
     return Positioned(
       top: axis == Axis.vertical
           ? axisDirection == AxisDirection.up
@@ -175,9 +170,9 @@ class _EasyRefreshState extends State<EasyRefresh>
           : 0,
       child: Container(
         color: Colors.blue,
-        width: axis == Axis.vertical ? double.infinity : _footerNotifier.extent,
+        width: axis == Axis.vertical ? double.infinity : _footerNotifier._offset,
         height:
-            axis == Axis.vertical ? _footerNotifier.extent : double.infinity,
+            axis == Axis.vertical ? _footerNotifier._offset : double.infinity,
       ),
     );
   }

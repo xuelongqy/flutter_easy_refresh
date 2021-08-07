@@ -1,7 +1,4 @@
-import 'dart:math' as math;
-
-import 'package:flutter/widgets.dart';
-import '../notifier/indicator_notifier.dart';
+part of easyrefresh;
 
 /// 滚动物理形式
 class ERScrollPhysics extends BouncingScrollPhysics {
@@ -15,8 +12,8 @@ class ERScrollPhysics extends BouncingScrollPhysics {
     required this.headerNotifier,
     required this.footerNotifier,
   }) : super(parent: parent) {
-    headerNotifier.bindPhysics(this);
-    footerNotifier.bindPhysics(this);
+    headerNotifier._bindPhysics(this);
+    footerNotifier._bindPhysics(this);
   }
 
   @override
@@ -38,11 +35,11 @@ class ERScrollPhysics extends BouncingScrollPhysics {
 
     // 判断是否越界，clamping时以指示器偏移量为准
     if (!(position.outOfRange ||
-        (headerNotifier.clamping && headerNotifier.offset > 0) ||
-        (footerNotifier.clamping && footerNotifier.offset > 0))) return offset;
+        (headerNotifier.clamping && headerNotifier._offset > 0) ||
+        (footerNotifier.clamping && footerNotifier._offset > 0))) return offset;
     // 计算实际位置
     final double pixels =
-        position.pixels - headerNotifier.offset + footerNotifier.offset;
+        position.pixels - headerNotifier._offset + footerNotifier._offset;
 
     final double overscrollPastStart =
         math.max(position.minScrollExtent - pixels, 0.0);
@@ -88,7 +85,7 @@ class ERScrollPhysics extends BouncingScrollPhysics {
       else if (value < position.minScrollExtent &&
           position.minScrollExtent < position.pixels) // hit top edge
         return value - position.minScrollExtent;
-      else if (headerNotifier.offset > 0 && !headerNotifier.modeLocked)
+      else if (headerNotifier._offset > 0 && !headerNotifier.modeLocked)
         bounds = value - position.pixels;
     }
     if (footerNotifier.clamping == true) {
@@ -98,13 +95,13 @@ class ERScrollPhysics extends BouncingScrollPhysics {
       else if (position.pixels < position.maxScrollExtent &&
           position.maxScrollExtent < value) // hit bottom edge
         return value - position.maxScrollExtent;
-      else if (footerNotifier.offset > 0 && !footerNotifier.modeLocked)
+      else if (footerNotifier._offset > 0 && !footerNotifier.modeLocked)
         bounds = value - position.pixels;
     }
 
     /// 更新偏移量
-    headerNotifier.updateOffset(position, value, false);
-    footerNotifier.updateOffset(position, value, false);
+    headerNotifier._updateOffset(position, value, false);
+    footerNotifier._updateOffset(position, value, false);
     return bounds;
   }
 
@@ -114,8 +111,8 @@ class ERScrollPhysics extends BouncingScrollPhysics {
     // 用户停止滚动
     userOffsetNotifier.value = false;
     // 模拟器更新
-    headerNotifier.updateBySimulation(position, velocity);
-    footerNotifier.updateBySimulation(position, velocity);
+    headerNotifier._updateBySimulation(position, velocity);
+    footerNotifier._updateBySimulation(position, velocity);
     // 模拟器
     if (velocity.abs() >= tolerance.velocity || position.outOfRange) {
       return BouncingScrollSimulation(

@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/src/physics/scroll_physics.dart';
+part of easyrefresh;
 
 /// 滚动行为
 /// 用于覆盖flutter自带平台相关的[ScrollBehavior]

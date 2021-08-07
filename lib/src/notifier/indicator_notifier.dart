@@ -1,8 +1,4 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
-import '../physics/scroll_physics.dart';
+part of easyrefresh;
 
 /// 指示器状态
 enum IndicatorMode {
@@ -54,17 +50,22 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   final bool clamping;
 
   /// 方向
-  Axis? axis;
-  AxisDirection? axisDirection;
+  Axis? _axis;
+  Axis? get axis => _axis;
+
+  AxisDirection? _axisDirection;
+  AxisDirection? get axisDirection => _axisDirection;
 
   /// 偏移量
-  double offset = 0;
+  double _offset = 0;
+  double get offset => _offset;
 
   /// 位置
-  late ScrollMetrics position;
+  late ScrollMetrics _position;
 
   /// 状态
-  IndicatorMode mode = IndicatorMode.inactive;
+  IndicatorMode _mode = IndicatorMode.inactive;
+  IndicatorMode get mode => _mode;
 
   /// 动画控制器
   /// [clamping]为true时，用到
@@ -78,20 +79,15 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// 列表越界范围
   double get overExtent {
-    if (this.mode == IndicatorMode.ready || this.modeLocked) {
+    if (this._mode == IndicatorMode.ready || this.modeLocked) {
       return triggerOffset;
     }
     return 0;
   }
 
-  /// 指示器范围
-  double get extent {
-    return offset;
-  }
-
   /// 状态锁定
   bool get modeLocked =>
-      mode == IndicatorMode.processing || mode == IndicatorMode.processed;
+      _mode == IndicatorMode.processing || _mode == IndicatorMode.processed;
 
   /// 获取弹性属性
   SpringDescription get spring => _spring ?? _physics.spring;
@@ -108,10 +104,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   }
 
   /// [clamping]动画监听器
-  void clampingTick();
+  void _clampingTick();
 
   /// 计算偏移量
-  double calculateOffset(ScrollMetrics position, double value);
+  double _calculateOffset(ScrollMetrics position, double value);
 
   @override
   void dispose() {
@@ -126,7 +122,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       _clampingAnimationController = AnimationController.unbounded(
         vsync: this.vsync,
       );
-      _clampingAnimationController!.addListener(clampingTick);
+      _clampingAnimationController!.addListener(_clampingTick);
     }
   }
 
@@ -142,7 +138,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   }
 
   /// 绑定物理形式
-  void bindPhysics(ERScrollPhysics physics) {
+  void _bindPhysics(ERScrollPhysics physics) {
     _physics = physics;
   }
 
@@ -152,17 +148,17 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       ScrollMetrics position, double velocity);
 
   /// 模拟器更新
-  void updateBySimulation(ScrollMetrics position, double velocity) {
-    this.position = position;
+  void _updateBySimulation(ScrollMetrics position, double velocity) {
+    this._position = position;
     // 更新方向
-    if (this.axis != position.axis && axisDirection != position.axisDirection) {
-      axis = position.axis;
-      axisDirection = position.axisDirection;
+    if (this._axis != position.axis && _axisDirection != position.axisDirection) {
+      _axis = position.axis;
+      _axisDirection = position.axisDirection;
     }
     // 更新释放时的偏移量
-    this.updateOffset(position, position.pixels, true);
+    this._updateOffset(position, position.pixels, true);
     // 如果为clamping，且offset大于0，则开始动画
-    if (this.clamping && this.offset > 0 && !this.modeLocked) {
+    if (this.clamping && this._offset > 0 && !this.modeLocked) {
       final simulation = this.createBallisticSimulation(position, velocity);
       if (simulation != null) {
         _startClampingAnimation(simulation);
@@ -171,7 +167,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   }
 
   /// 更新偏移量
-  void updateOffset(ScrollMetrics position, double value, bool bySimulation) {
+  void _updateOffset(ScrollMetrics position, double value, bool bySimulation) {
     // clamping
     // 在任务处理中，不做任何处理
     if (this.clamping && this.modeLocked) {
@@ -181,24 +177,24 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     // 在释放情况下，且offset大于0，则由动画控制
     if (!this.userOffsetNotifier.value &&
         this.clamping &&
-        this.offset > 0 &&
+        this._offset > 0 &&
         !bySimulation) {
       return;
     }
-    this.position = position;
+    this._position = position;
     // 记录旧状态
-    final oldOffset = this.offset;
-    final oldMode = this.mode;
+    final oldOffset = this._offset;
+    final oldMode = this._mode;
     // 更新偏移量
-    this.offset = calculateOffset(position, value);
+    this._offset = _calculateOffset(position, value);
     // 如果没有越界则不操作
-    if (oldOffset == 0 && this.offset == 0) {
+    if (oldOffset == 0 && this._offset == 0) {
       return;
     }
     // 更新状态
-    this.updateMode();
+    this._updateMode();
     // 是否需要通知
-    if (oldOffset == this.offset && oldMode == this.mode) {
+    if (oldOffset == this._offset && oldMode == this._mode) {
       return;
     }
     // 避免绘制过程中setState()
@@ -209,21 +205,21 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   }
 
   /// 更新状态
-  void updateMode() {
+  void _updateMode() {
     // 任务执行中和任务完成中不更新
     if (!this.modeLocked) {
-      if (this.offset == 0) {
-        this.mode = IndicatorMode.inactive;
-      } else if (this.offset < this.triggerOffset) {
-        this.mode = IndicatorMode.drag;
-      } else if (this.offset == this.triggerOffset) {
+      if (this._offset == 0) {
+        this._mode = IndicatorMode.inactive;
+      } else if (this._offset < this.triggerOffset) {
+        this._mode = IndicatorMode.drag;
+      } else if (this._offset == this.triggerOffset) {
         // 必须超过才能触发任务
-        this.mode = this.mode != IndicatorMode.ready
+        this._mode = this._mode != IndicatorMode.ready
             ? IndicatorMode.armed
             : IndicatorMode.processing;
-      } else if (this.offset > this.triggerOffset) {
+      } else if (this._offset > this.triggerOffset) {
         // 如果是用户在滑动(未释放则不执行任务)
-        this.mode = userOffsetNotifier.value
+        this._mode = userOffsetNotifier.value
             ? IndicatorMode.armed
             : IndicatorMode.ready;
       }
@@ -232,7 +228,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// 开始[clamping]动画
   void _startClampingAnimation(Simulation simulation) {
-    if (this.offset <= 0) {
+    if (this._offset <= 0) {
       return;
     }
     _clampingAnimationController!.animateWith(simulation);
@@ -240,15 +236,15 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// 设置状态
   void setMode(IndicatorMode mode) {
-    if (this.mode == mode) {
+    if (this._mode == mode) {
       return;
     }
-    final oldMode = this.mode;
-    this.mode = mode;
+    final oldMode = this._mode;
+    this._mode = mode;
     notifyListeners();
     if (oldMode == IndicatorMode.processing &&
-        position is ScrollActivityDelegate) {
-      (position as ScrollActivityDelegate).goBallistic(0);
+        _position is ScrollActivityDelegate) {
+      (_position as ScrollActivityDelegate).goBallistic(0);
     }
   }
 }
@@ -270,19 +266,19 @@ class HeaderNotifier extends IndicatorNotifier {
         );
 
   @override
-  double calculateOffset(ScrollMetrics position, double value) {
+  double _calculateOffset(ScrollMetrics position, double value) {
     if (value >= position.minScrollExtent &&
-        offset != 0 &&
-        !(this.clamping && this.offset > 0)) {
+        _offset != 0 &&
+        !(this.clamping && this._offset > 0)) {
       return 0;
     }
     if (this.clamping) {
       if (value > position.minScrollExtent) {
         // 回收先减去偏移量
-        return max(this.offset > 0 ? (-value + this.offset) : 0, 0);
+        return math.max(this._offset > 0 ? (-value + this._offset) : 0, 0);
       } else {
         // 越界累加偏移量
-        return -value + this.offset;
+        return -value + this._offset;
       }
     } else {
       return value > position.minScrollExtent ? 0 : -value;
@@ -292,10 +288,10 @@ class HeaderNotifier extends IndicatorNotifier {
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
-    if (this.clamping && this.offset > 0) {
+    if (this.clamping && this._offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
-        position: position.pixels - this.offset,
+        position: position.pixels - this._offset,
         velocity: velocity,
         leadingExtent: position.minScrollExtent - this.overExtent,
         trailingExtent: 0,
@@ -306,9 +302,9 @@ class HeaderNotifier extends IndicatorNotifier {
   }
 
   @override
-  void clampingTick() {
-    this.offset = -_clampingAnimationController!.value;
-    this.updateMode();
+  void _clampingTick() {
+    this._offset = math.max(-_clampingAnimationController!.value, 0);
+    this._updateMode();
     notifyListeners();
   }
 }
@@ -330,10 +326,10 @@ class FooterNotifier extends IndicatorNotifier {
         );
 
   @override
-  double calculateOffset(ScrollMetrics position, double value) {
+  double _calculateOffset(ScrollMetrics position, double value) {
     if (value <= position.maxScrollExtent &&
-        offset != 0 &&
-        !(this.clamping && this.offset > 0)) {
+        _offset != 0 &&
+        !(this.clamping && this._offset > 0)) {
       return 0;
     }
     // 移动量
@@ -341,10 +337,10 @@ class FooterNotifier extends IndicatorNotifier {
     if (this.clamping) {
       if (value < position.maxScrollExtent) {
         // 回收先减去偏移量
-        return max(this.offset > 0 ? (move + this.offset) : 0, 0);
+        return math.max(this._offset > 0 ? (move + this._offset) : 0, 0);
       } else {
         // 越界累加偏移量
-        return move + this.offset;
+        return move + this._offset;
       }
     } else {
       return value < position.maxScrollExtent ? 0 : move;
@@ -354,10 +350,10 @@ class FooterNotifier extends IndicatorNotifier {
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
-    if (this.clamping && this.offset > 0) {
+    if (this.clamping && this._offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
-        position: position.pixels + this.offset,
+        position: position.pixels + this._offset,
         velocity: velocity,
         leadingExtent: 0,
         trailingExtent: position.maxScrollExtent + this.overExtent,
@@ -368,10 +364,10 @@ class FooterNotifier extends IndicatorNotifier {
   }
 
   @override
-  void clampingTick() {
-    this.offset =
-        _clampingAnimationController!.value - position.maxScrollExtent;
-    this.updateMode();
+  void _clampingTick() {
+    this._offset = math.max(
+        _clampingAnimationController!.value - _position.maxScrollExtent, 0);
+    this._updateMode();
     notifyListeners();
   }
 }
