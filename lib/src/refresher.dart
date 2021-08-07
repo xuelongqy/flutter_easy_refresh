@@ -23,7 +23,6 @@ class EasyRefresh extends StatefulWidget {
 
 class _EasyRefreshState extends State<EasyRefresh>
     with TickerProviderStateMixin {
-
   /// 滚动行为
   late ERScrollBehavior _scrollBehavior;
 
@@ -78,7 +77,6 @@ class _EasyRefreshState extends State<EasyRefresh>
           });
         }
       }
-      setState(() {});
     });
     _footerNotifier.addListener(() {
       // 执行加载任务
@@ -91,7 +89,6 @@ class _EasyRefreshState extends State<EasyRefresh>
           });
         }
       }
-      setState(() {});
     });
   }
 
@@ -103,77 +100,95 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   /// 构建Header容器
   Widget _buildHeaderView() {
-    if (_headerNotifier._axis == null || _headerNotifier._axisDirection == null) {
-      return SizedBox();
-    }
-    // 方向
-    final axis = _headerNotifier._axis!;
-    final axisDirection = _headerNotifier._axisDirection!;
-    return Positioned(
-      top: axis == Axis.vertical
-          ? axisDirection == AxisDirection.down
-              ? 0
-              : null
-          : 0,
-      bottom: axis == Axis.vertical
-          ? axisDirection == AxisDirection.up
-              ? 0
-              : null
-          : 0,
-      left: axis == Axis.horizontal
-          ? axisDirection == AxisDirection.right
-              ? 0
-              : null
-          : 0,
-      right: axis == Axis.horizontal
-          ? axisDirection == AxisDirection.left
-              ? 0
-              : null
-          : 0,
-      child: Container(
-        color: Colors.blue,
-        width: axis == Axis.vertical ? double.infinity : _headerNotifier._offset,
-        height:
-            axis == Axis.vertical ? _headerNotifier._offset : double.infinity,
-      ),
+    return ValueListenableBuilder(
+      valueListenable: _headerNotifier.listenable(),
+      builder: (ctx, notifier, _) {
+        if (_headerNotifier._axis == null ||
+            _headerNotifier._axisDirection == null) {
+          return SizedBox();
+        }
+        // 方向
+        final axis = _headerNotifier._axis!;
+        final axisDirection = _headerNotifier._axisDirection!;
+        return Positioned(
+          top: axis == Axis.vertical
+              ? axisDirection == AxisDirection.down
+                  ? 0
+                  : null
+              : 0,
+          bottom: axis == Axis.vertical
+              ? axisDirection == AxisDirection.up
+                  ? 0
+                  : null
+              : 0,
+          left: axis == Axis.horizontal
+              ? axisDirection == AxisDirection.right
+                  ? 0
+                  : null
+              : 0,
+          right: axis == Axis.horizontal
+              ? axisDirection == AxisDirection.left
+                  ? 0
+                  : null
+              : 0,
+          child: Container(
+            color: Colors.blue,
+            width: axis == Axis.vertical
+                ? double.infinity
+                : _headerNotifier._offset,
+            height: axis == Axis.vertical
+                ? _headerNotifier._offset
+                : double.infinity,
+          ),
+        );
+      },
     );
   }
 
   /// 构建Footer容器
   Widget _buildFooterView() {
-    if (_headerNotifier._axis == null || _headerNotifier._axisDirection == null) {
-      return SizedBox();
-    }
-    // 方向
-    final axis = _headerNotifier._axis!;
-    final axisDirection = _headerNotifier._axisDirection!;
-    return Positioned(
-      top: axis == Axis.vertical
-          ? axisDirection == AxisDirection.up
-              ? 0
-              : null
-          : 0,
-      bottom: axis == Axis.vertical
-          ? axisDirection == AxisDirection.down
-              ? 0
-              : null
-          : 0,
-      left: axis == Axis.horizontal
-          ? axisDirection == AxisDirection.left
-              ? 0
-              : null
-          : 0,
-      right: axis == Axis.horizontal
-          ? axisDirection == AxisDirection.right
-              ? 0
-              : null
-          : 0,
-      child: Container(
-        color: Colors.blue,
-        width: axis == Axis.vertical ? double.infinity : _footerNotifier._offset,
-        height:
-            axis == Axis.vertical ? _footerNotifier._offset : double.infinity,
-      ),
+    return ValueListenableBuilder(
+      valueListenable: _footerNotifier.listenable(),
+      builder: (ctx, notifier, _) {
+        if (_headerNotifier._axis == null ||
+            _headerNotifier._axisDirection == null) {
+          return SizedBox();
+        }
+        // 方向
+        final axis = _headerNotifier._axis!;
+        final axisDirection = _headerNotifier._axisDirection!;
+        return Positioned(
+          top: axis == Axis.vertical
+              ? axisDirection == AxisDirection.up
+                  ? 0
+                  : null
+              : 0,
+          bottom: axis == Axis.vertical
+              ? axisDirection == AxisDirection.down
+                  ? 0
+                  : null
+              : 0,
+          left: axis == Axis.horizontal
+              ? axisDirection == AxisDirection.left
+                  ? 0
+                  : null
+              : 0,
+          right: axis == Axis.horizontal
+              ? axisDirection == AxisDirection.right
+                  ? 0
+                  : null
+              : 0,
+          child: Container(
+            color: Colors.blue,
+            width: axis == Axis.vertical
+                ? double.infinity
+                : _footerNotifier._offset,
+            height: axis == Axis.vertical
+                ? _footerNotifier._offset
+                : double.infinity,
+          ),
+        );
+      },
     );
   }
 

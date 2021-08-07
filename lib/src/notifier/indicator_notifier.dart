@@ -49,15 +49,29 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// 定住让列表不越界
   final bool clamping;
 
+  IndicatorNotifier({
+    required this.triggerOffset,
+    required this.clamping,
+    required this.userOffsetNotifier,
+    required this.vsync,
+    SpringDescription? spring,
+  }) : _spring = spring {
+    _initClampingAnimation();
+    this.userOffsetNotifier.addListener(_onUserOffset);
+  }
+
   /// 方向
   Axis? _axis;
+
   Axis? get axis => _axis;
 
   AxisDirection? _axisDirection;
+
   AxisDirection? get axisDirection => _axisDirection;
 
   /// 偏移量
   double _offset = 0;
+
   double get offset => _offset;
 
   /// 位置
@@ -65,6 +79,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// 状态
   IndicatorMode _mode = IndicatorMode.inactive;
+
   IndicatorMode get mode => _mode;
 
   /// 动画控制器
@@ -92,16 +107,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// 获取弹性属性
   SpringDescription get spring => _spring ?? _physics.spring;
 
-  IndicatorNotifier({
-    required this.triggerOffset,
-    required this.clamping,
-    required this.userOffsetNotifier,
-    required this.vsync,
-    SpringDescription? spring,
-  }) : _spring = spring {
-    _initClampingAnimation();
-    this.userOffsetNotifier.addListener(_onUserOffset);
-  }
+  /// 监听提供器
+  ValueListenable<IndicatorNotifier> listenable() => _IndicatorListenable(this);
 
   /// [clamping]动画监听器
   void _clampingTick();
@@ -151,7 +158,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   void _updateBySimulation(ScrollMetrics position, double velocity) {
     this._position = position;
     // 更新方向
-    if (this._axis != position.axis && _axisDirection != position.axisDirection) {
+    if (this._axis != position.axis &&
+        _axisDirection != position.axisDirection) {
       _axis = position.axis;
       _axisDirection = position.axisDirection;
     }
@@ -247,6 +255,43 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       (_position as ScrollActivityDelegate).goBallistic(0);
     }
   }
+}
+
+/// 指示器监听提供器
+class _IndicatorListenable<T extends IndicatorNotifier>
+    extends ValueListenable<T> {
+  /// 指示通知器
+  final T indicatorNotifier;
+
+  _IndicatorListenable(this.indicatorNotifier);
+
+  final List<VoidCallback> _listeners = [];
+
+  /// 监听通知
+  void _onNotify() {
+    for (final listener in _listeners) {
+      listener();
+    }
+  }
+
+  @override
+  void addListener(VoidCallback listener) {
+    if (_listeners.isEmpty) {
+      this.indicatorNotifier.addListener(_onNotify);
+    }
+    _listeners.add(listener);
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    _listeners.remove(listener);
+    if (_listeners.isEmpty) {
+      this.indicatorNotifier.removeListener(_onNotify);
+    }
+  }
+
+  @override
+  T get value => indicatorNotifier;
 }
 
 /// Header通知器
