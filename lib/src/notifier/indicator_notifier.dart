@@ -49,11 +49,18 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// 定住让列表不越界
   final bool clamping;
 
+  /// 是否计算安全区域
+  final bool safeArea;
+
+  /// 弹性属性
+  final SpringDescription? _spring;
+
   IndicatorNotifier({
     required this.triggerOffset,
     required this.clamping,
     required this.userOffsetNotifier,
     required this.vsync,
+    this.safeArea = true,
     SpringDescription? spring,
   }) : _spring = spring {
     _initClampingAnimation();
@@ -68,6 +75,14 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   AxisDirection? _axisDirection;
 
   AxisDirection? get axisDirection => _axisDirection;
+
+  /// 安全偏移量
+  /// 参考[SafeArea]
+  /// 用于解决安全区域被遮挡问题
+  /// 最终触发偏移量为[triggerOffset] + [safeOffset]
+  double? _safeOffset;
+
+  double get safeOffset => safeArea ? _safeOffset ?? 0 : 0;
 
   /// 偏移量
   double _offset = 0;
@@ -86,16 +101,17 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// [clamping]为true时，用到
   AnimationController? _clampingAnimationController;
 
-  /// 弹性属性
-  final SpringDescription? _spring;
-
   /// 滚动物理形式
   late ERScrollPhysics _physics;
+
+  /// 最终触发偏移量
+  /// [triggerOffset] + [safeOffset]
+  double get actualTriggerOffset => this.triggerOffset + this.safeOffset;
 
   /// 列表越界范围
   double get overExtent {
     if (this._mode == IndicatorMode.ready || this.modeLocked) {
-      return triggerOffset;
+      return actualTriggerOffset;
     }
     return 0;
   }
@@ -151,7 +167,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// 创建回弹模拟
   /// [clamping]使用
-  Simulation? createBallisticSimulation(
+  Simulation? _createBallisticSimulation(
       ScrollMetrics position, double velocity);
 
   /// 模拟器更新
@@ -167,7 +183,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     this._updateOffset(position, position.pixels, true);
     // 如果为clamping，且offset大于0，则开始动画
     if (this.clamping && this._offset > 0 && !this.modeLocked) {
-      final simulation = this.createBallisticSimulation(position, velocity);
+      final simulation = this._createBallisticSimulation(position, velocity);
       if (simulation != null) {
         _startClampingAnimation(simulation);
       }
@@ -218,14 +234,14 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (!this.modeLocked) {
       if (this._offset == 0) {
         this._mode = IndicatorMode.inactive;
-      } else if (this._offset < this.triggerOffset) {
+      } else if (this._offset < this.actualTriggerOffset) {
         this._mode = IndicatorMode.drag;
-      } else if (this._offset == this.triggerOffset) {
+      } else if (this._offset == this.actualTriggerOffset) {
         // 必须超过才能触发任务
         this._mode = this._mode != IndicatorMode.ready
             ? IndicatorMode.armed
             : IndicatorMode.processing;
-      } else if (this._offset > this.triggerOffset) {
+      } else if (this._offset > this.actualTriggerOffset) {
         // 如果是用户在滑动(未释放则不执行任务)
         this._mode = userOffsetNotifier.value
             ? IndicatorMode.armed
@@ -243,7 +259,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   }
 
   /// 设置状态
-  void setMode(IndicatorMode mode) {
+  void _setMode(IndicatorMode mode) {
     if (this._mode == mode) {
       return;
     }
@@ -302,12 +318,14 @@ class HeaderNotifier extends IndicatorNotifier {
     required ValueNotifier<bool> userOffsetNotifier,
     required TickerProvider vsync,
     SpringDescription? spring,
+    bool safeArea = true,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
           userOffsetNotifier: userOffsetNotifier,
           vsync: vsync,
           spring: spring,
+          safeArea: safeArea,
         );
 
   @override
@@ -331,7 +349,7 @@ class HeaderNotifier extends IndicatorNotifier {
   }
 
   @override
-  Simulation? createBallisticSimulation(
+  Simulation? _createBallisticSimulation(
       ScrollMetrics position, double velocity) {
     if (this.clamping && this._offset > 0) {
       return BouncingScrollSimulation(
@@ -362,12 +380,14 @@ class FooterNotifier extends IndicatorNotifier {
     required ValueNotifier<bool> userOffsetNotifier,
     required TickerProvider vsync,
     SpringDescription? spring,
+    bool safeArea = true,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
           userOffsetNotifier: userOffsetNotifier,
           vsync: vsync,
           spring: spring,
+          safeArea: safeArea,
         );
 
   @override
@@ -393,7 +413,7 @@ class FooterNotifier extends IndicatorNotifier {
   }
 
   @override
-  Simulation? createBallisticSimulation(
+  Simulation? _createBallisticSimulation(
       ScrollMetrics position, double velocity) {
     if (this.clamping && this._offset > 0) {
       return BouncingScrollSimulation(

@@ -49,12 +49,14 @@ class _EasyRefreshState extends State<EasyRefresh>
       clamping: true,
       userOffsetNotifier: _userOffsetNotifier,
       vsync: this,
+      safeArea: true,
     );
     _footerNotifier = FooterNotifier(
       triggerOffset: 70,
       clamping: false,
       userOffsetNotifier: _userOffsetNotifier,
       vsync: this,
+      safeArea: true,
     );
     _scrollBehavior = ERScrollBehavior(ERScrollPhysics(
       userOffsetNotifier: _userOffsetNotifier,
@@ -73,7 +75,7 @@ class _EasyRefreshState extends State<EasyRefresh>
           _refreshing = true;
           Future.sync(widget.onRefresh!).whenComplete(() {
             _refreshing = false;
-            _headerNotifier.setMode(IndicatorMode.done);
+            _headerNotifier._setMode(IndicatorMode.done);
           });
         }
       }
@@ -85,7 +87,7 @@ class _EasyRefreshState extends State<EasyRefresh>
           _loading = true;
           Future.sync(widget.onLoad!).whenComplete(() {
             _loading = false;
-            _footerNotifier.setMode(IndicatorMode.done);
+            _footerNotifier._setMode(IndicatorMode.done);
           });
         }
       }
@@ -100,16 +102,29 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   /// 构建Header容器
   Widget _buildHeaderView() {
+    // 设置安全偏移量
+    _headerNotifier._safeOffset = MediaQuery.of(context).padding.top;
     return ValueListenableBuilder(
       valueListenable: _headerNotifier.listenable(),
       builder: (ctx, notifier, _) {
-        if (_headerNotifier._axis == null ||
-            _headerNotifier._axisDirection == null) {
+        if (_headerNotifier.axis == null ||
+            _headerNotifier.axisDirection == null) {
           return SizedBox();
         }
         // 方向
-        final axis = _headerNotifier._axis!;
-        final axisDirection = _headerNotifier._axisDirection!;
+        final axis = _headerNotifier.axis!;
+        final axisDirection = _headerNotifier.axisDirection!;
+        // 设置安全偏移量
+        if (_headerNotifier._safeOffset == null) {
+          final safePadding = MediaQuery.of(context).padding;
+          _footerNotifier._safeOffset = axis == Axis.vertical
+              ? axisDirection == AxisDirection.down
+                  ? safePadding.top
+                  : safePadding.bottom
+              : axisDirection == AxisDirection.right
+                  ? safePadding.left
+                  : safePadding.right;
+        }
         return Positioned(
           top: axis == Axis.vertical
               ? axisDirection == AxisDirection.down
@@ -150,13 +165,25 @@ class _EasyRefreshState extends State<EasyRefresh>
     return ValueListenableBuilder(
       valueListenable: _footerNotifier.listenable(),
       builder: (ctx, notifier, _) {
-        if (_headerNotifier._axis == null ||
-            _headerNotifier._axisDirection == null) {
+        // physics未初始化完成
+        if (_headerNotifier.axis == null ||
+            _headerNotifier.axisDirection == null) {
           return SizedBox();
         }
         // 方向
-        final axis = _headerNotifier._axis!;
-        final axisDirection = _headerNotifier._axisDirection!;
+        final axis = _headerNotifier.axis!;
+        final axisDirection = _headerNotifier.axisDirection!;
+        // 设置安全偏移量
+        if (_footerNotifier._safeOffset == null) {
+          final safePadding = MediaQuery.of(context).padding;
+          _footerNotifier._safeOffset = axis == Axis.vertical
+              ? axisDirection == AxisDirection.down
+                  ? safePadding.bottom
+                  : safePadding.top
+              : axisDirection == AxisDirection.right
+                  ? safePadding.right
+                  : safePadding.left;
+        }
         return Positioned(
           top: axis == Axis.vertical
               ? axisDirection == AxisDirection.up
