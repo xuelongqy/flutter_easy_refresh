@@ -55,6 +55,11 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// 弹性属性
   final SpringDescription? _spring;
 
+  /// 无限滚动触发偏移量
+  /// 列表距离边界的相对偏移量(>= 0)
+  /// 为null时，不具备无限滚动
+  final double? infiniteOffset;
+
   IndicatorNotifier({
     required this.triggerOffset,
     required this.clamping,
@@ -62,7 +67,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     required this.vsync,
     this.safeArea = true,
     SpringDescription? spring,
-  }) : _spring = spring {
+    this.infiniteOffset,
+  })  : _spring = spring,
+        assert(infiniteOffset == null || infiniteOffset >= 0,
+            'The infiniteOffset cannot be smaller than 0.'),
+        assert(infiniteOffset == null || !clamping,
+            'Cannot scroll indefinitely when clamping.') {
     _initClampingAnimation();
     this.userOffsetNotifier.addListener(_onUserOffset);
   }
@@ -110,7 +120,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// 列表越界范围
   double get overExtent {
-    if (this._mode == IndicatorMode.ready || this.modeLocked) {
+    if (this.infiniteOffset != null ||
+        this._mode == IndicatorMode.ready ||
+        this.modeLocked) {
       return actualTriggerOffset;
     }
     return 0;
@@ -170,6 +182,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   Simulation? _createBallisticSimulation(
       ScrollMetrics position, double velocity);
 
+  /// 计算边界距离
+  double get boundaryOffset;
+
   /// 模拟器更新
   void _updateBySimulation(ScrollMetrics position, double velocity) {
     this._position = position;
@@ -213,6 +228,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     this._offset = _calculateOffset(position, value);
     // 如果没有越界则不操作
     if (oldOffset == 0 && this._offset == 0) {
+      // 处理无限滚动
+      if (this.infiniteOffset != null &&
+          this.boundaryOffset < this.infiniteOffset!) {
+        // 更新状态
+        this._updateMode();
+        notifyListeners();
+      }
       return;
     }
     // 更新状态
@@ -232,7 +254,11 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   void _updateMode() {
     // 任务执行中和任务完成中不更新
     if (!this.modeLocked) {
-      if (this._offset == 0) {
+      if (this.infiniteOffset != null &&
+          this.boundaryOffset < this.infiniteOffset!) {
+        // 无限滚动
+        this._mode = IndicatorMode.processing;
+      } else if (this._offset == 0) {
         this._mode = IndicatorMode.inactive;
       } else if (this._offset < this.actualTriggerOffset) {
         this._mode = IndicatorMode.drag;
@@ -319,6 +345,7 @@ class HeaderNotifier extends IndicatorNotifier {
     required TickerProvider vsync,
     SpringDescription? spring,
     bool safeArea = true,
+    double? infiniteOffset,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -326,6 +353,7 @@ class HeaderNotifier extends IndicatorNotifier {
           vsync: vsync,
           spring: spring,
           safeArea: safeArea,
+          infiniteOffset: infiniteOffset,
         );
 
   @override
@@ -370,6 +398,9 @@ class HeaderNotifier extends IndicatorNotifier {
     this._updateMode();
     notifyListeners();
   }
+
+  @override
+  double get boundaryOffset => _position.pixels;
 }
 
 /// Footer通知器
@@ -381,6 +412,7 @@ class FooterNotifier extends IndicatorNotifier {
     required TickerProvider vsync,
     SpringDescription? spring,
     bool safeArea = true,
+    double? infiniteOffset = 0,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -388,6 +420,7 @@ class FooterNotifier extends IndicatorNotifier {
           vsync: vsync,
           spring: spring,
           safeArea: safeArea,
+          infiniteOffset: infiniteOffset,
         );
 
   @override
@@ -435,4 +468,7 @@ class FooterNotifier extends IndicatorNotifier {
     this._updateMode();
     notifyListeners();
   }
+
+  @override
+  double get boundaryOffset => _position.maxScrollExtent - _position.pixels;
 }
