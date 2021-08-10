@@ -57,6 +57,7 @@ class _EasyRefreshState extends State<EasyRefresh>
       userOffsetNotifier: _userOffsetNotifier,
       vsync: this,
       safeArea: true,
+      infiniteOffset: 100,
     );
     _scrollBehavior = ERScrollBehavior(ERScrollPhysics(
       userOffsetNotifier: _userOffsetNotifier,

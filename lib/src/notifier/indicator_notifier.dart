@@ -230,7 +230,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (oldOffset == 0 && this._offset == 0) {
       // 处理无限滚动
       if (this.infiniteOffset != null &&
-          this.boundaryOffset < this.infiniteOffset!) {
+          (this.boundaryOffset < this.infiniteOffset! ||
+              this._mode == IndicatorMode.done) &&
+          !bySimulation) {
         // 更新状态
         this._updateMode();
         notifyListeners();
@@ -254,10 +256,20 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   void _updateMode() {
     // 任务执行中和任务完成中不更新
     if (!this.modeLocked) {
+      // 无限滚动
       if (this.infiniteOffset != null &&
           this.boundaryOffset < this.infiniteOffset!) {
-        // 无限滚动
-        this._mode = IndicatorMode.processing;
+        if (this._mode == IndicatorMode.done) {
+          // 没结束前状态不改变
+          return;
+        } else {
+          this._mode = IndicatorMode.processing;
+          return;
+        }
+      }
+      if (this._mode == IndicatorMode.done && this.offset > 0) {
+        // 没结束前状态不改变
+        return;
       } else if (this._offset == 0) {
         this._mode = IndicatorMode.inactive;
       } else if (this._offset < this.actualTriggerOffset) {

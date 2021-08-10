@@ -30,10 +30,12 @@ class _TestPageState extends State<TestPage> {
       ),
       body: EasyRefresh(
         onRefresh: () async {
+          print('Refreshing');
           await Future.delayed(Duration(seconds: 5));
           print('Refreshed');
         },
         onLoad: () async {
+          print('Loading');
           await Future.delayed(Duration(seconds: 5));
           print('Loaded');
         },
