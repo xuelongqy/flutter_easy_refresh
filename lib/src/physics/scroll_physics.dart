@@ -85,9 +85,28 @@ class ERScrollPhysics extends BouncingScrollPhysics {
       else if (value < position.minScrollExtent &&
           position.minScrollExtent < position.pixels) // hit top edge
         return value - position.minScrollExtent;
-      else if (headerNotifier._offset > 0 && !headerNotifier.modeLocked)
+      else if (headerNotifier._offset > 0 && !headerNotifier.modeLocked) {
+        // Header未消失，列表不发生偏移
         bounds = value - position.pixels;
+      }
+    } else {
+      // hit top over
+      if (headerNotifier.hitOver &&
+          value < position.minScrollExtent &&
+          position.minScrollExtent < position.pixels) {
+        return value - position.minScrollExtent;
+      }
+      // infinite hit top over
+      if (headerNotifier.infiniteHitOver &&
+          (value + headerNotifier.actualTriggerOffset) <
+              position.minScrollExtent &&
+          position.minScrollExtent <
+              (position.pixels + headerNotifier.actualTriggerOffset)) {
+        bounds = (value + headerNotifier.actualTriggerOffset) -
+            position.minScrollExtent;
+      }
     }
+
     if (footerNotifier.clamping == true) {
       if (position.maxScrollExtent <= position.pixels &&
           position.pixels < value) // overscroll
@@ -95,11 +114,29 @@ class ERScrollPhysics extends BouncingScrollPhysics {
       else if (position.pixels < position.maxScrollExtent &&
           position.maxScrollExtent < value) // hit bottom edge
         return value - position.maxScrollExtent;
-      else if (footerNotifier._offset > 0 && !footerNotifier.modeLocked)
+      else if (footerNotifier._offset > 0 && !footerNotifier.modeLocked) {
+        // Footer未消失，列表不发生偏移
         bounds = value - position.pixels;
+      }
+    } else {
+      // hit bottom over
+      if (footerNotifier.hitOver &&
+          position.pixels < position.maxScrollExtent &&
+          position.maxScrollExtent < value) {
+        return value - position.maxScrollExtent;
+      }
+      // infinite hit bottom over
+      if (footerNotifier.infiniteHitOver &&
+          (position.pixels - footerNotifier.actualTriggerOffset) <
+              position.maxScrollExtent &&
+          position.maxScrollExtent <
+              (value - footerNotifier.actualTriggerOffset)) {
+        bounds = (value - footerNotifier.actualTriggerOffset) -
+            position.maxScrollExtent;
+      }
     }
 
-    /// 更新偏移量
+    // 更新偏移量
     headerNotifier._updateOffset(position, value, false);
     footerNotifier._updateOffset(position, value, false);
     return bounds;

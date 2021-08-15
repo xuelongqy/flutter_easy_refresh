@@ -60,6 +60,16 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// 为null时，不具备无限滚动
   final double? infiniteOffset;
 
+  /// 撞击越界
+  /// 列表自己滚动时，是否越界
+  /// [clamping]为false时候，生效
+  final bool hitOver;
+
+  /// 无限滚动撞击越界
+  /// 列表自己滚动时，无限滚动是否越界
+  /// [clamping]为false时候，生效
+  final bool infiniteHitOver;
+
   IndicatorNotifier({
     required this.triggerOffset,
     required this.clamping,
@@ -68,7 +78,11 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     this.safeArea = true,
     SpringDescription? spring,
     this.infiniteOffset,
+    bool? hitOver,
+    bool? infiniteHitOver,
   })  : _spring = spring,
+        this.hitOver = hitOver ?? infiniteOffset == null,
+        this.infiniteHitOver = infiniteHitOver ?? infiniteOffset != null,
         assert(infiniteOffset == null || infiniteOffset >= 0,
             'The infiniteOffset cannot be smaller than 0.'),
         assert(infiniteOffset == null || !clamping,
@@ -358,6 +372,8 @@ class HeaderNotifier extends IndicatorNotifier {
     SpringDescription? spring,
     bool safeArea = true,
     double? infiniteOffset,
+    bool? hitOver,
+    bool? infiniteHitOver,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -366,6 +382,8 @@ class HeaderNotifier extends IndicatorNotifier {
           spring: spring,
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
+          hitOver: hitOver,
+          infiniteHitOver: infiniteHitOver,
         );
 
   @override
@@ -425,6 +443,8 @@ class FooterNotifier extends IndicatorNotifier {
     SpringDescription? spring,
     bool safeArea = true,
     double? infiniteOffset = 0,
+    bool? hitOver,
+    bool? infiniteHitOver,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -433,6 +453,8 @@ class FooterNotifier extends IndicatorNotifier {
           spring: spring,
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
+          hitOver: hitOver,
+          infiniteHitOver: infiniteHitOver,
         );
 
   @override
