@@ -93,13 +93,13 @@ class ERScrollPhysics extends BouncingScrollPhysics {
       }
     } else {
       // hit top over
-      if (headerNotifier.hitOver &&
+      if (!headerNotifier.hitOver &&
           value < position.minScrollExtent &&
           position.minScrollExtent < position.pixels) {
         return value - position.minScrollExtent;
       }
       // infinite hit top over
-      if (headerNotifier.infiniteHitOver &&
+      if (!headerNotifier.infiniteHitOver &&
           (value + headerNotifier.actualTriggerOffset) <
               position.minScrollExtent &&
           position.minScrollExtent <
@@ -123,13 +123,13 @@ class ERScrollPhysics extends BouncingScrollPhysics {
       }
     } else {
       // hit bottom over
-      if (footerNotifier.hitOver &&
+      if (!footerNotifier.hitOver &&
           position.pixels < position.maxScrollExtent &&
           position.maxScrollExtent < value) {
         return value - position.maxScrollExtent;
       }
       // infinite hit bottom over
-      if (footerNotifier.infiniteHitOver &&
+      if (!footerNotifier.infiniteHitOver &&
           (position.pixels - footerNotifier.actualTriggerOffset) <
               position.maxScrollExtent &&
           position.maxScrollExtent <
