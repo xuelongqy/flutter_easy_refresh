@@ -77,6 +77,8 @@ class ERScrollPhysics extends BouncingScrollPhysics {
   double applyBoundaryConditions(ScrollMetrics position, double value) {
     // 抵消越界量
     double bounds = 0;
+    // 更新值
+    double updateValue = value;
 
     if (headerNotifier.clamping == true) {
       if (value < position.pixels &&
@@ -104,6 +106,7 @@ class ERScrollPhysics extends BouncingScrollPhysics {
               (position.pixels + headerNotifier.actualTriggerOffset)) {
         bounds = (value + headerNotifier.actualTriggerOffset) -
             position.minScrollExtent;
+        updateValue = -headerNotifier.actualTriggerOffset;
       }
     }
 
@@ -133,12 +136,14 @@ class ERScrollPhysics extends BouncingScrollPhysics {
               (value - footerNotifier.actualTriggerOffset)) {
         bounds = (value - footerNotifier.actualTriggerOffset) -
             position.maxScrollExtent;
+        updateValue =
+            position.maxScrollExtent + footerNotifier.actualTriggerOffset;
       }
     }
 
     // 更新偏移量
-    headerNotifier._updateOffset(position, value, false);
-    footerNotifier._updateOffset(position, value, false);
+    headerNotifier._updateOffset(position, updateValue, false);
+    footerNotifier._updateOffset(position, updateValue, false);
     return bounds;
   }
 
