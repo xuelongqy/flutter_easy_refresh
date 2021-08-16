@@ -77,17 +77,17 @@ class ERScrollPhysics extends BouncingScrollPhysics {
   double applyBoundaryConditions(ScrollMetrics position, double value) {
     // 抵消越界量
     double bounds = 0;
-    // 更新值
-    double updateValue = value;
 
     if (headerNotifier.clamping == true) {
       if (value < position.pixels &&
           position.pixels <= position.minScrollExtent) // underscroll
         bounds = value - position.pixels;
       else if (value < position.minScrollExtent &&
-          position.minScrollExtent < position.pixels) // hit top edge
+          position.minScrollExtent < position.pixels) {
+        // hit top edge
+        _updateIndicatorOffset(position, 0);
         return value - position.minScrollExtent;
-      else if (headerNotifier._offset > 0 && !headerNotifier.modeLocked) {
+      } else if (headerNotifier._offset > 0 && !headerNotifier.modeLocked) {
         // Header未消失，列表不发生偏移
         bounds = value - position.pixels;
       }
@@ -96,6 +96,7 @@ class ERScrollPhysics extends BouncingScrollPhysics {
       if (!headerNotifier.hitOver &&
           value < position.minScrollExtent &&
           position.minScrollExtent < position.pixels) {
+        _updateIndicatorOffset(position, 0);
         return value - position.minScrollExtent;
       }
       // infinite hit top over
@@ -104,9 +105,9 @@ class ERScrollPhysics extends BouncingScrollPhysics {
               position.minScrollExtent &&
           position.minScrollExtent <
               (position.pixels + headerNotifier.actualTriggerOffset)) {
-        bounds = (value + headerNotifier.actualTriggerOffset) -
+        _updateIndicatorOffset(position, -headerNotifier.actualTriggerOffset);
+        return (value + headerNotifier.actualTriggerOffset) -
             position.minScrollExtent;
-        updateValue = -headerNotifier.actualTriggerOffset;
       }
     }
 
@@ -115,9 +116,11 @@ class ERScrollPhysics extends BouncingScrollPhysics {
           position.pixels < value) // overscroll
         bounds = value - position.pixels;
       else if (position.pixels < position.maxScrollExtent &&
-          position.maxScrollExtent < value) // hit bottom edge
+          position.maxScrollExtent < value) {
+        // hit bottom edge
+        _updateIndicatorOffset(position, position.maxScrollExtent);
         return value - position.maxScrollExtent;
-      else if (footerNotifier._offset > 0 && !footerNotifier.modeLocked) {
+      } else if (footerNotifier._offset > 0 && !footerNotifier.modeLocked) {
         // Footer未消失，列表不发生偏移
         bounds = value - position.pixels;
       }
@@ -126,6 +129,7 @@ class ERScrollPhysics extends BouncingScrollPhysics {
       if (!footerNotifier.hitOver &&
           position.pixels < position.maxScrollExtent &&
           position.maxScrollExtent < value) {
+        _updateIndicatorOffset(position, position.maxScrollExtent);
         return value - position.maxScrollExtent;
       }
       // infinite hit bottom over
@@ -134,17 +138,21 @@ class ERScrollPhysics extends BouncingScrollPhysics {
               position.maxScrollExtent &&
           position.maxScrollExtent <
               (value - footerNotifier.actualTriggerOffset)) {
-        bounds = (value - footerNotifier.actualTriggerOffset) -
+        _updateIndicatorOffset(position,
+            position.maxScrollExtent + footerNotifier.actualTriggerOffset);
+        return (value - footerNotifier.actualTriggerOffset) -
             position.maxScrollExtent;
-        updateValue =
-            position.maxScrollExtent + footerNotifier.actualTriggerOffset;
       }
     }
-
     // 更新偏移量
-    headerNotifier._updateOffset(position, updateValue, false);
-    footerNotifier._updateOffset(position, updateValue, false);
+    _updateIndicatorOffset(position, value);
     return bounds;
+  }
+
+  // 更新指示器偏移量
+  void _updateIndicatorOffset(ScrollMetrics position, double value) {
+    headerNotifier._updateOffset(position, value, false);
+    footerNotifier._updateOffset(position, value, false);
   }
 
   @override

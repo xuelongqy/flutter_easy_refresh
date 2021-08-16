@@ -42,7 +42,7 @@ class _TestPageState extends State<TestPage> {
         child: ListView.builder(
           padding: EdgeInsets.zero,
           scrollDirection: scrollDirection,
-          itemCount: 10,
+          itemCount: 5,
           itemBuilder: (context, index) {
             return SampleListItem(
               direction: scrollDirection,
