@@ -52,6 +52,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// 是否计算安全区域
   final bool safeArea;
 
+  /// 任务完成延时
+  /// [IndicatorMode.processed] 保持时长
+  final Duration processedDuration;
+
   /// 弹性属性
   final SpringDescription? _spring;
 
@@ -75,6 +79,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     required this.clamping,
     required this.userOffsetNotifier,
     required this.vsync,
+    this.processedDuration = const Duration(seconds: 1),
     this.safeArea = true,
     SpringDescription? spring,
     this.infiniteOffset,
@@ -324,9 +329,25 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     final oldMode = this._mode;
     this._mode = mode;
     notifyListeners();
-    if (oldMode == IndicatorMode.processing &&
-        _position is ScrollActivityDelegate) {
-      (_position as ScrollActivityDelegate).goBallistic(0);
+    // 完成任务
+    if (this.mode == IndicatorMode.processed) {
+      // 完成延时
+      if (this.processedDuration == Duration.zero) {
+        this._mode = IndicatorMode.done;
+        // 触发列表回滚
+        if (oldMode == IndicatorMode.processing &&
+            _position is ScrollActivityDelegate) {
+          (_position as ScrollActivityDelegate).goBallistic(0);
+        }
+      } else {
+        Future.delayed(this.processedDuration, () {
+          this._setMode(IndicatorMode.done);
+          // 触发列表回滚
+          if (_position is ScrollActivityDelegate) {
+            (_position as ScrollActivityDelegate).goBallistic(0);
+          }
+        });
+      }
     }
   }
 }
@@ -375,6 +396,7 @@ class HeaderNotifier extends IndicatorNotifier {
     required bool clamping,
     required ValueNotifier<bool> userOffsetNotifier,
     required TickerProvider vsync,
+    Duration processedDuration = const Duration(seconds: 1),
     SpringDescription? spring,
     bool safeArea = true,
     double? infiniteOffset,
@@ -385,6 +407,7 @@ class HeaderNotifier extends IndicatorNotifier {
           clamping: clamping,
           userOffsetNotifier: userOffsetNotifier,
           vsync: vsync,
+          processedDuration: processedDuration,
           spring: spring,
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
@@ -446,6 +469,7 @@ class FooterNotifier extends IndicatorNotifier {
     required bool clamping,
     required ValueNotifier<bool> userOffsetNotifier,
     required TickerProvider vsync,
+    Duration processedDuration = const Duration(seconds: 1),
     SpringDescription? spring,
     bool safeArea = true,
     double? infiniteOffset = 0,
@@ -456,6 +480,7 @@ class FooterNotifier extends IndicatorNotifier {
           clamping: clamping,
           userOffsetNotifier: userOffsetNotifier,
           vsync: vsync,
+          processedDuration: processedDuration,
           spring: spring,
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,

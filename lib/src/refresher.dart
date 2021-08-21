@@ -76,7 +76,7 @@ class _EasyRefreshState extends State<EasyRefresh>
           _refreshing = true;
           Future.sync(widget.onRefresh!).whenComplete(() {
             _refreshing = false;
-            _headerNotifier._setMode(IndicatorMode.done);
+            _headerNotifier._setMode(IndicatorMode.processed);
           });
         }
       }
@@ -88,7 +88,7 @@ class _EasyRefreshState extends State<EasyRefresh>
           _loading = true;
           Future.sync(widget.onLoad!).whenComplete(() {
             _loading = false;
-            _footerNotifier._setMode(IndicatorMode.done);
+            _footerNotifier._setMode(IndicatorMode.processed);
           });
         }
       }
