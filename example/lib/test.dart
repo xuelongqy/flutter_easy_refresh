@@ -14,6 +14,8 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   final scrollDirection = Axis.vertical;
 
+  int _count = 5;
+
   @override
   void initState() {
     super.initState();
@@ -31,18 +33,24 @@ class _TestPageState extends State<TestPage> {
       body: EasyRefresh(
         onRefresh: () async {
           print('Refreshing');
-          await Future.delayed(Duration(seconds: 5));
+          await Future.delayed(Duration(seconds: 2));
+          setState(() {
+            _count = 5;
+          });
           print('Refreshed');
         },
         onLoad: () async {
           print('Loading');
-          await Future.delayed(Duration(seconds: 5));
+          await Future.delayed(Duration(seconds: 2));
+          setState(() {
+            _count += 5;
+          });
           print('Loaded');
         },
         child: ListView.builder(
           padding: EdgeInsets.zero,
           scrollDirection: scrollDirection,
-          itemCount: 5,
+          itemCount: _count,
           itemBuilder: (context, index) {
             return SampleListItem(
               direction: scrollDirection,

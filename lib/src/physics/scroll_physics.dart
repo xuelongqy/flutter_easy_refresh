@@ -78,6 +78,7 @@ class ERScrollPhysics extends BouncingScrollPhysics {
     // 抵消越界量
     double bounds = 0;
 
+    // Header
     if (headerNotifier.clamping == true) {
       if (value < position.pixels &&
           position.pixels <= position.minScrollExtent) // underscroll
@@ -111,6 +112,7 @@ class ERScrollPhysics extends BouncingScrollPhysics {
       }
     }
 
+    // Footer
     if (footerNotifier.clamping == true) {
       if (position.maxScrollExtent <= position.pixels &&
           position.pixels < value) // overscroll

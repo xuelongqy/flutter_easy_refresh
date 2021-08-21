@@ -261,6 +261,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     // 避免绘制过程中setState()
     if (bySimulation) {
+      // 当列表长度变更时，通知
+      if (this.offset < this.actualTriggerOffset) {
+        Future(() {
+          notifyListeners();
+        });
+      }
       return;
     }
     notifyListeners();
