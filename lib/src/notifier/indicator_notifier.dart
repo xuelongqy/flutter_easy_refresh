@@ -336,14 +336,16 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         this._mode = IndicatorMode.done;
         // 触发列表回滚
         if (oldMode == IndicatorMode.processing &&
-            _position is ScrollActivityDelegate) {
+            _position is ScrollActivityDelegate &&
+            !this.userOffsetNotifier.value) {
           (_position as ScrollActivityDelegate).goBallistic(0);
         }
       } else {
         Future.delayed(this.processedDuration, () {
           this._setMode(IndicatorMode.done);
           // 触发列表回滚
-          if (_position is ScrollActivityDelegate) {
+          if (_position is ScrollActivityDelegate &&
+              !this.userOffsetNotifier.value) {
             (_position as ScrollActivityDelegate).goBallistic(0);
           }
         });
