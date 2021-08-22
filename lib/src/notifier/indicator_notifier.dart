@@ -183,7 +183,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
   }
 
-  /// 监听用户时间
+  /// 监听用户事件
   void _onUserOffset() {
     if (this.userOffsetNotifier.value) {
       // clamping
@@ -353,6 +353,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
               !this.userOffsetNotifier.value) {
             (_position as ScrollActivityDelegate).goBallistic(0);
           }
+        });
+      }
+      // 如果用户未释放，则主动更新偏移量
+      if (!this.clamping && this.userOffsetNotifier.value) {
+        Future(() {
+          _updateOffset(_position, 0, false);
         });
       }
     }

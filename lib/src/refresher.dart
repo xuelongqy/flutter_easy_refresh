@@ -65,9 +65,10 @@ class _EasyRefreshState extends State<EasyRefresh>
       footerNotifier: _footerNotifier,
     ));
     // Future(() {
-    //   PrimaryScrollController.of(context)!.addListener(() {
-    //     print(PrimaryScrollController.of(context)!.position.pixels);
-    //   });
+    //   print(PrimaryScrollController.of(context)!.position.extentInside);
+    //   // PrimaryScrollController.of(context)!.addListener(() {
+    //   //   print(PrimaryScrollController.of(context)!.position.pixels);
+    //   // });
     // });
     _headerNotifier.addListener(() {
       // 执行刷新任务
