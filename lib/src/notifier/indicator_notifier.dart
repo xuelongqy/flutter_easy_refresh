@@ -163,6 +163,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// 计算偏移量
   double _calculateOffset(ScrollMetrics position, double value);
 
+  /// 无限滚动排除条件
+  bool infiniteExclude(ScrollMetrics position, double value);
+
   @override
   void dispose() {
     super.dispose();
@@ -251,7 +254,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       if (this.infiniteOffset != null &&
           (this.boundaryOffset < this.infiniteOffset! ||
               this._mode == IndicatorMode.done) &&
-          !bySimulation) {
+          !bySimulation &&
+          !this.infiniteExclude(position, value)) {
         // 更新状态
         this._updateMode();
         notifyListeners();
@@ -284,7 +288,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       // 无限滚动
       if (this.infiniteOffset != null &&
           this.boundaryOffset < this.infiniteOffset!) {
-        if (this._mode == IndicatorMode.done) {
+        if (this._mode == IndicatorMode.done &&
+            _position.maxScrollExtent != _position.minScrollExtent) {
           // 没结束前状态不改变
           return;
         } else {
@@ -462,6 +467,11 @@ class HeaderNotifier extends IndicatorNotifier {
 
   @override
   double get boundaryOffset => _position.pixels;
+
+  @override
+  bool infiniteExclude(ScrollMetrics position, double value) {
+    return value >= position.maxScrollExtent;
+  }
 }
 
 /// Footer通知器
@@ -538,4 +548,9 @@ class FooterNotifier extends IndicatorNotifier {
 
   @override
   double get boundaryOffset => _position.maxScrollExtent - _position.pixels;
+
+  @override
+  bool infiniteExclude(ScrollMetrics position, double value) {
+    return value <= position.minScrollExtent;
+  }
 }
