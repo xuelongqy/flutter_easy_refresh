@@ -127,7 +127,7 @@ class EasyRefresh extends StatefulWidget {
     this.bottomBouncing = true,
     this.behavior = const EmptyOverScrollScrollBehavior(),
     required this.child,
-  })   : this.scrollDirection = Axis.vertical,
+  })  : this.scrollDirection = Axis.vertical,
         this.reverse = false,
         this.builder = null,
         this.primary = null,
@@ -172,7 +172,7 @@ class EasyRefresh extends StatefulWidget {
     this.bottomBouncing = true,
     this.behavior = const EmptyOverScrollScrollBehavior(),
     required this.slivers,
-  })   : this.builder = null,
+  })  : this.builder = null,
         this.child = null,
         super(key: key);
 
@@ -194,7 +194,7 @@ class EasyRefresh extends StatefulWidget {
     this.bottomBouncing = true,
     this.behavior = const EmptyOverScrollScrollBehavior(),
     required this.builder,
-  })   : this.scrollDirection = Axis.vertical,
+  })  : this.scrollDirection = Axis.vertical,
         this.reverse = false,
         this.child = null,
         this.primary = null,
@@ -279,8 +279,10 @@ class _EasyRefreshState extends State<EasyRefresh> {
       // 监听首次刷新是否结束
       if (_enableFirstRefresh && !_taskNotifier.value.refreshing) {
         _scrollerController?.jumpTo(0.0);
-        setState(() {
-          _enableFirstRefresh = false;
+        Future.delayed(const Duration(milliseconds: 200), () {
+          setState(() {
+            _enableFirstRefresh = false;
+          });
         });
       }
     });
