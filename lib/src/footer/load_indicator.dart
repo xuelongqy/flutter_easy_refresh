@@ -634,7 +634,9 @@ class _EasyRefreshSliverLoadControlState
       if (widget.enableInfiniteLoad) {
         loadState = LoadMode.inactive;
       }
-      setState(() => loadTask = null);
+      if (mounted) {
+        setState(() => loadTask = null);
+      }
       loadState = transitionNextState();
     }
   }
