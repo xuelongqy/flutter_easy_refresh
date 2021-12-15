@@ -634,7 +634,9 @@ class _EasyRefreshSliverLoadControlState
       if (widget.enableInfiniteLoad) {
         loadState = LoadMode.inactive;
       }
-      setState(() => loadTask = null);
+      if (mounted) {
+        setState(() => loadTask = null);
+      }
       loadState = transitionNextState();
     }
   }
@@ -750,7 +752,7 @@ class _EasyRefreshSliverLoadControlState
           if (hasSliverLayoutExtent && !hasTask) {
             SchedulerBinding.instance!
                 .addPostFrameCallback((Duration timestamp) {
-              setState(() => hasSliverLayoutExtent = false);
+              if (mounted) setState(() => hasSliverLayoutExtent = false);
             });
           }
           return LoadMode.drag;
