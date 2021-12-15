@@ -709,6 +709,15 @@ class _EasyRefreshSliverRefreshControlState
       return RefreshMode.inactive;
     }
 
+    // 标记结束
+    void _markDone() {
+      setState(() => hasSliverLayoutExtent = false);
+      if (!widget.taskIndependence) {
+        widget.taskNotifier.value =
+            widget.taskNotifier.value.copy(refreshing: false);
+      }
+    }
+
     // 结束
     void goToDone() {
       nextState = RefreshMode.done;
@@ -716,15 +725,11 @@ class _EasyRefreshSliverRefreshControlState
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
       if (SchedulerBinding.instance!.schedulerPhase == SchedulerPhase.idle) {
-        setState(() => hasSliverLayoutExtent = false);
+        _markDone();
       } else {
         SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
-          if (mounted) setState(() => hasSliverLayoutExtent = false);
+          if (mounted) _markDone();
         });
-      }
-      if (!widget.taskIndependence) {
-        widget.taskNotifier.value =
-            widget.taskNotifier.value.copy(refreshing: false);
       }
     }
 
