@@ -51,5 +51,8 @@ class FooterLocatorAdapter extends RenderSliverSingleBoxAdapter {
       hasVisualOverflow: childExtent > constraints.remainingPaintExtent || constraints.scrollOffset > 0.0,
     );
     setChildParentData(child!, constraints, geometry!);
+    if (EasyRefresh.renderObject != null) {
+      print(child!.localToGlobal(Offset(0, 0), ancestor: EasyRefresh.renderObject));
+    }
   }
 }

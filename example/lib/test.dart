@@ -47,17 +47,33 @@ class _TestPageState extends State<TestPage> {
           });
           print('Loaded');
         },
-        child: ListView.builder(
-          padding: EdgeInsets.zero,
-          scrollDirection: scrollDirection,
-          itemCount: _count,
-          itemBuilder: (context, index) {
-            return SampleListItem(
-              direction: scrollDirection,
-              width: scrollDirection == Axis.vertical ? double.infinity : 200,
-            );
-          },
+        child: CustomScrollView(
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return SampleListItem(
+                    direction: scrollDirection,
+                    width: scrollDirection == Axis.vertical ? double.infinity : 200,
+                  );
+                },
+                childCount: _count,
+              ),
+            ),
+            FooterLocator(),
+          ],
         ),
+        // child: ListView.builder(
+        //   padding: EdgeInsets.zero,
+        //   scrollDirection: scrollDirection,
+        //   itemCount: _count,
+        //   itemBuilder: (context, index) {
+        //     return SampleListItem(
+        //       direction: scrollDirection,
+        //       width: scrollDirection == Axis.vertical ? double.infinity : 200,
+        //     );
+        //   },
+        // ),
       ),
     );
   }

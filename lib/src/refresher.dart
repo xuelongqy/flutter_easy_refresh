@@ -1,6 +1,8 @@
 part of easyrefresh;
 
 class EasyRefresh extends StatefulWidget {
+  static RenderObject? renderObject;
+
   /// 子组件
   final Widget child;
 
@@ -64,6 +66,9 @@ class _EasyRefreshState extends State<EasyRefresh>
       headerNotifier: _headerNotifier,
       footerNotifier: _footerNotifier,
     ));
+    Future(() {
+      EasyRefresh.renderObject = context.findRenderObject();
+    });
     // Future(() {
     //   print(PrimaryScrollController.of(context)!.position.extentInside);
     //   // PrimaryScrollController.of(context)!.addListener(() {
