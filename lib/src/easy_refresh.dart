@@ -1,8 +1,37 @@
 part of easyrefresh;
 
-class EasyRefresh extends StatefulWidget {
-  static RenderObject? renderObject;
+/// EasyRefresh needs to share data
+class EasyRefreshData {
+  /// Header status data and responsive
+  final HeaderNotifier headerNotifier;
 
+  /// Footer status data and responsive
+  final FooterNotifier footerNotifier;
+
+  /// Whether the user scrolls and responsive
+  final ValueNotifier<bool> userOffsetNotifier;
+
+  const EasyRefreshData({
+    required this.headerNotifier,
+    required this.footerNotifier,
+    required this.userOffsetNotifier,
+  });
+}
+
+class _InheritedEasyRefresh extends InheritedWidget {
+  final EasyRefreshData data;
+
+  const _InheritedEasyRefresh({
+    Key? key,
+    required this.data,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(covariant _InheritedEasyRefresh oldWidget) => data != oldWidget.data;
+}
+
+class EasyRefresh extends StatefulWidget {
   /// 子组件
   final Widget child;
 
@@ -21,6 +50,12 @@ class EasyRefresh extends StatefulWidget {
 
   @override
   _EasyRefreshState createState() => _EasyRefreshState();
+
+  static EasyRefreshData of(BuildContext context) {
+    final inheritedEasyRefresh = context.dependOnInheritedWidgetOfExactType<_InheritedEasyRefresh>();
+    assert(inheritedEasyRefresh != null, 'Please use it in the scope of EasyRefresh!');
+    return inheritedEasyRefresh!.data;
+  }
 }
 
 class _EasyRefreshState extends State<EasyRefresh>
@@ -28,14 +63,17 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// 滚动行为
   late ERScrollBehavior _scrollBehavior;
 
+  /// Needs to share data
+  late EasyRefreshData _data;
+
   /// 用户偏移通知器(记录是否为用户滚动)
-  ValueNotifier<bool> _userOffsetNotifier = ValueNotifier<bool>(false);
+  ValueNotifier<bool> get _userOffsetNotifier => _data.userOffsetNotifier;
 
   /// Header通知器
-  late HeaderNotifier _headerNotifier;
+  HeaderNotifier get _headerNotifier => _data.headerNotifier;
 
   /// Footer通知器
-  late FooterNotifier _footerNotifier;
+  FooterNotifier get _footerNotifier => _data.footerNotifier;
 
   /// 更新中
   bool _refreshing = false;
@@ -46,29 +84,7 @@ class _EasyRefreshState extends State<EasyRefresh>
   @override
   void initState() {
     super.initState();
-    _headerNotifier = HeaderNotifier(
-      triggerOffset: 70,
-      clamping: true,
-      userOffsetNotifier: _userOffsetNotifier,
-      vsync: this,
-      safeArea: true,
-    );
-    _footerNotifier = FooterNotifier(
-      triggerOffset: 70,
-      clamping: false,
-      userOffsetNotifier: _userOffsetNotifier,
-      vsync: this,
-      safeArea: true,
-      infiniteOffset: 100,
-    );
-    _scrollBehavior = ERScrollBehavior(ERScrollPhysics(
-      userOffsetNotifier: _userOffsetNotifier,
-      headerNotifier: _headerNotifier,
-      footerNotifier: _footerNotifier,
-    ));
-    Future(() {
-      EasyRefresh.renderObject = context.findRenderObject();
-    });
+    _initData();
     // Future(() {
     //   print(PrimaryScrollController.of(context)!.position.extentInside);
     //   // PrimaryScrollController.of(context)!.addListener(() {
@@ -107,6 +123,34 @@ class _EasyRefreshState extends State<EasyRefresh>
     _userOffsetNotifier.dispose();
   }
 
+  /// Should be reinitialized [EasyRefreshData] when parameters change
+  void _initData() {
+    final userOffsetNotifier = ValueNotifier<bool>(false);
+    _data = EasyRefreshData(
+      userOffsetNotifier: userOffsetNotifier,
+      headerNotifier: HeaderNotifier(
+        triggerOffset: 70,
+        clamping: true,
+        userOffsetNotifier: userOffsetNotifier,
+        vsync: this,
+        safeArea: true,
+      ),
+      footerNotifier: FooterNotifier(
+        triggerOffset: 70,
+        clamping: false,
+        userOffsetNotifier: userOffsetNotifier,
+        vsync: this,
+        safeArea: true,
+        infiniteOffset: 100,
+      ),
+    );
+    _scrollBehavior = ERScrollBehavior(ERScrollPhysics(
+      userOffsetNotifier: _userOffsetNotifier,
+      headerNotifier: _headerNotifier,
+      footerNotifier: _footerNotifier,
+    ));
+  }
+
   /// 构建Header容器
   Widget _buildHeaderView() {
     // 设置安全偏移量
@@ -116,7 +160,7 @@ class _EasyRefreshState extends State<EasyRefresh>
       builder: (ctx, notifier, _) {
         if (_headerNotifier.axis == null ||
             _headerNotifier.axisDirection == null) {
-          return SizedBox();
+          return const SizedBox();
         }
         // 方向
         final axis = _headerNotifier.axis!;
@@ -175,7 +219,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         // physics未初始化完成
         if (_headerNotifier.axis == null ||
             _headerNotifier.axisDirection == null) {
-          return SizedBox();
+          return const SizedBox();
         }
         // 方向
         final axis = _headerNotifier.axis!;
@@ -232,7 +276,10 @@ class _EasyRefreshState extends State<EasyRefresh>
       behavior: _scrollBehavior,
       child: widget.child,
     );
-    return child;
+    return _InheritedEasyRefresh(
+      data: _data,
+      child: child,
+    );
   }
 
   @override
@@ -242,7 +289,7 @@ class _EasyRefreshState extends State<EasyRefresh>
       children: [
         _buildChild(),
         _buildHeaderView(),
-        _buildFooterView(),
+        // _buildFooterView(),
       ],
     );
   }

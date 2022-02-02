@@ -1,22 +1,51 @@
 part of easyrefresh;
 
-class FooterLocator extends SingleChildRenderObjectWidget {
-  const FooterLocator({
-    Key? key,
-  }) : super(key: key, child: const SizedBox());
+/// Find Footer's Location
+/// Put the last item in the list
+/// it will smartly show Footer
+class FooterLocator extends StatelessWidget {
+  const FooterLocator({Key? key}) : super(key: key);
+
+  Widget _buildFooter(FooterNotifier footerNotifier) {
+    if (footerNotifier.axis == null) {
+      return const SizedBox();
+    }
+    return Container(
+      color: Colors.blue,
+      width: footerNotifier.axis == Axis.vertical ? double.infinity : footerNotifier.offset,
+      height: footerNotifier.axis == Axis.vertical ? footerNotifier.offset : double.infinity,
+    );
+  }
 
   @override
-  FooterLocatorAdapter createRenderObject(BuildContext context) => FooterLocatorAdapter();
-
-  @override
-  void updateRenderObject(BuildContext context, covariant FooterLocatorAdapter renderObject) {
-    final RenderViewportBase renderViewport = renderObject.parent! as RenderViewportBase;
-    print(renderViewport.offset.pixels);
+  Widget build(BuildContext context) {
+    final footerNotifier = EasyRefresh.of(context).footerNotifier;
+    return ValueListenableBuilder(
+      valueListenable: footerNotifier.listenable(),
+      builder: (ctx, notifier, _) {
+        return _FooterLocatorRenderWidget(
+          child: _buildFooter(footerNotifier),
+        );
+      }
+    );
   }
 }
 
+class _FooterLocatorRenderWidget extends SingleChildRenderObjectWidget {
+  const _FooterLocatorRenderWidget({
+    Key? key,
+    required Widget? child
+  }) : super(key: key, child: child);
+
+  @override
+  FooterLocatorAdapter createRenderObject(BuildContext context) => FooterLocatorAdapter(context: context);
+}
+
 class FooterLocatorAdapter extends RenderSliverSingleBoxAdapter {
+  final BuildContext context;
+
   FooterLocatorAdapter({
+    required this.context,
     RenderBox? child,
   }) : super(child: child);
 
@@ -43,16 +72,15 @@ class FooterLocatorAdapter extends RenderSliverSingleBoxAdapter {
     assert(paintedChildSize.isFinite);
     assert(paintedChildSize >= 0.0);
     geometry = SliverGeometry(
-      scrollExtent: childExtent,
-      paintExtent: paintedChildSize,
+      scrollExtent: 0,
+      paintExtent: 0,
+      paintOrigin: constraints.axis == Axis.vertical ? 0 : constraints.remainingPaintExtent,
       cacheExtent: cacheExtent,
       maxPaintExtent: childExtent,
       hitTestExtent: paintedChildSize,
       hasVisualOverflow: childExtent > constraints.remainingPaintExtent || constraints.scrollOffset > 0.0,
+      visible: true,
     );
-    setChildParentData(child!, constraints, geometry!);
-    if (EasyRefresh.renderObject != null) {
-      print(child!.localToGlobal(Offset(0, 0), ancestor: EasyRefresh.renderObject));
-    }
+    setChildParentData(child!, constraints.copyWith(), geometry!);
   }
 }

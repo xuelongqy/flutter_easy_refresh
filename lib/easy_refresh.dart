@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
 
-part './src/refresher.dart';
+part './src/easy_refresh.dart';
 part './src/physics/scroll_physics.dart';
 part './src/notifier/indicator_notifier.dart';
 part './src/behavior/scroll_behavior.dart';

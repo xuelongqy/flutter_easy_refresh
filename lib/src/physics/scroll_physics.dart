@@ -81,8 +81,10 @@ class ERScrollPhysics extends BouncingScrollPhysics {
     // Header
     if (headerNotifier.clamping == true) {
       if (value < position.pixels &&
-          position.pixels <= position.minScrollExtent) // underscroll
+          position.pixels <= position.minScrollExtent) {
+        // underscroll
         bounds = value - position.pixels;
+      }
       else if (value < position.minScrollExtent &&
           position.minScrollExtent < position.pixels) {
         // hit top edge
@@ -115,8 +117,10 @@ class ERScrollPhysics extends BouncingScrollPhysics {
     // Footer
     if (footerNotifier.clamping == true) {
       if (position.maxScrollExtent <= position.pixels &&
-          position.pixels < value) // overscroll
+          position.pixels < value) {
+        // overscroll
         bounds = value - position.pixels;
+      }
       else if (position.pixels < position.maxScrollExtent &&
           position.maxScrollExtent < value) {
         // hit bottom edge

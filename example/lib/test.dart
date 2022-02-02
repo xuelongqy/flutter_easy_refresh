@@ -26,14 +26,15 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
+    ListView().buildChildLayout(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('EasyRefresh'),
+        title: const Text('EasyRefresh'),
       ),
       body: EasyRefresh(
         onRefresh: () async {
           print('Refreshing');
-          await Future.delayed(Duration(seconds: 2));
+          await Future.delayed(const Duration(seconds: 2));
           setState(() {
             _count = 5;
           });
@@ -41,13 +42,14 @@ class _TestPageState extends State<TestPage> {
         },
         onLoad: () async {
           print('Loading');
-          await Future.delayed(Duration(seconds: 2));
+          await Future.delayed(const Duration(seconds: 2));
           setState(() {
             _count += 5;
           });
           print('Loaded');
         },
         child: CustomScrollView(
+          scrollDirection: scrollDirection,
           slivers: [
             SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -60,7 +62,7 @@ class _TestPageState extends State<TestPage> {
                 childCount: _count,
               ),
             ),
-            FooterLocator(),
+            const FooterLocator(),
           ],
         ),
         // child: ListView.builder(
