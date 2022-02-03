@@ -139,9 +139,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// 列表越界范围
   double get overExtent {
-    if (infiniteOffset != null ||
-        _mode == IndicatorMode.ready ||
-        modeLocked) {
+    if (infiniteOffset != null || _mode == IndicatorMode.ready || modeLocked) {
       return actualTriggerOffset;
     }
     return 0;
@@ -211,8 +209,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   void _updateBySimulation(ScrollMetrics position, double velocity) {
     _position = position;
     // 更新方向
-    if (_axis != position.axis &&
-        _axisDirection != position.axisDirection) {
+    if (_axis != position.axis || _axisDirection != position.axisDirection) {
       _axis = position.axis;
       _axisDirection = position.axisDirection;
     }
@@ -236,10 +233,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     // clamping
     // 在释放情况下，且offset大于0，则由动画控制
-    if (!userOffsetNotifier.value &&
-        clamping &&
-        _offset > 0 &&
-        !bySimulation) {
+    if (!userOffsetNotifier.value && clamping && _offset > 0 && !bySimulation) {
       return;
     }
     _position = position;
@@ -252,8 +246,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (oldOffset == 0 && _offset == 0) {
       // 处理无限滚动
       if (infiniteOffset != null &&
-          (boundaryOffset < infiniteOffset! ||
-              _mode == IndicatorMode.done) &&
+          (boundaryOffset < infiniteOffset! || _mode == IndicatorMode.done) &&
           !bySimulation &&
           !infiniteExclude(position, value)) {
         // 更新状态
@@ -286,8 +279,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     // 任务执行中和任务完成中不更新
     if (!modeLocked) {
       // 无限滚动
-      if (infiniteOffset != null &&
-          boundaryOffset < infiniteOffset!) {
+      if (infiniteOffset != null && boundaryOffset < infiniteOffset!) {
         if (_mode == IndicatorMode.done &&
             _position.maxScrollExtent != _position.minScrollExtent) {
           // 没结束前状态不改变

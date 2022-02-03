@@ -26,7 +26,6 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
-    ListView().buildChildLayout(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('EasyRefresh'),
@@ -50,13 +49,17 @@ class _TestPageState extends State<TestPage> {
         },
         child: CustomScrollView(
           scrollDirection: scrollDirection,
+          reverse: false,
           slivers: [
+            const HeaderLocator(),
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   return SampleListItem(
                     direction: scrollDirection,
-                    width: scrollDirection == Axis.vertical ? double.infinity : 200,
+                    width: scrollDirection == Axis.vertical
+                        ? double.infinity
+                        : 200,
                   );
                 },
                 childCount: _count,

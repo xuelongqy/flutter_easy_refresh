@@ -28,7 +28,8 @@ class _InheritedEasyRefresh extends InheritedWidget {
   }) : super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(covariant _InheritedEasyRefresh oldWidget) => data != oldWidget.data;
+  bool updateShouldNotify(covariant _InheritedEasyRefresh oldWidget) =>
+      data != oldWidget.data;
 }
 
 class EasyRefresh extends StatefulWidget {
@@ -52,8 +53,10 @@ class EasyRefresh extends StatefulWidget {
   _EasyRefreshState createState() => _EasyRefreshState();
 
   static EasyRefreshData of(BuildContext context) {
-    final inheritedEasyRefresh = context.dependOnInheritedWidgetOfExactType<_InheritedEasyRefresh>();
-    assert(inheritedEasyRefresh != null, 'Please use it in the scope of EasyRefresh!');
+    final inheritedEasyRefresh =
+        context.dependOnInheritedWidgetOfExactType<_InheritedEasyRefresh>();
+    assert(inheritedEasyRefresh != null,
+        'Please use it in the scope of EasyRefresh!');
     return inheritedEasyRefresh!.data;
   }
 }
@@ -130,7 +133,7 @@ class _EasyRefreshState extends State<EasyRefresh>
       userOffsetNotifier: userOffsetNotifier,
       headerNotifier: HeaderNotifier(
         triggerOffset: 70,
-        clamping: true,
+        clamping: false,
         userOffsetNotifier: userOffsetNotifier,
         vsync: this,
         safeArea: true,
@@ -288,7 +291,7 @@ class _EasyRefreshState extends State<EasyRefresh>
       fit: StackFit.expand,
       children: [
         _buildChild(),
-        _buildHeaderView(),
+        // _buildHeaderView(),
         // _buildFooterView(),
       ],
     );

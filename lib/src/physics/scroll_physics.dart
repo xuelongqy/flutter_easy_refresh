@@ -84,8 +84,7 @@ class ERScrollPhysics extends BouncingScrollPhysics {
           position.pixels <= position.minScrollExtent) {
         // underscroll
         bounds = value - position.pixels;
-      }
-      else if (value < position.minScrollExtent &&
+      } else if (value < position.minScrollExtent &&
           position.minScrollExtent < position.pixels) {
         // hit top edge
         _updateIndicatorOffset(position, 0);
@@ -120,8 +119,7 @@ class ERScrollPhysics extends BouncingScrollPhysics {
           position.pixels < value) {
         // overscroll
         bounds = value - position.pixels;
-      }
-      else if (position.pixels < position.maxScrollExtent &&
+      } else if (position.pixels < position.maxScrollExtent &&
           position.maxScrollExtent < value) {
         // hit bottom edge
         _updateIndicatorOffset(position, position.maxScrollExtent);

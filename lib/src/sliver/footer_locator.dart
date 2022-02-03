@@ -12,8 +12,12 @@ class FooterLocator extends StatelessWidget {
     }
     return Container(
       color: Colors.blue,
-      width: footerNotifier.axis == Axis.vertical ? double.infinity : footerNotifier.offset,
-      height: footerNotifier.axis == Axis.vertical ? footerNotifier.offset : double.infinity,
+      width: footerNotifier.axis == Axis.vertical
+          ? double.infinity
+          : footerNotifier.offset,
+      height: footerNotifier.axis == Axis.vertical
+          ? footerNotifier.offset
+          : double.infinity,
     );
   }
 
@@ -26,25 +30,24 @@ class FooterLocator extends StatelessWidget {
         return _FooterLocatorRenderWidget(
           child: _buildFooter(footerNotifier),
         );
-      }
+      },
     );
   }
 }
 
 class _FooterLocatorRenderWidget extends SingleChildRenderObjectWidget {
-  const _FooterLocatorRenderWidget({
-    Key? key,
-    required Widget? child
-  }) : super(key: key, child: child);
+  const _FooterLocatorRenderWidget({Key? key, required Widget? child})
+      : super(key: key, child: child);
 
   @override
-  FooterLocatorAdapter createRenderObject(BuildContext context) => FooterLocatorAdapter(context: context);
+  _FooterLocatorAdapter createRenderObject(BuildContext context) =>
+      _FooterLocatorAdapter(context: context);
 }
 
-class FooterLocatorAdapter extends RenderSliverSingleBoxAdapter {
+class _FooterLocatorAdapter extends RenderSliverSingleBoxAdapter {
   final BuildContext context;
 
-  FooterLocatorAdapter({
+  _FooterLocatorAdapter({
     required this.context,
     RenderBox? child,
   }) : super(child: child);
@@ -66,19 +69,26 @@ class FooterLocatorAdapter extends RenderSliverSingleBoxAdapter {
         childExtent = child!.size.height;
         break;
     }
-    final double paintedChildSize = calculatePaintOffset(constraints, from: 0.0, to: childExtent);
-    final double cacheExtent = calculateCacheOffset(constraints, from: 0.0, to: childExtent);
+    final double paintedChildSize =
+        calculatePaintOffset(constraints, from: 0.0, to: childExtent);
+    final double cacheExtent =
+        calculateCacheOffset(constraints, from: 0.0, to: childExtent);
 
     assert(paintedChildSize.isFinite);
     assert(paintedChildSize >= 0.0);
+    final footerNotifier = EasyRefresh.of(context).footerNotifier;
     geometry = SliverGeometry(
       scrollExtent: 0,
       paintExtent: 0,
-      paintOrigin: constraints.axis == Axis.vertical ? 0 : constraints.remainingPaintExtent,
+      paintOrigin: constraints.axisDirection == AxisDirection.down ||
+              constraints.axisDirection == AxisDirection.right
+          ? 0
+          : math.min(footerNotifier.offset, constraints.remainingPaintExtent),
       cacheExtent: cacheExtent,
       maxPaintExtent: childExtent,
       hitTestExtent: paintedChildSize,
-      hasVisualOverflow: childExtent > constraints.remainingPaintExtent || constraints.scrollOffset > 0.0,
+      hasVisualOverflow: childExtent > constraints.remainingPaintExtent ||
+          constraints.scrollOffset > 0.0,
       visible: true,
     );
     setChildParentData(child!, constraints.copyWith(), geometry!);
