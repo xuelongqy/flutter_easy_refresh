@@ -1,29 +1,49 @@
 part of easyrefresh;
 
 /// 滚动物理形式
-class ERScrollPhysics extends BouncingScrollPhysics {
+class _ERScrollPhysics extends BouncingScrollPhysics {
   final ValueNotifier<bool> userOffsetNotifier;
   final HeaderNotifier headerNotifier;
   final FooterNotifier footerNotifier;
 
-  ERScrollPhysics({
+  _ERScrollPhysics({
     ScrollPhysics? parent = const AlwaysScrollableScrollPhysics(),
+    SpringDescription? spring,
     required this.userOffsetNotifier,
     required this.headerNotifier,
     required this.footerNotifier,
-  }) : super(parent: parent) {
+  })  : _spring = spring,
+        super(parent: parent) {
     headerNotifier._bindPhysics(this);
     footerNotifier._bindPhysics(this);
   }
 
   @override
-  ERScrollPhysics applyTo(ScrollPhysics? ancestor) {
-    return ERScrollPhysics(
+  _ERScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return _ERScrollPhysics(
       parent: buildParent(ancestor),
       userOffsetNotifier: userOffsetNotifier,
       headerNotifier: headerNotifier,
       footerNotifier: footerNotifier,
+      spring: _spring,
     );
+  }
+
+  /// The spring to use for ballistic simulations.
+  final SpringDescription? _spring;
+
+  /// Get the current [SpringDescription] to be used.
+  @override
+  SpringDescription get spring {
+    if (headerNotifier._spring != null &&
+        headerNotifier._offset > 0) {
+      return headerNotifier._spring!;
+    }
+    if (footerNotifier._spring != null &&
+        footerNotifier._offset > 0) {
+      return footerNotifier._spring!;
+    }
+    return _spring ?? super.spring;
   }
 
   @override

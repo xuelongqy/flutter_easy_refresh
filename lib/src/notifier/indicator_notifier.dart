@@ -56,7 +56,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// [IndicatorMode.processed] 保持时长
   final Duration processedDuration;
 
-  /// 弹性属性
+  /// Structure that describes a spring's constants.
   final SpringDescription? _spring;
 
   /// 无限滚动触发偏移量
@@ -131,7 +131,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   AnimationController? _clampingAnimationController;
 
   /// 滚动物理形式
-  late ERScrollPhysics _physics;
+  late _ERScrollPhysics _physics;
 
   /// 最终触发偏移量
   /// [triggerOffset] + [safeOffset]
@@ -193,7 +193,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   }
 
   /// 绑定物理形式
-  void _bindPhysics(ERScrollPhysics physics) {
+  void _bindPhysics(_ERScrollPhysics physics) {
     _physics = physics;
   }
 

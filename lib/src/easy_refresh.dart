@@ -147,7 +147,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         infiniteOffset: 100,
       ),
     );
-    _scrollBehavior = ERScrollBehavior(ERScrollPhysics(
+    _scrollBehavior = ERScrollBehavior(_ERScrollPhysics(
       userOffsetNotifier: _userOffsetNotifier,
       headerNotifier: _headerNotifier,
       footerNotifier: _footerNotifier,
