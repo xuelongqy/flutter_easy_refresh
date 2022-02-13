@@ -1,15 +1,15 @@
 part of easyrefresh;
 
-/// 滚动行为
-/// 用于覆盖flutter自带平台相关的[ScrollBehavior]
-class ERScrollBehavior extends ScrollBehavior {
-  final _ERScrollPhysics _physics;
+/// Define [ScrollBehavior] in the scope of EasyRefresh.
+/// Add support for web and PC.
+class _ERScrollBehavior extends ScrollBehavior {
+  final ScrollPhysics? _physics;
 
-  const ERScrollBehavior(this._physics);
+  const _ERScrollBehavior([this._physics]);
 
   @override
-  _ERScrollPhysics getScrollPhysics(BuildContext context) {
-    return _physics;
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return _physics ?? super.getScrollPhysics(context);
   }
 
   @override

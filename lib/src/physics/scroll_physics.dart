@@ -1,18 +1,22 @@
 part of easyrefresh;
 
+/// The multiple applied to overscroll to make it appear that scrolling past
+/// the edge of the scrollable contents is harder than scrolling the list.
+/// This is done by reducing the ratio of the scroll effect output vs the
+/// scroll gesture input.
+typedef FrictionFactor = double Function(double overscrollFraction);
+
 /// 滚动物理形式
 class _ERScrollPhysics extends BouncingScrollPhysics {
-  final ValueNotifier<bool> userOffsetNotifier;
-  final HeaderNotifier headerNotifier;
-  final FooterNotifier footerNotifier;
-
-  _ERScrollPhysics({
+   _ERScrollPhysics({
     ScrollPhysics? parent = const AlwaysScrollableScrollPhysics(),
-    SpringDescription? spring,
     required this.userOffsetNotifier,
     required this.headerNotifier,
     required this.footerNotifier,
+    SpringDescription? spring,
+    FrictionFactor? frictionFactor,
   })  : _spring = spring,
+        _frictionFactor = frictionFactor,
         super(parent: parent) {
     headerNotifier._bindPhysics(this);
     footerNotifier._bindPhysics(this);
@@ -26,8 +30,13 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       headerNotifier: headerNotifier,
       footerNotifier: footerNotifier,
       spring: _spring,
+      frictionFactor: _frictionFactor,
     );
   }
+
+  final ValueNotifier<bool> userOffsetNotifier;
+  final HeaderNotifier headerNotifier;
+  final FooterNotifier footerNotifier;
 
   /// The spring to use for ballistic simulations.
   final SpringDescription? _spring;
@@ -35,16 +44,21 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   /// Get the current [SpringDescription] to be used.
   @override
   SpringDescription get spring {
-    if (headerNotifier._spring != null &&
-        headerNotifier._offset > 0) {
+    if (headerNotifier._spring != null && headerNotifier._offset > 0) {
       return headerNotifier._spring!;
     }
-    if (footerNotifier._spring != null &&
-        footerNotifier._offset > 0) {
+    if (footerNotifier._spring != null && footerNotifier._offset > 0) {
       return footerNotifier._spring!;
     }
     return _spring ?? super.spring;
   }
+
+  final FrictionFactor? _frictionFactor;
+
+  @override
+  double frictionFactor(double overscrollFraction) =>
+      _frictionFactor?.call(overscrollFraction) ??
+      super.frictionFactor(overscrollFraction);
 
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {

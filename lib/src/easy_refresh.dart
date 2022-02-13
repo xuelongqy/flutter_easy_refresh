@@ -1,5 +1,10 @@
 part of easyrefresh;
 
+/// EasyRefresh child builder.
+/// Provide [ScrollPhysics], and use it in your [ScrollView].
+/// [ScrollPhysics] will not be scoped.
+typedef ERChildBuilder = Widget Function(BuildContext context, ScrollPhysics physics);
+
 /// EasyRefresh needs to share data
 class EasyRefreshData {
   /// Header status data and responsive
@@ -33,8 +38,15 @@ class _InheritedEasyRefresh extends InheritedWidget {
 }
 
 class EasyRefresh extends StatefulWidget {
-  /// 子组件
-  final Widget child;
+  /// Try to avoid including multiple ScrollViews.
+  /// Or set separate ScrollPhysics for other ScrollView.
+  /// Otherwise use [EasyRefresh.builder].
+  final Widget? child;
+
+  /// EasyRefresh child builder.
+  /// Provide [ScrollPhysics], and use it in your [ScrollView].
+  /// [ScrollPhysics] will not be scoped.
+  final ERChildBuilder? childBuilder;
 
   /// 刷新回调
   final FutureOr Function()? onRefresh;
@@ -42,12 +54,30 @@ class EasyRefresh extends StatefulWidget {
   /// 加载回调
   final FutureOr Function()? onLoad;
 
+  /// Structure that describes a spring's constants.
+  /// When spring is not set in [Header] and [Footer].
+  final SpringDescription? spring;
+
+  /// Friction factor when list is out of bounds.
+  final FrictionFactor? frictionFactor;
+
   const EasyRefresh({
     Key? key,
     required this.child,
     this.onRefresh,
     this.onLoad,
-  }) : super(key: key);
+    this.spring,
+    this.frictionFactor,
+  }) : childBuilder = null, super(key: key);
+
+  const EasyRefresh.builder({
+    Key? key,
+    required this.childBuilder,
+    this.onRefresh,
+    this.onLoad,
+    this.spring,
+    this.frictionFactor,
+  }) : child = null, super(key: key);
 
   @override
   _EasyRefreshState createState() => _EasyRefreshState();
@@ -63,8 +93,8 @@ class EasyRefresh extends StatefulWidget {
 
 class _EasyRefreshState extends State<EasyRefresh>
     with TickerProviderStateMixin {
-  /// 滚动行为
-  late ERScrollBehavior _scrollBehavior;
+  /// [ScrollPhysics] use it in EasyRefresh.
+  late _ERScrollPhysics _physics;
 
   /// Needs to share data
   late EasyRefreshData _data;
@@ -147,11 +177,13 @@ class _EasyRefreshState extends State<EasyRefresh>
         infiniteOffset: 100,
       ),
     );
-    _scrollBehavior = ERScrollBehavior(_ERScrollPhysics(
+    _physics = _ERScrollPhysics(
       userOffsetNotifier: _userOffsetNotifier,
       headerNotifier: _headerNotifier,
       footerNotifier: _footerNotifier,
-    ));
+      spring: widget.spring,
+      frictionFactor: widget.frictionFactor,
+    );
   }
 
   /// 构建Header容器
@@ -273,12 +305,20 @@ class _EasyRefreshState extends State<EasyRefresh>
     );
   }
 
-  /// 构建子组件
+  /// Build complete child widget.
   Widget _buildChild() {
-    Widget child = ScrollConfiguration(
-      behavior: _scrollBehavior,
-      child: widget.child,
-    );
+    Widget child;
+    if (widget.childBuilder != null) {
+      child = ScrollConfiguration(
+        behavior: const _ERScrollBehavior(),
+        child: widget.childBuilder!(context, _physics),
+      );
+    } else {
+      child = ScrollConfiguration(
+        behavior: _ERScrollBehavior(_physics),
+        child: widget.child!,
+      );
+    }
     return _InheritedEasyRefresh(
       data: _data,
       child: child,
