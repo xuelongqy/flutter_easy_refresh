@@ -47,11 +47,35 @@ class _TestPageState extends State<TestPage> {
           });
           print('Loaded');
         },
+        // child: ListView.builder(
+        //   padding: EdgeInsets.zero,
+        //   scrollDirection: scrollDirection,
+        //   itemCount: _count,
+        //   itemBuilder: (context, index) {
+        //     return SampleListItem(
+        //       direction: scrollDirection,
+        //       width: scrollDirection == Axis.vertical ? double.infinity : 200,
+        //     );
+        //   },
+        // ),
+        // child: ListView(
+        //   scrollDirection: scrollDirection,
+        //   reverse: true,
+        //   children: [
+        //     const HeaderLocator(),
+        //     for (int i = 0; i < _count; i++)
+        //       SampleListItem(
+        //         direction: scrollDirection,
+        //         width: scrollDirection == Axis.vertical ? double.infinity : 200,
+        //       ),
+        //     const FooterLocator(),
+        //   ],
+        // ),
         child: CustomScrollView(
           scrollDirection: scrollDirection,
           reverse: false,
           slivers: [
-            const HeaderLocator(),
+            const HeaderLocator.sliver(),
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -65,20 +89,9 @@ class _TestPageState extends State<TestPage> {
                 childCount: _count,
               ),
             ),
-            const FooterLocator(),
+            const FooterLocator.sliver(),
           ],
         ),
-        // child: ListView.builder(
-        //   padding: EdgeInsets.zero,
-        //   scrollDirection: scrollDirection,
-        //   itemCount: _count,
-        //   itemBuilder: (context, index) {
-        //     return SampleListItem(
-        //       direction: scrollDirection,
-        //       width: scrollDirection == Axis.vertical ? double.infinity : 200,
-        //     );
-        //   },
-        // ),
       ),
     );
   }

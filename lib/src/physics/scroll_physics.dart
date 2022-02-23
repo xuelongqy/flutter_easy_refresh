@@ -8,7 +8,7 @@ typedef FrictionFactor = double Function(double overscrollFraction);
 
 /// 滚动物理形式
 class _ERScrollPhysics extends BouncingScrollPhysics {
-   _ERScrollPhysics({
+  _ERScrollPhysics({
     ScrollPhysics? parent = const AlwaysScrollableScrollPhysics(),
     required this.userOffsetNotifier,
     required this.headerNotifier,

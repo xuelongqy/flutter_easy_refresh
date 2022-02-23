@@ -3,7 +3,8 @@ part of easyrefresh;
 /// EasyRefresh child builder.
 /// Provide [ScrollPhysics], and use it in your [ScrollView].
 /// [ScrollPhysics] will not be scoped.
-typedef ERChildBuilder = Widget Function(BuildContext context, ScrollPhysics physics);
+typedef ERChildBuilder = Widget Function(
+    BuildContext context, ScrollPhysics physics);
 
 /// EasyRefresh needs to share data
 class EasyRefreshData {
@@ -68,7 +69,8 @@ class EasyRefresh extends StatefulWidget {
     this.onLoad,
     this.spring,
     this.frictionFactor,
-  }) : childBuilder = null, super(key: key);
+  })  : childBuilder = null,
+        super(key: key);
 
   const EasyRefresh.builder({
     Key? key,
@@ -77,7 +79,8 @@ class EasyRefresh extends StatefulWidget {
     this.onLoad,
     this.spring,
     this.frictionFactor,
-  }) : child = null, super(key: key);
+  })  : child = null,
+        super(key: key);
 
   @override
   _EasyRefreshState createState() => _EasyRefreshState();
@@ -248,6 +251,8 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   /// 构建Footer容器
   Widget _buildFooterView() {
+    // 设置安全偏移量
+    _footerNotifier._safeOffset = MediaQuery.of(context).padding.bottom;
     return ValueListenableBuilder(
       valueListenable: _footerNotifier.listenable(),
       builder: (ctx, notifier, _) {
