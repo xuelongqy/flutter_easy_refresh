@@ -1,78 +1,82 @@
 part of easyrefresh;
 
-/// 指示器状态
+/// The current state of the indicator ([Header] or [Footer]).
 enum IndicatorMode {
-  /// 默认状态，不具备任何触发条件
-  /// 此时[Header]或者[Footer]不显示
-  /// 刷新完成后回归此状态
+  /// Default state, without any trigger conditions.
+  /// At this time [Header] or [Footer] is not displayed.
+  /// Return to this state after the task is completed.
   inactive,
 
-  /// 超出列表但未达到触发任务距离
-  /// 此状态松开，列表复原
+  /// Overscroll but not reached the trigger mission distance.
+  /// This state is released and the [Scrollable] is restored.
   drag,
 
-  /// 超出列表并达到触发任务距离
-  /// 此状态松开，列表触发任务
+  /// Overscroll and reach the trigger task distance.
+  /// This state is released and the list triggers the task.
   armed,
 
-  /// 超出列表并达到触发任务距离
-  /// 此状态表示用户已经松开
+  /// Overscroll and about to trigger a task
+  /// This state indicates that the user has released.
   ready,
 
-  /// 任务执行中
-  /// 进行中，直到完成任务
+  /// Task in progress.
+  /// In progress until the task is completed.
   processing,
 
-  /// 任务完成
-  /// 任务结束，但整个过程并未完成
-  /// 设置结束的动画，将在此状态后进行
+  /// Task completed.
+  /// The task is over, but the whole process is not complete.
+  /// Set the ending animation, which will be done after this state.
   processed,
 
-  /// 整个刷新过程完成
-  /// 结束后，回到[inactive]
+  /// The whole process is done.
+  /// When finished, go back to [inactive]
   done,
 }
 
-/// 指示通知器
+/// Indicator data and trigger notification.
 abstract class IndicatorNotifier extends ChangeNotifier {
-  /// 断续提供器
-  /// 用户[clamping]动画
+  /// Used to provide [clamping] animation.
   final TickerProvider vsync;
 
-  /// 触发偏移量
+  /// The offset of the trigger task.
   final double triggerOffset;
 
-  /// 用户触发通知器
+  /// User triggered notifier.
+  /// Record user triggers and releases.
   @protected
   final ValueNotifier<bool> userOffsetNotifier;
 
-  /// 定住让列表不越界
+  /// Hold to keep the [Scrollable] from going out of bounds.
   final bool clamping;
 
-  /// 是否计算安全区域
+  /// Whether to calculate the safe area.
   final bool safeArea;
 
-  /// 任务完成延时
-  /// [IndicatorMode.processed] 保持时长
+  /// Task completion delay.
+  /// [IndicatorMode.processed] duration of state.
   final Duration processedDuration;
 
   /// Structure that describes a spring's constants.
   final SpringDescription? _spring;
 
-  /// 无限滚动触发偏移量
-  /// 列表距离边界的相对偏移量(>= 0)
-  /// 为null时，不具备无限滚动
+  /// Infinite scroll trigger offset.
+  /// The relative offset of the [Scrollable] from the bounds (>= 0)
+  /// When null, no infinite scroll.
   final double? infiniteOffset;
 
-  /// 撞击越界
-  /// 列表自己滚动时，是否越界
-  /// [clamping]为false时候，生效
+  /// Hit boundary over.
+  /// When the [Scrollable] scrolls by itself, is it out of bounds.
+  /// When [clamping] is false, it takes effect.
   final bool hitOver;
 
-  /// 无限滚动撞击越界
-  /// 列表自己滚动时，无限滚动是否越界
-  /// [clamping]为false时候，生效
+  /// Infinite scroll hits out of bounds.
+  /// When the [Scrollable] scrolls by itself,
+  /// whether the infinite scroll is out of bounds.
+  /// When [clamping] is false, it takes effect.
   final bool infiniteHitOver;
+
+  /// Whether to use a locator in [Scrollable].
+  final bool useLocator;
 
   IndicatorNotifier({
     required this.triggerOffset,
@@ -85,13 +89,15 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     this.infiniteOffset,
     bool? hitOver,
     bool? infiniteHitOver,
+    this.useLocator = false,
   })  : _spring = spring,
         hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,
             'The infiniteOffset cannot be smaller than 0.'),
         assert(infiniteOffset == null || !clamping,
-            'Cannot scroll indefinitely when clamping.') {
+            'Cannot scroll indefinitely when clamping.'),
+        assert(!clamping || !useLocator, 'Cannot use locator when clamping.') {
     _initClampingAnimation();
     userOffsetNotifier.addListener(_onUserOffset);
   }
@@ -407,6 +413,7 @@ class HeaderNotifier extends IndicatorNotifier {
     double? infiniteOffset,
     bool? hitOver,
     bool? infiniteHitOver,
+    bool useLocator = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -418,6 +425,7 @@ class HeaderNotifier extends IndicatorNotifier {
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
           infiniteHitOver: infiniteHitOver,
+          useLocator: useLocator,
         );
 
   @override
@@ -485,6 +493,7 @@ class FooterNotifier extends IndicatorNotifier {
     double? infiniteOffset = 0,
     bool? hitOver,
     bool? infiniteHitOver,
+    bool useLocator = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -496,6 +505,7 @@ class FooterNotifier extends IndicatorNotifier {
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
           infiniteHitOver: infiniteHitOver,
+          useLocator: useLocator,
         );
 
   @override

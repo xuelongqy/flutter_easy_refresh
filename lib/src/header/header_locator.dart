@@ -34,6 +34,8 @@ class HeaderLocator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final headerNotifier = EasyRefresh.of(context).headerNotifier;
+    assert(headerNotifier.useLocator,
+        'Cannot use HeaderLocator when useLocator is false.');
     headerNotifier._safeOffset = MediaQuery.of(context).padding.top;
     return ValueListenableBuilder(
       valueListenable: headerNotifier.listenable(),
@@ -160,7 +162,8 @@ class _HeaderLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
       scrollExtent: 0,
       paintExtent: 0,
       paintOrigin: (constraints.axisDirection == AxisDirection.down ||
-          constraints.axisDirection == AxisDirection.right) && !headerNotifier.clamping
+                  constraints.axisDirection == AxisDirection.right) &&
+              !headerNotifier.clamping
           ? -headerNotifier.offset
           : 0,
       cacheExtent: cacheExtent,

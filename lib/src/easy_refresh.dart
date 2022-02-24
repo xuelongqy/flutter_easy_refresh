@@ -170,6 +170,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         userOffsetNotifier: userOffsetNotifier,
         vsync: this,
         safeArea: true,
+        useLocator: true,
       ),
       footerNotifier: FooterNotifier(
         triggerOffset: 70,
@@ -178,6 +179,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         vsync: this,
         safeArea: true,
         infiniteOffset: 100,
+        useLocator: true,
       ),
     );
     _physics = _ERScrollPhysics(
@@ -191,6 +193,8 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   /// 构建Header容器
   Widget _buildHeaderView() {
+    assert(!_headerNotifier.useLocator,
+        'When useLocator is true, you need to use HeaderLocator.');
     // 设置安全偏移量
     _headerNotifier._safeOffset = MediaQuery.of(context).padding.top;
     return ValueListenableBuilder(
@@ -251,6 +255,8 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   /// 构建Footer容器
   Widget _buildFooterView() {
+    assert(!_footerNotifier.useLocator,
+        'When useLocator is true, you need to use FooterLocator.');
     // 设置安全偏移量
     _footerNotifier._safeOffset = MediaQuery.of(context).padding.bottom;
     return ValueListenableBuilder(
@@ -336,8 +342,8 @@ class _EasyRefreshState extends State<EasyRefresh>
       fit: StackFit.expand,
       children: [
         _buildChild(),
-        // _buildHeaderView(),
-        // _buildFooterView(),
+        if (!_headerNotifier.useLocator) _buildHeaderView(),
+        if (!_footerNotifier.useLocator) _buildFooterView(),
       ],
     );
   }
