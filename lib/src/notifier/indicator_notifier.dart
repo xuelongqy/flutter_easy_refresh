@@ -35,74 +35,43 @@ enum IndicatorMode {
 
 /// Indicator data and trigger notification.
 abstract class IndicatorNotifier extends ChangeNotifier {
+  /// Refresh and loading Indicator.
+  final Indicator indicator;
+
   /// Used to provide [clamping] animation.
   final TickerProvider vsync;
-
-  /// The offset of the trigger task.
-  final double triggerOffset;
 
   /// User triggered notifier.
   /// Record user triggers and releases.
   @protected
   final ValueNotifier<bool> userOffsetNotifier;
 
-  /// Hold to keep the [Scrollable] from going out of bounds.
-  final bool clamping;
-
-  /// Whether to calculate the safe area.
-  final bool safeArea;
-
-  /// Task completion delay.
-  /// [IndicatorMode.processed] duration of state.
-  final Duration processedDuration;
-
-  /// Structure that describes a spring's constants.
-  final SpringDescription? _spring;
-
-  /// Infinite scroll trigger offset.
-  /// The relative offset of the [Scrollable] from the bounds (>= 0)
-  /// When null, no infinite scroll.
-  final double? infiniteOffset;
-
-  /// Hit boundary over.
-  /// When the [Scrollable] scrolls by itself, is it out of bounds.
-  /// When [clamping] is false, it takes effect.
-  final bool hitOver;
-
-  /// Infinite scroll hits out of bounds.
-  /// When the [Scrollable] scrolls by itself,
-  /// whether the infinite scroll is out of bounds.
-  /// When [clamping] is false, it takes effect.
-  final bool infiniteHitOver;
-
-  /// Whether to use a locator in [Scrollable].
-  final bool useLocator;
-
   IndicatorNotifier({
-    required this.triggerOffset,
-    required this.clamping,
-    required this.userOffsetNotifier,
+    required this.indicator,
     required this.vsync,
-    this.processedDuration = const Duration(seconds: 1),
-    this.safeArea = true,
-    SpringDescription? spring,
-    this.infiniteOffset,
-    bool? hitOver,
-    bool? infiniteHitOver,
-    this.useLocator = false,
-  })  : _spring = spring,
-        hitOver = hitOver ?? infiniteOffset != null,
-        infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
-        assert(infiniteOffset == null || infiniteOffset >= 0,
-            'The infiniteOffset cannot be smaller than 0.'),
-        assert(infiniteOffset == null || !clamping,
-            'Cannot scroll indefinitely when clamping.'),
-        assert(!clamping || !useLocator, 'Cannot use locator when clamping.') {
+    required this.userOffsetNotifier,
+  }) {
     _initClampingAnimation();
     userOffsetNotifier.addListener(_onUserOffset);
   }
 
-  /// 方向
+  double get triggerOffset => indicator.triggerOffset;
+
+  bool get clamping => indicator.clamping;
+
+  bool get safeArea => indicator.safeArea;
+
+  Duration get processedDuration => indicator.processedDuration;
+
+  double? get infiniteOffset => indicator.infiniteOffset;
+
+  bool get hitOver => indicator.hitOver;
+
+  bool get infiniteHitOver => indicator.infiniteHitOver;
+
+  bool get useLocator => indicator.useLocator;
+
+  /// [Scrollable] axis and direction
   Axis? _axis;
 
   Axis? get axis => _axis;
@@ -111,39 +80,39 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   AxisDirection? get axisDirection => _axisDirection;
 
-  /// 安全偏移量
-  /// 参考[SafeArea]
-  /// 用于解决安全区域被遮挡问题
-  /// 最终触发偏移量为[triggerOffset] + [safeOffset]
+  /// Safe area offset.
+  /// Refer to [SafeArea].
+  /// Used to solve the problem that the safe area is blocked.
+  /// The final trigger offset is [triggerOffset] + [safeOffset]
   double? _safeOffset;
 
   double get safeOffset => safeArea ? _safeOffset ?? 0 : 0;
 
-  /// 偏移量
+  /// Overscroll offset.
   double _offset = 0;
 
   double get offset => _offset;
 
-  /// 位置
+  /// The current scroll position.
   late ScrollMetrics _position;
 
-  /// 状态
+  /// The current state of the indicator.
   IndicatorMode _mode = IndicatorMode.inactive;
 
   IndicatorMode get mode => _mode;
 
-  /// 动画控制器
-  /// [clamping]为true时，用到
+  /// Animation controller.
+  /// Used when [clamping] is true.
   AnimationController? _clampingAnimationController;
 
-  /// 滚动物理形式
+  /// EasyRefresh scroll physics.
   late _ERScrollPhysics _physics;
 
-  /// 最终触发偏移量
+  /// Actual trigger offset.
   /// [triggerOffset] + [safeOffset]
   double get actualTriggerOffset => triggerOffset + safeOffset;
 
-  /// 列表越界范围
+  /// Keep the extent of the [Scrollable] out of bounds.
   double get overExtent {
     if (infiniteOffset != null || _mode == IndicatorMode.ready || modeLocked) {
       return actualTriggerOffset;
@@ -151,24 +120,26 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     return 0;
   }
 
-  /// 状态锁定
+  /// Is the state locked.
   bool get modeLocked =>
       _mode == IndicatorMode.processing || _mode == IndicatorMode.processed;
 
-  /// 获取弹性属性
+  /// Spring description.
+  SpringDescription? get _spring => indicator.spring;
+
   SpringDescription get spring => _spring ?? _physics.spring;
 
-  /// 监听提供器
+  /// Indicator listenable.
   ValueListenable<IndicatorNotifier> listenable() => _IndicatorListenable(this);
 
-  /// [clamping]动画监听器
+  /// Animation listener for [clamping].
   void _clampingTick();
 
-  /// 计算偏移量
+  /// Calculate the overscroll offset.
   double _calculateOffset(ScrollMetrics position, double value);
 
-  /// 无限滚动排除条件
-  bool infiniteExclude(ScrollMetrics position, double value);
+  /// Infinite scroll exclusions.
+  bool _infiniteExclude(ScrollMetrics position, double value);
 
   @override
   void dispose() {
@@ -177,7 +148,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     userOffsetNotifier.removeListener(_onUserOffset);
   }
 
-  /// 初始化[clamping]动画控制器
+  /// Initialize the [clamping] animation controller
   void _initClampingAnimation() {
     if (clamping) {
       _clampingAnimationController = AnimationController.unbounded(
@@ -187,41 +158,41 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
   }
 
-  /// 监听用户事件
+  /// Listen for user events
   void _onUserOffset() {
     if (userOffsetNotifier.value) {
       // clamping
-      // 取消动画，更新偏移量
+      // Cancel animation, update offset
       if (clamping && _clampingAnimationController!.isAnimating) {
         _clampingAnimationController!.stop(canceled: true);
       }
     }
   }
 
-  /// 绑定物理形式
+  /// Bind physics behavior
   void _bindPhysics(_ERScrollPhysics physics) {
     _physics = physics;
   }
 
-  /// 创建回弹模拟
-  /// [clamping]使用
+  /// Create a ballistic simulation.
+  /// Use for [clamping].
   Simulation? _createBallisticSimulation(
       ScrollMetrics position, double velocity);
 
-  /// 计算边界距离
+  /// Calculate distance from boundary
   double get boundaryOffset;
 
-  /// 模拟器更新
+  /// Update by [ScrollPhysics.createBallisticSimulation].
   void _updateBySimulation(ScrollMetrics position, double velocity) {
     _position = position;
-    // 更新方向
+    // Update axis and direction.
     if (_axis != position.axis || _axisDirection != position.axisDirection) {
       _axis = position.axis;
       _axisDirection = position.axisDirection;
     }
-    // 更新释放时的偏移量
+    // Update offset on release
     _updateOffset(position, position.pixels, true);
-    // 如果为clamping，且offset大于0，则开始动画
+    // If clamping is true and offset is greater than 0, start animation
     if (clamping && _offset > 0 && !modeLocked) {
       final simulation = _createBallisticSimulation(position, velocity);
       if (simulation != null) {
@@ -230,46 +201,46 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
   }
 
-  /// 更新偏移量
+  /// Update [Scrollable] offset
   void _updateOffset(ScrollMetrics position, double value, bool bySimulation) {
     // clamping
-    // 在任务处理中，不做任何处理
+    // In task processing, do nothing.
     if (clamping && modeLocked) {
       return;
     }
     // clamping
-    // 在释放情况下，且offset大于0，则由动画控制
+    // In the case of release, and offset is greater than 0, it is controlled by animation.
     if (!userOffsetNotifier.value && clamping && _offset > 0 && !bySimulation) {
       return;
     }
     _position = position;
-    // 记录旧状态
+    // Record old state.
     final oldOffset = _offset;
     final oldMode = _mode;
-    // 更新偏移量
+    // Calculate and update the offset.
     _offset = _calculateOffset(position, value);
-    // 如果没有越界则不操作
+    // Do nothing if not out of bounds.
     if (oldOffset == 0 && _offset == 0) {
-      // 处理无限滚动
+      // Handling infinite scroll
       if (infiniteOffset != null &&
           (boundaryOffset < infiniteOffset! || _mode == IndicatorMode.done) &&
           !bySimulation &&
-          !infiniteExclude(position, value)) {
-        // 更新状态
+          !_infiniteExclude(position, value)) {
+        // Update mode
         _updateMode();
         notifyListeners();
       }
       return;
     }
-    // 更新状态
+    // Update mode
     _updateMode();
-    // 是否需要通知
+    // Need notify
     if (oldOffset == _offset && oldMode == _mode) {
       return;
     }
-    // 避免绘制过程中setState()
+    // Avoid setState() during drawing
     if (bySimulation) {
-      // 当列表长度变更时，通知
+      // Notify when list length changes
       if (offset < actualTriggerOffset) {
         Future(() {
           notifyListeners();
@@ -280,15 +251,15 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 更新状态
+  /// Update indicator state
   void _updateMode() {
-    // 任务执行中和任务完成中不更新
+    // Not updated during task execution and task completion
     if (!modeLocked) {
-      // 无限滚动
+      // Infinite scroll
       if (infiniteOffset != null && boundaryOffset < infiniteOffset!) {
         if (_mode == IndicatorMode.done &&
             _position.maxScrollExtent != _position.minScrollExtent) {
-          // 没结束前状态不改变
+          // The state does not change until the end
           return;
         } else {
           _mode = IndicatorMode.processing;
@@ -296,19 +267,20 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         }
       }
       if (_mode == IndicatorMode.done && offset > 0) {
-        // 没结束前状态不改变
+        // The state does not change until the end
         return;
       } else if (_offset == 0) {
         _mode = IndicatorMode.inactive;
       } else if (_offset < actualTriggerOffset) {
         _mode = IndicatorMode.drag;
       } else if (_offset == actualTriggerOffset) {
-        // 必须超过才能触发任务
+        // Must be exceeded to trigger the task
         _mode = _mode != IndicatorMode.ready
             ? IndicatorMode.armed
             : IndicatorMode.processing;
       } else if (_offset > actualTriggerOffset) {
-        // 如果是用户在滑动(未释放则不执行任务)
+        // If the user is scrolling
+        // (the task is not executed if it is not released)
         _mode = userOffsetNotifier.value
             ? IndicatorMode.armed
             : IndicatorMode.ready;
@@ -316,7 +288,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
   }
 
-  /// 开始[clamping]动画
+  /// Start [clamping] animation
   void _startClampingAnimation(Simulation simulation) {
     if (_offset <= 0) {
       return;
@@ -324,7 +296,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     _clampingAnimationController!.animateWith(simulation);
   }
 
-  /// 设置状态
+  /// Set mode.
+  /// Internal use of EasyRefresh.
   void _setMode(IndicatorMode mode) {
     if (_mode == mode) {
       return;
@@ -332,12 +305,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     final oldMode = _mode;
     _mode = mode;
     notifyListeners();
-    // 完成任务
+    // Task processed
     if (this.mode == IndicatorMode.processed) {
-      // 完成延时
+      // Completion delay
       if (processedDuration == Duration.zero) {
         _mode = IndicatorMode.done;
-        // 触发列表回滚
+        // Trigger [Scrollable] rollback
         if (oldMode == IndicatorMode.processing &&
             _position is ScrollActivityDelegate &&
             !userOffsetNotifier.value) {
@@ -346,14 +319,14 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       } else {
         Future.delayed(processedDuration, () {
           _setMode(IndicatorMode.done);
-          // 触发列表回滚
+          // Trigger [Scrollable] rollback
           if (_position is ScrollActivityDelegate &&
               !userOffsetNotifier.value) {
             (_position as ScrollActivityDelegate).goBallistic(0);
           }
         });
       }
-      // 如果用户未释放，则主动更新偏移量
+      // Actively update the offset if the user does not release
       if (!clamping && userOffsetNotifier.value) {
         Future(() {
           _updateOffset(_position, 0, false);
@@ -361,19 +334,39 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       }
     }
   }
+
+  /// Build indicator widget.
+  Widget _build(BuildContext context) {
+    if (_axis == null || _axisDirection == null) {
+      return const SizedBox();
+    }
+    return indicator.build(
+      context,
+      IndicatorState(
+        indicator: indicator,
+        mode: mode,
+        offset: offset,
+        safeOffset: safeOffset,
+        axis: _axis!,
+        axisDirection: _axisDirection!,
+      ),
+    );
+  }
 }
 
-/// 指示器监听提供器
+/// Indicator listenable.
+/// Listen for property changes of the indicator.
+/// Used to update widget.
 class _IndicatorListenable<T extends IndicatorNotifier>
     extends ValueListenable<T> {
-  /// 指示通知器
+  /// Indicator notifier
   final T indicatorNotifier;
 
   _IndicatorListenable(this.indicatorNotifier);
 
   final List<VoidCallback> _listeners = [];
 
-  /// 监听通知
+  /// Listen for notifications
   void _onNotify() {
     for (final listener in _listeners) {
       listener();
@@ -400,32 +393,17 @@ class _IndicatorListenable<T extends IndicatorNotifier>
   T get value => indicatorNotifier;
 }
 
-/// Header通知器
+/// [Header] notifier
+/// [Header] status and Notifications
 class HeaderNotifier extends IndicatorNotifier {
   HeaderNotifier({
-    required double triggerOffset,
-    required bool clamping,
+    required Header header,
     required ValueNotifier<bool> userOffsetNotifier,
     required TickerProvider vsync,
-    Duration processedDuration = const Duration(seconds: 1),
-    SpringDescription? spring,
-    bool safeArea = true,
-    double? infiniteOffset,
-    bool? hitOver,
-    bool? infiniteHitOver,
-    bool useLocator = false,
   }) : super(
-          triggerOffset: triggerOffset,
-          clamping: clamping,
+          indicator: header,
           userOffsetNotifier: userOffsetNotifier,
           vsync: vsync,
-          processedDuration: processedDuration,
-          spring: spring,
-          safeArea: safeArea,
-          infiniteOffset: infiniteOffset,
-          hitOver: hitOver,
-          infiniteHitOver: infiniteHitOver,
-          useLocator: useLocator,
         );
 
   @override
@@ -437,10 +415,10 @@ class HeaderNotifier extends IndicatorNotifier {
     }
     if (clamping) {
       if (value > position.minScrollExtent) {
-        // 回收先减去偏移量
+        // Rollback first minus offset
         return math.max(_offset > 0 ? (-value + _offset) : 0, 0);
       } else {
-        // 越界累加偏移量
+        // Overscroll accumulated offset
         return -value + _offset;
       }
     } else {
@@ -475,37 +453,22 @@ class HeaderNotifier extends IndicatorNotifier {
   double get boundaryOffset => _position.pixels;
 
   @override
-  bool infiniteExclude(ScrollMetrics position, double value) {
+  bool _infiniteExclude(ScrollMetrics position, double value) {
     return value >= position.maxScrollExtent;
   }
 }
 
-/// Footer通知器
+/// [Footer] notifier
+/// [Footer] status and Notifications
 class FooterNotifier extends IndicatorNotifier {
   FooterNotifier({
-    required double triggerOffset,
-    required bool clamping,
+    required Footer footer,
     required ValueNotifier<bool> userOffsetNotifier,
     required TickerProvider vsync,
-    Duration processedDuration = const Duration(seconds: 1),
-    SpringDescription? spring,
-    bool safeArea = true,
-    double? infiniteOffset = 0,
-    bool? hitOver,
-    bool? infiniteHitOver,
-    bool useLocator = false,
   }) : super(
-          triggerOffset: triggerOffset,
-          clamping: clamping,
+          indicator: footer,
           userOffsetNotifier: userOffsetNotifier,
           vsync: vsync,
-          processedDuration: processedDuration,
-          spring: spring,
-          safeArea: safeArea,
-          infiniteOffset: infiniteOffset,
-          hitOver: hitOver,
-          infiniteHitOver: infiniteHitOver,
-          useLocator: useLocator,
         );
 
   @override
@@ -515,14 +478,14 @@ class FooterNotifier extends IndicatorNotifier {
         !(clamping && _offset > 0)) {
       return 0;
     }
-    // 移动量
+    // Moving distance
     final move = value - position.maxScrollExtent;
     if (clamping) {
       if (value < position.maxScrollExtent) {
-        // 回收先减去偏移量
+        // Rollback first minus offset
         return math.max(_offset > 0 ? (move + _offset) : 0, 0);
       } else {
-        // 越界累加偏移量
+        // Overscroll accumulated offset
         return move + _offset;
       }
     } else {
@@ -558,7 +521,7 @@ class FooterNotifier extends IndicatorNotifier {
   double get boundaryOffset => _position.maxScrollExtent - _position.pixels;
 
   @override
-  bool infiniteExclude(ScrollMetrics position, double value) {
+  bool _infiniteExclude(ScrollMetrics position, double value) {
     return value <= position.minScrollExtent;
   }
 }

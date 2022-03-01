@@ -165,21 +165,43 @@ class _EasyRefreshState extends State<EasyRefresh>
     _data = EasyRefreshData(
       userOffsetNotifier: userOffsetNotifier,
       headerNotifier: HeaderNotifier(
-        triggerOffset: 70,
-        clamping: false,
+        header: BuilderHeader(
+          triggerOffset: 70,
+          clamping: false,
+          safeArea: true,
+          useLocator: true,
+          builder: (ctx, state) {
+            return Container(
+              color: Colors.blue,
+              width:
+                  state.axis == Axis.vertical ? double.infinity : state.offset,
+              height:
+                  state.axis == Axis.vertical ? state.offset : double.infinity,
+            );
+          },
+        ),
         userOffsetNotifier: userOffsetNotifier,
         vsync: this,
-        safeArea: true,
-        useLocator: true,
       ),
       footerNotifier: FooterNotifier(
-        triggerOffset: 70,
-        clamping: false,
+        footer: BuilderFooter(
+          triggerOffset: 70,
+          clamping: false,
+          safeArea: true,
+          infiniteOffset: 100,
+          useLocator: true,
+          builder: (ctx, state) {
+            return Container(
+              color: Colors.blue,
+              width:
+                  state.axis == Axis.vertical ? double.infinity : state.offset,
+              height:
+                  state.axis == Axis.vertical ? state.offset : double.infinity,
+            );
+          },
+        ),
         userOffsetNotifier: userOffsetNotifier,
         vsync: this,
-        safeArea: true,
-        infiniteOffset: 100,
-        useLocator: true,
       ),
     );
     _physics = _ERScrollPhysics(
@@ -239,15 +261,7 @@ class _EasyRefreshState extends State<EasyRefresh>
                   ? 0
                   : null
               : 0,
-          child: Container(
-            color: Colors.blue,
-            width: axis == Axis.vertical
-                ? double.infinity
-                : _headerNotifier._offset,
-            height: axis == Axis.vertical
-                ? _headerNotifier._offset
-                : double.infinity,
-          ),
+          child: _headerNotifier._build(context),
         );
       },
     );
@@ -302,15 +316,7 @@ class _EasyRefreshState extends State<EasyRefresh>
                   ? 0
                   : null
               : 0,
-          child: Container(
-            color: Colors.blue,
-            width: axis == Axis.vertical
-                ? double.infinity
-                : _footerNotifier._offset,
-            height: axis == Axis.vertical
-                ? _footerNotifier._offset
-                : double.infinity,
-          ),
+          child: _footerNotifier._build(context),
         );
       },
     );

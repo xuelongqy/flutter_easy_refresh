@@ -16,21 +16,6 @@ class HeaderLocator extends StatelessWidget {
       : _isSliver = true,
         super(key: key);
 
-  Widget _buildFooter(HeaderNotifier headerNotifier) {
-    if (headerNotifier.axis == null) {
-      return const SizedBox();
-    }
-    return Container(
-      color: Colors.blue,
-      width: headerNotifier.axis == Axis.vertical
-          ? double.infinity
-          : headerNotifier.offset,
-      height: headerNotifier.axis == Axis.vertical
-          ? headerNotifier.offset
-          : double.infinity,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final headerNotifier = EasyRefresh.of(context).headerNotifier;
@@ -41,7 +26,7 @@ class HeaderLocator extends StatelessWidget {
       valueListenable: headerNotifier.listenable(),
       builder: (ctx, notifier, _) {
         return _HeaderLocatorRenderWidget(
-          child: _buildFooter(headerNotifier),
+          child: headerNotifier._build(context),
           isSliver: _isSliver,
         );
       },

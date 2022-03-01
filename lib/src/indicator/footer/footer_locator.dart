@@ -16,21 +16,6 @@ class FooterLocator extends StatelessWidget {
       : _isSliver = true,
         super(key: key);
 
-  Widget _buildFooter(FooterNotifier footerNotifier) {
-    if (footerNotifier.axis == null) {
-      return const SizedBox();
-    }
-    return Container(
-      color: Colors.blue,
-      width: footerNotifier.axis == Axis.vertical
-          ? double.infinity
-          : footerNotifier.offset,
-      height: footerNotifier.axis == Axis.vertical
-          ? footerNotifier.offset
-          : double.infinity,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final footerNotifier = EasyRefresh.of(context).footerNotifier;
@@ -41,7 +26,7 @@ class FooterLocator extends StatelessWidget {
       valueListenable: footerNotifier.listenable(),
       builder: (ctx, notifier, _) {
         return _FooterLocatorRenderWidget(
-          child: _buildFooter(footerNotifier),
+          child: footerNotifier._build(context),
           isSliver: _isSliver,
         );
       },
