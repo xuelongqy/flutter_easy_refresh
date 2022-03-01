@@ -19,7 +19,7 @@ class FooterLocator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final footerNotifier = EasyRefresh.of(context).footerNotifier;
-    assert(footerNotifier.useLocator,
+    assert(footerNotifier.iPosition == IndicatorPosition.locator,
         'Cannot use FooterLocator when useLocator is false.');
     footerNotifier._safeOffset = MediaQuery.of(context).padding.bottom;
     return ValueListenableBuilder(

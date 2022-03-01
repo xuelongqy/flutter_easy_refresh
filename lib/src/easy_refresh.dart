@@ -169,7 +169,7 @@ class _EasyRefreshState extends State<EasyRefresh>
           triggerOffset: 70,
           clamping: false,
           safeArea: true,
-          useLocator: true,
+          position: IndicatorPosition.locator,
           builder: (ctx, state) {
             return Container(
               color: Colors.blue,
@@ -189,7 +189,7 @@ class _EasyRefreshState extends State<EasyRefresh>
           clamping: false,
           safeArea: true,
           infiniteOffset: 100,
-          useLocator: true,
+          position: IndicatorPosition.locator,
           builder: (ctx, state) {
             return Container(
               color: Colors.blue,
@@ -215,10 +215,6 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   /// 构建Header容器
   Widget _buildHeaderView() {
-    assert(!_headerNotifier.useLocator,
-        'When useLocator is true, you need to use HeaderLocator.');
-    // 设置安全偏移量
-    _headerNotifier._safeOffset = MediaQuery.of(context).padding.top;
     return ValueListenableBuilder(
       valueListenable: _headerNotifier.listenable(),
       builder: (ctx, notifier, _) {
@@ -269,10 +265,6 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   /// 构建Footer容器
   Widget _buildFooterView() {
-    assert(!_footerNotifier.useLocator,
-        'When useLocator is true, you need to use FooterLocator.');
-    // 设置安全偏移量
-    _footerNotifier._safeOffset = MediaQuery.of(context).padding.bottom;
     return ValueListenableBuilder(
       valueListenable: _footerNotifier.listenable(),
       builder: (ctx, notifier, _) {
@@ -322,8 +314,8 @@ class _EasyRefreshState extends State<EasyRefresh>
     );
   }
 
-  /// Build complete child widget.
-  Widget _buildChild() {
+  /// Build content widget.
+  Widget _buildContent() {
     Widget child;
     if (widget.childBuilder != null) {
       child = ScrollConfiguration(
@@ -344,13 +336,38 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   @override
   Widget build(BuildContext context) {
+    final contentWidget = _buildContent();
+    final List<Widget> children = [];
+    final hPosition = _headerNotifier.iPosition;
+    final fPosition = _footerNotifier.iPosition;
+    // Set safe area offset.
+    final mPadding = MediaQuery.of(context).padding;
+    if (hPosition != IndicatorPosition.locator) {
+      _headerNotifier._safeOffset = mPadding.top;
+    }
+    if (fPosition != IndicatorPosition.locator) {
+      _footerNotifier._safeOffset = mPadding.bottom;
+    }
+    // Set the position of widgets.
+    if (hPosition == IndicatorPosition.above) {
+      children.add(_buildHeaderView());
+    }
+    if (fPosition == IndicatorPosition.above) {
+      children.add(_buildFooterView());
+    }
+    children.add(contentWidget);
+    if (hPosition == IndicatorPosition.behind) {
+      children.add(_buildHeaderView());
+    }
+    if (fPosition == IndicatorPosition.behind) {
+      children.add(_buildFooterView());
+    }
+    if (children.length == 1) {
+      return contentWidget;
+    }
     return Stack(
       fit: StackFit.expand,
-      children: [
-        _buildChild(),
-        if (!_headerNotifier.useLocator) _buildHeaderView(),
-        if (!_footerNotifier.useLocator) _buildFooterView(),
-      ],
+      children: children,
     );
   }
 }

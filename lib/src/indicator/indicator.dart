@@ -1,5 +1,57 @@
 part of easyrefresh;
 
+/// The current state of the indicator ([Header] or [Footer]).
+enum IndicatorMode {
+  /// Default state, without any trigger conditions.
+  /// At this time [Header] or [Footer] is not displayed.
+  /// Return to this state after the task is completed.
+  inactive,
+
+  /// Overscroll but not reached the trigger mission distance.
+  /// This state is released and the [Scrollable] is restored.
+  drag,
+
+  /// Overscroll and reach the trigger task distance.
+  /// This state is released and the list triggers the task.
+  armed,
+
+  /// Overscroll and about to trigger a task
+  /// This state indicates that the user has released.
+  ready,
+
+  /// Task in progress.
+  /// In progress until the task is completed.
+  processing,
+
+  /// Task completed.
+  /// The task is over, but the whole process is not complete.
+  /// Set the ending animation, which will be done after this state.
+  processed,
+
+  /// The whole process is done.
+  /// When finished, go back to [inactive]
+  done,
+}
+
+/// The position of the indicator.
+enum IndicatorPosition {
+  /// Above the content.
+  /// Above in [Stack] layout.
+  above,
+
+  /// Behind the content.
+  /// Below in the [Stack] layout.
+  behind,
+
+  /// Use locator.
+  /// Use [HeaderLocator] or [FooterLocator] in [ScrollView].
+  locator,
+
+  /// Customize the indicator anywhere.
+  /// Indicator widget will not be build in EasyRefresh.
+  custom,
+}
+
 /// Indicator properties and state.
 class IndicatorState {
   /// Refresh and loading indicator.
@@ -69,8 +121,8 @@ abstract class Indicator {
   /// When [clamping] is false, it takes effect.
   final bool infiniteHitOver;
 
-  /// Whether to use a locator in [Scrollable].
-  final bool useLocator;
+  /// The position of the indicator.
+  final IndicatorPosition position;
 
   const Indicator({
     required this.triggerOffset,
@@ -81,14 +133,15 @@ abstract class Indicator {
     this.infiniteOffset,
     bool? hitOver,
     bool? infiniteHitOver,
-    this.useLocator = false,
+    this.position = IndicatorPosition.above,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,
             'The infiniteOffset cannot be smaller than 0.'),
         assert(infiniteOffset == null || !clamping,
             'Cannot scroll indefinitely when clamping.'),
-        assert(!clamping || !useLocator, 'Cannot use locator when clamping.');
+        assert(!clamping || position != IndicatorPosition.locator,
+            'Cannot use locator when clamping.');
 
   /// Build indicator widget.
   Widget build(BuildContext context, IndicatorState state);

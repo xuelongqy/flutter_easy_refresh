@@ -1,38 +1,5 @@
 part of easyrefresh;
 
-/// The current state of the indicator ([Header] or [Footer]).
-enum IndicatorMode {
-  /// Default state, without any trigger conditions.
-  /// At this time [Header] or [Footer] is not displayed.
-  /// Return to this state after the task is completed.
-  inactive,
-
-  /// Overscroll but not reached the trigger mission distance.
-  /// This state is released and the [Scrollable] is restored.
-  drag,
-
-  /// Overscroll and reach the trigger task distance.
-  /// This state is released and the list triggers the task.
-  armed,
-
-  /// Overscroll and about to trigger a task
-  /// This state indicates that the user has released.
-  ready,
-
-  /// Task in progress.
-  /// In progress until the task is completed.
-  processing,
-
-  /// Task completed.
-  /// The task is over, but the whole process is not complete.
-  /// Set the ending animation, which will be done after this state.
-  processed,
-
-  /// The whole process is done.
-  /// When finished, go back to [inactive]
-  done,
-}
-
 /// Indicator data and trigger notification.
 abstract class IndicatorNotifier extends ChangeNotifier {
   /// Refresh and loading Indicator.
@@ -69,7 +36,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   bool get infiniteHitOver => indicator.infiniteHitOver;
 
-  bool get useLocator => indicator.useLocator;
+  IndicatorPosition get iPosition => indicator.position;
 
   /// [Scrollable] axis and direction
   Axis? _axis;

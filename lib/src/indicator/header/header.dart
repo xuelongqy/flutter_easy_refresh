@@ -11,7 +11,7 @@ abstract class Header extends Indicator {
     double? infiniteOffset,
     bool? hitOver,
     bool? infiniteHitOver,
-    bool useLocator = false,
+    IndicatorPosition position = IndicatorPosition.above,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -21,7 +21,7 @@ abstract class Header extends Indicator {
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
           infiniteHitOver: infiniteHitOver,
-          useLocator: useLocator,
+          position: position,
         );
 }
 
@@ -40,7 +40,7 @@ class BuilderHeader extends Header {
     double? infiniteOffset,
     bool? hitOver,
     bool? infiniteHitOver,
-    bool useLocator = false,
+    IndicatorPosition position = IndicatorPosition.above,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -50,7 +50,7 @@ class BuilderHeader extends Header {
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
           infiniteHitOver: infiniteHitOver,
-          useLocator: useLocator,
+          position: position,
         );
 
   @override

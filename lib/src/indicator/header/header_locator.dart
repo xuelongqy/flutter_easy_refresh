@@ -19,7 +19,7 @@ class HeaderLocator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final headerNotifier = EasyRefresh.of(context).headerNotifier;
-    assert(headerNotifier.useLocator,
+    assert(headerNotifier.iPosition == IndicatorPosition.locator,
         'Cannot use HeaderLocator when useLocator is false.');
     headerNotifier._safeOffset = MediaQuery.of(context).padding.top;
     return ValueListenableBuilder(
