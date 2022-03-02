@@ -1,11 +1,11 @@
 import 'package:flutter/widgets.dart';
 
-/// 滚动通知拦截器(用于拦截其他UI组件的滑动事件)
+/// Scroll notification interceptor.
+/// Used to intercept sliding events that are always used in inner widget.
 class ScrollNotificationInterceptor extends StatelessWidget {
   final Widget child;
 
-  // 构造函数
-  ScrollNotificationInterceptor({
+  const ScrollNotificationInterceptor({
     Key? key,
     required this.child,
   }) : super(key: key);
@@ -16,7 +16,7 @@ class ScrollNotificationInterceptor extends StatelessWidget {
       onNotification: (ScrollNotification notification) {
         return true;
       },
-      child: this.child,
+      child: child,
     );
   }
 }

@@ -3,7 +3,7 @@ part of easyrefresh;
 /// Indicator data and trigger notification.
 abstract class IndicatorNotifier extends ChangeNotifier {
   /// Refresh and loading Indicator.
-  final Indicator indicator;
+  Indicator _indicator;
 
   /// Used to provide [clamping] animation.
   final TickerProvider vsync;
@@ -14,29 +14,29 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   final ValueNotifier<bool> userOffsetNotifier;
 
   IndicatorNotifier({
-    required this.indicator,
+    required Indicator indicator,
     required this.vsync,
     required this.userOffsetNotifier,
-  }) {
+  }) : _indicator = indicator {
     _initClampingAnimation();
     userOffsetNotifier.addListener(_onUserOffset);
   }
 
-  double get triggerOffset => indicator.triggerOffset;
+  double get triggerOffset => _indicator.triggerOffset;
 
-  bool get clamping => indicator.clamping;
+  bool get clamping => _indicator.clamping;
 
-  bool get safeArea => indicator.safeArea;
+  bool get safeArea => _indicator.safeArea;
 
-  Duration get processedDuration => indicator.processedDuration;
+  Duration get processedDuration => _indicator.processedDuration;
 
-  double? get infiniteOffset => indicator.infiniteOffset;
+  double? get infiniteOffset => _indicator.infiniteOffset;
 
-  bool get hitOver => indicator.hitOver;
+  bool get hitOver => _indicator.hitOver;
 
-  bool get infiniteHitOver => indicator.infiniteHitOver;
+  bool get infiniteHitOver => _indicator.infiniteHitOver;
 
-  IndicatorPosition get iPosition => indicator.position;
+  IndicatorPosition get iPosition => _indicator.position;
 
   /// [Scrollable] axis and direction
   Axis? _axis;
@@ -92,12 +92,18 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       _mode == IndicatorMode.processing || _mode == IndicatorMode.processed;
 
   /// Spring description.
-  SpringDescription? get _spring => indicator.spring;
+  SpringDescription? get _spring => _indicator.spring;
 
   SpringDescription get spring => _spring ?? _physics.spring;
 
   /// Indicator listenable.
   ValueListenable<IndicatorNotifier> listenable() => _IndicatorListenable(this);
+
+  /// Update indicator.
+  /// When the indicator changes.
+  void _updateIndicator(Indicator indicator) {
+    _indicator = indicator;
+  }
 
   /// Animation listener for [clamping].
   void _clampingTick();
@@ -307,10 +313,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (_axis == null || _axisDirection == null) {
       return const SizedBox();
     }
-    return indicator.build(
+    return _indicator.build(
       context,
       IndicatorState(
-        indicator: indicator,
+        indicator: _indicator,
         mode: mode,
         offset: offset,
         safeOffset: safeOffset,

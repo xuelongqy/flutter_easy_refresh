@@ -44,15 +44,25 @@ class EasyRefresh extends StatefulWidget {
   /// Otherwise use [EasyRefresh.builder].
   final Widget? child;
 
+  /// Header indicator.
+  final Header? header;
+
+  /// Footer indicator.
+  final Footer? footer;
+
   /// EasyRefresh child builder.
   /// Provide [ScrollPhysics], and use it in your [ScrollView].
   /// [ScrollPhysics] will not be scoped.
   final ERChildBuilder? childBuilder;
 
-  /// 刷新回调
+  /// Refresh callback.
+  /// Triggered on refresh.
+  /// The current state is [IndicatorMode.processing].
   final FutureOr Function()? onRefresh;
 
-  /// 加载回调
+  /// Load callback.
+  /// Triggered on load.
+  /// The current state is [IndicatorMode.processing].
   final FutureOr Function()? onLoad;
 
   /// Structure that describes a spring's constants.
@@ -62,9 +72,42 @@ class EasyRefresh extends StatefulWidget {
   /// Friction factor when list is out of bounds.
   final FrictionFactor? frictionFactor;
 
+  /// Default header indicator.
+  static Header defaultHeader = BuilderHeader(
+    triggerOffset: 70,
+    clamping: false,
+    safeArea: true,
+    position: IndicatorPosition.locator,
+    builder: (ctx, state) {
+      return Container(
+        color: Colors.blue,
+        width: state.axis == Axis.vertical ? double.infinity : state.offset,
+        height: state.axis == Axis.vertical ? state.offset : double.infinity,
+      );
+    },
+  );
+
+  /// Default footer indicator.
+  static Footer defaultFooter = BuilderFooter(
+    triggerOffset: 70,
+    clamping: false,
+    safeArea: true,
+    infiniteOffset: 100,
+    position: IndicatorPosition.locator,
+    builder: (ctx, state) {
+      return Container(
+        color: Colors.blue,
+        width: state.axis == Axis.vertical ? double.infinity : state.offset,
+        height: state.axis == Axis.vertical ? state.offset : double.infinity,
+      );
+    },
+  );
+
   const EasyRefresh({
     Key? key,
     required this.child,
+    this.header,
+    this.footer,
     this.onRefresh,
     this.onLoad,
     this.spring,
@@ -75,6 +118,8 @@ class EasyRefresh extends StatefulWidget {
   const EasyRefresh.builder({
     Key? key,
     required this.childBuilder,
+    this.header,
+    this.footer,
     this.onRefresh,
     this.onLoad,
     this.spring,
@@ -99,23 +144,30 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// [ScrollPhysics] use it in EasyRefresh.
   late _ERScrollPhysics _physics;
 
-  /// Needs to share data
+  /// Needs to share data.
   late EasyRefreshData _data;
 
-  /// 用户偏移通知器(记录是否为用户滚动)
+  /// User triggered notifier.
+  /// Record user triggers and releases.
   ValueNotifier<bool> get _userOffsetNotifier => _data.userOffsetNotifier;
 
-  /// Header通知器
+  /// Header indicator notifier.
   HeaderNotifier get _headerNotifier => _data.headerNotifier;
 
-  /// Footer通知器
+  /// Footer indicator notifier.
   FooterNotifier get _footerNotifier => _data.footerNotifier;
 
-  /// 更新中
+  /// Currently refreshing.
   bool _refreshing = false;
 
-  /// 加载中
+  /// currently loading.
   bool _loading = false;
+
+  /// Use [EasyRefresh.defaultHeader] without [EasyRefresh.header].
+  Header get _header => widget.header ?? EasyRefresh.defaultHeader;
+
+  /// Use [EasyRefresh.defaultFooter] without [EasyRefresh.footer].
+  Footer get _footer => widget.footer ?? EasyRefresh.defaultFooter;
 
   @override
   void initState() {
@@ -128,7 +180,7 @@ class _EasyRefreshState extends State<EasyRefresh>
     //   // });
     // });
     _headerNotifier.addListener(() {
-      // 执行刷新任务
+      // Execute refresh task.
       if (_headerNotifier._mode == IndicatorMode.processing) {
         if (!_refreshing) {
           _refreshing = true;
@@ -140,7 +192,7 @@ class _EasyRefreshState extends State<EasyRefresh>
       }
     });
     _footerNotifier.addListener(() {
-      // 执行加载任务
+      // Execute load task.
       if (_footerNotifier._mode == IndicatorMode.processing) {
         if (!_loading) {
           _loading = true;
@@ -151,6 +203,18 @@ class _EasyRefreshState extends State<EasyRefresh>
         }
       }
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant EasyRefresh oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update header and footer.
+    if (oldWidget.header != widget.header) {
+      _headerNotifier._updateIndicator(_header);
+    }
+    if (oldWidget.footer != widget.footer) {
+      _footerNotifier._updateIndicator(_footer);
+    }
   }
 
   @override
@@ -165,41 +229,12 @@ class _EasyRefreshState extends State<EasyRefresh>
     _data = EasyRefreshData(
       userOffsetNotifier: userOffsetNotifier,
       headerNotifier: HeaderNotifier(
-        header: BuilderHeader(
-          triggerOffset: 70,
-          clamping: false,
-          safeArea: true,
-          position: IndicatorPosition.locator,
-          builder: (ctx, state) {
-            return Container(
-              color: Colors.blue,
-              width:
-                  state.axis == Axis.vertical ? double.infinity : state.offset,
-              height:
-                  state.axis == Axis.vertical ? state.offset : double.infinity,
-            );
-          },
-        ),
+        header: _header,
         userOffsetNotifier: userOffsetNotifier,
         vsync: this,
       ),
       footerNotifier: FooterNotifier(
-        footer: BuilderFooter(
-          triggerOffset: 70,
-          clamping: false,
-          safeArea: true,
-          infiniteOffset: 100,
-          position: IndicatorPosition.locator,
-          builder: (ctx, state) {
-            return Container(
-              color: Colors.blue,
-              width:
-                  state.axis == Axis.vertical ? double.infinity : state.offset,
-              height:
-                  state.axis == Axis.vertical ? state.offset : double.infinity,
-            );
-          },
-        ),
+        footer: _footer,
         userOffsetNotifier: userOffsetNotifier,
         vsync: this,
       ),
