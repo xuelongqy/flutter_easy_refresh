@@ -58,3 +58,23 @@ class BuilderFooter extends Footer {
     return builder(context, state);
   }
 }
+
+/// Parameters when [EasyRefresh.onLoad] is null.
+/// Overscroll behavior of [ScrollView].
+class NotLoadFooter extends Footer {
+  const NotLoadFooter({
+    bool clamping = false,
+    SpringDescription? spring,
+  }) : super(
+    triggerOffset: 0,
+    clamping: clamping,
+    position: IndicatorPosition.custom,
+    spring: spring,
+    processedDuration: const Duration(seconds: 0),
+  );
+
+  @override
+  Widget build(BuildContext context, IndicatorState state) {
+    return const SizedBox();
+  }
+}

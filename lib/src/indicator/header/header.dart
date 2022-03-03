@@ -58,3 +58,23 @@ class BuilderHeader extends Header {
     return builder(context, state);
   }
 }
+
+/// Parameters when [EasyRefresh.onRefresh] is null.
+/// Overscroll behavior of [ScrollView].
+class NotRefreshHeader extends Header {
+  const NotRefreshHeader({
+    bool clamping = false,
+    SpringDescription? spring,
+  }) : super(
+    triggerOffset: 0,
+    clamping: clamping,
+    position: IndicatorPosition.custom,
+    spring: spring,
+    processedDuration: const Duration(seconds: 0),
+  );
+
+  @override
+  Widget build(BuildContext context, IndicatorState state) {
+    return const SizedBox();
+  }
+}

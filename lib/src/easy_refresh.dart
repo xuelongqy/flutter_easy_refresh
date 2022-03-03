@@ -50,6 +50,14 @@ class EasyRefresh extends StatefulWidget {
   /// Footer indicator.
   final Footer? footer;
 
+  /// Overscroll behavior when [onRefresh] is null.
+  /// Won't build widget.
+  final NotRefreshHeader? notRefreshHeader;
+
+  /// Overscroll behavior when [onLoad] is null.
+  /// Won't build widget.
+  final NotLoadFooter? notLoadFooter;
+
   /// EasyRefresh child builder.
   /// Provide [ScrollPhysics], and use it in your [ScrollView].
   /// [ScrollPhysics] will not be scoped.
@@ -57,12 +65,14 @@ class EasyRefresh extends StatefulWidget {
 
   /// Refresh callback.
   /// Triggered on refresh.
-  /// The current state is [IndicatorMode.processing].
+  /// The Header current state is [IndicatorMode.processing].
+  /// More link [IndicatorNotifier.onTask].
   final FutureOr Function()? onRefresh;
 
   /// Load callback.
   /// Triggered on load.
-  /// The current state is [IndicatorMode.processing].
+  /// The Footer current state is [IndicatorMode.processing].
+  /// More link [IndicatorNotifier.onTask].
   final FutureOr Function()? onLoad;
 
   /// Structure that describes a spring's constants.
@@ -71,6 +81,9 @@ class EasyRefresh extends StatefulWidget {
 
   /// Friction factor when list is out of bounds.
   final FrictionFactor? frictionFactor;
+
+  /// Refresh and load can be performed simultaneously.
+  final bool simultaneously;
 
   /// Default header indicator.
   static Header defaultHeader = BuilderHeader(
@@ -112,6 +125,9 @@ class EasyRefresh extends StatefulWidget {
     this.onLoad,
     this.spring,
     this.frictionFactor,
+    this.notRefreshHeader,
+    this.notLoadFooter,
+    this.simultaneously = false,
   })  : childBuilder = null,
         super(key: key);
 
@@ -124,6 +140,9 @@ class EasyRefresh extends StatefulWidget {
     this.onLoad,
     this.spring,
     this.frictionFactor,
+    this.notRefreshHeader,
+    this.notLoadFooter,
+    this.simultaneously = false,
   })  : child = null,
         super(key: key);
 
@@ -157,17 +176,41 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// Footer indicator notifier.
   FooterNotifier get _footerNotifier => _data.footerNotifier;
 
-  /// Currently refreshing.
-  bool _refreshing = false;
-
-  /// currently loading.
-  bool _loading = false;
-
   /// Use [EasyRefresh.defaultHeader] without [EasyRefresh.header].
-  Header get _header => widget.header ?? EasyRefresh.defaultHeader;
+  /// Use [NotRefreshHeader] when [EasyRefresh.onRefresh] is null.
+  Header get _header {
+    if (widget.onRefresh == null) {
+      if (widget.notRefreshHeader != null) {
+        return widget.notRefreshHeader!;
+      } else {
+        final h = widget.header ?? EasyRefresh.defaultHeader;
+        return NotRefreshHeader(
+          clamping: h.clamping,
+          spring: h.spring,
+        );
+      }
+    } else {
+      return widget.header ?? EasyRefresh.defaultHeader;
+    }
+  }
 
   /// Use [EasyRefresh.defaultFooter] without [EasyRefresh.footer].
-  Footer get _footer => widget.footer ?? EasyRefresh.defaultFooter;
+  /// Use [NotLoadFooter] when [EasyRefresh.onLoad] is null.
+  Footer get _footer {
+    if (widget.onLoad == null) {
+      if (widget.notLoadFooter != null) {
+        return widget.notLoadFooter!;
+      } else {
+        final f = widget.footer ?? EasyRefresh.defaultFooter;
+        return NotLoadFooter(
+          clamping: f.clamping,
+          spring: f.spring,
+        );
+      }
+    } else {
+      return widget.footer ?? EasyRefresh.defaultFooter;
+    }
+  }
 
   @override
   void initState() {
@@ -179,30 +222,6 @@ class _EasyRefreshState extends State<EasyRefresh>
     //   //   print(PrimaryScrollController.of(context)!.position.pixels);
     //   // });
     // });
-    _headerNotifier.addListener(() {
-      // Execute refresh task.
-      if (_headerNotifier._mode == IndicatorMode.processing) {
-        if (!_refreshing) {
-          _refreshing = true;
-          Future.sync(widget.onRefresh!).whenComplete(() {
-            _refreshing = false;
-            _headerNotifier._setMode(IndicatorMode.processed);
-          });
-        }
-      }
-    });
-    _footerNotifier.addListener(() {
-      // Execute load task.
-      if (_footerNotifier._mode == IndicatorMode.processing) {
-        if (!_loading) {
-          _loading = true;
-          Future.sync(widget.onLoad!).whenComplete(() {
-            _loading = false;
-            _footerNotifier._setMode(IndicatorMode.processed);
-          });
-        }
-      }
-    });
   }
 
   @override
@@ -220,10 +239,12 @@ class _EasyRefreshState extends State<EasyRefresh>
   @override
   void dispose() {
     super.dispose();
+    _headerNotifier.dispose();
+    _footerNotifier.dispose();
     _userOffsetNotifier.dispose();
   }
 
-  /// Should be reinitialized [EasyRefreshData] when parameters change
+  /// Initialize [EasyRefreshData].
   void _initData() {
     final userOffsetNotifier = ValueNotifier<bool>(false);
     _data = EasyRefreshData(
@@ -232,11 +253,27 @@ class _EasyRefreshState extends State<EasyRefresh>
         header: _header,
         userOffsetNotifier: userOffsetNotifier,
         vsync: this,
+        onRefresh: widget.onRefresh,
+        onCanRefresh: () {
+          if (widget.simultaneously) {
+            return true;
+          } else {
+            return !_footerNotifier._processing;
+          }
+        },
       ),
       footerNotifier: FooterNotifier(
         footer: _footer,
         userOffsetNotifier: userOffsetNotifier,
         vsync: this,
+        onLoad: widget.onLoad,
+        onCanLoad: () {
+          if (widget.simultaneously) {
+            return true;
+          } else {
+            return !_headerNotifier._processing;
+          }
+        },
       ),
     );
     _physics = _ERScrollPhysics(
@@ -248,19 +285,22 @@ class _EasyRefreshState extends State<EasyRefresh>
     );
   }
 
-  /// 构建Header容器
+  /// Build Header widget.
+  /// When the Header [Indicator.position] is
+  /// [IndicatorPosition.above] or [IndicatorPosition.above].
   Widget _buildHeaderView() {
     return ValueListenableBuilder(
       valueListenable: _headerNotifier.listenable(),
       builder: (ctx, notifier, _) {
+        // Physics is not initialized.
         if (_headerNotifier.axis == null ||
             _headerNotifier.axisDirection == null) {
           return const SizedBox();
         }
-        // 方向
+        // Axis and direction.
         final axis = _headerNotifier.axis!;
         final axisDirection = _headerNotifier.axisDirection!;
-        // 设置安全偏移量
+        // Set safe area offset.
         if (_headerNotifier._safeOffset == null) {
           final safePadding = MediaQuery.of(context).padding;
           _footerNotifier._safeOffset = axis == Axis.vertical
@@ -298,20 +338,22 @@ class _EasyRefreshState extends State<EasyRefresh>
     );
   }
 
-  /// 构建Footer容器
+  /// Build Footer widget.
+  /// When the Footer [Indicator.position] is
+  /// [IndicatorPosition.above] or [IndicatorPosition.above].
   Widget _buildFooterView() {
     return ValueListenableBuilder(
       valueListenable: _footerNotifier.listenable(),
       builder: (ctx, notifier, _) {
-        // physics未初始化完成
+        // Physics is not initialized.
         if (_headerNotifier.axis == null ||
             _headerNotifier.axisDirection == null) {
           return const SizedBox();
         }
-        // 方向
+        // Axis and direction.
         final axis = _headerNotifier.axis!;
         final axisDirection = _headerNotifier.axisDirection!;
-        // 设置安全偏移量
+        // Set safe area offset.
         if (_footerNotifier._safeOffset == null) {
           final safePadding = MediaQuery.of(context).padding;
           _footerNotifier._safeOffset = axis == Axis.vertical

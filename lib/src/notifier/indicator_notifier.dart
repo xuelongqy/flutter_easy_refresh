@@ -13,11 +13,20 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   @protected
   final ValueNotifier<bool> userOffsetNotifier;
 
+  /// Tasks that need to be executed when triggered.
+  /// Can return [IndicatorMode.processed], [IndicatorMode.needless]
+  /// or [IndicatorMode.failed] to set the completion status.
+  final FutureOr Function()? _task;
+
   IndicatorNotifier({
     required Indicator indicator,
     required this.vsync,
     required this.userOffsetNotifier,
-  }) : _indicator = indicator {
+    required CanProcessCallBack onCanProcess,
+    FutureOr Function()? task,
+  })  : _indicator = indicator,
+        _onCanProcess = onCanProcess,
+        _task = task {
     _initClampingAnimation();
     userOffsetNotifier.addListener(_onUserOffset);
   }
@@ -81,6 +90,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Keep the extent of the [Scrollable] out of bounds.
   double get overExtent {
+    if (_task == null) {
+      return 0;
+    }
     if (infiniteOffset != null || _mode == IndicatorMode.ready || modeLocked) {
       return actualTriggerOffset;
     }
@@ -105,6 +117,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     _indicator = indicator;
   }
 
+  /// Is the task in progress.
+  bool _processing = false;
+
+  /// Can it be process.
+  CanProcessCallBack? _onCanProcess;
+  bool get _canProcess => _onCanProcess!.call() && !_processing && _task != null;
+
   /// Animation listener for [clamping].
   void _clampingTick();
 
@@ -117,6 +136,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   @override
   void dispose() {
     super.dispose();
+    _onCanProcess = null;
     _clampingAnimationController?.dispose();
     userOffsetNotifier.removeListener(_onUserOffset);
   }
@@ -224,9 +244,15 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update indicator state
+  /// Update indicator state.
   void _updateMode() {
-    // Not updated during task execution and task completion
+    // No task, keep IndicatorMode.done state.
+    if (_task == null) {
+      if (_mode != IndicatorMode.inactive) {
+        _mode = IndicatorMode.inactive;
+      }
+    }
+    // Not updated during task execution and task completion.
     if (!modeLocked) {
       // Infinite scroll
       if (infiniteOffset != null && boundaryOffset < infiniteOffset!) {
@@ -236,10 +262,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
           return;
         } else {
           _mode = IndicatorMode.processing;
-          return;
         }
-      }
-      if (_mode == IndicatorMode.done && offset > 0) {
+      } else if (_mode == IndicatorMode.done && offset > 0) {
         // The state does not change until the end
         return;
       } else if (_offset == 0) {
@@ -258,7 +282,23 @@ abstract class IndicatorNotifier extends ChangeNotifier {
             ? IndicatorMode.armed
             : IndicatorMode.ready;
       }
+      // Execute the task.
+      if (_mode == IndicatorMode.processing) {
+        _onTask();
+      }
     }
+  }
+
+  /// Execute the task and process the result.
+  void _onTask() {
+    if (!_canProcess) {
+      return;
+    }
+    _processing = true;
+    Future.sync(_task!).whenComplete(() {
+      _processing = false;
+      _setMode(IndicatorMode.processed);
+    });
   }
 
   /// Start [clamping] animation
@@ -373,10 +413,14 @@ class HeaderNotifier extends IndicatorNotifier {
     required Header header,
     required ValueNotifier<bool> userOffsetNotifier,
     required TickerProvider vsync,
+    required CanProcessCallBack onCanRefresh,
+    FutureOr Function()? onRefresh,
   }) : super(
           indicator: header,
           userOffsetNotifier: userOffsetNotifier,
           vsync: vsync,
+          onCanProcess: onCanRefresh,
+          task: onRefresh,
         );
 
   @override
@@ -431,6 +475,9 @@ class HeaderNotifier extends IndicatorNotifier {
   }
 }
 
+/// Indicator widget builder.
+typedef CanProcessCallBack = bool Function();
+
 /// [Footer] notifier
 /// [Footer] status and Notifications
 class FooterNotifier extends IndicatorNotifier {
@@ -438,10 +485,14 @@ class FooterNotifier extends IndicatorNotifier {
     required Footer footer,
     required ValueNotifier<bool> userOffsetNotifier,
     required TickerProvider vsync,
+    required CanProcessCallBack onCanLoad,
+    FutureOr Function()? onLoad,
   }) : super(
           indicator: footer,
           userOffsetNotifier: userOffsetNotifier,
           vsync: vsync,
+          onCanProcess: onCanLoad,
+          task: onLoad,
         );
 
   @override

@@ -6,7 +6,7 @@ part of easyrefresh;
 /// scroll gesture input.
 typedef FrictionFactor = double Function(double overscrollFraction);
 
-/// 滚动物理形式
+/// EasyRefresh scroll physics.
 class _ERScrollPhysics extends BouncingScrollPhysics {
   _ERScrollPhysics({
     ScrollPhysics? parent = const AlwaysScrollableScrollPhysics(),
@@ -62,16 +62,18 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
-    // 用户开始滚动
+    // User started scrolling.
     userOffsetNotifier.value = true;
     assert(offset != 0.0);
     assert(position.minScrollExtent <= position.maxScrollExtent);
 
-    // 判断是否越界，clamping时以指示器偏移量为准
+    // Whether it is overscroll.
+    // When clamping is true,
+    // the indicator offset shall prevail.
     if (!(position.outOfRange ||
         (headerNotifier.clamping && headerNotifier._offset > 0) ||
         (footerNotifier.clamping && footerNotifier._offset > 0))) return offset;
-    // 计算实际位置
+    // Calculate the actual location.
     final double pixels =
         position.pixels - headerNotifier._offset + footerNotifier._offset;
 
@@ -109,7 +111,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
   @override
   double applyBoundaryConditions(ScrollMetrics position, double value) {
-    // 抵消越界量
+    // Extend of overscroll for offset.
     double bounds = 0;
 
     // Header
@@ -124,10 +126,11 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         _updateIndicatorOffset(position, 0);
         return value - position.minScrollExtent;
       } else if (headerNotifier._offset > 0 && !headerNotifier.modeLocked) {
-        // Header未消失，列表不发生偏移
+        // Header does not disappear,
+        // and the list does not shift.
         bounds = value - position.pixels;
       }
-    } else {
+    } else if (headerNotifier._task != null) {
       // hit top over
       if (!headerNotifier.hitOver &&
           value < position.minScrollExtent &&
@@ -159,10 +162,11 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         _updateIndicatorOffset(position, position.maxScrollExtent);
         return value - position.maxScrollExtent;
       } else if (footerNotifier._offset > 0 && !footerNotifier.modeLocked) {
-        // Footer未消失，列表不发生偏移
+        // Footer does not disappear,
+        // and the list does not shift.
         bounds = value - position.pixels;
       }
-    } else {
+    } else if (footerNotifier._task != null) {
       // hit bottom over
       if (!footerNotifier.hitOver &&
           position.pixels < position.maxScrollExtent &&
@@ -182,12 +186,12 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
             position.maxScrollExtent;
       }
     }
-    // 更新偏移量
+    // Update offset
     _updateIndicatorOffset(position, value);
     return bounds;
   }
 
-  // 更新指示器偏移量
+  // Update indicator offset
   void _updateIndicatorOffset(ScrollMetrics position, double value) {
     headerNotifier._updateOffset(position, value, false);
     footerNotifier._updateOffset(position, value, false);
@@ -196,12 +200,12 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
-    // 用户停止滚动
+    // User stopped scrolling.
     userOffsetNotifier.value = false;
-    // 模拟器更新
+    // Simulation update.
     headerNotifier._updateBySimulation(position, velocity);
     footerNotifier._updateBySimulation(position, velocity);
-    // 模拟器
+    // Create simulation.
     if (velocity.abs() >= tolerance.velocity || position.outOfRange) {
       return BouncingScrollSimulation(
         spring: spring,
