@@ -250,17 +250,19 @@ class _EasyRefreshState extends State<EasyRefresh>
   void didUpdateWidget(covariant EasyRefresh oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Update header and footer.
-    if (oldWidget.header != widget.header) {
-      _headerNotifier._indicator = _header;
+    if (oldWidget.header != widget.header ||
+        oldWidget.noMoreRefresh != widget.noMoreRefresh) {
+      _headerNotifier._update(
+        indicator: _header,
+        noMoreProcess: widget.noMoreRefresh,
+      );
     }
-    if (oldWidget.noMoreRefresh != widget.noMoreRefresh) {
-      _headerNotifier._noMoreProcess = widget.noMoreRefresh;
-    }
-    if (oldWidget.footer != widget.footer) {
-      _footerNotifier._indicator = _footer;
-    }
-    if (oldWidget.noMoreLoad != widget.noMoreLoad) {
-      _footerNotifier._noMoreProcess = widget.noMoreLoad;
+    if (oldWidget.footer != widget.footer ||
+        oldWidget.noMoreLoad != widget.noMoreLoad) {
+      _footerNotifier._update(
+        indicator: _footer,
+        noMoreProcess: widget.noMoreLoad,
+      );
     }
   }
 
@@ -282,6 +284,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         userOffsetNotifier: userOffsetNotifier,
         vsync: this,
         onRefresh: widget.onRefresh,
+        noMoreRefresh: widget.noMoreRefresh,
         onCanRefresh: () {
           if (widget.simultaneously) {
             return true;
@@ -295,6 +298,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         userOffsetNotifier: userOffsetNotifier,
         vsync: this,
         onLoad: widget.onLoad,
+        noMoreLoad: widget.noMoreLoad,
         onCanLoad: () {
           if (widget.simultaneously) {
             return true;

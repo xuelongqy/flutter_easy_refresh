@@ -31,6 +31,8 @@ class _TestPageState extends State<TestPage> {
         title: const Text('EasyRefresh'),
       ),
       body: EasyRefresh(
+        noMoreRefresh: false,
+        noMoreLoad: false,
         onRefresh: () async {
           print('Refreshing');
           await Future.delayed(const Duration(seconds: 2));

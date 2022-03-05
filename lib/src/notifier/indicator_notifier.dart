@@ -91,7 +91,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Keep the extent of the [Scrollable] out of bounds.
   double get overExtent {
-    if (_task == null || !_canProcess) {
+    if (_task == null ||
+        !_canProcess ||
+        (_noMoreLocked && infiniteOffset == null)) {
       return 0;
     }
     if (infiniteOffset != null || _mode == IndicatorMode.ready || modeLocked) {
@@ -102,7 +104,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Is the state locked.
   bool get modeLocked =>
-      _mode == IndicatorMode.processing || _mode == IndicatorMode.processed;
+      _mode == IndicatorMode.processing ||
+      _mode == IndicatorMode.processed ||
+      _noMoreLocked;
 
   /// Spring description.
   SpringDescription? get _spring => _indicator.spring;
@@ -117,6 +121,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Can it be process.
   CanProcessCallBack? _onCanProcess;
+
   bool get _canProcess => _onCanProcess!.call();
 
   /// Task completion result.
@@ -124,6 +129,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Whether to execute the task after no more.
   bool _noMoreProcess;
+
+  /// State lock when no more.
+  bool get _noMoreLocked =>
+      !_noMoreProcess &&
+      _result == IndicatorResult.noMore &&
+      _mode == IndicatorMode.inactive;
 
   /// Animation listener for [clamping].
   void _clampingTick();
@@ -173,8 +184,18 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   Simulation? _createBallisticSimulation(
       ScrollMetrics position, double velocity);
 
-  /// Calculate distance from boundary
+  /// Calculate distance from boundary.
   double get boundaryOffset;
+
+  /// Update parameters.
+  /// When the EasyRefresh parameters is updated.
+  void _update({
+    Indicator? indicator,
+    bool? noMoreProcess,
+  }) {
+    _indicator = indicator ?? _indicator;
+    _noMoreProcess = noMoreProcess ?? _noMoreProcess;
+  }
 
   /// Update by [ScrollPhysics.createBallisticSimulation].
   void _updateBySimulation(ScrollMetrics position, double velocity) {
@@ -274,7 +295,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         return;
       } else if (_offset == 0) {
         _mode = IndicatorMode.inactive;
-        if (_result != IndicatorResult.noMore) {
+        if (_result != IndicatorResult.noMore || _noMoreProcess) {
           _result = IndicatorResult.none;
         }
       } else if (_offset < actualTriggerOffset) {
@@ -308,6 +329,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       final res = await Future.sync(_task!);
       if (res is IndicatorResult) {
         _result = res;
+      } else {
+        _result = IndicatorResult.succeeded;
       }
     } catch (_) {
       _result = IndicatorResult.failed;
