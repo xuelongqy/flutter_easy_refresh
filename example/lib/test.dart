@@ -38,6 +38,7 @@ class _TestPageState extends State<TestPage> {
             _count = 5;
           });
           print('Refreshed');
+          return IndicatorResult.noMore;
         },
         onLoad: () async {
           print('Loading');
@@ -46,6 +47,7 @@ class _TestPageState extends State<TestPage> {
             _count += 5;
           });
           print('Loaded');
+          return IndicatorResult.noMore;
         },
         // child: ListView.builder(
         //   padding: EdgeInsets.zero,

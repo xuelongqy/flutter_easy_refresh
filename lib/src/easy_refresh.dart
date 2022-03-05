@@ -85,6 +85,12 @@ class EasyRefresh extends StatefulWidget {
   /// Refresh and load can be performed simultaneously.
   final bool simultaneously;
 
+  /// Is it possible to refresh after there is no more.
+  final bool noMoreRefresh;
+
+  /// Is it loadable after no more.
+  final bool noMoreLoad;
+
   /// Default header indicator.
   static Header defaultHeader = BuilderHeader(
     triggerOffset: 70,
@@ -92,8 +98,14 @@ class EasyRefresh extends StatefulWidget {
     safeArea: true,
     position: IndicatorPosition.locator,
     builder: (ctx, state) {
+      Color color = Colors.blue;
+      if (state.result == IndicatorResult.failed) {
+        color = Colors.red;
+      } else if (state.result == IndicatorResult.noMore) {
+        color = Colors.yellow;
+      }
       return Container(
-        color: Colors.blue,
+        color: color,
         width: state.axis == Axis.vertical ? double.infinity : state.offset,
         height: state.axis == Axis.vertical ? state.offset : double.infinity,
       );
@@ -108,8 +120,14 @@ class EasyRefresh extends StatefulWidget {
     infiniteOffset: 100,
     position: IndicatorPosition.locator,
     builder: (ctx, state) {
+      Color color = Colors.blue;
+      if (state.result == IndicatorResult.failed) {
+        color = Colors.red;
+      } else if (state.result == IndicatorResult.noMore) {
+        color = Colors.yellow;
+      }
       return Container(
-        color: Colors.blue,
+        color: color,
         width: state.axis == Axis.vertical ? double.infinity : state.offset,
         height: state.axis == Axis.vertical ? state.offset : double.infinity,
       );
@@ -128,6 +146,8 @@ class EasyRefresh extends StatefulWidget {
     this.notRefreshHeader,
     this.notLoadFooter,
     this.simultaneously = false,
+    this.noMoreRefresh = false,
+    this.noMoreLoad = false,
   })  : childBuilder = null,
         super(key: key);
 
@@ -143,6 +163,8 @@ class EasyRefresh extends StatefulWidget {
     this.notRefreshHeader,
     this.notLoadFooter,
     this.simultaneously = false,
+    this.noMoreRefresh = false,
+    this.noMoreLoad = false,
   })  : child = null,
         super(key: key);
 
@@ -229,10 +251,16 @@ class _EasyRefreshState extends State<EasyRefresh>
     super.didUpdateWidget(oldWidget);
     // Update header and footer.
     if (oldWidget.header != widget.header) {
-      _headerNotifier._updateIndicator(_header);
+      _headerNotifier._indicator = _header;
+    }
+    if (oldWidget.noMoreRefresh != widget.noMoreRefresh) {
+      _headerNotifier._noMoreProcess = widget.noMoreRefresh;
     }
     if (oldWidget.footer != widget.footer) {
-      _footerNotifier._updateIndicator(_footer);
+      _footerNotifier._indicator = _footer;
+    }
+    if (oldWidget.noMoreLoad != widget.noMoreLoad) {
+      _footerNotifier._noMoreProcess = widget.noMoreLoad;
     }
   }
 

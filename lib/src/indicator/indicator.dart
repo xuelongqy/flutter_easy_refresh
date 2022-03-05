@@ -28,17 +28,24 @@ enum IndicatorMode {
   /// Set the ending animation, which will be done after this state.
   processed,
 
-  /// No need to perform tasks anymore.
-  /// For example no more data.
-  needless,
-
-  /// Task execution failed.
-  /// [IndicatorNotifier.onTask] throws exception or return this.
-  failed,
-
   /// The whole process is done.
   /// When finished, go back to [inactive]
   done,
+}
+
+/// The status returned after the task is completed.
+enum IndicatorResult {
+  /// No state until the task is not triggered.
+  none,
+
+  /// Task succeeded.
+  succeeded,
+
+  /// Task failed.
+  failed,
+
+  /// No more data.
+  noMore,
 }
 
 /// The position of the indicator.
@@ -68,6 +75,9 @@ class IndicatorState {
   /// Refresh and loading state.
   final IndicatorMode mode;
 
+  /// Task completion result.
+  final IndicatorResult result;
+
   /// Overscroll offset.
   final double offset;
 
@@ -83,6 +93,7 @@ class IndicatorState {
   const IndicatorState({
     required this.indicator,
     required this.mode,
+    required this.result,
     required this.offset,
     required this.safeOffset,
     required this.axis,

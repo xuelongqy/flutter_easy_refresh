@@ -140,6 +140,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       }
       // infinite hit top over
       if (!headerNotifier.infiniteHitOver &&
+          headerNotifier._canProcess &&
           (value + headerNotifier.actualTriggerOffset) <
               position.minScrollExtent &&
           position.minScrollExtent <
@@ -176,6 +177,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       }
       // infinite hit bottom over
       if (!footerNotifier.infiniteHitOver &&
+          footerNotifier._canProcess &&
           (position.pixels - footerNotifier.actualTriggerOffset) <
               position.maxScrollExtent &&
           position.maxScrollExtent <
