@@ -66,12 +66,12 @@ class NotRefreshHeader extends Header {
     bool clamping = false,
     SpringDescription? spring,
   }) : super(
-    triggerOffset: 0,
-    clamping: clamping,
-    position: IndicatorPosition.custom,
-    spring: spring,
-    processedDuration: const Duration(seconds: 0),
-  );
+          triggerOffset: 0,
+          clamping: clamping,
+          position: IndicatorPosition.custom,
+          spring: spring,
+          processedDuration: const Duration(seconds: 0),
+        );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
