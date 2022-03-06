@@ -93,10 +93,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   double get overExtent {
     if (_task == null ||
         !_canProcess ||
-        (_noMoreLocked && infiniteOffset == null)) {
+        (noMoreLocked && infiniteOffset == null)) {
       return 0;
     }
-    if (infiniteOffset != null || _mode == IndicatorMode.ready || modeLocked) {
+    if (infiniteOffset != null ||
+        _mode == IndicatorMode.ready ||
+        modeLocked ||
+        noMoreLocked) {
       return actualTriggerOffset;
     }
     return 0;
@@ -104,9 +107,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Is the state locked.
   bool get modeLocked =>
-      _mode == IndicatorMode.processing ||
-      _mode == IndicatorMode.processed ||
-      _noMoreLocked;
+      _mode == IndicatorMode.processing || _mode == IndicatorMode.processed;
 
   /// Spring description.
   SpringDescription? get _spring => _indicator.spring;
@@ -131,7 +132,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   bool _noMoreProcess;
 
   /// State lock when no more.
-  bool get _noMoreLocked =>
+  bool get noMoreLocked =>
       !_noMoreProcess &&
       _result == IndicatorResult.noMore &&
       _mode == IndicatorMode.inactive;
@@ -275,7 +276,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       }
     }
     // Not updated during task execution and task completion.
-    if (!modeLocked) {
+    if (!(modeLocked || noMoreLocked)) {
       // In the non-executable task state.
       if (!_canProcess) {
         _mode = IndicatorMode.inactive;
