@@ -195,8 +195,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
   // Update indicator offset
   void _updateIndicatorOffset(ScrollMetrics position, double value) {
-    headerNotifier._updateOffset(position, value, false);
-    footerNotifier._updateOffset(position, value, false);
+    final hClamping = headerNotifier.clamping && headerNotifier.offset > 0;
+    final fClamping = footerNotifier.clamping && footerNotifier.offset > 0;
+    headerNotifier._updateOffset(position, fClamping ? 0 : value, false);
+    footerNotifier._updateOffset(position, hClamping ? 0 : value, false);
   }
 
   @override
