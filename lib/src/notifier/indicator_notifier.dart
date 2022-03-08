@@ -15,7 +15,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Tasks that need to be executed when triggered.
   /// Can return [IndicatorResult] to set the completion result.
-  final FutureOr Function()? _task;
+  FutureOr Function()? _task;
 
   IndicatorNotifier({
     required Indicator indicator,
@@ -152,6 +152,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     _onCanProcess = null;
     _clampingAnimationController?.dispose();
     userOffsetNotifier.removeListener(_onUserOffset);
+    _task = null;
   }
 
   /// Initialize the [clamping] animation controller
@@ -193,9 +194,25 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   void _update({
     Indicator? indicator,
     bool? noMoreProcess,
+    FutureOr Function()? task,
   }) {
     _indicator = indicator ?? _indicator;
     _noMoreProcess = noMoreProcess ?? _noMoreProcess;
+    _task = task;
+    if (_indicator.clamping && _clampingAnimationController == null) {
+      _initClampingAnimation();
+    } else if (!_indicator.clamping && _clampingAnimationController != null) {
+      _clampingAnimationController?.stop();
+      _clampingAnimationController?.dispose();
+      _clampingAnimationController = null;
+    }
+  }
+
+  /// Reset partial state, e.g. no more.
+  void _reset() {
+    if (_result == IndicatorResult.noMore) {
+      _result = IndicatorResult.none;
+    }
   }
 
   /// Update by [ScrollPhysics.createBallisticSimulation].

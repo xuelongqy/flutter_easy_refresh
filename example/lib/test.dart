@@ -40,7 +40,7 @@ class _TestPageState extends State<TestPage> {
             _count = 5;
           });
           print('Refreshed');
-          return IndicatorResult.noMore;
+          return IndicatorResult.succeeded;
         },
         onLoad: () async {
           print('Loading');

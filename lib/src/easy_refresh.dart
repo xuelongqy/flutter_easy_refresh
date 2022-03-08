@@ -91,6 +91,9 @@ class EasyRefresh extends StatefulWidget {
   /// Is it loadable after no more.
   final bool noMoreLoad;
 
+  /// Reset after refresh when no more deactivation is loaded.
+  final bool resetAfterRefresh;
+
   /// Default header indicator.
   static Header defaultHeader = BuilderHeader(
     triggerOffset: 70,
@@ -148,6 +151,7 @@ class EasyRefresh extends StatefulWidget {
     this.simultaneously = false,
     this.noMoreRefresh = false,
     this.noMoreLoad = false,
+    this.resetAfterRefresh = true,
   })  : childBuilder = null,
         super(key: key);
 
@@ -165,6 +169,7 @@ class EasyRefresh extends StatefulWidget {
     this.simultaneously = false,
     this.noMoreRefresh = false,
     this.noMoreLoad = false,
+    this.resetAfterRefresh = true,
   })  : child = null,
         super(key: key);
 
@@ -250,20 +255,16 @@ class _EasyRefreshState extends State<EasyRefresh>
   void didUpdateWidget(covariant EasyRefresh oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Update header and footer.
-    if (oldWidget.header != widget.header ||
-        oldWidget.noMoreRefresh != widget.noMoreRefresh) {
-      _headerNotifier._update(
-        indicator: _header,
-        noMoreProcess: widget.noMoreRefresh,
-      );
-    }
-    if (oldWidget.footer != widget.footer ||
-        oldWidget.noMoreLoad != widget.noMoreLoad) {
-      _footerNotifier._update(
-        indicator: _footer,
-        noMoreProcess: widget.noMoreLoad,
-      );
-    }
+    _headerNotifier._update(
+      indicator: _header,
+      noMoreProcess: widget.noMoreRefresh,
+      task: _onRefresh,
+    );
+    _footerNotifier._update(
+      indicator: _footer,
+      noMoreProcess: widget.noMoreLoad,
+      task: widget.onLoad,
+    );
   }
 
   @override
@@ -283,7 +284,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         header: _header,
         userOffsetNotifier: userOffsetNotifier,
         vsync: this,
-        onRefresh: widget.onRefresh,
+        onRefresh: _onRefresh,
         noMoreRefresh: widget.noMoreRefresh,
         onCanRefresh: () {
           if (widget.simultaneously) {
@@ -315,6 +316,23 @@ class _EasyRefreshState extends State<EasyRefresh>
       spring: widget.spring,
       frictionFactor: widget.frictionFactor,
     );
+  }
+
+  /// Refresh callback.
+  /// Handle [EasyRefresh.resetAfterRefresh].
+  FutureOr Function()? get _onRefresh {
+    if (widget.onRefresh == null) {
+      return null;
+    }
+    if (widget.resetAfterRefresh) {
+      return () async {
+        final res = await Future.sync(widget.onRefresh!);
+        _footerNotifier._reset();
+        return res;
+      };
+    } else {
+      return widget.onRefresh;
+    }
   }
 
   /// Build Header widget.
@@ -472,6 +490,7 @@ class _EasyRefreshState extends State<EasyRefresh>
       children.add(_buildFooterView());
     }
     if (children.length == 1) {
+      children.clear();
       return contentWidget;
     }
     return Stack(
