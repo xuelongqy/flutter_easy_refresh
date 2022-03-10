@@ -14,7 +14,7 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   final scrollDirection = Axis.vertical;
 
-  int _count = 5;
+  int _count = 0;
 
   @override
   void initState() {
@@ -33,6 +33,7 @@ class _TestPageState extends State<TestPage> {
       body: EasyRefresh(
         noMoreRefresh: false,
         noMoreLoad: false,
+        refreshOnStart: true,
         onRefresh: () async {
           print('Refreshing');
           await Future.delayed(const Duration(seconds: 2));

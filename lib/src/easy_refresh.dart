@@ -94,6 +94,14 @@ class EasyRefresh extends StatefulWidget {
   /// Reset after refresh when no more deactivation is loaded.
   final bool resetAfterRefresh;
 
+  /// Refresh on start.
+  /// When the EasyRefresh build is complete, trigger the refresh.
+  final bool refreshOnStart;
+
+  /// Offset beyond trigger offset when calling refresh.
+  /// Used when refreshOnStart is true and [EasyRefreshController.callRefresh].
+  final double callOverOffset;
+
   /// Default header indicator.
   static Header defaultHeader = BuilderHeader(
     triggerOffset: 70,
@@ -152,7 +160,10 @@ class EasyRefresh extends StatefulWidget {
     this.noMoreRefresh = false,
     this.noMoreLoad = false,
     this.resetAfterRefresh = true,
+    this.refreshOnStart = false,
+    this.callOverOffset = 20,
   })  : childBuilder = null,
+        assert(callOverOffset > 0, 'callOverOffset must be greater than 0.'),
         super(key: key);
 
   const EasyRefresh.builder({
@@ -170,7 +181,10 @@ class EasyRefresh extends StatefulWidget {
     this.noMoreRefresh = false,
     this.noMoreLoad = false,
     this.resetAfterRefresh = true,
+    this.refreshOnStart = false,
+    this.callOverOffset = 20,
   })  : child = null,
+        assert(callOverOffset > 0, 'callOverOffset must be greater than 0.'),
         super(key: key);
 
   @override
@@ -243,12 +257,12 @@ class _EasyRefreshState extends State<EasyRefresh>
   void initState() {
     super.initState();
     _initData();
-    // Future(() {
-    //   print(PrimaryScrollController.of(context)!.position.extentInside);
-    //   // PrimaryScrollController.of(context)!.addListener(() {
-    //   //   print(PrimaryScrollController.of(context)!.position.pixels);
-    //   // });
-    // });
+    // Refresh on start.
+    if (widget.refreshOnStart) {
+      Future(() {
+        _callRefresh(widget.callOverOffset);
+      });
+    }
   }
 
   @override
@@ -332,6 +346,36 @@ class _EasyRefreshState extends State<EasyRefresh>
       };
     } else {
       return widget.onRefresh;
+    }
+  }
+
+  /// Automatically trigger refresh.
+  /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
+  void _callRefresh([double overOffset = 20]) {
+    if (_header.clamping) {
+      _headerNotifier._offset =
+          _headerNotifier.actualTriggerOffset + overOffset;
+      _headerNotifier._mode = IndicatorMode.ready;
+      _headerNotifier._updateBySimulation(_headerNotifier._position, 0);
+    } else {
+      PrimaryScrollController.of(context)
+          ?.jumpTo(-_headerNotifier.actualTriggerOffset - overOffset);
+    }
+  }
+
+  /// Automatically trigger load.
+  /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
+  void _callLoad([double overOffset = 20]) {
+    if (_footer.clamping) {
+      _footerNotifier._offset =
+          _headerNotifier.actualTriggerOffset + overOffset;
+      _footerNotifier._mode = IndicatorMode.ready;
+      _footerNotifier._updateBySimulation(_headerNotifier._position, 0);
+    } else {
+      PrimaryScrollController.of(context)?.jumpTo(
+          _footerNotifier._position.maxScrollExtent +
+              _headerNotifier.actualTriggerOffset +
+              overOffset);
     }
   }
 
