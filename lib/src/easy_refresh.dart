@@ -44,6 +44,12 @@ class EasyRefresh extends StatefulWidget {
   /// Otherwise use [EasyRefresh.builder].
   final Widget? child;
 
+  /// EasyRefresh controller.
+  final EasyRefreshController? controller;
+
+  /// The controller of the target Scrollable.
+  final ScrollController? scrollController;
+
   /// Header indicator.
   final Header? header;
 
@@ -100,7 +106,11 @@ class EasyRefresh extends StatefulWidget {
 
   /// Offset beyond trigger offset when calling refresh.
   /// Used when refreshOnStart is true and [EasyRefreshController.callRefresh].
-  final double callOverOffset;
+  final double callRefreshOverOffset;
+
+  /// Offset beyond trigger offset when calling load.
+  /// Used when [EasyRefreshController.callLoad].
+  final double callLoadOverOffset;
 
   /// Default header indicator.
   static Header defaultHeader = BuilderHeader(
@@ -148,6 +158,8 @@ class EasyRefresh extends StatefulWidget {
   const EasyRefresh({
     Key? key,
     required this.child,
+    this.controller,
+    this.scrollController,
     this.header,
     this.footer,
     this.onRefresh,
@@ -161,14 +173,20 @@ class EasyRefresh extends StatefulWidget {
     this.noMoreLoad = false,
     this.resetAfterRefresh = true,
     this.refreshOnStart = false,
-    this.callOverOffset = 20,
+    this.callRefreshOverOffset = 20,
+    this.callLoadOverOffset = 20,
   })  : childBuilder = null,
-        assert(callOverOffset > 0, 'callOverOffset must be greater than 0.'),
+        assert(callRefreshOverOffset > 0,
+            'callRefreshOverOffset must be greater than 0.'),
+        assert(callLoadOverOffset > 0,
+            'callLoadOverOffset must be greater than 0.'),
         super(key: key);
 
   const EasyRefresh.builder({
     Key? key,
     required this.childBuilder,
+    this.controller,
+    this.scrollController,
     this.header,
     this.footer,
     this.onRefresh,
@@ -182,9 +200,13 @@ class EasyRefresh extends StatefulWidget {
     this.noMoreLoad = false,
     this.resetAfterRefresh = true,
     this.refreshOnStart = false,
-    this.callOverOffset = 20,
+    this.callRefreshOverOffset = 20,
+    this.callLoadOverOffset = 20,
   })  : child = null,
-        assert(callOverOffset > 0, 'callOverOffset must be greater than 0.'),
+        assert(callRefreshOverOffset > 0,
+            'callRefreshOverOffset must be greater than 0.'),
+        assert(callLoadOverOffset > 0,
+            'callLoadOverOffset must be greater than 0.'),
         super(key: key);
 
   @override
@@ -253,14 +275,19 @@ class _EasyRefreshState extends State<EasyRefresh>
     }
   }
 
+  /// Scrollable controller.
+  ScrollController? get scrollController =>
+      widget.scrollController ?? PrimaryScrollController.of(context);
+
   @override
   void initState() {
     super.initState();
     _initData();
+    widget.controller?._bind(this);
     // Refresh on start.
     if (widget.refreshOnStart) {
       Future(() {
-        _callRefresh(widget.callOverOffset);
+        _callRefresh(widget.callRefreshOverOffset);
       });
     }
   }
@@ -279,6 +306,11 @@ class _EasyRefreshState extends State<EasyRefresh>
       noMoreProcess: widget.noMoreLoad,
       task: widget.onLoad,
     );
+    // Update controller.
+    if (widget.controller != null &&
+        oldWidget.controller != widget.controller) {
+      widget.controller?._bind(this);
+    }
   }
 
   @override
@@ -351,31 +383,32 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   /// Automatically trigger refresh.
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
-  void _callRefresh([double overOffset = 20]) {
+  void _callRefresh([double? overOffset]) {
+    final mOverOffset = overOffset ?? widget.callRefreshOverOffset;
     if (_header.clamping) {
       _headerNotifier._offset =
-          _headerNotifier.actualTriggerOffset + overOffset;
+          _headerNotifier.actualTriggerOffset + mOverOffset;
       _headerNotifier._mode = IndicatorMode.ready;
       _headerNotifier._updateBySimulation(_headerNotifier._position, 0);
     } else {
-      PrimaryScrollController.of(context)
-          ?.jumpTo(-_headerNotifier.actualTriggerOffset - overOffset);
+      scrollController
+          ?.jumpTo(-_headerNotifier.actualTriggerOffset - mOverOffset);
     }
   }
 
   /// Automatically trigger load.
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
-  void _callLoad([double overOffset = 20]) {
+  void _callLoad([double? overOffset]) {
+    final mOverOffset = overOffset ?? widget.callLoadOverOffset;
     if (_footer.clamping) {
       _footerNotifier._offset =
-          _headerNotifier.actualTriggerOffset + overOffset;
+          _headerNotifier.actualTriggerOffset + mOverOffset;
       _footerNotifier._mode = IndicatorMode.ready;
       _footerNotifier._updateBySimulation(_headerNotifier._position, 0);
     } else {
-      PrimaryScrollController.of(context)?.jumpTo(
-          _footerNotifier._position.maxScrollExtent +
-              _headerNotifier.actualTriggerOffset +
-              overOffset);
+      scrollController?.jumpTo(_footerNotifier._position.maxScrollExtent +
+          _headerNotifier.actualTriggerOffset +
+          mOverOffset);
     }
   }
 

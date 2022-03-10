@@ -18,3 +18,4 @@ part 'src/indicator/header/header.dart';
 part 'src/indicator/header/header_locator.dart';
 part 'src/indicator/footer/footer.dart';
 part 'src/indicator/footer/footer_locator.dart';
+part 'src/controller/controller.dart';
