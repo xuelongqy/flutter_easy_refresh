@@ -34,6 +34,23 @@ class _TestPageState extends State<TestPage> {
         noMoreRefresh: false,
         noMoreLoad: false,
         refreshOnStart: true,
+        refreshOnStartHeader: BuilderHeader(
+            triggerOffset: 70,
+            clamping: false,
+            position: IndicatorPosition.locator,
+            processedDuration: Duration.zero,
+            builder: (ctx, state) {
+              if (state.mode == IndicatorMode.inactive) {
+                return const SizedBox();
+              }
+              return Container(
+                width: double.infinity,
+                height: state.viewportDimension,
+                color: Colors.blue,
+                alignment: Alignment.center,
+                child: const Text('Refresh on start'),
+              );
+            }),
         onRefresh: () async {
           print('Refreshing');
           await Future.delayed(const Duration(seconds: 2));

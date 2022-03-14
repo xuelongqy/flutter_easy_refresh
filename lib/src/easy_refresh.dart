@@ -104,6 +104,10 @@ class EasyRefresh extends StatefulWidget {
   /// When the EasyRefresh build is complete, trigger the refresh.
   final bool refreshOnStart;
 
+  /// Header for refresh on start.
+  /// Use [header] when null.
+  final BuilderHeader? refreshOnStartHeader;
+
   /// Offset beyond trigger offset when calling refresh.
   /// Used when refreshOnStart is true and [EasyRefreshController.callRefresh].
   final double callRefreshOverOffset;
@@ -173,6 +177,7 @@ class EasyRefresh extends StatefulWidget {
     this.noMoreLoad = false,
     this.resetAfterRefresh = true,
     this.refreshOnStart = false,
+    this.refreshOnStartHeader,
     this.callRefreshOverOffset = 20,
     this.callLoadOverOffset = 20,
   })  : childBuilder = null,
@@ -200,6 +205,7 @@ class EasyRefresh extends StatefulWidget {
     this.noMoreLoad = false,
     this.resetAfterRefresh = true,
     this.refreshOnStart = false,
+    this.refreshOnStartHeader,
     this.callRefreshOverOffset = 20,
     this.callLoadOverOffset = 20,
   })  : child = null,
@@ -239,6 +245,9 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// Footer indicator notifier.
   FooterNotifier get _footerNotifier => _data.footerNotifier;
 
+  /// Whether the current is refresh on start.
+  bool _isRefreshOnStart = false;
+
   /// Use [EasyRefresh.defaultHeader] without [EasyRefresh.header].
   /// Use [NotRefreshHeader] when [EasyRefresh.onRefresh] is null.
   Header get _header {
@@ -253,7 +262,11 @@ class _EasyRefreshState extends State<EasyRefresh>
         );
       }
     } else {
-      return widget.header ?? EasyRefresh.defaultHeader;
+      Header h = widget.header ?? EasyRefresh.defaultHeader;
+      if (_isRefreshOnStart) {
+        h = widget.refreshOnStartHeader ?? h;
+      }
+      return h;
     }
   }
 
@@ -282,14 +295,15 @@ class _EasyRefreshState extends State<EasyRefresh>
   @override
   void initState() {
     super.initState();
-    _initData();
-    widget.controller?._bind(this);
     // Refresh on start.
-    if (widget.refreshOnStart) {
+    if (widget.refreshOnStart && widget.onRefresh != null) {
+      _isRefreshOnStart = true;
       Future(() {
         _callRefresh(widget.callRefreshOverOffset);
       });
     }
+    _initData();
+    widget.controller?._bind(this);
   }
 
   @override
@@ -364,21 +378,37 @@ class _EasyRefreshState extends State<EasyRefresh>
     );
   }
 
+  /// Refresh on start listener.
+  /// From [IndicatorMode.processing] to [IndicatorMode.inactive].
+  /// When back to inactive, end listening.
+  void _refreshOnStartListener() {
+    if (_headerNotifier._mode == IndicatorMode.inactive) {
+      _isRefreshOnStart = false;
+      _headerNotifier.removeListener(_refreshOnStartListener);
+      _headerNotifier._update(
+        indicator: _header,
+      );
+    }
+  }
+
   /// Refresh callback.
   /// Handle [EasyRefresh.resetAfterRefresh].
   FutureOr Function()? get _onRefresh {
     if (widget.onRefresh == null) {
       return null;
     }
-    if (widget.resetAfterRefresh) {
-      return () async {
-        final res = await Future.sync(widget.onRefresh!);
+    return () async {
+      // Start listening on refresh.
+      if (_isRefreshOnStart) {
+        _headerNotifier.addListener(_refreshOnStartListener);
+      }
+      final res = await Future.sync(widget.onRefresh!);
+      // Reset Footer state.
+      if (widget.resetAfterRefresh) {
         _footerNotifier._reset();
-        return res;
-      };
-    } else {
-      return widget.onRefresh;
-    }
+      }
+      return res;
+    };
   }
 
   /// Automatically trigger refresh.
