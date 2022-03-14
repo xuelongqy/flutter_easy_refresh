@@ -84,11 +84,15 @@ class IndicatorState {
   /// Safe area offset.
   final double safeOffset;
 
-  /// [Scrollable] axis
+  /// [Scrollable] axis.
   final Axis axis;
 
-  /// [Scrollable] axis direction
+  /// [Scrollable] axis direction.
   final AxisDirection axisDirection;
+
+  /// [Scrollable] viewport dimension.
+  /// It's helpful for full screen indicator and second floor views.
+  final double viewportDimension;
 
   const IndicatorState({
     required this.indicator,
@@ -98,6 +102,7 @@ class IndicatorState {
     required this.safeOffset,
     required this.axis,
     required this.axisDirection,
+    required this.viewportDimension,
   });
 }
 

@@ -421,6 +421,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         safeOffset: safeOffset,
         axis: _axis!,
         axisDirection: _axisDirection!,
+        viewportDimension: _position.viewportDimension,
       ),
     );
   }
