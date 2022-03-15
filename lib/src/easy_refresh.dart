@@ -387,6 +387,7 @@ class _EasyRefreshState extends State<EasyRefresh>
       _headerNotifier.removeListener(_refreshOnStartListener);
       _headerNotifier._update(
         indicator: _header,
+        task: _onRefresh,
       );
     }
   }
