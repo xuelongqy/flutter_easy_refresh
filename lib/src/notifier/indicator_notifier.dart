@@ -17,16 +17,21 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Can return [IndicatorResult] to set the completion result.
   FutureOr Function()? _task;
 
+  /// Wait for the task to complete.
+  bool _waitTaskResult;
+
   IndicatorNotifier({
     required Indicator indicator,
     required this.vsync,
     required this.userOffsetNotifier,
     required CanProcessCallBack onCanProcess,
     required bool noMoreProcess,
+    bool waitTaskResult = true,
     FutureOr Function()? task,
   })  : _indicator = indicator,
         _onCanProcess = onCanProcess,
         _noMoreProcess = noMoreProcess,
+        _waitTaskResult = waitTaskResult,
         _task = task {
     _initClampingAnimation();
     userOffsetNotifier.addListener(_onUserOffset);
@@ -195,10 +200,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     Indicator? indicator,
     bool? noMoreProcess,
     FutureOr Function()? task,
+    bool? waitTaskRefresh,
   }) {
     _indicator = indicator ?? _indicator;
     _noMoreProcess = noMoreProcess ?? _noMoreProcess;
     _task = task;
+    _waitTaskResult = waitTaskRefresh ?? _waitTaskResult;
     if (_indicator.clamping && _clampingAnimationController == null) {
       _initClampingAnimation();
     } else if (!_indicator.clamping && _clampingAnimationController != null) {
@@ -343,17 +350,31 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       return;
     }
     _processing = true;
-    try {
-      final res = await Future.sync(_task!);
-      if (res is IndicatorResult) {
-        _result = res;
-      } else {
-        _result = IndicatorResult.succeeded;
+    if (_waitTaskResult) {
+      try {
+        final res = await Future.sync(_task!);
+        if (res is IndicatorResult) {
+          _result = res;
+        } else {
+          _result = IndicatorResult.succeeded;
+        }
+      } catch (_) {
+        _result = IndicatorResult.failed;
+        rethrow;
+      } finally {
+        _setMode(IndicatorMode.processed);
+        _processing = false;
       }
-    } catch (_) {
-      _result = IndicatorResult.failed;
-      rethrow;
-    } finally {
+    } else {
+      _task!.call();
+    }
+  }
+
+  /// Finish task and return the result.
+  /// [result] Result of task completion.
+  void _finishTask([IndicatorResult result = IndicatorResult.succeeded]) {
+    if (!_waitTaskResult) {
+      _result = result;
       _setMode(IndicatorMode.processed);
       _processing = false;
     }
@@ -476,6 +497,7 @@ class HeaderNotifier extends IndicatorNotifier {
     required CanProcessCallBack onCanRefresh,
     bool noMoreRefresh = false,
     FutureOr Function()? onRefresh,
+    bool waitRefreshResult = true,
   }) : super(
           indicator: header,
           userOffsetNotifier: userOffsetNotifier,
@@ -483,6 +505,7 @@ class HeaderNotifier extends IndicatorNotifier {
           onCanProcess: onCanRefresh,
           noMoreProcess: noMoreRefresh,
           task: onRefresh,
+          waitTaskResult: waitRefreshResult,
         );
 
   @override
@@ -550,6 +573,7 @@ class FooterNotifier extends IndicatorNotifier {
     required CanProcessCallBack onCanLoad,
     bool noMoreLoad = false,
     FutureOr Function()? onLoad,
+    bool waitLoadResult = true,
   }) : super(
           indicator: footer,
           userOffsetNotifier: userOffsetNotifier,
@@ -557,6 +581,7 @@ class FooterNotifier extends IndicatorNotifier {
           onCanProcess: onCanLoad,
           noMoreProcess: noMoreLoad,
           task: onLoad,
+          waitTaskResult: waitLoadResult,
         );
 
   @override

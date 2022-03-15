@@ -12,9 +12,13 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
-  final scrollDirection = Axis.vertical;
+  final _scrollDirection = Axis.vertical;
 
   int _count = 0;
+
+  final _controller = EasyRefreshController(
+    controlFinishRefresh: true,
+  );
 
   @override
   void initState() {
@@ -34,6 +38,7 @@ class _TestPageState extends State<TestPage> {
         noMoreRefresh: false,
         noMoreLoad: false,
         refreshOnStart: true,
+        controller: _controller,
         refreshOnStartHeader: BuilderHeader(
             triggerOffset: 70,
             clamping: false,
@@ -58,6 +63,7 @@ class _TestPageState extends State<TestPage> {
             _count = 5;
           });
           print('Refreshed');
+          _controller.finishRefresh(IndicatorResult.succeeded);
           return IndicatorResult.succeeded;
         },
         onLoad: () async {
@@ -94,7 +100,7 @@ class _TestPageState extends State<TestPage> {
         //   ],
         // ),
         child: CustomScrollView(
-          scrollDirection: scrollDirection,
+          scrollDirection: _scrollDirection,
           reverse: false,
           slivers: [
             const HeaderLocator.sliver(),
@@ -102,8 +108,8 @@ class _TestPageState extends State<TestPage> {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   return SampleListItem(
-                    direction: scrollDirection,
-                    width: scrollDirection == Axis.vertical
+                    direction: _scrollDirection,
+                    width: _scrollDirection == Axis.vertical
                         ? double.infinity
                         : 200,
                   );

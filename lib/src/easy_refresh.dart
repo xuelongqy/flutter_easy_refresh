@@ -248,6 +248,13 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// Whether the current is refresh on start.
   bool _isRefreshOnStart = false;
 
+  /// Indicator waiting for refresh task to complete.
+  bool get _waitRefreshResult =>
+      !(widget.controller?.controlFinishRefresh ?? false);
+
+  /// Indicator waiting for load task to complete.
+  bool get _waitLoadResult => !(widget.controller?.controlFinishLoad ?? false);
+
   /// Use [EasyRefresh.defaultHeader] without [EasyRefresh.header].
   /// Use [NotRefreshHeader] when [EasyRefresh.onRefresh] is null.
   Header get _header {
@@ -314,11 +321,13 @@ class _EasyRefreshState extends State<EasyRefresh>
       indicator: _header,
       noMoreProcess: widget.noMoreRefresh,
       task: _onRefresh,
+      waitTaskRefresh: _waitRefreshResult,
     );
     _footerNotifier._update(
       indicator: _footer,
       noMoreProcess: widget.noMoreLoad,
       task: widget.onLoad,
+      waitTaskRefresh: _waitLoadResult,
     );
     // Update controller.
     if (widget.controller != null &&
@@ -346,6 +355,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         vsync: this,
         onRefresh: _onRefresh,
         noMoreRefresh: widget.noMoreRefresh,
+        waitRefreshResult: _waitRefreshResult,
         onCanRefresh: () {
           if (widget.simultaneously) {
             return true;
@@ -360,6 +370,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         vsync: this,
         onLoad: widget.onLoad,
         noMoreLoad: widget.noMoreLoad,
+        waitLoadResult: _waitLoadResult,
         onCanLoad: () {
           if (widget.simultaneously) {
             return true;
