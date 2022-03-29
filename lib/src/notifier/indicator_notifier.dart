@@ -53,6 +53,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   IndicatorPosition get iPosition => _indicator.position;
 
+  double? get secondaryTriggerOffset => _indicator.secondaryTriggerOffset;
+
+  bool get hapticFeedback => _indicator.hapticFeedback;
+
   /// [Scrollable] axis and direction
   Axis? _axis;
 
@@ -277,6 +281,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     // Need notify
     if (oldOffset == _offset && oldMode == _mode) {
       return;
+    }
+    // Haptic feedback
+    if (hapticFeedback &&
+        _mode == IndicatorMode.armed &&
+        oldMode != IndicatorMode.armed &&
+        userOffsetNotifier.value) {
+      HapticFeedback.mediumImpact();
     }
     // Avoid setState() during drawing
     if (bySimulation) {

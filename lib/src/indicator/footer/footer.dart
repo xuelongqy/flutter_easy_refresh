@@ -12,6 +12,8 @@ abstract class Footer extends Indicator {
     bool? hitOver,
     bool? infiniteHitOver,
     IndicatorPosition position = IndicatorPosition.above,
+    double? secondaryTriggerOffset,
+    bool hapticFeedback = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -22,6 +24,8 @@ abstract class Footer extends Indicator {
           hitOver: hitOver,
           infiniteHitOver: infiniteHitOver,
           position: position,
+          secondaryTriggerOffset: secondaryTriggerOffset,
+          hapticFeedback: hapticFeedback,
         );
 }
 
@@ -41,6 +45,7 @@ class BuilderFooter extends Footer {
     bool? hitOver,
     bool? infiniteHitOver,
     IndicatorPosition position = IndicatorPosition.above,
+    bool hapticFeedback = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -51,6 +56,7 @@ class BuilderFooter extends Footer {
           hitOver: hitOver,
           infiniteHitOver: infiniteHitOver,
           position: position,
+          hapticFeedback: hapticFeedback,
         );
 
   @override

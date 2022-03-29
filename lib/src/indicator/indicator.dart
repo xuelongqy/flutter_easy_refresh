@@ -148,6 +148,14 @@ abstract class Indicator {
   /// The position of the indicator.
   final IndicatorPosition position;
 
+  /// Trigger offset for secondary.
+  /// The indicator will expand and fill the scrollview area.
+  /// Will not trigger when null.
+  final double? secondaryTriggerOffset;
+
+  /// Whether to enable haptic feedback.
+  final bool hapticFeedback;
+
   const Indicator({
     required this.triggerOffset,
     required this.clamping,
@@ -158,6 +166,8 @@ abstract class Indicator {
     bool? hitOver,
     bool? infiniteHitOver,
     this.position = IndicatorPosition.above,
+    this.secondaryTriggerOffset,
+    this.hapticFeedback = false,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,
