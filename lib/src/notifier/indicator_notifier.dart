@@ -1,5 +1,8 @@
 part of easyrefresh;
 
+/// Indicator widget builder.
+typedef CanProcessCallBack = bool Function();
+
 /// Indicator data and trigger notification.
 abstract class IndicatorNotifier extends ChangeNotifier {
   /// Refresh and loading Indicator.
@@ -57,6 +60,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   bool get hapticFeedback => _indicator.hapticFeedback;
 
+  bool get hasSecondary => secondaryTriggerOffset != null;
+
   /// [Scrollable] axis and direction
   Axis? _axis;
 
@@ -98,18 +103,33 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// [triggerOffset] + [safeOffset]
   double get actualTriggerOffset => triggerOffset + safeOffset;
 
+  /// Actual secondary trigger offset.
+  /// [secondaryTriggerOffset] + [safeOffset]
+  double get actualSecondaryTriggerOffset =>
+      secondaryTriggerOffset! + safeOffset;
+
   /// Keep the extent of the [Scrollable] out of bounds.
   double get overExtent {
+    // State that doesn't change.
     if (_task == null ||
         !_canProcess ||
         (noMoreLocked && infiniteOffset == null)) {
       return 0;
     }
+    // State that triggers the task.
     if (infiniteOffset != null ||
         _mode == IndicatorMode.ready ||
         modeLocked ||
         noMoreLocked) {
       return actualTriggerOffset;
+    }
+    // State that triggers the secondary.
+    if (_mode == IndicatorMode.secondaryArmed && userOffsetNotifier.value) {
+      return offset;
+    }
+    if (_mode == IndicatorMode.secondaryReady ||
+        _mode == IndicatorMode.secondaryOpen) {
+      return _position.viewportDimension;
     }
     return 0;
   }
@@ -117,6 +137,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Is the state locked.
   bool get modeLocked =>
       _mode == IndicatorMode.processing || _mode == IndicatorMode.processed;
+
+  /// State lock when secondary.
+  bool get modeSecondaryLocked => _mode == IndicatorMode.secondaryOpen;
 
   /// Spring description.
   SpringDescription? get _spring => _indicator.spring;
@@ -155,6 +178,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Infinite scroll exclusions.
   bool _infiniteExclude(ScrollMetrics position, double value);
 
+  /// Open the secondary page.
+  // void _openSecondary();
+
+  /// Automatically trigger task.
+  void callTask(double overOffset);
+
   @override
   void dispose() {
     super.dispose();
@@ -177,10 +206,21 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Listen for user events
   void _onUserOffset() {
     if (userOffsetNotifier.value) {
-      // clamping
+      // Clamping
       // Cancel animation, update offset
       if (clamping && _clampingAnimationController!.isAnimating) {
         _clampingAnimationController!.stop(canceled: true);
+      }
+    } else {
+      // Secondary
+      if (hasSecondary && _mode == IndicatorMode.secondaryArmed) {
+        _mode = IndicatorMode.secondaryReady;
+        Future.delayed(const Duration(milliseconds: 50), () {
+          (_position as ScrollPosition).animateTo(-_position.viewportDimension,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.bounceIn);
+        });
+        notifyListeners();
       }
     }
   }
@@ -247,12 +287,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Update [Scrollable] offset
   void _updateOffset(ScrollMetrics position, double value, bool bySimulation) {
-    // clamping
+    // Clamping
     // In task processing, do nothing.
     if (clamping && modeLocked) {
       return;
     }
-    // clamping
+    // Clamping
     // In the case of release, and offset is greater than 0, it is controlled by animation.
     if (!userOffsetNotifier.value && clamping && _offset > 0 && !bySimulation) {
       return;
@@ -342,11 +382,19 @@ abstract class IndicatorNotifier extends ChangeNotifier {
             ? IndicatorMode.armed
             : IndicatorMode.processing;
       } else if (_offset > actualTriggerOffset) {
-        // If the user is scrolling
-        // (the task is not executed if it is not released)
-        _mode = userOffsetNotifier.value
-            ? IndicatorMode.armed
-            : IndicatorMode.ready;
+        if (hasSecondary && _offset > actualSecondaryTriggerOffset) {
+          // Secondary
+          _mode = userOffsetNotifier.value
+              ? IndicatorMode.secondaryArmed
+              : IndicatorMode.secondaryReady;
+        } else {
+          // Process
+          // If the user is scrolling
+          // (the task is not executed if it is not released)
+          _mode = userOffsetNotifier.value
+              ? IndicatorMode.armed
+              : IndicatorMode.ready;
+        }
       }
       // Execute the task.
       if (_mode == IndicatorMode.processing) {
@@ -569,10 +617,20 @@ class HeaderNotifier extends IndicatorNotifier {
   bool _infiniteExclude(ScrollMetrics position, double value) {
     return value >= position.maxScrollExtent;
   }
-}
 
-/// Indicator widget builder.
-typedef CanProcessCallBack = bool Function();
+  @override
+  void callTask(double overOffset) {
+    if (clamping) {
+      _offset = actualTriggerOffset + overOffset;
+      _mode = IndicatorMode.ready;
+      _updateBySimulation(_position, 0);
+    } else {
+      if (_position is ScrollPosition) {
+        (_position as ScrollPosition).jumpTo(-actualTriggerOffset - overOffset);
+      }
+    }
+  }
+}
 
 /// [Footer] notifier
 /// [Footer] status and Notifications
@@ -647,5 +705,19 @@ class FooterNotifier extends IndicatorNotifier {
   @override
   bool _infiniteExclude(ScrollMetrics position, double value) {
     return value <= position.minScrollExtent;
+  }
+
+  @override
+  void callTask(double overOffset) {
+    if (clamping) {
+      _offset = actualTriggerOffset + overOffset;
+      _mode = IndicatorMode.ready;
+      _updateBySimulation(_position, 0);
+    } else {
+      if (_position is ScrollPosition) {
+        (_position as ScrollPosition).jumpTo(
+            _position.maxScrollExtent + actualTriggerOffset + overOffset);
+      }
+    }
   }
 }

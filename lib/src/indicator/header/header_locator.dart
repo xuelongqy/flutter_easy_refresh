@@ -25,6 +25,7 @@ class HeaderLocator extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: headerNotifier.listenable(),
       builder: (ctx, notifier, _) {
+        print(headerNotifier._mode);
         return _HeaderLocatorRenderWidget(
           child: headerNotifier._build(context),
           isSliver: _isSliver,

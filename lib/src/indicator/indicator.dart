@@ -15,7 +15,7 @@ enum IndicatorMode {
   /// This state is released and the list triggers the task.
   armed,
 
-  /// Overscroll and about to trigger a task
+  /// Overscroll and about to trigger a task.
   /// This state indicates that the user has released.
   ready,
 
@@ -27,6 +27,20 @@ enum IndicatorMode {
   /// The task is over, but the whole process is not complete.
   /// Set the ending animation, which will be done after this state.
   processed,
+
+  /// Overscroll and reach the secondary trigger task distance.
+  /// This state is released, and open the secondary page.
+  secondaryArmed,
+
+  /// Overscroll and about to open the secondary page.
+  /// This state indicates that the user has released.
+  secondaryReady,
+
+  /// Secondary page is open.
+  secondaryOpen,
+
+  /// Secondary page is closing.
+  secondaryClosing,
 
   /// The whole process is done.
   /// When finished, go back to [inactive]
@@ -171,11 +185,17 @@ abstract class Indicator {
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,
-            'The infiniteOffset cannot be smaller than 0.'),
+            'The infiniteOffset cannot be less than 0.'),
         assert(infiniteOffset == null || !clamping,
             'Cannot scroll indefinitely when clamping.'),
         assert(!clamping || position != IndicatorPosition.locator,
-            'Cannot use locator when clamping.');
+            'Cannot use locator when clamping.'),
+        assert(
+            secondaryTriggerOffset == null ||
+                secondaryTriggerOffset > triggerOffset,
+            'The secondaryTriggerOffset cannot be less than triggerOffset.'),
+        assert(!(infiniteOffset != null && secondaryTriggerOffset != null),
+            'Infinite scroll and secondary cannot be used together.');
 
   /// Build indicator widget.
   Widget build(BuildContext context, IndicatorState state);
