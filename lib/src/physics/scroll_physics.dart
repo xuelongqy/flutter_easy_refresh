@@ -210,7 +210,13 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     headerNotifier._updateBySimulation(position, velocity);
     footerNotifier._updateBySimulation(position, velocity);
     // Create simulation.
-    if (velocity.abs() >= tolerance.velocity || position.outOfRange) {
+    bool headerSkip = !headerNotifier.modeLocked ||
+        headerNotifier.offset != headerNotifier.actualTriggerOffset;
+    bool footerSkip = !footerNotifier.modeLocked ||
+        footerNotifier.offset != footerNotifier.actualTriggerOffset;
+    if ((velocity.abs() >= tolerance.velocity || position.outOfRange) &&
+        headerSkip &&
+        footerSkip) {
       return BouncingScrollSimulation(
         spring: spring,
         position: position.pixels,

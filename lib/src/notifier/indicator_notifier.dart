@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 part of easyrefresh;
 
 /// Indicator widget builder.
@@ -447,6 +449,22 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     _clampingAnimationController!.animateWith(simulation);
   }
 
+  /// Reset ballistic.
+  /// Trigger [_ERScrollPhysics.createBallisticSimulation].
+  void _resetBallistic() {
+    ScrollActivityDelegate? delegate;
+    double velocity = 0;
+    if (_position is ScrollPosition) {
+      // ignore: invalid_use_of_protected_member
+      final activity = (_position as ScrollPosition).activity;
+      delegate = activity?.delegate;
+      velocity = activity?.velocity ?? 0;
+    } else if (_position is ScrollActivityDelegate) {
+      delegate = _position as ScrollActivityDelegate;
+    }
+    delegate?.goBallistic(velocity);
+  }
+
   /// Set mode.
   /// Internal use of EasyRefresh.
   void _setMode(IndicatorMode mode) {
@@ -465,7 +483,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         if (oldMode == IndicatorMode.processing &&
             _position is ScrollActivityDelegate &&
             !userOffsetNotifier.value) {
-          (_position as ScrollActivityDelegate).goBallistic(0);
+          _resetBallistic();
         }
       } else {
         Future.delayed(processedDuration, () {
@@ -473,7 +491,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
           // Trigger [Scrollable] rollback
           if (_position is ScrollActivityDelegate &&
               !userOffsetNotifier.value) {
-            (_position as ScrollActivityDelegate).goBallistic(0);
+            _resetBallistic();
           }
         });
       }
