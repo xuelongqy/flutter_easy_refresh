@@ -41,6 +41,20 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   /// The spring to use for ballistic simulations.
   final SpringDescription? _spring;
 
+  /// The state of the indicator when the BallisticSimulation is created.
+  final _headerSimulationCreationState =
+      ValueNotifier<_BallisticSimulationCreationState>(
+          const _BallisticSimulationCreationState(
+    mode: IndicatorMode.inactive,
+    offset: 0,
+  ));
+  final _footerSimulationCreationState =
+      ValueNotifier<_BallisticSimulationCreationState>(
+          const _BallisticSimulationCreationState(
+    mode: IndicatorMode.inactive,
+    offset: 0,
+  ));
+
   /// Get the current [SpringDescription] to be used.
   @override
   SpringDescription get spring {
@@ -207,19 +221,26 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
     // User stopped scrolling.
+    final oldUserOffset = userOffsetNotifier.value;
     userOffsetNotifier.value = false;
     // Simulation update.
     headerNotifier._updateBySimulation(position, velocity);
     footerNotifier._updateBySimulation(position, velocity);
     // Create simulation.
-    bool headerSkip = !headerNotifier.modeLocked ||
-        headerNotifier.offset != headerNotifier.actualTriggerOffset;
-    bool footerSkip = !footerNotifier.modeLocked ||
-        footerNotifier.offset != footerNotifier.actualTriggerOffset;
+    final hState = _BallisticSimulationCreationState(
+      mode: headerNotifier._mode,
+      offset: headerNotifier._offset,
+    );
+    final fState = _BallisticSimulationCreationState(
+      mode: footerNotifier._mode,
+      offset: footerNotifier._offset,
+    );
+    Simulation? simulation;
     if ((velocity.abs() >= tolerance.velocity || position.outOfRange) &&
-        headerSkip &&
-        footerSkip) {
-      return BouncingScrollSimulation(
+        (oldUserOffset ||
+            _headerSimulationCreationState.value.needCreation(hState) ||
+            _footerSimulationCreationState.value.needCreation(fState))) {
+      simulation = BouncingScrollSimulation(
         spring: spring,
         position: position.pixels,
         velocity: velocity,
@@ -228,6 +249,24 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         tolerance: tolerance,
       );
     }
-    return null;
+    _headerSimulationCreationState.value = hState;
+    _footerSimulationCreationState.value = fState;
+    return simulation;
+  }
+}
+
+/// The state of the indicator when the BallisticSimulation is created.
+/// Used to determine whether BallisticSimulation needs to be created.
+class _BallisticSimulationCreationState {
+  final IndicatorMode mode;
+  final double offset;
+
+  const _BallisticSimulationCreationState({
+    required this.mode,
+    required this.offset,
+  });
+
+  bool needCreation(_BallisticSimulationCreationState newState) {
+    return mode != newState.mode || offset != newState.offset;
   }
 }
