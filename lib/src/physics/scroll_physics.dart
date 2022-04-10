@@ -132,15 +132,16 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       }
     } else if (headerNotifier._task != null) {
       // hit top over
-      if (!headerNotifier.hitOver &&
+      if (!(headerNotifier.hitOver || headerNotifier.modeLocked) &&
           value < position.minScrollExtent &&
           position.minScrollExtent < position.pixels) {
         _updateIndicatorOffset(position, 0);
         return value - position.minScrollExtent;
       }
       // infinite hit top over
-      if (!headerNotifier.infiniteHitOver &&
-          headerNotifier._canProcess &&
+      if ((!headerNotifier.infiniteHitOver ||
+              (!headerNotifier.hitOver && headerNotifier.modeLocked)) &&
+          (headerNotifier._canProcess || headerNotifier.noMoreLocked) &&
           (value + headerNotifier.actualTriggerOffset) <
               position.minScrollExtent &&
           position.minScrollExtent <
@@ -169,15 +170,16 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       }
     } else if (footerNotifier._task != null) {
       // hit bottom over
-      if (!footerNotifier.hitOver &&
+      if (!(footerNotifier.hitOver || footerNotifier.modeLocked) &&
           position.pixels < position.maxScrollExtent &&
           position.maxScrollExtent < value) {
         _updateIndicatorOffset(position, position.maxScrollExtent);
         return value - position.maxScrollExtent;
       }
       // infinite hit bottom over
-      if (!footerNotifier.infiniteHitOver &&
-          footerNotifier._canProcess &&
+      if ((!footerNotifier.infiniteHitOver ||
+              !footerNotifier.hitOver && footerNotifier.modeLocked) &&
+          (footerNotifier._canProcess || footerNotifier.noMoreLocked) &&
           (position.pixels - footerNotifier.actualTriggerOffset) <
               position.maxScrollExtent &&
           position.maxScrollExtent <

@@ -114,7 +114,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   double get overExtent {
     // State that doesn't change.
     if (_task == null ||
-        !_canProcess ||
+        (!_canProcess && !noMoreLocked) ||
         (noMoreLocked && infiniteOffset == null)) {
       return 0;
     }

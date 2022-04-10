@@ -188,6 +188,8 @@ abstract class Indicator {
             'The infiniteOffset cannot be less than 0.'),
         assert(infiniteOffset == null || !clamping,
             'Cannot scroll indefinitely when clamping.'),
+        assert(!(hitOver == false && infiniteOffset != null),
+            'When hitOver is true, infinite scrolling cannot be used, please set infiniteHitOver.'),
         assert(!clamping || position != IndicatorPosition.locator,
             'Cannot use locator when clamping.'),
         assert(
