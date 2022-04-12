@@ -120,7 +120,7 @@ class EasyRefresh extends StatefulWidget {
     safeArea: true,
     position: IndicatorPosition.locator,
     hapticFeedback: true,
-    // secondaryTriggerOffset: 100,
+    secondaryTriggerOffset: 100,
     builder: (ctx, state) {
       Color color = Colors.blue;
       if (state.result == IndicatorResult.failed) {

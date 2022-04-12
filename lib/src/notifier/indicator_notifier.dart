@@ -60,6 +60,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   double? get secondaryTriggerOffset => _indicator.secondaryTriggerOffset;
 
+  double get secondaryVelocity => _indicator.secondaryVelocity;
+
   bool get hapticFeedback => _indicator.hapticFeedback;
 
   bool get hasSecondary => secondaryTriggerOffset != null;
@@ -212,17 +214,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       // Cancel animation, update offset
       if (clamping && _clampingAnimationController!.isAnimating) {
         _clampingAnimationController!.stop(canceled: true);
-      }
-    } else {
-      // Secondary
-      if (hasSecondary && _mode == IndicatorMode.secondaryArmed) {
-        _mode = IndicatorMode.secondaryReady;
-        Future.delayed(const Duration(milliseconds: 50), () {
-          (_position as ScrollPosition).animateTo(-_position.viewportDimension,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.bounceIn);
-        });
-        notifyListeners();
       }
     }
   }

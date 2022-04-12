@@ -14,6 +14,7 @@ abstract class Header extends Indicator {
     IndicatorPosition position = IndicatorPosition.above,
     double? secondaryTriggerOffset,
     bool hapticFeedback = false,
+    double secondaryVelocity = kDefaultSecondaryVelocity,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -25,6 +26,7 @@ abstract class Header extends Indicator {
           infiniteHitOver: infiniteHitOver,
           position: position,
           secondaryTriggerOffset: secondaryTriggerOffset,
+          secondaryVelocity: secondaryVelocity,
           hapticFeedback: hapticFeedback,
         );
 }
@@ -47,6 +49,7 @@ class BuilderHeader extends Header {
     bool? infiniteHitOver,
     double? secondaryTriggerOffset,
     bool hapticFeedback = false,
+    double secondaryVelocity = kDefaultSecondaryVelocity,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -58,6 +61,7 @@ class BuilderHeader extends Header {
           infiniteHitOver: infiniteHitOver,
           position: position,
           secondaryTriggerOffset: secondaryTriggerOffset,
+          secondaryVelocity: secondaryVelocity,
           hapticFeedback: hapticFeedback,
         );
 

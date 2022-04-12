@@ -14,7 +14,7 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   final _scrollDirection = Axis.vertical;
 
-  int _count = 0;
+  int _count = 20;
 
   final _controller = EasyRefreshController(
     controlFinishRefresh: true,
@@ -37,7 +37,7 @@ class _TestPageState extends State<TestPage> {
       body: EasyRefresh(
         noMoreRefresh: false,
         noMoreLoad: false,
-        refreshOnStart: true,
+        refreshOnStart: false,
         controller: _controller,
         refreshOnStartHeader: BuilderHeader(
             triggerOffset: 70,

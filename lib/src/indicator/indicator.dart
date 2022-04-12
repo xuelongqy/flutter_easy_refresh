@@ -1,5 +1,8 @@
 part of easyrefresh;
 
+/// The default opening speed of the secondary.
+const double kDefaultSecondaryVelocity = 3000;
+
 /// The current state of the indicator ([Header] or [Footer]).
 enum IndicatorMode {
   /// Default state, without any trigger conditions.
@@ -167,6 +170,9 @@ abstract class Indicator {
   /// Will not trigger when null.
   final double? secondaryTriggerOffset;
 
+  /// Secondary opening speed.
+  final double secondaryVelocity;
+
   /// Whether to enable haptic feedback.
   final bool hapticFeedback;
 
@@ -182,6 +188,7 @@ abstract class Indicator {
     this.position = IndicatorPosition.above,
     this.secondaryTriggerOffset,
     this.hapticFeedback = false,
+    this.secondaryVelocity = kDefaultSecondaryVelocity,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,

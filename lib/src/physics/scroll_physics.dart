@@ -236,14 +236,21 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       offset: footerNotifier._offset,
     );
     Simulation? simulation;
-    if ((velocity.abs() >= tolerance.velocity || position.outOfRange) &&
+    bool secondary = headerNotifier._mode == IndicatorMode.secondaryReady ||
+        headerNotifier._mode == IndicatorMode.secondaryOpen;
+    if ((velocity.abs() >= tolerance.velocity ||
+            position.outOfRange ||
+            (secondary && oldUserOffset)) &&
         (oldUserOffset ||
             _headerSimulationCreationState.value.needCreation(hState) ||
             _footerSimulationCreationState.value.needCreation(fState))) {
+      final secondaryVelocity = -headerNotifier.secondaryVelocity;
       simulation = BouncingScrollSimulation(
         spring: spring,
         position: position.pixels,
-        velocity: velocity,
+        velocity: secondary && velocity >= secondaryVelocity
+            ? secondaryVelocity
+            : velocity,
         leadingExtent: position.minScrollExtent - headerNotifier.overExtent,
         trailingExtent: position.maxScrollExtent + footerNotifier.overExtent,
         tolerance: tolerance,
