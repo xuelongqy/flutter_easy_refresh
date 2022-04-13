@@ -62,6 +62,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   double get secondaryVelocity => _indicator.secondaryVelocity;
 
+  double? get secondaryDimension => _indicator.secondaryDimension;
+
   bool get hapticFeedback => _indicator.hapticFeedback;
 
   bool get hasSecondary => secondaryTriggerOffset != null;
@@ -133,7 +135,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     if (_mode == IndicatorMode.secondaryReady ||
         _mode == IndicatorMode.secondaryOpen) {
-      return _position.viewportDimension;
+      return secondaryDimension ?? _position.viewportDimension;
     }
     return 0;
   }

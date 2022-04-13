@@ -165,6 +165,9 @@ abstract class Indicator {
   /// The position of the indicator.
   final IndicatorPosition position;
 
+  /// Whether to enable haptic feedback.
+  final bool hapticFeedback;
+
   /// Trigger offset for secondary.
   /// The indicator will expand and fill the scrollview area.
   /// Will not trigger when null.
@@ -173,8 +176,9 @@ abstract class Indicator {
   /// Secondary opening speed.
   final double secondaryVelocity;
 
-  /// Whether to enable haptic feedback.
-  final bool hapticFeedback;
+  /// Dimension of the second floor.
+  /// The default value is [ScrollMetrics.viewportDimension].
+  final double? secondaryDimension;
 
   const Indicator({
     required this.triggerOffset,
@@ -189,6 +193,7 @@ abstract class Indicator {
     this.secondaryTriggerOffset,
     this.hapticFeedback = false,
     this.secondaryVelocity = kDefaultSecondaryVelocity,
+    this.secondaryDimension,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,
@@ -204,7 +209,11 @@ abstract class Indicator {
                 secondaryTriggerOffset > triggerOffset,
             'The secondaryTriggerOffset cannot be less than triggerOffset.'),
         assert(!(infiniteOffset != null && secondaryTriggerOffset != null),
-            'Infinite scroll and secondary cannot be used together.');
+            'Infinite scroll and secondary cannot be used together.'),
+        assert(
+            secondaryDimension == null ||
+                secondaryDimension > (secondaryTriggerOffset ?? 0),
+            'The secondaryDimension cannot be less than secondaryTriggerOffset.');
 
   /// Build indicator widget.
   Widget build(BuildContext context, IndicatorState state);

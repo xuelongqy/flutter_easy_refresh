@@ -236,21 +236,34 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       offset: footerNotifier._offset,
     );
     Simulation? simulation;
-    bool secondary = headerNotifier._mode == IndicatorMode.secondaryReady ||
+    bool hSecondary = headerNotifier._mode == IndicatorMode.secondaryReady ||
         headerNotifier._mode == IndicatorMode.secondaryOpen;
+    bool fSecondary = footerNotifier._mode == IndicatorMode.secondaryReady ||
+        footerNotifier._mode == IndicatorMode.secondaryOpen;
+    bool secondary = hSecondary || fSecondary;
     if ((velocity.abs() >= tolerance.velocity ||
             position.outOfRange ||
             (secondary && oldUserOffset)) &&
         (oldUserOffset ||
             _headerSimulationCreationState.value.needCreation(hState) ||
             _footerSimulationCreationState.value.needCreation(fState))) {
-      final secondaryVelocity = -headerNotifier.secondaryVelocity;
+      double mVelocity = velocity;
+      // Open secondary speed.
+      if (secondary) {
+        if (hSecondary) {
+          if (mVelocity > -headerNotifier.secondaryVelocity) {
+            mVelocity = -headerNotifier.secondaryVelocity;
+          }
+        } else if (fSecondary) {
+          if (mVelocity < footerNotifier.secondaryVelocity) {
+            mVelocity = footerNotifier.secondaryVelocity;
+          }
+        }
+      }
       simulation = BouncingScrollSimulation(
         spring: spring,
         position: position.pixels,
-        velocity: secondary && velocity >= secondaryVelocity
-            ? secondaryVelocity
-            : velocity,
+        velocity: mVelocity,
         leadingExtent: position.minScrollExtent - headerNotifier.overExtent,
         trailingExtent: position.maxScrollExtent + footerNotifier.overExtent,
         tolerance: tolerance,
