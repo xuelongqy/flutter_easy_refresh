@@ -144,7 +144,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         // and the list does not shift.
         bounds = value - position.pixels;
       }
-    } else if (headerNotifier._task != null) {
+    } else {
       // hit top over
       if (!(headerNotifier.hitOver || headerNotifier.modeLocked) &&
           value < position.minScrollExtent &&
@@ -164,6 +164,24 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         return (value + headerNotifier.actualTriggerOffset) -
             position.minScrollExtent;
       }
+      // Cannot over the secondary.
+      if (headerNotifier.hasSecondary) {
+        if (value < position.pixels &&
+            position.pixels <=
+                position.minScrollExtent - headerNotifier.secondaryDimension) {
+          // underscroll secondary
+          bounds = value - position.pixels;
+        } else if (value + headerNotifier.secondaryDimension <
+                position.minScrollExtent &&
+            position.minScrollExtent <
+                position.pixels + headerNotifier.secondaryDimension) {
+          // hit top secondary
+          _updateIndicatorOffset(position, -headerNotifier.secondaryDimension);
+          return value +
+              headerNotifier.secondaryDimension -
+              position.minScrollExtent;
+        }
+      }
     }
 
     // Footer
@@ -182,7 +200,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         // and the list does not shift.
         bounds = value - position.pixels;
       }
-    } else if (footerNotifier._task != null) {
+    } else {
       // hit bottom over
       if (!(footerNotifier.hitOver || footerNotifier.modeLocked) &&
           position.pixels < position.maxScrollExtent &&
@@ -203,7 +221,27 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         return (value - footerNotifier.actualTriggerOffset) -
             position.maxScrollExtent;
       }
+      // Cannot over the secondary.
+      if (footerNotifier.hasSecondary) {
+        if (position.maxScrollExtent + footerNotifier.secondaryDimension <=
+                position.pixels &&
+            position.pixels < value) {
+          // overscroll
+          bounds = value - position.pixels;
+        } else if (position.pixels - footerNotifier.secondaryDimension <
+                position.maxScrollExtent &&
+            position.maxScrollExtent <
+                value - footerNotifier.secondaryDimension) {
+          // hit bottom edge
+          _updateIndicatorOffset(position,
+              position.maxScrollExtent + footerNotifier.secondaryDimension);
+          return value -
+              footerNotifier.secondaryDimension -
+              position.maxScrollExtent;
+        }
+      }
     }
+
     // Update offset
     _updateIndicatorOffset(position, value);
     return bounds;

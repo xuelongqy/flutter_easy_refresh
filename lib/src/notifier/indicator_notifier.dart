@@ -62,7 +62,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   double get secondaryVelocity => _indicator.secondaryVelocity;
 
-  double? get secondaryDimension => _indicator.secondaryDimension;
+  double get secondaryDimension =>
+      _indicator.secondaryDimension ?? _position.viewportDimension;
 
   bool get hapticFeedback => _indicator.hapticFeedback;
 
@@ -135,7 +136,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     if (_mode == IndicatorMode.secondaryReady ||
         _mode == IndicatorMode.secondaryOpen) {
-      return secondaryDimension ?? _position.viewportDimension;
+      return secondaryDimension;
     }
     return 0;
   }
@@ -327,7 +328,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     // Avoid setState() during drawing
     if (bySimulation) {
       // Notify when list length changes
-      if (offset < actualTriggerOffset) {
+      if (_offset <= actualTriggerOffset) {
         Future(() {
           notifyListeners();
         });
@@ -373,11 +374,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         _mode = IndicatorMode.drag;
       } else if (_offset == actualTriggerOffset) {
         // Must be exceeded to trigger the task
-        _mode = _mode != IndicatorMode.ready
-            ? IndicatorMode.armed
-            : IndicatorMode.processing;
+        _mode = IndicatorMode.processing;
       } else if (_offset > actualTriggerOffset) {
-        if (hasSecondary && _offset > actualSecondaryTriggerOffset) {
+        if (hasSecondary && _offset >= actualSecondaryTriggerOffset) {
           // Secondary
           _mode = userOffsetNotifier.value
               ? IndicatorMode.secondaryArmed
