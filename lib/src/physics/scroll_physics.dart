@@ -86,15 +86,39 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     // the indicator offset shall prevail.
     if (!(position.outOfRange ||
         (headerNotifier.clamping && headerNotifier._offset > 0) ||
-        (footerNotifier.clamping && footerNotifier._offset > 0))) return offset;
+        (footerNotifier.clamping && footerNotifier._offset > 0))) {
+      return offset;
+    }
     // Calculate the actual location.
-    final double pixels =
-        position.pixels - headerNotifier._offset + footerNotifier._offset;
+    double pixels = position.pixels;
+    if (headerNotifier.clamping && headerNotifier._offset > 0) {
+      pixels = position.pixels - headerNotifier._offset;
+    }
+    if (footerNotifier.clamping && footerNotifier._offset > 0) {
+      pixels = position.pixels + footerNotifier._offset;
+    }
+    double minScrollExtent = position.minScrollExtent;
+    double maxScrollExtent = position.maxScrollExtent;
 
-    final double overscrollPastStart =
-        math.max(position.minScrollExtent - pixels, 0.0);
-    final double overscrollPastEnd =
-        math.max(pixels - position.maxScrollExtent, 0.0);
+    if (headerNotifier.secondaryLocked) {
+      // Header secondary
+      pixels = headerNotifier.secondaryDimension +
+          (headerNotifier.secondaryDimension + position.pixels);
+      minScrollExtent = 0;
+      maxScrollExtent = headerNotifier.secondaryDimension;
+    }
+
+    if (footerNotifier.secondaryLocked) {
+      // Footer secondary
+      pixels = position.pixels -
+          footerNotifier.secondaryDimension -
+          position.maxScrollExtent;
+      minScrollExtent = 0;
+      maxScrollExtent = footerNotifier.secondaryDimension;
+    }
+
+    final double overscrollPastStart = math.max(minScrollExtent - pixels, 0.0);
+    final double overscrollPastEnd = math.max(pixels - maxScrollExtent, 0.0);
     final double overscrollPast =
         math.max(overscrollPastStart, overscrollPastEnd);
     final bool easing = (overscrollPastStart > 0.0 && offset < 0.0) ||

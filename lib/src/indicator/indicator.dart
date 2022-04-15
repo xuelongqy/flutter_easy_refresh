@@ -180,6 +180,9 @@ abstract class Indicator {
   /// The default value is [ScrollMetrics.viewportDimension].
   final double? secondaryDimension;
 
+  /// Secondary close trigger offset.
+  final double secondaryCloseTriggerOffset;
+
   const Indicator({
     required this.triggerOffset,
     required this.clamping,
@@ -194,6 +197,7 @@ abstract class Indicator {
     this.hapticFeedback = false,
     this.secondaryVelocity = kDefaultSecondaryVelocity,
     this.secondaryDimension,
+    this.secondaryCloseTriggerOffset = 70,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,

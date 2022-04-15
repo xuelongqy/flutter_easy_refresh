@@ -65,6 +65,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   double get secondaryDimension =>
       _indicator.secondaryDimension ?? _position.viewportDimension;
 
+  double get secondaryCloseTriggerOffset =>
+      _indicator.secondaryCloseTriggerOffset;
+
   bool get hapticFeedback => _indicator.hapticFeedback;
 
   bool get hasSecondary => secondaryTriggerOffset != null;
@@ -190,6 +193,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Automatically trigger task.
   void callTask(double overOffset);
+
+  bool get secondaryLocked =>
+      _mode == IndicatorMode.secondaryOpen ||
+      _mode == IndicatorMode.secondaryClosing;
 
   @override
   void dispose() {
@@ -347,7 +354,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       }
     }
     // Not updated during task execution and task completion.
-    if (!(modeLocked || noMoreLocked)) {
+    if (!(modeLocked || noMoreLocked || secondaryLocked)) {
       // In the non-executable task state.
       if (!_canProcess) {
         _mode = IndicatorMode.inactive;
@@ -378,9 +385,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       } else if (_offset > actualTriggerOffset) {
         if (hasSecondary && _offset >= actualSecondaryTriggerOffset) {
           // Secondary
-          _mode = userOffsetNotifier.value
-              ? IndicatorMode.secondaryArmed
-              : IndicatorMode.secondaryReady;
+          if (_offset < secondaryDimension) {
+            _mode = userOffsetNotifier.value
+                ? IndicatorMode.secondaryArmed
+                : IndicatorMode.secondaryReady;
+          } else {
+            _mode = IndicatorMode.secondaryOpen;
+          }
         } else {
           // Process
           // If the user is scrolling
@@ -393,6 +404,16 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       // Execute the task.
       if (_mode == IndicatorMode.processing) {
         _onTask();
+      }
+    }
+    // Close secondary
+    if (secondaryLocked) {
+      if (_mode == IndicatorMode.secondaryOpen &&
+          secondaryDimension - _offset >= secondaryCloseTriggerOffset) {
+        _mode = IndicatorMode.secondaryClosing;
+      }
+      if (_offset == 0) {
+        _mode = IndicatorMode.inactive;
       }
     }
   }
