@@ -49,8 +49,8 @@ class BuilderHeader extends Header {
     double? infiniteOffset,
     bool? hitOver,
     bool? infiniteHitOver,
-    double? secondaryTriggerOffset,
     bool hapticFeedback = false,
+    double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
   }) : super(

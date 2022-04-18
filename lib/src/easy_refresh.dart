@@ -116,12 +116,12 @@ class EasyRefresh extends StatefulWidget {
   /// Default header indicator.
   static Header defaultHeader = BuilderHeader(
     triggerOffset: 70,
-    clamping: false,
+    clamping: true,
     safeArea: true,
-    position: IndicatorPosition.locator,
+    position: IndicatorPosition.above,
     hapticFeedback: true,
     secondaryTriggerOffset: 100,
-    secondaryDimension: 300,
+    secondaryDimension: 200,
     builder: (ctx, state) {
       Color color = Colors.blue;
       if (state.result == IndicatorResult.failed) {
@@ -146,10 +146,10 @@ class EasyRefresh extends StatefulWidget {
   /// Default footer indicator.
   static Footer defaultFooter = BuilderFooter(
     triggerOffset: 70,
-    clamping: false,
+    clamping: true,
     safeArea: true,
     infiniteOffset: null,
-    position: IndicatorPosition.locator,
+    position: IndicatorPosition.above,
     hapticFeedback: true,
     secondaryTriggerOffset: 100,
     secondaryDimension: 300,
@@ -579,17 +579,17 @@ class _EasyRefreshState extends State<EasyRefresh>
       _footerNotifier._safeOffset = mPadding.bottom;
     }
     // Set the position of widgets.
-    if (hPosition == IndicatorPosition.above) {
-      children.add(_buildHeaderView());
-    }
-    if (fPosition == IndicatorPosition.above) {
-      children.add(_buildFooterView());
-    }
-    children.add(contentWidget);
     if (hPosition == IndicatorPosition.behind) {
       children.add(_buildHeaderView());
     }
     if (fPosition == IndicatorPosition.behind) {
+      children.add(_buildFooterView());
+    }
+    children.add(contentWidget);
+    if (hPosition == IndicatorPosition.above) {
+      children.add(_buildHeaderView());
+    }
+    if (fPosition == IndicatorPosition.above) {
       children.add(_buildFooterView());
     }
     if (children.length == 1) {

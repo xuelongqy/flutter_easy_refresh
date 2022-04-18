@@ -163,7 +163,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         // hit top edge
         _updateIndicatorOffset(position, 0);
         return value - position.minScrollExtent;
-      } else if (headerNotifier._offset > 0 && !headerNotifier.modeLocked) {
+      } else if (headerNotifier._offset > 0 &&
+          !(headerNotifier.modeLocked || headerNotifier.secondaryLocked)) {
         // Header does not disappear,
         // and the list does not shift.
         bounds = value - position.pixels;
@@ -219,7 +220,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         // hit bottom edge
         _updateIndicatorOffset(position, position.maxScrollExtent);
         return value - position.maxScrollExtent;
-      } else if (footerNotifier._offset > 0 && !footerNotifier.modeLocked) {
+      } else if (footerNotifier._offset > 0 &&
+          !(footerNotifier.modeLocked || footerNotifier.secondaryLocked)) {
         // Footer does not disappear,
         // and the list does not shift.
         bounds = value - position.pixels;
@@ -298,10 +300,12 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       offset: footerNotifier._offset,
     );
     Simulation? simulation;
-    bool hSecondary = headerNotifier._mode == IndicatorMode.secondaryReady ||
-        headerNotifier._mode == IndicatorMode.secondaryOpen;
-    bool fSecondary = footerNotifier._mode == IndicatorMode.secondaryReady ||
-        footerNotifier._mode == IndicatorMode.secondaryOpen;
+    bool hSecondary = !headerNotifier.clamping &&
+        (headerNotifier._mode == IndicatorMode.secondaryReady ||
+            headerNotifier._mode == IndicatorMode.secondaryOpen);
+    bool fSecondary = !headerNotifier.clamping &&
+        (footerNotifier._mode == IndicatorMode.secondaryReady ||
+            footerNotifier._mode == IndicatorMode.secondaryOpen);
     bool secondary = hSecondary || fSecondary;
     if ((velocity.abs() >= tolerance.velocity ||
             position.outOfRange ||
@@ -313,11 +317,17 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       // Open secondary speed.
       if (secondary) {
         if (hSecondary) {
-          if (mVelocity > -headerNotifier.secondaryVelocity) {
+          if (headerNotifier.offset ==
+              headerNotifier.secondaryDimension) {
+            mVelocity = 0;
+          } else if (mVelocity > -headerNotifier.secondaryVelocity) {
             mVelocity = -headerNotifier.secondaryVelocity;
           }
         } else if (fSecondary) {
-          if (mVelocity < footerNotifier.secondaryVelocity) {
+          if (footerNotifier.offset ==
+              footerNotifier.secondaryDimension) {
+            mVelocity = 0;
+          } else if (mVelocity < footerNotifier.secondaryVelocity) {
             mVelocity = footerNotifier.secondaryVelocity;
           }
         }

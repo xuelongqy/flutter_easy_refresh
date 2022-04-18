@@ -103,7 +103,7 @@ class _TestPageState extends State<TestPage> {
           scrollDirection: _scrollDirection,
           reverse: false,
           slivers: [
-            const HeaderLocator.sliver(),
+            // const HeaderLocator.sliver(),
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -117,7 +117,7 @@ class _TestPageState extends State<TestPage> {
                 childCount: _count,
               ),
             ),
-            const FooterLocator.sliver(),
+            // const FooterLocator.sliver(),
           ],
         ),
       ),

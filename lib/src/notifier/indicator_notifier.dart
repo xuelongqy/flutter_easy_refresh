@@ -148,9 +148,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   bool get modeLocked =>
       _mode == IndicatorMode.processing || _mode == IndicatorMode.processed;
 
-  /// State lock when secondary.
-  bool get modeSecondaryLocked => _mode == IndicatorMode.secondaryOpen;
-
   /// Spring description.
   SpringDescription? get _spring => _indicator.spring;
 
@@ -280,7 +277,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     // Update offset on release
     _updateOffset(position, position.pixels, true);
     // If clamping is true and offset is greater than 0, start animation
-    if (clamping && _offset > 0 && !modeLocked) {
+    if (clamping && _offset > 0 && !(modeLocked || secondaryLocked)) {
       final simulation = _createBallisticSimulation(position, velocity);
       if (simulation != null) {
         _startClampingAnimation(simulation);
@@ -292,7 +289,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   void _updateOffset(ScrollMetrics position, double value, bool bySimulation) {
     // Clamping
     // In task processing, do nothing.
-    if (clamping && modeLocked) {
+    if (clamping && (modeLocked || secondaryLocked)) {
       return;
     }
     // Clamping
@@ -381,7 +378,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         _mode = IndicatorMode.drag;
       } else if (_offset == actualTriggerOffset) {
         // Must be exceeded to trigger the task
-        _mode = IndicatorMode.processing;
+        _mode = userOffsetNotifier.value
+            ? IndicatorMode.ready
+            : IndicatorMode.processing;
       } else if (_offset > actualTriggerOffset) {
         if (hasSecondary && _offset >= actualSecondaryTriggerOffset) {
           // Secondary
@@ -390,7 +389,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
                 ? IndicatorMode.secondaryArmed
                 : IndicatorMode.secondaryReady;
           } else {
-            _mode = IndicatorMode.secondaryOpen;
+            _mode = userOffsetNotifier.value
+                ? IndicatorMode.secondaryReady
+                : IndicatorMode.secondaryOpen;
           }
         } else {
           // Process
@@ -607,11 +608,16 @@ class HeaderNotifier extends IndicatorNotifier {
     }
     if (clamping) {
       if (value > position.minScrollExtent) {
-        // Rollback first minus offset
+        // Rollback first minus offset.
         return math.max(_offset > 0 ? (-value + _offset) : 0, 0);
       } else {
-        // Overscroll accumulated offset
-        return -value + _offset;
+        // Overscroll accumulated offset.
+        final mOffset = -value + _offset;
+        if (hasSecondary && mOffset > secondaryDimension) {
+          // Cannot exceed secondary offset.
+          return secondaryDimension;
+        }
+        return mOffset;
       }
     } else {
       return value > position.minScrollExtent ? 0 : -value;
@@ -621,11 +627,14 @@ class HeaderNotifier extends IndicatorNotifier {
   @override
   Simulation? _createBallisticSimulation(
       ScrollMetrics position, double velocity) {
+    final mVelocity = hasSecondary && _offset >= actualSecondaryTriggerOffset
+        ? -secondaryVelocity
+        : velocity;
     if (clamping && _offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
         position: position.pixels - _offset,
-        velocity: velocity,
+        velocity: mVelocity,
         leadingExtent: position.minScrollExtent - overExtent,
         trailingExtent: 0,
         tolerance: _physics.tolerance,
@@ -636,7 +645,17 @@ class HeaderNotifier extends IndicatorNotifier {
 
   @override
   void _clampingTick() {
-    _offset = math.max(-_clampingAnimationController!.value, 0);
+    final mOffset = math.max(-_clampingAnimationController!.value, 0.0);
+    if (hasSecondary &&
+        !noMoreLocked &&
+        mOffset > secondaryDimension &&
+        _mode == IndicatorMode.secondaryReady) {
+      // After fully opening the secondary, turn off the animation.
+      _offset = secondaryDimension;
+      _clampingAnimationController!.stop();
+    } else {
+      _offset = mOffset;
+    }
     _updateMode();
     notifyListeners();
   }
@@ -699,7 +718,12 @@ class FooterNotifier extends IndicatorNotifier {
         return math.max(_offset > 0 ? (move + _offset) : 0, 0);
       } else {
         // Overscroll accumulated offset
-        return move + _offset;
+        final mOffset = move + _offset;
+        if (hasSecondary && mOffset > secondaryDimension) {
+          // Cannot exceed secondary offset.
+          return secondaryDimension;
+        }
+        return mOffset;
       }
     } else {
       return value < position.maxScrollExtent ? 0 : move;
@@ -709,11 +733,15 @@ class FooterNotifier extends IndicatorNotifier {
   @override
   Simulation? _createBallisticSimulation(
       ScrollMetrics position, double velocity) {
+    final mVelocity =
+        hasSecondary && !noMoreLocked && _offset >= actualSecondaryTriggerOffset
+            ? secondaryVelocity
+            : velocity;
     if (clamping && _offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
         position: position.pixels + _offset,
-        velocity: velocity,
+        velocity: mVelocity,
         leadingExtent: 0,
         trailingExtent: position.maxScrollExtent + overExtent,
         tolerance: _physics.tolerance,
@@ -724,8 +752,17 @@ class FooterNotifier extends IndicatorNotifier {
 
   @override
   void _clampingTick() {
-    _offset = math.max(
-        _clampingAnimationController!.value - _position.maxScrollExtent, 0);
+    final mOffset = math.max(
+        _clampingAnimationController!.value - _position.maxScrollExtent, 0.0);
+    if (hasSecondary &&
+        mOffset > secondaryDimension &&
+        _mode == IndicatorMode.secondaryReady) {
+      // After fully opening the secondary, turn off the animation.
+      _offset = secondaryDimension;
+      _clampingAnimationController!.stop();
+    } else {
+      _offset = mOffset;
+    }
     _updateMode();
     notifyListeners();
   }
