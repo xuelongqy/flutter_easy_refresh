@@ -121,6 +121,31 @@ class IndicatorState {
     required this.axisDirection,
     required this.viewportDimension,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is IndicatorState &&
+          runtimeType == other.runtimeType &&
+          indicator == other.indicator &&
+          mode == other.mode &&
+          result == other.result &&
+          offset == other.offset &&
+          safeOffset == other.safeOffset &&
+          axis == other.axis &&
+          axisDirection == other.axisDirection &&
+          viewportDimension == other.viewportDimension;
+
+  @override
+  int get hashCode =>
+      indicator.hashCode ^
+      mode.hashCode ^
+      result.hashCode ^
+      offset.hashCode ^
+      safeOffset.hashCode ^
+      axis.hashCode ^
+      axisDirection.hashCode ^
+      viewportDimension.hashCode;
 }
 
 /// Indicator widget builder.

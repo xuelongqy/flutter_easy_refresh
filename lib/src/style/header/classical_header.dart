@@ -1,8 +1,12 @@
 part of easyrefresh;
 
+/// Classical header.
 class ClassicalHeader extends Header {
+  final Key? key;
+
   const ClassicalHeader({
-    required double triggerOffset,
+    this.key,
+    double triggerOffset = 70,
     required bool clamping,
     required IndicatorPosition position,
     Duration processedDuration = const Duration(seconds: 1),
@@ -33,7 +37,23 @@ class ClassicalHeader extends Header {
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return _ClassicalHeaderWidget(key: key, state: state);
+  }
+}
+
+class _ClassicalHeaderWidget extends StatefulWidget {
+  /// Indicator properties and state.
+  final IndicatorState state;
+
+  const _ClassicalHeaderWidget({Key? key, required this.state}) : super(key: key);
+
+  @override
+  State<_ClassicalHeaderWidget> createState() => _ClassicalHeaderWidgetState();
+}
+
+class _ClassicalHeaderWidgetState extends State<_ClassicalHeaderWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
