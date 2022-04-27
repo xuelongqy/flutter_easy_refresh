@@ -317,15 +317,13 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       // Open secondary speed.
       if (secondary) {
         if (hSecondary) {
-          if (headerNotifier.offset ==
-              headerNotifier.secondaryDimension) {
+          if (headerNotifier.offset == headerNotifier.secondaryDimension) {
             mVelocity = 0;
           } else if (mVelocity > -headerNotifier.secondaryVelocity) {
             mVelocity = -headerNotifier.secondaryVelocity;
           }
         } else if (fSecondary) {
-          if (footerNotifier.offset ==
-              footerNotifier.secondaryDimension) {
+          if (footerNotifier.offset == footerNotifier.secondaryDimension) {
             mVelocity = 0;
           } else if (mVelocity < footerNotifier.secondaryVelocity) {
             mVelocity = footerNotifier.secondaryVelocity;

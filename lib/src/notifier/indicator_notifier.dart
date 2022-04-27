@@ -534,6 +534,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         axis: _axis!,
         axisDirection: _axisDirection!,
         viewportDimension: _position.viewportDimension,
+        triggerOffset: triggerOffset,
+        actualTriggerOffset: actualTriggerOffset,
       ),
     );
   }

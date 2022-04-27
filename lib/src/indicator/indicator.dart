@@ -111,6 +111,10 @@ class IndicatorState {
   /// It's helpful for full screen indicator and second floor views.
   final double viewportDimension;
 
+  final double triggerOffset;
+
+  final double actualTriggerOffset;
+
   const IndicatorState({
     required this.indicator,
     required this.mode,
@@ -120,6 +124,8 @@ class IndicatorState {
     required this.axis,
     required this.axisDirection,
     required this.viewportDimension,
+    required this.triggerOffset,
+    required this.actualTriggerOffset,
   });
 
   @override
@@ -134,7 +140,9 @@ class IndicatorState {
           safeOffset == other.safeOffset &&
           axis == other.axis &&
           axisDirection == other.axisDirection &&
-          viewportDimension == other.viewportDimension;
+          viewportDimension == other.viewportDimension &&
+          triggerOffset == other.triggerOffset &&
+          actualTriggerOffset == other.actualTriggerOffset;
 
   @override
   int get hashCode =>
@@ -145,7 +153,9 @@ class IndicatorState {
       safeOffset.hashCode ^
       axis.hashCode ^
       axisDirection.hashCode ^
-      viewportDimension.hashCode;
+      viewportDimension.hashCode ^
+      triggerOffset.hashCode ^
+      actualTriggerOffset.hashCode;
 }
 
 /// Indicator widget builder.

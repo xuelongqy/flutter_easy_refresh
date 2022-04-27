@@ -114,59 +114,39 @@ class EasyRefresh extends StatefulWidget {
   final double callLoadOverOffset;
 
   /// Default header indicator.
-  static Header defaultHeader = BuilderHeader(
-    triggerOffset: 70,
-    clamping: true,
-    safeArea: true,
-    position: IndicatorPosition.above,
-    hapticFeedback: true,
-    secondaryTriggerOffset: 100,
-    secondaryDimension: 200,
-    builder: (ctx, state) {
-      Color color = Colors.blue;
-      if (state.result == IndicatorResult.failed) {
-        color = Colors.red;
-      } else if (state.result == IndicatorResult.noMore) {
-        color = Colors.yellow;
-      }
-      if (state.mode == IndicatorMode.secondaryArmed ||
-          state.mode == IndicatorMode.secondaryReady ||
-          state.mode == IndicatorMode.secondaryOpen ||
-          state.mode == IndicatorMode.secondaryClosing) {
-        color = Colors.white;
-      }
-      return Container(
-        color: color,
-        width: state.axis == Axis.vertical ? double.infinity : state.offset,
-        height: state.axis == Axis.vertical ? state.offset : double.infinity,
-      );
-    },
-  );
+  static Header get _defaultHeader => defaultHeaderBuilder.call();
+  static Header Function() defaultHeaderBuilder = _defaultHeaderBuilder;
+
+  static Header _defaultHeaderBuilder() => const ClassicalHeader();
 
   /// Default footer indicator.
-  static Footer defaultFooter = BuilderFooter(
-    triggerOffset: 70,
-    clamping: true,
-    safeArea: true,
-    infiniteOffset: null,
-    position: IndicatorPosition.above,
-    hapticFeedback: true,
-    secondaryTriggerOffset: 100,
-    secondaryDimension: 300,
-    builder: (ctx, state) {
-      Color color = Colors.blue;
-      if (state.result == IndicatorResult.failed) {
-        color = Colors.red;
-      } else if (state.result == IndicatorResult.noMore) {
-        color = Colors.yellow;
-      }
-      return Container(
-        color: color,
-        width: state.axis == Axis.vertical ? double.infinity : state.offset,
-        height: state.axis == Axis.vertical ? state.offset : double.infinity,
+  static Footer get _defaultFooter => defaultFooterBuilder.call();
+  static Footer Function() defaultFooterBuilder = _defaultFooterBuilder;
+
+  static Footer _defaultFooterBuilder() => BuilderFooter(
+        triggerOffset: 70,
+        clamping: true,
+        safeArea: true,
+        infiniteOffset: null,
+        position: IndicatorPosition.above,
+        hapticFeedback: true,
+        secondaryTriggerOffset: 100,
+        secondaryDimension: 300,
+        builder: (ctx, state) {
+          Color color = Colors.blue;
+          if (state.result == IndicatorResult.failed) {
+            color = Colors.red;
+          } else if (state.result == IndicatorResult.noMore) {
+            color = Colors.yellow;
+          }
+          return Container(
+            color: color,
+            width: state.axis == Axis.vertical ? double.infinity : state.offset,
+            height:
+                state.axis == Axis.vertical ? state.offset : double.infinity,
+          );
+        },
       );
-    },
-  );
 
   const EasyRefresh({
     Key? key,
@@ -262,21 +242,21 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// Indicator waiting for load task to complete.
   bool get _waitLoadResult => !(widget.controller?.controlFinishLoad ?? false);
 
-  /// Use [EasyRefresh.defaultHeader] without [EasyRefresh.header].
+  /// Use [EasyRefresh._defaultHeader] without [EasyRefresh.header].
   /// Use [NotRefreshHeader] when [EasyRefresh.onRefresh] is null.
   Header get _header {
     if (widget.onRefresh == null) {
       if (widget.notRefreshHeader != null) {
         return widget.notRefreshHeader!;
       } else {
-        final h = widget.header ?? EasyRefresh.defaultHeader;
+        final h = widget.header ?? EasyRefresh._defaultHeader;
         return NotRefreshHeader(
           clamping: h.clamping,
           spring: h.spring,
         );
       }
     } else {
-      Header h = widget.header ?? EasyRefresh.defaultHeader;
+      Header h = widget.header ?? EasyRefresh._defaultHeader;
       if (_isRefreshOnStart) {
         h = widget.refreshOnStartHeader ?? h;
       }
@@ -284,21 +264,21 @@ class _EasyRefreshState extends State<EasyRefresh>
     }
   }
 
-  /// Use [EasyRefresh.defaultFooter] without [EasyRefresh.footer].
+  /// Use [EasyRefresh._defaultFooter] without [EasyRefresh.footer].
   /// Use [NotLoadFooter] when [EasyRefresh.onLoad] is null.
   Footer get _footer {
     if (widget.onLoad == null) {
       if (widget.notLoadFooter != null) {
         return widget.notLoadFooter!;
       } else {
-        final f = widget.footer ?? EasyRefresh.defaultFooter;
+        final f = widget.footer ?? EasyRefresh._defaultFooter;
         return NotLoadFooter(
           clamping: f.clamping,
           spring: f.spring,
         );
       }
     } else {
-      return widget.footer ?? EasyRefresh.defaultFooter;
+      return widget.footer ?? EasyRefresh._defaultFooter;
     }
   }
 
