@@ -32,12 +32,24 @@ class _ClassicalIndicator extends StatefulWidget {
   /// Text on [IndicatorResult.noMore].
   final String noMoreText;
 
+  /// Text on [IndicatorMode.failed].
+  final String failedText;
+
   /// Message text.
   /// %T will be replaced with the last time.
   final String messageText;
 
   /// Whether to display message.
   final bool showMessage;
+
+  /// The dimension of the text area.
+  final double textDimension;
+
+  /// The dimension of the icon area.
+  final double iconDimension;
+
+  /// Spacing between text and icon.
+  final double spacing;
 
   const _ClassicalIndicator({
     Key? key,
@@ -50,8 +62,12 @@ class _ClassicalIndicator extends StatefulWidget {
     required this.processingText,
     required this.processedText,
     required this.noMoreText,
+    required this.failedText,
     required this.messageText,
     this.showMessage = true,
+    this.textDimension = 150,
+    this.iconDimension = 24,
+    this.spacing = 16,
   })  : assert(
             mainAxisAlignment == MainAxisAlignment.start ||
                 mainAxisAlignment == MainAxisAlignment.center ||
@@ -63,9 +79,13 @@ class _ClassicalIndicator extends StatefulWidget {
   State<_ClassicalIndicator> createState() => _ClassicalIndicatorState();
 }
 
-class _ClassicalIndicatorState extends State<_ClassicalIndicator> {
+class _ClassicalIndicatorState extends State<_ClassicalIndicator>
+    with TickerProviderStateMixin<_ClassicalIndicator> {
   /// Update time.
   late DateTime _updateTime;
+
+  /// Icon animation controller.
+  late AnimationController _iconAnimationController;
 
   MainAxisAlignment get _mainAxisAlignment => widget.mainAxisAlignment;
 
@@ -75,10 +95,107 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator> {
 
   double get _actualTriggerOffset => widget.state.actualTriggerOffset;
 
+  IndicatorMode get _mode => widget.state.mode;
+
+  IndicatorResult get _result => widget.state.result;
+
   @override
   void initState() {
     super.initState();
     _updateTime = DateTime.now();
+    _iconAnimationController = AnimationController(
+      value: 0,
+      vsync: this,
+      duration: const Duration(microseconds: 200),
+    );
+    _iconAnimationController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void didUpdateWidget(_ClassicalIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update time.
+    if (widget.state.mode == IndicatorMode.processed &&
+        oldWidget.state.mode != IndicatorMode.processed) {
+      _updateTime = DateTime.now();
+    }
+    if (widget.state.mode == IndicatorMode.armed &&
+        oldWidget.state.mode == IndicatorMode.drag) {
+      // Armed animation.
+      _iconAnimationController.animateTo(1,
+          duration: const Duration(milliseconds: 200));
+    } else if (widget.state.mode == IndicatorMode.drag &&
+        oldWidget.state.mode == IndicatorMode.armed) {
+      // Recovery animation.
+      _iconAnimationController.animateBack(0,
+          duration: const Duration(milliseconds: 200));
+    } else if (widget.state.mode == IndicatorMode.processing &&
+        oldWidget.state.mode != IndicatorMode.processing) {
+      // Reset animation.
+      _iconAnimationController.reset();
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _iconAnimationController.dispose();
+  }
+
+  /// The text of the current state.
+  String get _currentText {
+    switch (_mode) {
+      case IndicatorMode.drag:
+        return widget.dragText;
+      case IndicatorMode.armed:
+        return widget.armedText;
+      case IndicatorMode.ready:
+        return widget.readyText;
+      case IndicatorMode.processing:
+        return widget.processingText;
+      case IndicatorMode.processed:
+      case IndicatorMode.done:
+        if (_result == IndicatorResult.failed) {
+          return widget.failedText;
+        } else if (_result == IndicatorResult.noMore) {
+          return widget.noMoreText;
+        } else {
+          return widget.processedText;
+        }
+      default:
+        return '';
+    }
+  }
+
+  /// Message text.
+  String get _messageText {
+    if (widget.messageText.contains('%T')) {
+      String fillChar = _updateTime.minute < 10 ? "0" : "";
+      return widget.messageText.replaceAll(
+          "%T", "${_updateTime.hour}:$fillChar${_updateTime.minute}");
+    }
+    return widget.messageText;
+  }
+
+  /// Build icon.
+  Widget _buildIcon() {
+    if (_mode == IndicatorMode.processing) {
+      return SizedBox(
+        width: 20,
+        height: 20,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: Theme.of(context).iconTheme.color,
+        ),
+      );
+    }
+    if (_mode == IndicatorMode.processed || _mode == IndicatorMode.done) {
+      return const Icon(Icons.done);
+    }
+    return Transform.rotate(
+      angle: -pi * _iconAnimationController.value,
+      child: const Icon(Icons.arrow_downward),
+    );
   }
 
   /// When the list direction is vertically.
@@ -115,17 +232,42 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator> {
 
   /// The body when the list is vertically direction.
   Widget _buildVerticalBody() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(widget.readyText),
-            Text(widget.messageText),
-          ],
-        )
-      ],
+    Widget textWidget = Text(
+      _currentText,
+      style: Theme.of(context).textTheme.titleMedium,
+    );
+    Widget messageWidget = Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Text(
+        _messageText,
+        style: Theme.of(context).textTheme.caption,
+      ),
+    );
+    return Container(
+      alignment: Alignment.center,
+      height: _actualTriggerOffset,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            alignment: Alignment.center,
+            width: widget.iconDimension,
+            child: _buildIcon(),
+          ),
+          SizedBox(width: widget.spacing),
+          SizedBox(
+            width: widget.textDimension,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                textWidget,
+                if (widget.showMessage) messageWidget,
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -57,13 +57,14 @@ class _ClassicalHeaderWidgetState extends State<_ClassicalHeaderWidget> {
   Widget build(BuildContext context) {
     return _ClassicalIndicator(
       state: widget.state,
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       dragText: 'Pull to refresh',
       armedText: 'Release to refresh',
-      readyText: 'Refreshing...',
+      readyText: 'Ready to refresh',
       processingText: 'Refreshing...',
       processedText: 'Refresh completed',
       noMoreText: 'No more',
+      failedText: 'Refresh failed',
       messageText: 'Update at %T',
     );
   }
