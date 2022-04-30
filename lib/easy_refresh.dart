@@ -22,4 +22,5 @@ part 'src/indicator/footer/footer.dart';
 part 'src/indicator/footer/footer_locator.dart';
 part 'src/controller/controller.dart';
 part 'src/style/header/classical_header.dart';
+part 'src/style/footer/classical_footer.dart';
 part 'src/style/classical_indicator.dart';

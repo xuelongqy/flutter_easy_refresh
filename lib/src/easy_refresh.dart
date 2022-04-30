@@ -123,30 +123,7 @@ class EasyRefresh extends StatefulWidget {
   static Footer get _defaultFooter => defaultFooterBuilder.call();
   static Footer Function() defaultFooterBuilder = _defaultFooterBuilder;
 
-  static Footer _defaultFooterBuilder() => BuilderFooter(
-        triggerOffset: 70,
-        clamping: true,
-        safeArea: true,
-        infiniteOffset: null,
-        position: IndicatorPosition.above,
-        hapticFeedback: true,
-        secondaryTriggerOffset: 100,
-        secondaryDimension: 300,
-        builder: (ctx, state) {
-          Color color = Colors.blue;
-          if (state.result == IndicatorResult.failed) {
-            color = Colors.red;
-          } else if (state.result == IndicatorResult.noMore) {
-            color = Colors.yellow;
-          }
-          return Container(
-            color: color,
-            width: state.axis == Axis.vertical ? double.infinity : state.offset,
-            height:
-                state.axis == Axis.vertical ? state.offset : double.infinity,
-          );
-        },
-      );
+  static Footer _defaultFooterBuilder() => const ClassicalFooter();
 
   const EasyRefresh({
     Key? key,

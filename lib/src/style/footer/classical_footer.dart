@@ -1,10 +1,10 @@
 part of easyrefresh;
 
-/// Classical header.
-class ClassicalHeader extends Header {
+/// Classical footer.
+class ClassicalFooter extends Footer {
   final Key? key;
 
-  const ClassicalHeader({
+  const ClassicalFooter({
     this.key,
     double triggerOffset = 70,
     bool clamping = false,
@@ -37,35 +37,35 @@ class ClassicalHeader extends Header {
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    return _ClassicalHeaderWidget(key: key, state: state);
+    return _ClassicalFooterWidget(key: key, state: state);
   }
 }
 
-class _ClassicalHeaderWidget extends StatefulWidget {
+class _ClassicalFooterWidget extends StatefulWidget {
   final IndicatorState state;
 
-  const _ClassicalHeaderWidget({Key? key, required this.state})
+  const _ClassicalFooterWidget({Key? key, required this.state})
       : super(key: key);
 
   @override
-  State<_ClassicalHeaderWidget> createState() => _ClassicalHeaderWidgetState();
+  State<_ClassicalFooterWidget> createState() => _ClassicalFooterWidgetState();
 }
 
-class _ClassicalHeaderWidgetState extends State<_ClassicalHeaderWidget> {
+class _ClassicalFooterWidgetState extends State<_ClassicalFooterWidget> {
   @override
   Widget build(BuildContext context) {
     return _ClassicalIndicator(
       state: widget.state,
-      mainAxisAlignment: MainAxisAlignment.center,
-      dragText: 'Pull to refresh',
+      mainAxisAlignment: MainAxisAlignment.start,
+      dragText: 'Pull up load',
       armedText: 'Release ready',
-      readyText: 'Refreshing...',
-      processingText: 'Refreshing...',
+      readyText: 'Loading...',
+      processingText: 'Loading...',
       processedText: 'Succeeded',
       noMoreText: 'No more',
       failedText: 'Failed',
       messageText: 'Last updated at %T',
-      reverse: false,
+      reverse: true,
     );
   }
 }

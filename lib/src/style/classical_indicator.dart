@@ -43,13 +43,18 @@ class _ClassicalIndicator extends StatefulWidget {
   final bool showMessage;
 
   /// The dimension of the text area.
-  final double textDimension;
+  /// When less than 0, calculate the length of the text widget.
+  final double? textDimension;
 
   /// The dimension of the icon area.
   final double iconDimension;
 
   /// Spacing between text and icon.
   final double spacing;
+
+  /// True for up and left.
+  /// False for down and right.
+  final bool reverse;
 
   const _ClassicalIndicator({
     Key? key,
@@ -64,8 +69,9 @@ class _ClassicalIndicator extends StatefulWidget {
     required this.noMoreText,
     required this.failedText,
     required this.messageText,
+    required this.reverse,
     this.showMessage = true,
-    this.textDimension = 150,
+    this.textDimension,
     this.iconDimension = 24,
     this.spacing = 16,
   })  : assert(
@@ -81,6 +87,9 @@ class _ClassicalIndicator extends StatefulWidget {
 
 class _ClassicalIndicatorState extends State<_ClassicalIndicator>
     with TickerProviderStateMixin<_ClassicalIndicator> {
+  /// Icon [AnimatedSwitcher] switch key.
+  final _iconAnimatedSwitcherKey = GlobalKey();
+
   /// Update time.
   late DateTime _updateTime;
 
@@ -94,6 +103,10 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
   double get _offset => widget.state.offset;
 
   double get _actualTriggerOffset => widget.state.actualTriggerOffset;
+
+  double get _triggerOffset => widget.state.triggerOffset;
+
+  double get _safeOffset => widget.state.safeOffset;
 
   IndicatorMode get _mode => widget.state.mode;
 
@@ -144,6 +157,9 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
 
   /// The text of the current state.
   String get _currentText {
+    if (_result == IndicatorResult.noMore) {
+      return widget.noMoreText;
+    }
     switch (_mode) {
       case IndicatorMode.drag:
         return widget.dragText;
@@ -157,8 +173,6 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
       case IndicatorMode.done:
         if (_result == IndicatorResult.failed) {
           return widget.failedText;
-        } else if (_result == IndicatorResult.noMore) {
-          return widget.noMoreText;
         } else {
           return widget.processedText;
         }
@@ -179,8 +193,16 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
 
   /// Build icon.
   Widget _buildIcon() {
-    if (_mode == IndicatorMode.processing) {
-      return SizedBox(
+    Widget icon;
+    if (_result == IndicatorResult.noMore) {
+      icon = const Icon(
+        Icons.inbox_outlined,
+        key: ValueKey(IndicatorResult.noMore),
+      );
+    } else if (_mode == IndicatorMode.processing ||
+        _mode == IndicatorMode.ready) {
+      icon = SizedBox(
+        key: const ValueKey(IndicatorMode.processing),
         width: 20,
         height: 20,
         child: CircularProgressIndicator(
@@ -188,13 +210,39 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
           color: Theme.of(context).iconTheme.color,
         ),
       );
+    } else if (_mode == IndicatorMode.processed ||
+        _mode == IndicatorMode.done) {
+      if (_result == IndicatorResult.failed) {
+        icon = const Icon(
+          Icons.error_outline,
+          key: ValueKey(IndicatorResult.failed),
+        );
+      } else {
+        icon = const Icon(
+          Icons.done,
+          key: ValueKey(IndicatorResult.succeeded),
+        );
+      }
+    } else {
+      icon = Transform.rotate(
+        key: const ValueKey(IndicatorMode.drag),
+        angle: pi * _iconAnimationController.value * (widget.reverse ? 1 : -1),
+        child: Icon(widget.reverse ? Icons.arrow_upward : Icons.arrow_downward),
+      );
     }
-    if (_mode == IndicatorMode.processed || _mode == IndicatorMode.done) {
-      return const Icon(Icons.done);
-    }
-    return Transform.rotate(
-      angle: -pi * _iconAnimationController.value,
-      child: const Icon(Icons.arrow_downward),
+    return AnimatedSwitcher(
+      key: _iconAnimatedSwitcherKey,
+      duration: const Duration(milliseconds: 300),
+      reverseDuration: const Duration(milliseconds: 200),
+      transitionBuilder: (child, animation) {
+        return FadeTransition(
+            child: ScaleTransition(
+              child: child,
+              scale: animation,
+            ),
+            opacity: animation);
+      },
+      child: icon,
     );
   }
 
@@ -207,23 +255,30 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
             left: 0,
             right: 0,
             top: _offset < _actualTriggerOffset
-                ? -(_actualTriggerOffset - _offset) / 2
-                : 0,
-            bottom: _offset < _actualTriggerOffset ? null : 0,
+                ? -(_actualTriggerOffset -
+                        _offset +
+                        (widget.reverse ? _safeOffset : -_safeOffset)) /
+                    2
+                : (!widget.reverse ? _safeOffset : 0),
+            bottom: _offset < _actualTriggerOffset
+                ? null
+                : (widget.reverse ? _safeOffset : 0),
             height:
                 _offset < _actualTriggerOffset ? _actualTriggerOffset : null,
             child: Center(
-              child: IntrinsicHeight(
-                child: _buildVerticalBody(),
-              ),
+              child: _buildVerticalBody(),
             ),
           ),
         if (_mainAxisAlignment != MainAxisAlignment.center)
           Positioned(
             left: 0,
             right: 0,
-            top: _mainAxisAlignment == MainAxisAlignment.start ? 0 : null,
-            bottom: _mainAxisAlignment == MainAxisAlignment.end ? 0 : null,
+            top: _mainAxisAlignment == MainAxisAlignment.start
+                ? (!widget.reverse ? _safeOffset : 0)
+                : null,
+            bottom: _mainAxisAlignment == MainAxisAlignment.end
+                ? (widget.reverse ? _safeOffset : 0)
+                : null,
             child: _buildVerticalBody(),
           ),
       ],
@@ -245,7 +300,7 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
     );
     return Container(
       alignment: Alignment.center,
-      height: _actualTriggerOffset,
+      height: _triggerOffset,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
