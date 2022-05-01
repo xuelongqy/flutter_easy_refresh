@@ -35,6 +35,9 @@ class _ClassicalIndicator extends StatefulWidget {
   /// Text on [IndicatorMode.failed].
   final String failedText;
 
+  /// Whether to display text.
+  final bool showText;
+
   /// Message text.
   /// %T will be replaced with the last time.
   final String messageText;
@@ -68,6 +71,7 @@ class _ClassicalIndicator extends StatefulWidget {
     required this.processedText,
     required this.noMoreText,
     required this.failedText,
+    this.showText = true,
     required this.messageText,
     required this.reverse,
     this.showMessage = true,
@@ -309,18 +313,19 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
             width: widget.iconDimension,
             child: _buildIcon(),
           ),
-          SizedBox(width: widget.spacing),
-          SizedBox(
-            width: widget.textDimension,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                textWidget,
-                if (widget.showMessage) messageWidget,
-              ],
+          if (widget.showText)
+            Container(
+              margin: EdgeInsets.only(left: widget.spacing),
+              width: widget.textDimension,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  textWidget,
+                  if (widget.showMessage) messageWidget,
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );

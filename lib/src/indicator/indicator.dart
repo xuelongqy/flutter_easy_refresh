@@ -115,6 +115,11 @@ class IndicatorState {
 
   final double actualTriggerOffset;
 
+  /// Whether the scroll view direction is reversed.
+  /// [AxisDirection.up] or [AxisDirection.left]
+  bool get reverse =>
+      axisDirection == AxisDirection.up || axisDirection == AxisDirection.left;
+
   const IndicatorState({
     required this.indicator,
     required this.mode,

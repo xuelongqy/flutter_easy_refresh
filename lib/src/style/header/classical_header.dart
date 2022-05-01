@@ -4,6 +4,55 @@ part of easyrefresh;
 class ClassicalHeader extends Header {
   final Key? key;
 
+  /// The location of the widget.
+  /// Only supports [MainAxisAlignment.center],
+  /// [MainAxisAlignment.start] and [MainAxisAlignment.end].
+  final MainAxisAlignment mainAxisAlignment;
+
+  /// Background color.
+  final Color? backgroundColor;
+
+  /// Text on [IndicatorMode.drag].
+  final String? dragText;
+
+  /// Text on [IndicatorMode.armed].
+  final String? armedText;
+
+  /// Text on [IndicatorMode.ready].
+  final String? readyText;
+
+  /// Text on [IndicatorMode.processing].
+  final String? processingText;
+
+  /// Text on [IndicatorMode.processed].
+  final String? processedText;
+
+  /// Text on [IndicatorResult.noMore].
+  final String? noMoreText;
+
+  /// Text on [IndicatorMode.failed].
+  final String? failedText;
+
+  /// Whether to display text.
+  final bool showText;
+
+  /// Message text.
+  /// %T will be replaced with the last time.
+  final String? messageText;
+
+  /// Whether to display message.
+  final bool showMessage;
+
+  /// The dimension of the text area.
+  /// When less than 0, calculate the length of the text widget.
+  final double? textDimension;
+
+  /// The dimension of the icon area.
+  final double iconDimension;
+
+  /// Spacing between text and icon.
+  final double spacing;
+
   const ClassicalHeader({
     this.key,
     double triggerOffset = 70,
@@ -19,6 +68,21 @@ class ClassicalHeader extends Header {
     double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    this.mainAxisAlignment = MainAxisAlignment.center,
+    this.backgroundColor,
+    this.dragText,
+    this.armedText,
+    this.readyText,
+    this.processingText,
+    this.processedText,
+    this.noMoreText,
+    this.failedText,
+    this.showText = true,
+    this.messageText,
+    this.showMessage = true,
+    this.textDimension,
+    this.iconDimension = 24,
+    this.spacing = 16,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -37,35 +101,23 @@ class ClassicalHeader extends Header {
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    return _ClassicalHeaderWidget(key: key, state: state);
-  }
-}
-
-class _ClassicalHeaderWidget extends StatefulWidget {
-  final IndicatorState state;
-
-  const _ClassicalHeaderWidget({Key? key, required this.state})
-      : super(key: key);
-
-  @override
-  State<_ClassicalHeaderWidget> createState() => _ClassicalHeaderWidgetState();
-}
-
-class _ClassicalHeaderWidgetState extends State<_ClassicalHeaderWidget> {
-  @override
-  Widget build(BuildContext context) {
     return _ClassicalIndicator(
-      state: widget.state,
-      mainAxisAlignment: MainAxisAlignment.center,
-      dragText: 'Pull to refresh',
-      armedText: 'Release ready',
-      readyText: 'Refreshing...',
-      processingText: 'Refreshing...',
-      processedText: 'Succeeded',
-      noMoreText: 'No more',
-      failedText: 'Failed',
-      messageText: 'Last updated at %T',
-      reverse: false,
+      state: state,
+      mainAxisAlignment: mainAxisAlignment,
+      dragText: dragText ?? 'Pull to refresh',
+      armedText: armedText ?? 'Release ready',
+      readyText: readyText ?? 'Refreshing...',
+      processingText: processingText ?? 'Refreshing...',
+      processedText: processedText ?? 'Succeeded',
+      noMoreText: noMoreText ?? 'No more',
+      failedText: failedText ?? 'Failed',
+      showText: showText,
+      messageText: messageText ?? 'Last updated at %T',
+      showMessage: showMessage,
+      textDimension: textDimension,
+      iconDimension: iconDimension,
+      spacing: spacing,
+      reverse: state.reverse,
     );
   }
 }

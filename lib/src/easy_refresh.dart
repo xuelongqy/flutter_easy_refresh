@@ -411,16 +411,14 @@ class _EasyRefreshState extends State<EasyRefresh>
         final axis = _headerNotifier.axis!;
         final axisDirection = _headerNotifier.axisDirection!;
         // Set safe area offset.
-        if (_headerNotifier._safeOffset == null) {
-          final safePadding = MediaQuery.of(context).padding;
-          _footerNotifier._safeOffset = axis == Axis.vertical
-              ? axisDirection == AxisDirection.down
-                  ? safePadding.top
-                  : safePadding.bottom
-              : axisDirection == AxisDirection.right
-                  ? safePadding.left
-                  : safePadding.right;
-        }
+        final safePadding = MediaQuery.of(context).padding;
+        _headerNotifier._safeOffset = axis == Axis.vertical
+            ? axisDirection == AxisDirection.down
+                ? safePadding.top
+                : safePadding.bottom
+            : axisDirection == AxisDirection.right
+                ? safePadding.left
+                : safePadding.right;
         return Positioned(
           top: axis == Axis.vertical
               ? axisDirection == AxisDirection.down
@@ -464,16 +462,14 @@ class _EasyRefreshState extends State<EasyRefresh>
         final axis = _headerNotifier.axis!;
         final axisDirection = _headerNotifier.axisDirection!;
         // Set safe area offset.
-        if (_footerNotifier._safeOffset == null) {
-          final safePadding = MediaQuery.of(context).padding;
-          _footerNotifier._safeOffset = axis == Axis.vertical
-              ? axisDirection == AxisDirection.down
-                  ? safePadding.bottom
-                  : safePadding.top
-              : axisDirection == AxisDirection.right
-                  ? safePadding.right
-                  : safePadding.left;
-        }
+        final safePadding = MediaQuery.of(context).padding;
+        _footerNotifier._safeOffset = axis == Axis.vertical
+            ? axisDirection == AxisDirection.down
+                ? safePadding.bottom
+                : safePadding.top
+            : axisDirection == AxisDirection.right
+                ? safePadding.right
+                : safePadding.left;
         return Positioned(
           top: axis == Axis.vertical
               ? axisDirection == AxisDirection.up
@@ -528,13 +524,13 @@ class _EasyRefreshState extends State<EasyRefresh>
     final hPosition = _headerNotifier.iPosition;
     final fPosition = _footerNotifier.iPosition;
     // Set safe area offset.
-    final mPadding = MediaQuery.of(context).padding;
-    if (hPosition != IndicatorPosition.locator) {
-      _headerNotifier._safeOffset = mPadding.top;
-    }
-    if (fPosition != IndicatorPosition.locator) {
-      _footerNotifier._safeOffset = mPadding.bottom;
-    }
+    // final safePadding = MediaQuery.of(context).padding;
+    // if (hPosition != IndicatorPosition.locator) {
+    //   _headerNotifier._safeOffset = safePadding.top;
+    // }
+    // if (fPosition != IndicatorPosition.locator) {
+    //   _footerNotifier._safeOffset = safePadding.bottom;
+    // }
     // Set the position of widgets.
     if (hPosition == IndicatorPosition.behind) {
       children.add(_buildHeaderView());
