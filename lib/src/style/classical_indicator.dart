@@ -230,8 +230,12 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
     } else {
       icon = Transform.rotate(
         key: const ValueKey(IndicatorMode.drag),
-        angle: pi * _iconAnimationController.value * (widget.reverse ? 1 : -1),
-        child: Icon(widget.reverse ? Icons.arrow_upward : Icons.arrow_downward),
+        angle: -pi * _iconAnimationController.value,
+        child: Icon(widget.reverse
+            ? (_axis == Axis.vertical ? Icons.arrow_upward : Icons.arrow_back)
+            : (_axis == Axis.vertical
+                ? Icons.arrow_downward
+                : Icons.arrow_forward)),
       );
     }
     return AnimatedSwitcher(
@@ -333,7 +337,85 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
 
   /// When the list direction is horizontally.
   Widget _buildHorizontalWidget() {
-    return Container();
+    return Stack(
+      children: [
+        if (_mainAxisAlignment == MainAxisAlignment.center)
+          Positioned(
+            left: _offset < _actualTriggerOffset
+                ? -(_actualTriggerOffset -
+                        _offset +
+                        (widget.reverse ? _safeOffset : -_safeOffset)) /
+                    2
+                : (!widget.reverse ? _safeOffset : 0),
+            right: _offset < _actualTriggerOffset
+                ? null
+                : (widget.reverse ? _safeOffset : 0),
+            top: 0,
+            bottom: 0,
+            width: _offset < _actualTriggerOffset ? _actualTriggerOffset : null,
+            child: Center(
+              child: _buildHorizontalBody(),
+            ),
+          ),
+        if (_mainAxisAlignment != MainAxisAlignment.center)
+          Positioned(
+            left: _mainAxisAlignment == MainAxisAlignment.start
+                ? (!widget.reverse ? _safeOffset : 0)
+                : null,
+            right: _mainAxisAlignment == MainAxisAlignment.end
+                ? (widget.reverse ? _safeOffset : 0)
+                : null,
+            top: 0,
+            bottom: 0,
+            child: _buildHorizontalBody(),
+          ),
+      ],
+    );
+  }
+
+  /// The body when the list is horizontal direction.
+  Widget _buildHorizontalBody() {
+    Widget textWidget = Text(
+      _currentText,
+      style: Theme.of(context).textTheme.titleMedium,
+    );
+    Widget messageWidget = Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Text(
+        _messageText,
+        style: Theme.of(context).textTheme.caption,
+      ),
+    );
+    return Container(
+      alignment: Alignment.center,
+      width: _triggerOffset,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            alignment: Alignment.center,
+            height: widget.iconDimension,
+            child: _buildIcon(),
+          ),
+          if (widget.showText)
+            Container(
+              margin: EdgeInsets.only(top: widget.spacing),
+              width: widget.textDimension,
+              child: RotatedBox(
+                quarterTurns: -3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    textWidget,
+                    if (widget.showMessage) messageWidget,
+                  ],
+                ),
+              ),
+            )
+        ],
+      ),
+    );
   }
 
   @override
