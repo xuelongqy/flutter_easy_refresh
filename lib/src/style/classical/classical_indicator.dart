@@ -14,7 +14,7 @@ typedef CIMessageBuilder = Widget Function(
 
 /// Classical indicator.
 /// Base widget for [ClassicalHeader] and [ClassicalFooter].
-class ClassicalIndicator extends StatefulWidget {
+class _ClassicalIndicator extends StatefulWidget {
   /// Indicator properties and state.
   final IndicatorState state;
 
@@ -95,7 +95,7 @@ class ClassicalIndicator extends StatefulWidget {
   /// Build message.
   final CIMessageBuilder? messageBuilder;
 
-  const ClassicalIndicator({
+  const _ClassicalIndicator({
     Key? key,
     required this.state,
     required this.mainAxisAlignment,
@@ -130,11 +130,11 @@ class ClassicalIndicator extends StatefulWidget {
         super(key: key);
 
   @override
-  State<ClassicalIndicator> createState() => _ClassicalIndicatorState();
+  State<_ClassicalIndicator> createState() => _ClassicalIndicatorState();
 }
 
-class _ClassicalIndicatorState extends State<ClassicalIndicator>
-    with TickerProviderStateMixin<ClassicalIndicator> {
+class _ClassicalIndicatorState extends State<_ClassicalIndicator>
+    with TickerProviderStateMixin<_ClassicalIndicator> {
   /// Icon [AnimatedSwitcher] switch key.
   final _iconAnimatedSwitcherKey = GlobalKey();
 
@@ -173,7 +173,7 @@ class _ClassicalIndicatorState extends State<ClassicalIndicator>
   }
 
   @override
-  void didUpdateWidget(ClassicalIndicator oldWidget) {
+  void didUpdateWidget(_ClassicalIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Update time.
     if (widget.state.mode == IndicatorMode.processed &&
@@ -286,7 +286,7 @@ class _ClassicalIndicatorState extends State<ClassicalIndicator>
         child: widget.pullIconBuilder
                 ?.call(context, widget.state, _iconAnimationController.value) ??
             Transform.rotate(
-              angle: -pi * _iconAnimationController.value,
+              angle: -math.pi * _iconAnimationController.value,
               child: Icon(widget.reverse
                   ? (_axis == Axis.vertical
                       ? Icons.arrow_upward

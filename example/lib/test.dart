@@ -56,6 +56,7 @@ class _TestPageState extends State<TestPage> {
                 child: const Text('Refresh on start'),
               );
             }),
+        header: MaterialHeader(),
         onRefresh: () async {
           print('Refreshing');
           await Future.delayed(const Duration(seconds: 2));

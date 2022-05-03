@@ -89,9 +89,6 @@ class ClassicalFooter extends Footer {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
-    double? secondaryTriggerOffset,
-    double secondaryVelocity = kDefaultSecondaryVelocity,
-    double? secondaryDimension,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.backgroundColor,
     this.dragText,
@@ -125,15 +122,12 @@ class ClassicalFooter extends Footer {
           hitOver: hitOver,
           infiniteHitOver: infiniteHitOver,
           position: position,
-          secondaryTriggerOffset: secondaryTriggerOffset,
-          secondaryVelocity: secondaryVelocity,
           hapticFeedback: hapticFeedback,
-          secondaryDimension: secondaryDimension,
         );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    return ClassicalIndicator(
+    return _ClassicalIndicator(
       key: key,
       state: state,
       mainAxisAlignment: MainAxisAlignment.start,

@@ -2,7 +2,6 @@ library easyrefresh;
 
 import 'dart:math' as math;
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -21,6 +20,9 @@ part 'src/indicator/header/header_locator.dart';
 part 'src/indicator/footer/footer.dart';
 part 'src/indicator/footer/footer_locator.dart';
 part 'src/controller/controller.dart';
-part 'src/style/header/classical_header.dart';
-part 'src/style/footer/classical_footer.dart';
-part 'src/style/classical_indicator.dart';
+part 'src/style/classical/header/classical_header.dart';
+part 'src/style/classical/footer/classical_footer.dart';
+part 'src/style/classical/classical_indicator.dart';
+part 'src/style/material/material_indicator.dart';
+part 'src/style/material/header/material_header.dart';
+part 'src/style/material/footer/material_footer.dart';
