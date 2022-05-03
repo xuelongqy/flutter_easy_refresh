@@ -1,8 +1,20 @@
 part of easyrefresh;
 
+/// Pull icon widget builder.
+typedef CIPullIconBuilder = Widget Function(
+    BuildContext context, IndicatorState state, double animation);
+
+/// Text widget builder.
+typedef CITextBuilder = Widget Function(
+    BuildContext context, IndicatorState state, String text);
+
+/// Message widget builder.
+typedef CIMessageBuilder = Widget Function(
+    BuildContext context, IndicatorState state, String text, DateTime dateTime);
+
 /// Classical indicator.
 /// Base widget for [ClassicalHeader] and [ClassicalFooter].
-class _ClassicalIndicator extends StatefulWidget {
+class ClassicalIndicator extends StatefulWidget {
   /// Indicator properties and state.
   final IndicatorState state;
 
@@ -59,7 +71,31 @@ class _ClassicalIndicator extends StatefulWidget {
   /// False for down and right.
   final bool reverse;
 
-  const _ClassicalIndicator({
+  /// Icon when [IndicatorResult.succeeded].
+  final Widget? succeededIcon;
+
+  /// Icon when [IndicatorResult.failed].
+  final Widget? failedIcon;
+
+  /// Icon when [IndicatorResult.noMore].
+  final Widget? noMoreIcon;
+
+  /// Icon on pull.
+  final CIPullIconBuilder? pullIconBuilder;
+
+  /// Text style.
+  final TextStyle? textStyle;
+
+  /// Build text.
+  final CITextBuilder? textBuilder;
+
+  /// Text style.
+  final TextStyle? messageStyle;
+
+  /// Build message.
+  final CIMessageBuilder? messageBuilder;
+
+  const ClassicalIndicator({
     Key? key,
     required this.state,
     required this.mainAxisAlignment,
@@ -78,6 +114,14 @@ class _ClassicalIndicator extends StatefulWidget {
     this.textDimension,
     this.iconDimension = 24,
     this.spacing = 16,
+    this.succeededIcon,
+    this.failedIcon,
+    this.noMoreIcon,
+    this.pullIconBuilder,
+    this.textStyle,
+    this.textBuilder,
+    this.messageStyle,
+    this.messageBuilder,
   })  : assert(
             mainAxisAlignment == MainAxisAlignment.start ||
                 mainAxisAlignment == MainAxisAlignment.center ||
@@ -86,11 +130,11 @@ class _ClassicalIndicator extends StatefulWidget {
         super(key: key);
 
   @override
-  State<_ClassicalIndicator> createState() => _ClassicalIndicatorState();
+  State<ClassicalIndicator> createState() => _ClassicalIndicatorState();
 }
 
-class _ClassicalIndicatorState extends State<_ClassicalIndicator>
-    with TickerProviderStateMixin<_ClassicalIndicator> {
+class _ClassicalIndicatorState extends State<ClassicalIndicator>
+    with TickerProviderStateMixin<ClassicalIndicator> {
   /// Icon [AnimatedSwitcher] switch key.
   final _iconAnimatedSwitcherKey = GlobalKey();
 
@@ -129,7 +173,7 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
   }
 
   @override
-  void didUpdateWidget(_ClassicalIndicator oldWidget) {
+  void didUpdateWidget(ClassicalIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Update time.
     if (widget.state.mode == IndicatorMode.processed &&
@@ -199,9 +243,12 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
   Widget _buildIcon() {
     Widget icon;
     if (_result == IndicatorResult.noMore) {
-      icon = const Icon(
-        Icons.inbox_outlined,
-        key: ValueKey(IndicatorResult.noMore),
+      icon = SizedBox(
+        key: const ValueKey(IndicatorResult.noMore),
+        child: widget.noMoreIcon ??
+            const Icon(
+              Icons.inbox_outlined,
+            ),
       );
     } else if (_mode == IndicatorMode.processing ||
         _mode == IndicatorMode.ready) {
@@ -217,25 +264,37 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
     } else if (_mode == IndicatorMode.processed ||
         _mode == IndicatorMode.done) {
       if (_result == IndicatorResult.failed) {
-        icon = const Icon(
-          Icons.error_outline,
-          key: ValueKey(IndicatorResult.failed),
+        icon = SizedBox(
+          key: const ValueKey(IndicatorResult.failed),
+          child: widget.failedIcon ??
+              const Icon(
+                Icons.error_outline,
+              ),
         );
       } else {
-        icon = const Icon(
-          Icons.done,
-          key: ValueKey(IndicatorResult.succeeded),
+        icon = SizedBox(
+          key: const ValueKey(IndicatorResult.succeeded),
+          child: widget.succeededIcon ??
+              const Icon(
+                Icons.done,
+              ),
         );
       }
     } else {
-      icon = Transform.rotate(
+      icon = SizedBox(
         key: const ValueKey(IndicatorMode.drag),
-        angle: -pi * _iconAnimationController.value,
-        child: Icon(widget.reverse
-            ? (_axis == Axis.vertical ? Icons.arrow_upward : Icons.arrow_back)
-            : (_axis == Axis.vertical
-                ? Icons.arrow_downward
-                : Icons.arrow_forward)),
+        child: widget.pullIconBuilder
+                ?.call(context, widget.state, _iconAnimationController.value) ??
+            Transform.rotate(
+              angle: -pi * _iconAnimationController.value,
+              child: Icon(widget.reverse
+                  ? (_axis == Axis.vertical
+                      ? Icons.arrow_upward
+                      : Icons.arrow_back)
+                  : (_axis == Axis.vertical
+                      ? Icons.arrow_downward
+                      : Icons.arrow_forward)),
+            ),
       );
     }
     return AnimatedSwitcher(
@@ -252,6 +311,28 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
       },
       child: icon,
     );
+  }
+
+  /// Build text.
+  Widget _buildText() {
+    return widget.textBuilder?.call(context, widget.state, _currentText) ??
+        Text(
+          _currentText,
+          style: widget.textStyle ?? Theme.of(context).textTheme.titleMedium,
+        );
+  }
+
+  /// Build text.
+  Widget _buildMessage() {
+    return widget.messageBuilder
+            ?.call(context, widget.state, widget.messageText, _updateTime) ??
+        Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            _messageText,
+            style: widget.messageStyle ?? Theme.of(context).textTheme.caption,
+          ),
+        );
   }
 
   /// When the list direction is vertically.
@@ -295,17 +376,6 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
 
   /// The body when the list is vertically direction.
   Widget _buildVerticalBody() {
-    Widget textWidget = Text(
-      _currentText,
-      style: Theme.of(context).textTheme.titleMedium,
-    );
-    Widget messageWidget = Padding(
-      padding: const EdgeInsets.only(top: 4),
-      child: Text(
-        _messageText,
-        style: Theme.of(context).textTheme.caption,
-      ),
-    );
     return Container(
       alignment: Alignment.center,
       height: _triggerOffset,
@@ -325,8 +395,8 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  textWidget,
-                  if (widget.showMessage) messageWidget,
+                  _buildText(),
+                  if (widget.showMessage) _buildMessage(),
                 ],
               ),
             ),
@@ -375,17 +445,6 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
 
   /// The body when the list is horizontal direction.
   Widget _buildHorizontalBody() {
-    Widget textWidget = Text(
-      _currentText,
-      style: Theme.of(context).textTheme.titleMedium,
-    );
-    Widget messageWidget = Padding(
-      padding: const EdgeInsets.only(top: 4),
-      child: Text(
-        _messageText,
-        style: Theme.of(context).textTheme.caption,
-      ),
-    );
     return Container(
       alignment: Alignment.center,
       width: _triggerOffset,
@@ -407,8 +466,8 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    textWidget,
-                    if (widget.showMessage) messageWidget,
+                    _buildText(),
+                    if (widget.showMessage) _buildMessage(),
                   ],
                 ),
               ),

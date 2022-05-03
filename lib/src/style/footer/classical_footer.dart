@@ -53,6 +53,30 @@ class ClassicalFooter extends Footer {
   /// Spacing between text and icon.
   final double spacing;
 
+  /// Icon when [IndicatorResult.succeeded].
+  final Widget? succeededIcon;
+
+  /// Icon when [IndicatorResult.failed].
+  final Widget? failedIcon;
+
+  /// Icon when [IndicatorResult.noMore].
+  final Widget? noMoreIcon;
+
+  /// Icon on pull.
+  final CIPullIconBuilder? pullIconBuilder;
+
+  /// Text style.
+  final TextStyle? textStyle;
+
+  /// Build text.
+  final CITextBuilder? textBuilder;
+
+  /// Text style.
+  final TextStyle? messageStyle;
+
+  /// Build message.
+  final CIMessageBuilder? messageBuilder;
+
   const ClassicalFooter({
     this.key,
     double triggerOffset = 70,
@@ -83,6 +107,14 @@ class ClassicalFooter extends Footer {
     this.textDimension,
     this.iconDimension = 24,
     this.spacing = 16,
+    this.succeededIcon,
+    this.failedIcon,
+    this.noMoreIcon,
+    this.pullIconBuilder,
+    this.textStyle,
+    this.textBuilder,
+    this.messageStyle,
+    this.messageBuilder,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -101,7 +133,8 @@ class ClassicalFooter extends Footer {
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    return _ClassicalIndicator(
+    return ClassicalIndicator(
+      key: key,
       state: state,
       mainAxisAlignment: MainAxisAlignment.start,
       dragText: dragText ?? 'Pull to load',
@@ -118,6 +151,14 @@ class ClassicalFooter extends Footer {
       iconDimension: iconDimension,
       spacing: spacing,
       reverse: !state.reverse,
+      succeededIcon: succeededIcon,
+      failedIcon: failedIcon,
+      noMoreIcon: noMoreIcon,
+      pullIconBuilder: pullIconBuilder,
+      textStyle: textStyle,
+      textBuilder: textBuilder,
+      messageStyle: messageStyle,
+      messageBuilder: messageBuilder,
     );
   }
 }
