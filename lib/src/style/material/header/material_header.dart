@@ -4,9 +4,33 @@ part of easyrefresh;
 class MaterialHeader extends Header {
   final Key? key;
 
+  /// See [ProgressIndicator.backgroundColor].
+  final Color? backgroundColor;
+
+  /// See [ProgressIndicator.color].
+  final Color? color;
+
+  /// See [ProgressIndicator.valueColor].
+  final Animation<Color?>? valueColor;
+
+  /// See [ProgressIndicator.semanticsLabel].
+  final String? semanticsLabel;
+
+  /// See [ProgressIndicator.semanticsLabel].
+  final String? semanticsValue;
+
+  /// Icon when [IndicatorResult.noMore].
+  final Widget? noMoreIcon;
+
+  /// Show bezier background.
+  final bool showBezierBackground;
+
+  /// Show bezier background.
+  final Color? bezierBackgroundColor;
+
   MaterialHeader({
     this.key,
-    double triggerOffset = 90,
+    double triggerOffset = 100,
     bool clamping = true,
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = const Duration(milliseconds: 200),
@@ -16,11 +40,19 @@ class MaterialHeader extends Header {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
+    this.backgroundColor,
+    this.color,
+    this.valueColor,
+    this.semanticsLabel,
+    this.semanticsValue,
+    this.noMoreIcon,
+    this.showBezierBackground = false,
+    this.bezierBackgroundColor,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
           processedDuration: processedDuration,
-          spring: spring,
+          spring: spring ?? (showBezierBackground ? _kBezierSpring : null),
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
@@ -35,6 +67,15 @@ class MaterialHeader extends Header {
       key: key,
       state: state,
       disappearDuration: processedDuration,
+      reverse: state.reverse,
+      backgroundColor: backgroundColor,
+      color: color,
+      valueColor: valueColor,
+      semanticsLabel: semanticsLabel,
+      semanticsValue: semanticsValue,
+      noMoreIcon: noMoreIcon,
+      showBezierBackground: showBezierBackground,
+      bezierBackgroundColor: bezierBackgroundColor,
     );
   }
 }

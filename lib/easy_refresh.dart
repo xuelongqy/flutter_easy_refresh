@@ -26,3 +26,4 @@ part 'src/style/classical/classical_indicator.dart';
 part 'src/style/material/material_indicator.dart';
 part 'src/style/material/header/material_header.dart';
 part 'src/style/material/footer/material_footer.dart';
+part 'src/style/bezier/bezier_background.dart';

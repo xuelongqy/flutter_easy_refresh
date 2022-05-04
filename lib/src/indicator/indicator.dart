@@ -111,8 +111,11 @@ class IndicatorState {
   /// It's helpful for full screen indicator and second floor views.
   final double viewportDimension;
 
+  /// The offset of the trigger task.
   final double triggerOffset;
 
+  /// Actual trigger offset.
+  /// [triggerOffset] + [safeOffset]
   final double actualTriggerOffset;
 
   /// Whether the scroll view direction is reversed.

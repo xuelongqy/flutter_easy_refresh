@@ -1,5 +1,8 @@
 part of easyrefresh;
 
+/// See [ProgressIndicator] _kMinCircularProgressIndicatorSize.
+const double _kCircularProgressIndicatorSize = 48;
+
 /// Material indicator.
 /// Base widget for [MaterialHeader] and [MaterialFooter].
 class _MaterialIndicator extends StatefulWidget {
@@ -25,15 +28,32 @@ class _MaterialIndicator extends StatefulWidget {
   /// When the mode is [IndicatorMode.processed].
   final Duration disappearDuration;
 
+  /// True for up and left.
+  /// False for down and right.
+  final bool reverse;
+
+  /// Icon when [IndicatorResult.noMore].
+  final Widget? noMoreIcon;
+
+  /// Show bezier background.
+  final bool showBezierBackground;
+
+  /// Show bezier background.
+  final Color? bezierBackgroundColor;
+
   const _MaterialIndicator({
     Key? key,
     required this.state,
     required this.disappearDuration,
+    required this.reverse,
     this.backgroundColor,
     this.color,
     this.valueColor,
     this.semanticsLabel,
     this.semanticsValue,
+    this.noMoreIcon,
+    this.showBezierBackground = false,
+    this.bezierBackgroundColor,
   }) : super(key: key);
 
   @override
@@ -44,15 +64,17 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
   /// Indicator value.
   /// See [ProgressIndicator.value].
   double? get _value {
+    if (_result == IndicatorResult.noMore) {
+      return 0;
+    }
     if (_mode == IndicatorMode.drag || _mode == IndicatorMode.armed) {
-      // [_kMinCircularProgressIndicatorSize] is 36
-      const noProgressOffset = 36 * 0.25;
-      if (_offset < noProgressOffset) {
+      const noneOffset = _kCircularProgressIndicatorSize * 0.25;
+      if (_offset < noneOffset) {
         return 0;
       }
       return math.min(
-              (_offset - noProgressOffset) /
-                  (_actualTriggerOffset * 1.25 - noProgressOffset),
+              (_offset - noneOffset) /
+                  (_actualTriggerOffset * 1.25 - noneOffset),
               1) *
           0.75;
     }
@@ -61,6 +83,9 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
 
   /// Indicator value.
   Color? get _color {
+    if (_result == IndicatorResult.noMore) {
+      return Colors.transparent;
+    }
     if (widget.valueColor != null) {
       return null;
     }
@@ -72,6 +97,10 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
 
   IndicatorMode get _mode => widget.state.mode;
 
+  IndicatorResult get _result => widget.state.result;
+
+  Axis get _axis => widget.state.axis;
+
   double get _offset => widget.state.offset;
 
   double get _actualTriggerOffset => widget.state.actualTriggerOffset;
@@ -79,36 +108,72 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
   /// Build [RefreshProgressIndicator].
   Widget _buildIndicator() {
     return Container(
-      alignment: Alignment.bottomCenter,
-      height: _actualTriggerOffset,
-      child: AnimatedScale(
-        child: RefreshProgressIndicator(
-          value: _value,
-          backgroundColor: widget.backgroundColor,
-          color: _color,
-          valueColor: widget.valueColor,
-          semanticsLabel: widget.semanticsLabel,
-          semanticsValue: widget.semanticsValue,
-        ),
-        duration: widget.disappearDuration,
-        scale: _mode == IndicatorMode.processed || _mode == IndicatorMode.done
-            ? 0
-            : 1,
+      alignment: _axis == Axis.vertical
+          ? (widget.reverse ? Alignment.topCenter : Alignment.bottomCenter)
+          : (widget.reverse ? Alignment.centerLeft : Alignment.centerRight),
+      height: _axis == Axis.vertical ? _actualTriggerOffset : double.infinity,
+      width: _axis == Axis.horizontal ? _actualTriggerOffset : double.infinity,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          AnimatedScale(
+            child: RefreshProgressIndicator(
+              value: _value,
+              backgroundColor: widget.backgroundColor,
+              color: _color,
+              valueColor: widget.valueColor,
+              semanticsLabel: widget.semanticsLabel,
+              semanticsValue: widget.semanticsValue,
+            ),
+            duration: widget.disappearDuration,
+            scale:
+                _mode == IndicatorMode.processed || _mode == IndicatorMode.done
+                    ? 0
+                    : 1,
+          ),
+          if (_mode == IndicatorMode.inactive &&
+              _result == IndicatorResult.noMore)
+            widget.noMoreIcon ?? const Icon(Icons.inbox_outlined),
+        ],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final padding = math.max(_offset - _kCircularProgressIndicatorSize, 0) / 2;
     return SizedBox(
-      height: _offset,
+      width: _axis == Axis.vertical ? double.infinity : _offset,
+      height: _axis == Axis.horizontal ? double.infinity : _offset,
       child: Stack(
         children: [
+          if (widget.showBezierBackground)
+            BezierBackground(
+              state: widget.state,
+              color: widget.bezierBackgroundColor,
+              reverse: widget.reverse,
+            ),
           Positioned(
-            top: null,
-            bottom: 0,
-            left: 0,
-            right: 0,
+            top: _axis == Axis.vertical
+                ? widget.reverse
+                    ? padding
+                    : null
+                : 0,
+            bottom: _axis == Axis.vertical
+                ? widget.reverse
+                    ? null
+                    : padding
+                : 0,
+            left: _axis == Axis.horizontal
+                ? widget.reverse
+                    ? padding
+                    : null
+                : 0,
+            right: _axis == Axis.horizontal
+                ? widget.reverse
+                    ? null
+                    : padding
+                : 0,
             child: Center(
               child: _buildIndicator(),
             ),

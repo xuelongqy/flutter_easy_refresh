@@ -57,6 +57,7 @@ class _TestPageState extends State<TestPage> {
               );
             }),
         header: MaterialHeader(),
+        footer: MaterialFooter(),
         onRefresh: () async {
           print('Refreshing');
           await Future.delayed(const Duration(seconds: 2));
