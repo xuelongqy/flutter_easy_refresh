@@ -189,6 +189,10 @@ abstract class Indicator {
   /// Structure that describes a spring's constants.
   final SpringDescription? spring;
 
+  /// Friction factor when list is out of bounds.
+  /// See [BouncingScrollPhysics.frictionFactor].
+  final FrictionFactor? frictionFactor;
+
   /// Infinite scroll trigger offset.
   /// The relative offset of the [Scrollable] from the bounds (>= 0)
   /// When null, no infinite scroll.
@@ -232,6 +236,7 @@ abstract class Indicator {
     this.processedDuration = const Duration(seconds: 1),
     this.safeArea = true,
     this.spring,
+    this.frictionFactor,
     this.infiniteOffset,
     bool? hitOver,
     bool? infiniteHitOver,

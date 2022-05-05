@@ -58,21 +58,36 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   /// Get the current [SpringDescription] to be used.
   @override
   SpringDescription get spring {
-    if (headerNotifier._spring != null && headerNotifier._offset > 0) {
+    final position = headerNotifier._position;
+    if (headerNotifier._spring != null &&
+        position.pixels < position.minScrollExtent) {
       return headerNotifier._spring!;
     }
-    if (footerNotifier._spring != null && footerNotifier._offset > 0) {
+    if (footerNotifier._spring != null &&
+        position.pixels > position.maxScrollExtent) {
       return footerNotifier._spring!;
     }
     return _spring ?? super.spring;
   }
 
+  /// Friction factor when list is out of bounds.
   final FrictionFactor? _frictionFactor;
 
   @override
-  double frictionFactor(double overscrollFraction) =>
-      _frictionFactor?.call(overscrollFraction) ??
-      super.frictionFactor(overscrollFraction);
+  double frictionFactor(double overscrollFraction) {
+    FrictionFactor factor;
+    final position = headerNotifier._position;
+    if (headerNotifier._indicator.frictionFactor != null &&
+        position.pixels < position.minScrollExtent) {
+      factor = headerNotifier._indicator.frictionFactor!;
+    } else if (footerNotifier._indicator.frictionFactor != null &&
+        position.pixels > position.maxScrollExtent) {
+      factor = footerNotifier._indicator.frictionFactor!;
+    } else {
+      factor = _frictionFactor ?? super.frictionFactor;
+    }
+    return factor.call(overscrollFraction);
+  }
 
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
@@ -85,16 +100,18 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     // When clamping is true,
     // the indicator offset shall prevail.
     if (!(position.outOfRange ||
-        (headerNotifier.clamping && headerNotifier._offset > 0) ||
-        (footerNotifier.clamping && footerNotifier._offset > 0))) {
+        (headerNotifier.clamping &&
+            position.pixels < position.minScrollExtent) ||
+        (footerNotifier.clamping &&
+            position.pixels > position.maxScrollExtent))) {
       return offset;
     }
     // Calculate the actual location.
     double pixels = position.pixels;
-    if (headerNotifier.clamping && headerNotifier._offset > 0) {
+    if (headerNotifier.clamping && position.pixels < position.minScrollExtent) {
       pixels = position.pixels - headerNotifier._offset;
     }
-    if (footerNotifier.clamping && footerNotifier._offset > 0) {
+    if (footerNotifier.clamping && position.pixels > position.maxScrollExtent) {
       pixels = position.pixels + footerNotifier._offset;
     }
     double minScrollExtent = position.minScrollExtent;

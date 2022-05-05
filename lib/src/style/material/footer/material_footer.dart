@@ -52,7 +52,7 @@ class MaterialFooter extends Footer {
           triggerOffset: triggerOffset,
           clamping: clamping,
           processedDuration: processedDuration,
-          spring: spring ?? (showBezierBackground ? _kBezierSpring : null),
+          spring: spring ?? (showBezierBackground ? kBezierSpring : null),
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,

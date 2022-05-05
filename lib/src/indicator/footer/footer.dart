@@ -7,6 +7,7 @@ abstract class Footer extends Indicator {
     required bool clamping,
     Duration processedDuration = const Duration(seconds: 1),
     SpringDescription? spring,
+    FrictionFactor? frictionFactor,
     bool safeArea = true,
     double? infiniteOffset = 0,
     bool? hitOver,
@@ -21,6 +22,7 @@ abstract class Footer extends Indicator {
           clamping: clamping,
           processedDuration: processedDuration,
           spring: spring,
+          frictionFactor: frictionFactor,
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
@@ -44,6 +46,7 @@ class BuilderFooter extends Footer {
     required bool clamping,
     Duration processedDuration = const Duration(seconds: 1),
     SpringDescription? spring,
+    FrictionFactor? frictionFactor,
     bool safeArea = true,
     double? infiniteOffset = 0,
     bool? hitOver,
@@ -58,6 +61,7 @@ class BuilderFooter extends Footer {
           clamping: clamping,
           processedDuration: processedDuration,
           spring: spring,
+          frictionFactor: frictionFactor,
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
@@ -81,11 +85,13 @@ class NotLoadFooter extends Footer {
   const NotLoadFooter({
     bool clamping = false,
     SpringDescription? spring,
+    FrictionFactor? frictionFactor,
   }) : super(
           triggerOffset: 0,
           clamping: clamping,
           position: IndicatorPosition.custom,
           spring: spring,
+          frictionFactor: frictionFactor,
           processedDuration: const Duration(seconds: 0),
         );
 

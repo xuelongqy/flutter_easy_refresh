@@ -7,6 +7,7 @@ abstract class Header extends Indicator {
     required bool clamping,
     Duration processedDuration = const Duration(seconds: 1),
     SpringDescription? spring,
+    FrictionFactor? frictionFactor,
     bool safeArea = true,
     double? infiniteOffset,
     bool? hitOver,
@@ -21,6 +22,7 @@ abstract class Header extends Indicator {
           clamping: clamping,
           processedDuration: processedDuration,
           spring: spring,
+          frictionFactor: frictionFactor,
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
@@ -45,6 +47,7 @@ class BuilderHeader extends Header {
     required IndicatorPosition position,
     Duration processedDuration = const Duration(seconds: 1),
     SpringDescription? spring,
+    FrictionFactor? frictionFactor,
     bool safeArea = true,
     double? infiniteOffset,
     bool? hitOver,
@@ -58,6 +61,7 @@ class BuilderHeader extends Header {
           clamping: clamping,
           processedDuration: processedDuration,
           spring: spring,
+          frictionFactor: frictionFactor,
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
@@ -81,11 +85,13 @@ class NotRefreshHeader extends Header {
   const NotRefreshHeader({
     bool clamping = false,
     SpringDescription? spring,
+    FrictionFactor? frictionFactor,
   }) : super(
           triggerOffset: 0,
           clamping: clamping,
           position: IndicatorPosition.custom,
           spring: spring,
+          frictionFactor: frictionFactor,
           processedDuration: const Duration(seconds: 0),
         );
 

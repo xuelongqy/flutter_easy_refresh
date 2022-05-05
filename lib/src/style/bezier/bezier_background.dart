@@ -1,11 +1,15 @@
 part of easyrefresh;
 
 /// Spring used by bezier curves.
-final SpringDescription _kBezierSpring = SpringDescription.withDampingRatio(
+final SpringDescription kBezierSpring = SpringDescription.withDampingRatio(
   mass: 0.1,
   stiffness: 100.0,
   ratio: 1.1,
 );
+
+/// Friction factor used by bezier curves.
+double kBezierFrictionFactor(double overscrollFraction) =>
+    0.375 * math.pow(1 - overscrollFraction, 2);
 
 /// Bezier curve background.
 class BezierBackground extends StatefulWidget {
