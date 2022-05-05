@@ -28,6 +28,9 @@ class MaterialFooter extends Footer {
   /// Show bezier background.
   final Color? bezierBackgroundColor;
 
+  /// Bezier background rebound.
+  final bool bezierBackgroundRebound;
+
   MaterialFooter({
     this.key,
     double triggerOffset = 100,
@@ -35,6 +38,7 @@ class MaterialFooter extends Footer {
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = const Duration(milliseconds: 200),
     SpringDescription? spring,
+    FrictionFactor? frictionFactor,
     bool safeArea = true,
     double? infiniteOffset,
     bool? hitOver,
@@ -48,11 +52,14 @@ class MaterialFooter extends Footer {
     this.noMoreIcon,
     this.showBezierBackground = false,
     this.bezierBackgroundColor,
+    this.bezierBackgroundRebound = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
           processedDuration: processedDuration,
           spring: spring ?? (showBezierBackground ? kBezierSpring : null),
+          frictionFactor: frictionFactor ??
+              (showBezierBackground ? kBezierFrictionFactor : null),
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
@@ -74,6 +81,9 @@ class MaterialFooter extends Footer {
       semanticsLabel: semanticsLabel,
       semanticsValue: semanticsValue,
       noMoreIcon: noMoreIcon,
+      showBezierBackground: showBezierBackground,
+      bezierBackgroundColor: bezierBackgroundColor,
+      bezierBackgroundRebound: bezierBackgroundRebound,
     );
   }
 }

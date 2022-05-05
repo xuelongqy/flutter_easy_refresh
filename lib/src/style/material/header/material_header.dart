@@ -28,10 +28,13 @@ class MaterialHeader extends Header {
   /// Show bezier background.
   final Color? bezierBackgroundColor;
 
+  /// Bezier background rebound.
+  final bool bezierBackgroundRebound;
+
   MaterialHeader({
     this.key,
     double triggerOffset = 100,
-    bool clamping = false,
+    bool clamping = true,
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = const Duration(milliseconds: 200),
     SpringDescription? spring,
@@ -47,8 +50,9 @@ class MaterialHeader extends Header {
     this.semanticsLabel,
     this.semanticsValue,
     this.noMoreIcon,
-    this.showBezierBackground = true,
+    this.showBezierBackground = false,
     this.bezierBackgroundColor,
+    this.bezierBackgroundRebound = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -79,6 +83,7 @@ class MaterialHeader extends Header {
       noMoreIcon: noMoreIcon,
       showBezierBackground: showBezierBackground,
       bezierBackgroundColor: bezierBackgroundColor,
+      bezierBackgroundRebound: bezierBackgroundRebound,
     );
   }
 }

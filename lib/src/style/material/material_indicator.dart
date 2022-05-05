@@ -41,6 +41,9 @@ class _MaterialIndicator extends StatefulWidget {
   /// Show bezier background.
   final Color? bezierBackgroundColor;
 
+  /// Bezier background rebound.
+  final bool bezierBackgroundRebound;
+
   const _MaterialIndicator({
     Key? key,
     required this.state,
@@ -54,6 +57,7 @@ class _MaterialIndicator extends StatefulWidget {
     this.noMoreIcon,
     this.showBezierBackground = false,
     this.bezierBackgroundColor,
+    this.bezierBackgroundRebound = false,
   }) : super(key: key);
 
   @override
@@ -151,6 +155,7 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
             BezierBackground(
               state: widget.state,
               color: widget.bezierBackgroundColor,
+              rebound: widget.bezierBackgroundRebound,
               reverse: widget.reverse,
             ),
           Positioned(
