@@ -58,13 +58,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   /// Get the current [SpringDescription] to be used.
   @override
   SpringDescription get spring {
-    final position = headerNotifier._position;
-    if (headerNotifier._spring != null &&
-        position.pixels < position.minScrollExtent) {
+    if (headerNotifier._spring != null && headerNotifier.outOfRange) {
       return headerNotifier._spring!;
     }
-    if (footerNotifier._spring != null &&
-        position.pixels > position.maxScrollExtent) {
+    if (footerNotifier._spring != null && footerNotifier.outOfRange) {
       return footerNotifier._spring!;
     }
     return _spring ?? super.spring;
@@ -76,12 +73,11 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   @override
   double frictionFactor(double overscrollFraction) {
     FrictionFactor factor;
-    final position = headerNotifier._position;
     if (headerNotifier._indicator.frictionFactor != null &&
-        position.pixels < position.minScrollExtent) {
+        headerNotifier.outOfRange) {
       factor = headerNotifier._indicator.frictionFactor!;
     } else if (footerNotifier._indicator.frictionFactor != null &&
-        position.pixels > position.maxScrollExtent) {
+        footerNotifier.outOfRange) {
       factor = footerNotifier._indicator.frictionFactor!;
     } else {
       factor = _frictionFactor ?? super.frictionFactor;
@@ -100,18 +96,16 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     // When clamping is true,
     // the indicator offset shall prevail.
     if (!(position.outOfRange ||
-        (headerNotifier.clamping &&
-            position.pixels < position.minScrollExtent) ||
-        (footerNotifier.clamping &&
-            position.pixels > position.maxScrollExtent))) {
+        (headerNotifier.clamping && headerNotifier.outOfRange) ||
+        (footerNotifier.clamping && footerNotifier.outOfRange))) {
       return offset;
     }
     // Calculate the actual location.
     double pixels = position.pixels;
-    if (headerNotifier.clamping && position.pixels < position.minScrollExtent) {
+    if (headerNotifier.clamping && headerNotifier.outOfRange) {
       pixels = position.pixels - headerNotifier._offset;
     }
-    if (footerNotifier.clamping && position.pixels > position.maxScrollExtent) {
+    if (footerNotifier.clamping && footerNotifier.outOfRange) {
       pixels = position.pixels + footerNotifier._offset;
     }
     double minScrollExtent = position.minScrollExtent;

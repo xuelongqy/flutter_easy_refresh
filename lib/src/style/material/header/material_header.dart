@@ -59,7 +59,9 @@ class MaterialHeader extends Header {
           processedDuration: processedDuration,
           spring: spring ?? (showBezierBackground ? kBezierSpring : null),
           frictionFactor: frictionFactor ??
-              (showBezierBackground ? kBezierFrictionFactor : null),
+              (showBezierBackground
+                  ? kBezierFrictionFactor
+                  : kMaterialFrictionFactor),
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,

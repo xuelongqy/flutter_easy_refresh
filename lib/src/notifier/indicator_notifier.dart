@@ -148,6 +148,14 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   bool get modeLocked =>
       _mode == IndicatorMode.processing || _mode == IndicatorMode.processed;
 
+  /// Out of scroll area.
+  bool get outOfRange {
+    if (clamping) {
+      return !modeLocked && _offset > 0;
+    }
+    return _offset > 0;
+  }
+
   /// Spring description.
   SpringDescription? get _spring => _indicator.spring;
 

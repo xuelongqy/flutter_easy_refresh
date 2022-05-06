@@ -3,6 +3,10 @@ part of easyrefresh;
 /// See [ProgressIndicator] _kMinCircularProgressIndicatorSize.
 const double _kCircularProgressIndicatorSize = 48;
 
+/// Friction factor used by material.
+double kMaterialFrictionFactor(double overscrollFraction) =>
+    0.435 * math.pow(1 - overscrollFraction, 2);
+
 /// Material indicator.
 /// Base widget for [MaterialHeader] and [MaterialFooter].
 class _MaterialIndicator extends StatefulWidget {
