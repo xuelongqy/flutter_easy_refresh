@@ -383,7 +383,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
           _result = IndicatorResult.none;
         }
       } else if (_offset < actualTriggerOffset) {
-        _mode = IndicatorMode.drag;
+        if (_mode != IndicatorMode.ready) {
+          // Prevent Spring from having repeated rebounds.
+          _mode = IndicatorMode.drag;
+        }
       } else if (_offset == actualTriggerOffset) {
         // Must be exceeded to trigger the task
         _mode = userOffsetNotifier.value
