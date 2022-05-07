@@ -97,6 +97,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// The current scroll position.
   late ScrollMetrics _position;
 
+  ScrollMetrics get position => _position;
+
+  /// The current scroll velocity.
+  double _velocity = 0;
+
+  double get velocity => _velocity;
+
   /// The current state of the indicator.
   IndicatorMode _mode = IndicatorMode.inactive;
 
@@ -184,11 +191,11 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       _result == IndicatorResult.noMore &&
       _mode == IndicatorMode.inactive;
 
-  /// Animation listener for [clamping].
-  void _clampingTick();
-
   /// Calculate the overscroll offset.
   double _calculateOffset(ScrollMetrics position, double value);
+
+  /// Calculate the overscroll offset with pixels.
+  double calculateOffsetWithPixels(ScrollMetrics position, double pixels);
 
   /// Infinite scroll exclusions.
   bool _infiniteExclude(ScrollMetrics position, double value);
@@ -240,7 +247,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Create a ballistic simulation.
   /// Use for [clamping].
-  Simulation? _createBallisticSimulation(
+  Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity);
 
   /// Calculate distance from boundary.
@@ -274,9 +281,39 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
   }
 
+  /// Animation listener for [clamping].
+  void _clampingTick() {
+    final mOffset = calculateOffsetWithPixels(
+        _position, _clampingAnimationController!.value);
+    if (hasSecondary &&
+        !noMoreLocked &&
+        mOffset > secondaryDimension &&
+        _mode == IndicatorMode.secondaryReady) {
+      // After fully opening the secondary, turn off the animation.
+      _offset = secondaryDimension;
+      _clampingAnimationController!.stop();
+    } else {
+      // Stop spring rebound.
+      if (_mode == IndicatorMode.ready &&
+          !_indicator.springRebound &&
+          mOffset < actualTriggerOffset) {
+        _offset = actualTriggerOffset;
+        _clampingAnimationController!.stop();
+      } else {
+        if (mOffset == 0) {
+          _clampingAnimationController!.stop();
+        }
+        _offset = mOffset;
+      }
+    }
+    _updateMode();
+    notifyListeners();
+  }
+
   /// Update by [ScrollPhysics.createBallisticSimulation].
   void _updateBySimulation(ScrollMetrics position, double velocity) {
     _position = position;
+    _velocity = velocity;
     // Update axis and direction.
     if (_axis != position.axis || _axisDirection != position.axisDirection) {
       _axis = position.axis;
@@ -286,7 +323,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     _updateOffset(position, position.pixels, true);
     // If clamping is true and offset is greater than 0, start animation
     if (clamping && _offset > 0 && !(modeLocked || secondaryLocked)) {
-      final simulation = _createBallisticSimulation(position, velocity);
+      final simulation = createBallisticSimulation(position, velocity);
       if (simulation != null) {
         _startClampingAnimation(simulation);
       }
@@ -538,6 +575,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       context,
       IndicatorState(
         indicator: _indicator,
+        notifier: this,
         mode: mode,
         result: _result,
         offset: offset,
@@ -545,7 +583,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         axis: _axis!,
         axisDirection: _axisDirection!,
         viewportDimension: _position.viewportDimension,
-        triggerOffset: triggerOffset,
         actualTriggerOffset: actualTriggerOffset,
       ),
     );
@@ -638,15 +675,19 @@ class HeaderNotifier extends IndicatorNotifier {
   }
 
   @override
-  Simulation? _createBallisticSimulation(
+  double calculateOffsetWithPixels(ScrollMetrics position, double pixels) =>
+      math.max(-pixels - position.minScrollExtent, 0.0);
+
+  @override
+  Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
     final mVelocity = hasSecondary && _offset >= actualSecondaryTriggerOffset
         ? -secondaryVelocity
         : velocity;
-    if (clamping && _offset > 0) {
+    if (_offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
-        position: position.pixels - _offset,
+        position: clamping ? position.pixels - _offset : position.pixels,
         velocity: mVelocity,
         leadingExtent: position.minScrollExtent - overExtent,
         trailingExtent: 0,
@@ -654,23 +695,6 @@ class HeaderNotifier extends IndicatorNotifier {
       );
     }
     return null;
-  }
-
-  @override
-  void _clampingTick() {
-    final mOffset = math.max(-_clampingAnimationController!.value, 0.0);
-    if (hasSecondary &&
-        !noMoreLocked &&
-        mOffset > secondaryDimension &&
-        _mode == IndicatorMode.secondaryReady) {
-      // After fully opening the secondary, turn off the animation.
-      _offset = secondaryDimension;
-      _clampingAnimationController!.stop();
-    } else {
-      _offset = mOffset;
-    }
-    _updateMode();
-    notifyListeners();
   }
 
   @override
@@ -744,13 +768,17 @@ class FooterNotifier extends IndicatorNotifier {
   }
 
   @override
-  Simulation? _createBallisticSimulation(
+  double calculateOffsetWithPixels(ScrollMetrics position, double pixels) =>
+      math.max(pixels - position.maxScrollExtent, 0.0);
+
+  @override
+  Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
     final mVelocity =
         hasSecondary && !noMoreLocked && _offset >= actualSecondaryTriggerOffset
             ? secondaryVelocity
             : velocity;
-    if (clamping && _offset > 0) {
+    if (_offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
         position: position.pixels + _offset,
@@ -761,23 +789,6 @@ class FooterNotifier extends IndicatorNotifier {
       );
     }
     return null;
-  }
-
-  @override
-  void _clampingTick() {
-    final mOffset = math.max(
-        _clampingAnimationController!.value - _position.maxScrollExtent, 0.0);
-    if (hasSecondary &&
-        mOffset > secondaryDimension &&
-        _mode == IndicatorMode.secondaryReady) {
-      // After fully opening the secondary, turn off the animation.
-      _offset = secondaryDimension;
-      _clampingAnimationController!.stop();
-    } else {
-      _offset = mOffset;
-    }
-    _updateMode();
-    notifyListeners();
   }
 
   @override

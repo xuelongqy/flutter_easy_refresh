@@ -28,16 +28,17 @@ class MaterialHeader extends Header {
   /// Show bezier background.
   final Color? bezierBackgroundColor;
 
-  /// Bezier background rebound.
-  final bool bezierBackgroundRebound;
+  /// Bezier background animation.
+  final bool bezierBackgroundAnimation;
 
   MaterialHeader({
     this.key,
     double triggerOffset = 100,
-    bool clamping = true,
+    bool clamping = false,
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = const Duration(milliseconds: 200),
     SpringDescription? spring,
+    bool springRebound = true,
     FrictionFactor? frictionFactor,
     bool safeArea = true,
     double? infiniteOffset,
@@ -50,14 +51,15 @@ class MaterialHeader extends Header {
     this.semanticsLabel,
     this.semanticsValue,
     this.noMoreIcon,
-    this.showBezierBackground = false,
+    this.showBezierBackground = true,
     this.bezierBackgroundColor,
-    this.bezierBackgroundRebound = false,
+    this.bezierBackgroundAnimation = true,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
           processedDuration: processedDuration,
           spring: spring ?? (showBezierBackground ? kBezierSpring : null),
+          springRebound: springRebound,
           frictionFactor: frictionFactor ??
               (showBezierBackground
                   ? kBezierFrictionFactor
@@ -85,7 +87,7 @@ class MaterialHeader extends Header {
       noMoreIcon: noMoreIcon,
       showBezierBackground: showBezierBackground,
       bezierBackgroundColor: bezierBackgroundColor,
-      bezierBackgroundRebound: bezierBackgroundRebound,
+      bezierBackgroundAnimation: bezierBackgroundAnimation,
     );
   }
 }

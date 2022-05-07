@@ -1,12 +1,15 @@
 part of easyrefresh;
 
 /// Spring used by bezier curves.
-const SpringDescription kBezierSpring =
-    SpringDescription(mass: 3, stiffness: 700, damping: 50);
+const SpringDescription kBezierSpring = SpringDescription(
+  mass: 10, //质量
+  stiffness: 1000, //硬度
+  damping: 0.75, //阻尼系数
+);
 
 /// Friction factor used by bezier curves.
 double kBezierFrictionFactor(double overscrollFraction) =>
-    0.375 * math.pow(1 - overscrollFraction, 2);
+    0.4 * math.pow(1 - overscrollFraction, 2);
 
 /// Bezier curve background.
 class BezierBackground extends StatefulWidget {
@@ -16,8 +19,8 @@ class BezierBackground extends StatefulWidget {
   /// Background color.
   final Color? color;
 
-  /// Whether to rebound after retraction.
-  final bool rebound;
+  /// Use animation with [IndicatorNotifier.createBallisticSimulation].
+  final bool useAnimation;
 
   /// True for up and left.
   /// False for down and right.
@@ -27,7 +30,7 @@ class BezierBackground extends StatefulWidget {
     Key? key,
     required this.state,
     required this.reverse,
-    this.rebound = true,
+    this.useAnimation = true,
     this.color,
   }) : super(key: key);
 
@@ -37,11 +40,7 @@ class BezierBackground extends StatefulWidget {
 
 class _BezierBackgroundState extends State<BezierBackground>
     with SingleTickerProviderStateMixin {
-  /// Minimum rebound value.
-  static const _kMinReboundOffset = 10.0;
-
-  /// Maximum rebound value.
-  static const _kMaxReboundOffset = 50.0;
+  IndicatorNotifier get _notifier => widget.state.notifier;
 
   double get _offset => widget.state.offset;
 
@@ -54,25 +53,21 @@ class _BezierBackgroundState extends State<BezierBackground>
   /// Get background color.
   Color get _color => widget.color ?? Theme.of(context).primaryColor;
 
-  /// [Scrollable] pull value.
-  /// Log when mode is [IndicatorMode.ready].
-  double _pullOffset = 0;
-
-  /// Rebound animation controller.
-  late AnimationController _reboundController;
+  /// Animation controller.
+  late AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
-    _reboundController = AnimationController.unbounded(vsync: this);
-    _reboundController.addListener(() {
+    _animationController = AnimationController.unbounded(vsync: this);
+    _animationController.addListener(() {
       setState(() {});
     });
   }
 
   @override
   void dispose() {
-    _reboundController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -80,28 +75,20 @@ class _BezierBackgroundState extends State<BezierBackground>
   void didUpdateWidget(BezierBackground oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (_mode == IndicatorMode.ready &&
-        oldWidget.state.mode != IndicatorMode.ready) {
-      _pullOffset = widget.state.offset;
-    } else if (_mode == IndicatorMode.processing &&
-        oldWidget.state.mode != IndicatorMode.processing &&
-        widget.rebound) {
-      // Start rebound;
-      double reboundOffset = (_pullOffset - _actualTriggerOffset) / 2;
-      reboundOffset = math.min(reboundOffset, _kMaxReboundOffset);
-      if (reboundOffset >= _kMinReboundOffset) {
-        _onRebound(reboundOffset);
-      }
+        oldWidget.state.mode != IndicatorMode.ready &&
+        widget.useAnimation) {
+      // Start animation.
+      _startAnimation();
     }
   }
 
-  /// Rebound animation.
-  void _onRebound(double reboundOffset) {
-    _reboundController
-        .animateTo(reboundOffset,
-            duration: const Duration(milliseconds: 150), curve: Curves.easeOut)
-        .whenComplete(() => _reboundController.animateTo(0,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.bounceIn.flipped));
+  /// Start animation.
+  void _startAnimation() {
+    final simulation = _notifier.createBallisticSimulation(
+        _notifier.position, _notifier.velocity);
+    if (simulation != null) {
+      _animationController.animateWith(simulation);
+    }
   }
 
   @override
@@ -112,8 +99,10 @@ class _BezierBackgroundState extends State<BezierBackground>
         reverse: widget.reverse,
         offset: _offset,
         actualTriggerOffset: _actualTriggerOffset,
-        reboundOffset:
-            _reboundController.isAnimating ? _reboundController.value : null,
+        reboundOffset: _animationController.isAnimating
+            ? _notifier.calculateOffsetWithPixels(
+                _notifier.position, _animationController.value)
+            : null,
       ),
       child: Container(
         width: _axis == Axis.horizontal ? _offset : double.infinity,
@@ -170,7 +159,7 @@ class _BezierPainter extends CustomClipper<Path> {
           } else {
             path.quadraticBezierTo(
               width / 2,
-              reboundOffset! * 2,
+              -(reboundOffset! - actualTriggerOffset) * 2,
               width,
               startHeight,
             );
@@ -196,7 +185,7 @@ class _BezierPainter extends CustomClipper<Path> {
           } else {
             path.quadraticBezierTo(
               width / 2,
-              height - (reboundOffset! * 2),
+              (reboundOffset! - actualTriggerOffset) * 2 + actualTriggerOffset,
               width,
               startHeight,
             );
@@ -224,7 +213,7 @@ class _BezierPainter extends CustomClipper<Path> {
             path.lineTo(startWidth, 0);
           } else {
             path.quadraticBezierTo(
-              reboundOffset! * 2,
+              -(reboundOffset! - actualTriggerOffset) * 2,
               height / 2,
               startWidth,
               0,
@@ -250,7 +239,7 @@ class _BezierPainter extends CustomClipper<Path> {
             path.lineTo(startWidth, 0);
           } else {
             path.quadraticBezierTo(
-              width - (reboundOffset! * 2),
+              (reboundOffset! - actualTriggerOffset) * 2 + actualTriggerOffset,
               height / 2,
               startWidth,
               0,

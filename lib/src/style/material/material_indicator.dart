@@ -45,8 +45,8 @@ class _MaterialIndicator extends StatefulWidget {
   /// Show bezier background.
   final Color? bezierBackgroundColor;
 
-  /// Bezier background rebound.
-  final bool bezierBackgroundRebound;
+  /// Bezier background animation.
+  final bool bezierBackgroundAnimation;
 
   const _MaterialIndicator({
     Key? key,
@@ -61,7 +61,7 @@ class _MaterialIndicator extends StatefulWidget {
     this.noMoreIcon,
     this.showBezierBackground = false,
     this.bezierBackgroundColor,
-    this.bezierBackgroundRebound = false,
+    this.bezierBackgroundAnimation = false,
   }) : super(key: key);
 
   @override
@@ -122,6 +122,7 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
       height: _axis == Axis.vertical ? _actualTriggerOffset : double.infinity,
       width: _axis == Axis.horizontal ? _actualTriggerOffset : double.infinity,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
           AnimatedScale(
@@ -159,7 +160,7 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
             BezierBackground(
               state: widget.state,
               color: widget.bezierBackgroundColor,
-              rebound: widget.bezierBackgroundRebound,
+              useAnimation: widget.bezierBackgroundAnimation,
               reverse: widget.reverse,
             ),
           Positioned(

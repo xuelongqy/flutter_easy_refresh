@@ -89,6 +89,9 @@ class IndicatorState {
   /// Refresh and loading indicator.
   final Indicator indicator;
 
+  /// Refresh and loading notifier.
+  final IndicatorNotifier notifier;
+
   /// Refresh and loading state.
   final IndicatorMode mode;
 
@@ -112,7 +115,7 @@ class IndicatorState {
   final double viewportDimension;
 
   /// The offset of the trigger task.
-  final double triggerOffset;
+  double get triggerOffset => indicator.triggerOffset;
 
   /// Actual trigger offset.
   /// [triggerOffset] + [safeOffset]
@@ -125,6 +128,7 @@ class IndicatorState {
 
   const IndicatorState({
     required this.indicator,
+    required this.notifier,
     required this.mode,
     required this.result,
     required this.offset,
@@ -132,7 +136,6 @@ class IndicatorState {
     required this.axis,
     required this.axisDirection,
     required this.viewportDimension,
-    required this.triggerOffset,
     required this.actualTriggerOffset,
   });
 
@@ -142,6 +145,7 @@ class IndicatorState {
       other is IndicatorState &&
           runtimeType == other.runtimeType &&
           indicator == other.indicator &&
+          notifier == other.notifier &&
           mode == other.mode &&
           result == other.result &&
           offset == other.offset &&
@@ -149,12 +153,12 @@ class IndicatorState {
           axis == other.axis &&
           axisDirection == other.axisDirection &&
           viewportDimension == other.viewportDimension &&
-          triggerOffset == other.triggerOffset &&
           actualTriggerOffset == other.actualTriggerOffset;
 
   @override
   int get hashCode =>
       indicator.hashCode ^
+      notifier.hashCode ^
       mode.hashCode ^
       result.hashCode ^
       offset.hashCode ^
@@ -162,7 +166,6 @@ class IndicatorState {
       axis.hashCode ^
       axisDirection.hashCode ^
       viewportDimension.hashCode ^
-      triggerOffset.hashCode ^
       actualTriggerOffset.hashCode;
 }
 
@@ -188,6 +191,9 @@ abstract class Indicator {
 
   /// Structure that describes a spring's constants.
   final SpringDescription? spring;
+
+  /// Whether the spring can rebound.
+  final bool springRebound;
 
   /// Friction factor when list is out of bounds.
   /// See [BouncingScrollPhysics.frictionFactor].
@@ -236,6 +242,7 @@ abstract class Indicator {
     this.processedDuration = const Duration(seconds: 1),
     this.safeArea = true,
     this.spring,
+    this.springRebound = true,
     this.frictionFactor,
     this.infiniteOffset,
     bool? hitOver,

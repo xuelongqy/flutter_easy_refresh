@@ -200,6 +200,15 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         return (value + headerNotifier.actualTriggerOffset) -
             position.minScrollExtent;
       }
+      // Stop spring rebound.
+      if (headerNotifier._mode == IndicatorMode.ready &&
+          !headerNotifier._indicator.springRebound &&
+          -value < headerNotifier.actualTriggerOffset) {
+        _updateIndicatorOffset(position, -headerNotifier.actualTriggerOffset);
+        return headerNotifier.actualTriggerOffset +
+            value -
+            position.minScrollExtent;
+      }
       // Cannot over the secondary.
       if (headerNotifier.hasSecondary) {
         if (value < position.pixels &&
@@ -253,6 +262,16 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
               position.maxScrollExtent &&
           position.maxScrollExtent <
               (value - footerNotifier.actualTriggerOffset)) {
+        _updateIndicatorOffset(position,
+            position.maxScrollExtent + footerNotifier.actualTriggerOffset);
+        return (value - footerNotifier.actualTriggerOffset) -
+            position.maxScrollExtent;
+      }
+      // Stop spring rebound.
+      if (footerNotifier._mode == IndicatorMode.ready &&
+          !footerNotifier._indicator.springRebound &&
+          value <
+              position.maxScrollExtent + footerNotifier.actualTriggerOffset) {
         _updateIndicatorOffset(position,
             position.maxScrollExtent + footerNotifier.actualTriggerOffset);
         return (value - footerNotifier.actualTriggerOffset) -
