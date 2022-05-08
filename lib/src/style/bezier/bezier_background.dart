@@ -146,24 +146,25 @@ class _BezierPainter extends CustomClipper<Path> {
     final width = size.width;
     if (axis == Axis.vertical) {
       if (reverse) {
-        // Up
-        final startHeight =
-            height > actualTriggerOffset ? height - actualTriggerOffset : 0.0;
+        // Top
+        final startHeight = reboundOffset == null
+            ? height > actualTriggerOffset
+                ? height - actualTriggerOffset
+                : 0.0
+            : height - actualTriggerOffset;
         path.moveTo(width, startHeight);
         path.lineTo(width, height);
         path.lineTo(0, height);
         path.lineTo(0, startHeight);
-        if (height <= actualTriggerOffset) {
-          if (reboundOffset == null) {
-            path.lineTo(width, startHeight);
-          } else {
-            path.quadraticBezierTo(
-              width / 2,
-              -(reboundOffset! - actualTriggerOffset) * 2,
-              width,
-              startHeight,
-            );
-          }
+        if (reboundOffset != null) {
+          path.quadraticBezierTo(
+            width / 2,
+            startHeight - (reboundOffset! - actualTriggerOffset),
+            width,
+            startHeight,
+          );
+        } else if (height <= actualTriggerOffset) {
+          path.lineTo(width, startHeight);
         } else {
           path.quadraticBezierTo(
             width / 2,
@@ -174,22 +175,22 @@ class _BezierPainter extends CustomClipper<Path> {
         }
       } else {
         // Bottom
-        final startHeight = math.min(height, actualTriggerOffset);
+        final startHeight = reboundOffset == null
+            ? math.min(height, actualTriggerOffset)
+            : actualTriggerOffset;
         path.moveTo(width, startHeight);
         path.lineTo(width, 0);
         path.lineTo(0, 0);
         path.lineTo(0, startHeight);
-        if (height <= actualTriggerOffset) {
-          if (reboundOffset == null) {
-            path.lineTo(width, startHeight);
-          } else {
-            path.quadraticBezierTo(
-              width / 2,
-              (reboundOffset! - actualTriggerOffset) * 2 + actualTriggerOffset,
-              width,
-              startHeight,
-            );
-          }
+        if (reboundOffset != null) {
+          path.quadraticBezierTo(
+            width / 2,
+            (reboundOffset! - actualTriggerOffset) * 2 + actualTriggerOffset,
+            width,
+            startHeight,
+          );
+        } else if (height <= actualTriggerOffset) {
+          path.lineTo(width, startHeight);
         } else {
           path.quadraticBezierTo(
             width / 2,
@@ -208,17 +209,15 @@ class _BezierPainter extends CustomClipper<Path> {
         path.lineTo(width, 0);
         path.lineTo(width, height);
         path.lineTo(startWidth, height);
-        if (width <= actualTriggerOffset) {
-          if (reboundOffset == null) {
-            path.lineTo(startWidth, 0);
-          } else {
-            path.quadraticBezierTo(
-              -(reboundOffset! - actualTriggerOffset) * 2,
-              height / 2,
-              startWidth,
-              0,
-            );
-          }
+        if (reboundOffset != null) {
+          path.quadraticBezierTo(
+            startWidth - (reboundOffset! - actualTriggerOffset),
+            height / 2,
+            startWidth,
+            0,
+          );
+        } else if (width <= actualTriggerOffset) {
+          path.lineTo(startWidth, 0);
         } else {
           path.quadraticBezierTo(
             -(width - actualTriggerOffset),
@@ -234,17 +233,15 @@ class _BezierPainter extends CustomClipper<Path> {
         path.lineTo(0, 0);
         path.lineTo(0, height);
         path.lineTo(startWidth, height);
-        if (width <= actualTriggerOffset) {
-          if (reboundOffset == null) {
-            path.lineTo(startWidth, 0);
-          } else {
-            path.quadraticBezierTo(
-              (reboundOffset! - actualTriggerOffset) * 2 + actualTriggerOffset,
-              height / 2,
-              startWidth,
-              0,
-            );
-          }
+        if (reboundOffset != null) {
+          path.quadraticBezierTo(
+            (reboundOffset! - actualTriggerOffset) * 2 + actualTriggerOffset,
+            height / 2,
+            startWidth,
+            0,
+          );
+        } else if (width <= actualTriggerOffset) {
+          path.lineTo(startWidth, 0);
         } else {
           path.quadraticBezierTo(
             width + (width - actualTriggerOffset),

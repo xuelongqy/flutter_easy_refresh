@@ -415,9 +415,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         // The state does not change until the end
         return;
       } else if (_offset == 0) {
-        _mode = IndicatorMode.inactive;
-        if (_result != IndicatorResult.noMore || _noMoreProcess) {
-          _result = IndicatorResult.none;
+        if (_mode != IndicatorMode.ready) {
+          // Prevent Spring from having repeated rebounds.
+          _mode = IndicatorMode.inactive;
+          if (_result != IndicatorResult.noMore || _noMoreProcess) {
+            _result = IndicatorResult.none;
+          }
         }
       } else if (_offset < actualTriggerOffset) {
         if (_mode != IndicatorMode.ready) {
@@ -781,7 +784,7 @@ class FooterNotifier extends IndicatorNotifier {
     if (_offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
-        position: position.pixels + _offset,
+        position: clamping ? position.pixels + _offset : position.pixels,
         velocity: mVelocity,
         leadingExtent: 0,
         trailingExtent: position.maxScrollExtent + overExtent,

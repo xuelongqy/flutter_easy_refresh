@@ -38,7 +38,7 @@ class MaterialFooter extends Footer {
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = const Duration(milliseconds: 200),
     SpringDescription? spring,
-    bool springRebound = false,
+    bool springRebound = true,
     FrictionFactor? frictionFactor,
     bool safeArea = true,
     double? infiniteOffset,

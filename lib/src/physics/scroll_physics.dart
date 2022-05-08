@@ -183,6 +183,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     } else {
       // hit top over
       if (!(headerNotifier.hitOver || headerNotifier.modeLocked) &&
+          headerNotifier.mode != IndicatorMode.ready &&
           value < position.minScrollExtent &&
           position.minScrollExtent < position.pixels) {
         _updateIndicatorOffset(position, 0);
@@ -208,6 +209,13 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         return headerNotifier.actualTriggerOffset +
             value -
             position.minScrollExtent;
+      }
+      if (!userOffsetNotifier.value &&
+          (headerNotifier._mode == IndicatorMode.done ||
+              headerNotifier._mode == IndicatorMode.drag) &&
+          value > position.minScrollExtent) {
+        _updateIndicatorOffset(position, 0);
+        return value - position.minScrollExtent;
       }
       // Cannot over the secondary.
       if (headerNotifier.hasSecondary) {
@@ -249,6 +257,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     } else {
       // hit bottom over
       if (!(footerNotifier.hitOver || footerNotifier.modeLocked) &&
+          footerNotifier.mode != IndicatorMode.ready &&
           position.pixels < position.maxScrollExtent &&
           position.maxScrollExtent < value) {
         _updateIndicatorOffset(position, position.maxScrollExtent);
@@ -276,6 +285,13 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
             position.maxScrollExtent + footerNotifier.actualTriggerOffset);
         return (value - footerNotifier.actualTriggerOffset) -
             position.maxScrollExtent;
+      }
+      if (!userOffsetNotifier.value &&
+          (footerNotifier._mode == IndicatorMode.done ||
+              footerNotifier._mode == IndicatorMode.drag) &&
+          value < position.maxScrollExtent) {
+        _updateIndicatorOffset(position, position.maxScrollExtent);
+        return value - position.maxScrollExtent;
       }
       // Cannot over the secondary.
       if (footerNotifier.hasSecondary) {
