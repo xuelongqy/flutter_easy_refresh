@@ -58,11 +58,21 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   /// Get the current [SpringDescription] to be used.
   @override
   SpringDescription get spring {
-    if (headerNotifier._spring != null && headerNotifier.outOfRange) {
-      return headerNotifier._spring!;
+    if (headerNotifier.outOfRange) {
+      if (headerNotifier._mode == IndicatorMode.ready &&
+          headerNotifier.readySpring != null) {
+        return headerNotifier.readySpring!;
+      } else if (headerNotifier._spring != null) {
+        return headerNotifier._spring!;
+      }
     }
-    if (footerNotifier._spring != null && footerNotifier.outOfRange) {
-      return footerNotifier._spring!;
+    if (footerNotifier.outOfRange) {
+      if (footerNotifier._mode == IndicatorMode.ready &&
+          footerNotifier.readySpring != null) {
+        return footerNotifier.readySpring!;
+      } else if (footerNotifier._spring != null) {
+        return footerNotifier._spring!;
+      }
     }
     return _spring ?? super.spring;
   }
@@ -202,7 +212,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
             position.minScrollExtent;
       }
       // Stop spring rebound.
-      if (headerNotifier._mode == IndicatorMode.ready &&
+      if (headerNotifier._releaseOffset > 0 &&
+          headerNotifier._mode == IndicatorMode.ready &&
           !headerNotifier._indicator.springRebound &&
           -value < headerNotifier.actualTriggerOffset) {
         _updateIndicatorOffset(position, -headerNotifier.actualTriggerOffset);
@@ -210,13 +221,13 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
             value -
             position.minScrollExtent;
       }
-      if (!userOffsetNotifier.value &&
-          (headerNotifier._mode == IndicatorMode.done ||
-              headerNotifier._mode == IndicatorMode.drag) &&
-          value > position.minScrollExtent) {
-        _updateIndicatorOffset(position, 0);
-        return value - position.minScrollExtent;
-      }
+      // if (!userOffsetNotifier.value &&
+      //     (headerNotifier._mode == IndicatorMode.done ||
+      //         headerNotifier._mode == IndicatorMode.drag) &&
+      //     value > position.minScrollExtent) {
+      //   _updateIndicatorOffset(position, 0);
+      //   return value - position.minScrollExtent;
+      // }
       // Cannot over the secondary.
       if (headerNotifier.hasSecondary) {
         if (value < position.pixels &&
@@ -277,7 +288,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
             position.maxScrollExtent;
       }
       // Stop spring rebound.
-      if (footerNotifier._mode == IndicatorMode.ready &&
+      if (footerNotifier._releaseOffset > 0 &&
+          footerNotifier._mode == IndicatorMode.ready &&
           !footerNotifier._indicator.springRebound &&
           value <
               position.maxScrollExtent + footerNotifier.actualTriggerOffset) {
@@ -286,13 +298,13 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         return (value - footerNotifier.actualTriggerOffset) -
             position.maxScrollExtent;
       }
-      if (!userOffsetNotifier.value &&
-          (footerNotifier._mode == IndicatorMode.done ||
-              footerNotifier._mode == IndicatorMode.drag) &&
-          value < position.maxScrollExtent) {
-        _updateIndicatorOffset(position, position.maxScrollExtent);
-        return value - position.maxScrollExtent;
-      }
+      // if (!userOffsetNotifier.value &&
+      //     (footerNotifier._mode == IndicatorMode.done ||
+      //         footerNotifier._mode == IndicatorMode.drag) &&
+      //     value < position.maxScrollExtent) {
+      //   _updateIndicatorOffset(position, position.maxScrollExtent);
+      //   return value - position.maxScrollExtent;
+      // }
       // Cannot over the secondary.
       if (footerNotifier.hasSecondary) {
         if (position.maxScrollExtent + footerNotifier.secondaryDimension <=

@@ -189,8 +189,11 @@ abstract class Indicator {
   /// [IndicatorMode.processed] duration of state.
   final Duration processedDuration;
 
-  /// Structure that describes a spring's constants.
+  /// Spring effect when scrollable goes back.
   final SpringDescription? spring;
+
+  /// Spring effect when the mode is [IndicatorMode.ready].
+  final SpringDescription? readySpring;
 
   /// Whether the spring can rebound.
   final bool springRebound;
@@ -242,6 +245,7 @@ abstract class Indicator {
     this.processedDuration = const Duration(seconds: 1),
     this.safeArea = true,
     this.spring,
+    this.readySpring,
     this.springRebound = true,
     this.frictionFactor,
     this.infiniteOffset,

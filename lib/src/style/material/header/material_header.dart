@@ -39,6 +39,7 @@ class MaterialHeader extends Header {
     Duration processedDuration = const Duration(milliseconds: 200),
     SpringDescription? spring,
     bool springRebound = true,
+    SpringDescription? readySpring,
     FrictionFactor? frictionFactor,
     bool safeArea = true,
     double? infiniteOffset,
@@ -58,7 +59,9 @@ class MaterialHeader extends Header {
           triggerOffset: triggerOffset,
           clamping: clamping,
           processedDuration: processedDuration,
-          spring: spring ?? (showBezierBackground ? kBezierSpring : null),
+          spring: spring,
+          readySpring:
+              readySpring ?? (showBezierBackground ? kBezierSpring : null),
           springRebound: springRebound,
           frictionFactor: frictionFactor ??
               (showBezierBackground

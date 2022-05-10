@@ -116,6 +116,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// EasyRefresh scroll physics.
   late _ERScrollPhysics _physics;
 
+  /// Offset on release.
+  /// Meet the premise of the task.
+  double _releaseOffset = 0;
+
   /// Actual trigger offset.
   /// [triggerOffset] + [safeOffset]
   double get actualTriggerOffset => triggerOffset + safeOffset;
@@ -166,7 +170,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Spring description.
   SpringDescription? get _spring => _indicator.spring;
 
-  SpringDescription get spring => _spring ?? _physics.spring;
+  SpringDescription get spring => _physics.spring;
+
+  SpringDescription? get readySpring => _indicator.readySpring;
 
   /// Indicator listenable.
   ValueListenable<IndicatorNotifier> listenable() => _IndicatorListenable(this);
@@ -348,6 +354,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     final oldMode = _mode;
     // Calculate and update the offset.
     _offset = _calculateOffset(position, value);
+    if (bySimulation) {
+      _releaseOffset = _offset;
+    }
     // Do nothing if not out of bounds.
     if (oldOffset == 0 && _offset == 0) {
       // Handling infinite scroll
@@ -415,25 +424,30 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         // The state does not change until the end
         return;
       } else if (_offset == 0) {
-        if (_mode != IndicatorMode.ready) {
+        if (!(_mode == IndicatorMode.ready && !userOffsetNotifier.value)) {
           // Prevent Spring from having repeated rebounds.
           _mode = IndicatorMode.inactive;
           if (_result != IndicatorResult.noMore || _noMoreProcess) {
             _result = IndicatorResult.none;
           }
+          _releaseOffset = 0;
         }
       } else if (_offset < actualTriggerOffset) {
-        if (_mode != IndicatorMode.ready) {
+        if (!(_mode == IndicatorMode.ready && !userOffsetNotifier.value)) {
           // Prevent Spring from having repeated rebounds.
           _mode = IndicatorMode.drag;
         }
       } else if (_offset == actualTriggerOffset) {
         // Must be exceeded to trigger the task
         _mode = userOffsetNotifier.value
-            ? IndicatorMode.ready
+            ? (_releaseOffset > actualTriggerOffset
+                ? IndicatorMode.ready
+                : IndicatorMode.armed)
             : IndicatorMode.processing;
       } else if (_offset > actualTriggerOffset) {
-        if (hasSecondary && _offset >= actualSecondaryTriggerOffset) {
+        if (hasSecondary &&
+            _offset >= actualSecondaryTriggerOffset &&
+            _releaseOffset >= actualSecondaryTriggerOffset) {
           // Secondary
           if (_offset < secondaryDimension) {
             _mode = userOffsetNotifier.value
@@ -450,7 +464,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
           // (the task is not executed if it is not released)
           _mode = userOffsetNotifier.value
               ? IndicatorMode.armed
-              : IndicatorMode.ready;
+              : (_releaseOffset > actualTriggerOffset
+                  ? IndicatorMode.ready
+                  : IndicatorMode.armed);
         }
       }
       // Execute the task.

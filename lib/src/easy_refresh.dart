@@ -230,7 +230,6 @@ class _EasyRefreshState extends State<EasyRefresh>
         return NotRefreshHeader(
           clamping: h.clamping,
           spring: h.spring,
-          springRebound: h.springRebound,
           frictionFactor: h.frictionFactor,
         );
       }
@@ -254,7 +253,6 @@ class _EasyRefreshState extends State<EasyRefresh>
         return NotLoadFooter(
           clamping: f.clamping,
           spring: f.spring,
-          springRebound: f.springRebound,
           frictionFactor: f.frictionFactor,
         );
       }
