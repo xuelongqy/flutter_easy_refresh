@@ -44,8 +44,6 @@ class _BezierBackgroundState extends State<BezierBackground>
 
   double get _offset => widget.state.offset;
 
-  IndicatorMode get _mode => widget.state.mode;
-
   Axis get _axis => widget.state.axis;
 
   double get _actualTriggerOffset => widget.state.actualTriggerOffset;
@@ -63,21 +61,24 @@ class _BezierBackgroundState extends State<BezierBackground>
     _animationController.addListener(() {
       setState(() {});
     });
+    widget.state.notifier.addModeChangeListener(_onModeChangeListener);
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    widget.state.notifier.removeModeChangeListener(_onModeChangeListener);
     super.dispose();
   }
 
   @override
   void didUpdateWidget(BezierBackground oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (_mode == IndicatorMode.ready &&
-        oldWidget.state.mode != IndicatorMode.ready &&
-        widget.useAnimation) {
-      // Start animation.
+  }
+
+  /// Mode change listener.
+  void _onModeChangeListener(IndicatorMode mode, double offset) {
+    if (mode == IndicatorMode.ready && widget.useAnimation) {
       _startAnimation();
     }
   }
@@ -93,21 +94,29 @@ class _BezierBackgroundState extends State<BezierBackground>
 
   @override
   Widget build(BuildContext context) {
+    final reboundOffset = _animationController.isAnimating
+        ? _notifier.calculateOffsetWithPixels(
+            _notifier.position, _animationController.value)
+        : null;
     return ClipPath(
       clipper: _BezierPainter(
         axis: _axis,
         reverse: widget.reverse,
         offset: _offset,
         actualTriggerOffset: _actualTriggerOffset,
-        reboundOffset: _animationController.isAnimating
-            ? _notifier.calculateOffsetWithPixels(
-                _notifier.position, _animationController.value)
-            : null,
+        reboundOffset: reboundOffset,
       ),
       child: Container(
-        width: _axis == Axis.horizontal ? _offset : double.infinity,
-        height: _axis == Axis.vertical ? _offset : double.infinity,
-        color: _color,
+        width: _axis == Axis.horizontal
+            ? _offset + (reboundOffset ?? 0)
+            : double.infinity,
+        height: _axis == Axis.vertical
+            ? _offset + (reboundOffset ?? 0)
+            : double.infinity,
+        clipBehavior: Clip.none,
+        decoration: BoxDecoration(
+          color: _color,
+        ),
       ),
     );
   }

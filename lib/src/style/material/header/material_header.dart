@@ -38,7 +38,7 @@ class MaterialHeader extends Header {
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = const Duration(milliseconds: 200),
     SpringDescription? spring,
-    bool springRebound = true,
+    bool springRebound = false,
     SpringDescription? readySpring,
     FrictionFactor? frictionFactor,
     bool safeArea = true,

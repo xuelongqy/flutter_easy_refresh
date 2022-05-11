@@ -39,7 +39,7 @@ class MaterialFooter extends Footer {
     Duration processedDuration = const Duration(milliseconds: 200),
     SpringDescription? spring,
     SpringDescription? readySpring,
-    bool springRebound = true,
+    bool springRebound = false,
     FrictionFactor? frictionFactor,
     bool safeArea = true,
     double? infiniteOffset,

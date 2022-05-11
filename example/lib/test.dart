@@ -14,7 +14,7 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   final _scrollDirection = Axis.vertical;
 
-  int _count = 20;
+  int _count = 10;
 
   final _controller = EasyRefreshController(
     controlFinishRefresh: true,
@@ -62,7 +62,7 @@ class _TestPageState extends State<TestPage> {
           print('Refreshing');
           await Future.delayed(const Duration(seconds: 2));
           setState(() {
-            _count = 5;
+            _count = 10;
           });
           print('Refreshed');
           _controller.finishRefresh(IndicatorResult.succeeded);
@@ -72,10 +72,10 @@ class _TestPageState extends State<TestPage> {
           print('Loading');
           await Future.delayed(const Duration(seconds: 2));
           setState(() {
-            _count += 5;
+            _count += 0;
           });
           print('Loaded');
-          return IndicatorResult.noMore;
+          return IndicatorResult.succeeded;
         },
         // child: ListView.builder(
         //   padding: EdgeInsets.zero,

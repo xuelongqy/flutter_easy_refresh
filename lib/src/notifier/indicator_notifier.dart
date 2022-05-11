@@ -5,6 +5,9 @@ part of easyrefresh;
 /// Indicator widget builder.
 typedef CanProcessCallBack = bool Function();
 
+/// Mode change listener.
+typedef ModeChangeListener = void Function(IndicatorMode mode, double offset);
+
 /// Indicator data and trigger notification.
 abstract class IndicatorNotifier extends ChangeNotifier {
   /// Refresh and loading Indicator.
@@ -105,7 +108,19 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   double get velocity => _velocity;
 
   /// The current state of the indicator.
-  IndicatorMode _mode = IndicatorMode.inactive;
+  IndicatorMode __mode = IndicatorMode.inactive;
+
+  IndicatorMode get _mode => __mode;
+
+  set _mode(IndicatorMode mode) {
+    final oldMode = __mode;
+    __mode = mode;
+    if (mode != oldMode) {
+      for (final listener in _modeChangeListeners) {
+        listener(mode, _offset);
+      }
+    }
+  }
 
   IndicatorMode get mode => _mode;
 
@@ -119,6 +134,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Offset on release.
   /// Meet the premise of the task.
   double _releaseOffset = 0;
+
+  /// Mode change listeners.
+  final Set<ModeChangeListener> _modeChangeListeners = {};
 
   /// Actual trigger offset.
   /// [triggerOffset] + [safeOffset]
@@ -218,11 +236,22 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   @override
   void dispose() {
-    super.dispose();
     _onCanProcess = null;
     _clampingAnimationController?.dispose();
     userOffsetNotifier.removeListener(_onUserOffset);
     _task = null;
+    _modeChangeListeners.clear();
+    super.dispose();
+  }
+
+  /// Add mode change listener.
+  void addModeChangeListener(ModeChangeListener listener) {
+    _modeChangeListeners.add(listener);
+  }
+
+  /// Remove mode change listener.
+  void removeModeChangeListener(ModeChangeListener listener) {
+    _modeChangeListeners.remove(listener);
   }
 
   /// Initialize the [clamping] animation controller
@@ -726,6 +755,7 @@ class HeaderNotifier extends IndicatorNotifier {
 
   @override
   void callTask(double overOffset) {
+    _releaseOffset = actualTriggerOffset + overOffset;
     if (clamping) {
       _offset = actualTriggerOffset + overOffset;
       _mode = IndicatorMode.ready;
@@ -820,6 +850,7 @@ class FooterNotifier extends IndicatorNotifier {
 
   @override
   void callTask(double overOffset) {
+    _releaseOffset = actualTriggerOffset + overOffset;
     if (clamping) {
       _offset = actualTriggerOffset + overOffset;
       _mode = IndicatorMode.ready;

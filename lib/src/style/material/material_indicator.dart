@@ -122,7 +122,6 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
       height: _axis == Axis.vertical ? _actualTriggerOffset : double.infinity,
       width: _axis == Axis.horizontal ? _actualTriggerOffset : double.infinity,
       child: Stack(
-        clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
           AnimatedScale(
@@ -151,45 +150,68 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
   @override
   Widget build(BuildContext context) {
     final padding = math.max(_offset - _kCircularProgressIndicatorSize, 0) / 2;
-    return SizedBox(
-      width: _axis == Axis.vertical ? double.infinity : _offset,
-      height: _axis == Axis.horizontal ? double.infinity : _offset,
-      child: Stack(
-        children: [
-          if (widget.showBezierBackground)
-            BezierBackground(
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        SizedBox(
+          width: _axis == Axis.vertical ? double.infinity : _offset,
+          height: _axis == Axis.horizontal ? double.infinity : _offset,
+        ),
+        if (widget.showBezierBackground)
+          Positioned(
+            top: _axis == Axis.vertical
+                ? widget.reverse
+                    ? null
+                    : 0
+                : 0,
+            left: _axis == Axis.horizontal
+                ? widget.reverse
+                    ? null
+                    : 0
+                : 0,
+            right: _axis == Axis.horizontal
+                ? widget.reverse
+                    ? 0
+                    : null
+                : 0,
+            bottom: _axis == Axis.vertical
+                ? widget.reverse
+                    ? 0
+                    : null
+                : 0,
+            child: BezierBackground(
               state: widget.state,
               color: widget.bezierBackgroundColor,
               useAnimation: widget.bezierBackgroundAnimation,
               reverse: widget.reverse,
             ),
-          Positioned(
-            top: _axis == Axis.vertical
-                ? widget.reverse
-                    ? padding
-                    : null
-                : 0,
-            bottom: _axis == Axis.vertical
-                ? widget.reverse
-                    ? null
-                    : padding
-                : 0,
-            left: _axis == Axis.horizontal
-                ? widget.reverse
-                    ? padding
-                    : null
-                : 0,
-            right: _axis == Axis.horizontal
-                ? widget.reverse
-                    ? null
-                    : padding
-                : 0,
-            child: Center(
-              child: _buildIndicator(),
-            ),
           ),
-        ],
-      ),
+        Positioned(
+          top: _axis == Axis.vertical
+              ? widget.reverse
+                  ? padding
+                  : null
+              : 0,
+          bottom: _axis == Axis.vertical
+              ? widget.reverse
+                  ? null
+                  : padding
+              : 0,
+          left: _axis == Axis.horizontal
+              ? widget.reverse
+                  ? padding
+                  : null
+              : 0,
+          right: _axis == Axis.horizontal
+              ? widget.reverse
+                  ? null
+                  : padding
+              : 0,
+          child: Center(
+            child: _buildIndicator(),
+          ),
+        ),
+      ],
     );
   }
 }
