@@ -61,13 +61,15 @@ class _BezierBackgroundState extends State<BezierBackground>
     _animationController.addListener(() {
       setState(() {});
     });
-    widget.state.notifier.addModeChangeListener(_onModeChangeListener);
+    widget.state.notifier.addModeChangeListener(_onModeChange);
+    widget.state.userOffsetNotifier.addListener(_onUserOffset);
   }
 
   @override
   void dispose() {
     _animationController.dispose();
-    widget.state.notifier.removeModeChangeListener(_onModeChangeListener);
+    widget.state.notifier.removeModeChangeListener(_onModeChange);
+    widget.state.userOffsetNotifier.removeListener(_onUserOffset);
     super.dispose();
   }
 
@@ -77,9 +79,19 @@ class _BezierBackgroundState extends State<BezierBackground>
   }
 
   /// Mode change listener.
-  void _onModeChangeListener(IndicatorMode mode, double offset) {
-    if (mode == IndicatorMode.ready && widget.useAnimation) {
-      _startAnimation();
+  void _onModeChange(IndicatorMode mode, double offset) {
+    if (mode == IndicatorMode.ready) {
+      if (widget.useAnimation) {
+        _startAnimation();
+      }
+    }
+  }
+
+  /// User offset.
+  void _onUserOffset() {
+    if (widget.state.userOffsetNotifier.value &&
+        _animationController.isAnimating) {
+      _animationController.stop();
     }
   }
 
@@ -98,6 +110,10 @@ class _BezierBackgroundState extends State<BezierBackground>
         ? _notifier.calculateOffsetWithPixels(
             _notifier.position, _animationController.value)
         : null;
+    double offset = _offset;
+    if (reboundOffset != null) {
+      offset = math.max(offset, reboundOffset);
+    }
     return ClipPath(
       clipper: _BezierPainter(
         axis: _axis,
@@ -107,12 +123,8 @@ class _BezierBackgroundState extends State<BezierBackground>
         reboundOffset: reboundOffset,
       ),
       child: Container(
-        width: _axis == Axis.horizontal
-            ? _offset + (reboundOffset ?? 0)
-            : double.infinity,
-        height: _axis == Axis.vertical
-            ? _offset + (reboundOffset ?? 0)
-            : double.infinity,
+        width: _axis == Axis.horizontal ? offset : double.infinity,
+        height: _axis == Axis.vertical ? offset : double.infinity,
         clipBehavior: Clip.none,
         decoration: BoxDecoration(
           color: _color,
@@ -168,7 +180,7 @@ class _BezierPainter extends CustomClipper<Path> {
         if (reboundOffset != null) {
           path.quadraticBezierTo(
             width / 2,
-            startHeight - (reboundOffset! - actualTriggerOffset),
+            startHeight - (reboundOffset! - actualTriggerOffset) * 2,
             width,
             startHeight,
           );
@@ -220,7 +232,7 @@ class _BezierPainter extends CustomClipper<Path> {
         path.lineTo(startWidth, height);
         if (reboundOffset != null) {
           path.quadraticBezierTo(
-            startWidth - (reboundOffset! - actualTriggerOffset),
+            startWidth - (reboundOffset! - actualTriggerOffset) * 2,
             height / 2,
             startWidth,
             0,

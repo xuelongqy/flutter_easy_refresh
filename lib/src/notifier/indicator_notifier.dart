@@ -608,7 +608,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       // Actively update the offset if the user does not release
       if (!clamping && userOffsetNotifier.value) {
         Future(() {
-          _updateOffset(_position, 0, false);
+          _updateOffset(_position, _position.pixels, false);
         });
       }
     }
@@ -623,6 +623,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       context,
       IndicatorState(
         indicator: _indicator,
+        userOffsetNotifier: userOffsetNotifier,
         notifier: this,
         mode: mode,
         result: _result,
@@ -729,13 +730,15 @@ class HeaderNotifier extends IndicatorNotifier {
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
-    final mVelocity = hasSecondary && _offset >= actualSecondaryTriggerOffset
-        ? -secondaryVelocity
-        : velocity;
+    final mVelocity =
+        hasSecondary && !noMoreLocked && _offset >= actualSecondaryTriggerOffset
+            ? -secondaryVelocity
+            : velocity;
     if (_offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
-        position: clamping ? position.pixels - _offset : position.pixels,
+        position:
+            clamping ? position.minScrollExtent - _offset : position.pixels,
         velocity: mVelocity,
         leadingExtent: position.minScrollExtent - overExtent,
         trailingExtent: 0,
@@ -830,7 +833,8 @@ class FooterNotifier extends IndicatorNotifier {
     if (_offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
-        position: clamping ? position.pixels + _offset : position.pixels,
+        position:
+            clamping ? position.maxScrollExtent + _offset : position.pixels,
         velocity: mVelocity,
         leadingExtent: 0,
         trailingExtent: position.maxScrollExtent + overExtent,

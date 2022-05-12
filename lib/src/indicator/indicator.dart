@@ -92,6 +92,9 @@ class IndicatorState {
   /// Refresh and loading notifier.
   final IndicatorNotifier notifier;
 
+  /// User offset notifier.
+  final ValueNotifier<bool> userOffsetNotifier;
+
   /// Refresh and loading state.
   final IndicatorMode mode;
 
@@ -129,6 +132,7 @@ class IndicatorState {
   const IndicatorState({
     required this.indicator,
     required this.notifier,
+    required this.userOffsetNotifier,
     required this.mode,
     required this.result,
     required this.offset,
