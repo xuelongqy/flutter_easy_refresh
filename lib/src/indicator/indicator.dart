@@ -3,6 +3,18 @@ part of easyrefresh;
 /// The default opening speed of the secondary.
 const double kDefaultSecondaryVelocity = 3000;
 
+/// Build spring with [IndicatorMode] and offset.
+/// [mode] Indicator mode.
+/// [offset] Indicator offset.
+/// [actualTriggerOffset] Indicator actual trigger offset.
+/// [velocity] Indicator actual trigger offset.
+typedef SpringBuilder = SpringDescription Function({
+  required IndicatorMode mode,
+  required double offset,
+  required double actualTriggerOffset,
+  required double velocity,
+});
+
 /// The current state of the indicator ([Header] or [Footer]).
 enum IndicatorMode {
   /// Default state, without any trigger conditions.
@@ -197,9 +209,10 @@ abstract class Indicator {
   final SpringDescription? spring;
 
   /// Spring effect when the mode is [IndicatorMode.ready].
-  final SpringDescription? readySpring;
+  final SpringBuilder? readySpringBuilder;
 
   /// Whether the spring can rebound.
+  /// Only works with [readySpringBuilder].
   final bool springRebound;
 
   /// Friction factor when list is out of bounds.
@@ -249,7 +262,7 @@ abstract class Indicator {
     this.processedDuration = const Duration(seconds: 1),
     this.safeArea = true,
     this.spring,
-    this.readySpring,
+    this.readySpringBuilder,
     this.springRebound = true,
     this.frictionFactor,
     this.infiniteOffset,

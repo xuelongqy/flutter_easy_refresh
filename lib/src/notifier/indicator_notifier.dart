@@ -190,7 +190,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   SpringDescription get spring => _physics.spring;
 
-  SpringDescription? get readySpring => _indicator.readySpring;
+  SpringBuilder? get readySpringBuilder => _indicator.readySpringBuilder;
 
   /// Indicator listenable.
   ValueListenable<IndicatorNotifier> listenable() => _IndicatorListenable(this);

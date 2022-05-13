@@ -38,7 +38,7 @@ class MaterialFooter extends Footer {
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = const Duration(milliseconds: 200),
     SpringDescription? spring,
-    SpringDescription? readySpring,
+    SpringBuilder? readySpringBuilder,
     bool springRebound = false,
     FrictionFactor? frictionFactor,
     bool safeArea = true,
@@ -60,8 +60,8 @@ class MaterialFooter extends Footer {
           clamping: clamping,
           processedDuration: processedDuration,
           spring: spring,
-          readySpring:
-              readySpring ?? (showBezierBackground ? kBezierSpring : null),
+          readySpringBuilder: readySpringBuilder ??
+              (showBezierBackground ? kBezierSpringBuilder : null),
           springRebound: springRebound,
           frictionFactor: frictionFactor ??
               (showBezierBackground

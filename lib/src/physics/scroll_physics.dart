@@ -60,16 +60,26 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   SpringDescription get spring {
     if (headerNotifier.outOfRange) {
       if (headerNotifier._mode == IndicatorMode.ready &&
-          headerNotifier.readySpring != null) {
-        return headerNotifier.readySpring!;
+          headerNotifier.readySpringBuilder != null) {
+        return headerNotifier.readySpringBuilder!(
+          mode: headerNotifier._mode,
+          offset: headerNotifier._offset,
+          actualTriggerOffset: headerNotifier.actualTriggerOffset,
+          velocity: headerNotifier.velocity,
+        );
       } else if (headerNotifier._spring != null) {
         return headerNotifier._spring!;
       }
     }
     if (footerNotifier.outOfRange) {
       if (footerNotifier._mode == IndicatorMode.ready &&
-          footerNotifier.readySpring != null) {
-        return footerNotifier.readySpring!;
+          footerNotifier.readySpringBuilder != null) {
+        return footerNotifier.readySpringBuilder!(
+          mode: footerNotifier._mode,
+          offset: footerNotifier._offset,
+          actualTriggerOffset: headerNotifier.actualTriggerOffset,
+          velocity: headerNotifier.velocity,
+        );
       } else if (footerNotifier._spring != null) {
         return footerNotifier._spring!;
       }

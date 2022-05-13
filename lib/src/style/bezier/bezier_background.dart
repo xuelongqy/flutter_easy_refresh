@@ -1,11 +1,20 @@
 part of easyrefresh;
 
 /// Spring used by bezier curves.
-const SpringDescription kBezierSpring = SpringDescription(
-  mass: 10, //质量
-  stiffness: 1000, //硬度
-  damping: 0.75, //阻尼系数
-);
+SpringDescription kBezierSpringBuilder({
+  required IndicatorMode mode,
+  required double offset,
+  required double actualTriggerOffset,
+  required double velocity,
+}) {
+  double mass = 6 + (offset - actualTriggerOffset) / 36;
+  double damping = 0.75 + velocity.abs() / 10000;
+  return SpringDescription(
+    mass: mass,
+    stiffness: 1000,
+    damping: damping,
+  );
+}
 
 /// Friction factor used by bezier curves.
 double kBezierFrictionFactor(double overscrollFraction) =>
@@ -84,13 +93,17 @@ class _BezierBackgroundState extends State<BezierBackground>
       if (widget.useAnimation) {
         _startAnimation();
       }
+    } else if (mode == IndicatorMode.done || mode == IndicatorMode.inactive) {
+      if (_animationController.isAnimating) {
+        _animationController.stop();
+      }
     }
   }
 
   /// User offset.
   void _onUserOffset() {
-    if (widget.state.userOffsetNotifier.value &&
-        _animationController.isAnimating) {
+    final state = widget.state;
+    if (state.userOffsetNotifier.value && _animationController.isAnimating) {
       _animationController.stop();
     }
   }
