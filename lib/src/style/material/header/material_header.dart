@@ -61,7 +61,9 @@ class MaterialHeader extends Header {
           processedDuration: processedDuration,
           spring: spring,
           readySpringBuilder: readySpringBuilder ??
-              (showBezierBackground ? kBezierSpringBuilder : null),
+              (bezierBackgroundAnimation
+                  ? kBezierSpringBuilder
+                  : kMaterialSpring),
           springRebound: springRebound,
           frictionFactor: frictionFactor ??
               (showBezierBackground

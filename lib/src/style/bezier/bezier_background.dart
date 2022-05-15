@@ -9,9 +9,10 @@ SpringDescription kBezierSpringBuilder({
 }) {
   double mass = 6 + (offset - actualTriggerOffset) / 36;
   double damping = 0.75 + velocity.abs() / 10000;
+  double stiffness = 1000 + velocity.abs() / 6;
   return SpringDescription(
     mass: mass,
-    stiffness: 1000,
+    stiffness: stiffness,
     damping: damping,
   );
 }

@@ -7,6 +7,19 @@ const double _kCircularProgressIndicatorSize = 48;
 double kMaterialFrictionFactor(double overscrollFraction) =>
     0.435 * math.pow(1 - overscrollFraction, 2);
 
+/// Spring description used by material.
+SpringDescription kMaterialSpring({
+  required IndicatorMode mode,
+  required double offset,
+  required double actualTriggerOffset,
+  required double velocity,
+}) =>
+    SpringDescription.withDampingRatio(
+      mass: 1,
+      stiffness: 500,
+      ratio: 1.1,
+    );
+
 /// Material indicator.
 /// Base widget for [MaterialHeader] and [MaterialFooter].
 class _MaterialIndicator extends StatefulWidget {
