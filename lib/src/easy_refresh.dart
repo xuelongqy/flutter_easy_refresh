@@ -268,7 +268,10 @@ class _EasyRefreshState extends State<EasyRefresh>
     if (widget.refreshOnStart && widget.onRefresh != null) {
       _isRefreshOnStart = true;
       Future(() {
-        _callRefresh(widget.callRefreshOverOffset);
+        _callRefresh(
+          overOffset: widget.callRefreshOverOffset,
+          duration: null,
+        );
       });
     }
     _initData();
@@ -387,14 +390,34 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   /// Automatically trigger refresh.
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
-  void _callRefresh([double? overOffset]) {
-    _headerNotifier.callTask(overOffset ?? widget.callRefreshOverOffset);
+  /// [duration] See [ScrollPosition.animateTo].
+  /// [curve] See [ScrollPosition.animateTo].
+  void _callRefresh({
+    double? overOffset,
+    Duration? duration,
+    Curve curve = Curves.linear,
+  }) {
+    _headerNotifier.callTask(
+      overOffset: overOffset ?? widget.callRefreshOverOffset,
+      duration: duration,
+      curve: curve,
+    );
   }
 
   /// Automatically trigger load.
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
-  void _callLoad([double? overOffset]) {
-    _headerNotifier.callTask(overOffset ?? widget.callLoadOverOffset);
+  /// [duration] See [ScrollPosition.animateTo].
+  /// [curve] See [ScrollPosition.animateTo].
+  void _callLoad({
+    double? overOffset,
+    Duration? duration,
+    Curve curve = Curves.linear,
+  }) {
+    _footerNotifier.callTask(
+      overOffset: overOffset ?? widget.callRefreshOverOffset,
+      duration: duration,
+      curve: curve,
+    );
   }
 
   /// Build Header widget.

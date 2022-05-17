@@ -228,7 +228,14 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   // void _openSecondary();
 
   /// Automatically trigger task.
-  void callTask(double overOffset);
+  /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
+  /// [duration] See [ScrollPosition.animateTo].
+  /// [curve] See [ScrollPosition.animateTo].
+  void callTask({
+    required double overOffset,
+    Duration? duration,
+    Curve curve = Curves.linear,
+  });
 
   bool get secondaryLocked =>
       _mode == IndicatorMode.secondaryOpen ||
@@ -335,7 +342,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         _offset = actualTriggerOffset;
         _clampingAnimationController!.stop();
       } else {
-        if (mOffset == 0) {
+        if (mOffset < 0) {
+          _offset = 0;
           _clampingAnimationController!.stop();
         }
         _offset = mOffset;
@@ -723,10 +731,12 @@ class HeaderNotifier extends IndicatorNotifier {
     }
   }
 
+  /// See [IndicatorNotifier.calculateOffsetWithPixels].
   @override
   double calculateOffsetWithPixels(ScrollMetrics position, double pixels) =>
       math.max(-pixels - position.minScrollExtent, 0.0);
 
+  /// See [IndicatorNotifier.createBallisticSimulation].
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
@@ -748,6 +758,7 @@ class HeaderNotifier extends IndicatorNotifier {
     return null;
   }
 
+  /// See [IndicatorNotifier.boundaryOffset].
   @override
   double get boundaryOffset => _position.pixels;
 
@@ -756,16 +767,40 @@ class HeaderNotifier extends IndicatorNotifier {
     return value >= position.maxScrollExtent;
   }
 
+  /// See [IndicatorNotifier.callTask].
   @override
-  void callTask(double overOffset) {
+  void callTask({
+    required double overOffset,
+    Duration? duration,
+    Curve curve = Curves.linear,
+  }) {
+    final to = -actualTriggerOffset - overOffset;
     _releaseOffset = actualTriggerOffset + overOffset;
+    (_position as ScrollPosition).jumpTo(_position.minScrollExtent);
     if (clamping) {
-      _offset = actualTriggerOffset + overOffset;
-      _mode = IndicatorMode.ready;
-      _updateBySimulation(_position, 0);
+      if (duration == null) {
+        _offset = actualTriggerOffset + overOffset;
+        _mode = IndicatorMode.ready;
+        _updateBySimulation(_position, 0);
+      } else {
+        userOffsetNotifier.value = true;
+        _clampingAnimationController!
+            .animateTo(to, duration: duration, curve: curve)
+            .then((value) {
+          userOffsetNotifier.value = false;
+          _updateBySimulation(_position, 0);
+        });
+      }
     } else {
       if (_position is ScrollPosition) {
-        (_position as ScrollPosition).jumpTo(-actualTriggerOffset - overOffset);
+        if (duration == null) {
+          (_position as ScrollPosition).jumpTo(to);
+        } else {
+          userOffsetNotifier.value = true;
+          (_position as ScrollPosition)
+              .animateTo(to, duration: duration, curve: curve)
+              .then((value) => userOffsetNotifier.value = false);
+        }
       }
     }
   }
@@ -819,10 +854,12 @@ class FooterNotifier extends IndicatorNotifier {
     }
   }
 
+  /// See [IndicatorNotifier.calculateOffsetWithPixels].
   @override
   double calculateOffsetWithPixels(ScrollMetrics position, double pixels) =>
       math.max(pixels - position.maxScrollExtent, 0.0);
 
+  /// See [IndicatorNotifier.createBallisticSimulation].
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
@@ -844,6 +881,7 @@ class FooterNotifier extends IndicatorNotifier {
     return null;
   }
 
+  /// See [IndicatorNotifier.boundaryOffset].
   @override
   double get boundaryOffset => _position.maxScrollExtent - _position.pixels;
 
@@ -852,17 +890,40 @@ class FooterNotifier extends IndicatorNotifier {
     return value <= position.minScrollExtent;
   }
 
+  /// See [IndicatorNotifier.callTask].
   @override
-  void callTask(double overOffset) {
+  void callTask({
+    required double overOffset,
+    Duration? duration,
+    Curve curve = Curves.linear,
+  }) {
+    final to = _position.maxScrollExtent + actualTriggerOffset + overOffset;
     _releaseOffset = actualTriggerOffset + overOffset;
+    (_position as ScrollPosition).jumpTo(_position.maxScrollExtent);
     if (clamping) {
-      _offset = actualTriggerOffset + overOffset;
-      _mode = IndicatorMode.ready;
-      _updateBySimulation(_position, 0);
+      if (duration == null) {
+        _offset = actualTriggerOffset + overOffset;
+        _mode = IndicatorMode.ready;
+        _updateBySimulation(_position, 0);
+      } else {
+        userOffsetNotifier.value = true;
+        _clampingAnimationController!
+            .animateTo(to, duration: duration, curve: curve)
+            .then((value) {
+          userOffsetNotifier.value = false;
+          _updateBySimulation(_position, 0);
+        });
+      }
     } else {
       if (_position is ScrollPosition) {
-        (_position as ScrollPosition).jumpTo(
-            _position.maxScrollExtent + actualTriggerOffset + overOffset);
+        if (duration == null) {
+          (_position as ScrollPosition).jumpTo(to);
+        } else {
+          userOffsetNotifier.value = true;
+          (_position as ScrollPosition)
+              .animateTo(to, duration: duration, curve: curve)
+              .then((value) => userOffsetNotifier.value = false);
+        }
       }
     }
   }

@@ -26,14 +26,34 @@ class EasyRefreshController {
 
   /// Automatically trigger refresh.
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
-  void callRefresh([double? overOffset]) {
-    _state?._callRefresh(overOffset);
+  /// [duration] See [ScrollPosition.animateTo].
+  /// [curve] See [ScrollPosition.animateTo].
+  void callRefresh({
+    double? overOffset,
+    Duration? duration = const Duration(milliseconds: 200),
+    Curve curve = Curves.linear,
+  }) {
+    _state?._callRefresh(
+      overOffset: overOffset,
+      duration: duration,
+      curve: curve,
+    );
   }
 
   /// Automatically trigger load.
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
-  void callLoad([double? overOffset]) {
-    _state?._callLoad(overOffset);
+  /// [duration] See [ScrollPosition.animateTo].
+  /// [curve] See [ScrollPosition.animateTo].
+  void callLoad({
+    double? overOffset,
+    Duration? duration = const Duration(milliseconds: 300),
+    Curve curve = Curves.linear,
+  }) {
+    _state?._callLoad(
+      overOffset: overOffset,
+      duration: duration,
+      curve: curve,
+    );
   }
 
   /// Reset Header indicator state.
