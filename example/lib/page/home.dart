@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+    SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
       // 设置EasyRefresh的默认样式
       EasyRefresh.defaultHeader = ClassicalHeader(
         enableInfiniteRefresh: false,

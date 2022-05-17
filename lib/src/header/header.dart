@@ -232,7 +232,7 @@ class LinkHeaderNotifier extends ChangeNotifier {
     this.enableInfiniteRefresh = enableInfiniteRefresh;
     this.success = success;
     this.noMore = noMore;
-    SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+    SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
       notifyListeners();
     });
   }
