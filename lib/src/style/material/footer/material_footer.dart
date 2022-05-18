@@ -25,16 +25,22 @@ class MaterialFooter extends Footer {
   /// Show bezier background.
   final bool showBezierBackground;
 
-  /// Show bezier background.
+  /// Bezier background color.
+  /// See [BezierBackground.color].
   final Color? bezierBackgroundColor;
 
   /// Bezier background animation.
+  /// See [BezierBackground.useAnimation].
   final bool bezierBackgroundAnimation;
+
+  /// Bezier background bounce.
+  /// See [BezierBackground.bounce].
+  final bool bezierBackgroundBounce;
 
   MaterialFooter({
     this.key,
     double triggerOffset = 100,
-    bool clamping = false,
+    bool clamping = true,
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = const Duration(milliseconds: 200),
     SpringDescription? spring,
@@ -52,9 +58,10 @@ class MaterialFooter extends Footer {
     this.semanticsLabel,
     this.semanticsValue,
     this.noMoreIcon,
-    this.showBezierBackground = true,
+    this.showBezierBackground = false,
     this.bezierBackgroundColor,
-    this.bezierBackgroundAnimation = true,
+    this.bezierBackgroundAnimation = false,
+    this.bezierBackgroundBounce = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -93,6 +100,7 @@ class MaterialFooter extends Footer {
       showBezierBackground: showBezierBackground,
       bezierBackgroundColor: bezierBackgroundColor,
       bezierBackgroundAnimation: bezierBackgroundAnimation,
+      bezierBackgroundBounce: bezierBackgroundBounce,
     );
   }
 }

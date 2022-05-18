@@ -55,11 +55,17 @@ class _MaterialIndicator extends StatefulWidget {
   /// Show bezier background.
   final bool showBezierBackground;
 
-  /// Show bezier background.
+  /// Bezier background color.
+  /// See [BezierBackground.color].
   final Color? bezierBackgroundColor;
 
   /// Bezier background animation.
+  /// See [BezierBackground.useAnimation].
   final bool bezierBackgroundAnimation;
+
+  /// Bezier background bounce.
+  /// See [BezierBackground.bounce].
+  final bool bezierBackgroundBounce;
 
   const _MaterialIndicator({
     Key? key,
@@ -75,6 +81,7 @@ class _MaterialIndicator extends StatefulWidget {
     this.showBezierBackground = false,
     this.bezierBackgroundColor,
     this.bezierBackgroundAnimation = false,
+    this.bezierBackgroundBounce = false,
   }) : super(key: key);
 
   @override
@@ -196,6 +203,7 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
               state: widget.state,
               color: widget.bezierBackgroundColor,
               useAnimation: widget.bezierBackgroundAnimation,
+              bounce: widget.bezierBackgroundBounce,
               reverse: widget.reverse,
             ),
           ),

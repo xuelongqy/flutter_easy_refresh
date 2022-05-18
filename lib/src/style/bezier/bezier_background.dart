@@ -32,6 +32,10 @@ class BezierBackground extends StatefulWidget {
   /// Use animation with [IndicatorNotifier.createBallisticSimulation].
   final bool useAnimation;
 
+  /// Use bounce animation.
+  /// When [useAnimation] is true.
+  final bool bounce;
+
   /// True for up and left.
   /// False for down and right.
   final bool reverse;
@@ -41,6 +45,7 @@ class BezierBackground extends StatefulWidget {
     required this.state,
     required this.reverse,
     this.useAnimation = true,
+    this.bounce = false,
     this.color,
   }) : super(key: key);
 
@@ -64,13 +69,19 @@ class _BezierBackgroundState extends State<BezierBackground>
   /// Animation controller.
   late AnimationController _animationController;
 
+  /// Animate with simulation.
+  /// When [BezierBackground.bounce] is true.
+  bool _simulationAnimation = false;
+
+  /// Last animation value.
+  /// When [BezierBackground.bounce] is true.
+  double _lastAnimationValue = 0;
+
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController.unbounded(vsync: this);
-    _animationController.addListener(() {
-      setState(() {});
-    });
+    _animationController.addListener(_onAnimation);
     widget.state.notifier.addModeChangeListener(_onModeChange);
     widget.state.userOffsetNotifier.addListener(_onUserOffset);
   }
@@ -114,8 +125,30 @@ class _BezierBackgroundState extends State<BezierBackground>
     final simulation = _notifier.createBallisticSimulation(
         _notifier.position, _notifier.velocity);
     if (simulation != null) {
+      _simulationAnimation = true;
       _animationController.animateWith(simulation);
     }
+  }
+
+  /// Animation listener.
+  void _onAnimation() {
+    if (widget.bounce) {
+      // Bounce animation.
+      final oldOffset = _notifier.calculateOffsetWithPixels(
+          _notifier.position, _lastAnimationValue);
+      final offset = _notifier.calculateOffsetWithPixels(
+          _notifier.position, _animationController.value);
+      if (_simulationAnimation) {
+        if (offset < _actualTriggerOffset && offset > oldOffset) {
+          _simulationAnimation = false;
+          _animationController.animateTo(-_actualTriggerOffset,
+              duration: const Duration(milliseconds: 600),
+              curve: Curves.bounceOut);
+        }
+      }
+      _lastAnimationValue = _animationController.value;
+    }
+    setState(() {});
   }
 
   @override
