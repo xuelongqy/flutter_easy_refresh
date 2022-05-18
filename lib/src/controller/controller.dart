@@ -56,6 +56,40 @@ class EasyRefreshController {
     );
   }
 
+  /// Open header secondary.
+  /// [duration] See [ScrollPosition.animateTo].
+  /// [curve] See [ScrollPosition.animateTo].
+  void openHeaderSecondary({
+    Duration? duration = const Duration(milliseconds: 200),
+    Curve curve = Curves.linear,
+  }) {
+    if (_state?._header.secondaryTriggerOffset != null) {
+      _state?._callRefresh(
+        overOffset: _state!._headerNotifier.secondaryDimension -
+            _state!._headerNotifier.actualTriggerOffset,
+        duration: duration,
+        curve: curve,
+      );
+    }
+  }
+
+  /// Open footer secondary.
+  /// [duration] See [ScrollPosition.animateTo].
+  /// [curve] See [ScrollPosition.animateTo].
+  void openFooterSecondary({
+    Duration? duration = const Duration(milliseconds: 200),
+    Curve curve = Curves.linear,
+  }) {
+    if (_state?._footer.secondaryTriggerOffset != null) {
+      _state?._callLoad(
+        overOffset: _state!._footerNotifier.secondaryDimension -
+            _state!._footerNotifier.actualTriggerOffset,
+        duration: duration,
+        curve: curve,
+      );
+    }
+  }
+
   /// Reset Header indicator state.
   void resetHeader() {
     _state?._headerNotifier._reset();

@@ -224,9 +224,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Infinite scroll exclusions.
   bool _infiniteExclude(ScrollMetrics position, double value);
 
-  /// Open the secondary page.
-  // void _openSecondary();
-
   /// Automatically trigger task.
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
   /// [duration] See [ScrollPosition.animateTo].
