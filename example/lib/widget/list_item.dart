@@ -1,111 +1,44 @@
 import 'package:flutter/material.dart';
 
-/// 列表项
-class ListItem extends StatefulWidget {
-  // 点击事件
-  final VoidCallback? onPressed;
+import '../util/color_utils.dart';
 
-  // 图标
-  final Widget? icon;
-
-  // 标题
-  final String? title;
-  final Color titleColor;
-
-  // 描述
-  final String? describe;
-  final Color describeColor;
-
-  // 右侧控件
-  final Widget? rightWidget;
-
-  // 构造函数
-  ListItem({
+/// List item.
+class ListItem extends StatelessWidget {
+  const ListItem({
     Key? key,
-    this.onPressed,
+    required this.title,
+    this.subtitle,
     this.icon,
-    this.title,
-    this.titleColor: Colors.black,
-    this.describe,
-    this.describeColor: Colors.grey,
-    this.rightWidget,
+    this.onTap,
   }) : super(key: key);
 
-  @override
-  _ListItemState createState() => _ListItemState();
-}
+  final String title;
 
-class _ListItemState extends State<ListItem> {
+  final String? subtitle;
+
+  final IconData? icon;
+
+  final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: widget.onPressed,
-      padding: EdgeInsets.all(0.0),
-      shape: Border.all(
-        color: Colors.transparent,
-        width: 0.0,
-        style: BorderStyle.none,
+    return ListTile(
+      title: Text(title),
+      subtitle: subtitle == null ? null : Text(subtitle!),
+      leading: icon == null ? null : Container(
+        height: 36,
+        width: 36,
+        decoration: BoxDecoration(
+          color: ColorUtils.backgroundColorWithString(title),
+          borderRadius: const BorderRadius.all(Radius.circular(18)),
+        ),
+        alignment: Alignment.center,
+        child: Icon(
+          icon!,
+          color: ColorUtils.foregroundColorWithString(title),
+        ),
       ),
-      child: Container(
-          height: 60.0,
-          width: double.infinity,
-          child: Row(
-            children: <Widget>[
-              widget.icon != null
-                  ? Container(
-                      padding: EdgeInsets.all(14.0),
-                      child: SizedBox(
-                        height: 32.0,
-                        width: 32.0,
-                        child: widget.icon,
-                      ),
-                    )
-                  : Container(
-                      width: 14.0,
-                    ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    widget.title != null
-                        ? Text(
-                            widget.title!,
-                            style: TextStyle(
-                              color: widget.titleColor,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : Container(),
-                    widget.describe != null
-                        ? Text(
-                            widget.describe!,
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: widget.describeColor, fontSize: 12.0),
-                          )
-                        : Container(),
-                  ],
-                ),
-              ),
-              widget.rightWidget ?? Container(),
-              Container(
-                width: 14.0,
-              ),
-            ],
-          )),
+      onTap: onTap,
     );
-  }
-}
-
-/// 空图标
-class EmptyIcon extends Icon {
-  const EmptyIcon() : super(Icons.hourglass_empty);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }

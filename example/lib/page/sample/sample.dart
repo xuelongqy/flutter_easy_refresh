@@ -214,10 +214,11 @@
 //   bool get wantKeepAlive => true;
 // }
 
-import 'package:example/test.dart';
-import 'package:example/util/color_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'test.dart';
+import '../../widget/list_item.dart';
 
 class SamplePage extends StatefulWidget {
   const SamplePage({Key? key}) : super(key: key);
@@ -245,28 +246,17 @@ class _SamplePageState extends State<SamplePage> {
             ),
           ),
           SliverList(
-              delegate: SliverChildListDelegate([
-            ListTile(
-              title: const Text('Test'),
-              leading: Container(
-                height: 36,
-                width: 36,
-                decoration: BoxDecoration(
-                  color: ColorUtils.backgroundColorWithString('test'),
-                  borderRadius: const BorderRadius.all(Radius.circular(18)),
-                ),
-                alignment: Alignment.center,
-                child: Icon(
-                  Icons.build,
-                  color: ColorUtils.foregroundColorWithString('test'),
-                ),
+            delegate: SliverChildListDelegate([
+              ListItem(
+                title: 'Test',
+                subtitle: 'EasyRefresh test page',
+                icon: Icons.build,
+                onTap: () {
+                  Get.to(() => const TestPage());
+                },
               ),
-              subtitle: const Text('EasyRefresh test page'),
-              onTap: () {
-                Get.to(() => const TestPage());
-              },
-            ),
-          ])),
+            ]),
+          ),
         ],
       ),
     );

@@ -1,101 +1,132 @@
-// import 'dart:async';
-//
-// import 'package:example/widget/sample_list_item.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_easyrefresh/easy_refresh.dart';
-//
-// /// 测试界面
-// class TestPage extends StatefulWidget {
-//   @override
-//   TestPageState createState() {
-//     return TestPageState();
-//   }
-// }
-//
-// class TestPageState extends State<TestPage> {
-//   // 总数
-//   int _count = 20;
-//   // 控制器
-//   late EasyRefreshController _controller;
-//
-//   // 通知器
-//   late LinkHeaderNotifier _headerNotifier;
-//   late LinkFooterNotifier _footerNotifier;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _headerNotifier = LinkHeaderNotifier();
-//     _footerNotifier = LinkFooterNotifier();
-//     _controller = EasyRefreshController();
-//     _headerNotifier.addListener(() {
-//       //print(_headerNotifier.refreshState);
-//     });
-//     _footerNotifier.addListener(() {
-//       //print(_footerNotifier.loadState);
-//     });
-//   }
-//
-//   @override
-//   void dispose() {
-//     super.dispose();
-//     _controller.dispose();
-//     _headerNotifier.dispose();
-//     _footerNotifier.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Test'),
-//         backgroundColor: Colors.white,
-//       ),
-//       body: EasyRefresh.custom(
-//         header: NotificationHeader(
-//           header: ClassicalHeader(
-//             enableInfiniteRefresh: true,
-//           ),
-//           notifier: _headerNotifier,
-//         ),
-//         footer: NotificationFooter(
-//           footer: ClassicalFooter(
-//             enableInfiniteLoad: true,
-//           ),
-//           notifier: _footerNotifier,
-//         ),
-//         controller: _controller,
-//         onRefresh: () async {
-//           print('refresh');
-//           await Future.delayed(Duration(seconds: 2), () {
-//             if (mounted) {
-//               setState(() {
-//                 _count = 20;
-//               });
-//             }
-//           });
-//         },
-//         onLoad: () async {
-//           print('load');
-//           await Future.delayed(Duration(seconds: 2), () {
-//             if (mounted) {
-//               setState(() {
-//                 _count += 1;
-//               });
-//             }
-//           });
-//         },
-//         slivers: <Widget>[
-//           SliverList(
-//             delegate: SliverChildBuilderDelegate(
-//               (context, index) {
-//                 return SampleListItem();
-//               },
-//               childCount: _count,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+import 'dart:async';
+
+import 'package:example/widget/sample_list_item.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+
+class TestPage extends StatefulWidget {
+  const TestPage({Key? key}) : super(key: key);
+
+  @override
+  _TestPageState createState() => _TestPageState();
+}
+
+class _TestPageState extends State<TestPage> {
+  final _scrollDirection = Axis.vertical;
+
+  int _count = 10;
+
+  final _controller = EasyRefreshController(
+    controlFinishRefresh: true,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    // Future.delayed(const Duration(seconds: 1), () {
+    //   PrimaryScrollController.of(context)!.position.jumpTo(-70);
+    // });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('EasyRefresh'),
+      ),
+      body: EasyRefresh(
+        noMoreRefresh: false,
+        noMoreLoad: false,
+        refreshOnStart: false,
+        controller: _controller,
+        refreshOnStartHeader: BuilderHeader(
+            triggerOffset: 70,
+            clamping: false,
+            position: IndicatorPosition.locator,
+            processedDuration: Duration.zero,
+            builder: (ctx, state) {
+              if (state.mode == IndicatorMode.inactive) {
+                return const SizedBox();
+              }
+              return Container(
+                width: double.infinity,
+                height: state.viewportDimension,
+                color: Colors.blue,
+                alignment: Alignment.center,
+                child: const Text('Refresh on start'),
+              );
+            }),
+        header: MaterialHeader(),
+        footer: MaterialFooter(),
+        onRefresh: () async {
+          print('Refreshing');
+          await Future.delayed(const Duration(seconds: 2));
+          setState(() {
+            _count = 10;
+          });
+          print('Refreshed');
+          _controller.finishRefresh(IndicatorResult.succeeded);
+          return IndicatorResult.succeeded;
+        },
+        onLoad: () async {
+          print('Loading');
+          await Future.delayed(const Duration(seconds: 2));
+          setState(() {
+            _count += 0;
+          });
+          print('Loaded');
+          return IndicatorResult.succeeded;
+        },
+        // child: ListView.builder(
+        //   padding: EdgeInsets.zero,
+        //   scrollDirection: scrollDirection,
+        //   itemCount: _count,
+        //   itemBuilder: (context, index) {
+        //     return SampleListItem(
+        //       direction: scrollDirection,
+        //       width: scrollDirection == Axis.vertical ? double.infinity : 200,
+        //     );
+        //   },
+        // ),
+        // child: ListView(
+        //   scrollDirection: scrollDirection,
+        //   reverse: true,
+        //   children: [
+        //     const HeaderLocator(),
+        //     for (int i = 0; i < _count; i++)
+        //       SampleListItem(
+        //         direction: scrollDirection,
+        //         width: scrollDirection == Axis.vertical ? double.infinity : 200,
+        //       ),
+        //     const FooterLocator(),
+        //   ],
+        // ),
+        child: CustomScrollView(
+          scrollDirection: _scrollDirection,
+          reverse: false,
+          slivers: [
+            // const HeaderLocator.sliver(),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return SampleListItem(
+                    direction: _scrollDirection,
+                    width: _scrollDirection == Axis.vertical
+                        ? double.infinity
+                        : 200,
+                  );
+                },
+                childCount: _count,
+              ),
+            ),
+            // const FooterLocator.sliver(),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.play_arrow),
+        onPressed: () => _controller.callRefresh(),
+      ),
+    );
+  }
+}

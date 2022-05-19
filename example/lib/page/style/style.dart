@@ -210,8 +210,9 @@
 //   // TODO: implement wantKeepAlive
 //   bool get wantKeepAlive => true;
 // }
-import 'package:example/util/color_utils.dart';
 import 'package:flutter/material.dart';
+
+import '../../widget/list_item.dart';
 
 class StylePage extends StatefulWidget {
   const StylePage({Key? key}) : super(key: key);
@@ -239,26 +240,15 @@ class _StylePageState extends State<StylePage> {
             ),
           ),
           SliverList(
-              delegate: SliverChildListDelegate([
-            ListTile(
-              title: const Text('Classical'),
-              leading: Container(
-                height: 36,
-                width: 36,
-                decoration: BoxDecoration(
-                  color: ColorUtils.backgroundColorWithString('Classical'),
-                  borderRadius: const BorderRadius.all(Radius.circular(18)),
-                ),
-                alignment: Alignment.center,
-                child: Icon(
-                  Icons.format_list_bulleted,
-                  color: ColorUtils.foregroundColorWithString('Classical'),
-                ),
+            delegate: SliverChildListDelegate([
+              ListItem(
+                title: 'Classical',
+                subtitle: 'Classical and default',
+                icon: Icons.format_list_bulleted,
+                onTap: () {},
               ),
-              subtitle: const Text('Classical and default'),
-              onTap: () {},
-            ),
-          ])),
+            ]),
+          ),
         ],
       ),
     );
