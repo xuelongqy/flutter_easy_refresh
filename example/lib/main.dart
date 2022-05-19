@@ -1,7 +1,8 @@
-import 'package:example/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+
+import 'page/home.dart';
 
 void main() => runApp(const MyApp());
 
@@ -21,14 +22,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      // App名字
       title: 'EasyRefresh',
-      // App主题
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        useMaterial3: true,
       ),
-      // 主页
-      home: const TestPage(),
+      home: const HomePage(),
       localizationsDelegates: const [
         GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

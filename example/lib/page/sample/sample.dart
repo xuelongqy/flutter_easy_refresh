@@ -213,3 +213,62 @@
 //   // TODO: implement wantKeepAlive
 //   bool get wantKeepAlive => true;
 // }
+
+import 'package:example/test.dart';
+import 'package:example/util/color_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class SamplePage extends StatefulWidget {
+  const SamplePage({Key? key}) : super(key: key);
+
+  @override
+  State<SamplePage> createState() => _SamplePageState();
+}
+
+class _SamplePageState extends State<SamplePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 120,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(
+                'Sample',
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.titleLarge?.color),
+              ),
+              centerTitle: false,
+            ),
+          ),
+          SliverList(
+              delegate: SliverChildListDelegate([
+            ListTile(
+              title: const Text('Test'),
+              leading: Container(
+                height: 36,
+                width: 36,
+                decoration: BoxDecoration(
+                  color: ColorUtils.backgroundColorWithString('test'),
+                  borderRadius: const BorderRadius.all(Radius.circular(18)),
+                ),
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.build,
+                  color: ColorUtils.foregroundColorWithString('test'),
+                ),
+              ),
+              subtitle: const Text('EasyRefresh test page'),
+              onTap: () {
+                Get.to(() => const TestPage());
+              },
+            ),
+          ])),
+        ],
+      ),
+    );
+  }
+}

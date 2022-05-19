@@ -210,3 +210,57 @@
 //   // TODO: implement wantKeepAlive
 //   bool get wantKeepAlive => true;
 // }
+import 'package:example/util/color_utils.dart';
+import 'package:flutter/material.dart';
+
+class StylePage extends StatefulWidget {
+  const StylePage({Key? key}) : super(key: key);
+
+  @override
+  State<StylePage> createState() => _StylePageState();
+}
+
+class _StylePageState extends State<StylePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 120,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(
+                'Style',
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.titleLarge?.color),
+              ),
+              centerTitle: false,
+            ),
+          ),
+          SliverList(
+              delegate: SliverChildListDelegate([
+            ListTile(
+              title: const Text('Classical'),
+              leading: Container(
+                height: 36,
+                width: 36,
+                decoration: BoxDecoration(
+                  color: ColorUtils.backgroundColorWithString('Classical'),
+                  borderRadius: const BorderRadius.all(Radius.circular(18)),
+                ),
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.format_list_bulleted,
+                  color: ColorUtils.foregroundColorWithString('Classical'),
+                ),
+              ),
+              subtitle: const Text('Classical and default'),
+              onTap: () {},
+            ),
+          ])),
+        ],
+      ),
+    );
+  }
+}

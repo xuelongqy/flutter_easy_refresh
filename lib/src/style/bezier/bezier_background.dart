@@ -26,6 +26,10 @@ class BezierBackground extends StatefulWidget {
   /// Indicator properties and state.
   final IndicatorState state;
 
+  /// True for up and left.
+  /// False for down and right.
+  final bool reverse;
+
   /// Background color.
   final Color? color;
 
@@ -36,9 +40,8 @@ class BezierBackground extends StatefulWidget {
   /// When [useAnimation] is true.
   final bool bounce;
 
-  /// True for up and left.
-  /// False for down and right.
-  final bool reverse;
+  /// Background clipper.
+  final CustomClipper<Path>? clipper;
 
   const BezierBackground({
     Key? key,
@@ -47,6 +50,7 @@ class BezierBackground extends StatefulWidget {
     this.useAnimation = true,
     this.bounce = false,
     this.color,
+    this.clipper,
   }) : super(key: key);
 
   @override
@@ -162,13 +166,14 @@ class _BezierBackgroundState extends State<BezierBackground>
       offset = math.max(offset, reboundOffset);
     }
     return ClipPath(
-      clipper: _BezierPainter(
-        axis: _axis,
-        reverse: widget.reverse,
-        offset: _offset,
-        actualTriggerOffset: _actualTriggerOffset,
-        reboundOffset: reboundOffset,
-      ),
+      clipper: widget.clipper ??
+          _BezierClipper(
+            axis: _axis,
+            reverse: widget.reverse,
+            offset: _offset,
+            actualTriggerOffset: _actualTriggerOffset,
+            reboundOffset: reboundOffset,
+          ),
       child: Container(
         width: _axis == Axis.horizontal ? offset : double.infinity,
         height: _axis == Axis.vertical ? offset : double.infinity,
@@ -181,8 +186,8 @@ class _BezierBackgroundState extends State<BezierBackground>
   }
 }
 
-/// Bezier curve painter.
-class _BezierPainter extends CustomClipper<Path> {
+/// Bezier curve clipper.
+class _BezierClipper extends CustomClipper<Path> {
   /// [Scrollable] axis.
   final Axis axis;
 
@@ -199,7 +204,7 @@ class _BezierPainter extends CustomClipper<Path> {
   /// Rebound offset.
   final double? reboundOffset;
 
-  _BezierPainter({
+  _BezierClipper({
     required this.axis,
     required this.reverse,
     required this.offset,
@@ -332,7 +337,7 @@ class _BezierPainter extends CustomClipper<Path> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is _BezierPainter &&
+      other is _BezierClipper &&
           runtimeType == other.runtimeType &&
           axis == other.axis &&
           reverse == other.reverse &&

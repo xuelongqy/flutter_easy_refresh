@@ -18,90 +18,91 @@ class SampleListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return direction == Axis.vertical
         ? Card(
-            child: Container(
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    height: 100.0,
-                    child: AspectRatio(
-                      aspectRatio: 1.0,
-                      child: Container(
-                        color: Colors.grey[200],
-                      ),
+            clipBehavior: Clip.antiAlias,
+            elevation: 0,
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  height: 100.0,
+                  child: AspectRatio(
+                    aspectRatio: 1.0,
+                    child: Container(
+                      color: Colors.grey[200],
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                        padding: EdgeInsets.all(
-                          10.0,
-                        ),
-                        color: Colors.white,
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      width: 120.0,
-                                      height: 15.0,
-                                      color: Colors.grey[200],
-                                    ),
-                                    Container(
-                                      width: 60.0,
-                                      height: 10.0,
-                                      margin: EdgeInsets.only(top: 8.0),
-                                      color: Colors.grey[200],
-                                    ),
-                                  ],
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: SizedBox(),
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.grey[200],
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 8.0,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Container(
-                                  height: 10.0,
-                                  color: Colors.grey[200],
-                                ),
-                                SizedBox(
-                                  height: 4.0,
-                                ),
-                                Container(
-                                  height: 10.0,
-                                  color: Colors.grey[200],
-                                ),
-                                SizedBox(
-                                  height: 4.0,
-                                ),
-                                Container(
-                                  height: 10.0,
-                                  width: 150.0,
-                                  color: Colors.grey[200],
-                                ),
-                              ],
-                            ),
-                          ],
-                        )),
-                  ),
-                ],
-              ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                      padding: const EdgeInsets.all(
+                        10.0,
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    width: 120.0,
+                                    height: 15.0,
+                                    color: Colors.grey[200],
+                                  ),
+                                  Container(
+                                    width: 60.0,
+                                    height: 10.0,
+                                    margin: const EdgeInsets.only(top: 8.0),
+                                    color: Colors.grey[200],
+                                  ),
+                                ],
+                              ),
+                              const Expanded(
+                                flex: 1,
+                                child: SizedBox(),
+                              ),
+                              Icon(
+                                Icons.star,
+                                color: Colors.grey[200],
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 8.0,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                height: 10.0,
+                                color: Colors.grey[200],
+                              ),
+                              const SizedBox(
+                                height: 4.0,
+                              ),
+                              Container(
+                                height: 10.0,
+                                color: Colors.grey[200],
+                              ),
+                              const SizedBox(
+                                height: 4.0,
+                              ),
+                              Container(
+                                height: 10.0,
+                                width: 150.0,
+                                color: Colors.grey[200],
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
+                ),
+              ],
             ),
           )
         : Card(
+            clipBehavior: Clip.antiAlias,
+            elevation: 0,
             child: Container(
               alignment: Alignment.center,
               child: Column(
@@ -113,7 +114,7 @@ class SampleListItem extends StatelessWidget {
                   ),
                   Container(
                     width: width,
-                    padding: EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Column(
                       children: <Widget>[
                         Row(
@@ -129,12 +130,12 @@ class SampleListItem extends StatelessWidget {
                                 Container(
                                   width: 60.0,
                                   height: 10.0,
-                                  margin: EdgeInsets.only(top: 8.0),
+                                  margin: const EdgeInsets.only(top: 8.0),
                                   color: Colors.grey[200],
                                 ),
                               ],
                             ),
-                            Expanded(
+                            const Expanded(
                               flex: 1,
                               child: SizedBox(),
                             ),
@@ -144,7 +145,7 @@ class SampleListItem extends StatelessWidget {
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8.0,
                         ),
                         Column(
@@ -154,14 +155,14 @@ class SampleListItem extends StatelessWidget {
                               height: 10.0,
                               color: Colors.grey[200],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 4.0,
                             ),
                             Container(
                               height: 10.0,
                               color: Colors.grey[200],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 4.0,
                             ),
                             Container(
