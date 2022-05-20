@@ -89,3 +89,54 @@
 //   // TODO: implement wantKeepAlive
 //   bool get wantKeepAlive => true;
 // }
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../widget/list_item.dart';
+import 'theme.dart';
+
+class MorePage extends StatefulWidget {
+  const MorePage({Key? key}) : super(key: key);
+
+  @override
+  State<MorePage> createState() => _MorePageState();
+}
+
+class _MorePageState extends State<MorePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 120,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(
+                'More',
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.titleLarge?.color),
+              ),
+              centerTitle: false,
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Obx(() {
+                return ListItem(
+                  title: 'Theme',
+                  subtitle: ThemeController.i.theme.value,
+                  icon: Icons.style,
+                  onTap: () {
+                    Get.to(() => const ThemePage());
+                  },
+                );
+              }),
+            ]),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
 import 'page/home.dart';
+import 'page/more/theme.dart';
 
 void main() => runApp(const MyApp());
 
@@ -16,6 +17,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
+    Get.put(ThemeController());
     super.initState();
   }
 
@@ -23,7 +25,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'EasyRefresh',
-      theme: ThemeData(
+      theme: ThemeData.light().copyWith(
+        useMaterial3: true,
+      ),
+      darkTheme: ThemeData.dark().copyWith(
         useMaterial3: true,
       ),
       home: const HomePage(),

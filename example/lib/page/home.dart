@@ -1,6 +1,7 @@
 import 'package:example/page/style/style.dart';
 import 'package:flutter/material.dart';
 
+import 'more/more.dart';
 import 'sample/sample.dart';
 
 /// 主页面
@@ -43,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: PageView(
         controller: _pageController,
-        children: const <Widget>[SamplePage(), StylePage(), SizedBox()],
+        children: const <Widget>[SamplePage(), StylePage(), MorePage()],
         onPageChanged: (index) {
           setState(() {
             _pageIndex = index;
