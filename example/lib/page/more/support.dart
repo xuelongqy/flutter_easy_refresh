@@ -14,7 +14,7 @@
 //
 // class _SupportPageState extends State<SupportPage> {
 //   // 交互通道名字
-//   final String _channel = "com.qingyi.easyrefresh.example/channel";
+//   final String _channel = "com.codiss.easy.refresh.example/channel";
 //   // 支付宝捐赠
 //   final String _alipayDonation = "aliPayDonation";
 //   // 交互通道

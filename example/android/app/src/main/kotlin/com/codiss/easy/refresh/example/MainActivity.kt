@@ -1,4 +1,4 @@
-package com.qingyi.easyrefresh.example
+package com.codiss.easy.refresh.example
 
 import android.os.Build
 import android.os.Bundle
@@ -14,7 +14,7 @@ class MainActivity: FlutterActivity() {
   // 伴生对象
   companion object {
     // 交互通道名字
-    const val CHANNEL = "com.qingyi.easyrefresh.example/channel"
+    const val CHANNEL = "com.codiss.easy.refresh.example/channel"
     // 支付宝捐赠
     const val ALIPAY_DONATION = "aliPayDonation"
   }

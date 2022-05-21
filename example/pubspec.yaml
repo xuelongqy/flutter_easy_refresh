@@ -26,7 +26,7 @@ dependencies:
   extended_nested_scroll_view: ^3.0.0
   get: ^4.6.3
   convert: ^3.0.1
-  flutter_easyrefresh:
+  flutter_easy_refresh:
     path: ../
 
 dev_dependencies:
