@@ -82,7 +82,7 @@ class ClassicFooter extends Footer {
     double triggerOffset = 70,
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.behind,
-    Duration processedDuration = const Duration(seconds: 1),
+    Duration processedDuration = Duration.zero,
     SpringDescription? spring,
     SpringBuilder? readySpringBuilder,
     bool springRebound = true,
