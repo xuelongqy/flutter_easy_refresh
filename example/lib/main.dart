@@ -25,12 +25,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'EasyRefresh',
-      theme: ThemeData.light().copyWith(
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData.dark().copyWith(
-        useMaterial3: true,
-      ),
+      theme: ThemeModel.light,
+      darkTheme: ThemeModel.dark,
       home: const HomePage(),
       localizationsDelegates: const [
         GlobalCupertinoLocalizations.delegate,

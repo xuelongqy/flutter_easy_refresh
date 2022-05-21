@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:example/widget/sample_list_item.dart';
+import 'package:example/widget/skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
@@ -109,11 +109,8 @@ class _TestPageState extends State<TestPage> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  return SampleListItem(
+                  return SkeletonItem(
                     direction: _scrollDirection,
-                    width: _scrollDirection == Axis.vertical
-                        ? double.infinity
-                        : 200,
                   );
                 },
                 childCount: _count,

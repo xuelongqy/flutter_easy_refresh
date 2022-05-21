@@ -39,26 +39,31 @@ class ListItem extends StatelessWidget {
         ListTile(
           title: Text(title),
           subtitle: subtitle == null ? null : Text(subtitle!),
-          leading: leading ?? (icon == null ? null : Container(
-            height: 36,
-            width: 36,
-            decoration: BoxDecoration(
-              color: ColorUtils.backgroundColorWithString(title),
-              borderRadius: const BorderRadius.all(Radius.circular(18)),
-            ),
-            alignment: Alignment.center,
-            child: Icon(
-              icon!,
-              color: ColorUtils.foregroundColorWithString(title),
-            ),
-          )),
+          leading: leading ??
+              (icon == null
+                  ? null
+                  : Container(
+                      height: 36,
+                      width: 36,
+                      decoration: BoxDecoration(
+                        color: ColorUtils.backgroundColorWithString(title),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(18)),
+                      ),
+                      alignment: Alignment.center,
+                      child: Icon(
+                        icon!,
+                        color: ColorUtils.foregroundColorWithString(title),
+                      ),
+                    )),
           trailing: trailing,
           selected: selected,
           onTap: onTap,
         ),
         if (divider)
           Padding(
-            padding: EdgeInsets.only(left: leading == null && icon == null ? 16 : 72, right: 16),
+            padding: EdgeInsets.only(
+                left: leading == null && icon == null ? 16 : 72, right: 16),
             child: const Divider(
               thickness: 1,
               height: 1,
