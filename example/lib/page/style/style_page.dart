@@ -242,8 +242,8 @@ class _StylePageState extends State<StylePage> {
           SliverList(
             delegate: SliverChildListDelegate([
               ListItem(
-                title: 'Classical',
-                subtitle: 'Classical and default',
+                title: 'Classic',
+                subtitle: 'Classic and default',
                 icon: Icons.format_list_bulleted,
                 onTap: () {},
               ),

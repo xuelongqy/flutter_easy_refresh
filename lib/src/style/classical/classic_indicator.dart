@@ -12,9 +12,9 @@ typedef CITextBuilder = Widget Function(
 typedef CIMessageBuilder = Widget Function(
     BuildContext context, IndicatorState state, String text, DateTime dateTime);
 
-/// Classical indicator.
-/// Base widget for [ClassicalHeader] and [ClassicalFooter].
-class _ClassicalIndicator extends StatefulWidget {
+/// Classic indicator.
+/// Base widget for [ClassicHeader] and [ClassicFooter].
+class _ClassicIndicator extends StatefulWidget {
   /// Indicator properties and state.
   final IndicatorState state;
 
@@ -24,7 +24,7 @@ class _ClassicalIndicator extends StatefulWidget {
   final MainAxisAlignment mainAxisAlignment;
 
   /// Background color.
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// Text on [IndicatorMode.drag].
   final String dragText;
@@ -95,11 +95,11 @@ class _ClassicalIndicator extends StatefulWidget {
   /// Build message.
   final CIMessageBuilder? messageBuilder;
 
-  const _ClassicalIndicator({
+  const _ClassicIndicator({
     Key? key,
     required this.state,
     required this.mainAxisAlignment,
-    this.backgroundColor = Colors.transparent,
+    this.backgroundColor,
     required this.dragText,
     required this.armedText,
     required this.readyText,
@@ -130,11 +130,11 @@ class _ClassicalIndicator extends StatefulWidget {
         super(key: key);
 
   @override
-  State<_ClassicalIndicator> createState() => _ClassicalIndicatorState();
+  State<_ClassicIndicator> createState() => _ClassicIndicatorState();
 }
 
-class _ClassicalIndicatorState extends State<_ClassicalIndicator>
-    with TickerProviderStateMixin<_ClassicalIndicator> {
+class _ClassicIndicatorState extends State<_ClassicIndicator>
+    with TickerProviderStateMixin<_ClassicIndicator> {
   /// Icon [AnimatedSwitcher] switch key.
   final _iconAnimatedSwitcherKey = GlobalKey();
 
@@ -173,7 +173,7 @@ class _ClassicalIndicatorState extends State<_ClassicalIndicator>
   }
 
   @override
-  void didUpdateWidget(_ClassicalIndicator oldWidget) {
+  void didUpdateWidget(_ClassicIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Update time.
     if (widget.state.mode == IndicatorMode.processed &&

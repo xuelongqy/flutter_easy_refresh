@@ -1,4 +1,4 @@
-import 'package:example/page/style/style.dart';
+import 'package:example/page/style/style_page.dart';
 import 'package:flutter/material.dart';
 
 import 'more/more.dart';

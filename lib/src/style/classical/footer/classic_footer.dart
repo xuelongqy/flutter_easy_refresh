@@ -1,7 +1,7 @@
 part of easyrefresh;
 
-/// Classical header.
-class ClassicalHeader extends Header {
+/// Classic footer.
+class ClassicFooter extends Footer {
   final Key? key;
 
   /// The location of the widget.
@@ -77,7 +77,7 @@ class ClassicalHeader extends Header {
   /// Build message.
   final CIMessageBuilder? messageBuilder;
 
-  const ClassicalHeader({
+  const ClassicFooter({
     this.key,
     double triggerOffset = 70,
     bool clamping = false,
@@ -88,11 +88,11 @@ class ClassicalHeader extends Header {
     bool springRebound = true,
     FrictionFactor? frictionFactor,
     bool safeArea = true,
-    double? infiniteOffset,
+    double? infiniteOffset = 70,
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
-    this.mainAxisAlignment = MainAxisAlignment.center,
+    this.mainAxisAlignment = MainAxisAlignment.start,
     this.backgroundColor,
     this.dragText,
     this.armedText,
@@ -133,14 +133,15 @@ class ClassicalHeader extends Header {
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    return _ClassicalIndicator(
+    return _ClassicIndicator(
       key: key,
       state: state,
-      mainAxisAlignment: mainAxisAlignment,
-      dragText: dragText ?? 'Pull to refresh',
+      backgroundColor: backgroundColor,
+      mainAxisAlignment: MainAxisAlignment.start,
+      dragText: dragText ?? 'Pull to load',
       armedText: armedText ?? 'Release ready',
-      readyText: readyText ?? 'Refreshing...',
-      processingText: processingText ?? 'Refreshing...',
+      readyText: readyText ?? 'Loading...',
+      processingText: processingText ?? 'Loading...',
       processedText: processedText ?? 'Succeeded',
       noMoreText: noMoreText ?? 'No more',
       failedText: failedText ?? 'Failed',
@@ -150,7 +151,7 @@ class ClassicalHeader extends Header {
       textDimension: textDimension,
       iconDimension: iconDimension,
       spacing: spacing,
-      reverse: state.reverse,
+      reverse: !state.reverse,
       succeededIcon: succeededIcon,
       failedIcon: failedIcon,
       noMoreIcon: noMoreIcon,

@@ -117,13 +117,13 @@ class EasyRefresh extends StatefulWidget {
   static Header get _defaultHeader => defaultHeaderBuilder.call();
   static Header Function() defaultHeaderBuilder = _defaultHeaderBuilder;
 
-  static Header _defaultHeaderBuilder() => const ClassicalHeader();
+  static Header _defaultHeaderBuilder() => const ClassicHeader();
 
   /// Default footer indicator.
   static Footer get _defaultFooter => defaultFooterBuilder.call();
   static Footer Function() defaultFooterBuilder = _defaultFooterBuilder;
 
-  static Footer _defaultFooterBuilder() => const ClassicalFooter();
+  static Footer _defaultFooterBuilder() => const ClassicFooter();
 
   const EasyRefresh({
     Key? key,
