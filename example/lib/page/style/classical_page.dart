@@ -1,3 +1,4 @@
+import 'package:example/widget/menu_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easy_refresh/easy_refresh.dart';
 
@@ -34,6 +35,8 @@ class _ClassicalPageState extends State<ClassicalPage> {
           });
         },
         child: ListView.builder(
+          clipBehavior: Clip.none,
+          scrollDirection: _scrollDirection,
           padding: EdgeInsets.zero,
           itemCount: _count,
           itemBuilder: (ctx, index) {
@@ -43,6 +46,7 @@ class _ClassicalPageState extends State<ClassicalPage> {
           },
         ),
       ),
+      bottomNavigationBar: const MenuBottomBar(),
     );
   }
 }
