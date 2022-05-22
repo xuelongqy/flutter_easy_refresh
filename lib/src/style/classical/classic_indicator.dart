@@ -303,11 +303,12 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
       reverseDuration: const Duration(milliseconds: 200),
       transitionBuilder: (child, animation) {
         return FadeTransition(
-            child: ScaleTransition(
-              child: child,
-              scale: animation,
-            ),
-            opacity: animation);
+          child: ScaleTransition(
+            child: child,
+            scale: animation,
+          ),
+          opacity: animation,
+        );
       },
       child: icon,
     );
@@ -451,17 +452,12 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            alignment: Alignment.center,
-            height: widget.iconDimension,
-            child: _buildIcon(),
-          ),
           if (widget.showText)
             Container(
-              margin: EdgeInsets.only(top: widget.spacing),
+              margin: EdgeInsets.only(bottom: widget.spacing),
               width: widget.textDimension,
               child: RotatedBox(
-                quarterTurns: -3,
+                quarterTurns: -1,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -471,7 +467,12 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
                   ],
                 ),
               ),
-            )
+            ),
+          Container(
+            alignment: Alignment.center,
+            height: widget.iconDimension,
+            child: _buildIcon(),
+          ),
         ],
       ),
     );
