@@ -6,6 +6,14 @@ import 'package:flutter/scheduler.dart';
 
 import '../../easy_refresh.dart';
 
+/// This allows a value of type T or T?
+/// to be treated as a value of type T?.
+///
+/// We use this so that APIs that have become
+/// non-nullable can still be used with `!` and `?`
+/// to support older versions of the API as well.
+T? _ambiguate<T>(T? value) => value;
+
 /// Header
 abstract class Header {
   /// Header容器高度
@@ -232,7 +240,8 @@ class LinkHeaderNotifier extends ChangeNotifier {
     this.enableInfiniteRefresh = enableInfiniteRefresh;
     this.success = success;
     this.noMore = noMore;
-    SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+    _ambiguate(SchedulerBinding.instance)!
+        .addPostFrameCallback((Duration timestamp) {
       notifyListeners();
     });
   }
@@ -613,13 +622,13 @@ class ClassicalHeaderWidgetState extends State<ClassicalHeaderWidget>
     _floatBackAnimation =
         new Tween(begin: widget.refreshIndicatorExtent, end: 0.0)
             .animate(_floatBackController)
-              ..addListener(() {
-                setState(() {
-                  if (_floatBackAnimation.status != AnimationStatus.dismissed) {
-                    _floatBackDistance = _floatBackAnimation.value;
-                  }
-                });
-              });
+          ..addListener(() {
+            setState(() {
+              if (_floatBackAnimation.status != AnimationStatus.dismissed) {
+                _floatBackDistance = _floatBackAnimation.value;
+              }
+            });
+          });
     _floatBackAnimation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         _floatBackController.reset();

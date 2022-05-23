@@ -11,6 +11,14 @@ import 'package:flutter/widgets.dart';
 
 import '../../easy_refresh.dart';
 
+/// This allows a value of type T or T?
+/// to be treated as a value of type T?.
+///
+/// We use this so that APIs that have become
+/// non-nullable can still be used with `!` and `?`
+/// to support older versions of the API as well.
+T? _ambiguate<T>(T? value) => value;
+
 class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
   const _EasyRefreshSliverRefresh({
     Key? key,
@@ -21,7 +29,7 @@ class _EasyRefreshSliverRefresh extends SingleChildRenderObjectWidget {
     required this.axisDirectionNotifier,
     required this.infiniteRefresh,
     required Widget child,
-  })   : assert(refreshIndicatorLayoutExtent >= 0.0),
+  })  : assert(refreshIndicatorLayoutExtent >= 0.0),
         super(key: key, child: child);
 
   // The amount of space the indicator should occupy in the sliver in a
@@ -197,10 +205,12 @@ class _RenderEasyRefreshSliverRefresh extends RenderSliverSingleBoxAdapter {
       }
     } else {
       if (constraints.scrollOffset > _refreshIndicatorExtent) {
-        if (SchedulerBinding.instance!.schedulerPhase == SchedulerPhase.idle) {
+        if (_ambiguate(SchedulerBinding.instance)!.schedulerPhase ==
+            SchedulerPhase.idle) {
           _triggerInfiniteRefresh = false;
         } else {
-          SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+          _ambiguate(SchedulerBinding.instance)!
+              .addPostFrameCallback((Duration timestamp) {
             _triggerInfiniteRefresh = false;
           });
         }
@@ -672,7 +682,8 @@ class _EasyRefreshSliverRefreshControlState
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
-      SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+      _ambiguate(SchedulerBinding.instance)!
+          .addPostFrameCallback((Duration timestamp) {
         refreshState = RefreshMode.refresh;
         refreshTask = widget.onRefresh!()
           ..then((_) {
@@ -715,10 +726,12 @@ class _EasyRefreshSliverRefreshControlState
       refreshState = RefreshMode.done;
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
-      if (SchedulerBinding.instance!.schedulerPhase == SchedulerPhase.idle) {
+      if (_ambiguate(SchedulerBinding.instance)!.schedulerPhase ==
+          SchedulerPhase.idle) {
         setState(() => hasSliverLayoutExtent = false);
       } else {
-        SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+        _ambiguate(SchedulerBinding.instance)!
+            .addPostFrameCallback((Duration timestamp) {
           if (mounted) setState(() => hasSliverLayoutExtent = false);
         });
       }
@@ -763,7 +776,7 @@ class _EasyRefreshSliverRefreshControlState
             widget.refreshTriggerPullDistance) {
           // 如果未触发刷新则取消固定高度
           if (hasSliverLayoutExtent && !hasTask) {
-            SchedulerBinding.instance!
+            _ambiguate(SchedulerBinding.instance)!
                 .addPostFrameCallback((Duration timestamp) {
               setState(() => hasSliverLayoutExtent = false);
             });
@@ -771,7 +784,8 @@ class _EasyRefreshSliverRefreshControlState
           return RefreshMode.drag;
         } else {
           // 提前固定高度，防止列表回弹
-          SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+          _ambiguate(SchedulerBinding.instance)!
+              .addPostFrameCallback((Duration timestamp) {
             if (!hasSliverLayoutExtent) {
               if (mounted) setState(() => hasSliverLayoutExtent = true);
             }
@@ -785,7 +799,7 @@ class _EasyRefreshSliverRefreshControlState
                 HapticFeedback.mediumImpact();
               }
               // 触发刷新任务
-              SchedulerBinding.instance!
+              _ambiguate(SchedulerBinding.instance)!
                   .addPostFrameCallback((Duration timestamp) {
                 refreshTask = widget.onRefresh!()
                   ..then((_) {

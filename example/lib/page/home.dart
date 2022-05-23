@@ -6,6 +6,14 @@ import 'package:example/generated/i18n.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
+/// This allows a value of type T or T?
+/// to be treated as a value of type T?.
+///
+/// We use this so that APIs that have become
+/// non-nullable can still be used with `!` and `?`
+/// to support older versions of the API as well.
+T? _ambiguate<T>(T? value) => value;
+
 /// 主页面
 class HomePage extends StatefulWidget {
   @override
@@ -23,7 +31,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+    _ambiguate(SchedulerBinding.instance)!
+        .addPostFrameCallback((Duration timestamp) {
       // 设置EasyRefresh的默认样式
       EasyRefresh.defaultHeader = ClassicalHeader(
         enableInfiniteRefresh: false,
