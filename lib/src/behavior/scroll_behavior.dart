@@ -13,6 +13,11 @@ class _ERScrollBehavior extends ScrollBehavior {
   }
 
   @override
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+
+  @override
   Set<PointerDeviceKind> get dragDevices => <PointerDeviceKind>{
         PointerDeviceKind.touch,
         PointerDeviceKind.stylus,
