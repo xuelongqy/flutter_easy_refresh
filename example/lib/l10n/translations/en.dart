@@ -20,4 +20,7 @@ const en = {
   'Infinite': 'Infinite',
   'Message': 'Message',
   'Text': 'Text',
+  'Animation': 'Animation',
+  'Bounce': 'Bounce',
+  'List Spring': 'List Spring',
 };

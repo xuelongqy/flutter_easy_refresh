@@ -771,6 +771,9 @@ class HeaderNotifier extends IndicatorNotifier {
     Duration? duration,
     Curve curve = Curves.linear,
   }) {
+    if (modeLocked || noMoreLocked || secondaryLocked || !_canProcess) {
+      return;
+    }
     final to = -actualTriggerOffset - overOffset;
     _releaseOffset = actualTriggerOffset + overOffset;
     (_position as ScrollPosition).jumpTo(_position.minScrollExtent);
@@ -894,6 +897,9 @@ class FooterNotifier extends IndicatorNotifier {
     Duration? duration,
     Curve curve = Curves.linear,
   }) {
+    if (modeLocked || noMoreLocked || secondaryLocked || !_canProcess) {
+      return;
+    }
     final to = _position.maxScrollExtent + actualTriggerOffset + overOffset;
     _releaseOffset = actualTriggerOffset + overOffset;
     (_position as ScrollPosition).jumpTo(_position.maxScrollExtent);

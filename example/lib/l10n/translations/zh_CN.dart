@@ -20,4 +20,7 @@ const zhCN = {
   'Infinite': '无限',
   'Message': '信息',
   'Text': '文本',
+  'Animation': '动画',
+  'Bounce': '回弹',
+  'List Spring': '列表弹簧',
 };

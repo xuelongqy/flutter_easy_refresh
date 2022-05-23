@@ -210,11 +210,11 @@
 //   // TODO: implement wantKeepAlive
 //   bool get wantKeepAlive => true;
 // }
+import 'package:example/page/style/classical_page.dart';
+import 'package:example/page/style/material_page.dart';
+import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../widget/list_item.dart';
-import 'classical_page.dart';
 
 class StylePage extends StatefulWidget {
   const StylePage({Key? key}) : super(key: key);
@@ -248,6 +248,12 @@ class _StylePageState extends State<StylePage> {
                 subtitle: 'Classic and default'.tr,
                 icon: Icons.format_list_bulleted,
                 onTap: () => Get.to(() => const ClassicPage()),
+              ),
+              ListItem(
+                title: 'Material',
+                subtitle: 'Google Material',
+                icon: Icons.refresh,
+                onTap: () => Get.to(() => const MaterialIndicatorPage()),
               ),
             ]),
           ),

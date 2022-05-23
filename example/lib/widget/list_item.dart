@@ -13,7 +13,7 @@ class ListItem extends StatelessWidget {
     this.trailing,
     this.onTap,
     this.selected = false,
-    this.divider = true,
+    this.divider = false,
   }) : super(key: key);
 
   final String title;
