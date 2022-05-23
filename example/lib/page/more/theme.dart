@@ -128,6 +128,10 @@ class ThemeController extends GetxController {
   static ThemeController get i => Get.find();
 
   final theme = 'System'.obs;
+
+  ThemeModel get themeModel =>
+      ThemeModel.themes.firstWhere((element) => element.name == theme.value,
+          orElse: () => ThemeModel.themes.first);
 }
 
 class ThemePage extends StatefulWidget {
@@ -144,13 +148,13 @@ class _ThemePageState extends State<ThemePage> {
       String theme = ThemeController.i.theme.value;
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Theme'),
+          title: Text('Theme'.tr),
         ),
         body: ListView(
           children: [
             for (final model in ThemeModel.themes)
               ListItem(
-                title: model.name,
+                title: model.name.tr,
                 leading: model.icon == null
                     ? Container(
                         height: 24,

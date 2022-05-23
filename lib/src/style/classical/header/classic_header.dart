@@ -81,7 +81,7 @@ class ClassicHeader extends Header {
     this.key,
     double triggerOffset = 70,
     bool clamping = false,
-    IndicatorPosition position = IndicatorPosition.behind,
+    IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = const Duration(seconds: 1),
     SpringDescription? spring,
     SpringBuilder? readySpringBuilder,

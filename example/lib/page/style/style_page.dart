@@ -234,7 +234,7 @@ class _StylePageState extends State<StylePage> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                'Style',
+                'Style'.tr,
                 style: TextStyle(
                     color: Theme.of(context).textTheme.titleLarge?.color),
               ),
@@ -244,10 +244,10 @@ class _StylePageState extends State<StylePage> {
           SliverList(
             delegate: SliverChildListDelegate([
               ListItem(
-                title: 'Classic',
-                subtitle: 'Classic and default',
+                title: 'Classic'.tr,
+                subtitle: 'Classic and default'.tr,
                 icon: Icons.format_list_bulleted,
-                onTap: () => Get.to(() => const ClassicalPage()),
+                onTap: () => Get.to(() => const ClassicPage()),
               ),
             ]),
           ),

@@ -114,7 +114,7 @@ class _MorePageState extends State<MorePage> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                'More',
+                'More'.tr,
                 style: TextStyle(
                     color: Theme.of(context).textTheme.titleLarge?.color),
               ),
@@ -125,8 +125,8 @@ class _MorePageState extends State<MorePage> {
             delegate: SliverChildListDelegate([
               Obx(() {
                 return ListItem(
-                  title: 'Theme',
-                  subtitle: ThemeController.i.theme.value,
+                  title: 'Theme'.tr,
+                  subtitle: ThemeController.i.theme.value.tr,
                   icon: Icons.style,
                   onTap: () {
                     Get.to(() => const ThemePage());

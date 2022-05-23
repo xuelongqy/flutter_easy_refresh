@@ -1,5 +1,6 @@
 import 'package:example/page/style/style_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'more/more.dart';
 import 'sample/sample.dart';
@@ -56,18 +57,18 @@ class _HomePageState extends State<HomePage> {
         type: BottomNavigationBarType.fixed,
         fixedColor: Colors.black,
         onTap: _onBottomNavigationBarTap,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Sample',
+            icon: const Icon(Icons.dashboard),
+            label: 'Sample'.tr,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.style),
-            label: 'Style',
+            icon: const Icon(Icons.style),
+            label: 'Style'.tr,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.more_vert),
-            label: 'More',
+            icon: const Icon(Icons.more_vert),
+            label: 'More'.tr,
           ),
         ],
       ),

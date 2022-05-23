@@ -115,4 +115,9 @@ class EasyRefreshController {
         'Please set controlFinishLoad to true, then use.');
     _state?._footerNotifier._finishTask(result);
   }
+
+  /// Unbind.
+  void dispose() {
+    _state = null;
+  }
 }

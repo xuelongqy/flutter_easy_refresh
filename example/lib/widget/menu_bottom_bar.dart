@@ -5,11 +5,15 @@ import 'package:flutter/material.dart';
 class MenuBottomBar extends StatefulWidget {
   final Widget? expandedBody;
   final double? expandedHeight;
+  final VoidCallback? onRefresh;
+  final VoidCallback? onLoad;
 
   const MenuBottomBar({
     Key? key,
     this.expandedBody,
     this.expandedHeight,
+    this.onRefresh,
+    this.onLoad,
   }) : super(key: key);
 
   @override
@@ -19,7 +23,7 @@ class MenuBottomBar extends StatefulWidget {
 class _MenuBottomBarState extends State<MenuBottomBar>
     with SingleTickerProviderStateMixin {
   bool _expanded = false;
-  final _duration = const Duration(milliseconds: 500);
+  final _duration = const Duration(milliseconds: 400);
 
   double get _expandedHeight {
     if (widget.expandedHeight != null) {
@@ -46,7 +50,8 @@ class _MenuBottomBarState extends State<MenuBottomBar>
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 10,
+      clipBehavior: Clip.antiAlias,
+      elevation: 4,
       margin: EdgeInsets.zero,
       surfaceTintColor: Theme.of(context).bottomAppBarColor,
       shape: const RoundedRectangleBorder(
@@ -61,16 +66,13 @@ class _MenuBottomBarState extends State<MenuBottomBar>
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: widget.onRefresh,
                     icon: const Icon(Icons.refresh),
                   ),
                   FloatingActionButton(
                     child: AnimatedIcon(
                       icon: AnimatedIcons.menu_close,
                       progress: _animationController,
-                    ),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(80)),
                     ),
                     onPressed: () {
                       setState(() {
@@ -80,7 +82,7 @@ class _MenuBottomBarState extends State<MenuBottomBar>
                     },
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: widget.onLoad,
                     icon: const Icon(Icons.more_horiz),
                   ),
                 ],
@@ -89,9 +91,7 @@ class _MenuBottomBarState extends State<MenuBottomBar>
                 duration: _duration,
                 height: _expanded ? _expandedHeight : 0,
                 child: SingleChildScrollView(
-                  child: Container(
-                    child: widget.expandedBody,
-                  ),
+                  child: widget.expandedBody,
                 ),
               ),
             ],

@@ -238,7 +238,7 @@ class _SamplePageState extends State<SamplePage> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                'Sample',
+                'Sample'.tr,
                 style: TextStyle(
                     color: Theme.of(context).textTheme.titleLarge?.color),
               ),
