@@ -48,7 +48,7 @@ class _ClassicPageState extends State<ClassicPage> {
     final propertiesItems = [_headerProperties, _footerProperties];
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Classic'),
+        title: Text('Classic'.tr),
       ),
       body: EasyRefresh(
         controller: _controller,
@@ -110,7 +110,7 @@ class _ClassicPageState extends State<ClassicPage> {
             Obx(() {
               final themeMode = ThemeController.i.themeModel;
               return ListTile(
-                title: const Text('Theme'),
+                title: Text('Theme'.tr),
                 trailing: IntrinsicWidth(
                   child: Row(
                     children: [
@@ -126,7 +126,7 @@ class _ClassicPageState extends State<ClassicPage> {
                           ),
                         ),
                       const SizedBox(width: 16),
-                      Text(ThemeController.i.theme.value),
+                      Text(ThemeController.i.theme.value.tr),
                     ],
                   ),
                 ),
@@ -134,7 +134,7 @@ class _ClassicPageState extends State<ClassicPage> {
               );
             }),
             ListTile(
-              title: const Text('Direction'),
+              title: Text('Direction'.tr),
               trailing: IntrinsicWidth(
                 child: Row(
                   children: [
@@ -147,7 +147,7 @@ class _ClassicPageState extends State<ClassicPage> {
                         });
                       },
                     ),
-                    const Text('Vertical'),
+                    Text('Vertical'.tr),
                     Radio<Axis>(
                       value: Axis.horizontal,
                       groupValue: _scrollDirection,
@@ -157,7 +157,7 @@ class _ClassicPageState extends State<ClassicPage> {
                         });
                       },
                     ),
-                    const Text('Horizontal'),
+                    Text('Horizontal'.tr),
                   ],
                 ),
               ),
@@ -187,7 +187,7 @@ class _ClassicPageState extends State<ClassicPage> {
                         return Column(
                           children: [
                             ListTile(
-                              title: const Text('Clamping'),
+                              title: Text('Clamping'.tr),
                               trailing: Switch(
                                 value: properties.clamping,
                                 onChanged: (value) {
@@ -201,7 +201,7 @@ class _ClassicPageState extends State<ClassicPage> {
                               ),
                             ),
                             ListTile(
-                              title: const Text('Background'),
+                              title: Text('Background'.tr),
                               trailing: Switch(
                                 value: properties.background,
                                 onChanged: (value) {
@@ -212,7 +212,7 @@ class _ClassicPageState extends State<ClassicPage> {
                               ),
                             ),
                             ListTile(
-                              title: const Text('Alignment'),
+                              title: Text('Alignment'.tr),
                               trailing: IntrinsicWidth(
                                 child: Row(
                                   children: [
@@ -225,7 +225,7 @@ class _ClassicPageState extends State<ClassicPage> {
                                         });
                                       },
                                     ),
-                                    const Text('Center'),
+                                    Text('Center'.tr),
                                     Radio<MainAxisAlignment>(
                                       value: MainAxisAlignment.start,
                                       groupValue: properties.alignment,
@@ -235,7 +235,7 @@ class _ClassicPageState extends State<ClassicPage> {
                                         });
                                       },
                                     ),
-                                    const Text('Start'),
+                                    Text('Start'.tr),
                                     Radio<MainAxisAlignment>(
                                       value: MainAxisAlignment.end,
                                       groupValue: properties.alignment,
@@ -245,13 +245,13 @@ class _ClassicPageState extends State<ClassicPage> {
                                         });
                                       },
                                     ),
-                                    const Text('End'),
+                                    Text('End'.tr),
                                   ],
                                 ),
                               ),
                             ),
                             ListTile(
-                              title: const Text('Infinite'),
+                              title: Text('Infinite'.tr),
                               trailing: Switch(
                                 value: properties.infinite,
                                 onChanged: (value) {
@@ -265,7 +265,7 @@ class _ClassicPageState extends State<ClassicPage> {
                               ),
                             ),
                             ListTile(
-                              title: const Text('Message'),
+                              title: Text('Message'.tr),
                               trailing: Switch(
                                 value: properties.message,
                                 onChanged: (value) {
@@ -276,7 +276,7 @@ class _ClassicPageState extends State<ClassicPage> {
                               ),
                             ),
                             ListTile(
-                              title: const Text('Text'),
+                              title: Text('Text'.tr),
                               trailing: Switch(
                                 value: properties.text,
                                 onChanged: (value) {
