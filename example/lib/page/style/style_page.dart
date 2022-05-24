@@ -210,6 +210,7 @@
 //   // TODO: implement wantKeepAlive
 //   bool get wantKeepAlive => true;
 // }
+import 'package:example/page/style/bezier_page.dart';
 import 'package:example/page/style/classical_page.dart';
 import 'package:example/page/style/material_page.dart';
 import 'package:example/widget/list_item.dart';
@@ -254,6 +255,12 @@ class _StylePageState extends State<StylePage> {
                 subtitle: 'Google Material',
                 icon: Icons.refresh,
                 onTap: () => Get.to(() => const MaterialIndicatorPage()),
+              ),
+              ListItem(
+                title: 'Bezier',
+                subtitle: 'Bezier curve'.tr,
+                icon: Icons.panorama_wide_angle,
+                onTap: () => Get.to(() => const BezierPage()),
               ),
             ]),
           ),

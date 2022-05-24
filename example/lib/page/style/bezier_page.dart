@@ -5,24 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
-class ClassicPage extends StatefulWidget {
-  const ClassicPage({Key? key}) : super(key: key);
+class BezierPage extends StatefulWidget {
+  const BezierPage({Key? key}) : super(key: key);
 
   @override
-  State<ClassicPage> createState() => _ClassicPageState();
+  State<BezierPage> createState() => _BezierPageState();
 }
 
-class _ClassicPageState extends State<ClassicPage> {
+class _BezierPageState extends State<BezierPage> {
   late EasyRefreshController _controller;
   int _count = 10;
   Axis _scrollDirection = Axis.vertical;
   int _expandedIndex = -1;
-  final _CIProperties _headerProperties = _CIProperties(
+  final _BIProperties _headerProperties = _BIProperties(
     name: 'Header',
     alignment: MainAxisAlignment.center,
     infinite: false,
   );
-  final _CIProperties _footerProperties = _CIProperties(
+  final _BIProperties _footerProperties = _BIProperties(
     name: 'Footer',
     alignment: MainAxisAlignment.start,
     infinite: true,
@@ -48,46 +48,12 @@ class _ClassicPageState extends State<ClassicPage> {
     final propertiesItems = [_headerProperties, _footerProperties];
     return Scaffold(
       appBar: AppBar(
-        title: Text('Classic'.tr),
+        title: const Text('Bezier'),
       ),
       body: EasyRefresh(
         controller: _controller,
-        header: ClassicHeader(
-          clamping: _headerProperties.clamping,
-          backgroundColor: _headerProperties.background
-              ? Theme.of(context).colorScheme.surfaceVariant
-              : null,
-          mainAxisAlignment: _headerProperties.alignment,
-          showMessage: _headerProperties.message,
-          showText: _headerProperties.text,
-          infiniteOffset: _headerProperties.infinite ? 70 : null,
-          dragText: 'Pull to refresh'.tr,
-          armedText: 'Release ready'.tr,
-          readyText: 'Refreshing...'.tr,
-          processingText: 'Refreshing...'.tr,
-          processedText: 'Succeeded'.tr,
-          noMoreText: 'No more'.tr,
-          failedText: 'Failed'.tr,
-          messageText: 'Last updated at %T'.tr,
-        ),
-        footer: ClassicFooter(
-          clamping: _footerProperties.clamping,
-          backgroundColor: _footerProperties.background
-              ? Theme.of(context).colorScheme.surfaceVariant
-              : null,
-          mainAxisAlignment: _footerProperties.alignment,
-          showMessage: _footerProperties.message,
-          showText: _footerProperties.text,
-          infiniteOffset: _footerProperties.infinite ? 70 : null,
-          dragText: 'Pull to load'.tr,
-          armedText: 'Release ready'.tr,
-          readyText: 'Loading...'.tr,
-          processingText: 'Loading...'.tr,
-          processedText: 'Succeeded'.tr,
-          noMoreText: 'No more'.tr,
-          failedText: 'Failed'.tr,
-          messageText: 'Last updated at %T'.tr,
-        ),
+        header: BezierHeader(),
+        footer: BezierFooter(),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));
           setState(() {
@@ -317,8 +283,8 @@ class _ClassicPageState extends State<ClassicPage> {
   }
 }
 
-/// Classic indicator properties.
-class _CIProperties {
+/// Bezier indicator properties.
+class _BIProperties {
   final String name;
   bool clamping = false;
   bool background = false;
@@ -327,7 +293,7 @@ class _CIProperties {
   bool text = true;
   bool infinite;
 
-  _CIProperties({
+  _BIProperties({
     required this.name,
     required this.alignment,
     required this.infinite,

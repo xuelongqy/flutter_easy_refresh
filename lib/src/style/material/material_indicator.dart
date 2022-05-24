@@ -8,7 +8,7 @@ double kMaterialFrictionFactor(double overscrollFraction) =>
     0.435 * math.pow(1 - overscrollFraction, 2);
 
 /// Spring description used by material.
-SpringDescription kMaterialSpring({
+SpringDescription kMaterialSpringBuilder({
   required IndicatorMode mode,
   required double offset,
   required double actualTriggerOffset,

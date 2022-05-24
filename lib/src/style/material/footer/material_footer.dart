@@ -70,7 +70,7 @@ class MaterialFooter extends Footer {
           readySpringBuilder: readySpringBuilder ??
               (bezierBackgroundAnimation
                   ? kBezierSpringBuilder
-                  : kMaterialSpring),
+                  : kMaterialSpringBuilder),
           springRebound: springRebound,
           frictionFactor: frictionFactor ??
               (showBezierBackground

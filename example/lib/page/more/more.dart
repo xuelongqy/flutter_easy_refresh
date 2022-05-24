@@ -127,7 +127,7 @@ class _MorePageState extends State<MorePage> {
                 return ListItem(
                   title: 'Theme'.tr,
                   subtitle: ThemeController.i.theme.value.tr,
-                  icon: Icons.style,
+                  icon: Icons.palette,
                   onTap: () {
                     Get.to(() => const ThemePage());
                   },
