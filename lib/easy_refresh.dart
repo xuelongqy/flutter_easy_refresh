@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easy_refresh/src/style/bezier/spin/hour_glass.dart';
 
 part 'src/easy_refresh.dart';
 part 'src/physics/scroll_physics.dart';

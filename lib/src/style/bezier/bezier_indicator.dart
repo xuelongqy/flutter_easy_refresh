@@ -1,5 +1,10 @@
 part of easyrefresh;
 
+/// A builder that builds a spin widget.
+/// [context] BuildContext.
+/// [value] Animation value.
+typedef BezierSpinBuilder = Widget Function(BuildContext context, double value);
+
 /// Bezier indicator.
 /// Base widget for [BezierHeader] and [BezierFooter].
 class _BezierIndicator extends StatefulWidget {
@@ -16,19 +21,24 @@ class _BezierIndicator extends StatefulWidget {
   /// Spin widget.
   final Widget? spin;
 
+  /// Spin widget builder.
+  final BezierSpinBuilder? spinBuilder;
+
   const _BezierIndicator({
     Key? key,
     required this.state,
     required this.reverse,
     this.showBalls = true,
     this.spin,
+    this.spinBuilder,
   }) : super(key: key);
 
   @override
   State<_BezierIndicator> createState() => _BezierIndicatorState();
 }
 
-class _BezierIndicatorState extends State<_BezierIndicator> {
+class _BezierIndicatorState extends State<_BezierIndicator>
+    with SingleTickerProviderStateMixin {
   static const _ballSize = 12.0;
   static const _ballArea = 400.0;
   static const _animationDuration = Duration(milliseconds: 200);
@@ -41,26 +51,61 @@ class _BezierIndicatorState extends State<_BezierIndicator> {
 
   double get _safeOffset => widget.state.safeOffset;
 
-  Widget get _spin => widget.spin ?? const SizedBox();
+  /// Animation controller.
+  late AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
     widget.state.notifier.addModeChangeListener(_onModeChange);
+    _animationController =
+        AnimationController(vsync: this, duration: _animationDuration);
   }
 
   @override
   void dispose() {
     widget.state.notifier.removeModeChangeListener(_onModeChange);
+    _animationController.dispose();
     super.dispose();
   }
 
   /// Mode change listener.
-  void _onModeChange(IndicatorMode mode, double offset) {}
+  void _onModeChange(IndicatorMode mode, double offset) {
+    if (mode == IndicatorMode.ready || mode == IndicatorMode.processing) {
+      if (!_animationController.isAnimating) {
+        _animationController.forward(from: 0);
+      }
+    } else {
+      if (_animationController.isAnimating) {
+        _animationController.stop();
+      }
+    }
+  }
+
+  /// Build spin.
+  Widget _buildSpin() {
+    if (widget.spinBuilder != null) {
+      widget.spinBuilder!(context, _animationController.value);
+    }
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (ctx, _) {
+        return Transform.scale(
+          scale: _animationController.value,
+          child: widget.spin ??
+              const SpinKitHourGlass(
+                color: Colors.white,
+                size: 32,
+              ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: Alignment.center,
       children: [
         SizedBox(
           width: _axis == Axis.vertical ? double.infinity : _offset,
@@ -98,27 +143,34 @@ class _BezierIndicatorState extends State<_BezierIndicator> {
                             ? ((length - ballSize) / 2) +
                                 (ballArea / 8 * scale) * (i - 3)
                             : null,
-                        child: AnimatedOpacity(
-                          opacity:
-                              widget.state.mode == IndicatorMode.inactive ||
-                                      widget.state.mode == IndicatorMode.drag ||
-                                      widget.state.mode == IndicatorMode.armed
-                                  ? 1
-                                  : 0,
-                          duration: _animationDuration,
-                          child: Opacity(
-                            opacity: (1 - ((0.8 / 3) * (i - 3).abs())) *
-                                math.min(1, scale),
-                            child: Container(
-                              width: ballSize,
-                              height: ballSize,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(ballSize / 2)),
+                        child: AnimatedBuilder(
+                          animation: _animationController,
+                          builder: (ctx, _) {
+                            double aValue;
+                            if (widget.state.mode == IndicatorMode.inactive ||
+                                widget.state.mode == IndicatorMode.drag ||
+                                widget.state.mode == IndicatorMode.armed) {
+                              aValue = 1;
+                            } else {
+                              aValue = _animationController.isAnimating
+                                  ? 1 - _animationController.value
+                                  : 0;
+                            }
+                            return Opacity(
+                              opacity: (1 - ((0.8 / 3) * (i - 3).abs())) *
+                                  math.min(1, scale) *
+                                  aValue,
+                              child: Container(
+                                width: ballSize,
+                                height: ballSize,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(ballSize / 2)),
+                                ),
                               ),
-                            ),
-                          ),
+                            );
+                          },
                         ),
                       ),
                   ],
@@ -126,6 +178,9 @@ class _BezierIndicatorState extends State<_BezierIndicator> {
               },
             ),
           ),
+        if (widget.state.mode == IndicatorMode.ready ||
+            widget.state.mode == IndicatorMode.processing)
+          _buildSpin(),
       ],
     );
   }
