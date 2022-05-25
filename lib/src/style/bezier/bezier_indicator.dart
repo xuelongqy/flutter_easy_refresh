@@ -24,6 +24,10 @@ class _BezierIndicator extends StatefulWidget {
   /// Spin widget builder.
   final BezierSpinBuilder? spinBuilder;
 
+  /// Task completion delay.
+  /// [IndicatorMode.processed] duration of state.
+  final Duration processedDuration;
+
   const _BezierIndicator({
     Key? key,
     required this.state,
@@ -31,6 +35,7 @@ class _BezierIndicator extends StatefulWidget {
     this.showBalls = true,
     this.spin,
     this.spinBuilder,
+    required this.processedDuration,
   }) : super(key: key);
 
   @override
@@ -115,6 +120,8 @@ class _BezierIndicatorState extends State<_BezierIndicator>
           state: widget.state,
           reverse: widget.reverse,
           useAnimation: true,
+          disappearAnimation: true,
+          disappearAnimationDuration: widget.processedDuration,
         ),
         if (widget.showBalls && _offset > _safeOffset)
           Positioned(

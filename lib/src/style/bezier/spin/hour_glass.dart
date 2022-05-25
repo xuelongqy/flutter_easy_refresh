@@ -34,7 +34,8 @@ class SpinKitHourGlass extends StatefulWidget {
   _SpinKitHourGlassState createState() => _SpinKitHourGlassState();
 }
 
-class _SpinKitHourGlassState extends State<SpinKitHourGlass> with SingleTickerProviderStateMixin {
+class _SpinKitHourGlassState extends State<SpinKitHourGlass>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -42,11 +43,13 @@ class _SpinKitHourGlassState extends State<SpinKitHourGlass> with SingleTickerPr
   void initState() {
     super.initState();
 
-    _controller = (widget.controller ?? AnimationController(vsync: this, duration: widget.duration))
+    _controller = (widget.controller ??
+        AnimationController(vsync: this, duration: widget.duration))
       ..addListener(() => setState(() {}))
       ..repeat();
-    _animation = Tween(begin: 0.0, end: 8.0)
-        .animate(CurvedAnimation(parent: _controller, curve: const Interval(0.0, 1.0, curve: Curves.easeOut)));
+    _animation = Tween(begin: 0.0, end: 8.0).animate(CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.0, 1.0, curve: Curves.easeOut)));
   }
 
   @override
@@ -75,8 +78,8 @@ class _SpinKitHourGlassState extends State<SpinKitHourGlass> with SingleTickerPr
 class _HourGlassPainter extends CustomPainter {
   _HourGlassPainter({required this.weight, required Color color})
       : _paint = Paint()
-    ..color = color
-    ..strokeWidth = 1.0;
+          ..color = color
+          ..strokeWidth = 1.0;
 
   final Paint _paint;
   final double weight;

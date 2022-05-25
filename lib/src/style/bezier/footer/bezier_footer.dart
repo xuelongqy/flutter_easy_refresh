@@ -9,7 +9,7 @@ class BezierFooter extends Footer {
     double triggerOffset = 100,
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.above,
-    Duration processedDuration = const Duration(seconds: 1),
+    Duration processedDuration = kDisappearAnimationDuration,
     SpringDescription? spring,
     SpringBuilder readySpringBuilder = kBezierSpringBuilder,
     bool springRebound = false,
@@ -41,6 +41,7 @@ class BezierFooter extends Footer {
       key: key,
       state: state,
       reverse: !state.reverse,
+      processedDuration: processedDuration,
     );
   }
 }

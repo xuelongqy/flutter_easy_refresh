@@ -21,6 +21,9 @@ SpringDescription kBezierSpringBuilder({
 double kBezierFrictionFactor(double overscrollFraction) =>
     0.4 * math.pow(1 - overscrollFraction, 2);
 
+/// Default disappear animation duration.
+const Duration kDisappearAnimationDuration = Duration(milliseconds: 500);
+
 /// Bezier curve background.
 class BezierBackground extends StatefulWidget {
   /// Indicator properties and state.
@@ -43,6 +46,12 @@ class BezierBackground extends StatefulWidget {
   /// Background clipper.
   final CustomClipper<Path>? clipper;
 
+  /// Disappear animation when [IndicatorMode.processed].
+  final bool disappearAnimation;
+
+  /// Disappear animation duration.
+  final Duration disappearAnimationDuration;
+
   const BezierBackground({
     Key? key,
     required this.state,
@@ -51,6 +60,8 @@ class BezierBackground extends StatefulWidget {
     this.bounce = false,
     this.color,
     this.clipper,
+    this.disappearAnimation = false,
+    this.disappearAnimationDuration = kDisappearAnimationDuration,
   }) : super(key: key);
 
   @override
@@ -58,10 +69,12 @@ class BezierBackground extends StatefulWidget {
 }
 
 class _BezierBackgroundState extends State<BezierBackground>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   IndicatorNotifier get _notifier => widget.state.notifier;
 
   double get _offset => widget.state.offset;
+
+  IndicatorMode get _mode => widget.state.mode;
 
   Axis get _axis => widget.state.axis;
 
@@ -81,10 +94,18 @@ class _BezierBackgroundState extends State<BezierBackground>
   /// When [BezierBackground.bounce] is true.
   double _lastAnimationValue = 0;
 
+  /// Disappear animation controller.
+  late AnimationController _disappearAnimationController;
+
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController.unbounded(vsync: this);
+    _disappearAnimationController = AnimationController(
+        vsync: this, duration: widget.disappearAnimationDuration);
+    _disappearAnimationController.addListener(() {
+      setState(() {});
+    });
     _animationController.addListener(_onAnimation);
     widget.state.notifier.addModeChangeListener(_onModeChange);
     widget.state.userOffsetNotifier.addListener(_onUserOffset);
@@ -93,6 +114,7 @@ class _BezierBackgroundState extends State<BezierBackground>
   @override
   void dispose() {
     _animationController.dispose();
+    _disappearAnimationController.dispose();
     widget.state.notifier.removeModeChangeListener(_onModeChange);
     widget.state.userOffsetNotifier.removeListener(_onUserOffset);
     super.dispose();
@@ -112,6 +134,10 @@ class _BezierBackgroundState extends State<BezierBackground>
     } else if (mode == IndicatorMode.done || mode == IndicatorMode.inactive) {
       if (_animationController.isAnimating) {
         _animationController.stop();
+      }
+    } else if (mode == IndicatorMode.processed) {
+      if (widget.disappearAnimation) {
+        _disappearAnimationController.forward(from: 0);
       }
     }
   }
@@ -155,6 +181,28 @@ class _BezierBackgroundState extends State<BezierBackground>
     setState(() {});
   }
 
+  CustomClipper<Path> _getClipper(double? reboundOffset) {
+    if (widget.clipper != null) {
+      return widget.clipper!;
+    }
+    if (widget.disappearAnimation &&
+        (_mode == IndicatorMode.processed || _mode == IndicatorMode.done)) {
+      return _BezierDisappearClipper(
+        axis: _axis,
+        reverse: widget.reverse,
+        offset: _offset,
+        scale: _disappearAnimationController.value,
+      );
+    }
+    return _BezierClipper(
+      axis: _axis,
+      reverse: widget.reverse,
+      offset: _offset,
+      actualTriggerOffset: _actualTriggerOffset,
+      reboundOffset: reboundOffset,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final reboundOffset = _animationController.isAnimating
@@ -166,14 +214,7 @@ class _BezierBackgroundState extends State<BezierBackground>
       offset = math.max(offset, reboundOffset);
     }
     return ClipPath(
-      clipper: widget.clipper ??
-          _BezierClipper(
-            axis: _axis,
-            reverse: widget.reverse,
-            offset: _offset,
-            actualTriggerOffset: _actualTriggerOffset,
-            reboundOffset: reboundOffset,
-          ),
+      clipper: _getClipper(reboundOffset),
       child: Container(
         width: _axis == Axis.horizontal ? offset : double.infinity,
         height: _axis == Axis.vertical ? offset : double.infinity,
@@ -352,4 +393,104 @@ class _BezierClipper extends CustomClipper<Path> {
       offset.hashCode ^
       actualTriggerOffset.hashCode ^
       reboundOffset.hashCode;
+}
+
+/// Disappear clipper.
+class _BezierDisappearClipper extends CustomClipper<Path> {
+  /// The value of Bezier traction.
+  static const _bezierRadian = 40.0;
+
+  /// [Scrollable] axis.
+  final Axis axis;
+
+  /// True for up and left.
+  /// False for down and right.
+  final bool reverse;
+
+  /// Overscroll offset.
+  final double offset;
+
+  /// Animation value (0 ~ 1);
+  final double scale;
+
+  _BezierDisappearClipper({
+    required this.axis,
+    required this.reverse,
+    required this.offset,
+    required this.scale,
+  });
+
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    // final height = size.height;
+    // final width = size.width;
+    // Offset start1;
+    // Offset start2;
+    // Offset start3;
+    // Offset start4;
+    // Offset start5;
+    // Offset end1;
+    // Offset end2;
+    // Offset end3;
+    // Offset end4;
+    // Offset end5;
+    // if (axis == Axis.vertical) {
+    //   final length = _bezierRadian * 2 + width;
+    //   final offset = length / 2 * scale;
+    //   start1 = const Offset(-_bezierRadian, 0);
+    //   start2 = Offset((width / 2) - offset, 0);
+    //   start3 = Offset((width / 2) - offset - (2 * _bezierRadian), 0);
+    //   start4 = Offset((width / 2) - offset, height);
+    //   start5 = Offset(-_bezierRadian, height);
+    //   end1 = Offset(width + _bezierRadian, 0);
+    //   end2 = Offset((width / 2) + offset, 0);
+    //   end3 = Offset((width / 2) + offset + (2 * _bezierRadian), 0);
+    //   end4 = Offset((width / 2) + offset, height);
+    //   end5 = Offset(-_bezierRadian, height);
+    // } else {
+    //   final length = _bezierRadian * 2 + width;
+    //   final offset = length / 2 * scale;
+    //   start1 = const Offset(-_bezierRadian, 0);
+    //   start2 = Offset((width / 2) - offset, 0);
+    //   start3 = Offset((width / 2) - offset - (2 * _bezierRadian), 0);
+    //   start4 = Offset((width / 2) - offset, height);
+    //   start5 = Offset(-_bezierRadian, height);
+    //   end1 = Offset(width + _bezierRadian, 0);
+    //   end2 = Offset((width / 2) + offset, 0);
+    //   end3 = Offset((width / 2) + offset + (2 * _bezierRadian), 0);
+    //   end4 = Offset((width / 2) + offset, height);
+    //   end5 = Offset(-_bezierRadian, height);
+    // }
+    // path.moveTo(start1.dx, start1.dy);
+    // path.lineTo(start2.dx, start2.dy);
+    // path.quadraticBezierTo(start3.dx, start3.dy, start4.dx, start4.dy);
+    // path.lineTo(start5.dx, start5.dy);
+    // path.lineTo(end1.dx, end1.dy);
+    // path.moveTo(end1.dx, end1.dy);
+    // path.lineTo(end2.dx, end2.dy);
+    // path.quadraticBezierTo(end3.dx, end3.dy, end4.dx, end4.dy);
+    // path.lineTo(end5.dx, end5.dy);
+    // path.lineTo(end1.dx, end1.dy);
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return oldClipper != this;
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _BezierDisappearClipper &&
+          runtimeType == other.runtimeType &&
+          axis == other.axis &&
+          reverse == other.reverse &&
+          offset == other.offset &&
+          scale == other.scale;
+
+  @override
+  int get hashCode =>
+      axis.hashCode ^ reverse.hashCode ^ offset.hashCode ^ scale.hashCode;
 }
