@@ -19,7 +19,10 @@ class _BezierIndicator extends StatefulWidget {
   final bool showBalls;
 
   /// Spin widget.
-  final Widget? spin;
+  final Widget? spinWidget;
+
+  /// No more widget.
+  final Widget? noMoreWidget;
 
   /// Spin widget builder.
   final BezierSpinBuilder? spinBuilder;
@@ -28,14 +31,23 @@ class _BezierIndicator extends StatefulWidget {
   /// [IndicatorMode.processed] duration of state.
   final Duration processedDuration;
 
+  /// Foreground color.
+  final Color? foregroundColor;
+
+  /// Background color.
+  final Color? backgroundColor;
+
   const _BezierIndicator({
     Key? key,
     required this.state,
     required this.reverse,
-    this.showBalls = true,
-    this.spin,
-    this.spinBuilder,
     required this.processedDuration,
+    this.showBalls = true,
+    this.spinWidget,
+    this.noMoreWidget,
+    this.spinBuilder,
+    this.foregroundColor,
+    this.backgroundColor,
   }) : super(key: key);
 
   @override
@@ -58,6 +70,8 @@ class _BezierIndicatorState extends State<_BezierIndicator>
 
   /// Animation controller.
   late AnimationController _animationController;
+
+  Color get _foregroundColor => widget.foregroundColor ?? Colors.white;
 
   @override
   void initState() {
@@ -87,7 +101,7 @@ class _BezierIndicatorState extends State<_BezierIndicator>
     }
   }
 
-  /// Build spin.
+  /// Build spin widget.
   Widget _buildSpin() {
     if (widget.spinBuilder != null) {
       widget.spinBuilder!(context, _animationController.value);
@@ -97,9 +111,9 @@ class _BezierIndicatorState extends State<_BezierIndicator>
       builder: (ctx, _) {
         return Transform.scale(
           scale: _animationController.value,
-          child: widget.spin ??
-              const SpinKitHourGlass(
-                color: Colors.white,
+          child: widget.spinWidget ??
+              SpinKitHourGlass(
+                color: _foregroundColor,
                 size: 32,
               ),
         );
@@ -122,8 +136,11 @@ class _BezierIndicatorState extends State<_BezierIndicator>
           useAnimation: true,
           disappearAnimation: true,
           disappearAnimationDuration: widget.processedDuration,
+          color: widget.backgroundColor,
         ),
-        if (widget.showBalls && _offset > _safeOffset)
+        if (widget.showBalls &&
+            _offset > _safeOffset &&
+            widget.state.result != IndicatorResult.noMore)
           Positioned(
             top: 0,
             bottom: 0,
@@ -171,7 +188,7 @@ class _BezierIndicatorState extends State<_BezierIndicator>
                                 width: ballSize,
                                 height: ballSize,
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: _foregroundColor,
                                   borderRadius: BorderRadius.all(
                                       Radius.circular(ballSize / 2)),
                                 ),
@@ -188,6 +205,39 @@ class _BezierIndicatorState extends State<_BezierIndicator>
         if (widget.state.mode == IndicatorMode.ready ||
             widget.state.mode == IndicatorMode.processing)
           _buildSpin(),
+        if (widget.state.result == IndicatorResult.noMore)
+          Positioned(
+            left: _axis == Axis.horizontal
+                ? (_offset < _actualTriggerOffset
+                    ? -(_actualTriggerOffset - _offset) / 2
+                    : 0)
+                : 0,
+            right: _axis == Axis.horizontal
+                ? (_offset < _actualTriggerOffset ? null : 0)
+                : 0,
+            top: _axis == Axis.vertical
+                ? (_offset < _actualTriggerOffset
+                    ? -(_actualTriggerOffset - _offset) / 2
+                    : 0)
+                : 0,
+            bottom: _axis == Axis.vertical
+                ? (_offset < _actualTriggerOffset ? null : 0)
+                : 0,
+            height: _axis == Axis.vertical
+                ? (_offset < _actualTriggerOffset ? _actualTriggerOffset : null)
+                : null,
+            width: _axis == Axis.horizontal
+                ? (_offset < _actualTriggerOffset ? _actualTriggerOffset : null)
+                : null,
+            child: Center(
+              child: widget.noMoreWidget ??
+                  Icon(
+                    Icons.inbox_outlined,
+                    color: _foregroundColor,
+                    size: 32,
+                  ),
+            ),
+          ),
       ],
     );
   }
