@@ -44,16 +44,18 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   /// The state of the indicator when the BallisticSimulation is created.
   final _headerSimulationCreationState =
       ValueNotifier<_BallisticSimulationCreationState>(
-          const _BallisticSimulationCreationState(
-    mode: IndicatorMode.inactive,
-    offset: 0,
-  ));
+    const _BallisticSimulationCreationState(
+      mode: IndicatorMode.inactive,
+      offset: 0,
+    ),
+  );
   final _footerSimulationCreationState =
       ValueNotifier<_BallisticSimulationCreationState>(
-          const _BallisticSimulationCreationState(
-    mode: IndicatorMode.inactive,
-    offset: 0,
-  ));
+    const _BallisticSimulationCreationState(
+      mode: IndicatorMode.inactive,
+      offset: 0,
+    ),
+  );
 
   /// Get the current [SpringDescription] to be used.
   @override
@@ -425,6 +427,6 @@ class _BallisticSimulationCreationState {
   });
 
   bool needCreation(_BallisticSimulationCreationState newState) {
-    return mode != newState.mode || offset != newState.offset;
+    return mode != newState.mode || offset != newState.offset || offset == 0;
   }
 }
