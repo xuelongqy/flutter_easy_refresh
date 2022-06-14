@@ -238,6 +238,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       _mode == IndicatorMode.secondaryOpen ||
       _mode == IndicatorMode.secondaryClosing;
 
+  bool _mounted = false;
+
   @override
   void dispose() {
     _onCanProcess = null;
@@ -245,6 +247,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     userOffsetNotifier.removeListener(_onUserOffset);
     _task = null;
     _modeChangeListeners.clear();
+    _mounted = true;
     super.dispose();
   }
 
@@ -586,6 +589,11 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (_mode == mode) {
       return;
     }
+
+    if (_mounted) {
+      return;
+    }
+
     final oldMode = _mode;
     _mode = mode;
     notifyListeners();
