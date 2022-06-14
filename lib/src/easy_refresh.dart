@@ -303,10 +303,10 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   @override
   void dispose() {
-    super.dispose();
     _headerNotifier.dispose();
     _footerNotifier.dispose();
     _userOffsetNotifier.dispose();
+    super.dispose();
   }
 
   /// Initialize [EasyRefreshData].
