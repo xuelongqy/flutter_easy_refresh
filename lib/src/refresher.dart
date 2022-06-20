@@ -290,7 +290,7 @@ class _EasyRefreshState extends State<EasyRefresh> {
       if (widget.firstRefreshWidget != null) {
         _firstRefreshHeader = FirstRefreshHeader(widget.firstRefreshWidget!);
       }
-      SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+      SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
         callRefresh();
       });
     }

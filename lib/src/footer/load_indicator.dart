@@ -195,10 +195,10 @@ class _RenderEasyRefreshSliverLoad extends RenderSliverSingleBoxAdapter {
           extraExtent > 0.0 ||
           (enableInfiniteLoad &&
               extraExtentNotifier.value == constraints.remainingPaintExtent)) {
-        if (SchedulerBinding.instance!.schedulerPhase == SchedulerPhase.idle) {
+        if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
           _triggerInfiniteLoad = false;
         } else {
-          SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+          SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
             _triggerInfiniteLoad = false;
           });
         }
@@ -593,7 +593,7 @@ class _EasyRefreshSliverLoadControlState
     super.initState();
     _axisDirectionNotifier = ValueNotifier<AxisDirection>(AxisDirection.down);
     _axisDirectionNotifier.addListener(() {
-      SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+      SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
         if (mounted) setState(() {});
       });
     });
@@ -660,7 +660,7 @@ class _EasyRefreshSliverLoadControlState
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
-      SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+      SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
         loadState = LoadMode.load;
         loadTask = widget.onLoad!()
           ..then((_) {
@@ -702,10 +702,10 @@ class _EasyRefreshSliverLoadControlState
       loadState = LoadMode.done;
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
-      if (SchedulerBinding.instance!.schedulerPhase == SchedulerPhase.idle) {
+      if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
         setState(() => hasSliverLayoutExtent = false);
       } else {
-        SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+        SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
           if (mounted) setState(() => hasSliverLayoutExtent = false);
         });
       }
@@ -748,7 +748,7 @@ class _EasyRefreshSliverLoadControlState
         } else if (latestIndicatorBoxExtent <= widget.loadTriggerPullDistance) {
           // 如果未触发加载则取消固定高度
           if (hasSliverLayoutExtent && !hasTask) {
-            SchedulerBinding.instance!
+            SchedulerBinding.instance
                 .addPostFrameCallback((Duration timestamp) {
               setState(() => hasSliverLayoutExtent = false);
             });
@@ -756,7 +756,7 @@ class _EasyRefreshSliverLoadControlState
           return LoadMode.drag;
         } else {
           // 提前固定高度，防止列表回弹
-          SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+          SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
             if (!hasSliverLayoutExtent) {
               if (mounted) setState(() => hasSliverLayoutExtent = true);
             }
@@ -767,7 +767,7 @@ class _EasyRefreshSliverLoadControlState
                 HapticFeedback.mediumImpact();
               }
               // 触发加载任务
-              SchedulerBinding.instance!
+              SchedulerBinding.instance
                   .addPostFrameCallback((Duration timestamp) {
                 loadTask = widget.onLoad!()
                   ..then((_) {
