@@ -23,7 +23,7 @@ class MenuBottomBar extends StatefulWidget {
 class _MenuBottomBarState extends State<MenuBottomBar>
     with SingleTickerProviderStateMixin {
   bool _expanded = false;
-  final _duration = const Duration(milliseconds: 400);
+  final _duration = const Duration(milliseconds: 300);
 
   double get _expandedHeight {
     if (widget.expandedHeight != null) {

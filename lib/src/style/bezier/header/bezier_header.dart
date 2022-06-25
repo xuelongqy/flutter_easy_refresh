@@ -4,6 +4,24 @@ part of easyrefresh;
 class BezierHeader extends Header {
   final Key? key;
 
+  /// Show the ball during the pull.
+  final bool displayBalls;
+
+  /// Spin widget.
+  final Widget? spinWidget;
+
+  /// No more widget.
+  final Widget? noMoreWidget;
+
+  /// Spin widget builder.
+  final BezierSpinBuilder? spinBuilder;
+
+  /// Foreground color.
+  final Color? foregroundColor;
+
+  /// Background color.
+  final Color? backgroundColor;
+
   BezierHeader({
     this.key,
     double triggerOffset = 100,
@@ -19,6 +37,12 @@ class BezierHeader extends Header {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
+    this.displayBalls = true,
+    this.spinWidget,
+    this.noMoreWidget,
+    this.spinBuilder,
+    this.foregroundColor,
+    this.backgroundColor,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -42,6 +66,12 @@ class BezierHeader extends Header {
       state: state,
       reverse: state.reverse,
       processedDuration: processedDuration,
+      displayBalls: displayBalls,
+      spinWidget: spinWidget,
+      noMoreWidget: noMoreWidget,
+      spinBuilder: spinBuilder,
+      foregroundColor: foregroundColor,
+      backgroundColor: backgroundColor,
     );
   }
 }

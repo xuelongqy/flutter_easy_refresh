@@ -1,4 +1,4 @@
-import 'package:example/l10n/intl.dart';
+import 'package:example/l10n/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easy_refresh/easy_refresh.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -49,9 +49,10 @@ class _MyAppState extends State<MyApp> {
       title: 'EasyRefresh',
       theme: ThemeModel.light,
       darkTheme: ThemeModel.dark,
-      translations: AppIntl(),
+      translations: AppTranslations(),
+      supportedLocales: AppTranslations.supportedLocales,
       locale: Get.deviceLocale,
-      fallbackLocale: const Locale('en'),
+      fallbackLocale: AppTranslations.fallbackLocale,
       home: const HomePage(),
       localizationsDelegates: const [
         GlobalCupertinoLocalizations.delegate,

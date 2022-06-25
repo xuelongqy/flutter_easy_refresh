@@ -33,4 +33,6 @@ const zhCN = {
   'Pull to load': '上拉加载',
   'Loading...': '加载中...',
   'Bezier curve': '贝塞尔曲线',
+  'Disable': '禁用',
+  'Display balls': '显示小球',
 };

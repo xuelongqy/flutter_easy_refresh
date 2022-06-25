@@ -5,9 +5,7 @@ class ColorUtils {
   /// Generate background color from string.
   static Color backgroundColorWithString(String value) {
     return Color(int.parse(
-        'ff${hex
-            .encode('${value}color'.codeUnits.map((e) => e % 256).toList())
-            .substring(1, 7)}',
+        'ff${hex.encode('${value}color'.codeUnits.map((e) => e % 256).toList()).substring(1, 7)}',
         radix: 16));
   }
 

@@ -88,23 +88,27 @@ class _ClassicPageState extends State<ClassicPage> {
           failedText: 'Failed'.tr,
           messageText: 'Last updated at %T'.tr,
         ),
-        onRefresh: () async {
-          await Future.delayed(const Duration(seconds: 2));
-          setState(() {
-            _count = 10;
-          });
-          _controller.finishRefresh();
-          _controller.resetFooter();
-        },
-        onLoad: () async {
-          await Future.delayed(const Duration(seconds: 2));
-          setState(() {
-            _count += 5;
-          });
-          _controller.finishLoad(_count >= 20
-              ? IndicatorResult.noMore
-              : IndicatorResult.succeeded);
-        },
+        onRefresh: _headerProperties.disable
+            ? null
+            : () async {
+                await Future.delayed(const Duration(seconds: 2));
+                setState(() {
+                  _count = 10;
+                });
+                _controller.finishRefresh();
+                _controller.resetFooter();
+              },
+        onLoad: _footerProperties.disable
+            ? null
+            : () async {
+                await Future.delayed(const Duration(seconds: 2));
+                setState(() {
+                  _count += 5;
+                });
+                _controller.finishLoad(_count >= 20
+                    ? IndicatorResult.noMore
+                    : IndicatorResult.succeeded);
+              },
         child: ListView.builder(
           clipBehavior: Clip.none,
           scrollDirection: _scrollDirection,
@@ -202,6 +206,17 @@ class _ClassicPageState extends State<ClassicPage> {
                         final properties = propertiesItems[i];
                         return Column(
                           children: [
+                            ListTile(
+                              title: Text('Disable'.tr),
+                              trailing: Switch(
+                                value: properties.disable,
+                                onChanged: (value) {
+                                  setState(() {
+                                    properties.disable = value;
+                                  });
+                                },
+                              ),
+                            ),
                             ListTile(
                               title: Text('Clamping'.tr),
                               trailing: Switch(
@@ -320,6 +335,7 @@ class _ClassicPageState extends State<ClassicPage> {
 /// Classic indicator properties.
 class _CIProperties {
   final String name;
+  bool disable = false;
   bool clamping = false;
   bool background = false;
   MainAxisAlignment alignment;

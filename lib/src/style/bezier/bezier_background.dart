@@ -397,9 +397,6 @@ class _BezierClipper extends CustomClipper<Path> {
 
 /// Disappear clipper.
 class _BezierDisappearClipper extends CustomClipper<Path> {
-  /// The value of Bezier traction.
-  static const _bezierRadian = 40.0;
-
   /// [Scrollable] axis.
   final Axis axis;
 
@@ -422,61 +419,15 @@ class _BezierDisappearClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
+    final fillPath = Path();
     final path = Path();
     final height = size.height;
     final width = size.width;
-    Offset start1;
-    Offset start2;
-    Offset start3;
-    Offset start4;
-    Offset start5;
-    Offset end1;
-    Offset end2;
-    Offset end3;
-    Offset end4;
-    Offset end5;
-    if (axis == Axis.vertical) {
-      final length = _bezierRadian * 2 + width;
-      final offset = (length / 2) * scale;
-      start1 = Offset(-_bezierRadian, height);
-      start2 = Offset((width / 2) - offset, height);
-      start3 = Offset(
-          (width / 2) - offset - (_bezierRadian * (1 - scale)), height / 2);
-      start4 = Offset((width / 2) - offset, 0);
-      start5 = const Offset(-_bezierRadian, 0);
-      end1 = Offset(width + _bezierRadian, height);
-      end2 = Offset((width / 2) + offset, height);
-      end3 = Offset(
-          (width / 2) + offset + (_bezierRadian * (1 - scale)), height / 2);
-      end4 = Offset((width / 2) + offset, 0);
-      end5 = Offset(width + _bezierRadian, 0);
-    } else {
-      final length = _bezierRadian * 2 + height;
-      final offset = (length / 2) * scale;
-      start1 = const Offset(0, -_bezierRadian);
-      start2 = Offset(0, (height / 2) - offset);
-      start3 = Offset(
-          width / 2, (height / 2) - offset - (_bezierRadian * (1 - scale)));
-      start4 = Offset(width, (height / 2) - offset);
-      start5 = Offset(width, -_bezierRadian);
-      end1 = Offset(0, height + _bezierRadian);
-      end2 = Offset(0, (height / 2) + offset);
-      end3 = Offset(
-          width / 2, (height / 2) + offset + (_bezierRadian * (1 - scale)));
-      end4 = Offset(width, (height / 2) + offset);
-      end5 = Offset(width, height + _bezierRadian);
-    }
-    path.moveTo(start1.dx, start1.dy);
-    path.lineTo(start2.dx, start2.dy);
-    path.quadraticBezierTo(start3.dx, start3.dy, start4.dx, start4.dy);
-    path.lineTo(start5.dx, start5.dy);
-    path.lineTo(start1.dx, start1.dy);
-    path.moveTo(end1.dx, end1.dy);
-    path.lineTo(end2.dx, end2.dy);
-    path.quadraticBezierTo(end3.dx, end3.dy, end4.dx, end4.dy);
-    path.lineTo(end5.dx, end5.dy);
-    path.lineTo(end1.dx, end1.dy);
-    return path;
+    fillPath.addRect(Rect.fromLTRB(0.0, 0.0, width, height));
+    final length = height + width;
+    path.addOval(Rect.fromCircle(
+        center: Offset(width / 2, height / 2), radius: length / 2 * scale));
+    return Path.combine(PathOperation.difference, fillPath, path);
   }
 
   @override

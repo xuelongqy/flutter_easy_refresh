@@ -33,4 +33,6 @@ const en = {
   'Pull to load': 'Pull to load',
   'Loading...': 'Loading...',
   'Bezier curve': 'Bezier curve',
+  'Disable': 'Disable',
+  'Display balls': 'Display balls',
 };
