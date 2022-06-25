@@ -90,11 +90,10 @@
 //   bool get wantKeepAlive => true;
 // }
 
+import 'package:example/page/more/theme_page.dart';
+import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../widget/list_item.dart';
-import 'theme.dart';
 
 class MorePage extends StatefulWidget {
   const MorePage({Key? key}) : super(key: key);
