@@ -60,6 +60,8 @@ class _BezierIndicatorState extends State<_BezierIndicator>
   static const _ballArea = 400.0;
   static const _animationDuration = Duration(milliseconds: 300);
 
+  IndicatorMode get _mode => widget.state.mode;
+
   Axis get _axis => widget.state.axis;
 
   double get _offset => widget.state.offset;
@@ -108,7 +110,7 @@ class _BezierIndicatorState extends State<_BezierIndicator>
     }
     return AnimatedBuilder(
       animation: _animationController,
-      builder: (ctx, _) {
+      builder: (context, _) {
         return Transform.scale(
           scale: _animationController.value,
           child: widget.spinWidget ??
@@ -171,9 +173,9 @@ class _BezierIndicatorState extends State<_BezierIndicator>
                           animation: _animationController,
                           builder: (ctx, _) {
                             double aValue;
-                            if (widget.state.mode == IndicatorMode.inactive ||
-                                widget.state.mode == IndicatorMode.drag ||
-                                widget.state.mode == IndicatorMode.armed) {
+                            if (_mode == IndicatorMode.inactive ||
+                                _mode == IndicatorMode.drag ||
+                                _mode == IndicatorMode.armed) {
                               aValue = 1;
                             } else {
                               aValue = _animationController.isAnimating
@@ -202,8 +204,7 @@ class _BezierIndicatorState extends State<_BezierIndicator>
               },
             ),
           ),
-        if (widget.state.mode == IndicatorMode.ready ||
-            widget.state.mode == IndicatorMode.processing)
+        if (_mode == IndicatorMode.ready || _mode == IndicatorMode.processing)
           _buildSpin(),
         if (widget.state.result == IndicatorResult.noMore)
           Positioned(

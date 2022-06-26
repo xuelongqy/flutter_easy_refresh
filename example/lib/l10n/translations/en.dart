@@ -35,4 +35,5 @@ const en = {
   'Bezier curve': 'Bezier curve',
   'Disable': 'Disable',
   'Display balls': 'Display balls',
+  'Bezier circle': 'Bezier circle',
 };

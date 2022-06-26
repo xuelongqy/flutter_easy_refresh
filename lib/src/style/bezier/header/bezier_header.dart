@@ -27,7 +27,7 @@ class BezierHeader extends Header {
     double triggerOffset = 100,
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.above,
-    Duration processedDuration = kDisappearAnimationDuration,
+    Duration processedDuration = kBezierBackgroundDisappearDuration,
     SpringDescription? spring,
     SpringBuilder readySpringBuilder = kBezierSpringBuilder,
     bool springRebound = false,

@@ -210,6 +210,7 @@
 //   // TODO: implement wantKeepAlive
 //   bool get wantKeepAlive => true;
 // }
+import 'package:example/page/style/bezier_circle_page.dart';
 import 'package:example/page/style/bezier_page.dart';
 import 'package:example/page/style/classical_page.dart';
 import 'package:example/page/style/material_page.dart';
@@ -261,6 +262,12 @@ class _StylePageState extends State<StylePage> {
                 subtitle: 'Bezier curve'.tr,
                 icon: Icons.panorama_wide_angle,
                 onTap: () => Get.to(() => const BezierPage()),
+              ),
+              ListItem(
+                title: 'BezierCircle',
+                subtitle: 'Bezier circle'.tr,
+                icon: Icons.circle_outlined,
+                onTap: () => Get.to(() => const BezierCirclePage()),
               ),
             ]),
           ),

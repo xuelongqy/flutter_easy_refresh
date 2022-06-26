@@ -1,9 +1,8 @@
+import 'package:example/page/more/more_page.dart';
+import 'package:example/page/sample/sample_page.dart';
 import 'package:example/page/style/style_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'more/more.dart';
-import 'sample/sample.dart';
 
 /// 主页面
 class HomePage extends StatefulWidget {

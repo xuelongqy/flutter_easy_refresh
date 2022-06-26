@@ -29,5 +29,7 @@ part 'src/style/material/header/material_header.dart';
 part 'src/style/material/footer/material_footer.dart';
 part 'src/style/bezier/bezier_background.dart';
 part 'src/style/bezier/bezier_indicator.dart';
+part 'src/style/bezier/bezier_circle_indicator.dart';
 part 'src/style/bezier/header/bezier_header.dart';
+part 'src/style/bezier/header/bezier_circle_header.dart';
 part 'src/style/bezier/footer/bezier_footer.dart';

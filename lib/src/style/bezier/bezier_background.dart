@@ -22,7 +22,7 @@ double kBezierFrictionFactor(double overscrollFraction) =>
     0.4 * math.pow(1 - overscrollFraction, 2);
 
 /// Default disappear animation duration.
-const Duration kDisappearAnimationDuration = Duration(milliseconds: 300);
+const Duration kBezierBackgroundDisappearDuration = Duration(milliseconds: 300);
 
 /// Bezier curve background.
 class BezierBackground extends StatefulWidget {
@@ -52,6 +52,9 @@ class BezierBackground extends StatefulWidget {
   /// Disappear animation duration.
   final Duration disappearAnimationDuration;
 
+  /// When the rebound offset changes.
+  final ValueChanged<double>? onReboundOffsetChanged;
+
   const BezierBackground({
     Key? key,
     required this.state,
@@ -61,7 +64,8 @@ class BezierBackground extends StatefulWidget {
     this.color,
     this.clipper,
     this.disappearAnimation = false,
-    this.disappearAnimationDuration = kDisappearAnimationDuration,
+    this.disappearAnimationDuration = kBezierBackgroundDisappearDuration,
+    this.onReboundOffsetChanged,
   }) : super(key: key);
 
   @override
@@ -177,6 +181,11 @@ class _BezierBackgroundState extends State<BezierBackground>
         }
       }
       _lastAnimationValue = _animationController.value;
+    }
+    if (widget.onReboundOffsetChanged != null) {
+      final reboundOffset = _notifier.calculateOffsetWithPixels(
+          _notifier.position, _animationController.value);
+      widget.onReboundOffsetChanged!(reboundOffset);
     }
     setState(() {});
   }

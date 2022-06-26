@@ -1,20 +1,8 @@
 part of easyrefresh;
 
-/// Bezier footer.
-class BezierFooter extends Footer {
+/// Bezier circle footer.
+class BezierCircleHeader extends Header {
   final Key? key;
-
-  /// Show the ball during the pull.
-  final bool displayBalls;
-
-  /// Spin widget.
-  final Widget? spinWidget;
-
-  /// No more widget.
-  final Widget? noMoreWidget;
-
-  /// Spin widget builder.
-  final BezierSpinBuilder? spinBuilder;
 
   /// Foreground color.
   final Color? foregroundColor;
@@ -22,12 +10,11 @@ class BezierFooter extends Footer {
   /// Background color.
   final Color? backgroundColor;
 
-  BezierFooter({
+  BezierCircleHeader({
     this.key,
     double triggerOffset = 100,
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.above,
-    Duration processedDuration = kBezierBackgroundDisappearDuration,
     SpringDescription? spring,
     SpringBuilder readySpringBuilder = kBezierSpringBuilder,
     bool springRebound = false,
@@ -37,16 +24,12 @@ class BezierFooter extends Footer {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
-    this.displayBalls = true,
-    this.spinWidget,
-    this.noMoreWidget,
-    this.spinBuilder,
     this.foregroundColor,
     this.backgroundColor,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
-          processedDuration: processedDuration,
+          processedDuration: kBezierCircleDisappearDuration,
           spring: spring,
           readySpringBuilder: readySpringBuilder,
           springRebound: springRebound,
@@ -61,15 +44,9 @@ class BezierFooter extends Footer {
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    return _BezierIndicator(
+    return _BezierCircleIndicator(
       key: key,
       state: state,
-      reverse: !state.reverse,
-      processedDuration: processedDuration,
-      displayBalls: displayBalls,
-      spinWidget: spinWidget,
-      noMoreWidget: noMoreWidget,
-      spinBuilder: spinBuilder,
       foregroundColor: foregroundColor,
       backgroundColor: backgroundColor,
     );

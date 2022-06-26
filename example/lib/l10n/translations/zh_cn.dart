@@ -35,4 +35,5 @@ const zhCN = {
   'Bezier curve': '贝塞尔曲线',
   'Disable': '禁用',
   'Display balls': '显示小球',
+  'Bezier circle': '弹出圆圈',
 };
