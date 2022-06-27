@@ -71,147 +71,147 @@ class _BezierPageState extends State<BezierPage> {
     'ThreeInOut',
   ];
 
-  Widget? _spinWidget(String spin) {
+  Widget? _spinWidget(String spin, Color color) {
     switch (spin) {
       case 'RotatingPlain':
-        return const SpinKitRotatingPlain(
+        return SpinKitRotatingPlain(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'DoubleBounce':
-        return const SpinKitDoubleBounce(
+        return SpinKitDoubleBounce(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'Wave':
-        return const SpinKitWave(
+        return SpinKitWave(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'WanderingCubes':
-        return const SpinKitWanderingCubes(
+        return SpinKitWanderingCubes(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'FadingFour':
-        return const SpinKitFadingFour(
+        return SpinKitFadingFour(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'FadingCube':
-        return const SpinKitFadingCube(
+        return SpinKitFadingCube(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'Pulse':
-        return const SpinKitPulse(
+        return SpinKitPulse(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'ChasingDots':
-        return const SpinKitChasingDots(
+        return SpinKitChasingDots(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'ThreeBounce':
-        return const SpinKitThreeBounce(
+        return SpinKitThreeBounce(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'Circle':
-        return const SpinKitCircle(
+        return SpinKitCircle(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'CubeGrid':
-        return const SpinKitCubeGrid(
+        return SpinKitCubeGrid(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'FadingCircle':
-        return const SpinKitFadingCircle(
+        return SpinKitFadingCircle(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'RotatingCircle':
-        return const SpinKitRotatingCircle(
+        return SpinKitRotatingCircle(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'FoldingCube':
-        return const SpinKitFoldingCube(
+        return SpinKitFoldingCube(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'PumpingHeart':
-        return const SpinKitPumpingHeart(
+        return SpinKitPumpingHeart(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'HourGlass':
-        return const SpinKitHourGlass(
+        return SpinKitHourGlass(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'PouringHourGlass':
-        return const SpinKitPouringHourGlass(
+        return SpinKitPouringHourGlass(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'PouringHourGlassRefined':
-        return const SpinKitPouringHourGlassRefined(
+        return SpinKitPouringHourGlassRefined(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'FadingGrid':
-        return const SpinKitFadingGrid(
+        return SpinKitFadingGrid(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'Ring':
-        return const SpinKitRing(
+        return SpinKitRing(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'Ripple':
-        return const SpinKitRipple(
+        return SpinKitRipple(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'SpinningCircle':
-        return const SpinKitSpinningCircle(
+        return SpinKitSpinningCircle(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'SpinningLines':
-        return const SpinKitSpinningLines(
+        return SpinKitSpinningLines(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'SquareCircle':
-        return const SpinKitSquareCircle(
+        return SpinKitSquareCircle(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'DualRing':
-        return const SpinKitDualRing(
+        return SpinKitDualRing(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'PianoWave':
-        return const SpinKitPianoWave(
+        return SpinKitPianoWave(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'DancingSquare':
-        return const SpinKitDancingSquare(
+        return SpinKitDancingSquare(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
       case 'ThreeInOut':
-        return const SpinKitThreeInOut(
+        return SpinKitThreeInOut(
           size: 32,
-          color: Colors.white,
+          color: color,
         );
     }
     return null;
@@ -234,14 +234,16 @@ class _BezierPageState extends State<BezierPage> {
           foregroundColor: themeData.colorScheme.onPrimary,
           clamping: _headerProperties.clamping,
           showBalls: _headerProperties.displayBalls,
-          spinWidget: _spinWidget(_headerProperties.spin),
+          spinWidget: _spinWidget(
+              _headerProperties.spin, themeData.colorScheme.onPrimary),
         ),
         footer: BezierFooter(
           backgroundColor: themeData.colorScheme.primary,
           foregroundColor: themeData.colorScheme.onPrimary,
           clamping: _footerProperties.clamping,
           showBalls: _headerProperties.displayBalls,
-          spinWidget: _spinWidget(_headerProperties.spin),
+          spinWidget: _spinWidget(
+              _headerProperties.spin, themeData.colorScheme.onPrimary),
         ),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));

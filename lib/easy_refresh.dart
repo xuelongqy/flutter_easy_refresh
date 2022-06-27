@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easy_refresh/src/painter/paths_painter.dart';
 import 'package:flutter_easy_refresh/src/style/bezier/spin/hour_glass.dart';
 
 part 'src/easy_refresh.dart';
@@ -37,3 +38,6 @@ part 'src/style/bezier/footer/bezier_footer.dart';
 part 'src/style/phoenix/phoenix_indicator.dart';
 part 'src/style/phoenix/header/phoenix_header.dart';
 part 'src/style/phoenix/footer/phoenix_footer.dart';
+part 'src/style/taurus/taurus_indicator.dart';
+part 'src/style/taurus/header/taurus_header.dart';
+part 'src/style/taurus/footer/taurus_footer.dart';

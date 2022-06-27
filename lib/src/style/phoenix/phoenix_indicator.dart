@@ -26,6 +26,7 @@ class _PhoenixIndicator extends StatefulWidget {
 
 class _PhoenixIndicatorState extends State<_PhoenixIndicator>
     with SingleTickerProviderStateMixin {
+
   static const _maxWidth = 420.0;
   static const _sunSize = 40.0;
   static const _animationDuration = Duration(milliseconds: 1000);
@@ -110,7 +111,7 @@ class _PhoenixIndicatorState extends State<_PhoenixIndicator>
               top: _offset < _actualTriggerOffset
                   ? _actualTriggerOffset - (_offset * 0.9)
                   : _actualTriggerOffset * 0.1,
-              left: width * 0.3 + sunSize / 2,
+              left: constraints.maxWidth * 0.3 + sunSize / 2,
               child: AnimatedBuilder(
                 animation: _animationController,
                 builder: (context, child) {

@@ -37,4 +37,5 @@ const zhCN = {
   'Display balls': '显示小球',
   'Bezier circle': '弹出圆圈',
   'Golden campus': '金色校园',
+  'Rush to the sky': '冲上云霄',
 };

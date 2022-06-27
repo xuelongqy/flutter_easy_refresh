@@ -215,6 +215,7 @@ import 'package:example/page/style/bezier_page.dart';
 import 'package:example/page/style/classical_page.dart';
 import 'package:example/page/style/material_page.dart';
 import 'package:example/page/style/phoenix_page.dart';
+import 'package:example/page/style/taurus_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -275,6 +276,12 @@ class _StylePageState extends State<StylePage> {
                 subtitle: 'Golden campus'.tr,
                 icon: Icons.location_city_outlined,
                 onTap: () => Get.to(() => const PhoenixPage()),
+              ),
+              ListItem(
+                title: 'Taurus',
+                subtitle: 'Rush to the sky'.tr,
+                icon: Icons.airplanemode_active,
+                onTap: () => Get.to(() => const TaurusPage()),
               ),
             ]),
           ),

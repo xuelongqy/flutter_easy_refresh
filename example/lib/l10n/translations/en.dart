@@ -37,4 +37,5 @@ const en = {
   'Display balls': 'Display balls',
   'Bezier circle': 'Bezier circle',
   'Golden campus': 'Golden campus',
+  'Rush to the sky': 'Rush to the sky',
 };
