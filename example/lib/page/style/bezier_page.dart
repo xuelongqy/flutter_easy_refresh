@@ -219,21 +219,28 @@ class _BezierPageState extends State<BezierPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     final propertiesItems = [_headerProperties, _footerProperties];
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: themeData.colorScheme.primary,
+        foregroundColor: themeData.colorScheme.onPrimary,
         title: const Text('Bezier'),
       ),
       body: EasyRefresh(
         controller: _controller,
         header: BezierHeader(
+          backgroundColor: themeData.colorScheme.primary,
+          foregroundColor: themeData.colorScheme.onPrimary,
           clamping: _headerProperties.clamping,
-          displayBalls: _headerProperties.displayBalls,
+          showBalls: _headerProperties.displayBalls,
           spinWidget: _spinWidget(_headerProperties.spin),
         ),
         footer: BezierFooter(
+          backgroundColor: themeData.colorScheme.primary,
+          foregroundColor: themeData.colorScheme.onPrimary,
           clamping: _footerProperties.clamping,
-          displayBalls: _headerProperties.displayBalls,
+          showBalls: _headerProperties.displayBalls,
           spinWidget: _spinWidget(_headerProperties.spin),
         ),
         onRefresh: () async {

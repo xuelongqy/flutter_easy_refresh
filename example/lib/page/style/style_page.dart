@@ -214,6 +214,7 @@ import 'package:example/page/style/bezier_circle_page.dart';
 import 'package:example/page/style/bezier_page.dart';
 import 'package:example/page/style/classical_page.dart';
 import 'package:example/page/style/material_page.dart';
+import 'package:example/page/style/phoenix_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -268,6 +269,12 @@ class _StylePageState extends State<StylePage> {
                 subtitle: 'Bezier circle'.tr,
                 icon: Icons.circle_outlined,
                 onTap: () => Get.to(() => const BezierCirclePage()),
+              ),
+              ListItem(
+                title: 'Phoenix',
+                subtitle: 'Golden campus'.tr,
+                icon: Icons.location_city_outlined,
+                onTap: () => Get.to(() => const PhoenixPage()),
               ),
             ]),
           ),

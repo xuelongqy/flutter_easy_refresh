@@ -36,4 +36,5 @@ const zhCN = {
   'Disable': '禁用',
   'Display balls': '显示小球',
   'Bezier circle': '弹出圆圈',
+  'Golden campus': '金色校园',
 };

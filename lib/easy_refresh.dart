@@ -1,5 +1,6 @@
 library easyrefresh;
 
+import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:async';
 
@@ -33,3 +34,6 @@ part 'src/style/bezier/bezier_circle_indicator.dart';
 part 'src/style/bezier/header/bezier_header.dart';
 part 'src/style/bezier/header/bezier_circle_header.dart';
 part 'src/style/bezier/footer/bezier_footer.dart';
+part 'src/style/phoenix/phoenix_indicator.dart';
+part 'src/style/phoenix/header/phoenix_header.dart';
+part 'src/style/phoenix/footer/phoenix_footer.dart';

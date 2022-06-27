@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
-class BezierCirclePage extends StatefulWidget {
-  const BezierCirclePage({Key? key}) : super(key: key);
+class PhoenixPage extends StatefulWidget {
+  const PhoenixPage({Key? key}) : super(key: key);
 
   @override
-  State<BezierCirclePage> createState() => _BezierCirclePageState();
+  State<PhoenixPage> createState() => _PhoenixPageState();
 }
 
-class _BezierCirclePageState extends State<BezierCirclePage> {
+class _PhoenixPageState extends State<PhoenixPage> {
   int _count = 10;
   late EasyRefreshController _controller;
 
@@ -34,16 +34,15 @@ class _BezierCirclePageState extends State<BezierCirclePage> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: themeData.colorScheme.primary,
-        foregroundColor: themeData.colorScheme.onPrimary,
-        title: Text('Bezier circle'.tr),
-      ),
       body: EasyRefresh(
         controller: _controller,
-        header: BezierCircleHeader(
-          foregroundColor: themeData.scaffoldBackgroundColor,
-          backgroundColor: themeData.colorScheme.primary,
+        header: PhoenixHeader(
+          skyColor: themeData.colorScheme.primary,
+          position: IndicatorPosition.locator,
+        ),
+        footer: PhoenixFooter(
+          skyColor: themeData.colorScheme.primary,
+          position: IndicatorPosition.locator,
         ),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));
@@ -62,13 +61,29 @@ class _BezierCirclePageState extends State<BezierCirclePage> {
               ? IndicatorResult.noMore
               : IndicatorResult.succeeded);
         },
-        child: ListView.builder(
-          clipBehavior: Clip.none,
-          padding: EdgeInsets.zero,
-          itemCount: _count,
-          itemBuilder: (ctx, index) {
-            return const SkeletonItem();
-          },
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: themeData.colorScheme.primary,
+              foregroundColor: themeData.colorScheme.onPrimary,
+              expandedHeight: 120,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text('Golden campus'.tr),
+                centerTitle: false,
+              ),
+            ),
+            const HeaderLocator.sliver(),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return const SkeletonItem();
+                },
+                childCount: _count,
+              ),
+            ),
+            const FooterLocator.sliver(),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(

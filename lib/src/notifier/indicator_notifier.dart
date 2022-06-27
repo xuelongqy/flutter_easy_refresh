@@ -346,6 +346,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         _offset = mOffset;
       }
     }
+    _slightDeviation();
     _updateMode();
     notifyListeners();
   }
@@ -370,6 +371,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
   }
 
+  /// Temporary solutions, sometimes with slight deviation.
+  void _slightDeviation() {
+    if ((_offset - actualTriggerOffset).abs() < 0.000001) {
+      _offset = actualTriggerOffset;
+    }
+  }
+
   /// Update [Scrollable] offset
   void _updateOffset(ScrollMetrics position, double value, bool bySimulation) {
     // Clamping
@@ -388,6 +396,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     final oldMode = _mode;
     // Calculate and update the offset.
     _offset = _calculateOffset(position, value);
+    _slightDeviation();
     if (bySimulation) {
       _releaseOffset = _offset;
     }

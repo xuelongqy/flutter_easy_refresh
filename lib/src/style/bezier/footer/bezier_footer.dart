@@ -5,7 +5,7 @@ class BezierFooter extends Footer {
   final Key? key;
 
   /// Show the ball during the pull.
-  final bool displayBalls;
+  final bool showBalls;
 
   /// Spin widget.
   final Widget? spinWidget;
@@ -37,7 +37,7 @@ class BezierFooter extends Footer {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
-    this.displayBalls = true,
+    this.showBalls = true,
     this.spinWidget,
     this.noMoreWidget,
     this.spinBuilder,
@@ -66,7 +66,7 @@ class BezierFooter extends Footer {
       state: state,
       reverse: !state.reverse,
       processedDuration: processedDuration,
-      displayBalls: displayBalls,
+      showBalls: showBalls,
       spinWidget: spinWidget,
       noMoreWidget: noMoreWidget,
       spinBuilder: spinBuilder,

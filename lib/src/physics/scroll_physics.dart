@@ -377,12 +377,11 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         (footerNotifier._mode == IndicatorMode.secondaryReady ||
             footerNotifier._mode == IndicatorMode.secondaryOpen);
     bool secondary = hSecondary || fSecondary;
-    if ((velocity.abs() >= tolerance.velocity ||
-            position.outOfRange ||
-            (secondary && oldUserOffset)) &&
-        (oldUserOffset ||
-            _headerSimulationCreationState.value.needCreation(hState) ||
-            _footerSimulationCreationState.value.needCreation(fState))) {
+    if (velocity.abs() >= tolerance.velocity ||
+        (position.outOfRange || (secondary && oldUserOffset)) &&
+            (oldUserOffset ||
+                _headerSimulationCreationState.value.needCreation(hState) ||
+                _footerSimulationCreationState.value.needCreation(fState))) {
       double mVelocity = velocity;
       // Open secondary speed.
       if (secondary) {
@@ -427,6 +426,6 @@ class _BallisticSimulationCreationState {
   });
 
   bool needCreation(_BallisticSimulationCreationState newState) {
-    return mode != newState.mode || offset != newState.offset || offset == 0;
+    return mode != newState.mode || offset != newState.offset;
   }
 }

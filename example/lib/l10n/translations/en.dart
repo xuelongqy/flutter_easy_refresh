@@ -36,4 +36,5 @@ const en = {
   'Disable': 'Disable',
   'Display balls': 'Display balls',
   'Bezier circle': 'Bezier circle',
+  'Golden campus': 'Golden campus',
 };

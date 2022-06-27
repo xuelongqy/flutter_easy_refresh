@@ -15,8 +15,8 @@ class _BezierIndicator extends StatefulWidget {
   /// False for down and right.
   final bool reverse;
 
-  /// Display the ball during the pull.
-  final bool displayBalls;
+  /// Show the ball during the pull.
+  final bool showBalls;
 
   /// Spin widget.
   final Widget? spinWidget;
@@ -42,7 +42,7 @@ class _BezierIndicator extends StatefulWidget {
     required this.state,
     required this.reverse,
     required this.processedDuration,
-    this.displayBalls = true,
+    this.showBalls = true,
     this.spinWidget,
     this.noMoreWidget,
     this.spinBuilder,
@@ -140,7 +140,7 @@ class _BezierIndicatorState extends State<_BezierIndicator>
           disappearAnimationDuration: widget.processedDuration,
           color: widget.backgroundColor,
         ),
-        if (widget.displayBalls &&
+        if (widget.showBalls &&
             _offset > _safeOffset &&
             widget.state.result != IndicatorResult.noMore)
           Positioned(

@@ -1,48 +1,27 @@
 part of easyrefresh;
 
-/// Bezier header.
-class BezierHeader extends Header {
+class PhoenixHeader extends Header {
   final Key? key;
 
-  /// Show the ball during the pull.
-  final bool showBalls;
+  /// Sky color.
+  final Color? skyColor;
 
-  /// Spin widget.
-  final Widget? spinWidget;
-
-  /// No more widget.
-  final Widget? noMoreWidget;
-
-  /// Spin widget builder.
-  final BezierSpinBuilder? spinBuilder;
-
-  /// Foreground color.
-  final Color? foregroundColor;
-
-  /// Background color.
-  final Color? backgroundColor;
-
-  BezierHeader({
+  PhoenixHeader({
     this.key,
     double triggerOffset = 100,
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.above,
-    Duration processedDuration = kBezierBackgroundDisappearDuration,
+    Duration processedDuration = const Duration(seconds: 1),
     SpringDescription? spring,
-    SpringBuilder readySpringBuilder = kBezierSpringBuilder,
+    SpringBuilder? readySpringBuilder,
     bool springRebound = false,
-    FrictionFactor frictionFactor = kBezierFrictionFactor,
+    FrictionFactor? frictionFactor,
     bool safeArea = true,
     double? infiniteOffset,
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
-    this.showBalls = true,
-    this.spinWidget,
-    this.noMoreWidget,
-    this.spinBuilder,
-    this.foregroundColor,
-    this.backgroundColor,
+    this.skyColor,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -61,17 +40,13 @@ class BezierHeader extends Header {
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    return _BezierIndicator(
+    assert(state.axis == Axis.vertical,
+        'PhoenixHeader does not support horizontal scrolling.');
+    return _PhoenixIndicator(
       key: key,
       state: state,
       reverse: state.reverse,
-      processedDuration: processedDuration,
-      showBalls: showBalls,
-      spinWidget: spinWidget,
-      noMoreWidget: noMoreWidget,
-      spinBuilder: spinBuilder,
-      foregroundColor: foregroundColor,
-      backgroundColor: backgroundColor,
+      skyColor: skyColor,
     );
   }
 }

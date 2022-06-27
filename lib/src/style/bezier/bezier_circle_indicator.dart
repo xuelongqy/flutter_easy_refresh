@@ -100,19 +100,42 @@ class _BezierCircleIndicatorState extends State<_BezierCircleIndicator>
   /// Build ball.
   Widget _buildBall(double offset) {
     return Positioned(
-      top: offset,
-      child: Container(
-        height: _kBallRadius * 2,
-        width: _kBallRadius * 2,
-        decoration: BoxDecoration(
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: CustomPaint(
+        painter: _BallPaint(
           color: _foregroundColor,
-          borderRadius: BorderRadius.circular(_kBallRadius),
+          ballCenterY: offset + _kBallRadius,
+          reboundOffset: _animationController.isAnimating
+              ? _reboundOffsetNotifier.value
+              : null,
         ),
       ),
     );
   }
 
-  /// Build
+  /// Build ball tail.
+  Widget _buildBallTail() {
+    return Positioned(
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: CustomPaint(
+        painter: _BallTailPaint(
+          color: _foregroundColor,
+          ballCenterY: _animationController.value + _kBallRadius,
+          scale: (_actualTriggerOffset - _animationController.value) /
+              (_actualTriggerOffset / 2 + _kBallRadius),
+          reboundOffset: _reboundOffsetNotifier.value,
+        ),
+      ),
+    );
+  }
+
+  /// Build progress
   Widget _buildProgress(double radius, double? value, double opacity) {
     return Positioned(
       top: _actualTriggerOffset / 2 - radius,
@@ -126,6 +149,22 @@ class _BezierCircleIndicatorState extends State<_BezierCircleIndicator>
             strokeWidth: 2,
             value: value,
           ),
+        ),
+      ),
+    );
+  }
+
+  /// Build ball drop
+  Widget _buildBallDrop() {
+    return Positioned(
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: CustomPaint(
+        painter: _BallDropPaint(
+          color: _foregroundColor,
+          ballCenterY: _disappearAnimationController.value + _kBallRadius,
         ),
       ),
     );
@@ -168,18 +207,7 @@ class _BezierCircleIndicatorState extends State<_BezierCircleIndicator>
               if (!_animationController.isAnimating || value < _kBallRadius) {
                 return const SizedBox();
               }
-              return Positioned(
-                top: _animationController.value - _kBallRadius,
-                child: CustomPaint(
-                  painter: _BallTailPaint(
-                    color: _foregroundColor,
-                    bollOffset: _animationController.value - _kBallRadius,
-                    scale: (_actualTriggerOffset - _animationController.value) /
-                        (_actualTriggerOffset / 2 + _kBallRadius),
-                    reboundOffset: _reboundOffsetNotifier.value,
-                  ),
-                ),
-              );
+              return _buildBallTail();
             },
           ),
         ],
@@ -187,6 +215,10 @@ class _BezierCircleIndicatorState extends State<_BezierCircleIndicator>
           AnimatedBuilder(
             animation: _disappearAnimationController,
             builder: (context, _) {
+              if (!_disappearAnimationController.isAnimating &&
+                  !_processedAnimationController.isAnimating) {
+                return const SizedBox();
+              }
               return _buildBall(_disappearAnimationController.isAnimating
                   ? _disappearAnimationController.value
                   : _actualTriggerOffset / 2 - _kBallRadius);
@@ -201,42 +233,113 @@ class _BezierCircleIndicatorState extends State<_BezierCircleIndicator>
                   : const SizedBox();
             },
           ),
+          AnimatedBuilder(
+            animation: _disappearAnimationController,
+            builder: (context, _) {
+              if (!_disappearAnimationController.isAnimating) {
+                return const SizedBox();
+              }
+              return _buildBallDrop();
+            },
+          ),
         ],
       ],
     );
   }
 }
 
-class _BallTailPaint extends CustomPainter {
-  final Color color;
-  final double bollOffset;
-  final double scale;
-  final double reboundOffset;
+Path _getBezierBackgroundPath(Size size, double reboundOffset) {
+  final width = size.width;
+  final height = size.height;
+  final path = Path();
+  path.moveTo(width, height);
+  path.lineTo(width, 0);
+  path.lineTo(0, 0);
+  path.lineTo(0, height);
+  path.quadraticBezierTo(
+    width / 2,
+    (reboundOffset - height) * 2 + height,
+    width,
+    height,
+  );
+  return path;
+}
 
-  _BallTailPaint({
+class _BallPaint extends CustomPainter {
+  final Color color;
+  final double ballCenterY;
+  final double? reboundOffset;
+
+  _BallPaint({
     required this.color,
-    required this.bollOffset,
-    required this.scale,
-    required this.reboundOffset,
+    required this.ballCenterY,
+    this.reboundOffset,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..color = color;
     final width = size.width;
-    final bottom = reboundOffset - bollOffset;
-    final startY = bollOffset + _kBallRadius * scale / 2;
+    final height = size.height;
+    final path = Path();
+    path.addOval(Rect.fromCircle(
+        center: Offset(width / 2, ballCenterY), radius: _kBallRadius));
+    final bgPath = _getBezierBackgroundPath(size, reboundOffset ?? height);
+    canvas.drawPath(Path.combine(PathOperation.intersect, path, bgPath), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return oldDelegate != this;
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _BallPaint &&
+          runtimeType == other.runtimeType &&
+          color == other.color &&
+          ballCenterY == other.ballCenterY &&
+          reboundOffset == other.reboundOffset;
+
+  @override
+  int get hashCode =>
+      color.hashCode ^ ballCenterY.hashCode ^ reboundOffset.hashCode;
+}
+
+class _BallTailPaint extends CustomPainter {
+  final Color color;
+  final double ballCenterY;
+  final double scale;
+  final double reboundOffset;
+
+  _BallTailPaint({
+    required this.color,
+    required this.ballCenterY,
+    required this.scale,
+    required this.reboundOffset,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (reboundOffset - ballCenterY < _kBallRadius) {
+      return;
+    }
+    final paint = Paint()..color = color;
+    final width = size.width;
+    final bottom = reboundOffset;
+    final startY = ballCenterY + _kBallRadius * scale / 2;
     final startX = width / 2 +
         math.sqrt(_kBallRadius * _kBallRadius * (1 - scale * scale / 4));
     final bezier1x = (width / 2 + (_kBallRadius * 3 / 4) * (1 - scale));
     final bezier2x = bezier1x + _kBallRadius;
     final path = Path();
-    path.reset();
     path.moveTo(startX, startY);
     path.quadraticBezierTo(bezier1x, bottom, bezier2x, bottom);
     path.lineTo(width - bezier2x, bottom);
     path.quadraticBezierTo(width - bezier1x, bottom, width - startX, startY);
-    canvas.drawPath(path, paint);
+    final bgPath = _getBezierBackgroundPath(size, reboundOffset);
+    canvas.drawPath(Path.combine(PathOperation.intersect, path, bgPath), paint);
   }
 
   @override
@@ -250,14 +353,72 @@ class _BallTailPaint extends CustomPainter {
       other is _BallTailPaint &&
           runtimeType == other.runtimeType &&
           color == other.color &&
-          bollOffset == other.bollOffset &&
+          ballCenterY == other.ballCenterY &&
           scale == other.scale &&
           reboundOffset == other.reboundOffset;
 
   @override
   int get hashCode =>
       color.hashCode ^
-      bollOffset.hashCode ^
+      ballCenterY.hashCode ^
       scale.hashCode ^
       reboundOffset.hashCode;
+}
+
+class _BallDropPaint extends CustomPainter {
+  final Color color;
+  final double ballCenterY;
+
+  _BallDropPaint({
+    required this.color,
+    required this.ballCenterY,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = color;
+    final height = size.height;
+    final width = size.width;
+    if (ballCenterY > height) {
+      final bezierHeight = _kBallRadius *
+          ((height + 2 * _kBallRadius - ballCenterY) / (3 * _kBallRadius));
+      final bezierWidth = _kBallRadius * _kBallRadius * 2 / bezierHeight;
+      final path = Path();
+      path.moveTo((width - bezierWidth) / 2, height);
+      path.quadraticBezierTo(width / 2, height - bezierHeight * 2,
+          (width + bezierWidth) / 2, height);
+      path.close();
+      canvas.drawPath(path, paint);
+    } else if (ballCenterY > height - _kBallRadius * 2) {
+      final scale = 1 - ((ballCenterY - _kBallRadius) / height);
+      final bottom = height;
+      final startY = ballCenterY + _kBallRadius * scale / 2;
+      final startX = width / 2 +
+          math.sqrt(_kBallRadius * _kBallRadius * (1 - scale * scale / 4));
+      final bezier1x = (width / 2 + (_kBallRadius * 3 / 4) * (1 - scale));
+      final bezier2x = bezier1x + _kBallRadius;
+      final path = Path();
+      path.moveTo(startX, startY);
+      path.quadraticBezierTo(bezier1x, bottom, bezier2x, bottom);
+      path.lineTo(width - bezier2x, bottom);
+      path.quadraticBezierTo(width - bezier1x, bottom, width - startX, startY);
+      canvas.drawPath(path, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return oldDelegate == this;
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _BallDropPaint &&
+          runtimeType == other.runtimeType &&
+          color == other.color &&
+          ballCenterY == other.ballCenterY;
+
+  @override
+  int get hashCode => color.hashCode ^ ballCenterY.hashCode;
 }

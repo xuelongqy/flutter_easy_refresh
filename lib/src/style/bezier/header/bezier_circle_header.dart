@@ -44,6 +44,9 @@ class BezierCircleHeader extends Header {
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
+    assert(state.axis == Axis.vertical,
+        'BezierCircleHeader does not support horizontal scrolling.');
+    assert(!state.reverse, 'BezierCircleHeader does not support reverse.');
     return _BezierCircleIndicator(
       key: key,
       state: state,
