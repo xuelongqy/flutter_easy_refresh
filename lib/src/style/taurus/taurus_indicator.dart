@@ -54,6 +54,13 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
   int _animationSign = 1;
   late AnimationController _disappearAnimationController;
 
+
+  /// Wind parameters.
+  static const _minWindWidth = 30.0;
+  final _windOffsets = <Offset>[];
+  double _windWidth = 0;
+  double get _windViewHeight => _actualTriggerOffset * 3;
+
   Color get _skyColor => widget.skyColor ?? Colors.blue;
 
   IndicatorMode get _mode => widget.state.mode;
@@ -71,6 +78,7 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed &&
           _mode == IndicatorMode.processing) {
+        _updateWind();
         _animationSign = -_animationSign;
         _animationController.forward(from: 0);
       }
@@ -89,8 +97,10 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
 
   /// Mode change listener.
   void _onModeChange(IndicatorMode mode, double offset) {
+    print(mode);
     if (mode == IndicatorMode.processing) {
       if (!_animationController.isAnimating) {
+        _updateWind();
         _animationSign = 1;
         _animationController.forward(from: 0);
       }
@@ -106,21 +116,33 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
     }
   }
 
+  /// Update wind parameters.
+  void _updateWind() {
+    final random = math.Random();
+    _windWidth = _minWindWidth + random.nextDouble() * 30;
+    _windOffsets.clear();
+    final _windSegment = _windViewHeight / 10;
+    for (int i = 0; i < 10; i++) {
+      final dx = random.nextDouble() * 40;
+      final dy = _windSegment * i + random.nextDouble() * _windSegment;
+      _windOffsets.add(Offset(dx, dy));
+    }
+  }
+
   Widget _buildWind(double width) {
+    final windViewWidth = width * 3;
+    final windOffset = _animationController.value * windViewWidth;
     return Positioned(
-      top: 0,
-      left: 0,
-      child: Opacity(
-        opacity: _animationController.isAnimating ? 1 : 0,
-        child: CustomPaint(
-          painter: _WindPainter(
-            offsets: [
-              const Offset(0, 20),
-            ],
-            width: 20,
-          ),
-          size: Size(100, _actualTriggerOffset * 3),
+      top: widget.reverse ? null : 0,
+      bottom: widget.reverse ? 0 : null,
+      left: width - windOffset,
+      height: _windViewHeight,
+      child: CustomPaint(
+        painter: _WindPainter(
+          offsets: _windOffsets,
+          width: _windWidth,
         ),
+        size: Size(100, _windViewHeight),
       ),
     );
   }
@@ -229,7 +251,7 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
                       ),
                     ),
                     // Wind
-                    // _buildWind(width),
+                    _buildWind(width),
                     // Airplane
                     AnimatedBuilder(
                       animation: _disappearAnimationController,
@@ -292,7 +314,7 @@ class _WindPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = const Color(0x88ffffff);
+    final paint = Paint()..color = const Color(0x50ffffff);
     final path = Path();
     for (final offset in offsets) {
       path.addRect(Rect.fromPoints(
