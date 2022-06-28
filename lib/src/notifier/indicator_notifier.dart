@@ -402,11 +402,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     // Do nothing if not out of bounds.
     if (oldOffset == 0 && _offset == 0) {
-      // Handling infinite scroll
-      if (infiniteOffset != null &&
-          (boundaryOffset < infiniteOffset! || _mode == IndicatorMode.done) &&
-          !bySimulation &&
-          !_infiniteExclude(position, value)) {
+      if (_mode == IndicatorMode.done ||
+          // Handling infinite scroll
+          (infiniteOffset != null &&
+              boundaryOffset < infiniteOffset! &&
+              !bySimulation &&
+              !_infiniteExclude(position, value))) {
         // Update mode
         _updateMode();
         notifyListeners();
@@ -441,7 +442,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Update indicator state.
   void _updateMode() {
-    // No task, keep IndicatorMode.done state.
+    // No task, keep IndicatorMode.inactive state.
     if (_task == null) {
       if (_mode != IndicatorMode.inactive) {
         _mode = IndicatorMode.inactive;

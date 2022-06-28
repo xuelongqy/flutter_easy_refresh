@@ -76,7 +76,13 @@ class _BezierCircleIndicatorState extends State<_BezierCircleIndicator>
         _animationController.value = _kBallRadius * 2 + offset;
         _animationController.animateTo(_actualTriggerOffset / 2 - _kBallRadius);
       }
-    } else if (mode == IndicatorMode.processed) {
+      return;
+    } else {
+      if (_animationController.isAnimating) {
+        _animationController.stop();
+      }
+    }
+    if (mode == IndicatorMode.processed) {
       // Processed animation.
       if (!_processedAnimationController.isAnimating) {
         _processedAnimationController.forward(from: 0).then((_) {
@@ -87,10 +93,8 @@ class _BezierCircleIndicatorState extends State<_BezierCircleIndicator>
               .animateTo(_kBallRadius * 2 + _actualTriggerOffset);
         });
       }
+      return;
     } else {
-      if (_animationController.isAnimating) {
-        _animationController.stop();
-      }
       if (_processedAnimationController.isAnimating) {
         _processedAnimationController.stop();
       }

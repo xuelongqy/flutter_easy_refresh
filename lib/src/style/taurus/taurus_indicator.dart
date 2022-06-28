@@ -54,7 +54,6 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
   int _animationSign = 1;
   late AnimationController _disappearAnimationController;
 
-
   /// Wind parameters.
   static const _minWindWidth = 30.0;
   final _windOffsets = <Offset>[];
@@ -97,21 +96,27 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
 
   /// Mode change listener.
   void _onModeChange(IndicatorMode mode, double offset) {
-    print(mode);
     if (mode == IndicatorMode.processing) {
       if (!_animationController.isAnimating) {
         _updateWind();
         _animationSign = 1;
         _animationController.forward(from: 0);
       }
-    } else if (mode == IndicatorMode.processed) {
-      _disappearAnimationController.forward(from: 0);
+      return;
     } else {
       if (_animationController.isAnimating) {
         _animationController.stop();
+        _animationController.reset();
       }
+    }
+    if (mode == IndicatorMode.processed) {
+      if (!_disappearAnimationController.isAnimating) {
+        _disappearAnimationController.forward(from: 0);
+      }
+      return;
+    } else {
       if (_disappearAnimationController.isAnimating) {
-        _animationController.stop();
+        _animationController.stop(canceled: true);
       }
     }
   }
