@@ -75,11 +75,14 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
     _animationController =
         AnimationController(vsync: this, duration: _animationDuration);
     _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed &&
-          _mode == IndicatorMode.processing) {
-        _updateWind();
-        _animationSign = -_animationSign;
-        _animationController.forward(from: 0);
+      if (status == AnimationStatus.completed) {
+        if (_mode == IndicatorMode.processing) {
+          _updateWind();
+          _animationSign = -_animationSign;
+          _animationController.forward(from: 0);
+        } else {
+          _animationController.stop();
+        }
       }
     });
     _disappearAnimationController =
@@ -102,21 +105,13 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
         _animationSign = 1;
         _animationController.forward(from: 0);
       }
-      return;
-    } else {
-      if (_animationController.isAnimating) {
-        _animationController.stop();
-        _animationController.reset();
-      }
-    }
-    if (mode == IndicatorMode.processed) {
+    } else if (mode == IndicatorMode.processed) {
       if (!_disappearAnimationController.isAnimating) {
         _disappearAnimationController.forward(from: 0);
       }
-      return;
     } else {
       if (_disappearAnimationController.isAnimating) {
-        _animationController.stop(canceled: true);
+        _disappearAnimationController.stop();
       }
     }
   }
@@ -166,7 +161,7 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
               builder: (context, _) {
                 // Animation
                 double animationScale = 0;
-                if (_animationController.isAnimating) {
+                if (_mode == IndicatorMode.processing) {
                   final value = _animationController.value;
                   if (value <= 0.5) {
                     animationScale = value / 0.5 * _animationSign;

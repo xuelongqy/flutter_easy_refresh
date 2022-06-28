@@ -46,7 +46,7 @@ class _TaurusPageState extends State<TaurusPage> {
           position: IndicatorPosition.locator,
         ),
         onRefresh: () async {
-          await Future.delayed(const Duration(seconds: 4));
+          await Future.delayed(const Duration(milliseconds: 4200));
           setState(() {
             _count = 10;
           });
