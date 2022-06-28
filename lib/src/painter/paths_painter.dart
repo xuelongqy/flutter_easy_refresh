@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:path_drawing/path_drawing.dart';
 
-class PathsPainter extends CustomPainter {
+/// Paths paint.
+class PathsPaint extends StatefulWidget {
+  /// String to Path.
   static List<Path> parserPaths(List<String> paths) {
     final pathList = <Path>[];
     for (final item in paths) {
@@ -10,26 +12,44 @@ class PathsPainter extends CustomPainter {
     return pathList;
   }
 
-  PathsPainter({
+  /// Paths in String format.
+  final List<String> paths;
+
+  /// The color corresponding to each path.
+  final List<Color> colors;
+
+  /// Drawing width, proportional scaling.
+  final double? width;
+
+  /// Drawing height, proportional scaling.
+  final double? height;
+
+  const PathsPaint({
+    Key? key,
     required this.paths,
     required this.colors,
     this.width,
     this.height,
-  }) {
-    _update();
-  }
+  }) : super(key: key);
 
-  final List<String> paths;
-  final List<Color> colors;
-  final double? width;
-  final double? height;
+  @override
+  State<PathsPaint> createState() => _PathsPaintState();
+}
 
+class _PathsPaintState extends State<PathsPaint> {
   late List<Path> _paths;
   late double _width;
   late double _height;
 
+  @override
+  void initState() {
+    super.initState();
+    _update();
+  }
+
+  /// Update paths and size.
   void _update() {
-    _paths = parserPaths(paths);
+    _paths = PathsPaint.parserPaths(widget.paths);
     Path combinePath = _paths.first;
     for (int i = 1; i < _paths.length; i++) {
       combinePath = Path.combine(PathOperation.union, combinePath, _paths[i]);
@@ -40,24 +60,72 @@ class PathsPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(PathsPainter oldDelegate) {
-    if (oldDelegate.paths != paths) {
+  void didUpdateWidget(covariant PathsPaint oldWidget) {
+    if (oldWidget.paths != widget.paths) {
       _update();
     }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double? sx;
+    double? sy;
+    if (widget.width != null && widget.height != null) {
+      sx = widget.width! / _width;
+      sy = widget.height! / _height;
+    } else if (widget.width != null) {
+      sx = widget.width! / _width;
+    } else if (widget.height != null) {
+      sx = widget.height! / _height;
+    }
+    double width = _width * (sx ?? 1);
+    double height = _height * (sy ?? sx ?? 1);
+    return CustomPaint(
+      painter: PathsPainter(
+        paths: _paths,
+        colors: widget.colors,
+        sx: sx,
+        sy: sy,
+      ),
+      size: Size(width, height),
+    );
+  }
+}
+
+/// Paths painter.
+class PathsPainter extends CustomPainter {
+  PathsPainter({
+    required this.paths,
+    required this.colors,
+    this.sx,
+    this.sy,
+  });
+
+  /// Paths.
+  final List<Path> paths;
+
+  /// The color corresponding to each path.
+  final List<Color> colors;
+
+  /// Width scaling.
+  final double? sx;
+
+  /// Height scaling.
+  final double? sy;
+
+  @override
+  bool shouldRepaint(PathsPainter oldDelegate) {
     return oldDelegate != this;
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (width != null && height != null) {
-      canvas.scale(width! / _width, height! / _height);
-    } else if (width != null) {
-      canvas.scale(width! / _width);
-    } else if (height != null) {
-      canvas.scale(height! / _height);
+    if (sx != null) {
+      canvas.scale(sx!, sy);
     }
-    for (int i = 0; i < _paths.length; i++) {
-      final path = _paths[i];
+    for (int i = 0; i < paths.length; i++) {
+      final path = paths[i];
       final color = colors[i];
       canvas.drawPath(
         path,
@@ -70,7 +138,7 @@ class PathsPainter extends CustomPainter {
 
   @override
   bool hitTest(Offset position) =>
-      _paths.any((element) => element.contains(position));
+      paths.any((element) => element.contains(position));
 
   @override
   bool operator ==(Object other) =>
@@ -79,10 +147,10 @@ class PathsPainter extends CustomPainter {
           runtimeType == other.runtimeType &&
           paths == other.paths &&
           colors == other.colors &&
-          width == other.width &&
-          height == other.height;
+          sx == other.sx &&
+          sy == other.sy;
 
   @override
   int get hashCode =>
-      paths.hashCode ^ colors.hashCode ^ width.hashCode ^ height.hashCode;
+      paths.hashCode ^ colors.hashCode ^ sx.hashCode ^ sy.hashCode;
 }

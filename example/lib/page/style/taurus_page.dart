@@ -39,13 +39,14 @@ class _TaurusPageState extends State<TaurusPage> {
         header: TaurusHeader(
           skyColor: themeData.colorScheme.primary,
           position: IndicatorPosition.locator,
+          safeArea: false,
         ),
         footer: TaurusFooter(
           skyColor: themeData.colorScheme.primary,
           position: IndicatorPosition.locator,
         ),
         onRefresh: () async {
-          await Future.delayed(const Duration(seconds: 2));
+          await Future.delayed(const Duration(seconds: 4));
           setState(() {
             _count = 10;
           });
@@ -53,7 +54,7 @@ class _TaurusPageState extends State<TaurusPage> {
           _controller.resetFooter();
         },
         onLoad: () async {
-          await Future.delayed(const Duration(seconds: 2));
+          await Future.delayed(const Duration(seconds: 4));
           setState(() {
             _count += 5;
           });
@@ -76,7 +77,7 @@ class _TaurusPageState extends State<TaurusPage> {
             const HeaderLocator.sliver(),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                    (context, index) {
+                (context, index) {
                   return const SkeletonItem();
                 },
                 childCount: _count,

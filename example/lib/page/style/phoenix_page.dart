@@ -39,6 +39,7 @@ class _PhoenixPageState extends State<PhoenixPage> {
         header: PhoenixHeader(
           skyColor: themeData.colorScheme.primary,
           position: IndicatorPosition.locator,
+          safeArea: false,
         ),
         footer: PhoenixFooter(
           skyColor: themeData.colorScheme.primary,

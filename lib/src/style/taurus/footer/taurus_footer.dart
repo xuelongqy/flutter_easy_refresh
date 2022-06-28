@@ -11,7 +11,6 @@ class TaurusFooter extends Footer {
     double triggerOffset = 100,
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.above,
-    Duration processedDuration = const Duration(seconds: 1),
     SpringDescription? spring,
     SpringBuilder? readySpringBuilder,
     bool springRebound = false,
@@ -23,26 +22,26 @@ class TaurusFooter extends Footer {
     bool hapticFeedback = false,
     this.skyColor,
   }) : super(
-    triggerOffset: triggerOffset,
-    clamping: clamping,
-    processedDuration: processedDuration,
-    spring: spring,
-    readySpringBuilder: readySpringBuilder,
-    springRebound: springRebound,
-    frictionFactor: frictionFactor,
-    safeArea: safeArea,
-    infiniteOffset: infiniteOffset,
-    hitOver: hitOver,
-    infiniteHitOver: infiniteHitOver,
-    position: position,
-    hapticFeedback: hapticFeedback,
-  );
+          triggerOffset: triggerOffset,
+          clamping: clamping,
+          processedDuration: kTaurusDisappearDuration,
+          spring: spring,
+          readySpringBuilder: readySpringBuilder,
+          springRebound: springRebound,
+          frictionFactor: frictionFactor,
+          safeArea: safeArea,
+          infiniteOffset: infiniteOffset,
+          hitOver: hitOver,
+          infiniteHitOver: infiniteHitOver,
+          position: position,
+          hapticFeedback: hapticFeedback,
+        );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
     assert(state.axis == Axis.vertical,
-    'TaurusFooter does not support horizontal scrolling.');
-    return _PhoenixIndicator(
+        'TaurusFooter does not support horizontal scrolling.');
+    return _TaurusIndicator(
       key: key,
       state: state,
       reverse: state.reverse,
