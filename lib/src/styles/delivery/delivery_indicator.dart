@@ -197,7 +197,7 @@ class _DeliveryIndicatorState extends State<_DeliveryIndicator>
               animation: _animationController,
               builder: (context, _) {
                 double boxBottom = 20;
-                double balloonTop = -270;
+                double balloonTop = -100;
                 if (_mode == IndicatorMode.ready ||
                     _mode == IndicatorMode.processing ||
                     _mode == IndicatorMode.processed ||
@@ -242,10 +242,13 @@ class _DeliveryIndicatorState extends State<_DeliveryIndicator>
                           top: balloonTop,
                           left: 2,
                           duration: _mergeDuration,
-                          child: const PathsPaint(
-                            paths: _balloonPaths,
-                            colors: _balloonColors,
-                            width: _balloonWidth,
+                          child: Opacity(
+                            opacity: balloonTop < 0 ? 0 : 1,
+                            child: const PathsPaint(
+                              paths: _balloonPaths,
+                              colors: _balloonColors,
+                              width: _balloonWidth,
+                            ),
                           ),
                         ),
                       ],

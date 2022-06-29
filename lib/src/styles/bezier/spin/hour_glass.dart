@@ -1,28 +1,24 @@
-import 'dart:math' as math;
-
-import 'package:flutter/widgets.dart';
+part of easyrefresh;
 
 /// Code from [https://github.com/jogboms/flutter_spinkit].
 /// flutter_spinkit LICENSE [https://github.com/jogboms/flutter_spinkit/blob/master/LICENSE].
-class SpinKitHourGlass extends StatefulWidget {
-  const SpinKitHourGlass({
+class _SpinKitHourGlass extends StatefulWidget {
+  const _SpinKitHourGlass({
     Key? key,
     required this.color,
     this.size = 50.0,
     this.duration = const Duration(milliseconds: 1200),
-    this.controller,
   }) : super(key: key);
 
   final Color color;
   final double size;
   final Duration duration;
-  final AnimationController? controller;
 
   @override
   _SpinKitHourGlassState createState() => _SpinKitHourGlassState();
 }
 
-class _SpinKitHourGlassState extends State<SpinKitHourGlass>
+class _SpinKitHourGlassState extends State<_SpinKitHourGlass>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -31,8 +27,7 @@ class _SpinKitHourGlassState extends State<SpinKitHourGlass>
   void initState() {
     super.initState();
 
-    _controller = (widget.controller ??
-        AnimationController(vsync: this, duration: widget.duration))
+    _controller = AnimationController(vsync: this, duration: widget.duration)
       ..addListener(() => setState(() {}))
       ..repeat();
     _animation = Tween(begin: 0.0, end: 8.0).animate(CurvedAnimation(
@@ -42,9 +37,7 @@ class _SpinKitHourGlassState extends State<SpinKitHourGlass>
 
   @override
   void dispose() {
-    if (widget.controller == null) {
-      _controller.dispose();
-    }
+    _controller.dispose();
     super.dispose();
   }
 

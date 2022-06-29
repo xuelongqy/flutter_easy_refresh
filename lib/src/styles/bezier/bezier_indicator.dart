@@ -114,7 +114,7 @@ class _BezierIndicatorState extends State<_BezierIndicator>
         return Transform.scale(
           scale: _animationController.value,
           child: widget.spinWidget ??
-              SpinKitHourGlass(
+              _SpinKitHourGlass(
                 color: _foregroundColor,
                 size: 32,
               ),

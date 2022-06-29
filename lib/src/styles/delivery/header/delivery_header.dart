@@ -23,7 +23,7 @@ class DeliveryHeader extends Header {
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
-          processedDuration: kDeliveryDisappearDuration,
+          processedDuration: const Duration(milliseconds: 100),
           spring: spring,
           readySpringBuilder: readySpringBuilder,
           springRebound: springRebound,

@@ -23,7 +23,7 @@ class DeliveryFooter extends Footer {
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
-          processedDuration: kDeliveryDisappearDuration,
+          processedDuration: const Duration(milliseconds: 100),
           spring: spring,
           readySpringBuilder: readySpringBuilder,
           springRebound: springRebound,
