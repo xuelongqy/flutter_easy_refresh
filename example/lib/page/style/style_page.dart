@@ -213,6 +213,7 @@
 import 'package:example/page/style/bezier_circle_page.dart';
 import 'package:example/page/style/bezier_page.dart';
 import 'package:example/page/style/classical_page.dart';
+import 'package:example/page/style/delivery_page.dart';
 import 'package:example/page/style/material_page.dart';
 import 'package:example/page/style/phoenix_page.dart';
 import 'package:example/page/style/taurus_page.dart';
@@ -282,6 +283,12 @@ class _StylePageState extends State<StylePage> {
                 subtitle: 'Rush to the sky'.tr,
                 icon: Icons.airplanemode_active,
                 onTap: () => Get.to(() => const TaurusPage()),
+              ),
+              ListItem(
+                title: 'Delivery',
+                subtitle: 'Balloon delivery'.tr,
+                icon: Icons.card_giftcard,
+                onTap: () => Get.to(() => const DeliveryPage()),
               ),
             ]),
           ),

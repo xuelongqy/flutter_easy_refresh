@@ -38,4 +38,5 @@ const en = {
   'Bezier circle': 'Bezier circle',
   'Golden campus': 'Golden campus',
   'Rush to the sky': 'Rush to the sky',
+  'Balloon delivery': 'Balloon delivery',
 };

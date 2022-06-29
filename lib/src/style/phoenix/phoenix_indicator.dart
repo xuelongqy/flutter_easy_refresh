@@ -2,6 +2,8 @@ part of easyrefresh;
 
 /// Bezier indicator.
 /// Base widget for [PhoenixHeader] and [PhoenixFooter].
+/// Paths from [https://github.com/scwang90/SmartRefreshLayout/blob/main/refresh-header/src/main/java/com/scwang/smart/refresh/header/PhoenixHeader.java].
+/// SmartRefreshLayout LICENSE [https://github.com/scwang90/SmartRefreshLayout/blob/main/LICENSE].
 class _PhoenixIndicator extends StatefulWidget {
   /// Indicator properties and state.
   final IndicatorState state;
@@ -65,7 +67,7 @@ class _PhoenixIndicatorState extends State<_PhoenixIndicator>
   ];
   static const _skyColors = [
     Color(0x00000000),
-    Color(0x88ffffff),
+    Color(0xffffffff),
   ];
 
   static const _sunPaths = [

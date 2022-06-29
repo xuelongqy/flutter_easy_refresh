@@ -5,6 +5,8 @@ const kTaurusDisappearDuration = Duration(milliseconds: 200);
 
 /// Taurus indicator.
 /// Base widget for [TaurusHeader] and [TaurusFooter].
+/// Paths from [https://github.com/scwang90/SmartRefreshLayout/blob/main/refresh-header/src/main/java/com/scwang/smart/refresh/header/TaurusHeader.java].
+/// SmartRefreshLayout LICENSE [https://github.com/scwang90/SmartRefreshLayout/blob/main/LICENSE].
 class _TaurusIndicator extends StatefulWidget {
   /// Indicator properties and state.
   final IndicatorState state;
@@ -48,6 +50,8 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
     Color(0xdde8f3fd),
     Color(0xfffdfdfd),
   ];
+  static const _cloudWidth = 762.0;
+  static const _cloudHeight = 122.0;
 
   /// Animation controller.
   late AnimationController _animationController;
@@ -153,7 +157,9 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
       builder: (context, constraints) {
         final width = math.min(constraints.maxWidth, _maxWidth);
         final cloudWidth = width * 0.6;
-        return Center(
+        return Container(
+          alignment: Alignment.center,
+          color: _skyColor,
           child: SizedBox(
             width: width,
             child: AnimatedBuilder(
@@ -173,10 +179,19 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
                 double sideCloudWidth = cloudWidth;
                 double sideCloudBottom = _actualTriggerOffset / 3;
                 double centerCloudWidth = width * 0.6;
-                double centerCloudBottom = _actualTriggerOffset / 8;
+                double? centerCloudBottom = _actualTriggerOffset / 8;
+                double? centerCloudTop;
                 if (_offset < _actualTriggerOffset / 2) {
                   sideCloudWidth = cloudWidth * 0.7;
                   centerCloudWidth = centerCloudWidth * 0.8;
+                  if (!widget.reverse) {
+                    final centerCloudHeight =
+                        centerCloudWidth / _cloudWidth * _cloudHeight;
+                    if (_offset < centerCloudHeight - centerCloudBottom) {
+                      centerCloudBottom = null;
+                      centerCloudTop = 0;
+                    }
+                  }
                 } else if (_offset < _actualTriggerOffset / 3 * 2) {
                   final scale = (_actualTriggerOffset / 3 * 2 - _offset) /
                       (_actualTriggerOffset / 3 * 2 - _actualTriggerOffset / 2);
@@ -218,11 +233,9 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
                 return Stack(
                   alignment: Alignment.center,
                   children: [
-                    // Sky
-                    Container(
+                    SizedBox(
                       width: double.infinity,
                       height: _offset,
-                      color: _skyColor,
                     ),
                     // Left cloud
                     Positioned(
@@ -283,7 +296,9 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
                     ),
                     // Center cloud
                     Positioned(
-                      bottom: -centerCloudBottom,
+                      top: centerCloudTop,
+                      bottom:
+                          centerCloudBottom == null ? null : -centerCloudBottom,
                       child: PathsPaint(
                         paths: _cloudPaths,
                         colors: _cloudColors,

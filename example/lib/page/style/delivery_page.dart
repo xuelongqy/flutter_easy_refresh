@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
-class TaurusPage extends StatefulWidget {
-  const TaurusPage({Key? key}) : super(key: key);
+class DeliveryPage extends StatefulWidget {
+  const DeliveryPage({Key? key}) : super(key: key);
 
   @override
-  State<TaurusPage> createState() => _TaurusPageState();
+  State<DeliveryPage> createState() => _DeliveryPageState();
 }
 
-class _TaurusPageState extends State<TaurusPage> {
+class _DeliveryPageState extends State<DeliveryPage> {
   int _count = 10;
   late EasyRefreshController _controller;
 
@@ -36,13 +36,10 @@ class _TaurusPageState extends State<TaurusPage> {
     return Scaffold(
       body: EasyRefresh(
         controller: _controller,
-        header: TaurusHeader(
-          skyColor: themeData.colorScheme.primary,
+        header: DeliveryHeader(
           position: IndicatorPosition.locator,
-          safeArea: false,
         ),
-        footer: TaurusFooter(
-          skyColor: themeData.colorScheme.primary,
+        footer: DeliveryFooter(
           position: IndicatorPosition.locator,
         ),
         onRefresh: () async {
@@ -65,14 +62,9 @@ class _TaurusPageState extends State<TaurusPage> {
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              backgroundColor: themeData.colorScheme.primary,
-              foregroundColor: themeData.colorScheme.onPrimary,
-              expandedHeight: 120,
+              backgroundColor: themeData.scaffoldBackgroundColor,
+              title: Text('Balloon delivery'.tr),
               pinned: true,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text('Rush to the sky'.tr),
-                centerTitle: false,
-              ),
             ),
             const HeaderLocator.sliver(),
             SliverList(

@@ -1,6 +1,5 @@
 library easyrefresh;
 
-import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:async';
 
@@ -41,3 +40,6 @@ part 'src/style/phoenix/footer/phoenix_footer.dart';
 part 'src/style/taurus/taurus_indicator.dart';
 part 'src/style/taurus/header/taurus_header.dart';
 part 'src/style/taurus/footer/taurus_footer.dart';
+part 'src/style/delivery/delivery_indicator.dart';
+part 'src/style/delivery/header/delivery_header.dart';
+part 'src/style/delivery/footer/delivery_footer.dart';
