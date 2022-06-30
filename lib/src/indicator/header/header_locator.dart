@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Find Header's Location
 /// Put the first item in the list

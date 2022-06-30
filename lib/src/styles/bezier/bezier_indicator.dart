@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// A builder that builds a spin widget.
 /// [context] BuildContext.

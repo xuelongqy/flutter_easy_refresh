@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 class TaurusHeader extends Header {
   final Key? key;

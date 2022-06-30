@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Bezier footer.
 class BezierFooter extends Footer {

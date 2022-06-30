@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Bezier circle footer.
 class BezierCircleHeader extends Header {

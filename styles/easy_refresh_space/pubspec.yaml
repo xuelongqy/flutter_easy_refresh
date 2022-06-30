@@ -2,7 +2,7 @@ name: easy_refresh_space
 description: Space Indicator on EasyRefresh.
 version: 1.0.0
 homepage: https://github.com/xuelongqy/flutter_easy_refresh
-repository: https://github.com/xuelongqy/flutter_easy_refresh
+repository: https://github.com/xuelongqy/flutter_easy_refresh/styles/easy_refresh_space
 issue_tracker: https://github.com/xuelongqy/flutter_easy_refresh/issues
 
 environment:
@@ -12,6 +12,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flare_flutter: ^3.0.2
+  flutter_easy_refresh:
+    path: ../../
 
 dev_dependencies:
   flutter_test:

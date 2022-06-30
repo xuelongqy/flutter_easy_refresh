@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Controls a EasyRefresh widget.
 /// Control refresh, loading and indicator states.

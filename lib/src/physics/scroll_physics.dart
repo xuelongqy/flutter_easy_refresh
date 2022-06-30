@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// The multiple applied to overscroll to make it appear that scrolling past
 /// the edge of the scrollable contents is harder than scrolling the list.

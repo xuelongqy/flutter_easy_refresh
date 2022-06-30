@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// The default opening speed of the secondary.
 const double kDefaultSecondaryVelocity = 3000;

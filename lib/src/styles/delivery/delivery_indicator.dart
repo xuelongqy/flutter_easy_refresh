@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Delivery indicator disappear animation duration.
 const kDeliveryDisappearDuration = Duration(milliseconds: 500);

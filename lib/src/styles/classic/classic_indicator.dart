@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Pull icon widget builder.
 typedef CIPullIconBuilder = Widget Function(

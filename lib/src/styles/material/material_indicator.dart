@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// See [ProgressIndicator] _kMinCircularProgressIndicatorSize.
 const double _kCircularProgressIndicatorSize = 48;

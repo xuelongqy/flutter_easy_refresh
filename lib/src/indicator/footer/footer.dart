@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Footer indicator.
 abstract class Footer extends Indicator {

@@ -27,6 +27,12 @@ dependencies:
   convert: ^3.0.2
   flutter_easy_refresh:
     path: ../
+  easy_refresh_space:
+    path: ../styles/easy_refresh_space
+  easy_refresh_squats:
+    path: ../styles/easy_refresh_squats
+  easy_refresh_skating:
+    path: ../styles/easy_refresh_skating
 
 dev_dependencies:
   flutter_test:
@@ -79,4 +85,3 @@ flutter:
   # see https://flutter.io/custom-fonts/#from-packages
   assets:
     - assets/image/
-    - assets/flare/

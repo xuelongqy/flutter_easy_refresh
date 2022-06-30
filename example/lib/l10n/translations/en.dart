@@ -39,4 +39,7 @@ const en = {
   'Golden campus': 'Golden campus',
   'Rush to the sky': 'Rush to the sky',
   'Balloon delivery': 'Balloon delivery',
+  'Star track': 'Star track',
+  'Lumberjack Squats': 'Lumberjack Squats',
+  'Skating boy': 'BSkating boy',
 };

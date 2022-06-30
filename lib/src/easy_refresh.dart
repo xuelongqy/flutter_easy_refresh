@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// EasyRefresh child builder.
 /// Provide [ScrollPhysics], and use it in your [ScrollView].

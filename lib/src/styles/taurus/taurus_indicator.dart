@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Taurus indicator disappear animation duration.
 const kTaurusDisappearDuration = Duration(milliseconds: 200);

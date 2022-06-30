@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Classic footer.
 class ClassicFooter extends Footer {

@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Classic header.
 class ClassicHeader extends Header {

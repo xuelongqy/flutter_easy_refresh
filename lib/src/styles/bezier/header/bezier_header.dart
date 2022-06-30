@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Bezier header.
 class BezierHeader extends Header {

@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 const _kBallRadius = 16.0;
 

@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Define [ScrollBehavior] in the scope of EasyRefresh.
 /// Add support for web and PC.

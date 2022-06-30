@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Header indicator.
 abstract class Header extends Indicator {

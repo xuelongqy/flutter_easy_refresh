@@ -39,4 +39,7 @@ const zhCN = {
   'Golden campus': '金色校园',
   'Rush to the sky': '冲上云霄',
   'Balloon delivery': '气球快递',
+  'Star track': '太空轨道',
+  'Lumberjack Squats': '暴力深蹲',
+  'Skating boy': '滑雪少年',
 };

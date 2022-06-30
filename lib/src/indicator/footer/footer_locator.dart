@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Find Footer's Location
 /// Put the last item in the list

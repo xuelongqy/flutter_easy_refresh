@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 class TaurusFooter extends Footer {
   final Key? key;

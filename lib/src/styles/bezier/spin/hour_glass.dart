@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Code from [https://github.com/jogboms/flutter_spinkit].
 /// flutter_spinkit LICENSE [https://github.com/jogboms/flutter_spinkit/blob/master/LICENSE].

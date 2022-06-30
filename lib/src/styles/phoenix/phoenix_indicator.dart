@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Bezier indicator.
 /// Base widget for [PhoenixHeader] and [PhoenixFooter].
