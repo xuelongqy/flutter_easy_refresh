@@ -113,6 +113,12 @@ class EasyRefresh extends StatefulWidget {
   /// Used when [EasyRefreshController.callLoad].
   final double callLoadOverOffset;
 
+  /// Link [Stack.StackFit]
+  final StackFit fit;
+
+  /// Link [Stack.clipBehavior].
+  final Clip clipBehavior;
+
   /// Default header indicator.
   static Header get _defaultHeader => defaultHeaderBuilder.call();
   static Header Function() defaultHeaderBuilder = _defaultHeaderBuilder;
@@ -145,6 +151,8 @@ class EasyRefresh extends StatefulWidget {
     this.refreshOnStartHeader,
     this.callRefreshOverOffset = 20,
     this.callLoadOverOffset = 20,
+    this.fit = StackFit.loose,
+    this.clipBehavior = Clip.hardEdge,
   })  : childBuilder = null,
         assert(callRefreshOverOffset > 0,
             'callRefreshOverOffset must be greater than 0.'),
@@ -172,6 +180,8 @@ class EasyRefresh extends StatefulWidget {
     this.refreshOnStartHeader,
     this.callRefreshOverOffset = 20,
     this.callLoadOverOffset = 20,
+    this.fit = StackFit.loose,
+    this.clipBehavior = Clip.hardEdge,
   })  : child = null,
         assert(callRefreshOverOffset > 0,
             'callRefreshOverOffset must be greater than 0.'),
@@ -548,14 +558,6 @@ class _EasyRefreshState extends State<EasyRefresh>
     final List<Widget> children = [];
     final hPosition = _headerNotifier.iPosition;
     final fPosition = _footerNotifier.iPosition;
-    // Set safe area offset.
-    // final safePadding = MediaQuery.of(context).padding;
-    // if (hPosition != IndicatorPosition.locator) {
-    //   _headerNotifier._safeOffset = safePadding.top;
-    // }
-    // if (fPosition != IndicatorPosition.locator) {
-    //   _footerNotifier._safeOffset = safePadding.bottom;
-    // }
     // Set the position of widgets.
     if (hPosition == IndicatorPosition.behind) {
       children.add(_buildHeaderView());
@@ -575,8 +577,8 @@ class _EasyRefreshState extends State<EasyRefresh>
       return contentWidget;
     }
     return Stack(
-      clipBehavior: Clip.none,
-      fit: StackFit.expand,
+      clipBehavior: widget.clipBehavior,
+      fit: StackFit.loose,
       children: children,
     );
   }

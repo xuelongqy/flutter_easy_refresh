@@ -7,6 +7,10 @@ const double _kCircularProgressIndicatorSize = 48;
 double kMaterialFrictionFactor(double overscrollFraction) =>
     0.435 * math.pow(1 - overscrollFraction, 2);
 
+/// Friction factor used by material horizontal.
+double kMaterialHorizontalFrictionFactor(double overscrollFraction) =>
+    1.0 * math.pow(1 - overscrollFraction, 2);
+
 /// Spring description used by material.
 SpringDescription kMaterialSpringBuilder({
   required IndicatorMode mode,

@@ -21,6 +21,10 @@ SpringDescription kBezierSpringBuilder({
 double kBezierFrictionFactor(double overscrollFraction) =>
     0.4 * math.pow(1 - overscrollFraction, 2);
 
+/// Horizontal friction factor used by bezier curves.
+double kBezierHorizontalFrictionFactor(double overscrollFraction) =>
+    1.0 * math.pow(1 - overscrollFraction, 2);
+
 /// Default disappear animation duration.
 const Duration kBezierBackgroundDisappearDuration = Duration(milliseconds: 300);
 

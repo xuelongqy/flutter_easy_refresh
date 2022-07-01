@@ -76,6 +76,10 @@ class MaterialFooter extends Footer {
               (showBezierBackground
                   ? kBezierFrictionFactor
                   : kMaterialFrictionFactor),
+          horizontalFrictionFactor: frictionFactor ??
+              (showBezierBackground
+                  ? kBezierHorizontalFrictionFactor
+                  : kMaterialHorizontalFrictionFactor),
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,

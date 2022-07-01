@@ -41,7 +41,7 @@ class _CarouselPageState extends State<CarouselPage> {
       body: EasyRefresh(
         controller: _controller,
         onRefresh: () async {
-          await Future.delayed(const Duration(seconds: 4));
+          await Future.delayed(const Duration(seconds: 2));
           setState(() {
             _count = 10;
           });
@@ -49,7 +49,7 @@ class _CarouselPageState extends State<CarouselPage> {
           _controller.resetFooter();
         },
         onLoad: () async {
-          await Future.delayed(const Duration(seconds: 4));
+          await Future.delayed(const Duration(seconds: 2));
           setState(() {
             _count += 5;
           });
@@ -60,46 +60,44 @@ class _CarouselPageState extends State<CarouselPage> {
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
-              child: SizedBox(
-                height: 180.0,
-                child: EasyRefresh(
-                  header: MaterialHeader(),
-                  footer: MaterialFooter(),
-                  onRefresh: () async {
-                    await Future.delayed(const Duration(seconds: 2), () {
-                      if (mounted) {
-                        setState(() {
-                          _carouselCount = 5;
-                        });
-                      }
-                    });
-                  },
-                  onLoad: () async {
-                    await Future.delayed(const Duration(seconds: 2), () {
-                      if (mounted) {
-                        setState(() {
-                          _carouselCount += 5;
-                        });
-                      }
-                    });
-                  },
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      height: 180.0,
-                      enableInfiniteScroll: false,
-                    ),
-                    items: [
-                      for (int i = 0; i < _carouselCount; i++)
-                        Card(
-                          elevation: 0,
-                          color: themeData.colorScheme.surfaceVariant,
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Center(
-                            child: Text(i.toString()),
-                          ),
-                        ),
-                    ],
+              child: EasyRefresh(
+                header: MaterialHeader(),
+                footer: MaterialFooter(),
+                onRefresh: () async {
+                  await Future.delayed(const Duration(seconds: 2), () {
+                    if (mounted) {
+                      setState(() {
+                        _carouselCount = 5;
+                      });
+                    }
+                  });
+                },
+                onLoad: () async {
+                  await Future.delayed(const Duration(seconds: 2), () {
+                    if (mounted) {
+                      setState(() {
+                        _carouselCount += 5;
+                      });
+                    }
+                  });
+                },
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 180.0,
+                    viewportFraction: 1,
+                    enableInfiniteScroll: false,
+                    autoPlay: true,
                   ),
+                  items: [
+                    for (int i = 0; i < _carouselCount; i++)
+                      Card(
+                        elevation: 0,
+                        color: themeData.colorScheme.surfaceVariant,
+                        child: Center(
+                          child: Text((i + 1).toString()),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),

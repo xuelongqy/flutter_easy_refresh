@@ -30,13 +30,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
             const expandedExtent = _expandedHeight - kToolbarHeight;
             final pixels = state.notifier.position.pixels;
             final height = state.offset + _imgHeight;
-            final clipStartHeight = pixels < expandedExtent
-                ? 0.0
-                : math.min(_imgHeight / 2, pixels - expandedExtent);
             final clipEndHeight = pixels < expandedExtent
                 ? _imgHeight
-                : math.max(
-                    _imgHeight / 2, _imgHeight - pixels + expandedExtent);
+                : math.max(0.0, _imgHeight - pixels + expandedExtent);
+            final imgHeight = pixels < expandedExtent
+                ? _imgHeight
+                : math.max(0.0, _imgHeight - (pixels - expandedExtent));
             return Stack(
               alignment: Alignment.center,
               clipBehavior: Clip.none,
@@ -44,7 +43,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 ClipPath(
                   clipper: _TrapezoidClipper(
                     height: height,
-                    clipStartHeight: clipStartHeight,
+                    clipStartHeight: 0.0,
                     clipEndHeight: clipEndHeight,
                   ),
                   child: Container(
@@ -68,8 +67,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   child: ClipOval(
                     child: Image.asset(
                       'assets/image/user_head.jpg',
-                      height: _imgHeight,
-                      width: _imgHeight,
+                      height: imgHeight,
+                      width: imgHeight,
                     ),
                   ),
                 ),
@@ -87,7 +86,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(
-                  'User profile'.tr,
+                  'Codiss',
                   style: TextStyle(color: themeData.colorScheme.onPrimary),
                 ),
                 centerTitle: true,

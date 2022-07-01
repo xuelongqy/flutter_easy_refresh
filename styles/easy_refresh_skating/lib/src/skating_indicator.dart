@@ -26,9 +26,9 @@ class _SkatingIndicator extends StatefulWidget {
 
 class _SkatingIndicatorState extends State<_SkatingIndicator> {
   StateMachineController? _controller;
-  late SMIInput<double>? _pullAmountInput;
-  late SMITrigger? _pullReleaseTrigger;
-  late SMITrigger? _loadFinishedTrigger;
+  SMIInput<double>? _pullAmountInput;
+  SMITrigger? _pullReleaseTrigger;
+  SMITrigger? _loadFinishedTrigger;
 
   IndicatorMode get _mode => widget.state.mode;
 
@@ -51,10 +51,12 @@ class _SkatingIndicatorState extends State<_SkatingIndicator> {
 
   @override
   void didUpdateWidget(covariant _SkatingIndicator oldWidget) {
-    if (_offset < _actualTriggerOffset) {
-      _pullAmountInput?.value = _offset / _actualTriggerOffset * 100;
-    } else {
-      _pullAmountInput?.value = 100;
+    if (_pullAmountInput != null) {
+      if (_offset < _actualTriggerOffset) {
+        _pullAmountInput?.value = _offset / _actualTriggerOffset * 100;
+      } else {
+        _pullAmountInput?.value = 100;
+      }
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -73,20 +75,20 @@ class _SkatingIndicatorState extends State<_SkatingIndicator> {
   /// Mode change listener.
   void _onModeChange(IndicatorMode mode, double offset) {
     if (mode == IndicatorMode.ready || mode == IndicatorMode.processing) {
-      if (!_pullReleaseTrigger!.value) {
+      if (_pullReleaseTrigger?.value == false) {
         _pullReleaseTrigger!.fire();
       }
     } else {
-      if (_pullReleaseTrigger!.value) {
+      if (_pullReleaseTrigger?.value == true) {
         _pullReleaseTrigger!.advance();
       }
     }
     if (mode == IndicatorMode.processed) {
-      if (!_loadFinishedTrigger!.value) {
+      if (_loadFinishedTrigger?.value == false) {
         _loadFinishedTrigger!.fire();
       }
     } else {
-      if (_loadFinishedTrigger!.value) {
+      if (_loadFinishedTrigger?.value == true) {
         _loadFinishedTrigger!.advance();
       }
     }

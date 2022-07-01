@@ -65,6 +65,36 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   double get secondaryVelocity => _indicator.secondaryVelocity;
 
+  /// Spring description.
+  SpringDescription? get _spring {
+    if (_axis == Axis.horizontal) {
+      return _indicator.horizontalSpring ?? _indicator.spring;
+    } else {
+      return _indicator.spring;
+    }
+  }
+
+  SpringDescription get spring => _physics.spring;
+
+  SpringBuilder? get readySpringBuilder {
+    if (_axis == Axis.horizontal) {
+      return _indicator.horizontalReadySpringBuilder ??
+          _indicator.readySpringBuilder;
+    } else {
+      return _indicator.readySpringBuilder;
+    }
+  }
+
+  FrictionFactor? get _frictionFactor {
+    if (_axis == Axis.horizontal) {
+      return _indicator.horizontalFrictionFactor ?? _indicator.frictionFactor;
+    } else {
+      return _indicator.frictionFactor;
+    }
+  }
+
+  FrictionFactor get frictionFactor => _physics.frictionFactor;
+
   double get secondaryDimension =>
       _indicator.secondaryDimension ?? _position.viewportDimension;
 
@@ -184,13 +214,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     return _offset > 0;
   }
-
-  /// Spring description.
-  SpringDescription? get _spring => _indicator.spring;
-
-  SpringDescription get spring => _physics.spring;
-
-  SpringBuilder? get readySpringBuilder => _indicator.readySpringBuilder;
 
   /// Indicator listenable.
   ValueListenable<IndicatorNotifier> listenable() => _IndicatorListenable(this);

@@ -95,12 +95,11 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   @override
   double frictionFactor(double overscrollFraction) {
     FrictionFactor factor;
-    if (headerNotifier._indicator.frictionFactor != null &&
-        headerNotifier.outOfRange) {
-      factor = headerNotifier._indicator.frictionFactor!;
-    } else if (footerNotifier._indicator.frictionFactor != null &&
+    if (headerNotifier._frictionFactor != null && headerNotifier.outOfRange) {
+      factor = headerNotifier._frictionFactor!;
+    } else if (footerNotifier._frictionFactor != null &&
         footerNotifier.outOfRange) {
-      factor = footerNotifier._indicator.frictionFactor!;
+      factor = footerNotifier._frictionFactor!;
     } else {
       factor = _frictionFactor ?? super.frictionFactor;
     }

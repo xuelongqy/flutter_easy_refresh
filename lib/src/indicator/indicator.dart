@@ -211,8 +211,14 @@ abstract class Indicator {
   /// Spring effect when scrollable goes back.
   final SpringDescription? spring;
 
+  /// Horizontal spring effect when scrollable goes back.
+  final SpringDescription? horizontalSpring;
+
   /// Spring effect when the mode is [IndicatorMode.ready].
   final SpringBuilder? readySpringBuilder;
+
+  /// Horizontal spring effect when the mode is [IndicatorMode.ready].
+  final SpringBuilder? horizontalReadySpringBuilder;
 
   /// Whether the spring can rebound.
   /// Only works with [readySpringBuilder].
@@ -221,6 +227,10 @@ abstract class Indicator {
   /// Friction factor when list is out of bounds.
   /// See [BouncingScrollPhysics.frictionFactor].
   final FrictionFactor? frictionFactor;
+
+  /// Horizontal friction factor when list is out of bounds.
+  /// See [BouncingScrollPhysics.frictionFactor].
+  final FrictionFactor? horizontalFrictionFactor;
 
   /// Infinite scroll trigger offset.
   /// The relative offset of the [Scrollable] from the bounds (>= 0)
@@ -270,9 +280,12 @@ abstract class Indicator {
     this.processedDuration = const Duration(seconds: 1),
     this.safeArea = true,
     this.spring,
+    this.horizontalSpring,
     this.readySpringBuilder,
+    this.horizontalReadySpringBuilder,
     this.springRebound = true,
     this.frictionFactor,
+    this.horizontalFrictionFactor,
     this.infiniteOffset,
     bool? hitOver,
     bool? infiniteHitOver,
