@@ -1,7 +1,7 @@
 # Skating Indicator on EasyRefresh.
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
-[![Pub](https://img.shields.io/pub/v/easy_refresh_space)](https://pub.flutter-io.cn/packages/easy_refresh_skating)
+[![Pub](https://img.shields.io/pub/v/easy_refresh_skating](https://pub.flutter-io.cn/packages/easy_refresh_skating)
 
 Animation from [Pull-to-refresh Animation Example](https://rive.app/community/2233-4412-pull-to-refresh-animation-example)
 

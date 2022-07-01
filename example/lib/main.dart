@@ -18,7 +18,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    Get.put(ThemeController());
     EasyRefresh.defaultHeaderBuilder = () => ClassicHeader(
           dragText: 'Pull to refresh'.tr,
           armedText: 'Release ready'.tr,
@@ -48,16 +47,24 @@ class _MyAppState extends State<MyApp> {
       title: 'EasyRefresh',
       theme: ThemeModel.light,
       darkTheme: ThemeModel.dark,
+      initialBinding: AppBindings(),
       translations: AppTranslations(),
       supportedLocales: AppTranslations.supportedLocales,
       locale: Get.deviceLocale,
       fallbackLocale: AppTranslations.fallbackLocale,
-      home: const HomePage(),
       localizationsDelegates: const [
         GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
+      home: const HomePage(),
     );
+  }
+}
+
+class AppBindings extends Bindings {
+  @override
+  void dependencies() {
+    Get.put(ThemeController(), permanent: true);
   }
 }

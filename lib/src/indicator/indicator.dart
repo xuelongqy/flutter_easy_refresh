@@ -1,7 +1,10 @@
 part of easy_refresh;
 
 /// The default opening speed of the secondary.
-const double kDefaultSecondaryVelocity = 3000;
+const kDefaultSecondaryVelocity = 3000.0;
+
+/// The default secondary close trigger offset.
+const kDefaultSecondaryCloseTriggerOffset = 70.0;
 
 /// Build spring with [IndicatorMode] and offset.
 /// [mode] Indicator mode.
@@ -256,6 +259,11 @@ abstract class Indicator {
   /// Secondary close trigger offset.
   final double secondaryCloseTriggerOffset;
 
+  /// Notify when invisible.
+  /// When [IndicatorNotifier.offset] < 0, scrolling will also trigger notification.
+  /// This might have extra performance overhead, but it's very useful when you need it.
+  final bool notifyWhenInvisible;
+
   const Indicator({
     required this.triggerOffset,
     required this.clamping,
@@ -273,7 +281,8 @@ abstract class Indicator {
     this.hapticFeedback = false,
     this.secondaryVelocity = kDefaultSecondaryVelocity,
     this.secondaryDimension,
-    this.secondaryCloseTriggerOffset = 70,
+    this.secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
+    this.notifyWhenInvisible = false,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,

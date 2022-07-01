@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+part of easy_refresh;
 
 /// Scroll notification interceptor.
 /// Used to intercept sliding events that are always used in inner widget.

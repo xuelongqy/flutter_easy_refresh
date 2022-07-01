@@ -19,6 +19,7 @@ abstract class Footer extends Indicator {
     double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    bool notifyWhenInvisible = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -36,6 +37,7 @@ abstract class Footer extends Indicator {
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
           secondaryDimension: secondaryDimension,
+          notifyWhenInvisible: notifyWhenInvisible,
         );
 }
 

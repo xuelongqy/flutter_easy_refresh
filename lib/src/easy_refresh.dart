@@ -575,6 +575,7 @@ class _EasyRefreshState extends State<EasyRefresh>
       return contentWidget;
     }
     return Stack(
+      clipBehavior: Clip.none,
       fit: StackFit.expand,
       children: children,
     );

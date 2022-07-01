@@ -14,7 +14,7 @@ class SkeletonItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final backgroundColor = themeData.colorScheme.surfaceVariant;
-    final foregroundColor = themeData.splashColor;
+    final foregroundColor = themeData.colorScheme.surface;
     if (direction == Axis.vertical) {
       return Card(
         elevation: 0,

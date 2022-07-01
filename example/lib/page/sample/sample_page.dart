@@ -214,11 +214,14 @@
 //   bool get wantKeepAlive => true;
 // }
 
+import 'package:example/page/sample/carousel_page.dart';
+import 'package:example/page/sample/nested_scroll_view.dart';
+import 'package:example/page/sample/test_page.dart';
+import 'package:example/page/sample/user_profile_page.dart';
+import 'package:example/widget/list_item.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'test.dart';
-import '../../widget/list_item.dart';
 
 class SamplePage extends StatefulWidget {
   const SamplePage({Key? key}) : super(key: key);
@@ -248,13 +251,38 @@ class _SamplePageState extends State<SamplePage> {
           SliverList(
             delegate: SliverChildListDelegate([
               ListItem(
-                title: 'Test',
-                subtitle: 'EasyRefresh test page',
-                icon: Icons.build,
+                title: 'User profile'.tr,
+                subtitle: 'User personal center'.tr,
+                icon: Icons.person,
                 onTap: () {
-                  Get.to(() => const TestPage());
+                  Get.to(() => const UserProfilePage());
                 },
               ),
+              ListItem(
+                title: 'NestedScrollView'.tr,
+                subtitle: 'NestedScrollView example'.tr,
+                icon: Icons.person,
+                onTap: () {
+                  Get.to(() => const NestedScrollViewPage());
+                },
+              ),
+              ListItem(
+                title: 'Carousel'.tr,
+                subtitle: 'Carousel example'.tr,
+                icon: Icons.view_carousel,
+                onTap: () {
+                  Get.to(() => const CarouselPage());
+                },
+              ),
+              if (kDebugMode)
+                ListItem(
+                  title: 'Test',
+                  subtitle: 'EasyRefresh test page',
+                  icon: Icons.build,
+                  onTap: () {
+                    Get.to(() => const TestPage());
+                  },
+                ),
             ]),
           ),
         ],

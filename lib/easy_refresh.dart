@@ -16,6 +16,7 @@ part 'src/physics/scroll_physics.dart';
 part 'src/notifier/indicator_notifier.dart';
 part 'src/behavior/scroll_behavior.dart';
 part 'src/indicator/indicator.dart';
+part 'src/listener/scroll_notification_interceptor.dart';
 part 'src/indicator/header/header.dart';
 part 'src/indicator/header/header_locator.dart';
 part 'src/indicator/footer/footer.dart';

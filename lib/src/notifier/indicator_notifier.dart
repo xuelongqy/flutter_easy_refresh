@@ -359,6 +359,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (_axis != position.axis || _axisDirection != position.axisDirection) {
       _axis = position.axis;
       _axisDirection = position.axisDirection;
+      Future(() {
+        notifyListeners();
+      });
     }
     // Update offset on release
     _updateOffset(position, position.pixels, true);
@@ -410,6 +413,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
               !_infiniteExclude(position, value))) {
         // Update mode
         _updateMode();
+        notifyListeners();
+      }
+      if (_indicator.notifyWhenInvisible && !bySimulation) {
         notifyListeners();
       }
       return;

@@ -19,6 +19,7 @@ abstract class Header extends Indicator {
     double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    bool notifyWhenInvisible = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -36,6 +37,7 @@ abstract class Header extends Indicator {
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
           secondaryDimension: secondaryDimension,
+          notifyWhenInvisible: notifyWhenInvisible,
         );
 }
 
@@ -62,6 +64,7 @@ class BuilderHeader extends Header {
     double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    bool notifyWhenInvisible = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -79,6 +82,7 @@ class BuilderHeader extends Header {
           secondaryVelocity: secondaryVelocity,
           hapticFeedback: hapticFeedback,
           secondaryDimension: secondaryDimension,
+          notifyWhenInvisible: notifyWhenInvisible,
         );
 
   @override

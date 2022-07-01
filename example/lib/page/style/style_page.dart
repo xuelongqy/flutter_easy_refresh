@@ -2,6 +2,7 @@ import 'package:example/page/style/bezier_circle_page.dart';
 import 'package:example/page/style/bezier_page.dart';
 import 'package:example/page/style/classical_page.dart';
 import 'package:example/page/style/delivery_page.dart';
+import 'package:example/page/style/halloween_page.dart';
 import 'package:example/page/style/material_page.dart';
 import 'package:example/page/style/phoenix_page.dart';
 import 'package:example/page/style/skating_page.dart';
@@ -98,6 +99,12 @@ class _StylePageState extends State<StylePage> {
                 subtitle: 'Skating boy'.tr,
                 icon: Icons.skateboarding,
                 onTap: () => Get.to(() => const SkatingPage()),
+              ),
+              ListItem(
+                title: 'Halloween',
+                subtitle: 'Halloween horror'.tr,
+                icon: Icons.whatshot,
+                onTap: () => Get.to(() => const HalloweenPage()),
               ),
             ]),
           ),

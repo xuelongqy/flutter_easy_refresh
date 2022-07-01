@@ -6,14 +6,22 @@ part of easy_refresh;
 class HeaderLocator extends StatelessWidget {
   final bool _isSliver;
 
+  /// Link [SliverGeometry.paintExtent].
+  /// Extent that is always maintained.
+  final double paintExtent;
+
   /// Use in Box
-  const HeaderLocator({Key? key})
-      : _isSliver = false,
+  const HeaderLocator({
+    Key? key,
+    this.paintExtent = 0,
+  })  : _isSliver = false,
         super(key: key);
 
   /// User in Sliver
-  const HeaderLocator.sliver({Key? key})
-      : _isSliver = true,
+  const HeaderLocator.sliver({
+    Key? key,
+    this.paintExtent = 0,
+  })  : _isSliver = true,
         super(key: key);
 
   @override
@@ -30,6 +38,7 @@ class HeaderLocator extends StatelessWidget {
         return _HeaderLocatorRenderWidget(
           child: headerNotifier._build(context),
           isSliver: _isSliver,
+          paintExtent: paintExtent,
         );
       },
     );
@@ -39,23 +48,37 @@ class HeaderLocator extends StatelessWidget {
 class _HeaderLocatorRenderWidget extends SingleChildRenderObjectWidget {
   final bool isSliver;
 
-  const _HeaderLocatorRenderWidget(
-      {Key? key, required Widget? child, required this.isSliver})
-      : super(key: key, child: child);
+  final double paintExtent;
+
+  const _HeaderLocatorRenderWidget({
+    Key? key,
+    required Widget? child,
+    required this.isSliver,
+    required this.paintExtent,
+  }) : super(key: key, child: child);
 
   @override
   RenderObject createRenderObject(BuildContext context) => isSliver
-      ? _HeaderLocatorRenderSliver(context: context)
-      : _HeaderLocatorRenderBox(context: context);
+      ? _HeaderLocatorRenderSliver(
+          context: context,
+          paintExtent: paintExtent,
+        )
+      : _HeaderLocatorRenderBox(
+          context: context,
+          paintExtent: paintExtent,
+        );
 }
 
 /// Use in Box
 class _HeaderLocatorRenderBox extends RenderProxyBox {
   final BuildContext context;
 
+  final double paintExtent;
+
   _HeaderLocatorRenderBox({
     required this.context,
     RenderBox? child,
+    required this.paintExtent,
   }) : super(child);
 
   @override
@@ -65,7 +88,9 @@ class _HeaderLocatorRenderBox extends RenderProxyBox {
   void performLayout() {
     final headerNotifier = EasyRefresh.of(context).headerNotifier;
     final axis = headerNotifier.axis;
-    final double extend = (headerNotifier.offset == 0 ? 0 : 0.0000000001);
+    final double extend = paintExtent == 0
+        ? (headerNotifier.offset == 0 ? 0 : 0.0000000001)
+        : paintExtent;
     if (axis == null) {
       size = constraints.smallest;
     } else {
@@ -115,8 +140,11 @@ class _HeaderLocatorRenderBox extends RenderProxyBox {
 class _HeaderLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
   final BuildContext context;
 
+  final double paintExtent;
+
   _HeaderLocatorRenderSliver({
     required this.context,
+    required this.paintExtent,
     RenderBox? child,
   }) : super(child: child);
 
@@ -138,26 +166,27 @@ class _HeaderLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
         break;
     }
     final double paintedChildSize =
-        calculatePaintOffset(constraints, from: 0.0, to: childExtent);
-    final double cacheExtent =
-        calculateCacheOffset(constraints, from: 0.0, to: childExtent);
+        calculatePaintOffset(constraints, from: 0, to: childExtent);
+    // final double cacheExtent =
+    //     calculateCacheOffset(constraints, from: 0, to: childExtent);
 
     assert(paintedChildSize.isFinite);
-    assert(paintedChildSize >= 0.0);
+    assert(paintedChildSize >= 0);
     final headerNotifier = EasyRefresh.of(context).headerNotifier;
     geometry = SliverGeometry(
       scrollExtent: 0,
-      paintExtent: 0,
+      paintExtent: math.min(childExtent, paintExtent),
       paintOrigin: (constraints.axisDirection == AxisDirection.down ||
                   constraints.axisDirection == AxisDirection.right) &&
               !headerNotifier.clamping
           ? -headerNotifier.offset
           : 0,
-      cacheExtent: cacheExtent,
-      maxPaintExtent: childExtent,
+      // No cache extent.
+      cacheExtent: math.min(childExtent, paintExtent),
+      maxPaintExtent: math.max(childExtent, paintExtent),
       hitTestExtent: paintedChildSize,
       hasVisualOverflow: childExtent > constraints.remainingPaintExtent ||
-          constraints.scrollOffset > 0.0,
+          constraints.scrollOffset > 0,
       visible: true,
     );
     setChildParentData(child!, constraints.copyWith(), geometry!);

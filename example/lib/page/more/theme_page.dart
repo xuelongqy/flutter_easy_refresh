@@ -20,11 +20,13 @@ class ThemeModel {
   static final light = ThemeData(
     brightness: Brightness.light,
     useMaterial3: true,
+    colorSchemeSeed: Colors.green,
   );
 
   static final dark = ThemeData(
     brightness: Brightness.dark,
     useMaterial3: true,
+    colorSchemeSeed: Colors.green,
   );
 
   static final themes = [
@@ -48,10 +50,6 @@ class ThemeModel {
     const ThemeModel(
       name: 'Blue',
       color: Colors.blue,
-    ),
-    const ThemeModel(
-      name: 'Green',
-      color: Colors.green,
     ),
     const ThemeModel(
       name: 'Red',
