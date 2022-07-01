@@ -261,7 +261,7 @@ class _SamplePageState extends State<SamplePage> {
               ListItem(
                 title: 'NestedScrollView'.tr,
                 subtitle: 'NestedScrollView example'.tr,
-                icon: Icons.person,
+                icon: Icons.line_style,
                 onTap: () {
                   Get.to(() => const NestedScrollViewPage());
                 },
