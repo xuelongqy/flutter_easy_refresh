@@ -658,14 +658,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
   }
 
-  /// Build indicator widget.
-  Widget _build(BuildContext context) {
-    if (_axis == null || _axisDirection == null) {
-      return const SizedBox();
-    }
-    return _indicator.build(
-      context,
-      IndicatorState(
+  /// Get indicator state;
+  IndicatorState get indicatorState => IndicatorState(
         indicator: _indicator,
         userOffsetNotifier: userOffsetNotifier,
         notifier: this,
@@ -677,7 +671,16 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         axisDirection: _axisDirection!,
         viewportDimension: _position.viewportDimension,
         actualTriggerOffset: actualTriggerOffset,
-      ),
+      );
+
+  /// Build indicator widget.
+  Widget _build(BuildContext context) {
+    if (_axis == null || _axisDirection == null) {
+      return const SizedBox();
+    }
+    return _indicator.build(
+      context,
+      indicatorState,
     );
   }
 }
@@ -688,9 +691,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 class _IndicatorListenable<T extends IndicatorNotifier>
     extends ValueListenable<T> {
   /// Indicator notifier
-  final T indicatorNotifier;
+  final T _indicatorNotifier;
 
-  _IndicatorListenable(this.indicatorNotifier);
+  _IndicatorListenable(this._indicatorNotifier);
 
   final List<VoidCallback> _listeners = [];
 
@@ -704,7 +707,7 @@ class _IndicatorListenable<T extends IndicatorNotifier>
   @override
   void addListener(VoidCallback listener) {
     if (_listeners.isEmpty) {
-      indicatorNotifier.addListener(_onNotify);
+      _indicatorNotifier.addListener(_onNotify);
     }
     _listeners.add(listener);
   }
@@ -713,12 +716,12 @@ class _IndicatorListenable<T extends IndicatorNotifier>
   void removeListener(VoidCallback listener) {
     _listeners.remove(listener);
     if (_listeners.isEmpty) {
-      indicatorNotifier.removeListener(_onNotify);
+      _indicatorNotifier.removeListener(_onNotify);
     }
   }
 
   @override
-  T get value => indicatorNotifier;
+  T get value => _indicatorNotifier;
 }
 
 /// [Header] notifier

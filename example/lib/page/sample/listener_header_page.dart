@@ -151,3 +151,113 @@
 //     );
 //   }
 // }
+
+import 'dart:math' as math;
+
+import 'package:example/widget/skeleton_item.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easy_refresh/easy_refresh.dart';
+import 'package:get/get.dart';
+
+class ListenerHeaderPage extends StatefulWidget {
+  const ListenerHeaderPage({Key? key}) : super(key: key);
+
+  @override
+  State<ListenerHeaderPage> createState() => _ListenerHeaderPageState();
+}
+
+class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
+  int _count = 10;
+  late EasyRefreshController _controller;
+  final _listenable = IndicatorStateListenable();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = EasyRefreshController(
+      controlFinishRefresh: true,
+      controlFinishLoad: true,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Listener'.tr),
+        actions: [
+          ValueListenableBuilder<IndicatorState?>(
+            valueListenable: _listenable,
+            builder: (context, state, _) {
+              if (state == null) {
+                return const SizedBox();
+              }
+              final mode = state.mode;
+              final offset = state.offset;
+              final actualTriggerOffset = state.actualTriggerOffset;
+              double? value;
+              if (mode == IndicatorMode.drag || mode == IndicatorMode.armed) {
+                const noneOffset = 48 * 0.25;
+                if (offset < noneOffset) {
+                  value = 0;
+                } else {
+                  value = math.min(
+                      (offset - noneOffset) /
+                          (actualTriggerOffset * 1.25 - noneOffset),
+                      1) *
+                      0.75;
+                }
+              }
+              return CircularProgressIndicator(
+                value: value,
+              );
+            },
+          ),
+        ],
+      ),
+      body: EasyRefresh(
+        controller: _controller,
+        header: ListenerHeader(
+          triggerOffset: 70,
+          listenable: _listenable,
+        ),
+        onRefresh: () async {
+          await Future.delayed(const Duration(seconds: 2));
+          setState(() {
+            _count = 10;
+          });
+          _controller.finishRefresh();
+          _controller.resetFooter();
+        },
+        onLoad: () async {
+          await Future.delayed(const Duration(seconds: 2));
+          setState(() {
+            _count += 5;
+          });
+          _controller.finishLoad(_count >= 20
+              ? IndicatorResult.noMore
+              : IndicatorResult.succeeded);
+        },
+        child: CustomScrollView(
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                  return const SkeletonItem();
+                },
+                childCount: _count,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

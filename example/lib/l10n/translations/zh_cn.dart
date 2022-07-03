@@ -55,4 +55,9 @@ const zhCN = {
   'Mail': '邮箱',
   'NestedScrollView example': 'NestedScrollView示例',
   'Carousel example': '轮播示例',
+  'Refresh on start': '启动时刷新',
+  'Refresh when the list is displayed and specify the Header':
+      '列表显示时刷新并指定Header',
+  'Listener': '监听器',
+  'Use listener to respond anywhere': '使用监听器，在任意位置响应',
 };

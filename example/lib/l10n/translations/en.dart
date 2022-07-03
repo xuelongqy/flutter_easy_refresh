@@ -55,4 +55,9 @@ const en = {
   'Mail': 'Mail',
   'NestedScrollView example': 'NestedScrollView example',
   'Carousel example': 'Carousel example',
+  'Refresh on start': 'Refresh on start',
+  'Refresh when the list is displayed and specify the Header':
+      'Refresh when the list is displayed and specify the Header',
+  'Listener': 'Listener',
+  'Use listener to respond anywhere': 'Use listener to respond anywhere',
 };

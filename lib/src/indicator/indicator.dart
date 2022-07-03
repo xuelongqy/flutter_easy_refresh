@@ -192,6 +192,50 @@ class IndicatorState {
 typedef IndicatorBuilder = Widget Function(
     BuildContext context, IndicatorState state);
 
+/// Indicator state listenable.
+class IndicatorStateListenable extends ValueListenable<IndicatorState?> {
+  /// Indicator notifier.
+  IndicatorNotifier? _indicatorNotifier;
+
+  /// Indicator state listeners.
+  final List<VoidCallback> _listeners = [];
+
+  /// Init.
+  void _init(IndicatorNotifier indicatorNotifier) {
+    _indicatorNotifier = indicatorNotifier;
+    if (_listeners.isNotEmpty) {
+      indicatorNotifier.addListener(_onNotify);
+      Future(_onNotify);
+    }
+  }
+
+  /// Listen for notifications
+  void _onNotify() {
+    for (final listener in _listeners) {
+      listener();
+    }
+  }
+
+  @override
+  void addListener(VoidCallback listener) {
+    if (_listeners.isEmpty) {
+      _indicatorNotifier?.addListener(_onNotify);
+    }
+    _listeners.add(listener);
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    _listeners.remove(listener);
+    if (_listeners.isEmpty) {
+      _indicatorNotifier?.removeListener(_onNotify);
+    }
+  }
+
+  @override
+  IndicatorState? get value => _indicatorNotifier?.indicatorState;
+}
+
 /// Refresh and loading indicator.
 /// Indicator configuration and widget builder.
 abstract class Indicator {

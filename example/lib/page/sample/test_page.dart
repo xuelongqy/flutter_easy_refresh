@@ -40,22 +40,23 @@ class _TestPageState extends State<TestPage> {
         refreshOnStart: false,
         controller: _controller,
         refreshOnStartHeader: BuilderHeader(
-            triggerOffset: 70,
-            clamping: false,
-            position: IndicatorPosition.locator,
-            processedDuration: Duration.zero,
-            builder: (ctx, state) {
-              if (state.mode == IndicatorMode.inactive) {
-                return const SizedBox();
-              }
-              return Container(
-                width: double.infinity,
-                height: state.viewportDimension,
-                color: Colors.blue,
-                alignment: Alignment.center,
-                child: const Text('Refresh on start'),
-              );
-            }),
+          triggerOffset: 70,
+          clamping: false,
+          position: IndicatorPosition.locator,
+          processedDuration: Duration.zero,
+          builder: (ctx, state) {
+            if (state.mode == IndicatorMode.inactive) {
+              return const SizedBox();
+            }
+            return Container(
+              width: double.infinity,
+              height: state.viewportDimension,
+              color: Colors.blue,
+              alignment: Alignment.center,
+              child: const Text('Refresh on start'),
+            );
+          },
+        ),
         header: MaterialHeader(),
         footer: MaterialFooter(),
         onRefresh: () async {

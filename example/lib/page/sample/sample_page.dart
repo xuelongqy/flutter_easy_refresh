@@ -215,7 +215,9 @@
 // }
 
 import 'package:example/page/sample/carousel_page.dart';
+import 'package:example/page/sample/listener_header_page.dart';
 import 'package:example/page/sample/nested_scroll_view.dart';
+import 'package:example/page/sample/refresh_on_start_page.dart';
 import 'package:example/page/sample/test_page.dart';
 import 'package:example/page/sample/user_profile_page.dart';
 import 'package:example/widget/list_item.dart';
@@ -272,6 +274,26 @@ class _SamplePageState extends State<SamplePage> {
                 icon: Icons.view_carousel,
                 onTap: () {
                   Get.to(() => const CarouselPage());
+                },
+              ),
+              ListItem(
+                title: 'Refresh on start'.tr,
+                subtitle:
+                    'Refresh when the list is displayed and specify the Header'
+                        .tr,
+                icon: Icons.refresh,
+                onTap: () {
+                  Get.to(() => const RefreshOnStartPage());
+                },
+              ),
+              ListItem(
+                title: 'Listener'.tr,
+                subtitle:
+                'Use listener to respond anywhere'
+                    .tr,
+                icon: Icons.earbuds,
+                onTap: () {
+                  Get.to(() => const ListenerHeaderPage());
                 },
               ),
               if (kDebugMode)

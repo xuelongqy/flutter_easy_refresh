@@ -103,6 +103,65 @@ class BuilderHeader extends Header {
   }
 }
 
+/// Listener header.
+/// Listen to the indicator state and respond anywhere.
+class ListenerHeader extends Header {
+  /// Header widget builder.
+  final IndicatorStateListenable listenable;
+
+  const ListenerHeader({
+    required this.listenable,
+    required double triggerOffset,
+    bool clamping = true,
+    Duration processedDuration = const Duration(seconds: 1),
+    SpringDescription? spring,
+    SpringDescription? horizontalSpring,
+    SpringBuilder? readySpringBuilder,
+    SpringBuilder? horizontalReadySpringBuilder,
+    bool springRebound = true,
+    FrictionFactor? frictionFactor,
+    FrictionFactor? horizontalFrictionFactor,
+    bool safeArea = true,
+    double? infiniteOffset,
+    bool? hitOver,
+    bool? infiniteHitOver,
+    bool hapticFeedback = false,
+    double? secondaryTriggerOffset,
+    double secondaryVelocity = kDefaultSecondaryVelocity,
+    double? secondaryDimension,
+    bool notifyWhenInvisible = false,
+  }) : super(
+    triggerOffset: triggerOffset,
+    clamping: clamping,
+    processedDuration: processedDuration,
+    spring: spring,
+    horizontalSpring: horizontalSpring,
+    readySpringBuilder: readySpringBuilder,
+    horizontalReadySpringBuilder: horizontalReadySpringBuilder,
+    springRebound: springRebound,
+    frictionFactor: frictionFactor,
+    horizontalFrictionFactor: horizontalFrictionFactor,
+    safeArea: safeArea,
+    infiniteOffset: infiniteOffset,
+    hitOver: hitOver,
+    infiniteHitOver: infiniteHitOver,
+    position: IndicatorPosition.custom,
+    secondaryTriggerOffset: secondaryTriggerOffset,
+    secondaryVelocity: secondaryVelocity,
+    hapticFeedback: hapticFeedback,
+    secondaryDimension: secondaryDimension,
+    notifyWhenInvisible: notifyWhenInvisible,
+  );
+
+  @override
+  Widget build(BuildContext context, IndicatorState state) {
+    if (listenable._indicatorNotifier == null) {
+      listenable._init(state.notifier);
+    }
+    return const SizedBox();
+  }
+}
+
 /// Parameters when [EasyRefresh.onRefresh] is null.
 /// Overscroll behavior of [ScrollView].
 class NotRefreshHeader extends Header {

@@ -103,7 +103,7 @@ class EasyRefresh extends StatefulWidget {
 
   /// Header for refresh on start.
   /// Use [header] when null.
-  final BuilderHeader? refreshOnStartHeader;
+  final Header? refreshOnStartHeader;
 
   /// Offset beyond trigger offset when calling refresh.
   /// Used when refreshOnStart is true and [EasyRefreshController.callRefresh].
