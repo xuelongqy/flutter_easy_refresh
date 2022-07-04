@@ -22,6 +22,7 @@ abstract class Header extends Indicator {
     double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
   }) : super(
@@ -44,6 +45,7 @@ abstract class Header extends Indicator {
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
           secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
         );
@@ -75,6 +77,7 @@ class BuilderHeader extends Header {
     double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
   }) : super(
@@ -93,10 +96,11 @@ class BuilderHeader extends Header {
           hitOver: hitOver,
           infiniteHitOver: infiniteHitOver,
           position: position,
+          hapticFeedback: hapticFeedback,
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
-          hapticFeedback: hapticFeedback,
           secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
         );
@@ -130,6 +134,7 @@ class ListenerHeader extends Header {
     double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
   }) : super(
           triggerOffset: triggerOffset,
@@ -151,6 +156,7 @@ class ListenerHeader extends Header {
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
           secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
         );
@@ -172,6 +178,7 @@ abstract class SecondaryHeader extends Header {
     required double secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     IndicatorStateListenable? listenable,
   }) : super(
           triggerOffset: header.triggerOffset,
@@ -193,6 +200,7 @@ abstract class SecondaryHeader extends Header {
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
           secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           notifyWhenInvisible: header.notifyWhenInvisible,
           listenable: listenable ?? header.listenable,
         );
@@ -217,12 +225,14 @@ class SecondaryBuilderHeader extends SecondaryHeader {
     required double secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     IndicatorStateListenable? listenable,
   }) : super(
           header: header,
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
           secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           listenable: listenable,
         );
 

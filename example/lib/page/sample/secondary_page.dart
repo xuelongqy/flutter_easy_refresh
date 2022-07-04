@@ -16,9 +16,10 @@ class SecondaryPage extends StatefulWidget {
 
 class _SecondaryPageState extends State<SecondaryPage> {
   int _count = 10;
+  bool _callOpenSecondary = false;
+  final _secondaryPageKey = GlobalKey();
   late EasyRefreshController _controller;
   final _listenable = IndicatorStateListenable();
-  final _secondaryPageKey = GlobalKey();
 
   @override
   void initState() {
@@ -65,13 +66,16 @@ class _SecondaryPageState extends State<SecondaryPage> {
           listenable: _listenable,
           builder: (context, state, header) {
             final mode = state.mode;
+            final offset = state.offset;
+            final actualSecondaryTriggerOffset =
+                state.actualSecondaryTriggerOffset!;
+            final actualTriggerOffset = state.actualTriggerOffset;
             double scale = 1;
             if (state.offset > state.actualTriggerOffset) {
               scale = math.max(
                   0.0,
-                  (state.actualSecondaryTriggerOffset! - state.offset) /
-                      (state.actualSecondaryTriggerOffset! -
-                          state.actualTriggerOffset));
+                  (actualSecondaryTriggerOffset - offset) /
+                      (actualSecondaryTriggerOffset - actualTriggerOffset));
             }
             return Stack(
               clipBehavior: Clip.none,
@@ -115,6 +119,7 @@ class _SecondaryPageState extends State<SecondaryPage> {
                             mode == IndicatorMode.secondaryClosing) {
                           return WillPopScope(
                             onWillPop: () async {
+                              _controller.closeHeaderSecondary();
                               return false;
                             },
                             child: secondaryPage,
@@ -122,6 +127,24 @@ class _SecondaryPageState extends State<SecondaryPage> {
                         }
                         return secondaryPage;
                       },
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 24,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: AnimatedOpacity(
+                      opacity: mode == IndicatorMode.secondaryArmed &&
+                              !_callOpenSecondary
+                          ? 1
+                          : 0,
+                      duration: const Duration(milliseconds: 200),
+                      child: Text(
+                        'Open the second floor'.tr,
+                        style: themeData.textTheme.titleMedium,
+                      ),
                     ),
                   ),
                 ),
@@ -174,6 +197,16 @@ class _SecondaryPageState extends State<SecondaryPage> {
                   sliver: SliverAppBar(
                     title: Text('Secondary'.tr),
                     pinned: true,
+                    actions: [
+                      IconButton(
+                        onPressed: () async {
+                          _callOpenSecondary = true;
+                          await _controller.openHeaderSecondary();
+                          _callOpenSecondary = false;
+                        },
+                        icon: const Icon(Icons.more_horiz),
+                      ),
+                    ],
                   ),
                 );
               },

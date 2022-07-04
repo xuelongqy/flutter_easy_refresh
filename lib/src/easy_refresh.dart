@@ -402,12 +402,12 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
-  void _callRefresh({
+  Future _callRefresh({
     double? overOffset,
     Duration? duration,
     Curve curve = Curves.linear,
   }) {
-    _headerNotifier.callTask(
+    return _headerNotifier.callTask(
       overOffset: overOffset ?? widget.callRefreshOverOffset,
       duration: duration,
       curve: curve,
@@ -418,12 +418,12 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
-  void _callLoad({
+  Future _callLoad({
     double? overOffset,
     Duration? duration,
     Curve curve = Curves.linear,
   }) {
-    _footerNotifier.callTask(
+    return _footerNotifier.callTask(
       overOffset: overOffset ?? widget.callRefreshOverOffset,
       duration: duration,
       curve: curve,

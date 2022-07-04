@@ -39,7 +39,7 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
       body: EasyRefresh(
         controller: _controller,
         header: ListenerHeader(
-          triggerOffset: 70,
+          triggerOffset: 100,
           listenable: _listenable,
           safeArea: false,
         ),
@@ -87,6 +87,8 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
                     double? value;
                     if (mode == IndicatorMode.inactive) {
                       value = 0;
+                    } else if (mode == IndicatorMode.processing) {
+                      value = null;
                     } else if (mode == IndicatorMode.drag ||
                         mode == IndicatorMode.armed) {
                       value = math.min(offset / actualTriggerOffset, 1) * 0.75;
@@ -117,8 +119,8 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 300),
-                            reverseDuration: const Duration(milliseconds: 200),
+                            duration: const Duration(milliseconds: 200),
+                            reverseDuration: const Duration(milliseconds: 100),
                             transitionBuilder: (child, animation) {
                               return FadeTransition(
                                 child: ScaleTransition(

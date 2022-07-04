@@ -22,6 +22,7 @@ abstract class Footer extends Indicator {
     double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
   }) : super(
@@ -44,6 +45,7 @@ abstract class Footer extends Indicator {
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
           secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
         );
@@ -75,6 +77,7 @@ class BuilderFooter extends Footer {
     double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
   }) : super(
@@ -97,6 +100,7 @@ class BuilderFooter extends Footer {
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
           secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
         );
@@ -130,6 +134,7 @@ class ListenerFooter extends Footer {
     double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
   }) : super(
           triggerOffset: triggerOffset,
@@ -151,6 +156,7 @@ class ListenerFooter extends Footer {
           secondaryVelocity: secondaryVelocity,
           hapticFeedback: hapticFeedback,
           secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
         );
@@ -172,6 +178,7 @@ abstract class SecondaryFooter extends Footer {
     required double secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     IndicatorStateListenable? listenable,
   }) : super(
           triggerOffset: footer.triggerOffset,
@@ -193,6 +200,7 @@ abstract class SecondaryFooter extends Footer {
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
           secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           notifyWhenInvisible: footer.notifyWhenInvisible,
           listenable: listenable ?? footer.listenable,
         );
@@ -217,12 +225,14 @@ class SecondaryBuilderFooter extends SecondaryFooter {
     required double secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     IndicatorStateListenable? listenable,
   }) : super(
           footer: footer,
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
           secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           listenable: listenable,
         );
 

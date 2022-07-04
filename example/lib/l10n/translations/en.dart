@@ -63,4 +63,5 @@ const en = {
   'Secondary': 'Secondary',
   'Combine existing Header with secondary':
       'Combine existing Header with secondary',
+  'Open the second floor': 'Open the second floor',
 };

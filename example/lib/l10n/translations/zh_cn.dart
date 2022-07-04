@@ -62,4 +62,5 @@ const zhCN = {
   'Use listener to respond anywhere': '使用监听器，在任意位置响应',
   'Secondary': '二楼',
   'Combine existing Header with secondary': '将已有的Header结合二楼',
+  'Open the second floor': '打开二楼',
 };

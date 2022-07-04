@@ -28,12 +28,12 @@ class EasyRefreshController {
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
-  void callRefresh({
+  Future callRefresh({
     double? overOffset,
     Duration? duration = const Duration(milliseconds: 200),
     Curve curve = Curves.linear,
-  }) {
-    _state?._callRefresh(
+  }) async {
+    await _state?._callRefresh(
       overOffset: overOffset,
       duration: duration,
       curve: curve,
@@ -44,12 +44,12 @@ class EasyRefreshController {
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
-  void callLoad({
+  Future callLoad({
     double? overOffset,
     Duration? duration = const Duration(milliseconds: 300),
     Curve curve = Curves.linear,
-  }) {
-    _state?._callLoad(
+  }) async {
+    await _state?._callLoad(
       overOffset: overOffset,
       duration: duration,
       curve: curve,
@@ -59,14 +59,49 @@ class EasyRefreshController {
   /// Open header secondary.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
-  void openHeaderSecondary({
+  Future openHeaderSecondary({
     Duration? duration = const Duration(milliseconds: 200),
     Curve curve = Curves.linear,
-  }) {
-    if (_state?._header.secondaryTriggerOffset != null) {
-      _state?._callRefresh(
-        overOffset: _state!._headerNotifier.secondaryDimension -
-            _state!._headerNotifier.actualTriggerOffset,
+  }) async {
+    if (_state == null) {
+      return;
+    }
+    if (_state!._header.secondaryTriggerOffset != null) {
+      final headerNotifier = _state!._headerNotifier;
+      if (headerNotifier.modeLocked ||
+          headerNotifier.noMoreLocked ||
+          headerNotifier.secondaryLocked ||
+          !headerNotifier._canProcess) {
+        return;
+      }
+      await headerNotifier.animateToOffset(
+        offset: headerNotifier.secondaryDimension,
+        mode: IndicatorMode.secondaryOpen,
+        duration: duration,
+        curve: curve,
+      );
+    }
+  }
+
+  /// Close header secondary.
+  /// [duration] See [ScrollPosition.animateTo].
+  /// [curve] See [ScrollPosition.animateTo].
+  Future closeHeaderSecondary({
+    Duration? duration = const Duration(milliseconds: 200),
+    Curve curve = Curves.linear,
+  }) async {
+    if (_state == null) {
+      return;
+    }
+    if (_state!._header.secondaryTriggerOffset != null) {
+      final headerNotifier = _state!._headerNotifier;
+      if (headerNotifier.mode != IndicatorMode.secondaryOpen) {
+        return;
+      }
+      await headerNotifier.animateToOffset(
+        offset: 0,
+        mode: IndicatorMode.inactive,
+        jumpToEdge: false,
         duration: duration,
         curve: curve,
       );
@@ -76,14 +111,49 @@ class EasyRefreshController {
   /// Open footer secondary.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
-  void openFooterSecondary({
+  Future openFooterSecondary({
     Duration? duration = const Duration(milliseconds: 200),
     Curve curve = Curves.linear,
-  }) {
-    if (_state?._footer.secondaryTriggerOffset != null) {
-      _state?._callLoad(
-        overOffset: _state!._footerNotifier.secondaryDimension -
-            _state!._footerNotifier.actualTriggerOffset,
+  }) async {
+    if (_state == null) {
+      return;
+    }
+    if (_state!._footer.secondaryTriggerOffset != null) {
+      final footerNotifier = _state!._footerNotifier;
+      if (footerNotifier.modeLocked ||
+          footerNotifier.noMoreLocked ||
+          footerNotifier.secondaryLocked ||
+          !footerNotifier._canProcess) {
+        return;
+      }
+      await footerNotifier.animateToOffset(
+        offset: footerNotifier.secondaryDimension,
+        mode: IndicatorMode.secondaryOpen,
+        jumpToEdge: false,
+        duration: duration,
+        curve: curve,
+      );
+    }
+  }
+
+  /// Close footer secondary.
+  /// [duration] See [ScrollPosition.animateTo].
+  /// [curve] See [ScrollPosition.animateTo].
+  Future closeFooterSecondary({
+    Duration? duration = const Duration(milliseconds: 200),
+    Curve curve = Curves.linear,
+  }) async {
+    if (_state == null) {
+      return;
+    }
+    if (_state!._footer.secondaryTriggerOffset != null) {
+      final footerNotifier = _state!._footerNotifier;
+      if (footerNotifier.mode != IndicatorMode.secondaryOpen) {
+        return;
+      }
+      await footerNotifier.animateToOffset(
+        offset: 0,
+        mode: IndicatorMode.inactive,
         duration: duration,
         curve: curve,
       );
