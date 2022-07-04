@@ -77,6 +77,9 @@ class ClassicFooter extends Footer {
   /// Build message.
   final CIMessageBuilder? messageBuilder;
 
+  /// Link [Stack.clipBehavior].
+  final Clip clipBehavior;
+
   const ClassicFooter({
     this.key,
     double triggerOffset = 70,
@@ -115,6 +118,7 @@ class ClassicFooter extends Footer {
     this.textBuilder,
     this.messageStyle,
     this.messageBuilder,
+    this.clipBehavior = Clip.hardEdge,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -160,6 +164,7 @@ class ClassicFooter extends Footer {
       textBuilder: textBuilder,
       messageStyle: messageStyle,
       messageBuilder: messageBuilder,
+      clipBehavior: clipBehavior,
     );
   }
 }

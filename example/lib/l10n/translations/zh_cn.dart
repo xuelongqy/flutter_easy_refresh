@@ -60,4 +60,6 @@ const zhCN = {
       '列表显示时刷新并指定Header',
   'Listener': '监听器',
   'Use listener to respond anywhere': '使用监听器，在任意位置响应',
+  'Secondary': '二楼',
+  'Combine existing Header with secondary': '将已有的Header结合二楼',
 };

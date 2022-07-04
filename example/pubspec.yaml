@@ -26,6 +26,7 @@ dependencies:
   get: ^4.6.5
   convert: ^3.0.2
   carousel_slider: ^4.1.1
+  rive: ^0.9.0
   flutter_easy_refresh:
     path: ../
   easy_refresh_space:
@@ -88,3 +89,4 @@ flutter:
   # see https://flutter.io/custom-fonts/#from-packages
   assets:
     - assets/image/
+    - assets/rive/

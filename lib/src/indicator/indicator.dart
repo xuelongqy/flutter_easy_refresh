@@ -139,6 +139,13 @@ class IndicatorState {
   /// [triggerOffset] + [safeOffset]
   final double actualTriggerOffset;
 
+  /// Trigger offset for secondary.
+  double? get secondaryTriggerOffset => indicator.secondaryTriggerOffset;
+
+  /// Actual secondary trigger offset.
+  double? get actualSecondaryTriggerOffset =>
+      notifier.actualSecondaryTriggerOffset;
+
   /// Whether the scroll view direction is reversed.
   /// [AxisDirection.up] or [AxisDirection.left]
   bool get reverse =>
@@ -192,6 +199,10 @@ class IndicatorState {
 typedef IndicatorBuilder = Widget Function(
     BuildContext context, IndicatorState state);
 
+/// Secondary indicator widget builder.
+typedef SecondaryIndicatorBuilder = Widget Function(
+    BuildContext context, IndicatorState state, Indicator indicator);
+
 /// Indicator state listenable.
 class IndicatorStateListenable extends ValueListenable<IndicatorState?> {
   /// Indicator notifier.
@@ -200,13 +211,19 @@ class IndicatorStateListenable extends ValueListenable<IndicatorState?> {
   /// Indicator state listeners.
   final List<VoidCallback> _listeners = [];
 
-  /// Init.
-  void _init(IndicatorNotifier indicatorNotifier) {
+  /// Bind [IndicatorNotifier].
+  void _bind(IndicatorNotifier indicatorNotifier) {
     _indicatorNotifier = indicatorNotifier;
     if (_listeners.isNotEmpty) {
       indicatorNotifier.addListener(_onNotify);
       Future(_onNotify);
     }
+  }
+
+  /// Unbind [IndicatorNotifier].
+  void _unbind() {
+    _indicatorNotifier?.removeListener(_onNotify);
+    _indicatorNotifier = null;
   }
 
   /// Listen for notifications
@@ -318,6 +335,10 @@ abstract class Indicator {
   /// This might have extra performance overhead, but it's very useful when you need it.
   final bool notifyWhenInvisible;
 
+  /// Indicator state listenable.
+  /// Monitor state changes in real time.
+  final IndicatorStateListenable? listenable;
+
   const Indicator({
     required this.triggerOffset,
     required this.clamping,
@@ -340,6 +361,7 @@ abstract class Indicator {
     this.secondaryDimension,
     this.secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     this.notifyWhenInvisible = false,
+    this.listenable,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,

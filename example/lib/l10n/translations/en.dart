@@ -60,4 +60,7 @@ const en = {
       'Refresh when the list is displayed and specify the Header',
   'Listener': 'Listener',
   'Use listener to respond anywhere': 'Use listener to respond anywhere',
+  'Secondary': 'Secondary',
+  'Combine existing Header with secondary':
+      'Combine existing Header with secondary',
 };

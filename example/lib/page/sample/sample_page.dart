@@ -218,6 +218,7 @@ import 'package:example/page/sample/carousel_page.dart';
 import 'package:example/page/sample/listener_header_page.dart';
 import 'package:example/page/sample/nested_scroll_view.dart';
 import 'package:example/page/sample/refresh_on_start_page.dart';
+import 'package:example/page/sample/secondary_page.dart';
 import 'package:example/page/sample/test_page.dart';
 import 'package:example/page/sample/user_profile_page.dart';
 import 'package:example/widget/list_item.dart';
@@ -288,12 +289,18 @@ class _SamplePageState extends State<SamplePage> {
               ),
               ListItem(
                 title: 'Listener'.tr,
-                subtitle:
-                'Use listener to respond anywhere'
-                    .tr,
+                subtitle: 'Use listener to respond anywhere'.tr,
                 icon: Icons.earbuds,
                 onTap: () {
                   Get.to(() => const ListenerHeaderPage());
+                },
+              ),
+              ListItem(
+                title: 'Secondary'.tr,
+                subtitle: 'Combine existing Header with secondary'.tr,
+                icon: Icons.view_agenda,
+                onTap: () {
+                  Get.to(() => const SecondaryPage());
                 },
               ),
               if (kDebugMode)

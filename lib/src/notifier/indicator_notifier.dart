@@ -43,6 +43,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         _task = task {
     _initClampingAnimation();
     userOffsetNotifier.addListener(_onUserOffset);
+    indicator.listenable?._bind(this);
   }
 
   double get triggerOffset => _indicator.triggerOffset;
@@ -268,6 +269,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     userOffsetNotifier.removeListener(_onUserOffset);
     _task = null;
     _modeChangeListeners.clear();
+    _indicator.listenable?._unbind();
     super.dispose();
   }
 
@@ -323,7 +325,11 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     FutureOr Function()? task,
     bool? waitTaskRefresh,
   }) {
-    _indicator = indicator ?? _indicator;
+    if (indicator != null) {
+      _indicator.listenable?._unbind();
+      indicator.listenable?._bind(this);
+      _indicator = indicator;
+    }
     _noMoreProcess = noMoreProcess ?? _noMoreProcess;
     _task = task;
     _waitTaskResult = waitTaskRefresh ?? _waitTaskResult;
@@ -659,19 +665,24 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   }
 
   /// Get indicator state;
-  IndicatorState get indicatorState => IndicatorState(
-        indicator: _indicator,
-        userOffsetNotifier: userOffsetNotifier,
-        notifier: this,
-        mode: mode,
-        result: _result,
-        offset: offset,
-        safeOffset: safeOffset,
-        axis: _axis!,
-        axisDirection: _axisDirection!,
-        viewportDimension: _position.viewportDimension,
-        actualTriggerOffset: actualTriggerOffset,
-      );
+  IndicatorState? get indicatorState {
+    if (_axis == null || _axisDirection == null) {
+      return null;
+    }
+    return IndicatorState(
+      indicator: _indicator,
+      userOffsetNotifier: userOffsetNotifier,
+      notifier: this,
+      mode: mode,
+      result: _result,
+      offset: offset,
+      safeOffset: safeOffset,
+      axis: _axis!,
+      axisDirection: _axisDirection!,
+      viewportDimension: _position.viewportDimension,
+      actualTriggerOffset: actualTriggerOffset,
+    );
+  }
 
   /// Build indicator widget.
   Widget _build(BuildContext context) {
@@ -680,7 +691,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     return _indicator.build(
       context,
-      indicatorState,
+      indicatorState!,
     );
   }
 }

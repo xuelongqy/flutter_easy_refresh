@@ -1,157 +1,3 @@
-// import 'dart:async';
-//
-// import 'package:example/widget/sample_list_item.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_easyrefresh/easy_refresh.dart';
-// import 'package:example/generated/i18n.dart';
-//
-// /// LinkHeader示例
-// class LinkHeaderPage extends StatefulWidget {
-//   @override
-//   LinkHeaderPageState createState() {
-//     return LinkHeaderPageState();
-//   }
-// }
-//
-// class LinkHeaderPageState extends State<LinkHeaderPage> {
-//   // 总数
-//   int _count = 20;
-//   // 连接通知器
-//   late LinkHeaderNotifier _headerNotifier;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _headerNotifier = LinkHeaderNotifier();
-//   }
-//
-//   @override
-//   void dispose() {
-//     super.dispose();
-//     _headerNotifier.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: EasyRefresh.custom(
-//         header: LinkHeader(
-//           _headerNotifier,
-//           extent: 70.0,
-//           triggerDistance: 70.0,
-//           completeDuration: Duration(milliseconds: 500),
-//         ),
-//         slivers: <Widget>[
-//           SliverAppBar(
-//             expandedHeight: 180.0,
-//             pinned: true,
-//             backgroundColor: Colors.white,
-//             flexibleSpace: FlexibleSpaceBar(
-//               centerTitle: false,
-//               title: Text(S.of(context).linkHeader),
-//             ),
-//             actions: <Widget>[
-//               CircleHeader(
-//                 _headerNotifier,
-//               ),
-//             ],
-//           ),
-//           SliverList(
-//             delegate: SliverChildBuilderDelegate(
-//               (context, index) {
-//                 return SampleListItem();
-//               },
-//               childCount: _count,
-//             ),
-//           ),
-//         ],
-//         onRefresh: () async {
-//           await Future.delayed(Duration(seconds: 2), () {
-//             if (mounted) {
-//               setState(() {
-//                 _count = 20;
-//               });
-//             }
-//           });
-//         },
-//         onLoad: () async {
-//           await Future.delayed(Duration(seconds: 2), () {
-//             if (mounted) {
-//               setState(() {
-//                 _count += 20;
-//               });
-//             }
-//           });
-//         },
-//       ),
-//     );
-//   }
-// }
-//
-// // 圆形Header
-// class CircleHeader extends StatefulWidget {
-//   final LinkHeaderNotifier linkNotifier;
-//
-//   const CircleHeader(this.linkNotifier, {Key? key}) : super(key: key);
-//
-//   @override
-//   CircleHeaderState createState() {
-//     return CircleHeaderState();
-//   }
-// }
-//
-// class CircleHeaderState extends State<CircleHeader> {
-//   // 指示器值
-//   double? _indicatorValue = 0.0;
-//
-//   RefreshMode get _refreshState => widget.linkNotifier.refreshState;
-//   double get _pulledExtent => widget.linkNotifier.pulledExtent;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     widget.linkNotifier.addListener(onLinkNotify);
-//   }
-//
-//   void onLinkNotify() {
-//     setState(() {
-//       if (_refreshState == RefreshMode.armed ||
-//           _refreshState == RefreshMode.refresh) {
-//         _indicatorValue = null;
-//       } else if (_refreshState == RefreshMode.refreshed ||
-//           _refreshState == RefreshMode.done) {
-//         _indicatorValue = 1.0;
-//       } else {
-//         if (_refreshState == RefreshMode.inactive) {
-//           _indicatorValue = 0.0;
-//         } else {
-//           double indicatorValue = _pulledExtent / 70.0 * 0.8;
-//           _indicatorValue = indicatorValue < 0.8 ? indicatorValue : 0.8;
-//         }
-//       }
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Container(
-//         alignment: Alignment.center,
-//         margin: EdgeInsets.only(
-//           right: 20.0,
-//         ),
-//         width: 24.0,
-//         height: 24.0,
-//         child: CircularProgressIndicator(
-//           value: _indicatorValue,
-//           valueColor: AlwaysStoppedAnimation(Colors.black),
-//           strokeWidth: 2.4,
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'dart:math' as math;
 
 import 'package:example/widget/skeleton_item.dart';
@@ -190,43 +36,12 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Listener'.tr),
-        actions: [
-          ValueListenableBuilder<IndicatorState?>(
-            valueListenable: _listenable,
-            builder: (context, state, _) {
-              if (state == null) {
-                return const SizedBox();
-              }
-              final mode = state.mode;
-              final offset = state.offset;
-              final actualTriggerOffset = state.actualTriggerOffset;
-              double? value;
-              if (mode == IndicatorMode.drag || mode == IndicatorMode.armed) {
-                const noneOffset = 48 * 0.25;
-                if (offset < noneOffset) {
-                  value = 0;
-                } else {
-                  value = math.min(
-                      (offset - noneOffset) /
-                          (actualTriggerOffset * 1.25 - noneOffset),
-                      1) *
-                      0.75;
-                }
-              }
-              return CircularProgressIndicator(
-                value: value,
-              );
-            },
-          ),
-        ],
-      ),
       body: EasyRefresh(
         controller: _controller,
         header: ListenerHeader(
           triggerOffset: 70,
           listenable: _listenable,
+          safeArea: false,
         ),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));
@@ -247,9 +62,84 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
         },
         child: CustomScrollView(
           slivers: [
+            SliverAppBar(
+              expandedHeight: 180.0,
+              pinned: true,
+              backgroundColor: Colors.white,
+              flexibleSpace: FlexibleSpaceBar(
+                centerTitle: false,
+                title: Text(
+                  'Listener'.tr,
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.titleLarge?.color),
+                ),
+              ),
+              actions: [
+                ValueListenableBuilder<IndicatorState?>(
+                  valueListenable: _listenable,
+                  builder: (context, state, _) {
+                    if (state == null) {
+                      return const SizedBox();
+                    }
+                    final mode = state.mode;
+                    final offset = state.offset;
+                    final actualTriggerOffset = state.actualTriggerOffset;
+                    double? value;
+                    if (mode == IndicatorMode.inactive) {
+                      value = 0;
+                    } else if (mode == IndicatorMode.drag ||
+                        mode == IndicatorMode.armed) {
+                      value = math.min(offset / actualTriggerOffset, 1) * 0.75;
+                    } else if (mode == IndicatorMode.ready ||
+                        mode == IndicatorMode.processing) {
+                      value == null;
+                    } else {
+                      value = 1;
+                    }
+                    Widget indicator;
+                    if (value != null && value < 0.1) {
+                      indicator = const SizedBox();
+                    } else if (value == 1) {
+                      indicator = Icon(
+                        Icons.done,
+                        color: themeData.colorScheme.primary,
+                      );
+                    } else {
+                      indicator = RefreshProgressIndicator(
+                        backgroundColor: Colors.transparent,
+                        value: value,
+                      );
+                    }
+                    return SizedBox(
+                      width: 56,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            reverseDuration: const Duration(milliseconds: 200),
+                            transitionBuilder: (child, animation) {
+                              return FadeTransition(
+                                child: ScaleTransition(
+                                  child: child,
+                                  scale: animation,
+                                ),
+                                opacity: animation,
+                              );
+                            },
+                            child: indicator,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                    (context, index) {
+                (context, index) {
                   return const SkeletonItem();
                 },
                 childCount: _count,

@@ -95,6 +95,9 @@ class _ClassicIndicator extends StatefulWidget {
   /// Build message.
   final CIMessageBuilder? messageBuilder;
 
+  /// Link [Stack.clipBehavior].
+  final Clip clipBehavior;
+
   const _ClassicIndicator({
     Key? key,
     required this.state,
@@ -122,6 +125,7 @@ class _ClassicIndicator extends StatefulWidget {
     this.textBuilder,
     this.messageStyle,
     this.messageBuilder,
+    this.clipBehavior = Clip.hardEdge,
   })  : assert(
             mainAxisAlignment == MainAxisAlignment.start ||
                 mainAxisAlignment == MainAxisAlignment.center ||
@@ -339,6 +343,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
   /// When the list direction is vertically.
   Widget _buildVerticalWidget() {
     return Stack(
+      clipBehavior: widget.clipBehavior,
       children: [
         if (_mainAxisAlignment == MainAxisAlignment.center)
           Positioned(
@@ -409,6 +414,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
   /// When the list direction is horizontally.
   Widget _buildHorizontalWidget() {
     return Stack(
+      clipBehavior: widget.clipBehavior,
       children: [
         if (_mainAxisAlignment == MainAxisAlignment.center)
           Positioned(
