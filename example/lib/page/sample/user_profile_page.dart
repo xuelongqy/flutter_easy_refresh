@@ -106,8 +106,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title: Text('QQ group'.tr),
                       subtitle: const Text('554981921'),
                       onTap: () {
-                        launchUrl(Uri.parse(
-                            'mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q'));
+                        launchUrl(
+                          Uri.parse(
+                              'mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q'),
+                        );
                       },
                     ),
                     ListTile(
