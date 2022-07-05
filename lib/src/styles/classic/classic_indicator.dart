@@ -279,8 +279,11 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
         icon = SizedBox(
           key: const ValueKey(IndicatorResult.succeeded),
           child: widget.succeededIcon ??
-              const Icon(
-                Icons.done,
+              Transform.rotate(
+                angle: _axis == Axis.vertical ? 0 : -math.pi / 2,
+                child: const Icon(
+                  Icons.done,
+                ),
               ),
         );
       }
