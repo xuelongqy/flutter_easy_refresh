@@ -1,7 +1,7 @@
 part of easy_refresh;
 
 /// Taurus indicator disappear animation duration.
-const kTaurusDisappearDuration = Duration(milliseconds: 200);
+const kTaurusDisappearDuration = Duration(milliseconds: 250);
 
 /// Taurus indicator.
 /// Base widget for [TaurusHeader] and [TaurusFooter].
@@ -159,7 +159,10 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
         final cloudWidth = width * 0.6;
         return Container(
           alignment: Alignment.center,
-          color: _skyColor,
+          decoration: BoxDecoration(
+            color: _skyColor,
+          ),
+          clipBehavior: Clip.hardEdge,
           child: SizedBox(
             width: width,
             child: AnimatedBuilder(
@@ -231,6 +234,7 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
                   airplaneAngle = math.min(airplaneAngle, math.pi / 9);
                 }
                 return Stack(
+                  clipBehavior: Clip.none,
                   alignment: Alignment.center,
                   children: [
                     SizedBox(
@@ -273,11 +277,12 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
                             _mode == IndicatorMode.done) {
                           final value = _disappearAnimationController.value;
                           airplaneTop =
-                              (_actualTriggerOffset - _airplaneHeight) /
-                                  2 *
-                                  (1 - value);
+                              (_actualTriggerOffset + _airplaneHeight * 2) /
+                                      2 *
+                                      (1 - value) -
+                                  _airplaneHeight / 2 * 3;
                           airplaneLeft = (width - _airplaneWidth) / 2 +
-                              (width / 2 + _airplaneWidth) * value;
+                              (width / 2 + _airplaneWidth * 3) * value;
                         }
                         return Positioned(
                           top: airplaneTop - (animationScale * 4.0),

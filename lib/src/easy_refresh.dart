@@ -69,13 +69,13 @@ class EasyRefresh extends StatefulWidget {
   /// Refresh callback.
   /// Triggered on refresh.
   /// The Header current state is [IndicatorMode.processing].
-  /// More link [IndicatorNotifier.onTask].
+  /// More see [IndicatorNotifier.onTask].
   final FutureOr Function()? onRefresh;
 
   /// Load callback.
   /// Triggered on load.
   /// The Footer current state is [IndicatorMode.processing].
-  /// More link [IndicatorNotifier.onTask].
+  /// More see [IndicatorNotifier.onTask].
   final FutureOr Function()? onLoad;
 
   /// Structure that describes a spring's constants.
@@ -113,10 +113,10 @@ class EasyRefresh extends StatefulWidget {
   /// Used when [EasyRefreshController.callLoad].
   final double callLoadOverOffset;
 
-  /// Link [Stack.StackFit]
+  /// See [Stack.StackFit]
   final StackFit fit;
 
-  /// Link [Stack.clipBehavior].
+  /// See [Stack.clipBehavior].
   final Clip clipBehavior;
 
   /// Default header indicator.

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,9 +31,7 @@ class ThemeModel {
     ThemeModel(
       name: 'System',
       mode: ThemeMode.system,
-      icon: Platform.isAndroid || Platform.isIOS
-          ? Icons.phone_android
-          : Icons.computer,
+      icon: GetPlatform.isMobile ? Icons.phone_android : Icons.computer,
     ),
     const ThemeModel(
       name: 'Light',

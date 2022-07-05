@@ -54,6 +54,7 @@ const en = {
   'Phone': 'Phone',
   'Mail': 'Mail',
   'NestedScrollView example': 'NestedScrollView example',
+  'Carousel': 'Carousel',
   'Carousel example': 'Carousel example',
   'Refresh on start': 'Refresh on start',
   'Refresh when the list is displayed and specify the Header':
@@ -64,4 +65,7 @@ const en = {
   'Combine existing Header with secondary':
       'Combine existing Header with secondary',
   'Open the second floor': 'Open the second floor',
+  'Chat': 'Chat',
+  'Chat page example': 'Chat page example',
+  'PageView example': 'PageView example',
 };

@@ -215,8 +215,10 @@
 // }
 
 import 'package:example/page/sample/carousel_page.dart';
+import 'package:example/page/sample/chat_page.dart';
 import 'package:example/page/sample/listener_header_page.dart';
 import 'package:example/page/sample/nested_scroll_view.dart';
+import 'package:example/page/sample/page_view_page.dart';
 import 'package:example/page/sample/refresh_on_start_page.dart';
 import 'package:example/page/sample/secondary_page.dart';
 import 'package:example/page/sample/test_page.dart';
@@ -301,6 +303,22 @@ class _SamplePageState extends State<SamplePage> {
                 icon: Icons.view_agenda,
                 onTap: () {
                   Get.to(() => const SecondaryPage());
+                },
+              ),
+              ListItem(
+                title: 'Chat'.tr,
+                subtitle: 'Chat page example'.tr,
+                icon: Icons.chat,
+                onTap: () {
+                  Get.to(() => const ChatPage());
+                },
+              ),
+              ListItem(
+                title: 'PageView',
+                subtitle: 'PageView example'.tr,
+                icon: Icons.pages,
+                onTap: () {
+                  Get.to(() => const PageViewPage());
                 },
               ),
               if (kDebugMode)

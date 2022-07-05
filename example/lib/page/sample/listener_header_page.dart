@@ -65,7 +65,6 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
             SliverAppBar(
               expandedHeight: 180.0,
               pinned: true,
-              backgroundColor: Colors.white,
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: false,
                 title: Text(

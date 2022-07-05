@@ -6,7 +6,7 @@ part of easy_refresh;
 class HeaderLocator extends StatelessWidget {
   final bool _isSliver;
 
-  /// Link [SliverGeometry.paintExtent].
+  /// See [SliverGeometry.paintExtent].
   /// Extent that is always maintained.
   final double paintExtent;
 

@@ -54,6 +54,7 @@ const zhCN = {
   'Phone': '电话',
   'Mail': '邮箱',
   'NestedScrollView example': 'NestedScrollView示例',
+  'Carousel': '轮播',
   'Carousel example': '轮播示例',
   'Refresh on start': '启动时刷新',
   'Refresh when the list is displayed and specify the Header':
@@ -63,4 +64,7 @@ const zhCN = {
   'Secondary': '二楼',
   'Combine existing Header with secondary': '将已有的Header结合二楼',
   'Open the second floor': '打开二楼',
+  'Chat': '聊天',
+  'Chat page example': '聊天页面示例',
+  'PageView example': 'PageView 示例',
 };

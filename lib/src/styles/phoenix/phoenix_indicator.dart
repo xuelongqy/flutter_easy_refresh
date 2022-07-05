@@ -149,7 +149,9 @@ class _PhoenixIndicatorState extends State<_PhoenixIndicator>
               top: _offset < _actualTriggerOffset
                   ? _actualTriggerOffset - (_offset * 0.9)
                   : _actualTriggerOffset * 0.1,
-              left: constraints.maxWidth * 0.3 + sunSize / 2,
+              left: (constraints.maxWidth - width) / 2 +
+                  width * 0.3 +
+                  sunSize / 2,
               child: AnimatedBuilder(
                 animation: _animationController,
                 builder: (context, child) {
