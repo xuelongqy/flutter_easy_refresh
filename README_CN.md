@@ -42,7 +42,7 @@
   EasyRefresh.builder(
     onRefresh: () async {
       ....
-      return IndicatorResult.succeeded; 
+      return IndicatorResult.success; 
     },
     onLoad: () async {
       ....

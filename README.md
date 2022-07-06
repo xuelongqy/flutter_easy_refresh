@@ -42,7 +42,7 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
   EasyRefresh.builder(
     onRefresh: () async {
       ....
-      return IndicatorResult.succeeded; 
+      return IndicatorResult.success; 
     },
     onLoad: () async {
       ....
