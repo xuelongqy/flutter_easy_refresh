@@ -58,7 +58,7 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
           });
           _controller.finishLoad(_count >= 20
               ? IndicatorResult.noMore
-              : IndicatorResult.succeeded);
+              : IndicatorResult.success);
         },
         child: CustomScrollView(
           slivers: [

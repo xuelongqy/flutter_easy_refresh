@@ -90,7 +90,7 @@ class _PageViewPageState extends State<PageViewPage> {
           });
           _controller.finishLoad(_count >= 20
               ? IndicatorResult.noMore
-              : IndicatorResult.succeeded);
+              : IndicatorResult.success);
         },
         child: PageView.builder(
           controller: _pageController,

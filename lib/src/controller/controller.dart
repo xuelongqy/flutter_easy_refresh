@@ -172,7 +172,7 @@ class EasyRefreshController {
 
   /// Finish the refresh task and return the result.
   /// [result] Result of task completion.
-  void finishRefresh([IndicatorResult result = IndicatorResult.succeeded]) {
+  void finishRefresh([IndicatorResult result = IndicatorResult.success]) {
     assert(controlFinishRefresh,
         'Please set controlFinishRefresh to true, then use.');
     _state?._headerNotifier._finishTask(result);
@@ -180,7 +180,7 @@ class EasyRefreshController {
 
   /// Finish the load task and return the result.
   /// [result] Result of task completion.
-  void finishLoad([IndicatorResult result = IndicatorResult.succeeded]) {
+  void finishLoad([IndicatorResult result = IndicatorResult.success]) {
     assert(controlFinishRefresh,
         'Please set controlFinishLoad to true, then use.');
     _state?._footerNotifier._finishTask(result);

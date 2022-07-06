@@ -71,10 +71,10 @@ enum IndicatorResult {
   none,
 
   /// Task succeeded.
-  succeeded,
+  success,
 
   /// Task failed.
-  failed,
+  fail,
 
   /// No more data.
   noMore,

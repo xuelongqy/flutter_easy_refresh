@@ -44,7 +44,7 @@ class _ClassicIndicator extends StatefulWidget {
   /// Text on [IndicatorResult.noMore].
   final String noMoreText;
 
-  /// Text on [IndicatorMode.failed].
+  /// Text on [IndicatorResult.fail].
   final String failedText;
 
   /// Whether to display text.
@@ -71,10 +71,10 @@ class _ClassicIndicator extends StatefulWidget {
   /// False for down and right.
   final bool reverse;
 
-  /// Icon when [IndicatorResult.succeeded].
+  /// Icon when [IndicatorResult.success].
   final Widget? succeededIcon;
 
-  /// Icon when [IndicatorResult.failed].
+  /// Icon when [IndicatorResult.fail].
   final Widget? failedIcon;
 
   /// Icon when [IndicatorResult.noMore].
@@ -223,7 +223,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
         return widget.processingText;
       case IndicatorMode.processed:
       case IndicatorMode.done:
-        if (_result == IndicatorResult.failed) {
+        if (_result == IndicatorResult.fail) {
           return widget.failedText;
         } else {
           return widget.processedText;
@@ -267,9 +267,9 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
       );
     } else if (_mode == IndicatorMode.processed ||
         _mode == IndicatorMode.done) {
-      if (_result == IndicatorResult.failed) {
+      if (_result == IndicatorResult.fail) {
         icon = SizedBox(
-          key: const ValueKey(IndicatorResult.failed),
+          key: const ValueKey(IndicatorResult.fail),
           child: widget.failedIcon ??
               const Icon(
                 Icons.error_outline,
@@ -277,7 +277,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
         );
       } else {
         icon = SizedBox(
-          key: const ValueKey(IndicatorResult.succeeded),
+          key: const ValueKey(IndicatorResult.success),
           child: widget.succeededIcon ??
               Transform.rotate(
                 angle: _axis == Axis.vertical ? 0 : -math.pi / 2,

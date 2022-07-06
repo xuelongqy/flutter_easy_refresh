@@ -4,13 +4,12 @@
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
 [![Pub](https://img.shields.io/pub/v/flutter_easy_refresh)](https://pub.flutter-io.cn/packages/flutter_easy_refresh)
 
-## [English](/README_EN.md) | 中文
+## [English](/README.md) | 中文
 
-正如名字一样，EasyRefresh很容易就能在Flutter应用上实现下拉刷新以及上拉加载操作，它支持几乎所有的Flutter控件。它的功能与Android的SmartRefreshLayout很相似，同样也吸取了很多三方库的优点。EasyRefresh中集成了多种风格的Header和Footer，但是它并没有局限性，你可以很轻松的自定义。使用Flutter强大的动画，甚至随便一个简单的控件也可以完成。EasyRefresh的目标是为Flutter打造一个强大，稳定，成熟的下拉刷新框架。
+正如名字一样，EasyRefresh很容易就能在Flutter应用上实现下拉刷新以及上拉加载操作，它支持几乎所有的Flutter滚动组件。它的功能与Android的SmartRefreshLayout很相似，同样也吸取了很多三方库的优点。EasyRefresh中集成了多种风格的Header和Footer，但是它并没有局限性，你可以很轻松的自定义。使用Flutter强大的动画，甚至随便一个简单的控件也可以完成。EasyRefresh的目标是为Flutter打造一个强大，稳定，成熟的下拉刷新框架。
 
 ### [在线演示](https://xuelongqy.github.io/flutter_easy_refresh/)
 ### [APK下载](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/v2/art/pkg/EasyRefresh.apk)
-
 
 ## 特点功能:
 
@@ -25,117 +24,106 @@
  - 自定义滚动参数，让列表具有不同的滚动反馈和惯性
 
 ## 简单用例
-#### 1.在 pubspec.yaml 中添加依赖
-```
-//pub方式
-dependencies:
-  flutter_easyrefresh: version
-
-//导入方式
-dependencies:
-  flutter_easyrefresh:
-    path: 项目路径
-
-//git方式
-dependencies:
-  flutter_easyrefresh:
-    git:
-      url: git://github.com/xuelongqy/flutter_easyrefresh.git
-```
-#### 2.在布局文件中添加 EasyreFresh
+#### 1.默认构造器
+ - child作用域内，所有滚动组件会公用一个physics。如果有滚动嵌套，请使用EasyRefresh.builder或用ScrollConfiguration设置作用域
 ```dart
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-....
-  // 方式一
   EasyRefresh(
-    child: ScrollView(),
-    onRefresh: () async{
+    onRefresh: () async {
       ....
     },
     onLoad: () async {
       ....
     },
+    child: ListView(),
   )
-  // 方式二
-  EasyRefresh.custom(
-    slivers: <Widget>[],
-    onRefresh: () async{
-      ....
-    },
-    onLoad: () async {
-      ....
-    },
-  )
-  // 方式三
+```
+#### 2.builder构造器
+```dart
   EasyRefresh.builder(
-    builder: (context, physics, header, footer) {
-      return CustomScrollView(
-        physics: physics,
-        slivers: <Widget>[
-          ...
-          header,
-          ...
-          footer,
-        ],
-      );
-    }
-    onRefresh: () async{
+    onRefresh: () async {
       ....
+      return IndicatorResult.succeeded; 
     },
     onLoad: () async {
       ....
+    },
+    childBuilder: (context, physics) {
+      return ListView(
+        physics: physics,
+      );
     },
   )
 ```
-#### 3.触发刷新和加载动作
+#### 3.指示器定位
 ```dart
-  EasyRefreshController _controller = EasyRefreshController();
+  EasyRefresh.builder(
+    header: Header(
+      position: IndicatorPosition.locator,
+    ),
+    footer: Footer(
+      position: IndicatorPosition.locator,
+    ),
+    onRefresh: () async {
+      ....
+    },
+    onLoad: () async {
+      ....
+      return IndicatorResult.noMore;
+    },
+    child: CustomScrollView(
+      slivers: [
+        SliverAppBar(),
+        const HeaderLocator.sliver(),
+        ...
+        const FooterLocator.sliver(),
+        ],
+      ),
+  )
+```
+#### 4.控制器使用
+```dart
+  EasyRefreshController _controller = EasyRefreshController(
+    controlFinishRefresh: true,
+    controlFinishLoad: true,
+  );
   ....
   EasyRefresh(
     controller: _controller,
+    onRefresh: () async {
+      ....
+      _controller.finishRefresh();
+      _controller.resetFooter();
+    },
+    onLoad: () async {
+      ....
+      _controller.finishLoad(IndicatorResult.noMore);
+    },
     ....
   );
   ....
   _controller.callRefresh();
   _controller.callLoad();
 ```
-#### 4.控制加载和刷新完成
+#### 5.使用指定的 Header 和 Footer
 ```dart
-  EasyRefreshController _controller = EasyRefreshController();
-  ....
   EasyRefresh(
-	enableControlFinishRefresh: true,
-	enableControlFinishLoad: true,
-    ....
-  );
-  ....
-  _controller.finishRefresh(success: true);
-  _controller.finishLoad(success： true, noMore: false);
-```
-
-## 使用指定的 Header 和 Footer
-```dart
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_easyrefresh/material_header.dart';
-import 'package:flutter_easyrefresh/material_footer.dart';
-....
-  new EasyRefresh(
     header: MaterialHeader(),
     footer: MaterialFooter(),
-    child: ScrollView(),
+    child: ListView(),
     ....
   )
+  // 全局设置
+  EasyRefresh.defaultHeaderBuilder = () => ClassicHeader();
+  EasyRefresh.defaultFooterBuilder = () => ClassicFooter();
 ```
 
+## 欢迎贡献
+一个人的维护是孤独的。如果你有好的建议和改动，欢迎贡献你的代码。如果你有非常酷的样式，能够分享给大家那就更酷了。
 
-# 捐赠
-如果你喜欢我的项目，请在项目右上角 "Star" 一下。你的支持是我最大的鼓励！ ^_^
-你也还可以扫描下面的二维码，或者通过[![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/paypalme/xuelongqy)，对作者进行打赏。  
+# 赞赏
+如果你喜欢我的项目，请在项目右上角 "Star" 一下。你的支持是我最大的鼓励！ ^_^ 你还可以扫描下面的二维码，对作者进行打赏。  
 
 ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_alipay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_wxpay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_tencent.jpg?raw=true)
-
-如果在捐赠留言中备注名称，将会被记录到列表中~ 如果你也是github开源作者，捐赠时可以留下github项目地址或者个人主页地址，链接将会被添加到列表中起到互相推广的作用  
-[捐赠列表](https://github.com/xuelongqy/donation/blob/master/DONATIONLIST.md)
 
 ### QQ讨论群 - 554981921
 #### 进群须知

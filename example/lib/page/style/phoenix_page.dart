@@ -60,7 +60,7 @@ class _PhoenixPageState extends State<PhoenixPage> {
           });
           _controller.finishLoad(_count >= 20
               ? IndicatorResult.noMore
-              : IndicatorResult.succeeded);
+              : IndicatorResult.success);
         },
         child: CustomScrollView(
           slivers: [

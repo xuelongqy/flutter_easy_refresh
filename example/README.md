@@ -1,6 +1,6 @@
 # example
 
-A new Flutter project.
+EasyRefresh example.
 
 ## Getting Started
 

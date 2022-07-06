@@ -66,8 +66,8 @@ class _TestPageState extends State<TestPage> {
             _count = 10;
           });
           print('Refreshed');
-          _controller.finishRefresh(IndicatorResult.succeeded);
-          return IndicatorResult.succeeded;
+          _controller.finishRefresh(IndicatorResult.success);
+          return IndicatorResult.success;
         },
         onLoad: () async {
           print('Loading');
@@ -76,7 +76,7 @@ class _TestPageState extends State<TestPage> {
             _count += 0;
           });
           print('Loaded');
-          return IndicatorResult.succeeded;
+          return IndicatorResult.success;
         },
         // child: ListView.builder(
         //   padding: EdgeInsets.zero,

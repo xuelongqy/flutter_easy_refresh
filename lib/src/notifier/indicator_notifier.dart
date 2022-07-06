@@ -601,10 +601,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         if (res is IndicatorResult) {
           _result = res;
         } else {
-          _result = IndicatorResult.succeeded;
+          _result = IndicatorResult.success;
         }
       } catch (_) {
-        _result = IndicatorResult.failed;
+        _result = IndicatorResult.fail;
         rethrow;
       } finally {
         _setMode(IndicatorMode.processed);
@@ -617,7 +617,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Finish task and return the result.
   /// [result] Result of task completion.
-  void _finishTask([IndicatorResult result = IndicatorResult.succeeded]) {
+  void _finishTask([IndicatorResult result = IndicatorResult.success]) {
     if (!_waitTaskResult) {
       _result = result;
       _setMode(IndicatorMode.processed);

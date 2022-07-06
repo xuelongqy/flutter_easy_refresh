@@ -56,7 +56,7 @@ class _HalloweenPageState extends State<HalloweenPage> {
           });
           _controller.finishLoad(_count >= 20
               ? IndicatorResult.noMore
-              : IndicatorResult.succeeded);
+              : IndicatorResult.success);
         },
         child: CustomScrollView(
           slivers: [

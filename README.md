@@ -1,204 +1,167 @@
-# flutter_easyrefresh
+# flutter_easy_refresh
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/pub/v/flutter_easyrefresh)](https://pub.dev/packages/flutter_easyrefresh)
+[![Pub](https://img.shields.io/pub/v/flutter_easy_refresh)](https://pub.flutter-io.cn/packages/flutter_easy_refresh)
 
-## English | [中文](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/README.md)
+## English | [中文](/README_CN.md)
 
-Just like the name, EasyRefresh can easily implement pull-down refresh and upload operations on Flutter applications. It supports almost all Flutter controls. Its functions are similar to Android's Smart Refresh Layout, and it also draws on the advantages of many tripartite libraries. EasyRefresh integrates various styles of Headers and Footers, but it has no limitations. You can easily customize it. Using Flutter's powerful animation, even a simple control can be done. EasyRefresh aims to build a strong, stable and mature drop-down refresh framework for Flutter.
+Just like the name, EasyRefresh can easily implement pull-down refresh and pull-up load on Flutter applications. It supports almost all Flutter Scrollable widgets. Its function is very similar to Android's SmartRefreshLayout, and it also absorbs the advantages of many third-party libraries. EasyRefresh integrates various styles of Header and Footer, but it has no limitations, you can easily customize it. Using Flutter's powerful animations, even just a simple control can be done. The goal of EasyRefresh is to create a powerful, stable and mature pull-to-refresh framework for Flutter.
 
-Web version: [vue-easyrefresh](https://github.com/xuelongqy/vue-easyrefresh)
-
-Demo：[Download apk](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/v2/art/pkg/EasyRefresh.apk) | [web](https://xuelongqy.github.io/flutter_easyrefresh/)
-
-![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/apk_QRCode.png)
+### [Online demo](https://xuelongqy.github.io/flutter_easy_refresh/)
+### [APK download](https://github.com/xuelongqy/flutter_easyrefresh/raw/master/v2/art/pkg/EasyRefresh.apk)
 
 ## Features:
 
- - Support for most Widgets
- - Support custom and has integrated a lot of cool Header and Footer
- - Support pull refresh, on the load (controllable trigger)
- - Support the Header and Footer list embedded and view the floating two forms
- - Support list event listener, make any look of Header and Footer, and can be placed anywhere
- - Support for first refresh and custom view
- - Support for custom list empty view
-
-## Portal
-
- - [Properties document](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/en/PROPERTY.md)
- - [FAQ](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/en/FQA.md)
- - [Change log](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/CHANGELOG.md)
- - [Custom Header and Footer](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/document/en/CUSTOM_HEADER_FOOTER.md)
-
-#### Project presentations
-|Basic|User profile|
-|:---:|:---:|
-|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/basic.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/user_profile.gif)|
-|[BasicPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/sample/basic.dart)|[UserProfilePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/sample/user_profile.dart)|
-
-|NestedScrollView|Link header|
-|:---:|:---:|
-|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/nested_scroll_view.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/link_header.gif)|
-|[NestedScrollViewPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/sample/nested_scroll_view.dart)|[LinkHeaderPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/sample/link_header.dart)|
-
-|First refresh|Empty widget|
-|:---:|:---:|
-|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/first_refresh.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/empty.gif)|
-|[FirstRefreshPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/sample/first_refresh.dart)|[EmptyPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/sample/empty.dart)|
-
-|Second floor|Chat demo|
-|Second floor|Chat demo|
-|:---:|:---:|
-|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/second_floor.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/chat.gif)|
-|[SecondFloorPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/sample/second_floor.dart)|[ChatPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/sample/chat.dart)|
-
-#### Style presentations
-|Material|BallPulse|
-|:---:|:---:|
-|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/material.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/ball_pulse.gif)|
-|[MaterialPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/style/material.dart)|[BallPulsePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/style/ball_pulse.dart)|
-
-|BezierCircle|BezierHourGlass|
-|:---:|:---:|
-|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/bezier_circle.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/bezier_hour_glass.gif)|
-|[BezierCirclePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/style/bezier_circle.dart)|[BezierHourGlassPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/style/bezier_hour_glass.dart)|
-
-|Phoenix|Delivery|
-|:---:|:---:|
-|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/phoenix.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/taurus.gif)|
-|[PhoenixPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/style/phoenix.dart)|[TaurusPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/style/taurus.dart)|
-
-|Space|Delivery|
-|:---:|:---:|
-|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/space.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_easyrefresh/master/v2/art/image/delivery.gif)|
-|[SpacePage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/style/space.dart)|[DeliveryPage](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/style/delivery.dart)|
+- Supports all scrollable widgets
+- Scrolling physics scope, exactly matching scrollable widgets
+- Integrate multiple cool Header and Footer
+- Support custom styles to achieve various animation effects
+- Support pull-down refresh, pull-up load (Can be triggered and finished with a controller)
+- Support indicator position setting, combined with listeners can also be placed in any position
+- Support refresh when the page starts, and customize the view
+- Support safe area, no more occlusion
+- Customize scroll parameters to allow lists to have different scrolling feedback and inertia
 
 ## Sample
-#### 1.Adding dependencies to pubspec. yaml
-```
-//pub
-dependencies:
-  flutter_easyrefresh: version
-
-//import
-dependencies:
-  flutter_easyrefresh:
-    path: Your path
-
-//git
-dependencies:
-  flutter_easyrefresh:
-    git:
-      url: git://github.com/xuelongqy/flutter_easyrefresh.git
-```
-#### 2.Add EasyreFresh
+#### 1. Default constructor
+- In the child scope, all scrolling components will share one physics. If there is scroll nesting, use EasyRefresh.builder or set the scope with ScrollConfiguration
 ```dart
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-....
-  // Way one
   EasyRefresh(
-    child: ScrollView(),
-    onRefresh: () async{
+    onRefresh: () async {
       ....
     },
     onLoad: () async {
       ....
     },
+    child: ListView(),
   )
-  // Way two
-  EasyRefresh.custom(
-    slivers: <Widget>[],
-    onRefresh: () async{
-      ....
-    },
-    onLoad: () async {
-      ....
-    },
-  )
-  // Way three
+```
+#### 2. builder constructor
+```dart
   EasyRefresh.builder(
-    builder: (context, physics, header, footer) {
-      return CustomScrollView(
-        physics: physics,
-        slivers: <Widget>[
-          ...
-          header,
-          ...
-          footer,
-        ],
-      );
-    }
-    onRefresh: () async{
+    onRefresh: () async {
       ....
+      return IndicatorResult.succeeded; 
     },
     onLoad: () async {
       ....
+    },
+    childBuilder: (context, physics) {
+      return ListView(
+        physics: physics,
+      );
     },
   )
 ```
-#### 3.Trigger refresh and load action
+#### 3. Indicator locate
 ```dart
-  EasyRefreshController _controller = EasyRefreshController();
+  EasyRefresh.builder(
+    header: Header(
+      position: IndicatorPosition.locator,
+    ),
+    footer: Footer(
+      position: IndicatorPosition.locator,
+    ),
+    onRefresh: () async {
+      ....
+    },
+    onLoad: () async {
+      ....
+      return IndicatorResult.noMore;
+    },
+    child: CustomScrollView(
+      slivers: [
+        SliverAppBar(),
+        const HeaderLocator.sliver(),
+        ...
+        const FooterLocator.sliver(),
+        ],
+      ),
+  )
+```
+#### 4. Use controller
+```dart
+  EasyRefreshController _controller = EasyRefreshController(
+    controlFinishRefresh: true,
+    controlFinishLoad: true,
+  );
   ....
   EasyRefresh(
     controller: _controller,
+    onRefresh: () async {
+      ....
+      _controller.finishRefresh();
+      _controller.resetFooter();
+    },
+    onLoad: () async {
+      ....
+      _controller.finishLoad(IndicatorResult.noMore);
+    },
     ....
   );
   ....
   _controller.callRefresh();
   _controller.callLoad();
 ```
-#### 4.Control loading and refreshing completed
+#### 5. Specify Header and Footer
 ```dart
-  EasyRefreshController _controller = EasyRefreshController();
-  ....
   EasyRefresh(
-	enableControlFinishRefresh: true,
-	enableControlFinishLoad: true,
-    ....
-  );
-  ....
-  _controller.finishRefresh(success: true);
-  _controller.finishLoad(success： true, noMore: false);
-```
-
-## Use the specified Header and Footer
-```dart
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_easyrefresh/material_header.dart';
-import 'package:flutter_easyrefresh/material_footer.dart';
-....
-  new EasyRefresh(
     header: MaterialHeader(),
     footer: MaterialFooter(),
-    child: ScrollView(),
+    child: ListView(),
     ....
   )
+  // Global
+  EasyRefresh.defaultHeaderBuilder = () => ClassicHeader();
+  EasyRefresh.defaultFooterBuilder = () => ClassicFooter();
 ```
 
-## Add internationalization support
-No built-in internationalization support is provided. Please set the text that needs to be displayed in ClassicalHeader and ClassicalFooter.
+## Contributions welcome
+One's maintenance is lonely. If you have good suggestions and changes, welcome to contribute your code. If you have really cool styles， It's even cooler to share with everyone.
 
-# Donation
-If you like my project, please in the upper right corner of the project "Star". Your support is my biggest encouragement! ^_^
-You can also scan the qr code below or [![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/paypalme/xuelongqy), donation to Author.
+# Donate
+If you like my project, please in the upper right corner of the project "Star". Your support is my biggest encouragement! ^_^ You can also use cryptocurrencies, buy me a coffee.
 
-![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_alipay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_wxpay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_tencent.jpg?raw=true)
+<details>
+<summary>Ethereum</summary>
+<p>Ethereum series, ETH, BNB, MATIC, USDT and other tokens</p>
+<pre>
+0x949A007161651015b8A07D0255B75731d60be804
+</pre>
+</details>
 
-If in donation message note name, will be record to the list if you are making open source authors, donation can leave when making project address or personal home page, a link will be added to the list have the effect of promoting each other
-[Donation list](https://github.com/xuelongqy/donation/blob/master/DONATIONLIST.md)
+<details>
+<summary>Tron</summary>
+<p>Tron chain, TRX, USDT, USDC and other tokens</p>
+<pre>
+TKqkkyrjeox37cVG8G2HfHZrNMET1YbEfw
+</pre>
+</details>
+
+<details>
+<summary>Bitcoin</summary>
+<pre>
+bc1qutj3gmn46vwmcsjnc5sjqax7kxx5xm6fvyg5vp
+</pre>
+</details>
+
+<details>
+<summary>Dogecoin</summary>
+<pre>
+DLs1Btam1M13o9LxiErbe1UXy7iqfZyNRg
+</pre>
+</details>
 
 ### QQ Group - 554981921
 #### Into the group of instructions
 The group is not only solve the problem of EasyreFresh, any Flutter related issues can be discussed. Just as its name, craigslist, as long as there is time, group of Lord will help you solve problems together.
 
 ## Thanks 
-[flutter_pulltorefresh](https://github.com/peng8350/flutter_pulltorefresh)  
 [SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)  
 [flutter_spinkit](https://github.com/jogboms/flutter_spinkit)  
 
-## Open source licenses
+## Licenses
 
 ```
  

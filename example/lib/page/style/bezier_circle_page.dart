@@ -60,7 +60,7 @@ class _BezierCirclePageState extends State<BezierCirclePage> {
           });
           _controller.finishLoad(_count >= 20
               ? IndicatorResult.noMore
-              : IndicatorResult.succeeded);
+              : IndicatorResult.success);
         },
         child: ListView.builder(
           clipBehavior: Clip.none,

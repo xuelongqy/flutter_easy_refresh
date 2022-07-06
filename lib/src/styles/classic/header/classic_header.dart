@@ -30,7 +30,7 @@ class ClassicHeader extends Header {
   /// Text on [IndicatorResult.noMore].
   final String? noMoreText;
 
-  /// Text on [IndicatorMode.failed].
+  /// Text on [IndicatorResult.fail].
   final String? failedText;
 
   /// Whether to display text.
@@ -53,10 +53,10 @@ class ClassicHeader extends Header {
   /// Spacing between text and icon.
   final double spacing;
 
-  /// Icon when [IndicatorResult.succeeded].
+  /// Icon when [IndicatorResult.success].
   final Widget? succeededIcon;
 
-  /// Icon when [IndicatorResult.failed].
+  /// Icon when [IndicatorResult.fail].
   final Widget? failedIcon;
 
   /// Icon when [IndicatorResult.noMore].

@@ -53,13 +53,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ),
                 ),
                 Positioned(
-                  top: -0.5,
+                  top: -1,
                   left: 0,
                   right: 0,
-                  child: Container(
-                    height: 0.7,
-                    width: double.infinity,
-                    color: themeData.colorScheme.primary,
+                  child: ClipPath(
+                    clipper: _FillLineClipper(imgHeight),
+                    child: Container(
+                      height: 2,
+                      width: double.infinity,
+                      color: themeData.colorScheme.primary,
+                    ),
                   ),
                 ),
                 Positioned(
@@ -213,5 +216,30 @@ class _TrapezoidClipper extends CustomClipper<Path> {
     return oldClipper.height != height ||
         oldClipper.clipStartHeight != clipStartHeight ||
         oldClipper.clipEndHeight != clipEndHeight;
+  }
+}
+
+class _FillLineClipper extends CustomClipper<Path> {
+  final double imgHeight;
+
+  _FillLineClipper(this.imgHeight);
+
+  @override
+  Path getClip(Size size) {
+    final width = size.width;
+    final height = size.height;
+    Path path = Path();
+    path.moveTo(0, 0);
+    path.lineTo(width, 0);
+    path.lineTo(width, height / 2);
+    path.lineTo(0, height / 2 + imgHeight / 2);
+    path.lineTo(0, height);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant _FillLineClipper oldClipper) {
+    return oldClipper.imgHeight != imgHeight;
   }
 }

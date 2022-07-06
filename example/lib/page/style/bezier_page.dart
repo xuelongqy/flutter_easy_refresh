@@ -260,7 +260,7 @@ class _BezierPageState extends State<BezierPage> {
           });
           _controller.finishLoad(_count >= 20
               ? IndicatorResult.noMore
-              : IndicatorResult.succeeded);
+              : IndicatorResult.success);
         },
         child: ListView.builder(
           clipBehavior: Clip.none,
