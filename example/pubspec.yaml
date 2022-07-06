@@ -27,6 +27,8 @@ dependencies:
   convert: ^3.0.2
   carousel_slider: ^4.1.1
   rive: ^0.9.0
+  qr_flutter: ^4.0.0
+  flutter_svg: ^1.1.1+1
   flutter_easy_refresh:
     path: ../
   easy_refresh_space:
@@ -89,4 +91,5 @@ flutter:
   # see https://flutter.io/custom-fonts/#from-packages
   assets:
     - assets/image/
+    - assets/image/cryptocurrency/
     - assets/rive/

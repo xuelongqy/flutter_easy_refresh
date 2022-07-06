@@ -78,4 +78,10 @@ const zhCN = {
   'Wechat donation': '微信捐赠',
   'Cryptocurrency': '加密货币',
   'Cryptocurrency donation': '加密货币捐赠',
+  'Bitcoin donation': '比特币捐赠',
+  'Ethereum series, ETH, BNB, MATIC, USDT and other tokens':
+      '以太坊系列，ETH、BNB、MATIC、USDT及其他代币',
+  'Tron chain, TRX, USDT, USDC and other tokens': '波场链，TRX、USDT、USDC及其他代币',
+  'Dogecoin donation': '狗狗币捐赠',
+  '%s copied!': '%s 已复制!',
 };

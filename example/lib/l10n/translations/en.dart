@@ -79,4 +79,11 @@ const en = {
   'Wechat donation': 'Wechat donation',
   'Cryptocurrency': 'Cryptocurrency',
   'Cryptocurrency donation': 'Cryptocurrency donation',
+  'Bitcoin donation': 'Bitcoin donation',
+  'Ethereum series, ETH, BNB, MATIC, USDT and other tokens':
+      'Ethereum series, ETH, BNB, MATIC, USDT and other tokens',
+  'Tron chain, TRX, USDT, USDC and other tokens':
+      'Tron chain, TRX, USDT, USDC and other tokens',
+  'Dogecoin donation': 'Dogecoin donation',
+  '%s copied!': '%s copied!',
 };
