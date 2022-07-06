@@ -117,7 +117,7 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
   EasyRefresh.defaultFooterBuilder = () => ClassicFooter();
 ```
 
-## Contributions welcome
+# Contributions welcome
 One's maintenance is lonely. If you have good suggestions and changes, welcome to contribute your code. If you have really cool styles， It's even cooler to share with everyone.
 
 # Donate

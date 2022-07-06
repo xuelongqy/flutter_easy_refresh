@@ -117,7 +117,7 @@
   EasyRefresh.defaultFooterBuilder = () => ClassicFooter();
 ```
 
-## 欢迎贡献
+# 欢迎贡献
 一个人的维护是孤独的。如果你有好的建议和改动，欢迎贡献你的代码。如果你有非常酷的样式，能够分享给大家那就更酷了。
 
 # 赞赏
