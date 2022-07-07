@@ -54,9 +54,8 @@ class _SpacePageState extends State<SpacePage> {
           setState(() {
             _count += 5;
           });
-          _controller.finishLoad(_count >= 20
-              ? IndicatorResult.noMore
-              : IndicatorResult.success);
+          _controller.finishLoad(
+              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
         },
         child: CustomScrollView(
           slivers: [

@@ -75,9 +75,8 @@ class _RefreshOnStartPageState extends State<RefreshOnStartPage> {
           setState(() {
             _count += 10;
           });
-          _controller.finishLoad(_count >= 30
-              ? IndicatorResult.noMore
-              : IndicatorResult.success);
+          _controller.finishLoad(
+              _count >= 30 ? IndicatorResult.noMore : IndicatorResult.success);
         },
         child: CustomScrollView(
           slivers: [

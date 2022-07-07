@@ -64,9 +64,8 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             _count += 5;
           });
-          _controller.finishLoad(_count >= 20
-              ? IndicatorResult.noMore
-              : IndicatorResult.success);
+          _controller.finishLoad(
+              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
         },
         child: ListView.builder(
           itemBuilder: (context, index) {
@@ -84,4 +83,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-

@@ -77,9 +77,8 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
           setState(() {
             _count += 5;
           });
-          _controller.finishLoad(_count >= 20
-              ? IndicatorResult.noMore
-              : IndicatorResult.success);
+          _controller.finishLoad(
+              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
         },
         child: ListView.builder(
           clipBehavior: Clip.none,
