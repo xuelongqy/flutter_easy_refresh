@@ -4,6 +4,8 @@
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
 [![Pub](https://img.shields.io/pub/v/flutter_easyrefresh)](https://pub.dev/packages/flutter_easyrefresh)
 
+# ！！！v2 will no longer be maintained, please upgrade to [v3](https://pub.dev/packages/easy_refresh)
+
 ## English | [中文](https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/README.md)
 
 Just like the name, EasyRefresh can easily implement pull-down refresh and upload operations on Flutter applications. It supports almost all Flutter controls. Its functions are similar to Android's Smart Refresh Layout, and it also draws on the advantages of many tripartite libraries. EasyRefresh integrates various styles of Headers and Footers, but it has no limitations. You can easily customize it. Using Flutter's powerful animation, even a simple control can be done. EasyRefresh aims to build a strong, stable and mature drop-down refresh framework for Flutter.

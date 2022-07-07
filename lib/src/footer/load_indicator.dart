@@ -603,7 +603,8 @@ class _EasyRefreshSliverLoadControlState
     super.initState();
     _axisDirectionNotifier = ValueNotifier<AxisDirection>(AxisDirection.down);
     _axisDirectionNotifier.addListener(() {
-      _ambiguate(SchedulerBinding.instance)!.addPostFrameCallback((Duration timestamp) {
+      _ambiguate(SchedulerBinding.instance)!
+          .addPostFrameCallback((Duration timestamp) {
         if (mounted) setState(() {});
       });
     });
@@ -670,7 +671,8 @@ class _EasyRefreshSliverLoadControlState
       if (widget.enableHapticFeedback) {
         HapticFeedback.mediumImpact();
       }
-      _ambiguate(SchedulerBinding.instance)!.addPostFrameCallback((Duration timestamp) {
+      _ambiguate(SchedulerBinding.instance)!
+          .addPostFrameCallback((Duration timestamp) {
         loadState = LoadMode.load;
         loadTask = widget.onLoad!()
           ..then((_) {
@@ -712,10 +714,12 @@ class _EasyRefreshSliverLoadControlState
       loadState = LoadMode.done;
       // Either schedule the RenderSliver to re-layout on the next frame
       // when not currently in a frame or schedule it on the next frame.
-      if (_ambiguate(SchedulerBinding.instance)!.schedulerPhase == SchedulerPhase.idle) {
+      if (_ambiguate(SchedulerBinding.instance)!.schedulerPhase ==
+          SchedulerPhase.idle) {
         setState(() => hasSliverLayoutExtent = false);
       } else {
-        _ambiguate(SchedulerBinding.instance)!.addPostFrameCallback((Duration timestamp) {
+        _ambiguate(SchedulerBinding.instance)!
+            .addPostFrameCallback((Duration timestamp) {
           if (mounted) setState(() => hasSliverLayoutExtent = false);
         });
       }
@@ -766,7 +770,8 @@ class _EasyRefreshSliverLoadControlState
           return LoadMode.drag;
         } else {
           // 提前固定高度，防止列表回弹
-          _ambiguate(SchedulerBinding.instance)!.addPostFrameCallback((Duration timestamp) {
+          _ambiguate(SchedulerBinding.instance)!
+              .addPostFrameCallback((Duration timestamp) {
             if (!hasSliverLayoutExtent) {
               if (mounted) setState(() => hasSliverLayoutExtent = true);
             }

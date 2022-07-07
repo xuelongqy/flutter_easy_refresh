@@ -88,11 +88,11 @@ class _HomePageState extends State<HomePage> {
         onTap: _onBottomNavigationBarTap,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard), title: Text(S.of(context).sample)),
+              icon: Icon(Icons.dashboard), label: S.of(context).sample),
           BottomNavigationBarItem(
-              icon: Icon(Icons.style), title: Text(S.of(context).style)),
+              icon: Icon(Icons.style), label: S.of(context).style),
           BottomNavigationBarItem(
-              icon: Icon(Icons.more_vert), title: Text(S.of(context).more)),
+              icon: Icon(Icons.more_vert), label: S.of(context).more),
         ],
       ),
     );

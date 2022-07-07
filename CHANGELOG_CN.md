@@ -1,6 +1,7 @@
 # 更新日志
 
 ## V 2.2.2
+>！！！v2将不再维护，请升级至[v3](https://pub.dev/packages/easy_refresh)  
 >添加: flutter3 支持
 
 ## V 2.2.1

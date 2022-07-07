@@ -87,8 +87,9 @@ class _BasicPageState extends State<BasicPage> {
             header: _enableRefresh
                 ? ClassicalHeader(
                     enableInfiniteRefresh: false,
-                    bgColor:
-                        _headerFloat ? Theme.of(context).primaryColor : Colors.transparent,
+                    bgColor: _headerFloat
+                        ? Theme.of(context).primaryColor
+                        : Colors.transparent,
                     infoColor: _headerFloat ? Colors.black87 : Colors.teal,
                     float: _headerFloat,
                     enableHapticFeedback: _vibration,
