@@ -1,5 +1,11 @@
 # Change log
 
+## V 3.0.0+2
+> fix: Scores
+
+## V 3.0.0+1
+> fix: .pubignore
+
 ## V 3.0.0
 > ### New version
 > Framework rewrite, stronger refresh widget.  
