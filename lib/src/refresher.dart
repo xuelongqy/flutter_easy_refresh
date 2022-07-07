@@ -10,6 +10,14 @@ import 'header/header.dart';
 import 'listener/scroll_notification_listener.dart';
 import 'physics/scroll_physics.dart';
 
+/// This allows a value of type T or T?
+/// to be treated as a value of type T?.
+///
+/// We use this so that APIs that have become
+/// non-nullable can still be used with `!` and `?`
+/// to support older versions of the API as well.
+T? _ambiguate<T>(T? value) => value;
+
 /// 子组件构造器
 typedef EasyRefreshChildBuilder = Widget Function(BuildContext context,
     ScrollPhysics physics, Widget? header, Widget? footer);
@@ -127,7 +135,7 @@ class EasyRefresh extends StatefulWidget {
     this.bottomBouncing = true,
     this.behavior = const EmptyOverScrollScrollBehavior(),
     required this.child,
-  })   : this.scrollDirection = Axis.vertical,
+  })  : this.scrollDirection = Axis.vertical,
         this.reverse = false,
         this.builder = null,
         this.primary = null,
@@ -172,7 +180,7 @@ class EasyRefresh extends StatefulWidget {
     this.bottomBouncing = true,
     this.behavior = const EmptyOverScrollScrollBehavior(),
     required this.slivers,
-  })   : this.builder = null,
+  })  : this.builder = null,
         this.child = null,
         super(key: key);
 
@@ -194,7 +202,7 @@ class EasyRefresh extends StatefulWidget {
     this.bottomBouncing = true,
     this.behavior = const EmptyOverScrollScrollBehavior(),
     required this.builder,
-  })   : this.scrollDirection = Axis.vertical,
+  })  : this.scrollDirection = Axis.vertical,
         this.reverse = false,
         this.child = null,
         this.primary = null,
@@ -290,7 +298,8 @@ class _EasyRefreshState extends State<EasyRefresh> {
       if (widget.firstRefreshWidget != null) {
         _firstRefreshHeader = FirstRefreshHeader(widget.firstRefreshWidget!);
       }
-      SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+      _ambiguate(SchedulerBinding.instance)!
+          .addPostFrameCallback((Duration timestamp) {
         callRefresh();
       });
     }

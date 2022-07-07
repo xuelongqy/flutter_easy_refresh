@@ -1,6 +1,6 @@
 name: flutter_easyrefresh
 description: A flutter widget that provides pull-down refresh and pull-up load.
-version: 2.2.1
+version: 2.2.2
 homepage: https://github.com/xuelongqy/flutter_easyrefresh
 repository: https://github.com/xuelongqy/flutter_easyrefresh
 issue_tracker: https://github.com/xuelongqy/flutter_easyrefresh/issues

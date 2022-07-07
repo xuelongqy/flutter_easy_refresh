@@ -1,5 +1,8 @@
 # 更新日志
 
+## V 2.2.2
+>添加: flutter3 支持
+
 ## V 2.2.1
 >修复：firstRefresh为true时，不设置firstRefreshWidget报错[issues#457](https://github.com/xuelongqy/flutter_easyrefresh/issues/457)  
 
