@@ -83,88 +83,99 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildMessageItem(int index) {
-    final themeData = Theme.of(context);
-    final message = _messages[index];
-    final maxWidth = math.min(MediaQuery.of(context).size.width - 124, 400.0);
-    Widget? imgWidget;
-    Widget? msgWidget;
-    bool continuously = index != 0 && _messages[index - 1].own == message.own;
-    if (message.img != null) {
-      imgWidget = Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: themeData.colorScheme.tertiaryContainer,
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-        ),
-        constraints: BoxConstraints(
-          maxWidth: maxWidth,
-        ),
-        child: Image.asset(message.img!),
-      );
-    }
-    if (message.msg != null) {
-      msgWidget = Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: message.own
-              ? themeData.colorScheme.primaryContainer
-              : themeData.colorScheme.tertiaryContainer,
-          borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(24),
-            topRight: const Radius.circular(24),
-            bottomLeft: Radius.circular(message.own || continuously ? 24 : 8),
-            bottomRight: Radius.circular(message.own && !continuously ? 8 : 24),
-          ),
-        ),
-        constraints: BoxConstraints(
-          maxWidth: maxWidth,
-        ),
-        child: Text(message.msg!),
-      );
-    }
-    Widget contentWidget = Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (imgWidget != null) imgWidget,
-        if (imgWidget != null && msgWidget != null)
-          const SizedBox(
-            height: 8,
-          ),
-        if (msgWidget != null) msgWidget,
-      ],
-    );
-    return Container(
-      margin: EdgeInsets.only(
-          top: 8, bottom: continuously ? 0 : 8, left: 16, right: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (message.own) const Spacer(),
-          if (!message.own)
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: ClipOval(
-                child: continuously
-                    ? const SizedBox(
-                        width: 36,
-                      )
-                    : InkWell(
-                        onTap: () {
-                          Get.to(() => const UserProfilePage());
-                        },
-                        child: Image.asset(
-                          'assets/image/user_head.jpg',
-                          height: 36,
-                          width: 36,
-                        ),
-                      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final themeData = Theme.of(context);
+        final message = _messages[index];
+        final maxWidth = math.min(constraints.maxWidth - 124, 400.0);
+        Widget? imgWidget;
+        Widget? msgWidget;
+        bool continuously =
+            index != 0 && _messages[index - 1].own == message.own;
+        if (message.img != null) {
+          imgWidget = LayoutBuilder(
+            builder: (context, c) {
+              return Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: themeData.colorScheme.tertiaryContainer,
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                constraints: BoxConstraints(
+                  maxWidth: maxWidth,
+                ),
+                child: Image.asset(message.img!),
+              );
+            },
+          );
+        }
+        if (message.msg != null) {
+          msgWidget = Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: message.own
+                  ? themeData.colorScheme.primaryContainer
+                  : themeData.colorScheme.tertiaryContainer,
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(24),
+                topRight: const Radius.circular(24),
+                bottomLeft:
+                    Radius.circular(message.own || continuously ? 24 : 8),
+                bottomRight:
+                    Radius.circular(message.own && !continuously ? 8 : 24),
               ),
             ),
-          contentWidget,
-          if (!message.own) const Spacer(),
-        ],
-      ),
+            constraints: BoxConstraints(
+              maxWidth: maxWidth,
+            ),
+            child: Text(message.msg!),
+          );
+        }
+        Widget contentWidget = Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (imgWidget != null) imgWidget,
+            if (imgWidget != null && msgWidget != null)
+              const SizedBox(
+                height: 8,
+              ),
+            if (msgWidget != null) msgWidget,
+          ],
+        );
+        return Container(
+          margin: EdgeInsets.only(
+              top: 8, bottom: continuously ? 0 : 8, left: 16, right: 16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              if (message.own) const Spacer(),
+              if (!message.own)
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: ClipOval(
+                    child: continuously
+                        ? const SizedBox(
+                            width: 36,
+                          )
+                        : InkWell(
+                            onTap: () {
+                              Get.to(() => const UserProfilePage());
+                            },
+                            child: Image.asset(
+                              'assets/image/user_head.jpg',
+                              height: 36,
+                              width: 36,
+                            ),
+                          ),
+                  ),
+                ),
+              contentWidget,
+              if (!message.own) const Spacer(),
+            ],
+          ),
+        );
+      },
     );
   }
 
