@@ -1,48 +1,30 @@
-.DS_Store
-.dart_tool/
-
-.packages
-.pub/
-
-.idea
-.vagrant/
-.sconsign.dblite
-.svn/
-
-*.swp
-profile
-
-DerivedData/
-
-.generated/
-
-*.pbxuser
-*.mode1v3
-*.mode2v3
-*.perspectivev3
-
-!default.pbxuser
-!default.mode1v3
-!default.mode2v3
-!default.perspectivev3
-
-xcuserdata
-
-*.moved-aside
-
+# Miscellaneous
+*.class
+*.log
 *.pyc
-*sync/
-Icon?
-.tags*
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
 
-build/
-.android/
-.ios/
-.flutter-plugins
+# IntelliJ related
 *.iml
-.metadata
-pubspec.lock
-ios/.generated/
-ios/Flutter/Generated.xcconfig
-ios/Runner/GeneratedPluginRegistrant.*
-.lib/generated/i18n.dart
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+.vscode/
+
+# Flutter/Dart/Pub related
+# Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
+/pubspec.lock
+**/doc/api/
+.dart_tool/
+.packages
+build/

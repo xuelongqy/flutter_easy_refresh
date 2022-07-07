@@ -129,6 +129,29 @@ If you like my project, please in the upper right corner of the project "Star". 
 <pre>
 0x949A007161651015b8A07D0255B75731d60be804
 </pre>
+<iframe height="200px" width="200px" name="eth" frameborder="0" scrolling="no" src="data:text/html;charset=utf-8,
+<script src='https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js'></script>
+<style>
+body {
+  padding: 0;
+  margin: 0;
+}
+div img {
+  width: 100%;
+  height: 100%;
+}
+</style>
+<div id='qrcode' style='height: 200px;width: 200px;'></div>
+<script>
+var typeNumber = 0;
+var errorCorrectionLevel = 'L';
+var qr = qrcode(typeNumber, errorCorrectionLevel);
+qr.addData('0x949A007161651015b8A07D0255B75731d60be804');
+qr.make();
+document.getElementById('qrcode').innerHTML = qr.createImgTag(8);
+</script>
+">
+</iframe>
 </details>
 
 <details>
@@ -137,6 +160,29 @@ If you like my project, please in the upper right corner of the project "Star". 
 <pre>
 TKqkkyrjeox37cVG8G2HfHZrNMET1YbEfw
 </pre>
+<iframe height="200px" width="200px" name="eth" frameborder="0" scrolling="no" src="data:text/html;charset=utf-8,
+<script src='https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js'></script>
+<style>
+body {
+  padding: 0;
+  margin: 0;
+}
+div img {
+  width: 100%;
+  height: 100%;
+}
+</style>
+<div id='qrcode' style='height: 200px;width: 200px;'></div>
+<script>
+var typeNumber = 0;
+var errorCorrectionLevel = 'L';
+var qr = qrcode(typeNumber, errorCorrectionLevel);
+qr.addData('TKqkkyrjeox37cVG8G2HfHZrNMET1YbEfw');
+qr.make();
+document.getElementById('qrcode').innerHTML = qr.createImgTag(8);
+</script>
+">
+</iframe>
 </details>
 
 <details>
@@ -144,6 +190,29 @@ TKqkkyrjeox37cVG8G2HfHZrNMET1YbEfw
 <pre>
 bc1qutj3gmn46vwmcsjnc5sjqax7kxx5xm6fvyg5vp
 </pre>
+<iframe height="200px" width="200px" name="eth" frameborder="0" scrolling="no" src="data:text/html;charset=utf-8,
+<script src='https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js'></script>
+<style>
+body {
+  padding: 0;
+  margin: 0;
+}
+div img {
+  width: 100%;
+  height: 100%;
+}
+</style>
+<div id='qrcode' style='height: 200px;width: 200px;'></div>
+<script>
+var typeNumber = 0;
+var errorCorrectionLevel = 'L';
+var qr = qrcode(typeNumber, errorCorrectionLevel);
+qr.addData('bc1qutj3gmn46vwmcsjnc5sjqax7kxx5xm6fvyg5vp');
+qr.make();
+document.getElementById('qrcode').innerHTML = qr.createImgTag(8);
+</script>
+">
+</iframe>
 </details>
 
 <details>
@@ -151,6 +220,29 @@ bc1qutj3gmn46vwmcsjnc5sjqax7kxx5xm6fvyg5vp
 <pre>
 DLs1Btam1M13o9LxiErbe1UXy7iqfZyNRg
 </pre>
+<iframe height="200px" width="200px" name="eth" frameborder="0" scrolling="no" src="data:text/html;charset=utf-8,
+<script src='https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js'></script>
+<style>
+body {
+  padding: 0;
+  margin: 0;
+}
+div img {
+  width: 100%;
+  height: 100%;
+}
+</style>
+<div id='qrcode' style='height: 200px;width: 200px;'></div>
+<script>
+var typeNumber = 0;
+var errorCorrectionLevel = 'L';
+var qr = qrcode(typeNumber, errorCorrectionLevel);
+qr.addData('DLs1Btam1M13o9LxiErbe1UXy7iqfZyNRg');
+qr.make();
+document.getElementById('qrcode').innerHTML = qr.createImgTag(8);
+</script>
+">
+</iframe>
 </details>
 
 ### QQ Group - 554981921
