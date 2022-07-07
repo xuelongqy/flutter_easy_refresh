@@ -335,6 +335,7 @@ class _BezierPageState extends State<BezierPage> {
               ),
             ),
             ExpansionPanelList(
+              dividerColor: Colors.transparent,
               expansionCallback: (panelIndex, isExpanded) {
                 setState(() {
                   if (!isExpanded) {
@@ -347,6 +348,7 @@ class _BezierPageState extends State<BezierPage> {
               children: [
                 for (int i = 0; i < propertiesItems.length; i++)
                   ExpansionPanel(
+                    canTapOnHeader: true,
                     headerBuilder: (ctx, isExpanded) {
                       return ListTile(
                         title: Text(propertiesItems[i].name),
@@ -391,7 +393,9 @@ class _BezierPageState extends State<BezierPage> {
                                 children: [
                                   for (final spin in _spins)
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 8),
+                                      padding: EdgeInsets.only(
+                                          right: 8,
+                                          bottom: GetPlatform.isWeb ? 8 : 0),
                                       child: RawChip(
                                         label: Text(spin),
                                         onPressed: () {

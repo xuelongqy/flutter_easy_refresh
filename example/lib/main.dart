@@ -102,7 +102,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               _mobileStyle = !_mobileStyle;
             });
           },
-          child: const Icon(Icons.phone_android),
+          child: Icon(_mobileStyle ? Icons.computer : Icons.phone_android),
         ).marginOnly(top: 16),
       ),
     );

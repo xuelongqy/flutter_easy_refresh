@@ -183,6 +183,7 @@ class _ClassicPageState extends State<ClassicPage> {
               ),
             ),
             ExpansionPanelList(
+              dividerColor: Colors.transparent,
               expansionCallback: (panelIndex, isExpanded) {
                 setState(() {
                   if (!isExpanded) {
@@ -195,6 +196,7 @@ class _ClassicPageState extends State<ClassicPage> {
               children: [
                 for (int i = 0; i < propertiesItems.length; i++)
                   ExpansionPanel(
+                    canTapOnHeader: true,
                     headerBuilder: (ctx, isExpanded) {
                       return ListTile(
                         title: Text(propertiesItems[i].name),

@@ -154,6 +154,7 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
               ),
             ),
             ExpansionPanelList(
+              dividerColor: Colors.transparent,
               expansionCallback: (panelIndex, isExpanded) {
                 setState(() {
                   if (!isExpanded) {
@@ -166,6 +167,7 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
               children: [
                 for (int i = 0; i < propertiesItems.length; i++)
                   ExpansionPanel(
+                    canTapOnHeader: true,
                     headerBuilder: (ctx, isExpanded) {
                       return ListTile(
                         title: Text(propertiesItems[i].name),
