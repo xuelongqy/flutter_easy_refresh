@@ -2,7 +2,7 @@ import 'package:example/l10n/translations.dart';
 import 'package:example/page/home.dart';
 import 'package:example/page/more/theme_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easy_refresh/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:example/widget/skeleton_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easy_refresh/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:get/get.dart';
 

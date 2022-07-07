@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   flare_flutter: ^3.0.2
-  flutter_easy_refresh:
+  easy_refresh:
     path: ../../
 
 dev_dependencies:

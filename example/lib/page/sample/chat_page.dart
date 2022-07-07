@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:example/page/sample/user_profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easy_refresh/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 

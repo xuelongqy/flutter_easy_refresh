@@ -1,7 +1,7 @@
 import 'package:easy_refresh_squats/easy_refresh_squats.dart';
 import 'package:example/widget/skeleton_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easy_refresh/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
 class SquatsPage extends StatefulWidget {

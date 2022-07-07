@@ -1,7 +1,7 @@
 import 'package:easy_refresh_halloween/easy_refresh_halloween.dart';
 import 'package:example/widget/skeleton_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easy_refresh/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
 class HalloweenPage extends StatefulWidget {
