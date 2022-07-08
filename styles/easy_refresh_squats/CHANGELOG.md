@@ -1,3 +1,5 @@
-## 1.0.0
+## 1.0.0+1
+> fix: dart >=2.13.0.
 
-* Squats Indicator on EasyRefresh.
+## 1.0.0
+> Squats Indicator on EasyRefresh.
