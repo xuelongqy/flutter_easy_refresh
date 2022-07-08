@@ -10,10 +10,15 @@ class HeaderLocator extends StatelessWidget {
   /// Extent that is always maintained.
   final double paintExtent;
 
+  /// Whether to calculate the extent.
+  /// When true, extent is always 0.
+  final bool clearExtent;
+
   /// Use in Box
   const HeaderLocator({
     Key? key,
     this.paintExtent = 0,
+    this.clearExtent = true,
   })  : _isSliver = false,
         super(key: key);
 
@@ -21,6 +26,7 @@ class HeaderLocator extends StatelessWidget {
   const HeaderLocator.sliver({
     Key? key,
     this.paintExtent = 0,
+    this.clearExtent = true,
   })  : _isSliver = true,
         super(key: key);
 
@@ -35,8 +41,16 @@ class HeaderLocator extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: headerNotifier.listenable(),
       builder: (ctx, notifier, _) {
+        final headerWidget = headerNotifier._build(context);
+        if (!clearExtent) {
+          return _isSliver
+              ? SliverToBoxAdapter(
+                  child: headerWidget,
+                )
+              : headerWidget;
+        }
         return _HeaderLocatorRenderWidget(
-          child: headerNotifier._build(context),
+          child: headerWidget,
           isSliver: _isSliver,
           paintExtent: paintExtent,
         );

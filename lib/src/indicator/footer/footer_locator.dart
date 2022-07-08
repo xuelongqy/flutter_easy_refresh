@@ -10,10 +10,15 @@ class FooterLocator extends StatelessWidget {
   /// Extent that is always maintained.
   final double paintExtent;
 
+  /// Whether to calculate the extent.
+  /// When true, extent is always 0.
+  final bool clearExtent;
+
   /// Use in Box
   const FooterLocator({
     Key? key,
     this.paintExtent = 0,
+    this.clearExtent = true,
   })  : _isSliver = false,
         super(key: key);
 
@@ -21,6 +26,7 @@ class FooterLocator extends StatelessWidget {
   const FooterLocator.sliver({
     Key? key,
     this.paintExtent = 0,
+    this.clearExtent = true,
   })  : _isSliver = true,
         super(key: key);
 
@@ -35,8 +41,16 @@ class FooterLocator extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: footerNotifier.listenable(),
       builder: (ctx, notifier, _) {
+        final footerWidget = footerNotifier._build(context);
+        if (!clearExtent) {
+          return _isSliver
+              ? SliverToBoxAdapter(
+                  child: footerWidget,
+                )
+              : footerWidget;
+        }
         return _FooterLocatorRenderWidget(
-          child: footerNotifier._build(context),
+          child: footerWidget,
           isSliver: _isSliver,
           paintExtent: paintExtent,
         );
