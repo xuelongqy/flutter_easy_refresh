@@ -521,7 +521,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
           // The state does not change until the end
           return;
         } else {
-          _mode = IndicatorMode.processing;
+          if (_mode == IndicatorMode.done) {
+            if (offset == 0) {
+              _mode = IndicatorMode.inactive;
+            }
+          } else {
+            _mode = IndicatorMode.processing;
+          }
         }
       } else if (_mode == IndicatorMode.done && offset > 0) {
         // The state does not change until the end
@@ -611,7 +617,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         _processing = false;
       }
     } else {
-      _task!.call();
+      Future.sync(_task!);
     }
   }
 
