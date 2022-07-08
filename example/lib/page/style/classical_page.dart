@@ -53,6 +53,7 @@ class _ClassicPageState extends State<ClassicPage> {
       body: EasyRefresh(
         controller: _controller,
         header: ClassicHeader(
+          iconTheme: IconThemeData(color: Colors.green),
           clamping: _headerProperties.clamping,
           backgroundColor: _headerProperties.background
               ? Theme.of(context).colorScheme.surfaceVariant
@@ -71,6 +72,7 @@ class _ClassicPageState extends State<ClassicPage> {
           messageText: 'Last updated at %T'.tr,
         ),
         footer: ClassicFooter(
+          iconTheme: IconThemeData(color: Colors.green),
           clamping: _footerProperties.clamping,
           backgroundColor: _footerProperties.background
               ? Theme.of(context).colorScheme.surfaceVariant

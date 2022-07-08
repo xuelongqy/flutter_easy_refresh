@@ -80,6 +80,9 @@ class ClassicHeader extends Header {
   /// Link [Stack.clipBehavior].
   final Clip clipBehavior;
 
+  /// Icon style.
+  final IconThemeData? iconTheme;
+
   const ClassicHeader({
     this.key,
     double triggerOffset = 70,
@@ -119,6 +122,7 @@ class ClassicHeader extends Header {
     this.messageStyle,
     this.messageBuilder,
     this.clipBehavior = Clip.hardEdge,
+    this.iconTheme
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -165,6 +169,7 @@ class ClassicHeader extends Header {
       messageStyle: messageStyle,
       messageBuilder: messageBuilder,
       clipBehavior: clipBehavior,
+      iconTheme: iconTheme
     );
   }
 }

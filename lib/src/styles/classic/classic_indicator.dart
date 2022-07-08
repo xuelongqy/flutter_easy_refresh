@@ -98,6 +98,9 @@ class _ClassicIndicator extends StatefulWidget {
   /// Link [Stack.clipBehavior].
   final Clip clipBehavior;
 
+  /// Icon style.
+  final IconThemeData? iconTheme;
+
   const _ClassicIndicator({
     Key? key,
     required this.state,
@@ -126,6 +129,7 @@ class _ClassicIndicator extends StatefulWidget {
     this.messageStyle,
     this.messageBuilder,
     this.clipBehavior = Clip.hardEdge,
+    this.iconTheme
   })  : assert(
             mainAxisAlignment == MainAxisAlignment.start ||
                 mainAxisAlignment == MainAxisAlignment.center ||
@@ -246,6 +250,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
   /// Build icon.
   Widget _buildIcon() {
     Widget icon;
+    final iconTheme = widget.iconTheme ?? Theme.of(context).iconTheme;
     if (_result == IndicatorResult.noMore) {
       icon = SizedBox(
         key: const ValueKey(IndicatorResult.noMore),
@@ -262,7 +267,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
         height: 20,
         child: CircularProgressIndicator(
           strokeWidth: 2,
-          color: Theme.of(context).iconTheme.color,
+          color: iconTheme.color,
         ),
       );
     } else if (_mode == IndicatorMode.processed ||
@@ -304,6 +309,8 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
             ),
       );
     }
+
+
     return AnimatedSwitcher(
       key: _iconAnimatedSwitcherKey,
       duration: const Duration(milliseconds: 300),
@@ -317,7 +324,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
           opacity: animation,
         );
       },
-      child: icon,
+      child: IconTheme.merge(data: iconTheme, child: icon),
     );
   }
 
