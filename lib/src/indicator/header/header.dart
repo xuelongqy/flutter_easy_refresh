@@ -268,3 +268,70 @@ class NotRefreshHeader extends Header {
     return const SizedBox();
   }
 }
+
+/// Override the Header parameter.
+/// First of all you have to make it clear that this is feasible,
+/// otherwise please don't use it.
+class OverrideHeader extends Header {
+  /// Header that needs to be overwritten.
+  final Header header;
+
+  OverrideHeader({
+    required this.header,
+    double? triggerOffset,
+    bool? clamping,
+    IndicatorPosition? position,
+    Duration? processedDuration,
+    SpringDescription? spring,
+    SpringDescription? horizontalSpring,
+    SpringBuilder? readySpringBuilder,
+    SpringBuilder? horizontalReadySpringBuilder,
+    bool? springRebound,
+    FrictionFactor? frictionFactor,
+    FrictionFactor? horizontalFrictionFactor,
+    bool? safeArea,
+    double? infiniteOffset,
+    bool? hitOver,
+    bool? infiniteHitOver,
+    bool? hapticFeedback,
+    double? secondaryTriggerOffset,
+    double? secondaryVelocity,
+    double? secondaryDimension,
+    double? secondaryCloseTriggerOffset,
+    bool? notifyWhenInvisible,
+    IndicatorStateListenable? listenable,
+  }) : super(
+          triggerOffset: triggerOffset ?? header.triggerOffset,
+          clamping: clamping ?? header.clamping,
+          processedDuration: processedDuration ?? header.processedDuration,
+          spring: spring ?? header.spring,
+          horizontalSpring: horizontalSpring ?? header.horizontalSpring,
+          readySpringBuilder: readySpringBuilder ?? header.readySpringBuilder,
+          horizontalReadySpringBuilder: horizontalReadySpringBuilder ??
+              header.horizontalReadySpringBuilder,
+          springRebound: springRebound ?? header.springRebound,
+          frictionFactor: frictionFactor ?? header.frictionFactor,
+          horizontalFrictionFactor:
+              horizontalFrictionFactor ?? header.horizontalFrictionFactor,
+          safeArea: safeArea ?? header.safeArea,
+          infiniteOffset: infiniteOffset ?? header.infiniteOffset,
+          hitOver: hitOver ?? header.hitOver,
+          infiniteHitOver: infiniteHitOver ?? header.infiniteHitOver,
+          position: position ?? header.position,
+          hapticFeedback: hapticFeedback ?? header.hapticFeedback,
+          secondaryTriggerOffset:
+              secondaryTriggerOffset ?? header.secondaryTriggerOffset,
+          secondaryVelocity: secondaryVelocity ?? header.secondaryVelocity,
+          secondaryDimension: secondaryDimension ?? header.secondaryDimension,
+          secondaryCloseTriggerOffset:
+              secondaryCloseTriggerOffset ?? header.secondaryCloseTriggerOffset,
+          notifyWhenInvisible:
+              notifyWhenInvisible ?? header.notifyWhenInvisible,
+          listenable: listenable ?? header.listenable,
+        );
+
+  @override
+  Widget build(BuildContext context, IndicatorState state) {
+    return header.build(context, state);
+  }
+}

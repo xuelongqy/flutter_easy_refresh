@@ -268,3 +268,70 @@ class NotLoadFooter extends Footer {
     return const SizedBox();
   }
 }
+
+/// Override the Footer parameter.
+/// First of all you have to make it clear that this is feasible,
+/// otherwise please don't use it.
+class OverrideFooter extends Footer {
+  /// Footer that needs to be overwritten.
+  final Footer footer;
+
+  OverrideFooter({
+    required this.footer,
+    double? triggerOffset,
+    bool? clamping,
+    IndicatorPosition? position,
+    Duration? processedDuration,
+    SpringDescription? spring,
+    SpringDescription? horizontalSpring,
+    SpringBuilder? readySpringBuilder,
+    SpringBuilder? horizontalReadySpringBuilder,
+    bool? springRebound,
+    FrictionFactor? frictionFactor,
+    FrictionFactor? horizontalFrictionFactor,
+    bool? safeArea,
+    double? infiniteOffset,
+    bool? hitOver,
+    bool? infiniteHitOver,
+    bool? hapticFeedback,
+    double? secondaryTriggerOffset,
+    double? secondaryVelocity,
+    double? secondaryDimension,
+    double? secondaryCloseTriggerOffset,
+    bool? notifyWhenInvisible,
+    IndicatorStateListenable? listenable,
+  }) : super(
+          triggerOffset: triggerOffset ?? footer.triggerOffset,
+          clamping: clamping ?? footer.clamping,
+          processedDuration: processedDuration ?? footer.processedDuration,
+          spring: spring ?? footer.spring,
+          horizontalSpring: horizontalSpring ?? footer.horizontalSpring,
+          readySpringBuilder: readySpringBuilder ?? footer.readySpringBuilder,
+          horizontalReadySpringBuilder: horizontalReadySpringBuilder ??
+              footer.horizontalReadySpringBuilder,
+          springRebound: springRebound ?? footer.springRebound,
+          frictionFactor: frictionFactor ?? footer.frictionFactor,
+          horizontalFrictionFactor:
+              horizontalFrictionFactor ?? footer.horizontalFrictionFactor,
+          safeArea: safeArea ?? footer.safeArea,
+          infiniteOffset: infiniteOffset ?? footer.infiniteOffset,
+          hitOver: hitOver ?? footer.hitOver,
+          infiniteHitOver: infiniteHitOver ?? footer.infiniteHitOver,
+          position: position ?? footer.position,
+          hapticFeedback: hapticFeedback ?? footer.hapticFeedback,
+          secondaryTriggerOffset:
+              secondaryTriggerOffset ?? footer.secondaryTriggerOffset,
+          secondaryVelocity: secondaryVelocity ?? footer.secondaryVelocity,
+          secondaryDimension: secondaryDimension ?? footer.secondaryDimension,
+          secondaryCloseTriggerOffset:
+              secondaryCloseTriggerOffset ?? footer.secondaryCloseTriggerOffset,
+          notifyWhenInvisible:
+              notifyWhenInvisible ?? footer.notifyWhenInvisible,
+          listenable: listenable ?? footer.listenable,
+        );
+
+  @override
+  Widget build(BuildContext context, IndicatorState state) {
+    return footer.build(context, state);
+  }
+}
