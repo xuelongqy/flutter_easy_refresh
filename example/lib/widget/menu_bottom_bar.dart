@@ -23,7 +23,7 @@ class MenuBottomBar extends StatefulWidget {
 class _MenuBottomBarState extends State<MenuBottomBar>
     with SingleTickerProviderStateMixin {
   bool _expanded = false;
-  final _duration = const Duration(milliseconds: 400);
+  final _duration = const Duration(milliseconds: 300);
 
   double get _expandedHeight {
     if (widget.expandedHeight != null) {
@@ -59,43 +59,49 @@ class _MenuBottomBarState extends State<MenuBottomBar>
       ),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 16),
-        child: IntrinsicHeight(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  IconButton(
-                    onPressed: widget.onRefresh,
-                    icon: const Icon(Icons.refresh),
-                  ),
-                  FloatingActionButton(
-                    child: AnimatedIcon(
-                      icon: AnimatedIcons.menu_close,
-                      progress: _animationController,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _expanded = !_expanded;
-                      });
-                      _animationController.animateTo(_expanded ? 1 : 0);
-                    },
-                  ),
-                  IconButton(
-                    onPressed: widget.onLoad,
-                    icon: const Icon(Icons.more_horiz),
-                  ),
-                ],
-              ),
-              AnimatedContainer(
-                duration: _duration,
-                height: _expanded ? _expandedHeight : 0,
-                child: SingleChildScrollView(
-                  child: widget.expandedBody,
+        child: Stack(
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(
+                  height: 56,
                 ),
-              ),
-            ],
-          ),
+                AnimatedContainer(
+                  duration: _duration,
+                  height: _expanded ? _expandedHeight : 0,
+                  child: SingleChildScrollView(
+                    child: widget.expandedBody,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  onPressed: widget.onRefresh,
+                  icon: const Icon(Icons.refresh),
+                ),
+                FloatingActionButton(
+                  child: AnimatedIcon(
+                    icon: AnimatedIcons.menu_close,
+                    progress: _animationController,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _expanded = !_expanded;
+                    });
+                    _animationController.animateTo(_expanded ? 1 : 0);
+                  },
+                ),
+                IconButton(
+                  onPressed: widget.onLoad,
+                  icon: const Icon(Icons.more_horiz),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

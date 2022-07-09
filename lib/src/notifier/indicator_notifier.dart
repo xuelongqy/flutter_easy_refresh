@@ -1,6 +1,6 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
-part of easyrefresh;
+part of easy_refresh;
 
 /// Indicator widget builder.
 typedef CanProcessCallBack = bool Function();
@@ -43,6 +43,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         _task = task {
     _initClampingAnimation();
     userOffsetNotifier.addListener(_onUserOffset);
+    indicator.listenable?._bind(this);
   }
 
   double get triggerOffset => _indicator.triggerOffset;
@@ -64,6 +65,36 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   double? get secondaryTriggerOffset => _indicator.secondaryTriggerOffset;
 
   double get secondaryVelocity => _indicator.secondaryVelocity;
+
+  /// Spring description.
+  SpringDescription? get _spring {
+    if (_axis == Axis.horizontal) {
+      return _indicator.horizontalSpring ?? _indicator.spring;
+    } else {
+      return _indicator.spring;
+    }
+  }
+
+  SpringDescription get spring => _physics.spring;
+
+  SpringBuilder? get readySpringBuilder {
+    if (_axis == Axis.horizontal) {
+      return _indicator.horizontalReadySpringBuilder ??
+          _indicator.readySpringBuilder;
+    } else {
+      return _indicator.readySpringBuilder;
+    }
+  }
+
+  FrictionFactor? get _frictionFactor {
+    if (_axis == Axis.horizontal) {
+      return _indicator.horizontalFrictionFactor ?? _indicator.frictionFactor;
+    } else {
+      return _indicator.frictionFactor;
+    }
+  }
+
+  FrictionFactor get frictionFactor => _physics.frictionFactor;
 
   double get secondaryDimension =>
       _indicator.secondaryDimension ?? _position.viewportDimension;
@@ -185,13 +216,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     return _offset > 0;
   }
 
-  /// Spring description.
-  SpringDescription? get _spring => _indicator.spring;
-
-  SpringDescription get spring => _physics.spring;
-
-  SpringBuilder? get readySpringBuilder => _indicator.readySpringBuilder;
-
   /// Indicator listenable.
   ValueListenable<IndicatorNotifier> listenable() => _IndicatorListenable(this);
 
@@ -224,12 +248,16 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Infinite scroll exclusions.
   bool _infiniteExclude(ScrollMetrics position, double value);
 
-  /// Automatically trigger task.
-  /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
+  /// Animates the position from its current value to the given value.
+  /// [offset] The offset to scroll to.
+  /// [mode] When duration is null and clamping is true, set the state.
+  /// [jumpToEdge] Whether to jump to the edge before scrolling.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
-  void callTask({
-    required double overOffset,
+  Future animateToOffset({
+    required double offset,
+    required IndicatorMode mode,
+    bool jumpToEdge = true,
     Duration? duration,
     Curve curve = Curves.linear,
   });
@@ -247,6 +275,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     userOffsetNotifier.removeListener(_onUserOffset);
     _task = null;
     _modeChangeListeners.clear();
+    _indicator.listenable?._unbind();
     _mounted = true;
     super.dispose();
   }
@@ -303,7 +332,11 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     FutureOr Function()? task,
     bool? waitTaskRefresh,
   }) {
-    _indicator = indicator ?? _indicator;
+    if (indicator != null) {
+      _indicator.listenable?._unbind();
+      indicator.listenable?._bind(this);
+      _indicator = indicator;
+    }
     _noMoreProcess = noMoreProcess ?? _noMoreProcess;
     _task = task;
     _waitTaskResult = waitTaskRefresh ?? _waitTaskResult;
@@ -321,6 +354,26 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (_result == IndicatorResult.noMore) {
       _result = IndicatorResult.none;
     }
+  }
+
+  /// Automatically trigger task.
+  /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
+  /// [duration] See [ScrollPosition.animateTo].
+  /// [curve] See [ScrollPosition.animateTo].
+  Future callTask({
+    required double overOffset,
+    Duration? duration,
+    Curve curve = Curves.linear,
+  }) {
+    if (modeLocked || noMoreLocked || secondaryLocked || !_canProcess) {
+      return Future.value();
+    }
+    return animateToOffset(
+      offset: actualTriggerOffset + overOffset,
+      mode: IndicatorMode.ready,
+      duration: duration,
+      curve: curve,
+    );
   }
 
   /// Animation listener for [clamping].
@@ -349,6 +402,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         _offset = mOffset;
       }
     }
+    _slightDeviation();
     _updateMode();
     notifyListeners();
   }
@@ -361,6 +415,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (_axis != position.axis || _axisDirection != position.axisDirection) {
       _axis = position.axis;
       _axisDirection = position.axisDirection;
+      Future(() {
+        notifyListeners();
+      });
     }
     // Update offset on release
     _updateOffset(position, position.pixels, true);
@@ -370,6 +427,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       if (simulation != null) {
         _startClampingAnimation(simulation);
       }
+    }
+  }
+
+  /// Temporary solutions, sometimes with slight deviation.
+  void _slightDeviation() {
+    if ((_offset - actualTriggerOffset).abs() < 0.000001) {
+      _offset = actualTriggerOffset;
     }
   }
 
@@ -391,18 +455,23 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     final oldMode = _mode;
     // Calculate and update the offset.
     _offset = _calculateOffset(position, value);
+    _slightDeviation();
     if (bySimulation) {
       _releaseOffset = _offset;
     }
     // Do nothing if not out of bounds.
     if (oldOffset == 0 && _offset == 0) {
-      // Handling infinite scroll
-      if (infiniteOffset != null &&
-          (boundaryOffset < infiniteOffset! || _mode == IndicatorMode.done) &&
-          !bySimulation &&
-          !_infiniteExclude(position, value)) {
+      if (_mode == IndicatorMode.done ||
+          // Handling infinite scroll
+          (infiniteOffset != null &&
+              boundaryOffset < infiniteOffset! &&
+              !bySimulation &&
+              !_infiniteExclude(position, value))) {
         // Update mode
         _updateMode();
+        notifyListeners();
+      }
+      if (_indicator.notifyWhenInvisible && !bySimulation) {
         notifyListeners();
       }
       return;
@@ -435,7 +504,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Update indicator state.
   void _updateMode() {
-    // No task, keep IndicatorMode.done state.
+    // No task, keep IndicatorMode.inactive state.
     if (_task == null) {
       if (_mode != IndicatorMode.inactive) {
         _mode = IndicatorMode.inactive;
@@ -455,7 +524,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
           // The state does not change until the end
           return;
         } else {
-          _mode = IndicatorMode.processing;
+          if (_mode == IndicatorMode.done) {
+            if (offset == 0) {
+              _mode = IndicatorMode.inactive;
+            }
+          } else {
+            _mode = IndicatorMode.processing;
+          }
         }
       } else if (_mode == IndicatorMode.done && offset > 0) {
         // The state does not change until the end
@@ -484,7 +559,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       } else if (_offset > actualTriggerOffset) {
         if (hasSecondary &&
             _offset >= actualSecondaryTriggerOffset &&
-            _releaseOffset >= actualSecondaryTriggerOffset) {
+            (_releaseOffset == 0 ||
+                _releaseOffset >= actualSecondaryTriggerOffset)) {
           // Secondary
           if (_offset < secondaryDimension) {
             _mode = userOffsetNotifier.value
@@ -513,10 +589,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     // Close secondary
     if (secondaryLocked) {
-      if (_mode == IndicatorMode.secondaryOpen &&
-          secondaryDimension - _offset >= secondaryCloseTriggerOffset) {
-        _mode = IndicatorMode.secondaryClosing;
-      }
+      _mode = secondaryDimension - _offset >= secondaryCloseTriggerOffset
+          ? IndicatorMode.secondaryClosing
+          : IndicatorMode.secondaryOpen;
       if (_offset == 0) {
         _mode = IndicatorMode.inactive;
       }
@@ -535,23 +610,23 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         if (res is IndicatorResult) {
           _result = res;
         } else {
-          _result = IndicatorResult.succeeded;
+          _result = IndicatorResult.success;
         }
       } catch (_) {
-        _result = IndicatorResult.failed;
+        _result = IndicatorResult.fail;
         rethrow;
       } finally {
         _setMode(IndicatorMode.processed);
         _processing = false;
       }
     } else {
-      _task!.call();
+      Future.sync(_task!);
     }
   }
 
   /// Finish task and return the result.
   /// [result] Result of task completion.
-  void _finishTask([IndicatorResult result = IndicatorResult.succeeded]) {
+  void _finishTask([IndicatorResult result = IndicatorResult.success]) {
     if (!_waitTaskResult) {
       _result = result;
       _setMode(IndicatorMode.processed);
@@ -627,6 +702,26 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
   }
 
+  /// Get indicator state;
+  IndicatorState? get indicatorState {
+    if (_axis == null || _axisDirection == null) {
+      return null;
+    }
+    return IndicatorState(
+      indicator: _indicator,
+      userOffsetNotifier: userOffsetNotifier,
+      notifier: this,
+      mode: mode,
+      result: _result,
+      offset: offset,
+      safeOffset: safeOffset,
+      axis: _axis!,
+      axisDirection: _axisDirection!,
+      viewportDimension: _position.viewportDimension,
+      actualTriggerOffset: actualTriggerOffset,
+    );
+  }
+
   /// Build indicator widget.
   Widget _build(BuildContext context) {
     if (_axis == null || _axisDirection == null) {
@@ -634,19 +729,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     return _indicator.build(
       context,
-      IndicatorState(
-        indicator: _indicator,
-        userOffsetNotifier: userOffsetNotifier,
-        notifier: this,
-        mode: mode,
-        result: _result,
-        offset: offset,
-        safeOffset: safeOffset,
-        axis: _axis!,
-        axisDirection: _axisDirection!,
-        viewportDimension: _position.viewportDimension,
-        actualTriggerOffset: actualTriggerOffset,
-      ),
+      indicatorState!,
     );
   }
 }
@@ -657,9 +740,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 class _IndicatorListenable<T extends IndicatorNotifier>
     extends ValueListenable<T> {
   /// Indicator notifier
-  final T indicatorNotifier;
+  final T _indicatorNotifier;
 
-  _IndicatorListenable(this.indicatorNotifier);
+  _IndicatorListenable(this._indicatorNotifier);
 
   final List<VoidCallback> _listeners = [];
 
@@ -673,7 +756,7 @@ class _IndicatorListenable<T extends IndicatorNotifier>
   @override
   void addListener(VoidCallback listener) {
     if (_listeners.isEmpty) {
-      indicatorNotifier.addListener(_onNotify);
+      _indicatorNotifier.addListener(_onNotify);
     }
     _listeners.add(listener);
   }
@@ -682,12 +765,12 @@ class _IndicatorListenable<T extends IndicatorNotifier>
   void removeListener(VoidCallback listener) {
     _listeners.remove(listener);
     if (_listeners.isEmpty) {
-      indicatorNotifier.removeListener(_onNotify);
+      _indicatorNotifier.removeListener(_onNotify);
     }
   }
 
   @override
-  T get value => indicatorNotifier;
+  T get value => _indicatorNotifier;
 }
 
 /// [Header] notifier
@@ -772,42 +855,41 @@ class HeaderNotifier extends IndicatorNotifier {
     return value >= position.maxScrollExtent;
   }
 
-  /// See [IndicatorNotifier.callTask].
   @override
-  void callTask({
-    required double overOffset,
+  Future animateToOffset({
+    required double offset,
+    required IndicatorMode mode,
+    bool jumpToEdge = true,
     Duration? duration,
     Curve curve = Curves.linear,
-  }) {
-    if (modeLocked || noMoreLocked || secondaryLocked || !_canProcess) {
-      return;
+  }) async {
+    final scrollTo = -offset;
+    _releaseOffset = offset;
+    if (jumpToEdge) {
+      (_position as ScrollPosition).jumpTo(_position.minScrollExtent);
     }
-    final to = -actualTriggerOffset - overOffset;
-    _releaseOffset = actualTriggerOffset + overOffset;
-    (_position as ScrollPosition).jumpTo(_position.minScrollExtent);
     if (clamping) {
       if (duration == null) {
-        _offset = actualTriggerOffset + overOffset;
-        _mode = IndicatorMode.ready;
+        _offset = offset;
+        _mode = mode;
         _updateBySimulation(_position, 0);
       } else {
         userOffsetNotifier.value = true;
-        _clampingAnimationController!
-            .animateTo(to, duration: duration, curve: curve)
-            .then((value) {
-          userOffsetNotifier.value = false;
-          _updateBySimulation(_position, 0);
-        });
+        await _clampingAnimationController!
+            .animateTo(scrollTo, duration: duration, curve: curve);
+        userOffsetNotifier.value = false;
+        _updateBySimulation(_position, 0);
       }
     } else {
       if (_position is ScrollPosition) {
         if (duration == null) {
-          (_position as ScrollPosition).jumpTo(to);
+          (_position as ScrollPosition).jumpTo(scrollTo);
         } else {
           userOffsetNotifier.value = true;
-          (_position as ScrollPosition)
-              .animateTo(to, duration: duration, curve: curve)
-              .then((value) => userOffsetNotifier.value = false);
+          await (_position as ScrollPosition)
+              .animateTo(scrollTo, duration: duration, curve: curve);
+          userOffsetNotifier.value = false;
+          notifyListeners();
         }
       }
     }
@@ -898,42 +980,41 @@ class FooterNotifier extends IndicatorNotifier {
     return value <= position.minScrollExtent;
   }
 
-  /// See [IndicatorNotifier.callTask].
   @override
-  void callTask({
-    required double overOffset,
+  Future animateToOffset({
+    required double offset,
+    required IndicatorMode mode,
     Duration? duration,
     Curve curve = Curves.linear,
-  }) {
-    if (modeLocked || noMoreLocked || secondaryLocked || !_canProcess) {
-      return;
+    bool jumpToEdge = true,
+  }) async {
+    final scrollTo = _position.maxScrollExtent + offset;
+    _releaseOffset = offset;
+    if (jumpToEdge) {
+      (_position as ScrollPosition).jumpTo(_position.maxScrollExtent);
     }
-    final to = _position.maxScrollExtent + actualTriggerOffset + overOffset;
-    _releaseOffset = actualTriggerOffset + overOffset;
-    (_position as ScrollPosition).jumpTo(_position.maxScrollExtent);
     if (clamping) {
       if (duration == null) {
-        _offset = actualTriggerOffset + overOffset;
-        _mode = IndicatorMode.ready;
+        _offset = offset;
+        _mode = mode;
         _updateBySimulation(_position, 0);
       } else {
         userOffsetNotifier.value = true;
-        _clampingAnimationController!
-            .animateTo(to, duration: duration, curve: curve)
-            .then((value) {
-          userOffsetNotifier.value = false;
-          _updateBySimulation(_position, 0);
-        });
+        await _clampingAnimationController!
+            .animateTo(scrollTo, duration: duration, curve: curve);
+        userOffsetNotifier.value = false;
+        _updateBySimulation(_position, 0);
       }
     } else {
       if (_position is ScrollPosition) {
         if (duration == null) {
-          (_position as ScrollPosition).jumpTo(to);
+          (_position as ScrollPosition).jumpTo(scrollTo);
         } else {
           userOffsetNotifier.value = true;
-          (_position as ScrollPosition)
-              .animateTo(to, duration: duration, curve: curve)
-              .then((value) => userOffsetNotifier.value = false);
+          await (_position as ScrollPosition)
+              .animateTo(scrollTo, duration: duration, curve: curve);
+          userOffsetNotifier.value = false;
+          notifyListeners();
         }
       }
     }

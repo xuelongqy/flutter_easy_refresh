@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// EasyRefresh child builder.
 /// Provide [ScrollPhysics], and use it in your [ScrollView].
@@ -69,13 +69,13 @@ class EasyRefresh extends StatefulWidget {
   /// Refresh callback.
   /// Triggered on refresh.
   /// The Header current state is [IndicatorMode.processing].
-  /// More link [IndicatorNotifier.onTask].
+  /// More see [IndicatorNotifier.onTask].
   final FutureOr Function()? onRefresh;
 
   /// Load callback.
   /// Triggered on load.
   /// The Footer current state is [IndicatorMode.processing].
-  /// More link [IndicatorNotifier.onTask].
+  /// More see [IndicatorNotifier.onTask].
   final FutureOr Function()? onLoad;
 
   /// Structure that describes a spring's constants.
@@ -103,7 +103,7 @@ class EasyRefresh extends StatefulWidget {
 
   /// Header for refresh on start.
   /// Use [header] when null.
-  final BuilderHeader? refreshOnStartHeader;
+  final Header? refreshOnStartHeader;
 
   /// Offset beyond trigger offset when calling refresh.
   /// Used when refreshOnStart is true and [EasyRefreshController.callRefresh].
@@ -112,6 +112,12 @@ class EasyRefresh extends StatefulWidget {
   /// Offset beyond trigger offset when calling load.
   /// Used when [EasyRefreshController.callLoad].
   final double callLoadOverOffset;
+
+  /// See [Stack.StackFit]
+  final StackFit fit;
+
+  /// See [Stack.clipBehavior].
+  final Clip clipBehavior;
 
   /// Default header indicator.
   static Header get _defaultHeader => defaultHeaderBuilder.call();
@@ -145,6 +151,8 @@ class EasyRefresh extends StatefulWidget {
     this.refreshOnStartHeader,
     this.callRefreshOverOffset = 20,
     this.callLoadOverOffset = 20,
+    this.fit = StackFit.loose,
+    this.clipBehavior = Clip.hardEdge,
   })  : childBuilder = null,
         assert(callRefreshOverOffset > 0,
             'callRefreshOverOffset must be greater than 0.'),
@@ -172,6 +180,8 @@ class EasyRefresh extends StatefulWidget {
     this.refreshOnStartHeader,
     this.callRefreshOverOffset = 20,
     this.callLoadOverOffset = 20,
+    this.fit = StackFit.loose,
+    this.clipBehavior = Clip.hardEdge,
   })  : child = null,
         assert(callRefreshOverOffset > 0,
             'callRefreshOverOffset must be greater than 0.'),
@@ -392,12 +402,12 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
-  void _callRefresh({
+  Future _callRefresh({
     double? overOffset,
     Duration? duration,
     Curve curve = Curves.linear,
   }) {
-    _headerNotifier.callTask(
+    return _headerNotifier.callTask(
       overOffset: overOffset ?? widget.callRefreshOverOffset,
       duration: duration,
       curve: curve,
@@ -408,12 +418,12 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
-  void _callLoad({
+  Future _callLoad({
     double? overOffset,
     Duration? duration,
     Curve curve = Curves.linear,
   }) {
-    _footerNotifier.callTask(
+    return _footerNotifier.callTask(
       overOffset: overOffset ?? widget.callRefreshOverOffset,
       duration: duration,
       curve: curve,
@@ -548,14 +558,6 @@ class _EasyRefreshState extends State<EasyRefresh>
     final List<Widget> children = [];
     final hPosition = _headerNotifier.iPosition;
     final fPosition = _footerNotifier.iPosition;
-    // Set safe area offset.
-    // final safePadding = MediaQuery.of(context).padding;
-    // if (hPosition != IndicatorPosition.locator) {
-    //   _headerNotifier._safeOffset = safePadding.top;
-    // }
-    // if (fPosition != IndicatorPosition.locator) {
-    //   _footerNotifier._safeOffset = safePadding.bottom;
-    // }
     // Set the position of widgets.
     if (hPosition == IndicatorPosition.behind) {
       children.add(_buildHeaderView());
@@ -575,7 +577,8 @@ class _EasyRefreshState extends State<EasyRefresh>
       return contentWidget;
     }
     return Stack(
-      fit: StackFit.expand,
+      clipBehavior: widget.clipBehavior,
+      fit: StackFit.loose,
       children: children,
     );
   }

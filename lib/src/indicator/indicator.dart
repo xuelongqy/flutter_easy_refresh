@@ -1,7 +1,10 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// The default opening speed of the secondary.
-const double kDefaultSecondaryVelocity = 3000;
+const kDefaultSecondaryVelocity = 3000.0;
+
+/// The default secondary close trigger offset.
+const kDefaultSecondaryCloseTriggerOffset = 70.0;
 
 /// Build spring with [IndicatorMode] and offset.
 /// [mode] Indicator mode.
@@ -68,10 +71,10 @@ enum IndicatorResult {
   none,
 
   /// Task succeeded.
-  succeeded,
+  success,
 
   /// Task failed.
-  failed,
+  fail,
 
   /// No more data.
   noMore,
@@ -136,6 +139,13 @@ class IndicatorState {
   /// [triggerOffset] + [safeOffset]
   final double actualTriggerOffset;
 
+  /// Trigger offset for secondary.
+  double? get secondaryTriggerOffset => indicator.secondaryTriggerOffset;
+
+  /// Actual secondary trigger offset.
+  double? get actualSecondaryTriggerOffset =>
+      notifier.actualSecondaryTriggerOffset;
+
   /// Whether the scroll view direction is reversed.
   /// [AxisDirection.up] or [AxisDirection.left]
   bool get reverse =>
@@ -189,6 +199,60 @@ class IndicatorState {
 typedef IndicatorBuilder = Widget Function(
     BuildContext context, IndicatorState state);
 
+/// Secondary indicator widget builder.
+typedef SecondaryIndicatorBuilder = Widget Function(
+    BuildContext context, IndicatorState state, Indicator indicator);
+
+/// Indicator state listenable.
+class IndicatorStateListenable extends ValueListenable<IndicatorState?> {
+  /// Indicator notifier.
+  IndicatorNotifier? _indicatorNotifier;
+
+  /// Indicator state listeners.
+  final List<VoidCallback> _listeners = [];
+
+  /// Bind [IndicatorNotifier].
+  void _bind(IndicatorNotifier indicatorNotifier) {
+    _indicatorNotifier = indicatorNotifier;
+    if (_listeners.isNotEmpty) {
+      indicatorNotifier.addListener(_onNotify);
+      Future(_onNotify);
+    }
+  }
+
+  /// Unbind [IndicatorNotifier].
+  void _unbind() {
+    _indicatorNotifier?.removeListener(_onNotify);
+    _indicatorNotifier = null;
+  }
+
+  /// Listen for notifications
+  void _onNotify() {
+    for (final listener in _listeners) {
+      listener();
+    }
+  }
+
+  @override
+  void addListener(VoidCallback listener) {
+    if (_listeners.isEmpty) {
+      _indicatorNotifier?.addListener(_onNotify);
+    }
+    _listeners.add(listener);
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    _listeners.remove(listener);
+    if (_listeners.isEmpty) {
+      _indicatorNotifier?.removeListener(_onNotify);
+    }
+  }
+
+  @override
+  IndicatorState? get value => _indicatorNotifier?.indicatorState;
+}
+
 /// Refresh and loading indicator.
 /// Indicator configuration and widget builder.
 abstract class Indicator {
@@ -208,8 +272,14 @@ abstract class Indicator {
   /// Spring effect when scrollable goes back.
   final SpringDescription? spring;
 
+  /// Horizontal spring effect when scrollable goes back.
+  final SpringDescription? horizontalSpring;
+
   /// Spring effect when the mode is [IndicatorMode.ready].
   final SpringBuilder? readySpringBuilder;
+
+  /// Horizontal spring effect when the mode is [IndicatorMode.ready].
+  final SpringBuilder? horizontalReadySpringBuilder;
 
   /// Whether the spring can rebound.
   /// Only works with [readySpringBuilder].
@@ -218,6 +288,10 @@ abstract class Indicator {
   /// Friction factor when list is out of bounds.
   /// See [BouncingScrollPhysics.frictionFactor].
   final FrictionFactor? frictionFactor;
+
+  /// Horizontal friction factor when list is out of bounds.
+  /// See [BouncingScrollPhysics.frictionFactor].
+  final FrictionFactor? horizontalFrictionFactor;
 
   /// Infinite scroll trigger offset.
   /// The relative offset of the [Scrollable] from the bounds (>= 0)
@@ -256,15 +330,27 @@ abstract class Indicator {
   /// Secondary close trigger offset.
   final double secondaryCloseTriggerOffset;
 
+  /// Notify when invisible.
+  /// When [IndicatorNotifier.offset] < 0, scrolling will also trigger notification.
+  /// This might have extra performance overhead, but it's very useful when you need it.
+  final bool notifyWhenInvisible;
+
+  /// Indicator state listenable.
+  /// Monitor state changes in real time.
+  final IndicatorStateListenable? listenable;
+
   const Indicator({
     required this.triggerOffset,
     required this.clamping,
     this.processedDuration = const Duration(seconds: 1),
     this.safeArea = true,
     this.spring,
+    this.horizontalSpring,
     this.readySpringBuilder,
+    this.horizontalReadySpringBuilder,
     this.springRebound = true,
     this.frictionFactor,
+    this.horizontalFrictionFactor,
     this.infiniteOffset,
     bool? hitOver,
     bool? infiniteHitOver,
@@ -273,7 +359,9 @@ abstract class Indicator {
     this.hapticFeedback = false,
     this.secondaryVelocity = kDefaultSecondaryVelocity,
     this.secondaryDimension,
-    this.secondaryCloseTriggerOffset = 70,
+    this.secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
+    this.notifyWhenInvisible = false,
+    this.listenable,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,

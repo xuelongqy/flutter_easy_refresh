@@ -1,8 +1,8 @@
-import 'package:example/page/more/theme.dart';
+import 'package:example/page/more/theme_page.dart';
 import 'package:example/widget/menu_bottom_bar.dart';
 import 'package:example/widget/skeleton_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easy_refresh/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
 class MaterialIndicatorPage extends StatefulWidget {
@@ -77,9 +77,8 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
           setState(() {
             _count += 5;
           });
-          _controller.finishLoad(_count >= 20
-              ? IndicatorResult.noMore
-              : IndicatorResult.succeeded);
+          _controller.finishLoad(
+              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
         },
         child: ListView.builder(
           clipBehavior: Clip.none,
@@ -155,6 +154,7 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
               ),
             ),
             ExpansionPanelList(
+              dividerColor: Colors.transparent,
               expansionCallback: (panelIndex, isExpanded) {
                 setState(() {
                   if (!isExpanded) {
@@ -167,6 +167,7 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
               children: [
                 for (int i = 0; i < propertiesItems.length; i++)
                   ExpansionPanel(
+                    canTapOnHeader: true,
                     headerBuilder: (ctx, isExpanded) {
                       return ListTile(
                         title: Text(propertiesItems[i].name),

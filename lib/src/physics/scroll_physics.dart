@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// The multiple applied to overscroll to make it appear that scrolling past
 /// the edge of the scrollable contents is harder than scrolling the list.
@@ -95,12 +95,11 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   @override
   double frictionFactor(double overscrollFraction) {
     FrictionFactor factor;
-    if (headerNotifier._indicator.frictionFactor != null &&
-        headerNotifier.outOfRange) {
-      factor = headerNotifier._indicator.frictionFactor!;
-    } else if (footerNotifier._indicator.frictionFactor != null &&
+    if (headerNotifier._frictionFactor != null && headerNotifier.outOfRange) {
+      factor = headerNotifier._frictionFactor!;
+    } else if (footerNotifier._frictionFactor != null &&
         footerNotifier.outOfRange) {
-      factor = footerNotifier._indicator.frictionFactor!;
+      factor = footerNotifier._frictionFactor!;
     } else {
       factor = _frictionFactor ?? super.frictionFactor;
     }
@@ -377,12 +376,11 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         (footerNotifier._mode == IndicatorMode.secondaryReady ||
             footerNotifier._mode == IndicatorMode.secondaryOpen);
     bool secondary = hSecondary || fSecondary;
-    if ((velocity.abs() >= tolerance.velocity ||
-            position.outOfRange ||
-            (secondary && oldUserOffset)) &&
-        (oldUserOffset ||
-            _headerSimulationCreationState.value.needCreation(hState) ||
-            _footerSimulationCreationState.value.needCreation(fState))) {
+    if (velocity.abs() >= tolerance.velocity ||
+        (position.outOfRange || (secondary && oldUserOffset)) &&
+            (oldUserOffset ||
+                _headerSimulationCreationState.value.needCreation(hState) ||
+                _footerSimulationCreationState.value.needCreation(fState))) {
       double mVelocity = velocity;
       // Open secondary speed.
       if (secondary) {
@@ -427,6 +425,6 @@ class _BallisticSimulationCreationState {
   });
 
   bool needCreation(_BallisticSimulationCreationState newState) {
-    return mode != newState.mode || offset != newState.offset || offset == 0;
+    return mode != newState.mode || offset != newState.offset;
   }
 }

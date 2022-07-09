@@ -12,10 +12,13 @@ class SkeletonItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final backgroundColor = themeData.colorScheme.surfaceVariant;
+    final foregroundColor = themeData.colorScheme.surface;
     if (direction == Axis.vertical) {
       return Card(
         elevation: 0,
-        color: Theme.of(context).colorScheme.surfaceVariant,
+        color: backgroundColor,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
@@ -25,7 +28,7 @@ class SkeletonItem extends StatelessWidget {
                 margin: const EdgeInsets.only(right: 16),
                 height: 80,
                 width: 80,
-                color: Theme.of(context).splashColor,
+                color: foregroundColor,
               ),
               Expanded(
                 child: Column(
@@ -38,19 +41,19 @@ class SkeletonItem extends StatelessWidget {
                       constraints: const BoxConstraints(
                         maxWidth: 200,
                       ),
-                      color: Theme.of(context).splashColor,
+                      color: foregroundColor,
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 16),
                       height: 12,
                       width: 80,
-                      color: Theme.of(context).splashColor,
+                      color: foregroundColor,
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 8),
                       height: 12,
                       width: 80,
-                      color: Theme.of(context).splashColor,
+                      color: foregroundColor,
                     ),
                   ],
                 ),

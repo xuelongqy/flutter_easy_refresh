@@ -1,9 +1,10 @@
-import 'package:example/page/more/theme.dart';
+import 'package:example/page/more/theme_page.dart';
 import 'package:example/widget/menu_bottom_bar.dart';
 import 'package:example/widget/skeleton_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easy_refresh/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class BezierPage extends StatefulWidget {
   const BezierPage({Key? key}) : super(key: key);
@@ -19,13 +20,9 @@ class _BezierPageState extends State<BezierPage> {
   int _expandedIndex = -1;
   final _BIProperties _headerProperties = _BIProperties(
     name: 'Header',
-    alignment: MainAxisAlignment.center,
-    infinite: false,
   );
   final _BIProperties _footerProperties = _BIProperties(
     name: 'Footer',
-    alignment: MainAxisAlignment.start,
-    infinite: true,
   );
 
   @override
@@ -43,17 +40,211 @@ class _BezierPageState extends State<BezierPage> {
     super.dispose();
   }
 
+  static const List<String> _spins = [
+    'HourGlass',
+    'RotatingPlain',
+    'DoubleBounce',
+    'Wave',
+    'WanderingCubes',
+    'FadingFour',
+    'FadingCube',
+    'Pulse',
+    'ChasingDots',
+    'ThreeBounce',
+    'Circle',
+    'CubeGrid',
+    'FadingCircle',
+    'RotatingCircle',
+    'FoldingCube',
+    'PumpingHeart',
+    'PouringHourGlass',
+    'PouringHourGlassRefined',
+    'FadingGrid',
+    'Ring',
+    'Ripple',
+    'SpinningCircle',
+    'SpinningLines',
+    'SquareCircle',
+    'DualRing',
+    'PianoWave',
+    'DancingSquare',
+    'ThreeInOut',
+  ];
+
+  Widget? _spinWidget(String spin, Color color) {
+    switch (spin) {
+      case 'RotatingPlain':
+        return SpinKitRotatingPlain(
+          size: 32,
+          color: color,
+        );
+      case 'DoubleBounce':
+        return SpinKitDoubleBounce(
+          size: 32,
+          color: color,
+        );
+      case 'Wave':
+        return SpinKitWave(
+          size: 32,
+          color: color,
+        );
+      case 'WanderingCubes':
+        return SpinKitWanderingCubes(
+          size: 32,
+          color: color,
+        );
+      case 'FadingFour':
+        return SpinKitFadingFour(
+          size: 32,
+          color: color,
+        );
+      case 'FadingCube':
+        return SpinKitFadingCube(
+          size: 32,
+          color: color,
+        );
+      case 'Pulse':
+        return SpinKitPulse(
+          size: 32,
+          color: color,
+        );
+      case 'ChasingDots':
+        return SpinKitChasingDots(
+          size: 32,
+          color: color,
+        );
+      case 'ThreeBounce':
+        return SpinKitThreeBounce(
+          size: 32,
+          color: color,
+        );
+      case 'Circle':
+        return SpinKitCircle(
+          size: 32,
+          color: color,
+        );
+      case 'CubeGrid':
+        return SpinKitCubeGrid(
+          size: 32,
+          color: color,
+        );
+      case 'FadingCircle':
+        return SpinKitFadingCircle(
+          size: 32,
+          color: color,
+        );
+      case 'RotatingCircle':
+        return SpinKitRotatingCircle(
+          size: 32,
+          color: color,
+        );
+      case 'FoldingCube':
+        return SpinKitFoldingCube(
+          size: 32,
+          color: color,
+        );
+      case 'PumpingHeart':
+        return SpinKitPumpingHeart(
+          size: 32,
+          color: color,
+        );
+      case 'HourGlass':
+        return SpinKitHourGlass(
+          size: 32,
+          color: color,
+        );
+      case 'PouringHourGlass':
+        return SpinKitPouringHourGlass(
+          size: 32,
+          color: color,
+        );
+      case 'PouringHourGlassRefined':
+        return SpinKitPouringHourGlassRefined(
+          size: 32,
+          color: color,
+        );
+      case 'FadingGrid':
+        return SpinKitFadingGrid(
+          size: 32,
+          color: color,
+        );
+      case 'Ring':
+        return SpinKitRing(
+          size: 32,
+          color: color,
+        );
+      case 'Ripple':
+        return SpinKitRipple(
+          size: 32,
+          color: color,
+        );
+      case 'SpinningCircle':
+        return SpinKitSpinningCircle(
+          size: 32,
+          color: color,
+        );
+      case 'SpinningLines':
+        return SpinKitSpinningLines(
+          size: 32,
+          color: color,
+        );
+      case 'SquareCircle':
+        return SpinKitSquareCircle(
+          size: 32,
+          color: color,
+        );
+      case 'DualRing':
+        return SpinKitDualRing(
+          size: 32,
+          color: color,
+        );
+      case 'PianoWave':
+        return SpinKitPianoWave(
+          size: 32,
+          color: color,
+        );
+      case 'DancingSquare':
+        return SpinKitDancingSquare(
+          size: 32,
+          color: color,
+        );
+      case 'ThreeInOut':
+        return SpinKitThreeInOut(
+          size: 32,
+          color: color,
+        );
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     final propertiesItems = [_headerProperties, _footerProperties];
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: themeData.colorScheme.primary,
+        foregroundColor: themeData.colorScheme.onPrimary,
         title: const Text('Bezier'),
       ),
       body: EasyRefresh(
         controller: _controller,
-        header: BezierHeader(),
-        footer: BezierFooter(),
+        header: BezierHeader(
+          backgroundColor: themeData.colorScheme.primary,
+          foregroundColor: themeData.colorScheme.onPrimary,
+          clamping: _headerProperties.clamping,
+          showBalls: _headerProperties.displayBalls,
+          spinWidget: _spinWidget(
+              _headerProperties.spin, themeData.colorScheme.onPrimary),
+        ),
+        footer: BezierFooter(
+          backgroundColor: themeData.colorScheme.primary,
+          foregroundColor: themeData.colorScheme.onPrimary,
+          clamping: _footerProperties.clamping,
+          showBalls: _headerProperties.displayBalls,
+          spinWidget: _spinWidget(
+              _headerProperties.spin, themeData.colorScheme.onPrimary),
+        ),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));
           setState(() {
@@ -67,9 +258,8 @@ class _BezierPageState extends State<BezierPage> {
           setState(() {
             _count += 5;
           });
-          _controller.finishLoad(_count >= 20
-              ? IndicatorResult.noMore
-              : IndicatorResult.succeeded);
+          _controller.finishLoad(
+              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
         },
         child: ListView.builder(
           clipBehavior: Clip.none,
@@ -145,6 +335,7 @@ class _BezierPageState extends State<BezierPage> {
               ),
             ),
             ExpansionPanelList(
+              dividerColor: Colors.transparent,
               expansionCallback: (panelIndex, isExpanded) {
                 setState(() {
                   if (!isExpanded) {
@@ -157,6 +348,7 @@ class _BezierPageState extends State<BezierPage> {
               children: [
                 for (int i = 0; i < propertiesItems.length; i++)
                   ExpansionPanel(
+                    canTapOnHeader: true,
                     headerBuilder: (ctx, isExpanded) {
                       return ListTile(
                         title: Text(propertiesItems[i].name),
@@ -167,6 +359,7 @@ class _BezierPageState extends State<BezierPage> {
                       builder: (ctx) {
                         final properties = propertiesItems[i];
                         return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ListTile(
                               title: Text('Clamping'.tr),
@@ -175,97 +368,45 @@ class _BezierPageState extends State<BezierPage> {
                                 onChanged: (value) {
                                   setState(() {
                                     properties.clamping = value;
-                                    if (value && properties.infinite) {
-                                      properties.infinite = false;
-                                    }
                                   });
                                 },
                               ),
                             ),
                             ListTile(
-                              title: Text('Background'.tr),
+                              title: Text('Display balls'.tr),
                               trailing: Switch(
-                                value: properties.background,
+                                value: properties.displayBalls,
                                 onChanged: (value) {
                                   setState(() {
-                                    properties.background = value;
+                                    properties.displayBalls = value;
                                   });
                                 },
                               ),
                             ),
-                            ListTile(
-                              title: Text('Alignment'.tr),
-                              trailing: IntrinsicWidth(
-                                child: Row(
-                                  children: [
-                                    Radio<MainAxisAlignment>(
-                                      value: MainAxisAlignment.center,
-                                      groupValue: properties.alignment,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          properties.alignment = value!;
-                                        });
-                                      },
+                            const ListTile(
+                              title: Text('Spin'),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Wrap(
+                                children: [
+                                  for (final spin in _spins)
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          right: 8,
+                                          bottom: GetPlatform.isWeb ? 8 : 0),
+                                      child: RawChip(
+                                        label: Text(spin),
+                                        onPressed: () {
+                                          setState(() {
+                                            properties.spin = spin;
+                                          });
+                                        },
+                                        selected: properties.spin == spin,
+                                      ),
                                     ),
-                                    Text('Center'.tr),
-                                    Radio<MainAxisAlignment>(
-                                      value: MainAxisAlignment.start,
-                                      groupValue: properties.alignment,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          properties.alignment = value!;
-                                        });
-                                      },
-                                    ),
-                                    Text('Start'.tr),
-                                    Radio<MainAxisAlignment>(
-                                      value: MainAxisAlignment.end,
-                                      groupValue: properties.alignment,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          properties.alignment = value!;
-                                        });
-                                      },
-                                    ),
-                                    Text('End'.tr),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            ListTile(
-                              title: Text('Infinite'.tr),
-                              trailing: Switch(
-                                value: properties.infinite,
-                                onChanged: (value) {
-                                  setState(() {
-                                    properties.infinite = value;
-                                    if (value && properties.clamping) {
-                                      properties.clamping = false;
-                                    }
-                                  });
-                                },
-                              ),
-                            ),
-                            ListTile(
-                              title: Text('Message'.tr),
-                              trailing: Switch(
-                                value: properties.message,
-                                onChanged: (value) {
-                                  setState(() {
-                                    properties.message = value;
-                                  });
-                                },
-                              ),
-                            ),
-                            ListTile(
-                              title: Text('Text'.tr),
-                              trailing: Switch(
-                                value: properties.text,
-                                onChanged: (value) {
-                                  setState(() {
-                                    properties.text = value;
-                                  });
-                                },
+                                ],
                               ),
                             ),
                           ],
@@ -287,15 +428,10 @@ class _BezierPageState extends State<BezierPage> {
 class _BIProperties {
   final String name;
   bool clamping = false;
-  bool background = false;
-  MainAxisAlignment alignment;
-  bool message = true;
-  bool text = true;
-  bool infinite;
+  bool displayBalls = true;
+  String spin = 'HourGlass';
 
   _BIProperties({
     required this.name,
-    required this.alignment,
-    required this.infinite,
   });
 }

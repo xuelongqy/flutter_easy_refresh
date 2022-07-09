@@ -1,4 +1,4 @@
-part of easyrefresh;
+part of easy_refresh;
 
 /// Footer indicator.
 abstract class Footer extends Indicator {
@@ -7,9 +7,12 @@ abstract class Footer extends Indicator {
     required bool clamping,
     Duration processedDuration = const Duration(seconds: 1),
     SpringDescription? spring,
+    SpringDescription? horizontalSpring,
     SpringBuilder? readySpringBuilder,
+    SpringBuilder? horizontalReadySpringBuilder,
     bool springRebound = true,
     FrictionFactor? frictionFactor,
+    FrictionFactor? horizontalFrictionFactor,
     bool safeArea = true,
     double? infiniteOffset = 0,
     bool? hitOver,
@@ -19,14 +22,20 @@ abstract class Footer extends Indicator {
     double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
+    bool notifyWhenInvisible = false,
+    IndicatorStateListenable? listenable,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
           processedDuration: processedDuration,
           spring: spring,
+          horizontalSpring: horizontalSpring,
           readySpringBuilder: readySpringBuilder,
+          horizontalReadySpringBuilder: horizontalReadySpringBuilder,
           springRebound: springRebound,
           frictionFactor: frictionFactor,
+          horizontalFrictionFactor: horizontalFrictionFactor,
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
@@ -36,6 +45,9 @@ abstract class Footer extends Indicator {
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
           secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
+          notifyWhenInvisible: notifyWhenInvisible,
+          listenable: listenable,
         );
 }
 
@@ -50,9 +62,12 @@ class BuilderFooter extends Footer {
     required bool clamping,
     Duration processedDuration = const Duration(seconds: 1),
     SpringDescription? spring,
+    SpringDescription? horizontalSpring,
     SpringBuilder? readySpringBuilder,
+    SpringBuilder? horizontalReadySpringBuilder,
     bool springRebound = true,
     FrictionFactor? frictionFactor,
+    FrictionFactor? horizontalFrictionFactor,
     bool safeArea = true,
     double? infiniteOffset = 0,
     bool? hitOver,
@@ -62,14 +77,20 @@ class BuilderFooter extends Footer {
     double? secondaryTriggerOffset,
     double secondaryVelocity = kDefaultSecondaryVelocity,
     double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
+    bool notifyWhenInvisible = false,
+    IndicatorStateListenable? listenable,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
           processedDuration: processedDuration,
           spring: spring,
+          horizontalSpring: horizontalSpring,
           readySpringBuilder: readySpringBuilder,
+          horizontalReadySpringBuilder: horizontalReadySpringBuilder,
           springRebound: springRebound,
           frictionFactor: frictionFactor,
+          horizontalFrictionFactor: horizontalFrictionFactor,
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
@@ -79,11 +100,146 @@ class BuilderFooter extends Footer {
           secondaryTriggerOffset: secondaryTriggerOffset,
           secondaryVelocity: secondaryVelocity,
           secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
+          notifyWhenInvisible: notifyWhenInvisible,
+          listenable: listenable,
         );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
     return builder(context, state);
+  }
+}
+
+/// Listener footer.
+/// Listen to the indicator state and respond anywhere.
+class ListenerFooter extends Footer {
+  const ListenerFooter({
+    required IndicatorStateListenable listenable,
+    required double triggerOffset,
+    bool clamping = true,
+    Duration processedDuration = const Duration(seconds: 1),
+    SpringDescription? spring,
+    SpringDescription? horizontalSpring,
+    SpringBuilder? readySpringBuilder,
+    SpringBuilder? horizontalReadySpringBuilder,
+    bool springRebound = true,
+    FrictionFactor? frictionFactor,
+    FrictionFactor? horizontalFrictionFactor,
+    bool safeArea = true,
+    double? infiniteOffset = 0,
+    bool? hitOver,
+    bool? infiniteHitOver,
+    bool hapticFeedback = false,
+    double? secondaryTriggerOffset,
+    double secondaryVelocity = kDefaultSecondaryVelocity,
+    double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
+    bool notifyWhenInvisible = false,
+  }) : super(
+          triggerOffset: triggerOffset,
+          clamping: clamping,
+          processedDuration: processedDuration,
+          spring: spring,
+          horizontalSpring: horizontalSpring,
+          readySpringBuilder: readySpringBuilder,
+          horizontalReadySpringBuilder: horizontalReadySpringBuilder,
+          springRebound: springRebound,
+          frictionFactor: frictionFactor,
+          horizontalFrictionFactor: horizontalFrictionFactor,
+          safeArea: safeArea,
+          infiniteOffset: infiniteOffset,
+          hitOver: hitOver,
+          infiniteHitOver: infiniteHitOver,
+          position: IndicatorPosition.custom,
+          secondaryTriggerOffset: secondaryTriggerOffset,
+          secondaryVelocity: secondaryVelocity,
+          hapticFeedback: hapticFeedback,
+          secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
+          notifyWhenInvisible: notifyWhenInvisible,
+          listenable: listenable,
+        );
+
+  @override
+  Widget build(BuildContext context, IndicatorState state) {
+    return const SizedBox();
+  }
+}
+
+/// Secondary footer.
+/// Combine existing [Footer] with secondary.
+abstract class SecondaryFooter extends Footer {
+  /// Existing [Footer].
+  final Footer footer;
+
+  SecondaryFooter({
+    required this.footer,
+    required double secondaryTriggerOffset,
+    double secondaryVelocity = kDefaultSecondaryVelocity,
+    double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
+    IndicatorStateListenable? listenable,
+  }) : super(
+          triggerOffset: footer.triggerOffset,
+          clamping: footer.clamping,
+          processedDuration: footer.processedDuration,
+          spring: footer.spring,
+          horizontalSpring: footer.horizontalSpring,
+          readySpringBuilder: footer.readySpringBuilder,
+          horizontalReadySpringBuilder: footer.horizontalReadySpringBuilder,
+          springRebound: footer.springRebound,
+          frictionFactor: footer.frictionFactor,
+          horizontalFrictionFactor: footer.horizontalFrictionFactor,
+          safeArea: footer.safeArea,
+          infiniteOffset: footer.infiniteOffset,
+          hitOver: footer.hitOver,
+          infiniteHitOver: footer.infiniteHitOver,
+          position: footer.position,
+          hapticFeedback: footer.hapticFeedback,
+          secondaryTriggerOffset: secondaryTriggerOffset,
+          secondaryVelocity: secondaryVelocity,
+          secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
+          notifyWhenInvisible: footer.notifyWhenInvisible,
+          listenable: listenable ?? footer.listenable,
+        );
+
+  @override
+  Widget build(BuildContext context, IndicatorState state) {
+    return secondaryBuild(context, state, footer);
+  }
+
+  Widget secondaryBuild(
+      BuildContext context, IndicatorState state, Indicator indicator);
+}
+
+/// Secondary builder footer.
+class SecondaryBuilderFooter extends SecondaryFooter {
+  /// Footer widget builder.
+  final SecondaryIndicatorBuilder builder;
+
+  SecondaryBuilderFooter({
+    required Footer footer,
+    required this.builder,
+    required double secondaryTriggerOffset,
+    double secondaryVelocity = kDefaultSecondaryVelocity,
+    double? secondaryDimension,
+    double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
+    IndicatorStateListenable? listenable,
+  }) : super(
+          footer: footer,
+          secondaryTriggerOffset: secondaryTriggerOffset,
+          secondaryVelocity: secondaryVelocity,
+          secondaryDimension: secondaryDimension,
+          secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
+          listenable: listenable,
+        );
+
+  @override
+  Widget secondaryBuild(
+      BuildContext context, IndicatorState state, Indicator indicator) {
+    return builder(context, state, indicator);
   }
 }
 
@@ -93,18 +249,89 @@ class NotLoadFooter extends Footer {
   const NotLoadFooter({
     bool clamping = false,
     SpringDescription? spring,
+    SpringDescription? horizontalSpring,
     FrictionFactor? frictionFactor,
+    FrictionFactor? horizontalFrictionFactor,
   }) : super(
           triggerOffset: 0,
           clamping: clamping,
           position: IndicatorPosition.custom,
           spring: spring,
+          horizontalSpring: horizontalSpring,
           frictionFactor: frictionFactor,
+          horizontalFrictionFactor: horizontalFrictionFactor,
           processedDuration: const Duration(seconds: 0),
         );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
     return const SizedBox();
+  }
+}
+
+/// Override the Footer parameter.
+/// First of all you have to make it clear that this is feasible,
+/// otherwise please don't use it.
+class OverrideFooter extends Footer {
+  /// Footer that needs to be overwritten.
+  final Footer footer;
+
+  OverrideFooter({
+    required this.footer,
+    double? triggerOffset,
+    bool? clamping,
+    IndicatorPosition? position,
+    Duration? processedDuration,
+    SpringDescription? spring,
+    SpringDescription? horizontalSpring,
+    SpringBuilder? readySpringBuilder,
+    SpringBuilder? horizontalReadySpringBuilder,
+    bool? springRebound,
+    FrictionFactor? frictionFactor,
+    FrictionFactor? horizontalFrictionFactor,
+    bool? safeArea,
+    double? infiniteOffset,
+    bool? hitOver,
+    bool? infiniteHitOver,
+    bool? hapticFeedback,
+    double? secondaryTriggerOffset,
+    double? secondaryVelocity,
+    double? secondaryDimension,
+    double? secondaryCloseTriggerOffset,
+    bool? notifyWhenInvisible,
+    IndicatorStateListenable? listenable,
+  }) : super(
+          triggerOffset: triggerOffset ?? footer.triggerOffset,
+          clamping: clamping ?? footer.clamping,
+          processedDuration: processedDuration ?? footer.processedDuration,
+          spring: spring ?? footer.spring,
+          horizontalSpring: horizontalSpring ?? footer.horizontalSpring,
+          readySpringBuilder: readySpringBuilder ?? footer.readySpringBuilder,
+          horizontalReadySpringBuilder: horizontalReadySpringBuilder ??
+              footer.horizontalReadySpringBuilder,
+          springRebound: springRebound ?? footer.springRebound,
+          frictionFactor: frictionFactor ?? footer.frictionFactor,
+          horizontalFrictionFactor:
+              horizontalFrictionFactor ?? footer.horizontalFrictionFactor,
+          safeArea: safeArea ?? footer.safeArea,
+          infiniteOffset: infiniteOffset ?? footer.infiniteOffset,
+          hitOver: hitOver ?? footer.hitOver,
+          infiniteHitOver: infiniteHitOver ?? footer.infiniteHitOver,
+          position: position ?? footer.position,
+          hapticFeedback: hapticFeedback ?? footer.hapticFeedback,
+          secondaryTriggerOffset:
+              secondaryTriggerOffset ?? footer.secondaryTriggerOffset,
+          secondaryVelocity: secondaryVelocity ?? footer.secondaryVelocity,
+          secondaryDimension: secondaryDimension ?? footer.secondaryDimension,
+          secondaryCloseTriggerOffset:
+              secondaryCloseTriggerOffset ?? footer.secondaryCloseTriggerOffset,
+          notifyWhenInvisible:
+              notifyWhenInvisible ?? footer.notifyWhenInvisible,
+          listenable: listenable ?? footer.listenable,
+        );
+
+  @override
+  Widget build(BuildContext context, IndicatorState state) {
+    return footer.build(context, state);
   }
 }

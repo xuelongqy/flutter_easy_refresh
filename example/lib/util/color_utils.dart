@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 class ColorUtils {
   /// Generate background color from string.
   static Color backgroundColorWithString(String value) {
-    return Color(int.parse(
-        'ff${hex
-            .encode('${value}color'.codeUnits.map((e) => e % 256).toList())
-            .substring(1, 7)}',
-        radix: 16));
+    final strHex =
+        hex.encode('${value}color'.codeUnits.map((e) => e % 256).toList());
+    String colorStr = '';
+    const hexLength = 6;
+    final spacing = strHex.length ~/ hexLength;
+    for (int i = 0; i < hexLength; i++) {
+      colorStr += String.fromCharCode(strHex.codeUnitAt(i * spacing + 1));
+    }
+    return Color(int.parse('ff$colorStr', radix: 16));
   }
 
   /// Generate foreground color from string.

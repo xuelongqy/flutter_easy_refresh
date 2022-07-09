@@ -1,6 +1,6 @@
+import 'package:example/util/color_utils.dart';
 import 'package:flutter/material.dart';
-
-import '../util/color_utils.dart';
+import 'package:easy_refresh/src/painter/paths_painter.dart';
 
 /// List item.
 class ListItem extends StatelessWidget {
@@ -10,6 +10,7 @@ class ListItem extends StatelessWidget {
     this.subtitle,
     this.leading,
     this.icon,
+    this.iconPaths,
     this.trailing,
     this.onTap,
     this.selected = false,
@@ -24,6 +25,8 @@ class ListItem extends StatelessWidget {
 
   final IconData? icon;
 
+  final List<String>? iconPaths;
+
   final Widget? trailing;
 
   final bool selected;
@@ -32,6 +35,45 @@ class ListItem extends StatelessWidget {
 
   final bool divider;
 
+  Widget? get _leading {
+    if (leading != null) {
+      return leading!;
+    }
+    if (icon != null) {
+      return Container(
+        height: 36,
+        width: 36,
+        decoration: BoxDecoration(
+          color: ColorUtils.backgroundColorWithString(title),
+          borderRadius: const BorderRadius.all(Radius.circular(18)),
+        ),
+        alignment: Alignment.center,
+        child: Icon(
+          icon!,
+          color: ColorUtils.foregroundColorWithString(title),
+        ),
+      );
+    }
+    if (iconPaths != null) {
+      return Container(
+        height: 36,
+        width: 36,
+        decoration: BoxDecoration(
+          color: ColorUtils.backgroundColorWithString(title),
+          borderRadius: const BorderRadius.all(Radius.circular(18)),
+        ),
+        alignment: Alignment.center,
+        child: PathsPaint(
+          paths: iconPaths!,
+          colors: List.filled(
+              iconPaths!.length, ColorUtils.foregroundColorWithString(title)),
+          width: 24,
+        ),
+      );
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -39,23 +81,7 @@ class ListItem extends StatelessWidget {
         ListTile(
           title: Text(title),
           subtitle: subtitle == null ? null : Text(subtitle!),
-          leading: leading ??
-              (icon == null
-                  ? null
-                  : Container(
-                      height: 36,
-                      width: 36,
-                      decoration: BoxDecoration(
-                        color: ColorUtils.backgroundColorWithString(title),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(18)),
-                      ),
-                      alignment: Alignment.center,
-                      child: Icon(
-                        icon!,
-                        color: ColorUtils.foregroundColorWithString(title),
-                      ),
-                    )),
+          leading: _leading,
           trailing: trailing,
           selected: selected,
           onTap: onTap,
