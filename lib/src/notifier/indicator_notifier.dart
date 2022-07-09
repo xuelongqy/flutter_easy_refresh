@@ -28,6 +28,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Wait for the task to complete.
   bool _waitTaskResult;
 
+  /// Mounted on EasyRefresh.
+  bool _mounted = false;
+
   IndicatorNotifier({
     required Indicator indicator,
     required this.vsync,
@@ -44,6 +47,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     _initClampingAnimation();
     userOffsetNotifier.addListener(_onUserOffset);
     indicator.listenable?._bind(this);
+    _mounted = true;
   }
 
   double get triggerOffset => _indicator.triggerOffset;
@@ -266,8 +270,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       _mode == IndicatorMode.secondaryOpen ||
       _mode == IndicatorMode.secondaryClosing;
 
-  bool _mounted = false;
-
   @override
   void dispose() {
     _onCanProcess = null;
@@ -276,7 +278,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     _task = null;
     _modeChangeListeners.clear();
     _indicator.listenable?._unbind();
-    _mounted = true;
+    _mounted = false;
     super.dispose();
   }
 
@@ -664,11 +666,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (_mode == mode) {
       return;
     }
-
-    if (_mounted) {
+    // Do not continue if not mounted.
+    if (!_mounted) {
       return;
     }
-
     final oldMode = _mode;
     _mode = mode;
     notifyListeners();
