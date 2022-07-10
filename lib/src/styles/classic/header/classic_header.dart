@@ -83,6 +83,13 @@ class ClassicHeader extends Header {
   /// Icon style.
   final IconThemeData? iconTheme;
 
+  /// Progress indicator size.
+  final double? progressIndicatorSize;
+
+  /// Progress indicator stroke width.
+  /// See [CircularProgressIndicator.strokeWidth].
+  final double? progressIndicatorStrokeWidth;
+
   const ClassicHeader({
     this.key,
     double triggerOffset = 70,
@@ -122,7 +129,9 @@ class ClassicHeader extends Header {
     this.messageStyle,
     this.messageBuilder,
     this.clipBehavior = Clip.hardEdge,
-    this.iconTheme
+    this.iconTheme,
+    this.progressIndicatorSize,
+    this.progressIndicatorStrokeWidth,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -169,7 +178,9 @@ class ClassicHeader extends Header {
       messageStyle: messageStyle,
       messageBuilder: messageBuilder,
       clipBehavior: clipBehavior,
-      iconTheme: iconTheme
+      iconTheme: iconTheme,
+      progressIndicatorSize: progressIndicatorSize,
+      progressIndicatorStrokeWidth: progressIndicatorStrokeWidth,
     );
   }
 }

@@ -12,6 +12,12 @@ typedef CITextBuilder = Widget Function(
 typedef CIMessageBuilder = Widget Function(
     BuildContext context, IndicatorState state, String text, DateTime dateTime);
 
+/// Default progress indicator size.
+const _kDefaultProgressIndicatorSize = 20.0;
+
+/// Default progress indicator stroke width.
+const _kDefaultProgressIndicatorStrokeWidth = 2.0;
+
 /// Classic indicator.
 /// Base widget for [ClassicHeader] and [ClassicFooter].
 class _ClassicIndicator extends StatefulWidget {
@@ -101,6 +107,13 @@ class _ClassicIndicator extends StatefulWidget {
   /// Icon style.
   final IconThemeData? iconTheme;
 
+  /// Progress indicator size.
+  final double? progressIndicatorSize;
+
+  /// Progress indicator stroke width.
+  /// See [CircularProgressIndicator.strokeWidth].
+  final double? progressIndicatorStrokeWidth;
+
   const _ClassicIndicator({
     Key? key,
     required this.state,
@@ -129,7 +142,9 @@ class _ClassicIndicator extends StatefulWidget {
     this.messageStyle,
     this.messageBuilder,
     this.clipBehavior = Clip.hardEdge,
-    this.iconTheme
+    this.iconTheme,
+    this.progressIndicatorSize,
+    this.progressIndicatorStrokeWidth,
   })  : assert(
             mainAxisAlignment == MainAxisAlignment.start ||
                 mainAxisAlignment == MainAxisAlignment.center ||
@@ -233,7 +248,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
           return widget.processedText;
         }
       default:
-        return '';
+        return widget.dragText;
     }
   }
 
@@ -261,12 +276,15 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
       );
     } else if (_mode == IndicatorMode.processing ||
         _mode == IndicatorMode.ready) {
+      final progressIndicatorSize =
+          widget.progressIndicatorSize ?? _kDefaultProgressIndicatorSize;
       icon = SizedBox(
         key: const ValueKey(IndicatorMode.processing),
-        width: 20,
-        height: 20,
+        width: progressIndicatorSize,
+        height: progressIndicatorSize,
         child: CircularProgressIndicator(
-          strokeWidth: 2,
+          strokeWidth: widget.progressIndicatorStrokeWidth ??
+              _kDefaultProgressIndicatorStrokeWidth,
           color: iconTheme.color,
         ),
       );
@@ -309,7 +327,6 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
             ),
       );
     }
-
 
     return AnimatedSwitcher(
       key: _iconAnimatedSwitcherKey,

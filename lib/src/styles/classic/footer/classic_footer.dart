@@ -83,6 +83,12 @@ class ClassicFooter extends Footer {
   /// Icon style.
   final IconThemeData? iconTheme;
 
+  /// Progress indicator size.
+  final double? progressIndicatorSize;
+
+  /// Progress indicator stroke width.
+  /// See [CircularProgressIndicator.strokeWidth].
+  final double? progressIndicatorStrokeWidth;
 
   const ClassicFooter({
     this.key,
@@ -123,7 +129,9 @@ class ClassicFooter extends Footer {
     this.messageStyle,
     this.messageBuilder,
     this.clipBehavior = Clip.hardEdge,
-    this.iconTheme
+    this.iconTheme,
+    this.progressIndicatorSize,
+    this.progressIndicatorStrokeWidth,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -170,7 +178,9 @@ class ClassicFooter extends Footer {
       messageStyle: messageStyle,
       messageBuilder: messageBuilder,
       clipBehavior: clipBehavior,
-      iconTheme: iconTheme
+      iconTheme: iconTheme,
+      progressIndicatorSize: progressIndicatorSize,
+      progressIndicatorStrokeWidth: progressIndicatorStrokeWidth,
     );
   }
 }
