@@ -80,6 +80,10 @@ class ClassicFooter extends Footer {
   /// Link [Stack.clipBehavior].
   final Clip clipBehavior;
 
+  /// Icon style.
+  final IconThemeData? iconTheme;
+
+
   const ClassicFooter({
     this.key,
     double triggerOffset = 70,
@@ -119,6 +123,7 @@ class ClassicFooter extends Footer {
     this.messageStyle,
     this.messageBuilder,
     this.clipBehavior = Clip.hardEdge,
+    this.iconTheme
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -165,6 +170,7 @@ class ClassicFooter extends Footer {
       messageStyle: messageStyle,
       messageBuilder: messageBuilder,
       clipBehavior: clipBehavior,
+      iconTheme: iconTheme
     );
   }
 }
