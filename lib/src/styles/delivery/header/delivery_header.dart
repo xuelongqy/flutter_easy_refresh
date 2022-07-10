@@ -6,7 +6,7 @@ class DeliveryHeader extends Header {
   /// Sky color.
   final Color? skyColor;
 
-  DeliveryHeader({
+  const DeliveryHeader({
     this.key,
     double triggerOffset = kDeliveryTriggerOffset,
     bool clamping = false,

@@ -6,7 +6,7 @@ class DeliveryFooter extends Footer {
   /// Sky color.
   final Color? skyColor;
 
-  DeliveryFooter({
+  const DeliveryFooter({
     this.key,
     double triggerOffset = kDeliveryTriggerOffset,
     bool clamping = false,

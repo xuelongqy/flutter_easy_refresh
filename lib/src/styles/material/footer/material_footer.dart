@@ -37,7 +37,7 @@ class MaterialFooter extends Footer {
   /// See [BezierBackground.bounce].
   final bool bezierBackgroundBounce;
 
-  MaterialFooter({
+  const MaterialFooter({
     this.key,
     double triggerOffset = 100,
     bool clamping = true,

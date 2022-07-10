@@ -6,7 +6,7 @@ class PhoenixFooter extends Footer {
   /// Sky color.
   final Color? skyColor;
 
-  PhoenixFooter({
+  const PhoenixFooter({
     this.key,
     double triggerOffset = 100,
     bool clamping = false,

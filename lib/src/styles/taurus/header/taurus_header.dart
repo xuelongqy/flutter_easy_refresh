@@ -6,7 +6,7 @@ class TaurusHeader extends Header {
   /// Sky color.
   final Color? skyColor;
 
-  TaurusHeader({
+  const TaurusHeader({
     this.key,
     double triggerOffset = 100,
     bool clamping = false,

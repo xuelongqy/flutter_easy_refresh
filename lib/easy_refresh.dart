@@ -3,6 +3,7 @@ library easy_refresh;
 import 'dart:math' as math;
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -43,3 +44,6 @@ part 'src/styles/taurus/footer/taurus_footer.dart';
 part 'src/styles/delivery/delivery_indicator.dart';
 part 'src/styles/delivery/header/delivery_header.dart';
 part 'src/styles/delivery/footer/delivery_footer.dart';
+part 'src/styles/cupertino/cupertino_indicator.dart';
+part 'src/styles/cupertino/header/cupertino_header.dart';
+part 'src/styles/cupertino/footer/cupertino_footer.dart';

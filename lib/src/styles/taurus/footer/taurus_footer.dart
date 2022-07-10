@@ -6,7 +6,7 @@ class TaurusFooter extends Footer {
   /// Sky color.
   final Color? skyColor;
 
-  TaurusFooter({
+  const TaurusFooter({
     this.key,
     double triggerOffset = 100,
     bool clamping = false,

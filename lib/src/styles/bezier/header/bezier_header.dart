@@ -22,7 +22,7 @@ class BezierHeader extends Header {
   /// Background color.
   final Color? backgroundColor;
 
-  BezierHeader({
+  const BezierHeader({
     this.key,
     double triggerOffset = 100,
     bool clamping = false,

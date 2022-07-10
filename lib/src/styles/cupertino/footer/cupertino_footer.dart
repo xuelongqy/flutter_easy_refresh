@@ -1,27 +1,23 @@
 part of easy_refresh;
 
-class PhoenixHeader extends Header {
+class CupertinoFooter extends Footer {
   final Key? key;
 
-  /// Sky color.
-  final Color? skyColor;
-
-  const PhoenixHeader({
+  const CupertinoFooter({
     this.key,
-    double triggerOffset = 100,
+    double triggerOffset = 60,
     bool clamping = false,
-    IndicatorPosition position = IndicatorPosition.above,
-    Duration processedDuration = const Duration(seconds: 1),
+    IndicatorPosition position = IndicatorPosition.behind,
+    Duration processedDuration = Duration.zero,
     SpringDescription? spring,
     SpringBuilder? readySpringBuilder,
-    bool springRebound = false,
+    bool springRebound = true,
     FrictionFactor? frictionFactor,
     bool safeArea = true,
-    double? infiniteOffset,
+    double? infiniteOffset = 60,
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
-    this.skyColor,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -41,12 +37,11 @@ class PhoenixHeader extends Header {
   @override
   Widget build(BuildContext context, IndicatorState state) {
     assert(state.axis == Axis.vertical,
-        'PhoenixHeader does not support horizontal scrolling.');
-    return _PhoenixIndicator(
+        'CupertinoFooter does not support horizontal scrolling.');
+    return _CupertinoIndicator(
       key: key,
       state: state,
       reverse: state.reverse,
-      skyColor: skyColor,
     );
   }
 }

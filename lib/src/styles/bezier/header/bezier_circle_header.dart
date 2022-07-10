@@ -10,7 +10,7 @@ class BezierCircleHeader extends Header {
   /// Background color.
   final Color? backgroundColor;
 
-  BezierCircleHeader({
+  const BezierCircleHeader({
     this.key,
     double triggerOffset = 100,
     bool clamping = false,

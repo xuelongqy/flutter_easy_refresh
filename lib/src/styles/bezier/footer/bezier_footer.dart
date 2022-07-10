@@ -22,7 +22,7 @@ class BezierFooter extends Footer {
   /// Background color.
   final Color? backgroundColor;
 
-  BezierFooter({
+  const BezierFooter({
     this.key,
     double triggerOffset = 100,
     bool clamping = false,

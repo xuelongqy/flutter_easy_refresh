@@ -1,6 +1,7 @@
 import 'package:example/page/style/bezier_circle_page.dart';
 import 'package:example/page/style/bezier_page.dart';
 import 'package:example/page/style/classical_page.dart';
+import 'package:example/page/style/cupertino_page.dart';
 import 'package:example/page/style/delivery_page.dart';
 import 'package:example/page/style/halloween_page.dart';
 import 'package:example/page/style/material_page.dart';
@@ -51,6 +52,12 @@ class _StylePageState extends State<StylePage> {
                 subtitle: 'Google Material',
                 icon: Icons.refresh,
                 onTap: () => Get.to(() => const MaterialIndicatorPage()),
+              ),
+              ListItem(
+                title: 'Cupertino',
+                subtitle: 'iOS Cupertino',
+                icon: Icons.apple,
+                onTap: () => Get.to(() => const CupertinoIndicatorPage()),
               ),
               ListItem(
                 title: 'Bezier',

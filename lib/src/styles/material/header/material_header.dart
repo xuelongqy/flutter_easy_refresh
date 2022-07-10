@@ -37,7 +37,7 @@ class MaterialHeader extends Header {
   /// See [BezierBackground.bounce].
   final bool bezierBackgroundBounce;
 
-  MaterialHeader({
+  const MaterialHeader({
     this.key,
     double triggerOffset = 100,
     bool clamping = true,

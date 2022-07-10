@@ -19,6 +19,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  cupertino_icons: ^1.0.5
+
   url_launcher: ^6.1.4
   flutter_spinkit: ^5.1.0
   flare_flutter: ^3.0.2
