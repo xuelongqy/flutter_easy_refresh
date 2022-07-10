@@ -208,6 +208,9 @@ class _ChatPageState extends State<ChatPage> {
                 onRefresh: () {},
                 onLoad: () {
                   return Future.delayed(const Duration(seconds: 2), () {
+                    if (!mounted) {
+                      return;
+                    }
                     setState(() {
                       _messages.addAll([
                         MessageEntity(

@@ -47,6 +47,9 @@ class _TaurusPageState extends State<TaurusPage> {
         ),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 4));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count = 10;
           });
@@ -55,6 +58,9 @@ class _TaurusPageState extends State<TaurusPage> {
         },
         onLoad: () async {
           await Future.delayed(const Duration(seconds: 4));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count += 5;
           });

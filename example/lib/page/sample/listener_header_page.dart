@@ -45,6 +45,9 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
         ),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count = 10;
           });
@@ -53,6 +56,9 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
         },
         onLoad: () async {
           await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count += 5;
           });

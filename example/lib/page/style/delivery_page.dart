@@ -44,6 +44,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
         ),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 4));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count = 10;
           });
@@ -52,6 +55,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
         },
         onLoad: () async {
           await Future.delayed(const Duration(seconds: 4));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count += 5;
           });

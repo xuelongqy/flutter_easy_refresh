@@ -42,6 +42,9 @@ class _CarouselPageState extends State<CarouselPage> {
         controller: _controller,
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count = 10;
           });
@@ -50,6 +53,9 @@ class _CarouselPageState extends State<CarouselPage> {
         },
         onLoad: () async {
           await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count += 5;
           });

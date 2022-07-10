@@ -53,6 +53,9 @@ class _HomePageState extends State<HomePage> {
         footer: const ClassicFooter(),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 4));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count = 10;
           });
@@ -61,6 +64,9 @@ class _HomePageState extends State<HomePage> {
         },
         onLoad: () async {
           await Future.delayed(const Duration(seconds: 4));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count += 5;
           });

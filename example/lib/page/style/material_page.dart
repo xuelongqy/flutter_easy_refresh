@@ -66,6 +66,9 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
         ),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count = 10;
           });
@@ -74,6 +77,9 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
         },
         onLoad: () async {
           await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count += 5;
           });

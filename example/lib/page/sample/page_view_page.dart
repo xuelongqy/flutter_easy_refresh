@@ -77,6 +77,9 @@ class _PageViewPageState extends State<PageViewPage> {
         ),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count = 5;
           });
@@ -85,6 +88,9 @@ class _PageViewPageState extends State<PageViewPage> {
         },
         onLoad: () async {
           await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count += 5;
           });

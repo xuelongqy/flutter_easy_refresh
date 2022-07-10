@@ -47,6 +47,9 @@ class _PhoenixPageState extends State<PhoenixPage> {
         ),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count = 10;
           });
@@ -55,6 +58,9 @@ class _PhoenixPageState extends State<PhoenixPage> {
         },
         onLoad: () async {
           await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count += 5;
           });

@@ -92,6 +92,9 @@ class _ClassicPageState extends State<ClassicPage> {
             ? null
             : () async {
                 await Future.delayed(const Duration(seconds: 2));
+                if (!mounted) {
+                  return;
+                }
                 setState(() {
                   _count = 10;
                 });
@@ -102,6 +105,9 @@ class _ClassicPageState extends State<ClassicPage> {
             ? null
             : () async {
                 await Future.delayed(const Duration(seconds: 2));
+                if (!mounted) {
+                  return;
+                }
                 setState(() {
                   _count += 5;
                 });

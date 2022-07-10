@@ -43,6 +43,9 @@ class _HalloweenPageState extends State<HalloweenPage> {
         ),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 4));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count = 10;
           });
@@ -51,6 +54,9 @@ class _HalloweenPageState extends State<HalloweenPage> {
         },
         onLoad: () async {
           await Future.delayed(const Duration(seconds: 4));
+          if (!mounted) {
+            return;
+          }
           setState(() {
             _count += 5;
           });

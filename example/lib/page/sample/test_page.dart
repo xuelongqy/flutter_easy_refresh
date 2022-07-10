@@ -62,6 +62,9 @@ class _TestPageState extends State<TestPage> {
         onRefresh: () async {
           print('Refreshing');
           await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return null;
+          }
           setState(() {
             _count = 10;
           });
@@ -72,6 +75,9 @@ class _TestPageState extends State<TestPage> {
         onLoad: () async {
           print('Loading');
           await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return null;
+          }
           setState(() {
             _count += 0;
           });
