@@ -1,10 +1,11 @@
 # Change log
 
-## Next
+## V 3.0.1
 > fix: Use notifyListeners after ChangeNotifier disposed. Thanks laiiihz for [PR#555](https://github.com/xuelongqy/flutter_easy_refresh/pull/555).  
 > feat: ClassicHeader、ClassicFooter add IconThemeData. Thanks Lay523 for [PR#562](https://github.com/xuelongqy/flutter_easy_refresh/pull/562).  
 > feat: ClassicIndicator add [progressIndicatorSize] and [progressIndicatorStrokeWidth].  
 > feat: Add CupertinoIndicator.  
+> fix: finishLoad asset [#563](https://github.com/xuelongqy/flutter_easy_refresh/pull/563).
 
 ## V 3.0.0+3
 > fix: dart >=2.13.0.  

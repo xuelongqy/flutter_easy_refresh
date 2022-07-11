@@ -181,7 +181,7 @@ class EasyRefreshController {
   /// Finish the load task and return the result.
   /// [result] Result of task completion.
   void finishLoad([IndicatorResult result = IndicatorResult.success]) {
-    assert(controlFinishRefresh,
+    assert(controlFinishLoad,
         'Please set controlFinishLoad to true, then use.');
     _state?._footerNotifier._finishTask(result);
   }
