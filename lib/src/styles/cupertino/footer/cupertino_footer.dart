@@ -12,6 +12,10 @@ class CupertinoFooter extends Footer {
   /// WaterDrop background color.
   final Color? backgroundColor;
 
+  /// Empty widget.
+  /// When result is [IndicatorResult.noMore].
+  final Widget? emptyWidget;
+
   const CupertinoFooter({
     this.key,
     double triggerOffset = 60,
@@ -30,6 +34,7 @@ class CupertinoFooter extends Footer {
     this.foregroundColor,
     this.userWaterDrop = false,
     this.backgroundColor,
+    this.emptyWidget,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -37,7 +42,11 @@ class CupertinoFooter extends Footer {
           spring: spring,
           readySpringBuilder: readySpringBuilder,
           springRebound: springRebound,
-          frictionFactor: frictionFactor,
+          frictionFactor: frictionFactor ??
+              (userWaterDrop && infiniteOffset == null
+                  ? kCupertinoFrictionFactor
+                  : null),
+          horizontalFrictionFactor: kCupertinoHorizontalFrictionFactor,
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
@@ -57,6 +66,7 @@ class CupertinoFooter extends Footer {
       foregroundColor: foregroundColor,
       userWaterDrop: userWaterDrop,
       backgroundColor: backgroundColor,
+      emptyWidget: emptyWidget,
     );
   }
 }

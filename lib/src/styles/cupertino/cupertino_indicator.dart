@@ -6,6 +6,12 @@ const double _kDefaultWaterDropCupertinoIndicatorRadius = 10.0;
 const _maxCircleRadius = 20.0;
 const _minCircleRadius = _maxCircleRadius / 5;
 
+double kCupertinoFrictionFactor(double overscrollFraction) =>
+    0.25 * math.pow(1 - overscrollFraction, 2);
+
+double kCupertinoHorizontalFrictionFactor(double overscrollFraction) =>
+    0.52 * math.pow(1 - overscrollFraction, 2);
+
 /// Cupertino indicator.
 /// Base widget for [CupertinoHeader] and [CupertinoFooter].
 class _CupertinoIndicator extends StatefulWidget {
@@ -25,6 +31,10 @@ class _CupertinoIndicator extends StatefulWidget {
   /// WaterDrop background color.
   final Color? backgroundColor;
 
+  /// Empty widget.
+  /// When result is [IndicatorResult.noMore].
+  final Widget? emptyWidget;
+
   const _CupertinoIndicator({
     Key? key,
     required this.state,
@@ -32,6 +42,7 @@ class _CupertinoIndicator extends StatefulWidget {
     this.foregroundColor,
     this.userWaterDrop = true,
     this.backgroundColor,
+    this.emptyWidget,
   }) : super(key: key);
 
   @override
@@ -44,11 +55,14 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
   double get _offset => widget.state.offset;
   double get _actualTriggerOffset => widget.state.actualTriggerOffset;
 
-  double get _radius => widget.userWaterDrop
+  double get _radius => _useWaterDrop
       ? _kDefaultWaterDropCupertinoIndicatorRadius
       : _kDefaultCupertinoIndicatorRadius;
 
   late AnimationController _waterDropHiddenController;
+
+  bool get _useWaterDrop =>
+      widget.userWaterDrop && widget.state.indicator.infiniteOffset == null;
 
   @override
   void initState() {
@@ -78,6 +92,7 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
 
   Widget _buildIndicator() {
     final scale = (_offset / _actualTriggerOffset).clamp(0.0, 1.0);
+    Widget indicator;
     switch (_mode) {
       case IndicatorMode.drag:
       case IndicatorMode.armed:
@@ -86,7 +101,8 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
           0.8,
           curve: Curves.easeInOut,
         );
-        return Opacity(
+        indicator = Opacity(
+          key: const ValueKey('indicator'),
           opacity: opacityCurve.transform(scale),
           child: CupertinoActivityIndicator.partiallyRevealed(
             radius: _radius,
@@ -94,21 +110,45 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
             color: widget.foregroundColor,
           ),
         );
+        break;
       case IndicatorMode.ready:
       case IndicatorMode.processing:
       case IndicatorMode.processed:
-        return CupertinoActivityIndicator(
+        indicator = CupertinoActivityIndicator(
+          key: const ValueKey('indicator'),
           radius: _radius,
           color: widget.foregroundColor,
         );
+        break;
       case IndicatorMode.done:
-        return CupertinoActivityIndicator(
+        indicator = CupertinoActivityIndicator(
+          key: const ValueKey('indicator'),
           radius: _radius * scale,
           color: widget.foregroundColor,
         );
+        break;
       default:
-        return Container();
+        indicator = const SizedBox(
+          key: ValueKey('indicator'),
+        );
+        break;
     }
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      reverseDuration: const Duration(milliseconds: 100),
+      child: widget.state.result == IndicatorResult.noMore
+          ? widget.emptyWidget != null
+              ? SizedBox(
+                  key: const ValueKey('noMore'),
+                  child: widget.emptyWidget!,
+                )
+              : Icon(
+                  CupertinoIcons.archivebox,
+                  key: const ValueKey('noMore'),
+                  color: widget.foregroundColor,
+                )
+          : indicator,
+    );
   }
 
   Widget _buildWaterDrop() {
@@ -159,8 +199,7 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
           width: double.infinity,
         ),
         // WaterDrop.
-        if (widget.userWaterDrop &&
-            widget.state.indicator.infiniteOffset == null)
+        if (_useWaterDrop)
           Positioned(
             top: 0,
             left: 0,
