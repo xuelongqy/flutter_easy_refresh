@@ -3,6 +3,15 @@ part of easy_refresh;
 class CupertinoFooter extends Footer {
   final Key? key;
 
+  /// Indicator foreground color.
+  final Color? foregroundColor;
+
+  /// Use WaterDrop style.
+  final bool userWaterDrop;
+
+  /// WaterDrop background color.
+  final Color? backgroundColor;
+
   const CupertinoFooter({
     this.key,
     double triggerOffset = 60,
@@ -18,6 +27,9 @@ class CupertinoFooter extends Footer {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
+    this.foregroundColor,
+    this.userWaterDrop = false,
+    this.backgroundColor,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -42,6 +54,9 @@ class CupertinoFooter extends Footer {
       key: key,
       state: state,
       reverse: state.reverse,
+      foregroundColor: foregroundColor,
+      userWaterDrop: userWaterDrop,
+      backgroundColor: backgroundColor,
     );
   }
 }

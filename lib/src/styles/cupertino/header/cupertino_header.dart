@@ -3,6 +3,15 @@ part of easy_refresh;
 class CupertinoHeader extends Header {
   final Key? key;
 
+  /// Indicator foreground color.
+  final Color? foregroundColor;
+
+  /// Use WaterDrop style.
+  final bool userWaterDrop;
+
+  /// WaterDrop background color.
+  final Color? backgroundColor;
+
   const CupertinoHeader({
     this.key,
     double triggerOffset = 60,
@@ -18,6 +27,9 @@ class CupertinoHeader extends Header {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
+    this.foregroundColor,
+    this.userWaterDrop = true,
+    this.backgroundColor,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -42,6 +54,9 @@ class CupertinoHeader extends Header {
       key: key,
       state: state,
       reverse: state.reverse,
+      foregroundColor: foregroundColor,
+      userWaterDrop: userWaterDrop,
+      backgroundColor: backgroundColor,
     );
   }
 }

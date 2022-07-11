@@ -32,6 +32,7 @@ class _CupertinoIndicatorPageState extends State<CupertinoIndicatorPage> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.transparent,
       child: CupertinoPageScaffold(
         child: EasyRefresh(
           controller: _controller,
