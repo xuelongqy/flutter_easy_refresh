@@ -31,6 +31,7 @@ class _CupertinoIndicatorPageState extends State<CupertinoIndicatorPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Material(
       color: Colors.transparent,
       child: CupertinoPageScaffold(
@@ -68,8 +69,13 @@ class _CupertinoIndicatorPageState extends State<CupertinoIndicatorPage> {
           },
           child: CustomScrollView(
             slivers: [
-              const CupertinoSliverNavigationBar(
-                largeTitle: Text('iOS Cupertino'),
+              CupertinoSliverNavigationBar(
+                largeTitle: Text(
+                  'iOS Cupertino',
+                  style: TextStyle(
+                    color: themeData.textTheme.titleMedium?.color,
+                  ),
+                ),
               ),
               const HeaderLocator.sliver(),
               SliverList(
