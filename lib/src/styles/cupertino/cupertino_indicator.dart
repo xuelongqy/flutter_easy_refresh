@@ -91,7 +91,7 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
   }
 
   Widget _buildIndicator() {
-    final scale = (_offset / _actualTriggerOffset).clamp(0.0, 1.0);
+    final scale = (_offset / _actualTriggerOffset).clamp(0.01, 0.99);
     Widget indicator;
     switch (_mode) {
       case IndicatorMode.drag:
@@ -106,7 +106,7 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
           opacity: opacityCurve.transform(scale),
           child: CupertinoActivityIndicator.partiallyRevealed(
             radius: _radius,
-            progress: math.min(scale, 0.99),
+            progress: scale,
             color: widget.foregroundColor,
           ),
         );
