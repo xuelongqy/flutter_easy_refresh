@@ -1,3 +1,4 @@
+import 'package:example/config/routes.dart';
 import 'package:example/l10n/translations.dart';
 import 'package:example/page/home.dart';
 import 'package:example/page/more/theme_page.dart';
@@ -68,49 +69,36 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   Widget _buildFrame(Widget app) {
-    return MaterialApp(
-      title: 'EasyRefresh',
-      theme: ThemeModel.light,
-      darkTheme: ThemeModel.dark,
-      supportedLocales: AppTranslations.supportedLocales,
-      locale: Get.deviceLocale,
-      localizationsDelegates: const [
-        GlobalCupertinoLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: _mobileStyle
-            ? Center(
-                child: Card(
-                  elevation: 10,
-                  margin: const EdgeInsets.symmetric(vertical: 16),
-                  clipBehavior: Clip.hardEdge,
-                  child: SizedBox(
-                    height: _mobileHeight,
-                    width: _mobileWidth,
-                    child: app,
-                  ),
+    return Scaffold(
+      body: _mobileStyle
+          ? Center(
+              child: Card(
+                elevation: 10,
+                margin: const EdgeInsets.symmetric(vertical: 16),
+                clipBehavior: Clip.hardEdge,
+                child: SizedBox(
+                  height: _mobileHeight,
+                  width: _mobileWidth,
+                  child: app,
                 ),
-              )
-            : app,
-        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              _mobileStyle = !_mobileStyle;
-            });
-          },
-          child: Icon(_mobileStyle ? Icons.computer : Icons.phone_android),
-        ).marginOnly(top: 16),
-      ),
+              ),
+            )
+          : app,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _mobileStyle = !_mobileStyle;
+          });
+        },
+        child: Icon(_mobileStyle ? Icons.computer : Icons.phone_android),
+      ).marginOnly(top: 16),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget app = GetMaterialApp(
+    return GetMaterialApp(
       key: _appKey,
       title: 'EasyRefresh',
       theme: ThemeModel.light,
@@ -126,15 +114,19 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         GlobalWidgetsLocalizations.delegate
       ],
       home: const HomePage(),
+      initialRoute: '/',
+      getPages: Routes.getPages,
+      builder: (context, widget) {
+        if (_checkSize) {
+          final size = Get.size;
+          final _hasFrame = size.width > _mobileWidthThreshold;
+          if (_hasFrame) {
+            return _buildFrame(widget!);
+          }
+        }
+        return widget!;
+      },
     );
-    if (_checkSize) {
-      final size = Get.size;
-      final _hasFrame = size.width > _mobileWidthThreshold;
-      if (_hasFrame) {
-        app = _buildFrame(app);
-      }
-    }
-    return app;
   }
 }
 

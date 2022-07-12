@@ -1,15 +1,4 @@
-import 'package:example/page/style/bezier_circle_page.dart';
-import 'package:example/page/style/bezier_page.dart';
-import 'package:example/page/style/classical_page.dart';
-import 'package:example/page/style/cupertino_page.dart';
-import 'package:example/page/style/delivery_page.dart';
-import 'package:example/page/style/halloween_page.dart';
-import 'package:example/page/style/material_page.dart';
-import 'package:example/page/style/phoenix_page.dart';
-import 'package:example/page/style/skating_page.dart';
-import 'package:example/page/style/space_page.dart';
-import 'package:example/page/style/squats_page.dart';
-import 'package:example/page/style/taurus_page.dart';
+import 'package:example/config/routes.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,73 +34,73 @@ class _StylePageState extends State<StylePage> {
                 title: 'Classic'.tr,
                 subtitle: 'Classic and default'.tr,
                 icon: Icons.format_list_bulleted,
-                onTap: () => Get.to(() => const ClassicPage()),
+                onTap: () => Get.toNamed(Routes.classicStyle),
               ),
               ListItem(
                 title: 'Material',
                 subtitle: 'Google Material',
                 icon: Icons.refresh,
-                onTap: () => Get.to(() => const MaterialIndicatorPage()),
+                onTap: () => Get.toNamed(Routes.materialStyle),
               ),
               ListItem(
                 title: 'Cupertino',
                 subtitle: 'iOS Cupertino',
                 icon: Icons.apple,
-                onTap: () => Get.to(() => const CupertinoIndicatorPage()),
+                onTap: () => Get.toNamed(Routes.cupertinoStyle),
               ),
               ListItem(
                 title: 'Bezier',
                 subtitle: 'Bezier curve'.tr,
                 icon: Icons.panorama_wide_angle,
-                onTap: () => Get.to(() => const BezierPage()),
+                onTap: () => Get.toNamed(Routes.bezierStyle),
               ),
               ListItem(
                 title: 'BezierCircle',
                 subtitle: 'Bezier circle'.tr,
                 icon: Icons.circle_outlined,
-                onTap: () => Get.to(() => const BezierCirclePage()),
+                onTap: () => Get.toNamed(Routes.bezierCircleStyle),
               ),
               ListItem(
                 title: 'Phoenix',
                 subtitle: 'Golden campus'.tr,
                 icon: Icons.location_city_outlined,
-                onTap: () => Get.to(() => const PhoenixPage()),
+                onTap: () => Get.toNamed(Routes.phoenixStyle),
               ),
               ListItem(
                 title: 'Taurus',
                 subtitle: 'Rush to the sky'.tr,
                 icon: Icons.airplanemode_active,
-                onTap: () => Get.to(() => const TaurusPage()),
+                onTap: () => Get.toNamed(Routes.taurusStyle),
               ),
               ListItem(
                 title: 'Delivery',
                 subtitle: 'Balloon delivery'.tr,
                 icon: Icons.card_giftcard,
-                onTap: () => Get.to(() => const DeliveryPage()),
+                onTap: () => Get.toNamed(Routes.deliveryStyle),
               ),
               ListItem(
                 title: 'Space',
                 subtitle: 'Star track'.tr,
                 icon: Icons.satellite_alt,
-                onTap: () => Get.to(() => const SpacePage()),
+                onTap: () => Get.toNamed(Routes.spaceStyle),
               ),
               ListItem(
                 title: 'Squats',
                 subtitle: 'Lumberjack Squats'.tr,
                 icon: Icons.sports,
-                onTap: () => Get.to(() => const SquatsPage()),
+                onTap: () => Get.toNamed(Routes.squatsStyle),
               ),
               ListItem(
                 title: 'Skating',
                 subtitle: 'Skating boy'.tr,
                 icon: Icons.skateboarding,
-                onTap: () => Get.to(() => const SkatingPage()),
+                onTap: () => Get.toNamed(Routes.skatingStyle),
               ),
               ListItem(
                 title: 'Halloween',
                 subtitle: 'Halloween horror'.tr,
                 icon: Icons.whatshot,
-                onTap: () => Get.to(() => const HalloweenPage()),
+                onTap: () => Get.toNamed(Routes.halloweenStyle),
               ),
             ]),
           ),

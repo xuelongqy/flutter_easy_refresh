@@ -1,12 +1,5 @@
-import 'package:example/page/sample/carousel_page.dart';
-import 'package:example/page/sample/chat_page.dart';
-import 'package:example/page/sample/listener_header_page.dart';
-import 'package:example/page/sample/nested_scroll_view.dart';
-import 'package:example/page/sample/page_view_page.dart';
-import 'package:example/page/sample/refresh_on_start_page.dart';
-import 'package:example/page/sample/secondary_page.dart';
+import 'package:example/config/routes.dart';
 import 'package:example/page/sample/test_page.dart';
-import 'package:example/page/sample/user_profile_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -43,25 +36,19 @@ class _SamplePageState extends State<SamplePage> {
                 title: 'User profile'.tr,
                 subtitle: 'User personal center'.tr,
                 icon: Icons.person,
-                onTap: () {
-                  Get.to(() => const UserProfilePage());
-                },
+                onTap: () => Get.toNamed(Routes.profileSample),
               ),
               ListItem(
                 title: 'NestedScrollView',
                 subtitle: 'NestedScrollView example'.tr,
                 icon: Icons.line_style,
-                onTap: () {
-                  Get.to(() => const NestedScrollViewPage());
-                },
+                onTap: () => Get.toNamed(Routes.nestedScrollViewSample),
               ),
               ListItem(
                 title: 'Carousel'.tr,
                 subtitle: 'Carousel example'.tr,
                 icon: Icons.view_carousel,
-                onTap: () {
-                  Get.to(() => const CarouselPage());
-                },
+                onTap: () => Get.toNamed(Routes.carouselSample),
               ),
               ListItem(
                 title: 'Refresh on start'.tr,
@@ -69,41 +56,31 @@ class _SamplePageState extends State<SamplePage> {
                     'Refresh when the list is displayed and specify the Header'
                         .tr,
                 icon: Icons.refresh,
-                onTap: () {
-                  Get.to(() => const RefreshOnStartPage());
-                },
+                onTap: () => Get.toNamed(Routes.refreshOnStartSample),
               ),
               ListItem(
                 title: 'Listener'.tr,
                 subtitle: 'Use listener to respond anywhere'.tr,
                 icon: Icons.earbuds,
-                onTap: () {
-                  Get.to(() => const ListenerHeaderPage());
-                },
+                onTap: () => Get.toNamed(Routes.listenerSample),
               ),
               ListItem(
                 title: 'Secondary'.tr,
                 subtitle: 'Combine existing Header with secondary'.tr,
                 icon: Icons.view_agenda,
-                onTap: () {
-                  Get.to(() => const SecondaryPage());
-                },
+                onTap: () => Get.toNamed(Routes.secondarySample),
               ),
               ListItem(
                 title: 'Chat'.tr,
                 subtitle: 'Chat page example'.tr,
                 icon: Icons.chat,
-                onTap: () {
-                  Get.to(() => const ChatPage());
-                },
+                onTap: () => Get.toNamed(Routes.chatSample),
               ),
               ListItem(
                 title: 'PageView',
                 subtitle: 'PageView example'.tr,
                 icon: Icons.pages,
-                onTap: () {
-                  Get.to(() => const PageViewPage());
-                },
+                onTap: () => Get.toNamed(Routes.pageViewSample),
               ),
               if (kDebugMode)
                 ListItem(

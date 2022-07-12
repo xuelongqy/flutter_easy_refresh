@@ -1,4 +1,4 @@
-import 'package:example/page/more/cryptocurrency_page.dart';
+import 'package:example/config/routes.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -81,7 +81,7 @@ class _SupportMePageState extends State<SupportMePage> {
                 title: 'Cryptocurrency'.tr,
                 subtitle: 'Cryptocurrency donation'.tr,
                 icon: Icons.currency_bitcoin,
-                onTap: () => Get.to(() => const CryptocurrencyPage()),
+                onTap: () => Get.toNamed(Routes.cryptocurrency),
               ),
             ]),
           ),

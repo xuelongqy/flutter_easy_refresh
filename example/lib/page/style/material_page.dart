@@ -1,3 +1,4 @@
+import 'package:example/config/routes.dart';
 import 'package:example/page/more/theme_page.dart';
 import 'package:example/widget/menu_bottom_bar.dart';
 import 'package:example/widget/skeleton_item.dart';
@@ -127,7 +128,7 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
                     ],
                   ),
                 ),
-                onTap: () => Get.to(() => const ThemePage()),
+                onTap: () => Get.toNamed(Routes.theme),
               );
             }),
             ListTile(

@@ -1,4 +1,4 @@
-import 'package:example/page/more/support_me_page.dart';
+import 'package:example/config/routes.dart';
 import 'package:example/page/more/theme_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +37,7 @@ class _MorePageState extends State<MorePage> {
                   title: 'Theme'.tr,
                   subtitle: ThemeController.i.theme.value.tr,
                   icon: Icons.palette,
-                  onTap: () {
-                    Get.to(() => const ThemePage());
-                  },
+                  onTap: () => Get.toNamed(Routes.theme),
                 );
               }),
               ListItem(
@@ -68,9 +66,7 @@ class _MorePageState extends State<MorePage> {
                 title: 'Support me'.tr,
                 subtitle: 'Buy me a coffee ~'.tr,
                 icon: Icons.coffee,
-                onTap: () {
-                  Get.to(() => const SupportMePage());
-                },
+                onTap: () => Get.toNamed(Routes.supportMe),
               ),
             ]),
           ),

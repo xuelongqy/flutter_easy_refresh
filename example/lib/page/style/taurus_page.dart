@@ -1,4 +1,4 @@
-import 'package:example/page/more/theme_page.dart';
+import 'package:example/config/routes.dart';
 import 'package:example/widget/skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_refresh/easy_refresh.dart';
@@ -95,7 +95,7 @@ class _TaurusPageState extends State<TaurusPage> {
       floatingActionButton: FloatingActionButton.extended(
         label: Text('Theme'.tr),
         icon: const Icon(Icons.color_lens),
-        onPressed: () => Get.to(() => const ThemePage()),
+        onPressed: () => Get.toNamed(Routes.theme),
       ),
     );
   }
