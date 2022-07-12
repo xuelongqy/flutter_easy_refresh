@@ -12,12 +12,16 @@ class CupertinoHeader extends Header {
   /// WaterDrop background color.
   final Color? backgroundColor;
 
+  /// Empty widget.
+  /// When result is [IndicatorResult.noMore].
+  final Widget? emptyWidget;
+
   const CupertinoHeader({
     this.key,
     double triggerOffset = 60,
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.behind,
-    Duration processedDuration = const Duration(seconds: 1),
+    Duration processedDuration = Duration.zero,
     SpringDescription? spring,
     SpringBuilder? readySpringBuilder,
     bool springRebound = false,
@@ -30,6 +34,7 @@ class CupertinoHeader extends Header {
     this.foregroundColor,
     this.userWaterDrop = true,
     this.backgroundColor,
+    this.emptyWidget,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -37,7 +42,11 @@ class CupertinoHeader extends Header {
           spring: spring,
           readySpringBuilder: readySpringBuilder,
           springRebound: springRebound,
-          frictionFactor: frictionFactor,
+          frictionFactor: frictionFactor ??
+              (userWaterDrop && infiniteOffset == null
+                  ? kCupertinoFrictionFactor
+                  : null),
+          horizontalFrictionFactor: kCupertinoHorizontalFrictionFactor,
           safeArea: safeArea,
           infiniteOffset: infiniteOffset,
           hitOver: hitOver,
@@ -57,6 +66,7 @@ class CupertinoHeader extends Header {
       foregroundColor: foregroundColor,
       userWaterDrop: userWaterDrop,
       backgroundColor: backgroundColor,
+      emptyWidget: emptyWidget,
     );
   }
 }
