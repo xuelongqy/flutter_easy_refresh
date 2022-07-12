@@ -8,6 +8,7 @@ import 'package:example/page/sample/listener_header_page.dart';
 import 'package:example/page/sample/nested_scroll_view.dart';
 import 'package:example/page/sample/page_view_page.dart';
 import 'package:example/page/sample/refresh_on_start_page.dart';
+import 'package:example/page/sample/sample_page.dart';
 import 'package:example/page/sample/secondary_page.dart';
 import 'package:example/page/sample/user_profile_page.dart';
 import 'package:example/page/style/bezier_circle_page.dart';
@@ -21,6 +22,7 @@ import 'package:example/page/style/phoenix_page.dart';
 import 'package:example/page/style/skating_page.dart';
 import 'package:example/page/style/space_page.dart';
 import 'package:example/page/style/squats_page.dart';
+import 'package:example/page/style/style_page.dart';
 import 'package:example/page/style/taurus_page.dart';
 import 'package:get/get.dart';
 
@@ -28,6 +30,7 @@ class Routes {
   // Home
   static const home = '/';
   // Sample
+  static const sample = '/sample';
   static const profileSample = '/sample/profile';
   static const nestedScrollViewSample = '/sample/nested-scroll-view';
   static const carouselSample = '/sample/carousel';
@@ -37,6 +40,7 @@ class Routes {
   static const chatSample = '/sample/chat';
   static const pageViewSample = '/sample/page-view';
   // Style
+  static const style = '/style';
   static const classicStyle = '/style/classic';
   static const materialStyle = '/style/material';
   static const cupertinoStyle = '/style/cupertino';
@@ -58,6 +62,7 @@ class Routes {
     // Home
     GetPage(name: home, page: () => const HomePage()),
     // Sample
+    GetPage(name: sample, page: () => const SamplePage()),
     GetPage(name: profileSample, page: () => const UserProfilePage()),
     GetPage(
         name: nestedScrollViewSample, page: () => const NestedScrollViewPage()),
@@ -68,6 +73,7 @@ class Routes {
     GetPage(name: chatSample, page: () => const ChatPage()),
     GetPage(name: pageViewSample, page: () => const PageViewPage()),
     // Style
+    GetPage(name: style, page: () => const StylePage()),
     GetPage(name: classicStyle, page: () => const ClassicPage()),
     GetPage(name: materialStyle, page: () => const MaterialIndicatorPage()),
     GetPage(name: cupertinoStyle, page: () => const CupertinoIndicatorPage()),
