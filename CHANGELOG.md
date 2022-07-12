@@ -1,5 +1,8 @@
 # Change log
 
+## V 3.0.1+1
+> fix: CupertinoActivityIndicator radius == 0.  
+
 ## V 3.0.1
 > fix: Use notifyListeners after ChangeNotifier disposed. Thanks laiiihz for [PR#555](https://github.com/xuelongqy/flutter_easy_refresh/pull/555).  
 > feat: ClassicHeader、ClassicFooter add IconThemeData. Thanks Lay523 for [PR#562](https://github.com/xuelongqy/flutter_easy_refresh/pull/562).  

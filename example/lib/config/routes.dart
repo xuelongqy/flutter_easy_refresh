@@ -1,3 +1,4 @@
+import 'package:example/page/home.dart';
 import 'package:example/page/more/cryptocurrency_page.dart';
 import 'package:example/page/more/support_me_page.dart';
 import 'package:example/page/more/theme_page.dart';
@@ -24,6 +25,8 @@ import 'package:example/page/style/taurus_page.dart';
 import 'package:get/get.dart';
 
 class Routes {
+  // Home
+  static const home = '/';
   // Sample
   static const profileSample = '/sample/profile';
   static const nestedScrollViewSample = '/sample/nested-scroll-view';
@@ -52,6 +55,8 @@ class Routes {
   static const cryptocurrency = '/cryptocurrency';
 
   static final getPages = [
+    // Home
+    GetPage(name: home, page: () => const HomePage()),
     // Sample
     GetPage(name: profileSample, page: () => const UserProfilePage()),
     GetPage(
