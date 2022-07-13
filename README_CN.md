@@ -1,7 +1,7 @@
 # flutter_easy_refresh
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
-[![Platform Flutter](https://img.shields.io/badge/platform-flutter-blue.svg)](https://flutter.dev)
+[![Platform Flutter](https://img.shields.io/badge/platform-Flutter-blue.svg)](https://flutter.dev)
 [![Pub](https://img.shields.io/pub/v/easy_refresh)](https://pub.dev/packages/easy_refresh)
 
 ## [English](https://github.com/xuelongqy/flutter_easy_refresh/blob/v3/README.md) | 中文
