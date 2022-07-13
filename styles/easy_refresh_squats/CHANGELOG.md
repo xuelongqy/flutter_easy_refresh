@@ -1,3 +1,6 @@
+## 1.0.1
+> docs: Update docs.  
+
 ## 1.0.0+1
 > fix: dart >=2.13.0.
 

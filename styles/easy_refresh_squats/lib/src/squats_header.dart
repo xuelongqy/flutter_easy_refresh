@@ -6,7 +6,7 @@ class SquatsHeader extends Header {
   /// Background color.
   final Color? backgroundColor;
 
-  SquatsHeader({
+  const SquatsHeader({
     this.key,
     bool clamping = false,
     double triggerOffset = _kDefaultSquatsTriggerOffset,

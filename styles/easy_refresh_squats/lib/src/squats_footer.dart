@@ -6,7 +6,7 @@ class SquatsFooter extends Footer {
   /// Background color.
   final Color? backgroundColor;
 
-  SquatsFooter({
+  const SquatsFooter({
     this.key,
     bool clamping = false,
     double triggerOffset = _kDefaultSquatsTriggerOffset,

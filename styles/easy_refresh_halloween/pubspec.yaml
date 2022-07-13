@@ -1,8 +1,8 @@
 name: easy_refresh_halloween
-description: Halloween Indicator on EasyRefresh.
-version: 1.0.0+1
-homepage: https://xuelongqy.github.io/flutter_easy_refresh
-repository: https://github.com/xuelongqy/flutter_easy_refresh/styles/easy_refresh_halloween
+description: Halloween Indicator on EasyRefresh. Provides HalloweenHeader and HalloweenFooter. Animation with Rive.
+version: 1.0.1
+homepage: https://xuelongqy.github.io/flutter_easy_refresh/#/style/halloween
+repository: https://github.com/xuelongqy/flutter_easy_refresh/tree/v3/styles/easy_refresh_halloween
 issue_tracker: https://github.com/xuelongqy/flutter_easy_refresh/issues
 
 environment:

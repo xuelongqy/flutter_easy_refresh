@@ -3,7 +3,7 @@ part of easy_refresh_space;
 class SpaceHeader extends Header {
   final Key? key;
 
-  SpaceHeader({
+  const SpaceHeader({
     this.key,
     bool clamping = false,
     double triggerOffset = _kDefaultSpaceTriggerOffset,

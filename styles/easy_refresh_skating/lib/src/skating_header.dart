@@ -3,7 +3,7 @@ part of easy_refresh_skating;
 class SkatingHeader extends Header {
   final Key? key;
 
-  SkatingHeader({
+  const SkatingHeader({
     this.key,
     bool clamping = false,
     double triggerOffset = _kDefaultSkatingTriggerOffset,

@@ -3,7 +3,7 @@ part of easy_refresh_halloween;
 class HalloweenFooter extends Footer {
   final Key? key;
 
-  HalloweenFooter({
+  const HalloweenFooter({
     this.key,
     bool clamping = false,
     double triggerOffset = _kDefaultHalloweenTriggerOffset,

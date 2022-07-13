@@ -3,7 +3,7 @@ part of easy_refresh_halloween;
 class HalloweenHeader extends Header {
   final Key? key;
 
-  HalloweenHeader({
+  const HalloweenHeader({
     this.key,
     bool clamping = false,
     double triggerOffset = _kDefaultHalloweenTriggerOffset,

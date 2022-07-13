@@ -1,3 +1,6 @@
+## 1.0.1
+> feat: Migrate to rive animation.  
+
 ## 1.0.0+1
 > fix: dart >=2.13.0.
 

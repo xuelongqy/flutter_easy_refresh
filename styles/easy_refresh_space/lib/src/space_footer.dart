@@ -3,7 +3,7 @@ part of easy_refresh_space;
 class SpaceFooter extends Footer {
   final Key? key;
 
-  SpaceFooter({
+  const SpaceFooter({
     this.key,
     bool clamping = false,
     double triggerOffset = _kDefaultSpaceTriggerOffset,

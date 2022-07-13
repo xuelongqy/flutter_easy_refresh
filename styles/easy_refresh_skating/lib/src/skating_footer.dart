@@ -3,7 +3,7 @@ part of easy_refresh_skating;
 class SkatingFooter extends Footer {
   final Key? key;
 
-  SkatingFooter({
+  const SkatingFooter({
     this.key,
     bool clamping = false,
     double triggerOffset = _kDefaultSkatingTriggerOffset,

@@ -22,73 +22,104 @@ class _SpaceIndicator extends StatefulWidget {
   State<_SpaceIndicator> createState() => _SpaceIndicatorState();
 }
 
-class _SpaceIndicatorState extends State<_SpaceIndicator> with FlareController {
+class _SpaceIndicatorState extends State<_SpaceIndicator> {
+  RuntimeArtboard? _artboard;
+  late SimpleAnimation _pullController;
+  late SimpleAnimation _triggerController;
+  late SimpleAnimation _loadingController;
+
   IndicatorMode get _mode => widget.state.mode;
 
   double get _offset => widget.state.offset;
 
   double get _actualTriggerOffset => widget.state.actualTriggerOffset;
 
-  late ActorAnimation _loadingAnimation;
-  late ActorAnimation _successAnimation;
-  late ActorAnimation _pullAnimation;
-  late ActorAnimation _cometAnimation;
-  double _successTime = 0.0;
-  double _loadingTime = 0.0;
-  double _cometTime = 0.0;
+  @override
+  void initState() {
+    super.initState();
+    _pullController = SimpleAnimation(
+      'Pull',
+      autoplay: false,
+    );
+    _triggerController = OneShotAnimation(
+      'Trigger',
+      autoplay: false,
+      onStop: () {
+        if (_mode == IndicatorMode.processing) {
+          _loadingController.isActive = true;
+        }
+      },
+    );
+    _loadingController = SimpleAnimation(
+      'Loading',
+      autoplay: false,
+    );
+    widget.state.notifier.addModeChangeListener(_onModeChange);
+  }
 
   @override
-  bool advance(FlutterActorArtboard artboard, double elapsed) {
-    double animationPosition = _offset / _actualTriggerOffset;
-    animationPosition *= animationPosition;
-    _cometTime += elapsed;
-    _cometAnimation.apply(_cometTime % _cometAnimation.duration, artboard, 1.0);
-    _pullAnimation.apply(
-        _pullAnimation.duration * animationPosition, artboard, 1.0);
-    if (_mode == IndicatorMode.ready ||
-        _mode == IndicatorMode.processing ||
-        _mode == IndicatorMode.processed) {
-      _successTime += elapsed;
-      if (_successTime >= _successAnimation.duration) {
-        _loadingTime += elapsed;
+  void dispose() {
+    widget.state.notifier.removeModeChangeListener(_onModeChange);
+    _pullController.dispose();
+    _triggerController.dispose();
+    _loadingController.dispose();
+    super.dispose();
+  }
+
+  /// Mode change listener.
+  void _onModeChange(IndicatorMode mode, double offset) {
+    if (mode == IndicatorMode.ready) {
+      _triggerController.isActive = true;
+      return;
+    }
+    if (mode == IndicatorMode.drag || mode == IndicatorMode.armed) {
+      if (_triggerController.isActive) {
+        _triggerController.isActive = false;
+        _triggerController.instance?.animation
+            .apply(0, coreContext: _artboard!);
       }
-    } else {
-      _successTime = _loadingTime = 0.0;
     }
-    if (_mode == IndicatorMode.inactive) {
-      _successTime = _loadingTime = 0.0;
-      _loadingAnimation.apply(0.0, artboard, 1.0);
-    } else if (_successTime >= _successAnimation.duration) {
-      _loadingAnimation.apply(
-          _loadingTime % _loadingAnimation.duration, artboard, 1.0);
-    } else if (_successTime > 0.0) {
-      _successAnimation.apply(_successTime, artboard, 1.0);
+    if (mode == IndicatorMode.done) {
+      _triggerController.isActive = false;
+      _loadingController.isActive = false;
+      return;
     }
-    return true;
+    if (mode == IndicatorMode.inactive) {
+      _loadingController.reset();
+      _triggerController.reset();
+      _triggerController.instance?.animation.apply(0, coreContext: _artboard!);
+      _loadingController.instance?.animation.apply(0, coreContext: _artboard!);
+      return;
+    }
   }
-
-  @override
-  void initialize(FlutterActorArtboard actor) {
-    _pullAnimation = actor.getAnimation("pull")!;
-    _successAnimation = actor.getAnimation("success")!;
-    _loadingAnimation = actor.getAnimation("loading")!;
-    _cometAnimation = actor.getAnimation("idle comet")!;
-  }
-
-  @override
-  void setViewTransform(Mat2D viewTransform) {}
 
   @override
   Widget build(BuildContext context) {
+    if (_artboard != null) {
+      if (_mode == IndicatorMode.drag ||
+          _mode == IndicatorMode.armed ||
+          _mode == IndicatorMode.done) {
+        final scale = (_offset / _actualTriggerOffset).clamp(0.0, 1.0);
+        _pullController.instance?.animation
+            .apply(scale, coreContext: _artboard!);
+      }
+    }
     return SizedBox(
       width: double.infinity,
       height: _offset,
-      child: FlareActor(
-        "packages/easy_refresh_space/assets/SpaceDemo.flr",
-        alignment: Alignment.center,
-        animation: "idle",
+      child: RiveAnimation.asset(
+        'packages/easy_refresh_space/assets/space_reload.riv',
+        controllers: [
+          _pullController,
+          _triggerController,
+          _loadingController,
+        ],
         fit: BoxFit.cover,
-        controller: this,
+        onInit: (artboard) {
+          if (artboard is RuntimeArtboard) {
+            _artboard = artboard;
+          }
+        },
       ),
     );
   }

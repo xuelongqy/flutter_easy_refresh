@@ -30,7 +30,7 @@ class _SkatingIndicatorState extends State<_SkatingIndicator> {
   SMITrigger? _pullReleaseTrigger;
   SMITrigger? _loadFinishedTrigger;
 
-  IndicatorMode get _mode => widget.state.mode;
+  int _key = 0;
 
   double get _offset => widget.state.offset;
 
@@ -92,6 +92,11 @@ class _SkatingIndicatorState extends State<_SkatingIndicator> {
         _loadFinishedTrigger!.advance();
       }
     }
+    if (mode == IndicatorMode.inactive) {
+      setState(() {
+        _key++;
+      });
+    }
   }
 
   @override
@@ -107,16 +112,15 @@ class _SkatingIndicatorState extends State<_SkatingIndicator> {
           left: 0,
           right: 0,
           child: SizedBox(
+            key: ValueKey(_key),
             width: double.infinity,
             height: _offset < 140 ? 140 : _offset,
-            child: _offset == 0 && _mode == IndicatorMode.inactive
-                ? const SizedBox()
-                : RiveAnimation.asset(
-                    'packages/easy_refresh_skating/assets/skating.riv',
-                    fit: BoxFit.cover,
-                    onInit: _onRiveInit,
-                    antialiasing: false,
-                  ),
+            child: RiveAnimation.asset(
+              'packages/easy_refresh_skating/assets/skating.riv',
+              fit: BoxFit.cover,
+              onInit: _onRiveInit,
+              antialiasing: false,
+            ),
           ),
         ),
       ],

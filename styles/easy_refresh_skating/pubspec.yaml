@@ -1,8 +1,8 @@
 name: easy_refresh_skating
-description: Skating Indicator on EasyRefresh.
-version: 1.0.0+1
-homepage: https://xuelongqy.github.io/flutter_easy_refresh
-repository: https://github.com/xuelongqy/flutter_easy_refresh/styles/easy_refresh_skating
+description: Skating Indicator on EasyRefresh. Provides SkatingHeader and SkatingFooter. Animation with Rive.
+version: 1.0.1
+homepage: https://xuelongqy.github.io/flutter_easy_refresh/#/style/skating
+repository: https://github.com/xuelongqy/flutter_easy_refresh/tree/v3/styles/easy_refresh_skating
 issue_tracker: https://github.com/xuelongqy/flutter_easy_refresh/issues
 
 environment:

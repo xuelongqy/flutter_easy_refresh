@@ -1,8 +1,8 @@
 name: easy_refresh_space
-description: Space Indicator on EasyRefresh.
-version: 1.0.0+1
-homepage: https://xuelongqy.github.io/flutter_easy_refresh
-repository: https://github.com/xuelongqy/flutter_easy_refresh/styles/easy_refresh_space
+description: Space Indicator on EasyRefresh. Provides SpaceHeader and SpaceFooter. Animation with Rive.
+version: 1.0.1
+homepage: https://xuelongqy.github.io/flutter_easy_refresh/#/style/space
+repository: https://github.com/xuelongqy/flutter_easy_refresh/tree/v3/styles/easy_refresh_space
 issue_tracker: https://github.com/xuelongqy/flutter_easy_refresh/issues
 
 environment:
@@ -12,7 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flare_flutter: ^3.0.2
+  rive: ^0.9.0
   easy_refresh:
     path: ../../
 
@@ -29,7 +29,7 @@ flutter:
 
   # To add assets to your package, add an assets section, like this:
  assets:
-   - assets/SpaceDemo.flr
+   - assets/space_reload.riv
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
