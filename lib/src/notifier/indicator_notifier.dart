@@ -553,11 +553,17 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         }
       } else if (_offset == actualTriggerOffset) {
         // Must be exceeded to trigger the task
-        _mode = userOffsetNotifier.value
-            ? (_releaseOffset > actualTriggerOffset
+        if (userOffsetNotifier.value) {
+          if (_indicator.triggerWhenReach) {
+            _mode = IndicatorMode.processing;
+          } else {
+            _mode = (_releaseOffset > actualTriggerOffset
                 ? IndicatorMode.ready
-                : IndicatorMode.armed)
-            : IndicatorMode.processing;
+                : IndicatorMode.armed);
+          }
+        } else {
+          _mode = IndicatorMode.processing;
+        }
       } else if (_offset > actualTriggerOffset) {
         if (hasSecondary &&
             _offset >= actualSecondaryTriggerOffset &&
@@ -577,11 +583,15 @@ abstract class IndicatorNotifier extends ChangeNotifier {
           // Process
           // If the user is scrolling
           // (the task is not executed if it is not released)
-          _mode = userOffsetNotifier.value
-              ? IndicatorMode.armed
-              : (_releaseOffset > actualTriggerOffset
-                  ? IndicatorMode.ready
-                  : IndicatorMode.armed);
+          if (userOffsetNotifier.value) {
+            _mode = _indicator.triggerWhenReach
+                ? IndicatorMode.processing
+                : IndicatorMode.armed;
+          } else {
+            _mode = (_releaseOffset > actualTriggerOffset
+                ? IndicatorMode.ready
+                : IndicatorMode.armed);
+          }
         }
       }
       // Execute the task.

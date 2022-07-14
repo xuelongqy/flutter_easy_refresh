@@ -84,4 +84,5 @@ const zhCN = {
   'Tron chain, TRX, USDT, USDC and other tokens': '波场链，TRX、USDT、USDC及其他代币',
   'Dogecoin donation': '狗狗币捐赠',
   '%s copied!': '%s 已复制!',
+  'Trigger immediately': '立即触发',
 };

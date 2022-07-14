@@ -105,6 +105,7 @@ class ClassicHeader extends Header {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
+    bool triggerWhenReach = false,
     this.mainAxisAlignment = MainAxisAlignment.center,
     this.backgroundColor,
     this.dragText,
@@ -146,6 +147,7 @@ class ClassicHeader extends Header {
           infiniteHitOver: infiniteHitOver,
           position: position,
           hapticFeedback: hapticFeedback,
+          triggerWhenReach: triggerWhenReach,
         );
 
   @override

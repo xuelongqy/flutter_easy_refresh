@@ -1,4 +1,6 @@
-# Change log
+## V 3.0.2
+> feat: Indicator add [triggerWhenReach] [#348](https://github.com/xuelongqy/flutter_easy_refresh/pull/348). Trigger immediately when reaching the [triggerOffset].  
+> feat: CupertinoIndicator support horizontal.  
 
 ## V 3.0.1+1
 > fix: CupertinoActivityIndicator radius == 0.  

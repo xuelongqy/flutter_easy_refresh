@@ -105,6 +105,7 @@ class ClassicFooter extends Footer {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
+    bool triggerWhenReach = false,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.backgroundColor,
     this.dragText,
@@ -146,6 +147,7 @@ class ClassicFooter extends Footer {
           infiniteHitOver: infiniteHitOver,
           position: position,
           hapticFeedback: hapticFeedback,
+          triggerWhenReach: triggerWhenReach,
         );
 
   @override

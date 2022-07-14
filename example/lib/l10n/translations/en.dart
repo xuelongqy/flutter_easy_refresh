@@ -86,4 +86,5 @@ const en = {
       'Tron chain, TRX, USDT, USDC and other tokens',
   'Dogecoin donation': 'Dogecoin donation',
   '%s copied!': '%s copied!',
+  'Trigger immediately': 'Trigger immediately',
 };

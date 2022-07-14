@@ -339,6 +339,9 @@ abstract class Indicator {
   /// Monitor state changes in real time.
   final IndicatorStateListenable? listenable;
 
+  /// Trigger immediately when reaching the [triggerOffset].
+  final bool triggerWhenReach;
+
   const Indicator({
     required this.triggerOffset,
     required this.clamping,
@@ -362,6 +365,7 @@ abstract class Indicator {
     this.secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     this.notifyWhenInvisible = false,
     this.listenable,
+    this.triggerWhenReach = false,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,

@@ -62,6 +62,7 @@ class _ClassicPageState extends State<ClassicPage> {
           showMessage: _headerProperties.message,
           showText: _headerProperties.text,
           infiniteOffset: _headerProperties.infinite ? 70 : null,
+          triggerWhenReach: _headerProperties.immediately,
           dragText: 'Pull to refresh'.tr,
           armedText: 'Release ready'.tr,
           readyText: 'Refreshing...'.tr,
@@ -80,6 +81,7 @@ class _ClassicPageState extends State<ClassicPage> {
           showMessage: _footerProperties.message,
           showText: _footerProperties.text,
           infiniteOffset: _footerProperties.infinite ? 70 : null,
+          triggerWhenReach: _footerProperties.immediately,
           dragText: 'Pull to load'.tr,
           armedText: 'Release ready'.tr,
           readyText: 'Loading...'.tr,
@@ -291,6 +293,17 @@ class _ClassicPageState extends State<ClassicPage> {
                               ),
                             ),
                             ListTile(
+                              title: Text('Trigger immediately'.tr),
+                              trailing: Switch(
+                                value: properties.immediately,
+                                onChanged: (value) {
+                                  setState(() {
+                                    properties.immediately = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            ListTile(
                               title: Text('Infinite'.tr),
                               trailing: Switch(
                                 value: properties.infinite,
@@ -351,6 +364,7 @@ class _CIProperties {
   bool message = true;
   bool text = true;
   bool infinite;
+  bool immediately = false;
 
   _CIProperties({
     required this.name,

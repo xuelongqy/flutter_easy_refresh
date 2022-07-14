@@ -25,6 +25,7 @@ abstract class Header extends Indicator {
     double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
+    bool triggerWhenReach = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -48,6 +49,7 @@ abstract class Header extends Indicator {
           secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
+          triggerWhenReach: triggerWhenReach,
         );
 }
 
@@ -80,6 +82,7 @@ class BuilderHeader extends Header {
     double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
+    bool triggerWhenReach = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -103,6 +106,7 @@ class BuilderHeader extends Header {
           secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
+          triggerWhenReach: triggerWhenReach,
         );
 
   @override
@@ -136,6 +140,7 @@ class ListenerHeader extends Header {
     double? secondaryDimension,
     double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
+    bool triggerWhenReach = false,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -159,6 +164,7 @@ class ListenerHeader extends Header {
           secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
+          triggerWhenReach: triggerWhenReach,
         );
 
   @override
@@ -203,6 +209,7 @@ abstract class SecondaryHeader extends Header {
           secondaryCloseTriggerOffset: secondaryCloseTriggerOffset,
           notifyWhenInvisible: header.notifyWhenInvisible,
           listenable: listenable ?? header.listenable,
+          triggerWhenReach: header.triggerWhenReach,
         );
 
   @override
@@ -300,6 +307,7 @@ class OverrideHeader extends Header {
     double? secondaryCloseTriggerOffset,
     bool? notifyWhenInvisible,
     IndicatorStateListenable? listenable,
+    bool triggerWhenReach = false,
   }) : super(
           triggerOffset: triggerOffset ?? header.triggerOffset,
           clamping: clamping ?? header.clamping,
@@ -328,6 +336,7 @@ class OverrideHeader extends Header {
           notifyWhenInvisible:
               notifyWhenInvisible ?? header.notifyWhenInvisible,
           listenable: listenable ?? header.listenable,
+          triggerWhenReach: triggerWhenReach,
         );
 
   @override
