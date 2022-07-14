@@ -57,8 +57,6 @@ class CupertinoHeader extends Header {
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    assert(state.axis == Axis.vertical,
-        'CupertinoHeader does not support horizontal scrolling.');
     return _CupertinoIndicator(
       key: key,
       state: state,

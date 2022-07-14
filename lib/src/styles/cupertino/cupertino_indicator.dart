@@ -51,6 +51,7 @@ class _CupertinoIndicator extends StatefulWidget {
 
 class _CupertinoIndicatorState extends State<_CupertinoIndicator>
     with SingleTickerProviderStateMixin {
+  Axis get _axis => widget.state.axis;
   IndicatorMode get _mode => widget.state.mode;
   double get _offset => widget.state.offset;
   double get _actualTriggerOffset => widget.state.actualTriggerOffset;
@@ -154,6 +155,7 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
   Widget _buildWaterDrop() {
     Widget waterDropWidget = CustomPaint(
       painter: WaterDropPainter(
+        axis: _axis,
         offset: _offset,
         actualTriggerOffset: _actualTriggerOffset,
         color: widget.backgroundColor ?? Theme.of(context).splashColor,
@@ -195,18 +197,19 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
       alignment: Alignment.center,
       children: [
         SizedBox(
-          height: _offset,
-          width: double.infinity,
+          height: _axis == Axis.vertical ? _offset : double.infinity,
+          width: _axis == Axis.vertical ? double.infinity : _offset,
         ),
         // WaterDrop.
         if (_useWaterDrop)
           Positioned(
             top: 0,
             left: 0,
-            right: 0,
+            right: _axis == Axis.vertical ? 0 : null,
+            bottom: _axis == Axis.vertical ? null : 0,
             child: SizedBox(
-              height: _offset,
-              width: double.infinity,
+              height: _axis == Axis.vertical ? _offset : double.infinity,
+              width: _axis == Axis.vertical ? double.infinity : _offset,
               child: _buildWaterDrop(),
             ),
           ),
@@ -214,11 +217,14 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
         Positioned(
           top: 0,
           left: 0,
-          right: 0,
+          right: _axis == Axis.vertical ? 0 : null,
+          bottom: _axis == Axis.vertical ? null : 0,
           child: Container(
             alignment: Alignment.center,
-            height: _actualTriggerOffset,
-            width: double.infinity,
+            height:
+                _axis == Axis.vertical ? _actualTriggerOffset : double.infinity,
+            width:
+                _axis == Axis.vertical ? double.infinity : _actualTriggerOffset,
             child: _buildIndicator(),
           ),
         ),
@@ -228,11 +234,13 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
 }
 
 class WaterDropPainter extends CustomPainter {
+  final Axis axis;
   final Color color;
   final double offset;
   final double actualTriggerOffset;
 
   WaterDropPainter({
+    required this.axis,
     required this.color,
     required this.offset,
     required this.actualTriggerOffset,
@@ -240,6 +248,16 @@ class WaterDropPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = color;
+    canvas.drawPath(
+        axis == Axis.vertical
+            ? _buildVerticalPath(size)
+            : _buildHorizontalPath(size),
+        paint);
+  }
+
+  Path _buildVerticalPath(Size size) {
+    Path path = Path();
     final width = size.width;
     double topRadius = _maxCircleRadius;
     double bottomRadius = _maxCircleRadius;
@@ -250,8 +268,6 @@ class WaterDropPainter extends CustomPainter {
       topRadius = topRadius - radiusDifference / 4;
       bottomRadius = bottomRadius - radiusDifference;
     }
-    Path path = Path();
-    final paint = Paint()..color = color;
     final topCenterY = actualTriggerOffset / 2;
     final centerX = width / 2;
     path.addOval(
@@ -298,12 +314,74 @@ class WaterDropPainter extends CustomPainter {
 
       path = Path.combine(PathOperation.union, path, bezierPath);
     }
-    canvas.drawPath(path, paint);
+    return path;
+  }
+
+  Path _buildHorizontalPath(Size size) {
+    Path path = Path();
+    final height = size.height;
+    double topRadius = _maxCircleRadius;
+    double bottomRadius = _maxCircleRadius;
+    if (offset > actualTriggerOffset) {
+      const radiusLimit = _maxCircleRadius - _minCircleRadius;
+      final radiusDifference = radiusLimit *
+          (1 - math.pow(100, -(offset - actualTriggerOffset) / 200));
+      topRadius = topRadius - radiusDifference / 4;
+      bottomRadius = bottomRadius - radiusDifference;
+    }
+    final topCenterX = actualTriggerOffset / 2;
+    final centerY = height / 2;
+    path.addOval(
+      Rect.fromCircle(
+        center: Offset(
+          actualTriggerOffset / 2,
+          centerY,
+        ),
+        radius: topRadius,
+      ),
+    );
+    if (offset > actualTriggerOffset) {
+      final bottomCenterX =
+          offset - (actualTriggerOffset / 2 - topRadius) - bottomRadius;
+      path.addOval(
+        Rect.fromCircle(
+          center: Offset(
+            bottomCenterX,
+            centerY,
+          ),
+          radius: bottomRadius,
+        ),
+      );
+
+      final bezierPath = Path();
+      final angle =
+          math.asin((topRadius - bottomRadius) / (topCenterX - bottomCenterX));
+      final topY1 = centerY - topRadius * math.cos(angle);
+      final topX1 = topCenterX + topRadius * math.sin(angle);
+      final topY2 = centerY + topRadius * math.cos(angle);
+      final topX2 = topX1;
+      final bottomY1 = centerY - bottomRadius * math.cos(angle);
+      final bottomX1 = bottomCenterX + bottomRadius * math.sin(angle);
+      final bottomY2 = centerY + bottomRadius * math.cos(angle);
+      final bottomX2 = bottomX1;
+      bezierPath.moveTo(topCenterX, centerY);
+      bezierPath.lineTo(topX1, topY1);
+      bezierPath.quadraticBezierTo((bottomCenterX + topCenterX) / 2,
+          (centerY - bottomRadius), bottomX1, bottomY1);
+      bezierPath.lineTo(bottomX2, bottomY2);
+      bezierPath.quadraticBezierTo(
+          (bottomCenterX + topX2) / 2, (centerY + bottomRadius), topX2, topY2);
+      bezierPath.close();
+
+      path = Path.combine(PathOperation.union, path, bezierPath);
+    }
+    return path;
   }
 
   @override
   bool shouldRepaint(covariant WaterDropPainter oldDelegate) {
-    return oldDelegate.color != color ||
+    return oldDelegate.axis != axis ||
+        oldDelegate.color != color ||
         oldDelegate.actualTriggerOffset != actualTriggerOffset ||
         (oldDelegate.offset != offset &&
             !(oldDelegate.offset < oldDelegate.actualTriggerOffset &&

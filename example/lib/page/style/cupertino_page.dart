@@ -11,6 +11,7 @@ class CupertinoIndicatorPage extends StatefulWidget {
 }
 
 class _CupertinoIndicatorPageState extends State<CupertinoIndicatorPage> {
+  Axis _scrollDirection = Axis.vertical;
   int _count = 10;
   late EasyRefreshController _controller;
 
@@ -35,6 +36,29 @@ class _CupertinoIndicatorPageState extends State<CupertinoIndicatorPage> {
     return Material(
       color: Colors.transparent,
       child: CupertinoPageScaffold(
+        navigationBar: _scrollDirection == Axis.vertical
+            ? null
+            : CupertinoNavigationBar(
+                middle: Text(
+                  'iOS Cupertino',
+                  style: TextStyle(
+                    color: themeData.textTheme.titleMedium?.color,
+                  ),
+                ),
+                trailing: IconButton(
+                  iconSize: 24,
+                  onPressed: () {
+                    setState(() {
+                      _scrollDirection = _scrollDirection == Axis.horizontal
+                          ? Axis.vertical
+                          : Axis.horizontal;
+                    });
+                  },
+                  icon: Icon(_scrollDirection == Axis.horizontal
+                      ? Icons.horizontal_distribute
+                      : Icons.vertical_distribute),
+                ),
+              ),
         child: EasyRefresh(
           controller: _controller,
           header: const CupertinoHeader(
@@ -68,20 +92,37 @@ class _CupertinoIndicatorPageState extends State<CupertinoIndicatorPage> {
                 : IndicatorResult.success);
           },
           child: CustomScrollView(
+            scrollDirection: _scrollDirection,
             slivers: [
-              CupertinoSliverNavigationBar(
-                largeTitle: Text(
-                  'iOS Cupertino',
-                  style: TextStyle(
-                    color: themeData.textTheme.titleMedium?.color,
+              if (_scrollDirection == Axis.vertical)
+                CupertinoSliverNavigationBar(
+                  largeTitle: Text(
+                    'iOS Cupertino',
+                    style: TextStyle(
+                      color: themeData.textTheme.titleMedium?.color,
+                    ),
+                  ),
+                  trailing: IconButton(
+                    iconSize: 24,
+                    onPressed: () {
+                      setState(() {
+                        _scrollDirection = _scrollDirection == Axis.horizontal
+                            ? Axis.vertical
+                            : Axis.horizontal;
+                      });
+                    },
+                    icon: Icon(_scrollDirection == Axis.horizontal
+                        ? Icons.horizontal_distribute
+                        : Icons.vertical_distribute),
                   ),
                 ),
-              ),
               const HeaderLocator.sliver(),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    return const SkeletonItem();
+                    return SkeletonItem(
+                      direction: _scrollDirection,
+                    );
                   },
                   childCount: _count,
                 ),

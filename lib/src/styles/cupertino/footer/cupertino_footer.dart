@@ -57,8 +57,6 @@ class CupertinoFooter extends Footer {
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    assert(state.axis == Axis.vertical,
-        'CupertinoFooter does not support horizontal scrolling.');
     return _CupertinoIndicator(
       key: key,
       state: state,
