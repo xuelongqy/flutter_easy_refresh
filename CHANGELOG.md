@@ -1,3 +1,6 @@
+## V 3.0.2+1
+> fix: [viewportDimension] changes may trigger loading.  
+
 ## V 3.0.2
 > feat: Indicator add [triggerWhenReach] [#348](https://github.com/xuelongqy/flutter_easy_refresh/pull/348). Trigger immediately when reaching the [triggerOffset].  
 > feat: CupertinoIndicator support horizontal.  

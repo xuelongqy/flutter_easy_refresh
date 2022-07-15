@@ -310,6 +310,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       if (clamping && _clampingAnimationController!.isAnimating) {
         _clampingAnimationController!.stop(canceled: true);
       }
+    } else {
+      _releaseOffset = _offset;
     }
   }
 
@@ -458,9 +460,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     // Calculate and update the offset.
     _offset = _calculateOffset(position, value);
     _slightDeviation();
-    if (bySimulation) {
-      _releaseOffset = _offset;
-    }
     // Do nothing if not out of bounds.
     if (oldOffset == 0 && _offset == 0) {
       if (_mode == IndicatorMode.done ||
