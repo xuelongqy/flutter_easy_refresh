@@ -1,5 +1,7 @@
 part of easy_refresh;
 
+/// Taurus footer.
+/// https://github.com/Yalantis/Taurus
 class TaurusFooter extends Footer {
   final Key? key;
 

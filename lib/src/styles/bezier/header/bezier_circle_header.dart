@@ -1,6 +1,7 @@
 part of easy_refresh;
 
 /// Bezier circle footer.
+/// https://dribbble.com/shots/1797373-Pull-Down-To-Refresh
 class BezierCircleHeader extends Header {
   final Key? key;
 

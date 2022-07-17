@@ -1,5 +1,7 @@
 part of easy_refresh;
 
+/// Taurus header.
+/// https://github.com/Yalantis/Taurus
 class TaurusHeader extends Header {
   final Key? key;
 

@@ -10,9 +10,9 @@
 
 ### [在线演示](https://xuelongqy.github.io/flutter_easy_refresh/)
 ### [APK下载](https://github.com/xuelongqy/flutter_easy_refresh/releases)
+### [API文档](https://pub.dev/documentation/easy_refresh/latest/)
 
 ## 特点功能:
-
  - 支持所有的滚动组件
  - 滚动物理作用域，精确匹配滚动组件
  - 集成多个炫酷的 Header 和 Footer

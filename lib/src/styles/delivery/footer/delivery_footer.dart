@@ -1,5 +1,7 @@
 part of easy_refresh;
 
+/// Delivery footer.
+/// https://dribbble.com/shots/2753803-Refresh-your-delivery
 class DeliveryFooter extends Footer {
   final Key? key;
 

@@ -10,9 +10,9 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
 
 ### [Online demo](https://xuelongqy.github.io/flutter_easy_refresh/)
 ### [APK download](https://github.com/xuelongqy/flutter_easy_refresh/releases)
+### [API reference](https://pub.dev/documentation/easy_refresh/latest/)
 
 ## Features:
-
 - Supports all scrollable widgets
 - Scrolling physics scope, exactly matching scrollable widgets
 - Integrate multiple cool Header and Footer

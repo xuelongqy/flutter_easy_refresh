@@ -154,7 +154,7 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
 
   Widget _buildWaterDrop() {
     Widget waterDropWidget = CustomPaint(
-      painter: WaterDropPainter(
+      painter: _WaterDropPainter(
         axis: _axis,
         offset: _offset,
         actualTriggerOffset: _actualTriggerOffset,
@@ -233,13 +233,13 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
   }
 }
 
-class WaterDropPainter extends CustomPainter {
+class _WaterDropPainter extends CustomPainter {
   final Axis axis;
   final Color color;
   final double offset;
   final double actualTriggerOffset;
 
-  WaterDropPainter({
+  _WaterDropPainter({
     required this.axis,
     required this.color,
     required this.offset,
@@ -379,7 +379,7 @@ class WaterDropPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant WaterDropPainter oldDelegate) {
+  bool shouldRepaint(covariant _WaterDropPainter oldDelegate) {
     return oldDelegate.axis != axis ||
         oldDelegate.color != color ||
         oldDelegate.actualTriggerOffset != actualTriggerOffset ||

@@ -1,5 +1,7 @@
 part of easy_refresh;
 
+/// Cupertino footer.
+/// https://github.com/THEONE10211024/WaterDropListView
 class CupertinoFooter extends Footer {
   final Key? key;
 

@@ -24,6 +24,7 @@ class EasyRefreshData {
   });
 }
 
+/// EasyRefresh inherited widget.
 class _InheritedEasyRefresh extends InheritedWidget {
   final EasyRefreshData data;
 
@@ -38,6 +39,8 @@ class _InheritedEasyRefresh extends InheritedWidget {
       data != oldWidget.data;
 }
 
+/// EasyRefresh.
+/// A flutter widget that provides pull-down refresh and pull-up load.
 class EasyRefresh extends StatefulWidget {
   /// Try to avoid including multiple ScrollViews.
   /// Or set separate ScrollPhysics for other ScrollView.
@@ -203,6 +206,7 @@ class EasyRefresh extends StatefulWidget {
   }
 }
 
+/// EasyRefresh widget state.
 class _EasyRefreshState extends State<EasyRefresh>
     with TickerProviderStateMixin {
   /// [ScrollPhysics] use it in EasyRefresh.

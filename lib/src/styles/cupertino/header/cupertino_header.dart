@@ -1,5 +1,7 @@
 part of easy_refresh;
 
+/// Cupertino header.
+/// https://github.com/THEONE10211024/WaterDropListView
 class CupertinoHeader extends Header {
   final Key? key;
 

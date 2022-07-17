@@ -1,5 +1,7 @@
 part of easy_refresh;
 
+/// Phoenix header.
+/// https://github.com/Yalantis/Phoenix
 class PhoenixHeader extends Header {
   final Key? key;
 

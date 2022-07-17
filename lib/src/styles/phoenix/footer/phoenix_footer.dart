@@ -1,5 +1,7 @@
 part of easy_refresh;
 
+/// Phoenix footer.
+/// https://github.com/Yalantis/Phoenix
 class PhoenixFooter extends Footer {
   final Key? key;
 
