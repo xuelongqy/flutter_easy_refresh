@@ -159,7 +159,7 @@ class _ClassicIndicator extends StatefulWidget {
 class _ClassicIndicatorState extends State<_ClassicIndicator>
     with TickerProviderStateMixin<_ClassicIndicator> {
   /// Icon [AnimatedSwitcher] switch key.
-  final _iconAnimatedSwitcherKey = GlobalKey();
+  late GlobalKey _iconAnimatedSwitcherKey;
 
   /// Update time.
   late DateTime _updateTime;
@@ -186,6 +186,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
   @override
   void initState() {
     super.initState();
+    _iconAnimatedSwitcherKey = GlobalKey();
     _updateTime = DateTime.now();
     _iconAnimationController = AnimationController(
       value: 0,
@@ -266,9 +267,10 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
   Widget _buildIcon() {
     Widget icon;
     final iconTheme = widget.iconTheme ?? Theme.of(context).iconTheme;
+    ValueKey iconKey;
     if (_result == IndicatorResult.noMore) {
+      iconKey = const ValueKey(IndicatorResult.noMore);
       icon = SizedBox(
-        key: const ValueKey(IndicatorResult.noMore),
         child: widget.noMoreIcon ??
             const Icon(
               Icons.inbox_outlined,
@@ -276,10 +278,10 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
       );
     } else if (_mode == IndicatorMode.processing ||
         _mode == IndicatorMode.ready) {
+      iconKey = const ValueKey(IndicatorMode.processing);
       final progressIndicatorSize =
           widget.progressIndicatorSize ?? _kDefaultProgressIndicatorSize;
       icon = SizedBox(
-        key: const ValueKey(IndicatorMode.processing),
         width: progressIndicatorSize,
         height: progressIndicatorSize,
         child: CircularProgressIndicator(
@@ -291,16 +293,16 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
     } else if (_mode == IndicatorMode.processed ||
         _mode == IndicatorMode.done) {
       if (_result == IndicatorResult.fail) {
+        iconKey = const ValueKey(IndicatorResult.fail);
         icon = SizedBox(
-          key: const ValueKey(IndicatorResult.fail),
           child: widget.failedIcon ??
               const Icon(
                 Icons.error_outline,
               ),
         );
       } else {
+        iconKey = const ValueKey(IndicatorResult.success);
         icon = SizedBox(
-          key: const ValueKey(IndicatorResult.success),
           child: widget.succeededIcon ??
               Transform.rotate(
                 angle: _axis == Axis.vertical ? 0 : -math.pi / 2,
@@ -311,8 +313,8 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
         );
       }
     } else {
+      iconKey = const ValueKey(IndicatorMode.drag);
       icon = SizedBox(
-        key: const ValueKey(IndicatorMode.drag),
         child: widget.pullIconBuilder
                 ?.call(context, widget.state, _iconAnimationController.value) ??
             Transform.rotate(
@@ -327,7 +329,6 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
             ),
       );
     }
-
     return AnimatedSwitcher(
       key: _iconAnimatedSwitcherKey,
       duration: const Duration(milliseconds: 300),
@@ -341,7 +342,11 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
           opacity: animation,
         );
       },
-      child: IconTheme.merge(data: iconTheme, child: icon),
+      child: IconTheme(
+        key: iconKey,
+        data: iconTheme,
+        child: icon,
+      ),
     );
   }
 
