@@ -72,14 +72,14 @@ class EasyRefresh extends StatefulWidget {
   /// Triggered on refresh.
   /// When null, disable refresh.
   /// The Header current state is [IndicatorMode.processing].
-  /// More see [IndicatorNotifier.onTask].
+  /// More see [IndicatorNotifier._onTask].
   final FutureOr Function()? onRefresh;
 
   /// Load callback.
   /// Triggered on load.
   /// When null, disable load.
   /// The Footer current state is [IndicatorMode.processing].
-  /// More see [IndicatorNotifier.onTask].
+  /// More see [IndicatorNotifier._onTask].
   final FutureOr Function()? onLoad;
 
   /// Structure that describes a spring's constants.
