@@ -39,7 +39,6 @@ class _InheritedEasyRefresh extends InheritedWidget {
       data != oldWidget.data;
 }
 
-/// EasyRefresh.
 /// A flutter widget that provides pull-down refresh and pull-up load.
 class EasyRefresh extends StatefulWidget {
   /// Try to avoid including multiple ScrollViews.
@@ -245,6 +244,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         final h = widget.header ?? EasyRefresh._defaultHeader;
         return NotRefreshHeader(
           clamping: h.clamping,
+          position: h.position,
           spring: h.spring,
           frictionFactor: h.frictionFactor,
         );
@@ -268,6 +268,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         final f = widget.footer ?? EasyRefresh._defaultFooter;
         return NotLoadFooter(
           clamping: f.clamping,
+          position: f.position,
           spring: f.spring,
           frictionFactor: f.frictionFactor,
         );

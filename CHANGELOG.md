@@ -1,3 +1,7 @@
+## V 3.0.2+2
+> fix: ClassicIndicator transition animation.  
+> fix: NotRefreshHeader and NotLoadFooter [position] causes tree structure changes.  
+
 ## V 3.0.2+1
 > fix: [viewportDimension] changes may trigger loading.  
 

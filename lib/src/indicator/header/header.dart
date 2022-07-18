@@ -255,6 +255,7 @@ class SecondaryBuilderHeader extends SecondaryHeader {
 class NotRefreshHeader extends Header {
   const NotRefreshHeader({
     bool clamping = false,
+    IndicatorPosition position = IndicatorPosition.custom,
     SpringDescription? spring,
     SpringDescription? horizontalSpring,
     FrictionFactor? frictionFactor,
@@ -262,7 +263,7 @@ class NotRefreshHeader extends Header {
   }) : super(
           triggerOffset: 0,
           clamping: clamping,
-          position: IndicatorPosition.custom,
+          position: position,
           spring: spring,
           horizontalSpring: horizontalSpring,
           frictionFactor: frictionFactor,
