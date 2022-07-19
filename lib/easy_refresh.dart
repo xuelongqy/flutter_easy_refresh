@@ -47,3 +47,11 @@ part 'src/styles/delivery/footer/delivery_footer.dart';
 part 'src/styles/cupertino/cupertino_indicator.dart';
 part 'src/styles/cupertino/header/cupertino_header.dart';
 part 'src/styles/cupertino/footer/cupertino_footer.dart';
+
+/// This allows a value of type T or T?
+/// to be treated as a value of type T?.
+///
+/// We use this so that APIs that have become
+/// non-nullable can still be used with `!` and `?`
+/// to support older versions of the API as well.
+T? _ambiguate<T>(T? value) => value;

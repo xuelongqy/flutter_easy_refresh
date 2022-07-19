@@ -686,13 +686,15 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (this.mode == IndicatorMode.processed) {
       // Completion delay
       if (processedDuration == Duration.zero) {
-        _mode = IndicatorMode.done;
-        // Trigger [Scrollable] rollback
-        if (oldMode == IndicatorMode.processing &&
-            _position is ScrollActivityDelegate &&
-            !userOffsetNotifier.value) {
-          _resetBallistic();
-        }
+        _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((timeStamp) {
+          _mode = IndicatorMode.done;
+          // Trigger [Scrollable] rollback
+          if (oldMode == IndicatorMode.processing &&
+              _position is ScrollActivityDelegate &&
+              !userOffsetNotifier.value) {
+            _resetBallistic();
+          }
+        });
       } else {
         Future.delayed(processedDuration, () {
           _setMode(IndicatorMode.done);

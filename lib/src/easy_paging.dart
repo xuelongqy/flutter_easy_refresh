@@ -6,9 +6,71 @@ abstract class EasyPaging<DataType, ItemType> extends StatefulWidget {
   /// when false, use [EasyRefresh.builder].
   final bool useDefaultPhysics;
 
+  /// EasyRefresh controller.
+  final EasyRefreshController? controller;
+
+  /// Overscroll behavior when [onRefresh] is null.
+  /// Won't build widget.
+  final NotRefreshHeader? notRefreshHeader;
+
+  /// Overscroll behavior when [onLoad] is null.
+  /// Won't build widget.
+  final NotLoadFooter? notLoadFooter;
+
+  /// Structure that describes a spring's constants.
+  /// When spring is not set in [Header] and [Footer].
+  final SpringDescription? spring;
+
+  /// Friction factor when list is out of bounds.
+  final FrictionFactor? frictionFactor;
+
+  /// Refresh and load can be performed simultaneously.
+  final bool simultaneously;
+
+  /// Is it possible to refresh after there is no more.
+  final bool noMoreRefresh;
+
+  /// Is it loadable after no more.
+  final bool noMoreLoad;
+
+  /// Reset after refresh when no more deactivation is loaded.
+  final bool resetAfterRefresh;
+
+  /// Refresh on start.
+  /// When the EasyRefresh build is complete, trigger the refresh.
+  final bool refreshOnStart;
+
+  /// Offset beyond trigger offset when calling refresh.
+  /// Used when refreshOnStart is true and [EasyRefreshController.callRefresh].
+  final double callRefreshOverOffset;
+
+  /// Offset beyond trigger offset when calling load.
+  /// Used when [EasyRefreshController.callLoad].
+  final double callLoadOverOffset;
+
+  /// See [Stack.StackFit]
+  final StackFit fit;
+
+  /// See [Stack.clipBehavior].
+  final Clip clipBehavior;
+
   const EasyPaging({
     Key? key,
     this.useDefaultPhysics = false,
+    this.controller,
+    this.spring,
+    this.frictionFactor,
+    this.notRefreshHeader,
+    this.notLoadFooter,
+    this.simultaneously = false,
+    this.noMoreRefresh = false,
+    this.noMoreLoad = false,
+    this.resetAfterRefresh = true,
+    this.refreshOnStart = false,
+    this.callRefreshOverOffset = 20,
+    this.callLoadOverOffset = 20,
+    this.fit = StackFit.loose,
+    this.clipBehavior = Clip.hardEdge,
   }) : super(key: key);
 
   @override
@@ -75,6 +137,9 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
   /// Empty widget.
   Widget? buildEmptyWidget() => null;
 
+  /// Refresh on start widget.
+  Widget? buildRefreshOnStartWidget() => null;
+
   /// Build header.
   Header buildHeader() => EasyRefresh.defaultHeaderBuilder();
 
@@ -114,7 +179,7 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
   Widget buildSliver() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (context, index) {
+        (context, index) {
           return buildItem(context, index, getItem(index));
         },
         childCount: count,
@@ -129,22 +194,67 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
   Widget build(BuildContext context) {
     final header = buildHeader();
     final footer = buildFooter();
+    Header? startHeader;
+    Widget? startWidget = buildRefreshOnStartWidget();
+    if (startHeader != null) {
+      startHeader = BuilderHeader(
+        triggerOffset: 70,
+        clamping: true,
+        position: IndicatorPosition.above,
+        processedDuration: Duration.zero,
+        builder: (ctx, state) {
+          if (state.mode == IndicatorMode.inactive ||
+              state.mode == IndicatorMode.done) {
+            return const SizedBox();
+          }
+          return startWidget!;
+        },
+      );
+    }
     if (widget.useDefaultPhysics) {
       return EasyRefresh(
-        resetAfterRefresh: true,
         header: header,
         footer: footer,
-        onRefresh: _onRefresh,
-        onLoad: _onLoad,
+        refreshOnStartHeader: startHeader,
+        onRefresh: enableRefresh ? _onRefresh : null,
+        onLoad: enableLoad ? _onLoad : null,
+        controller: widget.controller,
+        spring: widget.spring,
+        frictionFactor: widget.frictionFactor,
+        notRefreshHeader: widget.notRefreshHeader,
+        notLoadFooter: widget.notLoadFooter,
+        simultaneously: widget.simultaneously,
+        noMoreRefresh: widget.noMoreRefresh,
+        noMoreLoad: widget.noMoreLoad,
+        resetAfterRefresh: widget.resetAfterRefresh,
+        refreshOnStart: widget.refreshOnStart,
+        callRefreshOverOffset: widget.callRefreshOverOffset,
+        callLoadOverOffset: widget.callLoadOverOffset,
+        fit: widget.fit,
+        clipBehavior: widget.clipBehavior,
         child: buildScrollView(),
       );
     }
     return EasyRefresh.builder(
-      resetAfterRefresh: true,
       header: header,
       footer: footer,
+      refreshOnStartHeader: startHeader,
       onRefresh: _onRefresh,
       onLoad: _onLoad,
+      controller: widget.controller,
+      spring: widget.spring,
+      frictionFactor: widget.frictionFactor,
+      notRefreshHeader: widget.notRefreshHeader,
+      notLoadFooter: widget.notLoadFooter,
+      simultaneously: widget.simultaneously,
+      noMoreRefresh: widget.noMoreRefresh,
+      noMoreLoad: widget.noMoreLoad,
+      resetAfterRefresh: widget.resetAfterRefresh,
+      refreshOnStart: widget.refreshOnStart,
+      callRefreshOverOffset: widget.callRefreshOverOffset,
+      callLoadOverOffset: widget.callLoadOverOffset,
+      fit: widget.fit,
+      clipBehavior: widget.clipBehavior,
       childBuilder: (context, physics) {
         return buildScrollView(physics);
       },
