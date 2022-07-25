@@ -31,9 +31,9 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('EasyRefresh'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('EasyRefresh'),
+      // ),
       body: EasyRefresh(
         noMoreRefresh: false,
         noMoreLoad: false,
@@ -57,7 +57,9 @@ class _TestPageState extends State<TestPage> {
             );
           },
         ),
-        header: MaterialHeader(),
+        header: ClassicHeader(
+          clamping: true,
+        ),
         footer: MaterialFooter(),
         onRefresh: () async {
           print('Refreshing');
@@ -108,23 +110,53 @@ class _TestPageState extends State<TestPage> {
         //     const FooterLocator(),
         //   ],
         // ),
-        child: CustomScrollView(
-          scrollDirection: _scrollDirection,
-          reverse: false,
-          slivers: [
-            // const HeaderLocator.sliver(),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return SkeletonItem(
-                    direction: _scrollDirection,
-                  );
-                },
-                childCount: _count,
+        // child: CustomScrollView(
+        //   scrollDirection: _scrollDirection,
+        //   reverse: false,
+        //   slivers: [
+        //     // const HeaderLocator.sliver(),
+        //     SliverList(
+        //       delegate: SliverChildBuilderDelegate(
+        //         (context, index) {
+        //           return SkeletonItem(
+        //             direction: _scrollDirection,
+        //           );
+        //         },
+        //         childCount: _count,
+        //       ),
+        //     ),
+        //     // const FooterLocator.sliver(),
+        //   ],
+        // ),
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            print(innerBoxIsScrolled);
+            return [
+              SliverAppBar(
+                title: const Text('EasyRefresh'),
+                expandedHeight: 100,
+                pinned: true,
               ),
-            ),
-            // const FooterLocator.sliver(),
-          ],
+            ];
+          },
+          body: CustomScrollView(
+            scrollDirection: _scrollDirection,
+            reverse: false,
+            slivers: [
+              // const HeaderLocator.sliver(),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return SkeletonItem(
+                      direction: _scrollDirection,
+                    );
+                  },
+                  childCount: _count,
+                ),
+              ),
+              // const FooterLocator.sliver(),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

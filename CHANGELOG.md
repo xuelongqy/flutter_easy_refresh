@@ -1,3 +1,7 @@
+## Next
+> fix: processedDuration == Duration.zero, can't rebound [#348](https://github.com/xuelongqy/flutter_easy_refresh/pull/572).   
+> fix: When using NestedScrollView, [hitOver] is invalid.   
+
 ## V 3.0.2+2
 > fix: ClassicIndicator transition animation.  
 > fix: NotRefreshHeader and NotLoadFooter [position] causes tree structure changes.  

@@ -205,8 +205,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       // hit top over
       if (!(headerNotifier.hitOver || headerNotifier.modeLocked) &&
           headerNotifier.mode != IndicatorMode.ready &&
+          !userOffsetNotifier.value &&
           value < position.minScrollExtent &&
-          position.minScrollExtent < position.pixels) {
+          position.minScrollExtent <= position.pixels) {
         _updateIndicatorOffset(position, 0);
         return value - position.minScrollExtent;
       }
@@ -214,9 +215,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       if ((!headerNotifier.infiniteHitOver ||
               (!headerNotifier.hitOver && headerNotifier.modeLocked)) &&
           (headerNotifier._canProcess || headerNotifier.noMoreLocked) &&
+          !userOffsetNotifier.value &&
           (value + headerNotifier.actualTriggerOffset) <
               position.minScrollExtent &&
-          position.minScrollExtent <
+          position.minScrollExtent <=
               (position.pixels + headerNotifier.actualTriggerOffset)) {
         _updateIndicatorOffset(position, -headerNotifier.actualTriggerOffset);
         return (value + headerNotifier.actualTriggerOffset) -
@@ -280,7 +282,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       // hit bottom over
       if (!(footerNotifier.hitOver || footerNotifier.modeLocked) &&
           footerNotifier.mode != IndicatorMode.ready &&
-          position.pixels < position.maxScrollExtent &&
+          !userOffsetNotifier.value &&
+          position.pixels <= position.maxScrollExtent &&
           position.maxScrollExtent < value) {
         _updateIndicatorOffset(position, position.maxScrollExtent);
         return value - position.maxScrollExtent;
@@ -289,7 +292,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       if ((!footerNotifier.infiniteHitOver ||
               !footerNotifier.hitOver && footerNotifier.modeLocked) &&
           (footerNotifier._canProcess || footerNotifier.noMoreLocked) &&
-          (position.pixels - footerNotifier.actualTriggerOffset) <
+          !userOffsetNotifier.value &&
+          (position.pixels - footerNotifier.actualTriggerOffset) <=
               position.maxScrollExtent &&
           position.maxScrollExtent <
               (value - footerNotifier.actualTriggerOffset)) {
