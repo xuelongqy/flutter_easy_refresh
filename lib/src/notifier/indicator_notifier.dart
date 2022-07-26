@@ -450,7 +450,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     // Clamping
     // In the case of release, and offset is greater than 0, it is controlled by animation.
-    if (!userOffsetNotifier.value && clamping && _offset > 0 && !bySimulation) {
+    if ((_mode == IndicatorMode.done && bySimulation) ||
+        !userOffsetNotifier.value && clamping && _offset > 0 && !bySimulation) {
       return;
     }
     _position = position;
