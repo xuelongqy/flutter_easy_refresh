@@ -34,7 +34,7 @@ class _TestPageState extends State<TestPage> {
       // appBar: AppBar(
       //   title: const Text('EasyRefresh'),
       // ),
-      body: EasyRefresh(
+      body: EasyRefresh.builder(
         noMoreRefresh: false,
         noMoreLoad: false,
         refreshOnStart: false,
@@ -128,36 +128,39 @@ class _TestPageState extends State<TestPage> {
         //     // const FooterLocator.sliver(),
         //   ],
         // ),
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            print(innerBoxIsScrolled);
-            return [
-              SliverAppBar(
-                title: const Text('EasyRefresh'),
-                expandedHeight: 100,
-                pinned: true,
-              ),
-            ];
-          },
-          body: CustomScrollView(
-            scrollDirection: _scrollDirection,
-            reverse: false,
-            slivers: [
-              // const HeaderLocator.sliver(),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return SkeletonItem(
-                      direction: _scrollDirection,
-                    );
-                  },
-                  childCount: _count,
+        childBuilder: (context, physics) {
+          return NestedScrollView(
+            physics: physics,
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                SliverAppBar(
+                  title: const Text('EasyRefresh'),
+                  expandedHeight: 100,
+                  pinned: true,
                 ),
-              ),
-              // const FooterLocator.sliver(),
-            ],
-          ),
-        ),
+              ];
+            },
+            body: CustomScrollView(
+              physics: physics,
+              scrollDirection: _scrollDirection,
+              reverse: false,
+              slivers: [
+                // const HeaderLocator.sliver(),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return SkeletonItem(
+                        direction: _scrollDirection,
+                      );
+                    },
+                    childCount: _count,
+                  ),
+                ),
+                // const FooterLocator.sliver(),
+              ],
+            ),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.play_arrow),

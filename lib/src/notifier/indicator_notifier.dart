@@ -667,7 +667,16 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     } else if (_position is ScrollActivityDelegate) {
       delegate = _position as ScrollActivityDelegate;
     }
-    delegate?.goBallistic(velocity);
+    if (delegate != null) {
+      delegate.goBallistic(velocity);
+    } else {
+      if (clamping && _offset > 0 && !(modeLocked || secondaryLocked)) {
+        final simulation = createBallisticSimulation(position, velocity);
+        if (simulation != null) {
+          _startClampingAnimation(simulation);
+        }
+      }
+    }
   }
 
   /// Set mode.
@@ -691,7 +700,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
           _mode = IndicatorMode.done;
           // Trigger [Scrollable] rollback
           if (oldMode == IndicatorMode.processing &&
-              _position is ScrollActivityDelegate &&
               !userOffsetNotifier.value) {
             _resetBallistic();
           }
@@ -700,8 +708,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         Future.delayed(processedDuration, () {
           _setMode(IndicatorMode.done);
           // Trigger [Scrollable] rollback
-          if (_position is ScrollActivityDelegate &&
-              !userOffsetNotifier.value) {
+          if (!userOffsetNotifier.value) {
             _resetBallistic();
           }
         });
