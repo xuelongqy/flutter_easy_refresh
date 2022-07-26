@@ -186,15 +186,18 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
     // Header
     if (headerNotifier.clamping == true) {
-      if (value < position.pixels &&
-          position.pixels <= position.minScrollExtent) {
-        // underscroll
-        bounds = value - position.pixels;
-      } else if (value < position.minScrollExtent &&
-          position.minScrollExtent < position.pixels) {
+      if (value < position.minScrollExtent &&
+          (position.minScrollExtent < position.pixels ||
+              // NestedScrollView
+              (!userOffsetNotifier.value &&
+                  position.minScrollExtent == position.pixels))) {
         // hit top edge
         _updateIndicatorOffset(position, 0);
         return value - position.minScrollExtent;
+      } else if (value < position.pixels &&
+          position.pixels <= position.minScrollExtent) {
+        // underscroll
+        bounds = value - position.pixels;
       } else if (headerNotifier._offset > 0 &&
           !(headerNotifier.modeLocked || headerNotifier.secondaryLocked)) {
         // Header does not disappear,
@@ -205,9 +208,11 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       // hit top over
       if (!(headerNotifier.hitOver || headerNotifier.modeLocked) &&
           headerNotifier.mode != IndicatorMode.ready &&
-          !userOffsetNotifier.value &&
           value < position.minScrollExtent &&
-          position.minScrollExtent <= position.pixels) {
+          (position.minScrollExtent < position.pixels ||
+              // NestedScrollView
+              (!userOffsetNotifier.value &&
+                  position.minScrollExtent == position.pixels))) {
         _updateIndicatorOffset(position, 0);
         return value - position.minScrollExtent;
       }
@@ -215,11 +220,15 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       if ((!headerNotifier.infiniteHitOver ||
               (!headerNotifier.hitOver && headerNotifier.modeLocked)) &&
           (headerNotifier._canProcess || headerNotifier.noMoreLocked) &&
-          !userOffsetNotifier.value &&
           (value + headerNotifier.actualTriggerOffset) <
               position.minScrollExtent &&
-          position.minScrollExtent <=
-              (position.pixels + headerNotifier.actualTriggerOffset)) {
+          (position.minScrollExtent <
+                  (position.pixels + headerNotifier.actualTriggerOffset) ||
+              // NestedScrollView
+              (!userOffsetNotifier.value &&
+                  position.minScrollExtent ==
+                      (position.pixels +
+                          headerNotifier.actualTriggerOffset)))) {
         _updateIndicatorOffset(position, -headerNotifier.actualTriggerOffset);
         return (value + headerNotifier.actualTriggerOffset) -
             position.minScrollExtent;
@@ -263,15 +272,18 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
     // Footer
     if (footerNotifier.clamping == true) {
-      if (position.maxScrollExtent <= position.pixels &&
-          position.pixels < value) {
-        // overscroll
-        bounds = value - position.pixels;
-      } else if (position.pixels < position.maxScrollExtent &&
+      if ((position.pixels < position.maxScrollExtent ||
+              // NestedScrollView
+              (!userOffsetNotifier.value &&
+                  position.pixels == position.maxScrollExtent)) &&
           position.maxScrollExtent < value) {
         // hit bottom edge
         _updateIndicatorOffset(position, position.maxScrollExtent);
         return value - position.maxScrollExtent;
+      } else if (position.maxScrollExtent <= position.pixels &&
+          position.pixels < value) {
+        // overscroll
+        bounds = value - position.pixels;
       } else if (footerNotifier._offset > 0 &&
           !(footerNotifier.modeLocked || footerNotifier.secondaryLocked)) {
         // Footer does not disappear,
@@ -282,8 +294,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       // hit bottom over
       if (!(footerNotifier.hitOver || footerNotifier.modeLocked) &&
           footerNotifier.mode != IndicatorMode.ready &&
-          !userOffsetNotifier.value &&
-          position.pixels <= position.maxScrollExtent &&
+          (position.pixels < position.maxScrollExtent ||
+              // NestedScrollView
+              (!userOffsetNotifier.value &&
+                  position.pixels == position.maxScrollExtent)) &&
           position.maxScrollExtent < value) {
         _updateIndicatorOffset(position, position.maxScrollExtent);
         return value - position.maxScrollExtent;
@@ -292,9 +306,12 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       if ((!footerNotifier.infiniteHitOver ||
               !footerNotifier.hitOver && footerNotifier.modeLocked) &&
           (footerNotifier._canProcess || footerNotifier.noMoreLocked) &&
-          !userOffsetNotifier.value &&
-          (position.pixels - footerNotifier.actualTriggerOffset) <=
-              position.maxScrollExtent &&
+          ((position.pixels - footerNotifier.actualTriggerOffset) <
+                  position.maxScrollExtent ||
+              // NestedScrollView
+              (!userOffsetNotifier.value &&
+                  (position.pixels - footerNotifier.actualTriggerOffset) ==
+                      position.maxScrollExtent)) &&
           position.maxScrollExtent <
               (value - footerNotifier.actualTriggerOffset)) {
         _updateIndicatorOffset(position,
