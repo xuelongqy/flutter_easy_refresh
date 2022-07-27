@@ -28,15 +28,18 @@ class EasyRefreshController {
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
+  /// [scrollController] When position is not [ScrollPosition], you can use [ScrollController].
   Future callRefresh({
     double? overOffset,
     Duration? duration = const Duration(milliseconds: 200),
     Curve curve = Curves.linear,
+    ScrollController? scrollController,
   }) async {
     await _state?._callRefresh(
       overOffset: overOffset,
       duration: duration,
       curve: curve,
+      scrollController: scrollController,
     );
   }
 
@@ -44,24 +47,29 @@ class EasyRefreshController {
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
+  /// [scrollController] When position is not [ScrollPosition], you can use [ScrollController].
   Future callLoad({
     double? overOffset,
     Duration? duration = const Duration(milliseconds: 300),
     Curve curve = Curves.linear,
+    ScrollController? scrollController,
   }) async {
     await _state?._callLoad(
       overOffset: overOffset,
       duration: duration,
       curve: curve,
+      scrollController: scrollController,
     );
   }
 
   /// Open header secondary.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
+  /// [scrollController] When position is not [ScrollPosition], you can use [ScrollController].
   Future openHeaderSecondary({
     Duration? duration = const Duration(milliseconds: 200),
     Curve curve = Curves.linear,
+    ScrollController? scrollController,
   }) async {
     if (_state == null) {
       return;
@@ -79,6 +87,7 @@ class EasyRefreshController {
         mode: IndicatorMode.secondaryOpen,
         duration: duration,
         curve: curve,
+        scrollController: scrollController ?? _state?.widget.scrollController,
       );
     }
   }
@@ -86,9 +95,11 @@ class EasyRefreshController {
   /// Close header secondary.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
+  /// [scrollController] When position is not [ScrollPosition], you can use [ScrollController].
   Future closeHeaderSecondary({
     Duration? duration = const Duration(milliseconds: 200),
     Curve curve = Curves.linear,
+    ScrollController? scrollController,
   }) async {
     if (_state == null) {
       return;
@@ -104,6 +115,7 @@ class EasyRefreshController {
         jumpToEdge: false,
         duration: duration,
         curve: curve,
+        scrollController: scrollController ?? _state?.widget.scrollController,
       );
     }
   }

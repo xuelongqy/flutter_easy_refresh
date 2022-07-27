@@ -258,12 +258,14 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// [jumpToEdge] Whether to jump to the edge before scrolling.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
+  /// [scrollController] When position is not [ScrollPosition], you can use [ScrollController].
   Future animateToOffset({
     required double offset,
     required IndicatorMode mode,
     bool jumpToEdge = true,
     Duration? duration,
     Curve curve = Curves.linear,
+    ScrollController? scrollController,
   });
 
   bool get secondaryLocked =>
@@ -364,10 +366,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// [overOffset] Offset beyond the trigger offset, must be greater than 0.
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
+  /// [scrollController] When position is not [ScrollPosition], you can use [ScrollController].
   Future callTask({
     required double overOffset,
     Duration? duration,
     Curve curve = Curves.linear,
+    ScrollController? scrollController,
   }) {
     if (modeLocked || noMoreLocked || secondaryLocked || !_canProcess) {
       return Future.value();
@@ -377,6 +381,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       mode: IndicatorMode.ready,
       duration: duration,
       curve: curve,
+      scrollController: scrollController,
     );
   }
 
@@ -882,11 +887,24 @@ class HeaderNotifier extends IndicatorNotifier {
     bool jumpToEdge = true,
     Duration? duration,
     Curve curve = Curves.linear,
+    ScrollController? scrollController,
   }) async {
+    try {
+      if (scrollController == null && _position is! ScrollPosition) {
+        return;
+      }
+    } catch (_) {
+      return;
+    }
     final scrollTo = -offset;
     _releaseOffset = offset;
     if (jumpToEdge) {
-      (_position as ScrollPosition).jumpTo(_position.minScrollExtent);
+      if (scrollController != null) {
+        scrollController
+            .jumpTo(scrollController.positions.first.minScrollExtent);
+      } else {
+        (_position as ScrollPosition).jumpTo(_position.minScrollExtent);
+      }
     }
     if (clamping) {
       if (duration == null) {
@@ -903,11 +921,20 @@ class HeaderNotifier extends IndicatorNotifier {
     } else {
       if (_position is ScrollPosition) {
         if (duration == null) {
-          (_position as ScrollPosition).jumpTo(scrollTo);
+          if (scrollController != null) {
+            scrollController.jumpTo(scrollTo);
+          } else {
+            (_position as ScrollPosition).jumpTo(scrollTo);
+          }
         } else {
           userOffsetNotifier.value = true;
-          await (_position as ScrollPosition)
-              .animateTo(scrollTo, duration: duration, curve: curve);
+          if (scrollController != null) {
+            await scrollController.animateTo(scrollTo,
+                duration: duration, curve: curve);
+          } else {
+            await (_position as ScrollPosition)
+                .animateTo(scrollTo, duration: duration, curve: curve);
+          }
           userOffsetNotifier.value = false;
           notifyListeners();
         }
@@ -1007,11 +1034,24 @@ class FooterNotifier extends IndicatorNotifier {
     Duration? duration,
     Curve curve = Curves.linear,
     bool jumpToEdge = true,
+    ScrollController? scrollController,
   }) async {
+    try {
+      if (scrollController == null && _position is! ScrollPosition) {
+        return;
+      }
+    } catch (_) {
+      return;
+    }
     final scrollTo = _position.maxScrollExtent + offset;
     _releaseOffset = offset;
     if (jumpToEdge) {
-      (_position as ScrollPosition).jumpTo(_position.maxScrollExtent);
+      if (scrollController != null) {
+        scrollController
+            .jumpTo(scrollController.positions.first.maxScrollExtent);
+      } else {
+        (_position as ScrollPosition).jumpTo(_position.maxScrollExtent);
+      }
     }
     if (clamping) {
       if (duration == null) {
@@ -1028,11 +1068,20 @@ class FooterNotifier extends IndicatorNotifier {
     } else {
       if (_position is ScrollPosition) {
         if (duration == null) {
-          (_position as ScrollPosition).jumpTo(scrollTo);
+          if (scrollController != null) {
+            scrollController.jumpTo(scrollTo);
+          } else {
+            (_position as ScrollPosition).jumpTo(scrollTo);
+          }
         } else {
           userOffsetNotifier.value = true;
-          await (_position as ScrollPosition)
-              .animateTo(scrollTo, duration: duration, curve: curve);
+          if (scrollController != null) {
+            await scrollController.animateTo(scrollTo,
+                duration: duration, curve: curve);
+          } else {
+            await (_position as ScrollPosition)
+                .animateTo(scrollTo, duration: duration, curve: curve);
+          }
           userOffsetNotifier.value = false;
           notifyListeners();
         }

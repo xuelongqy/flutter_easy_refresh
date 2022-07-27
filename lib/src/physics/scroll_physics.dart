@@ -181,6 +181,16 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
   @override
   double applyBoundaryConditions(ScrollMetrics position, double value) {
+    if (headerNotifier._axis != position.axis ||
+        headerNotifier._axisDirection != position.axisDirection) {
+      headerNotifier._axis = position.axis;
+      headerNotifier._axisDirection = position.axisDirection;
+    }
+    if (footerNotifier._axis != position.axis ||
+        footerNotifier._axisDirection != position.axisDirection) {
+      footerNotifier._axis = position.axis;
+      footerNotifier._axisDirection = position.axisDirection;
+    }
     // Extend of overscroll for offset.
     double bounds = 0;
 
@@ -192,7 +202,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
               (!userOffsetNotifier.value &&
                   position.minScrollExtent == position.pixels))) {
         // hit top edge
-        _updateIndicatorOffset(position, 0);
+        _updateIndicatorOffset(position, 0, value);
         return value - position.minScrollExtent;
       } else if (value < position.pixels &&
           position.pixels <= position.minScrollExtent) {
@@ -213,7 +223,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
               // NestedScrollView
               (!userOffsetNotifier.value &&
                   position.minScrollExtent == position.pixels))) {
-        _updateIndicatorOffset(position, 0);
+        _updateIndicatorOffset(position, 0, value);
         return value - position.minScrollExtent;
       }
       // infinite hit top over
@@ -229,7 +239,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
                   position.minScrollExtent ==
                       (position.pixels +
                           headerNotifier.actualTriggerOffset)))) {
-        _updateIndicatorOffset(position, -headerNotifier.actualTriggerOffset);
+        _updateIndicatorOffset(
+            position, -headerNotifier.actualTriggerOffset, value);
         return (value + headerNotifier.actualTriggerOffset) -
             position.minScrollExtent;
       }
@@ -238,7 +249,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
           headerNotifier._mode == IndicatorMode.ready &&
           !headerNotifier._indicator.springRebound &&
           -value < headerNotifier.actualTriggerOffset) {
-        _updateIndicatorOffset(position, -headerNotifier.actualTriggerOffset);
+        _updateIndicatorOffset(
+            position, -headerNotifier.actualTriggerOffset, value);
         return headerNotifier.actualTriggerOffset +
             value -
             position.minScrollExtent;
@@ -262,7 +274,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
             position.minScrollExtent <
                 position.pixels + headerNotifier.secondaryDimension) {
           // hit top secondary
-          _updateIndicatorOffset(position, -headerNotifier.secondaryDimension);
+          _updateIndicatorOffset(
+              position, -headerNotifier.secondaryDimension, value);
           return value +
               headerNotifier.secondaryDimension -
               position.minScrollExtent;
@@ -278,7 +291,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
                   position.pixels == position.maxScrollExtent)) &&
           position.maxScrollExtent < value) {
         // hit bottom edge
-        _updateIndicatorOffset(position, position.maxScrollExtent);
+        _updateIndicatorOffset(position, position.maxScrollExtent, value);
         return value - position.maxScrollExtent;
       } else if (position.maxScrollExtent <= position.pixels &&
           position.pixels < value) {
@@ -299,7 +312,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
               (!userOffsetNotifier.value &&
                   position.pixels == position.maxScrollExtent)) &&
           position.maxScrollExtent < value) {
-        _updateIndicatorOffset(position, position.maxScrollExtent);
+        _updateIndicatorOffset(position, position.maxScrollExtent, value);
         return value - position.maxScrollExtent;
       }
       // infinite hit bottom over
@@ -314,8 +327,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
                       position.maxScrollExtent)) &&
           position.maxScrollExtent <
               (value - footerNotifier.actualTriggerOffset)) {
-        _updateIndicatorOffset(position,
-            position.maxScrollExtent + footerNotifier.actualTriggerOffset);
+        _updateIndicatorOffset(
+            position,
+            position.maxScrollExtent + footerNotifier.actualTriggerOffset,
+            value);
         return (value - footerNotifier.actualTriggerOffset) -
             position.maxScrollExtent;
       }
@@ -325,8 +340,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
           !footerNotifier._indicator.springRebound &&
           value <
               position.maxScrollExtent + footerNotifier.actualTriggerOffset) {
-        _updateIndicatorOffset(position,
-            position.maxScrollExtent + footerNotifier.actualTriggerOffset);
+        _updateIndicatorOffset(
+            position,
+            position.maxScrollExtent + footerNotifier.actualTriggerOffset,
+            value);
         return (value - footerNotifier.actualTriggerOffset) -
             position.maxScrollExtent;
       }
@@ -349,8 +366,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
             position.maxScrollExtent <
                 value - footerNotifier.secondaryDimension) {
           // hit bottom edge
-          _updateIndicatorOffset(position,
-              position.maxScrollExtent + footerNotifier.secondaryDimension);
+          _updateIndicatorOffset(
+              position,
+              position.maxScrollExtent + footerNotifier.secondaryDimension,
+              value);
           return value -
               footerNotifier.secondaryDimension -
               position.maxScrollExtent;
@@ -359,12 +378,22 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     }
 
     // Update offset
-    _updateIndicatorOffset(position, value);
+    _updateIndicatorOffset(position, value, value);
     return bounds;
   }
 
   // Update indicator offset
-  void _updateIndicatorOffset(ScrollMetrics position, double value) {
+  void _updateIndicatorOffset(
+      ScrollMetrics position, double value, double moveValue) {
+    if (position.runtimeType.toString() == '_NestedScrollPosition') {
+      final debugLabel = (position as ScrollPosition).debugLabel;
+      if (debugLabel == 'outer' &&
+          headerNotifier._offset > 0 &&
+          moveValue > position.minScrollExtent &&
+          !headerNotifier.modeLocked) {
+        return;
+      }
+    }
     final hClamping = headerNotifier.clamping && headerNotifier.offset > 0;
     final fClamping = footerNotifier.clamping && footerNotifier.offset > 0;
     headerNotifier._updateOffset(position, fClamping ? 0 : value, false);

@@ -374,8 +374,6 @@ abstract class Indicator {
             'Cannot scroll indefinitely when clamping.'),
         assert(!(hitOver == false && infiniteOffset != null),
             'When hitOver is true, infinite scrolling cannot be used, please set infiniteHitOver.'),
-        assert(!clamping || position != IndicatorPosition.locator,
-            'Cannot use locator when clamping.'),
         assert(
             secondaryTriggerOffset == null ||
                 secondaryTriggerOffset > triggerOffset,

@@ -20,6 +20,8 @@ class _TestPageState extends State<TestPage> {
     controlFinishRefresh: true,
   );
 
+  final _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -57,10 +59,12 @@ class _TestPageState extends State<TestPage> {
             );
           },
         ),
-        header: ClassicHeader(
+        header: const ClassicHeader(
           clamping: true,
+          position: IndicatorPosition.locator,
+          mainAxisAlignment: MainAxisAlignment.end,
         ),
-        footer: MaterialFooter(),
+        footer: const MaterialFooter(),
         onRefresh: () async {
           print('Refreshing');
           await Future.delayed(const Duration(seconds: 2));
@@ -131,10 +135,12 @@ class _TestPageState extends State<TestPage> {
         childBuilder: (context, physics) {
           return NestedScrollView(
             physics: physics,
+            controller: _scrollController,
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
-                SliverAppBar(
-                  title: const Text('EasyRefresh'),
+                const HeaderLocator.sliver(clearExtent: false),
+                const SliverAppBar(
+                  title: Text('EasyRefresh'),
                   expandedHeight: 100,
                   pinned: true,
                 ),
@@ -164,7 +170,8 @@ class _TestPageState extends State<TestPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.play_arrow),
-        onPressed: () => _controller.callRefresh(),
+        onPressed: () =>
+            _controller.callRefresh(scrollController: _scrollController),
       ),
     );
   }
