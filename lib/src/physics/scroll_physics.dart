@@ -384,20 +384,20 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
   // Update indicator offset
   void _updateIndicatorOffset(
-      ScrollMetrics position, double value, double moveValue) {
+      ScrollMetrics position, double offset, double value) {
     if (position.runtimeType.toString() == '_NestedScrollPosition') {
       final debugLabel = (position as ScrollPosition).debugLabel;
       if (debugLabel == 'outer' &&
           headerNotifier._offset > 0 &&
-          moveValue > position.minScrollExtent &&
+          value > position.minScrollExtent &&
           !headerNotifier.modeLocked) {
         return;
       }
     }
     final hClamping = headerNotifier.clamping && headerNotifier.offset > 0;
     final fClamping = footerNotifier.clamping && footerNotifier.offset > 0;
-    headerNotifier._updateOffset(position, fClamping ? 0 : value, false);
-    footerNotifier._updateOffset(position, hClamping ? 0 : value, false);
+    headerNotifier._updateOffset(position, fClamping ? 0 : offset, false);
+    footerNotifier._updateOffset(position, hClamping ? 0 : offset, false);
   }
 
   @override
