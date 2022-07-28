@@ -45,6 +45,12 @@ class _SamplePageState extends State<SamplePage> {
                 onTap: () => Get.toNamed(Routes.nestedScrollViewSample),
               ),
               ListItem(
+                title: 'TabView',
+                subtitle: 'NestedScrollView example'.tr,
+                icon: Icons.line_style,
+                onTap: () => Get.toNamed(Routes.tabBarViewSample),
+              ),
+              ListItem(
                 title: 'Carousel'.tr,
                 subtitle: 'Carousel example'.tr,
                 icon: Icons.view_carousel,

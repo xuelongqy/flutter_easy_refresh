@@ -441,7 +441,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Temporary solutions, sometimes with slight deviation.
   void _slightDeviation() {
-    if ((_offset - actualTriggerOffset).abs() < 0.000001) {
+    if ((_offset - actualTriggerOffset).abs() <= precisionErrorTolerance) {
       _offset = actualTriggerOffset;
     }
   }

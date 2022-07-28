@@ -10,6 +10,7 @@ import 'package:example/page/sample/page_view_page.dart';
 import 'package:example/page/sample/refresh_on_start_page.dart';
 import 'package:example/page/sample/sample_page.dart';
 import 'package:example/page/sample/secondary_page.dart';
+import 'package:example/page/sample/tab_bar_view_page.dart';
 import 'package:example/page/sample/user_profile_page.dart';
 import 'package:example/page/style/bezier_circle_page.dart';
 import 'package:example/page/style/bezier_page.dart';
@@ -39,6 +40,7 @@ class Routes {
   static const secondarySample = '/sample/secondary';
   static const chatSample = '/sample/chat';
   static const pageViewSample = '/sample/page-view';
+  static const tabBarViewSample = '/sample/tab-bar-view';
   // Style
   static const style = '/style';
   static const classicStyle = '/style/classic';
@@ -72,6 +74,7 @@ class Routes {
     GetPage(name: secondarySample, page: () => const SecondaryPage()),
     GetPage(name: chatSample, page: () => const ChatPage()),
     GetPage(name: pageViewSample, page: () => const PageViewPage()),
+    GetPage(name: tabBarViewSample, page: () => const TabBarViewPage()),
     // Style
     GetPage(name: style, page: () => const StylePage()),
     GetPage(name: classicStyle, page: () => const ClassicPage()),
