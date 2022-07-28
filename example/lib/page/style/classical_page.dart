@@ -52,6 +52,7 @@ class _ClassicPageState extends State<ClassicPage> {
         title: Text('Classic'.tr),
       ),
       body: EasyRefresh(
+        clipBehavior: Clip.none,
         controller: _controller,
         header: ClassicHeader(
           clamping: _headerProperties.clamping,

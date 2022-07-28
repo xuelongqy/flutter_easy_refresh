@@ -595,10 +595,13 @@ class _EasyRefreshState extends State<EasyRefresh>
       children.clear();
       return contentWidget;
     }
-    return Stack(
+    return ClipPath(
       clipBehavior: widget.clipBehavior,
-      fit: StackFit.loose,
-      children: children,
+      child: Stack(
+        clipBehavior: Clip.none,
+        fit: StackFit.loose,
+        children: children,
+      ),
     );
   }
 }

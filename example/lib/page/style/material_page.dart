@@ -48,6 +48,7 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
         title: const Text('Material'),
       ),
       body: EasyRefresh(
+        clipBehavior: Clip.none,
         controller: _controller,
         header: MaterialHeader(
           clamping: _headerProperties.clamping,

@@ -229,6 +229,7 @@ class _BezierPageState extends State<BezierPage> {
         title: const Text('Bezier'),
       ),
       body: EasyRefresh(
+        clipBehavior: Clip.none,
         controller: _controller,
         header: BezierHeader(
           backgroundColor: themeData.colorScheme.primary,
