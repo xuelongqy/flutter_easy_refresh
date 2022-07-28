@@ -7,7 +7,7 @@ const _kProgressRadius = _kBallRadius + 4;
 const kBezierCircleDisappearDuration = Duration(milliseconds: 800);
 
 /// Bezier indicator.
-/// Base widget for [BezierCircleHeader] and [BezierCircleFooter].
+/// Base widget for [BezierCircleHeader].
 class _BezierCircleIndicator extends StatefulWidget {
   /// Indicator properties and state.
   final IndicatorState state;
@@ -383,16 +383,22 @@ class _BallDropPaint extends CustomPainter {
     final paint = Paint()..color = color;
     final height = size.height;
     final width = size.width;
+    Path path = Path();
+    final rectPath = Path();
+    rectPath.addRect(Rect.fromPoints(
+      const Offset(0, 0),
+      Offset(width, height),
+    ));
     if (ballCenterY > height) {
       final bezierHeight = _kBallRadius *
           ((height + 2 * _kBallRadius - ballCenterY) / (3 * _kBallRadius));
       final bezierWidth = _kBallRadius * _kBallRadius * 2 / bezierHeight;
-      final path = Path();
       path.moveTo((width - bezierWidth) / 2, height);
       path.quadraticBezierTo(width / 2, height - bezierHeight * 2,
           (width + bezierWidth) / 2, height);
       path.close();
-      canvas.drawPath(path, paint);
+      canvas.drawPath(
+          Path.combine(PathOperation.intersect, path, rectPath), paint);
     } else if (ballCenterY > height - _kBallRadius * 2) {
       final scale = 1 - ((ballCenterY - _kBallRadius) / height);
       final bottom = height;
@@ -401,12 +407,12 @@ class _BallDropPaint extends CustomPainter {
           math.sqrt(_kBallRadius * _kBallRadius * (1 - scale * scale / 4));
       final bezier1x = (width / 2 + (_kBallRadius * 3 / 4) * (1 - scale));
       final bezier2x = bezier1x + _kBallRadius;
-      final path = Path();
       path.moveTo(startX, startY);
       path.quadraticBezierTo(bezier1x, bottom, bezier2x, bottom);
       path.lineTo(width - bezier2x, bottom);
       path.quadraticBezierTo(width - bezier1x, bottom, width - startX, startY);
-      canvas.drawPath(path, paint);
+      canvas.drawPath(
+          Path.combine(PathOperation.intersect, path, rectPath), paint);
     }
   }
 
