@@ -35,7 +35,7 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
       ....
     },
     child: ListView(),
-  )
+  );
 ```
 #### 2. builder constructor
 ```dart
@@ -52,7 +52,7 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
         physics: physics,
       );
     },
-  )
+  );
 ```
 #### 3. Indicator locate
 ```dart
@@ -76,9 +76,9 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
         const HeaderLocator.sliver(),
         ...
         const FooterLocator.sliver(),
-        ],
-      ),
-  )
+      ],
+    ),
+  );
 ```
 #### 4. Use controller
 ```dart
@@ -111,10 +111,59 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
     footer: MaterialFooter(),
     child: ListView(),
     ....
-  )
+  );
   // Global
   EasyRefresh.defaultHeaderBuilder = () => ClassicHeader();
   EasyRefresh.defaultFooterBuilder = () => ClassicFooter();
+```
+#### 6. NestedScrollView
+```dart
+  EasyRefresh.builder(
+    header: MaterialHeader(
+      clamping: true,
+    ),
+    onRefresh: () async {
+      ....
+    },
+    onLoad: () async {
+      ....
+    },
+    childBuilder: (context, physics) {
+      return NestedScrollView(
+        physics: physics,
+        body: ListView(
+          physics: physics,
+        );
+      );
+    },
+  );
+  // or
+  EasyRefresh.builder(
+    header: MaterialHeader(
+      clamping: true,
+      position: IndicatorPosition.locator,
+    ),
+    onRefresh: () async {
+      ....
+    },
+    onLoad: () async {
+      ....
+    },
+    childBuilder: (context, physics) {
+      return NestedScrollView(
+        physics: physics,
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            const HeaderLocator.sliver(clearExtent: false),
+            ....
+          ];
+        },
+        body: ListView(
+          physics: physics,
+        );
+      );
+    },
+  );
 ```
 
 # Contributions welcome
