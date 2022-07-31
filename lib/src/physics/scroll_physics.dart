@@ -382,17 +382,15 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     return bounds;
   }
 
-  // Update indicator offset
+  /// Update indicator offset
   void _updateIndicatorOffset(
       ScrollMetrics position, double offset, double value) {
-    if (position.runtimeType.toString() == '_NestedScrollPosition') {
-      final debugLabel = (position as ScrollPosition).debugLabel;
-      if (debugLabel == 'outer' &&
-          headerNotifier._offset > 0 &&
-          value > position.minScrollExtent &&
-          !headerNotifier.modeLocked) {
-        return;
-      }
+    // NestedScrollView special handling.
+    if (position.isNestedOuter &&
+        headerNotifier._offset > 0 &&
+        value > position.minScrollExtent &&
+        !headerNotifier.modeLocked) {
+      return;
     }
     final hClamping = headerNotifier.clamping && headerNotifier.offset > 0;
     final fClamping = footerNotifier.clamping && footerNotifier.offset > 0;
@@ -477,4 +475,11 @@ class _BallisticSimulationCreationState {
   bool needCreation(_BallisticSimulationCreationState newState) {
     return mode != newState.mode || offset != newState.offset;
   }
+}
+
+/// ScrollMetrics extension.
+extension _ScrollMetricsExtension on ScrollMetrics {
+  // NestedScrollView outer.
+  bool get isNestedOuter =>
+      this is ScrollPosition && (this as ScrollPosition).debugLabel == 'outer';
 }

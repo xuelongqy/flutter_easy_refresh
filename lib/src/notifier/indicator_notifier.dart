@@ -327,8 +327,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity);
 
-  /// Calculate distance from boundary.
-  double get boundaryOffset;
+  /// Calculate distance from edge.
+  double get edgeOffset;
 
   /// Update parameters.
   /// When the EasyRefresh parameters is updated.
@@ -471,7 +471,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       if (_mode == IndicatorMode.done ||
           // Handling infinite scroll
           (infiniteOffset != null &&
-              boundaryOffset < infiniteOffset! &&
+              (!_position.isNestedOuter && edgeOffset < infiniteOffset!) &&
               !bySimulation &&
               !_infiniteExclude(position, value))) {
         // Update mode
@@ -525,7 +525,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         return;
       }
       // Infinite scroll
-      if (infiniteOffset != null && boundaryOffset < infiniteOffset!) {
+      if (infiniteOffset != null &&
+          (!_position.isNestedOuter && edgeOffset < infiniteOffset!)) {
         if (_mode == IndicatorMode.done &&
             _position.maxScrollExtent != _position.minScrollExtent) {
           // The state does not change until the end
@@ -871,9 +872,9 @@ class HeaderNotifier extends IndicatorNotifier {
     return null;
   }
 
-  /// See [IndicatorNotifier.boundaryOffset].
+  /// See [IndicatorNotifier.edgeOffset].
   @override
-  double get boundaryOffset => _position.pixels;
+  double get edgeOffset => _position.pixels;
 
   @override
   bool _infiniteExclude(ScrollMetrics position, double value) {
@@ -1018,9 +1019,9 @@ class FooterNotifier extends IndicatorNotifier {
     return null;
   }
 
-  /// See [IndicatorNotifier.boundaryOffset].
+  /// See [IndicatorNotifier.edgeOffset].
   @override
-  double get boundaryOffset => _position.maxScrollExtent - _position.pixels;
+  double get edgeOffset => _position.maxScrollExtent - _position.pixels;
 
   @override
   bool _infiniteExclude(ScrollMetrics position, double value) {

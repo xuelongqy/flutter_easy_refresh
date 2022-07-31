@@ -87,4 +87,5 @@ const en = {
   'Dogecoin donation': 'Dogecoin donation',
   '%s copied!': '%s copied!',
   'Trigger immediately': 'Trigger immediately',
+  'TabBarView example': 'NestedScrollView + TabBarView example',
 };

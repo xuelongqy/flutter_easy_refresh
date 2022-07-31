@@ -65,7 +65,7 @@ class SkeletonItem extends StatelessWidget {
     }
     return Card(
       elevation: 0,
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -75,7 +75,7 @@ class SkeletonItem extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 16),
               height: 80,
               width: 80,
-              color: Theme.of(context).splashColor,
+              color: foregroundColor,
             ),
             Expanded(
               child: Row(
@@ -88,19 +88,19 @@ class SkeletonItem extends StatelessWidget {
                     constraints: const BoxConstraints(
                       maxHeight: 200,
                     ),
-                    color: Theme.of(context).splashColor,
+                    color: foregroundColor,
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 16),
                     width: 12,
                     height: 80,
-                    color: Theme.of(context).splashColor,
+                    color: foregroundColor,
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 8),
                     width: 12,
                     height: 80,
-                    color: Theme.of(context).splashColor,
+                    color: foregroundColor,
                   ),
                 ],
               ),

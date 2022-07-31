@@ -41,6 +41,7 @@ class TabBarViewPageState extends State<TabBarViewPage>
         header: ClassicHeader(
           clamping: true,
           position: IndicatorPosition.locator,
+          mainAxisAlignment: MainAxisAlignment.end,
           dragText: 'Pull to refresh'.tr,
           armedText: 'Release ready'.tr,
           readyText: 'Refreshing...'.tr,
@@ -88,94 +89,123 @@ class TabBarViewPageState extends State<TabBarViewPage>
           });
         },
         childBuilder: (context, physics) {
-          return ExtendedNestedScrollView(
-            physics: physics,
-            onlyOneScrollInBody: true,
-            pinnedHeaderSliverHeightBuilder: () {
-              return MediaQuery.of(context).padding.top + kToolbarHeight;
-            },
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return <Widget>[
-                const HeaderLocator.sliver(clearExtent: false),
-                SliverAppBar(
-                  expandedHeight: 166,
-                  pinned: true,
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: Text(
-                      'TabBarView',
-                      style: TextStyle(
-                          color: Theme.of(context).textTheme.titleLarge?.color),
-                    ),
-                    titlePadding: const EdgeInsets.only(left: 64, bottom: 60),
-                    centerTitle: false,
-                  ),
-                  bottom: PreferredSize(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
+          return ScrollConfiguration(
+            behavior: const ERScrollBehavior(),
+            child: ExtendedNestedScrollView(
+              physics: physics,
+              onlyOneScrollInBody: true,
+              pinnedHeaderSliverHeightBuilder: () {
+                return MediaQuery.of(context).padding.top + kToolbarHeight;
+              },
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return <Widget>[
+                  const HeaderLocator.sliver(clearExtent: false),
+                  SliverAppBar(
+                    expandedHeight: 120,
+                    pinned: true,
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Text(
+                        'TabBarView',
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.titleLarge?.color),
                       ),
-                      child: TabBar(
-                        controller: _tabController,
-                        labelColor: themeData.colorScheme.primary,
-                        indicatorColor: themeData.colorScheme.primary,
-                        tabs: const <Widget>[
-                          Tab(
-                            text: 'List',
-                          ),
-                          Tab(
-                            text: 'Grid',
-                          ),
-                        ],
-                      ),
+                      centerTitle: false,
                     ),
-                    preferredSize: const Size(double.infinity, 46),
                   ),
-                ),
-              ];
-            },
-            body: TabBarView(
-              controller: _tabController,
-              children: <Widget>[
-                ExtendedVisibilityDetector(
-                  uniqueKey: const Key('Tab0'),
-                  child: CustomScrollView(
-                    physics: physics,
-                    slivers: [
-                      SliverList(
-                          delegate:
-                              SliverChildBuilderDelegate((context, index) {
-                        return const SkeletonItem();
-                      }, childCount: _listCount)),
-                      const FooterLocator.sliver(),
+                ];
+              },
+              body: Column(
+                children: [
+                  TabBar(
+                    controller: _tabController,
+                    labelColor: themeData.colorScheme.primary,
+                    indicatorColor: themeData.colorScheme.primary,
+                    tabs: const <Widget>[
+                      Tab(
+                        text: 'List',
+                      ),
+                      Tab(
+                        text: 'Grid',
+                      ),
                     ],
                   ),
-                ),
-                ExtendedVisibilityDetector(
-                  uniqueKey: const Key('Tab1'),
-                  child: CustomScrollView(
-                    physics: physics,
-                    slivers: [
-                      SliverGrid(
-                          delegate:
-                              SliverChildBuilderDelegate((context, index) {
-                            return const SkeletonItem(
-                              direction: Axis.horizontal,
-                            );
-                          }, childCount: _gridCount),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 6 / 7,
-                          )),
-                      const FooterLocator.sliver(),
-                    ],
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: <Widget>[
+                        ExtendedVisibilityDetector(
+                          uniqueKey: const Key('Tab0'),
+                          child: _AutomaticKeepAlive(
+                            child: CustomScrollView(
+                              physics: physics,
+                              slivers: [
+                                SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                        (context, index) {
+                                  return const SkeletonItem();
+                                }, childCount: _listCount)),
+                                const FooterLocator.sliver(),
+                              ],
+                            ),
+                          ),
+                        ),
+                        ExtendedVisibilityDetector(
+                          uniqueKey: const Key('Tab1'),
+                          child: _AutomaticKeepAlive(
+                            child: CustomScrollView(
+                              physics: physics,
+                              slivers: [
+                                SliverGrid(
+                                    delegate: SliverChildBuilderDelegate(
+                                        (context, index) {
+                                      return const SkeletonItem(
+                                        direction: Axis.horizontal,
+                                      );
+                                    }, childCount: _gridCount),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 6 / 7,
+                                    )),
+                                const FooterLocator.sliver(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
       ),
     );
   }
+}
+
+class _AutomaticKeepAlive extends StatefulWidget {
+  final Widget child;
+
+  const _AutomaticKeepAlive({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  State<_AutomaticKeepAlive> createState() => _AutomaticKeepAliveState();
+}
+
+class _AutomaticKeepAliveState extends State<_AutomaticKeepAlive>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.child;
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }

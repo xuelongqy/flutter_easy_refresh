@@ -556,12 +556,12 @@ class _EasyRefreshState extends State<EasyRefresh>
     Widget child;
     if (widget.childBuilder != null) {
       child = ScrollConfiguration(
-        behavior: const _ERScrollBehavior(),
+        behavior: const ERScrollBehavior(),
         child: widget.childBuilder!(context, _physics),
       );
     } else {
       child = ScrollConfiguration(
-        behavior: _ERScrollBehavior(_physics),
+        behavior: ERScrollBehavior(_physics),
         child: widget.child!,
       );
     }

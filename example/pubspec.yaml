@@ -7,7 +7,7 @@ description: EasyRefresh example.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 3.0.2+47
+version: 3.0.3+48
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
@@ -31,7 +31,7 @@ dependencies:
   rive: ^0.9.0
   qr_flutter: ^4.0.0
   flutter_svg: ^1.1.1+1
-  flutter_sticky_header: ^0.6.3
+  flutter_sticky_header: ^0.6.4
   easy_refresh:
     path: ../
   easy_refresh_space:

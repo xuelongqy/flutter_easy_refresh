@@ -2,10 +2,10 @@ part of easy_refresh;
 
 /// Define [ScrollBehavior] in the scope of EasyRefresh.
 /// Add support for web and PC.
-class _ERScrollBehavior extends ScrollBehavior {
+class ERScrollBehavior extends ScrollBehavior {
   final ScrollPhysics? _physics;
 
-  const _ERScrollBehavior([this._physics]);
+  const ERScrollBehavior([this._physics]);
 
   @override
   ScrollPhysics getScrollPhysics(BuildContext context) {
@@ -24,5 +24,6 @@ class _ERScrollBehavior extends ScrollBehavior {
         PointerDeviceKind.stylus,
         PointerDeviceKind.invertedStylus,
         PointerDeviceKind.mouse,
+        PointerDeviceKind.unknown,
       };
 }

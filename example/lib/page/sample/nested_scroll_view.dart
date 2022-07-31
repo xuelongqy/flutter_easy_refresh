@@ -61,31 +61,23 @@ class NestedScrollViewPageState extends State<NestedScrollViewPage>
         },
         body: Column(
           children: <Widget>[
-            PreferredSize(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
+            TabBar(
+              controller: _tabController,
+              labelColor: themeData.colorScheme.primary,
+              indicatorColor: themeData.colorScheme.primary,
+              onTap: (index) {
+                setState(() {
+                  _tabIndex = index;
+                });
+              },
+              tabs: const <Widget>[
+                Tab(
+                  text: 'List',
                 ),
-                child: TabBar(
-                  controller: _tabController,
-                  labelColor: themeData.colorScheme.primary,
-                  indicatorColor: themeData.colorScheme.primary,
-                  onTap: (index) {
-                    setState(() {
-                      _tabIndex = index;
-                    });
-                  },
-                  tabs: const <Widget>[
-                    Tab(
-                      text: 'List',
-                    ),
-                    Tab(
-                      text: 'Grid',
-                    ),
-                  ],
+                Tab(
+                  text: 'Grid',
                 ),
-              ),
-              preferredSize: const Size(double.infinity, 46.0),
+              ],
             ),
             Expanded(
               child: IndexedStack(

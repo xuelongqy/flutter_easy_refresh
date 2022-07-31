@@ -85,4 +85,5 @@ const zhCN = {
   'Dogecoin donation': '狗狗币捐赠',
   '%s copied!': '%s 已复制!',
   'Trigger immediately': '立即触发',
+  'TabBarView example': 'NestedScrollView + TabBarView示例',
 };
