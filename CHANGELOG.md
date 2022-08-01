@@ -1,5 +1,6 @@
-## Next
+## V 3.0.4+1
 > fix: [NestedScrollView.viewportDimension] should use outer's [#582](https://github.com/xuelongqy/flutter_easy_refresh/pull/582).  
+> fix: Notify UI to update when indicator property changes [#582](https://github.com/xuelongqy/flutter_easy_refresh/pull/582).  
 
 ## V 3.0.4
 > fix: ScrollMetrics.minScrollExtent != 0.0, offset calculation error.  

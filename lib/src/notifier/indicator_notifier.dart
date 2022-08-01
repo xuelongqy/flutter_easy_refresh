@@ -372,6 +372,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       _clampingAnimationController?.dispose();
       _clampingAnimationController = null;
     }
+    notifyListeners();
   }
 
   /// Reset partial state, e.g. no more.
