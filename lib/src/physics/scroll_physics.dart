@@ -156,11 +156,23 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     final bool easing = (overscrollPastStart > 0.0 && offset < 0.0) ||
         (overscrollPastEnd > 0.0 && offset > 0.0);
 
+    // Scrollable viewport dimension;
+    double viewportDimension = position.viewportDimension;
+    if (position.isNestedInner) {
+      if (headerNotifier._viewportDimension != null) {
+        viewportDimension = headerNotifier._viewportDimension!;
+      } else {
+        viewportDimension = (position.axis == Axis.vertical
+                ? headerNotifier.vsync.context.size?.height
+                : headerNotifier.vsync.context.size?.width) ??
+            viewportDimension;
+      }
+    }
+
     final double friction = easing
         // Apply less resistance when easing the overscroll vs tensioning.
-        ? frictionFactor(
-            (overscrollPast - offset.abs()) / position.viewportDimension)
-        : frictionFactor(overscrollPast / position.viewportDimension);
+        ? frictionFactor((overscrollPast - offset.abs()) / viewportDimension)
+        : frictionFactor(overscrollPast / viewportDimension);
     final double direction = offset.sign;
 
     return direction * _applyFriction(overscrollPast, offset.abs(), friction);
@@ -481,4 +493,8 @@ extension _ScrollMetricsExtension on ScrollMetrics {
   // NestedScrollView outer.
   bool get isNestedOuter =>
       this is ScrollPosition && (this as ScrollPosition).debugLabel == 'outer';
+
+  // NestedScrollView inner.
+  bool get isNestedInner =>
+      this is ScrollPosition && (this as ScrollPosition).debugLabel == 'inner';
 }

@@ -1,3 +1,6 @@
+## Next
+> fix: [NestedScrollView.viewportDimension] should use outer's [#582](https://github.com/xuelongqy/flutter_easy_refresh/pull/582).  
+
 ## V 3.0.4
 > fix: ScrollMetrics.minScrollExtent != 0.0, offset calculation error.  
 > feat: Supported [ScrollView.center] [#581](https://github.com/xuelongqy/flutter_easy_refresh/pull/581).  

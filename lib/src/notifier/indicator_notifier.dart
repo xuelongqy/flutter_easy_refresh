@@ -14,7 +14,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   Indicator _indicator;
 
   /// Used to provide [clamping] animation.
-  final TickerProvider vsync;
+  final _EasyRefreshState vsync;
 
   /// User triggered notifier.
   /// Record user triggers and releases.
@@ -101,7 +101,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   FrictionFactor get frictionFactor => _physics.frictionFactor;
 
   double get secondaryDimension =>
-      _indicator.secondaryDimension ?? _position.viewportDimension;
+      _indicator.secondaryDimension ?? viewportDimension;
 
   double get secondaryCloseTriggerOffset =>
       _indicator.secondaryCloseTriggerOffset;
@@ -133,9 +133,22 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   double get offset => _offset;
 
   /// The current scroll position.
-  late ScrollMetrics _position;
-
   ScrollMetrics get position => _position;
+
+  set position(ScrollMetrics value) {
+    if (value.isNestedOuter) {
+      _viewportDimension = value.viewportDimension;
+    } else if (value.isNestedInner) {
+      _viewportDimension = value.axis == Axis.vertical
+          ? vsync.context.size?.height
+          : vsync.context.size?.width;
+    } else {
+      _viewportDimension = null;
+    }
+    _position = value;
+  }
+
+  late ScrollMetrics _position;
 
   /// The current scroll velocity.
   double _velocity = 0;
@@ -242,6 +255,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       !_noMoreProcess &&
       _result == IndicatorResult.noMore &&
       _mode == IndicatorMode.inactive;
+
+  /// [Scrollable] viewport dimension.
+  double get viewportDimension =>
+      _viewportDimension ?? position.viewportDimension;
+
+  double? _viewportDimension;
 
   /// Calculate the overscroll offset.
   double _calculateOffset(ScrollMetrics position, double value);
@@ -418,7 +437,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Update by [ScrollPhysics.createBallisticSimulation].
   void _updateBySimulation(ScrollMetrics position, double velocity) {
-    _position = position;
     _velocity = velocity;
     // Update axis and direction.
     if (_axis != position.axis || _axisDirection != position.axisDirection) {
@@ -428,6 +446,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         notifyListeners();
       });
     }
+    this.position = position;
     // Update offset on release
     _updateOffset(position, position.pixels, true);
     // If clamping is true and offset is greater than 0, start animation
@@ -459,7 +478,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         !userOffsetNotifier.value && clamping && _offset > 0 && !bySimulation) {
       return;
     }
-    _position = position;
+    this.position = position;
     // Record old state.
     final oldOffset = _offset;
     final oldMode = _mode;
@@ -743,7 +762,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       safeOffset: safeOffset,
       axis: _axis!,
       axisDirection: _axisDirection!,
-      viewportDimension: _position.viewportDimension,
+      viewportDimension: viewportDimension,
       actualTriggerOffset: actualTriggerOffset,
     );
   }
@@ -805,7 +824,7 @@ class HeaderNotifier extends IndicatorNotifier {
   HeaderNotifier({
     required Header header,
     required ValueNotifier<bool> userOffsetNotifier,
-    required TickerProvider vsync,
+    required _EasyRefreshState vsync,
     required CanProcessCallBack onCanRefresh,
     bool noMoreRefresh = false,
     FutureOr Function()? onRefresh,
@@ -952,7 +971,7 @@ class FooterNotifier extends IndicatorNotifier {
   FooterNotifier({
     required Footer footer,
     required ValueNotifier<bool> userOffsetNotifier,
-    required TickerProvider vsync,
+    required _EasyRefreshState vsync,
     required CanProcessCallBack onCanLoad,
     bool noMoreLoad = false,
     FutureOr Function()? onLoad,
