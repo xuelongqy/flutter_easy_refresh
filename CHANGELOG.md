@@ -1,3 +1,7 @@
+## V 3.0.4
+> fix: ScrollMetrics.minScrollExtent != 0.0, offset calculation error.  
+> feat: Supported [ScrollView.center] [#581](https://github.com/xuelongqy/flutter_easy_refresh/pull/581).  
+
 ## V 3.0.3+1
 > docs: NestedScrollView example.   
 

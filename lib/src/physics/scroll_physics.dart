@@ -376,7 +376,6 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         }
       }
     }
-
     // Update offset
     _updateIndicatorOffset(position, value, value);
     return bounds;

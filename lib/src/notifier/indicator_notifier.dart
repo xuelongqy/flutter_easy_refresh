@@ -827,13 +827,15 @@ class HeaderNotifier extends IndicatorNotifier {
         !(clamping && _offset > 0)) {
       return 0;
     }
+    // Moving distance
+    final move = position.minScrollExtent - value;
     if (clamping) {
       if (value > position.minScrollExtent) {
         // Rollback first minus offset.
-        return math.max(_offset > 0 ? (-value + _offset) : 0, 0);
+        return math.max(_offset > 0 ? (move + _offset) : 0, 0);
       } else {
         // Overscroll accumulated offset.
-        final mOffset = -value + _offset;
+        final mOffset = move + _offset;
         if (hasSecondary && mOffset > secondaryDimension) {
           // Cannot exceed secondary offset.
           return secondaryDimension;
@@ -841,14 +843,14 @@ class HeaderNotifier extends IndicatorNotifier {
         return mOffset;
       }
     } else {
-      return value > position.minScrollExtent ? 0 : -value;
+      return value > position.minScrollExtent ? 0 : move;
     }
   }
 
   /// See [IndicatorNotifier.calculateOffsetWithPixels].
   @override
   double calculateOffsetWithPixels(ScrollMetrics position, double pixels) =>
-      math.max(-pixels - position.minScrollExtent, 0.0);
+      math.max(position.minScrollExtent - pixels, 0.0);
 
   /// See [IndicatorNotifier.createBallisticSimulation].
   @override
