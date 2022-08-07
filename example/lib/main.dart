@@ -69,31 +69,34 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   Widget _buildFrame(Widget app) {
-    return Scaffold(
-      body: _mobileStyle
-          ? Center(
-              child: Card(
-                elevation: 10,
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                clipBehavior: Clip.hardEdge,
-                child: SizedBox(
-                  height: _mobileHeight,
-                  width: _mobileWidth,
-                  child: app,
+    return Builder(builder: (context) {
+      return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+        body: _mobileStyle
+            ? Center(
+                child: Card(
+                  elevation: 10,
+                  margin: const EdgeInsets.symmetric(vertical: 16),
+                  clipBehavior: Clip.hardEdge,
+                  child: SizedBox(
+                    height: _mobileHeight,
+                    width: _mobileWidth,
+                    child: app,
+                  ),
                 ),
-              ),
-            )
-          : app,
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _mobileStyle = !_mobileStyle;
-          });
-        },
-        child: Icon(_mobileStyle ? Icons.computer : Icons.phone_android),
-      ).marginOnly(top: 16),
-    );
+              )
+            : app,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              _mobileStyle = !_mobileStyle;
+            });
+          },
+          child: Icon(_mobileStyle ? Icons.computer : Icons.phone_android),
+        ).marginOnly(top: 16),
+      );
+    });
   }
 
   @override

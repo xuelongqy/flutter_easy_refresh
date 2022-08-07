@@ -54,7 +54,6 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _pageIndex,
         type: BottomNavigationBarType.fixed,
-        fixedColor: Colors.black,
         onTap: _onBottomNavigationBarTap,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
