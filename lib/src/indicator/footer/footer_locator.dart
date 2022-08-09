@@ -37,10 +37,23 @@ class FooterLocator extends StatelessWidget {
         footerNotifier.iPosition == IndicatorPosition.locator ||
             footerNotifier.iPosition == IndicatorPosition.custom,
         'Cannot use FooterLocator when header position is not IndicatorPosition.locator.');
-    footerNotifier._safeOffset = MediaQuery.of(context).padding.bottom;
     return ValueListenableBuilder(
       valueListenable: footerNotifier.listenable(),
       builder: (ctx, notifier, _) {
+        if (footerNotifier.axis != null) {
+          // Axis and direction.
+          final axis = footerNotifier.axis!;
+          final axisDirection = footerNotifier.axisDirection!;
+          // Set safe area offset.
+          final safePadding = MediaQuery.of(context).padding;
+          footerNotifier._safeOffset = axis == Axis.vertical
+              ? axisDirection == AxisDirection.down
+                  ? safePadding.bottom
+                  : safePadding.top
+              : axisDirection == AxisDirection.right
+                  ? safePadding.right
+                  : safePadding.left;
+        }
         final footerWidget = footerNotifier._build(context);
         if (!clearExtent) {
           return _isSliver

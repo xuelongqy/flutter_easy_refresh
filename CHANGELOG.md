@@ -1,3 +1,6 @@
+## V 3.0.4+2
+> fix: [refreshOnStart] safe area [#586](https://github.com/xuelongqy/flutter_easy_refresh/pull/586).  
+
 ## V 3.0.4+1
 > fix: [NestedScrollView.viewportDimension] should use outer's [#582](https://github.com/xuelongqy/flutter_easy_refresh/pull/582).  
 > fix: Notify UI to update when indicator property changes [#582](https://github.com/xuelongqy/flutter_easy_refresh/pull/582).  

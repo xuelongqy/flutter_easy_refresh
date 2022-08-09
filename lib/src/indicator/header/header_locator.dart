@@ -37,10 +37,23 @@ class HeaderLocator extends StatelessWidget {
         headerNotifier.iPosition == IndicatorPosition.locator ||
             headerNotifier.iPosition == IndicatorPosition.custom,
         'Cannot use HeaderLocator when header position is not IndicatorPosition.locator.');
-    headerNotifier._safeOffset = MediaQuery.of(context).padding.top;
     return ValueListenableBuilder(
       valueListenable: headerNotifier.listenable(),
       builder: (ctx, notifier, _) {
+        if (headerNotifier.axis != null) {
+          // Axis and direction.
+          final axis = headerNotifier.axis!;
+          final axisDirection = headerNotifier.axisDirection!;
+          // Set safe area offset.
+          final safePadding = MediaQuery.of(context).padding;
+          headerNotifier._safeOffset = axis == Axis.vertical
+              ? axisDirection == AxisDirection.down
+                  ? safePadding.top
+                  : safePadding.bottom
+              : axisDirection == AxisDirection.right
+                  ? safePadding.left
+                  : safePadding.right;
+        }
         final headerWidget = headerNotifier._build(context);
         if (!clearExtent) {
           return _isSliver
