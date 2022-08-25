@@ -56,7 +56,7 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
 ```
 #### 3. Indicator locate
 ```dart
-  EasyRefresh.builder(
+  EasyRefresh(
     header: Header(
       position: IndicatorPosition.locator,
     ),

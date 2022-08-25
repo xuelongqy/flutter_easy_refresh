@@ -56,7 +56,7 @@
 ```
 #### 3.指示器定位
 ```dart
-  EasyRefresh.builder(
+  EasyRefresh(
     header: Header(
       position: IndicatorPosition.locator,
     ),
