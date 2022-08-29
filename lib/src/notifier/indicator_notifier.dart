@@ -70,6 +70,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   double get secondaryVelocity => _indicator.secondaryVelocity;
 
+  double get maxPullHeight => _indicator.maxPullHeight;
+
   /// Spring description.
   SpringDescription? get _spring {
     if (_axis == Axis.horizontal) {

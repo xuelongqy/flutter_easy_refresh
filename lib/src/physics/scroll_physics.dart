@@ -169,12 +169,17 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       }
     }
 
+    if ((headerNotifier.maxPullHeight > 0 ||
+            footerNotifier.maxPullHeight > 0) &&
+        overscrollPast >= footerNotifier.maxPullHeight) {
+      return 0.0;
+    }
+
     final double friction = easing
         // Apply less resistance when easing the overscroll vs tensioning.
         ? frictionFactor((overscrollPast - offset.abs()) / viewportDimension)
         : frictionFactor(overscrollPast / viewportDimension);
     final double direction = offset.sign;
-
     return direction * _applyFriction(overscrollPast, offset.abs(), friction);
   }
 

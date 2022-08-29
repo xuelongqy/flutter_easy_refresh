@@ -106,6 +106,7 @@ class ClassicHeader extends Header {
     bool? infiniteHitOver,
     bool hapticFeedback = false,
     bool triggerWhenReach = false,
+    double maxPullHeight = 0.0,
     this.mainAxisAlignment = MainAxisAlignment.center,
     this.backgroundColor,
     this.dragText,
@@ -148,6 +149,7 @@ class ClassicHeader extends Header {
           position: position,
           hapticFeedback: hapticFeedback,
           triggerWhenReach: triggerWhenReach,
+          maxPullHeight: maxPullHeight,
         );
 
   @override

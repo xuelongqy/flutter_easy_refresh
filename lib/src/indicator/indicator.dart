@@ -342,6 +342,10 @@ abstract class Indicator {
   /// Trigger immediately when reaching the [triggerOffset].
   final bool triggerWhenReach;
 
+  /// Limit the maximum height of the pull up or down
+  /// When zero, infinite pull.
+  final double maxPullHeight;
+
   const Indicator({
     required this.triggerOffset,
     required this.clamping,
@@ -366,6 +370,7 @@ abstract class Indicator {
     this.notifyWhenInvisible = false,
     this.listenable,
     this.triggerWhenReach = false,
+    this.maxPullHeight = 0.0,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,

@@ -26,6 +26,7 @@ abstract class Header extends Indicator {
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
     bool triggerWhenReach = false,
+    double maxPullHeight = 0.0
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -50,6 +51,7 @@ abstract class Header extends Indicator {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          maxPullHeight: maxPullHeight,
         );
 }
 

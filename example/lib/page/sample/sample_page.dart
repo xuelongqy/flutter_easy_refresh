@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'test_max_pull_height_page.dart';
+
 class SamplePage extends StatefulWidget {
   const SamplePage({Key? key}) : super(key: key);
 
@@ -88,7 +90,7 @@ class _SamplePageState extends State<SamplePage> {
                 icon: Icons.pages,
                 onTap: () => Get.toNamed(Routes.pageViewSample),
               ),
-              if (kDebugMode)
+              if (kDebugMode) ...[
                 ListItem(
                   title: 'Test',
                   subtitle: 'EasyRefresh test page',
@@ -97,6 +99,15 @@ class _SamplePageState extends State<SamplePage> {
                     Get.to(() => const TestPage());
                   },
                 ),
+                ListItem(
+                  title: 'TestMaxPullHeight',
+                  subtitle: 'EasyRefresh test max pull height page',
+                  icon: Icons.build,
+                  onTap: () {
+                    Get.to(() => const TestMaxPullHeightPage());
+                  },
+                ),
+              ]
             ]),
           ),
         ],
