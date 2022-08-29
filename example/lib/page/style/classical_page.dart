@@ -54,7 +54,7 @@ class _ClassicPageState extends State<ClassicPage> {
       body: EasyRefresh(
         clipBehavior: Clip.none,
         controller: _controller,
-        header: ClassicHeader(
+        header: ClassicHeader.defaultHeader.copyWith(
           clamping: _headerProperties.clamping,
           backgroundColor: _headerProperties.background
               ? Theme.of(context).colorScheme.surfaceVariant
@@ -73,7 +73,7 @@ class _ClassicPageState extends State<ClassicPage> {
           failedText: 'Failed'.tr,
           messageText: 'Last updated at %T'.tr,
         ),
-        footer: ClassicFooter(
+        footer: ClassicFooter.defaultFooter.copyWith(
           clamping: _footerProperties.clamping,
           backgroundColor: _footerProperties.background
               ? Theme.of(context).colorScheme.surfaceVariant

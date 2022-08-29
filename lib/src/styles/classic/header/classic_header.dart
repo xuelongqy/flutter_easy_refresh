@@ -150,6 +150,13 @@ class ClassicHeader extends Header {
           triggerWhenReach: triggerWhenReach,
         );
 
+  /// get default header
+  static ClassicHeader get defaultHeader {
+    assert(EasyRefresh._defaultHeader is ClassicHeader,"The default header is not ClassicHeader");
+    return EasyRefresh._defaultHeader as ClassicHeader;
+  }
+
+
   @override
   Widget build(BuildContext context, IndicatorState state) {
     return _ClassicIndicator(
@@ -185,4 +192,97 @@ class ClassicHeader extends Header {
       progressIndicatorStrokeWidth: progressIndicatorStrokeWidth,
     );
   }
+
+
+  /// copyWith ClassicHeader
+  ClassicHeader copyWith({
+    Key? key,
+    double? triggerOffset,
+    bool? clamping,
+    IndicatorPosition? position,
+    Duration? processedDuration,
+    SpringDescription? spring,
+    SpringBuilder? readySpringBuilder,
+    bool? springRebound,
+    FrictionFactor? frictionFactor,
+    bool? safeArea,
+    double? infiniteOffset,
+    bool? hitOver,
+    bool? infiniteHitOver,
+    bool? hapticFeedback,
+    bool? triggerWhenReach,
+    MainAxisAlignment? mainAxisAlignment,
+    Color? backgroundColor,
+    String? dragText,
+    String? armedText,
+    String? readyText,
+    String? processingText,
+    String? processedText,
+    String? noMoreText,
+    String? failedText,
+    bool? showText,
+    String? messageText,
+    bool? showMessage,
+    double? textDimension,
+    double? iconDimension,
+    double? spacing,
+    Widget? succeededIcon,
+    Widget? failedIcon,
+    Widget? noMoreIcon,
+    CIPullIconBuilder? pullIconBuilder,
+    TextStyle? textStyle,
+    CITextBuilder? textBuilder,
+    TextStyle? messageStyle,
+    CIMessageBuilder? messageBuilder,
+    Clip? clipBehavior,
+    IconThemeData? iconTheme,
+    double? progressIndicatorSize,
+    double? progressIndicatorStrokeWidth
+  }) =>
+      ClassicHeader(
+        key: key ?? this.key,
+        triggerOffset: triggerOffset ?? this.triggerOffset,
+        clamping: clamping ?? this.clamping,
+        position: position ?? this.position,
+        processedDuration: processedDuration ?? this.processedDuration,
+        spring: spring ?? this.spring,
+        readySpringBuilder: readySpringBuilder ?? this.readySpringBuilder,
+        springRebound: springRebound ?? this.springRebound,
+        frictionFactor: frictionFactor ?? this.frictionFactor,
+        safeArea: safeArea ?? this.safeArea,
+        infiniteOffset: infiniteOffset ?? this.infiniteOffset,
+        hitOver: hitOver ?? this.hitOver,
+        infiniteHitOver: infiniteHitOver ?? this.infiniteHitOver,
+        hapticFeedback: hapticFeedback ?? this.hapticFeedback,
+        triggerWhenReach: triggerWhenReach ?? this.triggerWhenReach,
+        mainAxisAlignment: mainAxisAlignment ?? this.mainAxisAlignment,
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        dragText: dragText ?? this.dragText,
+        armedText: armedText ?? this.armedText,
+        readyText: readyText ?? this.readyText,
+        processingText: processingText ?? this.processingText,
+        processedText: processedText ?? this.processedText,
+        noMoreText: noMoreText ?? this.noMoreText,
+        failedText: failedText ?? this.failedText,
+        showText: showText ?? this.showText,
+        messageText: messageText ?? this.messageText,
+        showMessage: showMessage ?? this.showMessage,
+        textDimension: textDimension ?? this.textDimension,
+        iconDimension: iconDimension ?? this.iconDimension,
+        spacing: spacing ?? this.spacing,
+        succeededIcon: succeededIcon ?? this.succeededIcon,
+        failedIcon: failedIcon ?? this.failedIcon,
+        noMoreIcon: noMoreIcon ?? this.noMoreIcon,
+        pullIconBuilder: pullIconBuilder ?? this.pullIconBuilder,
+        textStyle: textStyle ?? this.textStyle,
+        textBuilder: textBuilder ?? this.textBuilder,
+        messageStyle: messageStyle ?? this.messageStyle,
+        messageBuilder: messageBuilder ?? this.messageBuilder,
+        clipBehavior: clipBehavior ?? this.clipBehavior,
+        iconTheme: iconTheme ?? this.iconTheme,
+        progressIndicatorSize: progressIndicatorSize ?? this.progressIndicatorSize,
+        progressIndicatorStrokeWidth: progressIndicatorStrokeWidth ?? this.progressIndicatorStrokeWidth
+      );
+
 }
+
