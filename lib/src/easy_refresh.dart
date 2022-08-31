@@ -6,6 +6,9 @@ part of easy_refresh;
 typedef ERChildBuilder = Widget Function(
     BuildContext context, ScrollPhysics physics);
 
+typedef ERScrollBehaviorBuilder = ScrollBehavior Function(
+    ScrollPhysics? physics);
+
 /// EasyRefresh needs to share data
 class EasyRefreshData {
   /// Header status data and responsive
@@ -123,6 +126,18 @@ class EasyRefresh extends StatefulWidget {
   /// See [Stack.clipBehavior].
   final Clip clipBehavior;
 
+  /// use [ERScrollBehavior] by default.
+  ///
+  /// example: 
+  /// ```dart
+  /// EasyRefresh(
+  ///   scrollBehaviorBuilder: (ScrollPhysics? physics) {
+  ///     return YourCustomScrollBehavior(physics);
+  ///   }
+  /// )
+  /// ```
+  final ERScrollBehaviorBuilder? scrollBehaviorBuilder;
+
   /// When the position cannot be determined, such as [NestedScrollView].
   /// Mainly used to trigger events.
   final ScrollController? scrollController;
@@ -138,6 +153,9 @@ class EasyRefresh extends StatefulWidget {
   static Footer Function() defaultFooterBuilder = _defaultFooterBuilder;
 
   static Footer _defaultFooterBuilder() => const ClassicFooter();
+
+  static ScrollBehavior _defaultScrollBehaviorBuilder(ScrollPhysics? physics) =>
+      ERScrollBehavior(physics);
 
   const EasyRefresh({
     Key? key,
@@ -161,6 +179,7 @@ class EasyRefresh extends StatefulWidget {
     this.callLoadOverOffset = 20,
     this.fit = StackFit.loose,
     this.clipBehavior = Clip.hardEdge,
+    this.scrollBehaviorBuilder,
     this.scrollController,
   })  : childBuilder = null,
         assert(callRefreshOverOffset > 0,
@@ -191,6 +210,7 @@ class EasyRefresh extends StatefulWidget {
     this.callLoadOverOffset = 20,
     this.fit = StackFit.loose,
     this.clipBehavior = Clip.hardEdge,
+    this.scrollBehaviorBuilder,
     this.scrollController,
   })  : child = null,
         assert(callRefreshOverOffset > 0,
@@ -553,17 +573,21 @@ class _EasyRefreshState extends State<EasyRefresh>
     );
   }
 
+  // a builder of scroll behavior
+  ERScrollBehaviorBuilder get _scrollBehaviorBuilder =>
+      widget.scrollBehaviorBuilder ?? EasyRefresh._defaultScrollBehaviorBuilder;
+
   /// Build content widget.
   Widget _buildContent() {
     Widget child;
     if (widget.childBuilder != null) {
       child = ScrollConfiguration(
-        behavior: const ERScrollBehavior(),
+        behavior: _scrollBehaviorBuilder(null),
         child: widget.childBuilder!(context, _physics),
       );
     } else {
       child = ScrollConfiguration(
-        behavior: ERScrollBehavior(_physics),
+        behavior: _scrollBehaviorBuilder(_physics),
         child: widget.child!,
       );
     }

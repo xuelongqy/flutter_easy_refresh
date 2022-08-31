@@ -68,6 +68,9 @@ const en = {
   'Chat': 'Chat',
   'Chat page example': 'Chat page example',
   'PageView example': 'PageView example',
+  'CustomScrollBehavior': 'Custom Scroll Behavior',
+  'use a custom scroll behavior to support more pointer device':
+      'use a custom scroll behavior to support more pointer device',
   'Join discussion': 'Join discussion',
   'Join the QQ group (554981921)': 'Join the QQ group (554981921)',
   'Repository': 'Repository',

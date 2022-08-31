@@ -88,6 +88,14 @@ class _SamplePageState extends State<SamplePage> {
                 icon: Icons.pages,
                 onTap: () => Get.toNamed(Routes.pageViewSample),
               ),
+              ListItem(
+                title: 'CustomScrollBehavior'.tr,
+                subtitle:
+                    'use a custom scroll behavior to support more pointer device'
+                        .tr,
+                icon: Icons.pages,
+                onTap: () => Get.toNamed(Routes.customScrollBehaviorSample),
+              ),
               if (kDebugMode)
                 ListItem(
                   title: 'Test',
