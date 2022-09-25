@@ -987,6 +987,18 @@ class FooterNotifier extends IndicatorNotifier {
           waitTaskResult: waitLoadResult,
         );
 
+  /// Keep the extent of the [Scrollable] out of bounds.
+  @override
+  double get overExtent {
+    /// When the content of the list is not full,
+    /// the infinite scroll does not cross the bounds.
+    if (infiniteOffset != null &&
+        position.maxScrollExtent <= position.minScrollExtent) {
+      return 0;
+    }
+    return super.overExtent;
+  }
+
   @override
   double _calculateOffset(ScrollMetrics position, double value) {
     if (value <= position.maxScrollExtent &&

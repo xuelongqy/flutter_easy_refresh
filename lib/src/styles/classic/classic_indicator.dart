@@ -355,7 +355,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
     return widget.textBuilder?.call(context, widget.state, _currentText) ??
         Text(
           _currentText,
-          style: widget.textStyle ?? Theme.of(context).textTheme.titleMedium,
+          style: widget.textStyle ?? Theme.of(context).textTheme.subtitle1,
         );
   }
 
@@ -518,10 +518,17 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
 
   @override
   Widget build(BuildContext context) {
+    double offset = _offset;
+    if (widget.state.indicator.infiniteOffset != null &&
+        widget.state.indicator.position == IndicatorPosition.locator &&
+        (_mode != IndicatorMode.inactive ||
+            _result == IndicatorResult.noMore)) {
+      offset = _actualTriggerOffset;
+    }
     return Container(
       color: widget.backgroundColor,
-      width: _axis == Axis.vertical ? double.infinity : _offset,
-      height: _axis == Axis.horizontal ? double.infinity : _offset,
+      width: _axis == Axis.vertical ? double.infinity : offset,
+      height: _axis == Axis.horizontal ? double.infinity : offset,
       child: _axis == Axis.vertical
           ? _buildVerticalWidget()
           : _buildHorizontalWidget(),

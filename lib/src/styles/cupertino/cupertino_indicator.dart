@@ -52,8 +52,11 @@ class _CupertinoIndicator extends StatefulWidget {
 class _CupertinoIndicatorState extends State<_CupertinoIndicator>
     with SingleTickerProviderStateMixin {
   Axis get _axis => widget.state.axis;
+
   IndicatorMode get _mode => widget.state.mode;
+
   double get _offset => widget.state.offset;
+
   double get _actualTriggerOffset => widget.state.actualTriggerOffset;
 
   double get _radius => _useWaterDrop
@@ -193,12 +196,19 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
 
   @override
   Widget build(BuildContext context) {
+    double offset = _offset;
+    if (widget.state.indicator.infiniteOffset != null &&
+        widget.state.indicator.position == IndicatorPosition.locator &&
+        (_mode != IndicatorMode.inactive ||
+            widget.state.result == IndicatorResult.noMore)) {
+      offset = _actualTriggerOffset;
+    }
     return Stack(
       alignment: Alignment.center,
       children: [
         SizedBox(
-          height: _axis == Axis.vertical ? _offset : double.infinity,
-          width: _axis == Axis.vertical ? double.infinity : _offset,
+          height: _axis == Axis.vertical ? offset : double.infinity,
+          width: _axis == Axis.vertical ? double.infinity : offset,
         ),
         // WaterDrop.
         if (_useWaterDrop)
