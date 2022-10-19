@@ -173,13 +173,20 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
 
   @override
   Widget build(BuildContext context) {
+    double offset = _offset;
+    if (widget.state.indicator.infiniteOffset != null &&
+        widget.state.indicator.position == IndicatorPosition.locator &&
+        (_mode != IndicatorMode.inactive ||
+            _result == IndicatorResult.noMore)) {
+      offset = _actualTriggerOffset;
+    }
     final padding = math.max(_offset - _kCircularProgressIndicatorSize, 0) / 2;
     return Stack(
       clipBehavior: Clip.none,
       children: [
         SizedBox(
-          width: _axis == Axis.vertical ? double.infinity : _offset,
-          height: _axis == Axis.horizontal ? double.infinity : _offset,
+          width: _axis == Axis.vertical ? double.infinity : offset,
+          height: _axis == Axis.horizontal ? double.infinity : offset,
         ),
         if (widget.showBezierBackground)
           Positioned(

@@ -337,7 +337,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         return value - position.maxScrollExtent;
       }
       // infinite hit bottom over
-      if ((!footerNotifier.infiniteHitOver ||
+      if (!(footerNotifier.infiniteOffset != null &&
+              position.maxScrollExtent <= position.minScrollExtent) &&
+          (!footerNotifier.infiniteHitOver ||
               !footerNotifier.hitOver && footerNotifier.modeLocked) &&
           (footerNotifier._canProcess || footerNotifier.noMoreLocked) &&
           ((position.pixels - footerNotifier.actualTriggerOffset) <
