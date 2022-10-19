@@ -21,8 +21,9 @@ class _TestMaxPullHeightPageState extends State<TestMaxPullHeightPage> {
         title: const Text('TestMaxPullHeight'),
       ),
       body: EasyRefresh(
-        header: const ClassicHeader(maxPullHeight: 150),
-        footer: const ClassicFooter(maxPullHeight: 150),
+        header: const ClassicHeader(maxPullHeight: 80, clamping: true),
+        footer: const ClassicFooter(
+            maxPullHeight: 150, clamping: true, infiniteOffset: null),
         child: CustomScrollView(
           slivers: [
             SliverList(

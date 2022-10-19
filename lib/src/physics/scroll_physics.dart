@@ -169,9 +169,13 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       }
     }
 
-    if ((headerNotifier.maxPullHeight > 0 ||
-            footerNotifier.maxPullHeight > 0) &&
-        overscrollPast >= footerNotifier.maxPullHeight) {
+    // check maxPullHeight
+    if ((headerNotifier.outOfRange &&
+            headerNotifier.maxPullHeight > 0 &&
+            overscrollPast >= headerNotifier.maxPullHeight) ||
+        (footerNotifier.outOfRange &&
+            footerNotifier.maxPullHeight > 0 &&
+            overscrollPast >= footerNotifier.maxPullHeight)) {
       return 0.0;
     }
 
@@ -461,6 +465,11 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
             mVelocity = footerNotifier.secondaryVelocity;
           }
         }
+      }
+      // check maxPullHeight
+      if (((headerNotifier.maxPullHeight > 0 && headerNotifier.outOfRange) ||
+          footerNotifier.maxPullHeight > 0 && footerNotifier.outOfRange)) {
+        mVelocity = 0;
       }
       simulation = BouncingScrollSimulation(
         spring: spring,
