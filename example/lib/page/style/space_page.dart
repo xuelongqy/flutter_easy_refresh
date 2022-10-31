@@ -35,10 +35,10 @@ class _SpacePageState extends State<SpacePage> {
     return Scaffold(
       body: EasyRefresh(
         controller: _controller,
-        header: SpaceHeader(
+        header: const SpaceHeader(
           position: IndicatorPosition.locator,
         ),
-        footer: SpaceFooter(
+        footer: const SpaceFooter(
           position: IndicatorPosition.locator,
         ),
         onRefresh: () async {

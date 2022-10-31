@@ -20,7 +20,7 @@ class NestedScrollViewPageState extends State<NestedScrollViewPage>
   late TabController _tabController;
   int _tabIndex = 0;
   int _listCount = 20;
-  int _gridCount = 30;
+  int _gridCount = 20;
 
   @override
   void initState() {

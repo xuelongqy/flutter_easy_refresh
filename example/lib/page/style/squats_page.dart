@@ -35,10 +35,10 @@ class _SquatsPageState extends State<SquatsPage> {
     return Scaffold(
       body: EasyRefresh(
         controller: _controller,
-        header: SquatsHeader(
+        header: const SquatsHeader(
           position: IndicatorPosition.locator,
         ),
-        footer: SquatsFooter(
+        footer: const SquatsFooter(
           position: IndicatorPosition.locator,
         ),
         onRefresh: () async {

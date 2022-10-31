@@ -1,6 +1,6 @@
 name: easy_refresh
 description: A flutter widget that provides pull-down refresh and pull-up load.
-version: 3.0.4+2
+version: 3.0.4+3
 homepage: https://xuelongqy.github.io/flutter_easy_refresh
 repository: https://github.com/xuelongqy/flutter_easy_refresh
 issue_tracker: https://github.com/xuelongqy/flutter_easy_refresh/issues
@@ -13,12 +13,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  path_drawing: ^1.0.0
+  path_drawing: ^1.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.4
+  flutter_lints: ^2.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

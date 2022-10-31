@@ -35,10 +35,10 @@ class _SkatingPageState extends State<SkatingPage> {
     return Scaffold(
       body: EasyRefresh(
         controller: _controller,
-        header: SkatingHeader(
+        header: const SkatingHeader(
           position: IndicatorPosition.locator,
         ),
-        footer: SkatingFooter(
+        footer: const SkatingFooter(
           position: IndicatorPosition.locator,
         ),
         onRefresh: () async {

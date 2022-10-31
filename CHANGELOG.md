@@ -1,4 +1,4 @@
-## Next
+## V 3.0.4+2
 > feat: When the content of the list is not full, the infinite scroll does not cross the bounds [#588](https://github.com/xuelongqy/flutter_easy_refresh/pull/588).  
 
 ## V 3.0.4+2
