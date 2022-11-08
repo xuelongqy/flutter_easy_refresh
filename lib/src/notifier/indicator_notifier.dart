@@ -665,7 +665,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Finish task and return the result.
   /// [result] Result of task completion.
   void _finishTask([IndicatorResult result = IndicatorResult.success]) {
-    if (!_waitTaskResult) {
+    if (!_waitTaskResult && _result != result && _mode != IndicatorMode.inactive) {
       _result = result;
       _setMode(IndicatorMode.processed);
       _processing = false;
@@ -724,6 +724,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       if (processedDuration == Duration.zero) {
         _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((timeStamp) {
           _mode = IndicatorMode.done;
+          if (offset == 0) {
+            _mode = IndicatorMode.inactive;
+          }
           // Trigger [Scrollable] rollback
           if (oldMode == IndicatorMode.processing &&
               !userOffsetNotifier.value) {
@@ -733,6 +736,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       } else {
         Future.delayed(processedDuration, () {
           _setMode(IndicatorMode.done);
+          if (offset == 0) {
+            _mode = IndicatorMode.inactive;
+          }
           // Trigger [Scrollable] rollback
           if (!userOffsetNotifier.value) {
             _resetBallistic();
