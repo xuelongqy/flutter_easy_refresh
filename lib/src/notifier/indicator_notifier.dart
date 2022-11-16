@@ -400,6 +400,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         return Future.value();
       }
     } else {
+      _offset = 0;
       _mode = IndicatorMode.inactive;
       _processing = false;
     }
@@ -710,6 +711,18 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         }
       }
     }
+    if (clamping && !userOffsetNotifier.value) {
+      // Sucks. When clamping, the position will not change after the task is completed.
+      // Temporary solution like this, there is a better way to replace.
+      double pixels = _position.pixels;
+      const tiny = 0.001;
+      if (pixels > tiny) {
+        pixels -= tiny;
+      } else {
+        pixels += tiny;
+      }
+      (_position as ScrollPosition).jumpTo(pixels);
+    }
   }
 
   /// Set mode.
@@ -949,6 +962,7 @@ class HeaderNotifier extends IndicatorNotifier {
         _updateBySimulation(_position, 0);
       } else {
         userOffsetNotifier.value = true;
+        _clampingAnimationController!.value = position.minScrollExtent;
         await _clampingAnimationController!
             .animateTo(scrollTo, duration: duration, curve: curve);
         userOffsetNotifier.value = false;
@@ -1108,6 +1122,7 @@ class FooterNotifier extends IndicatorNotifier {
         _updateBySimulation(_position, 0);
       } else {
         userOffsetNotifier.value = true;
+        _clampingAnimationController!.value = position.maxScrollExtent;
         await _clampingAnimationController!
             .animateTo(scrollTo, duration: duration, curve: curve);
         userOffsetNotifier.value = false;
