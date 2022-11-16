@@ -29,17 +29,20 @@ class EasyRefreshController {
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
   /// [scrollController] When position is not [ScrollPosition], you can use [ScrollController].
+  /// [force] Enforce execution even if the task is in progress. But you have to handle the completion event.
   Future callRefresh({
     double? overOffset,
     Duration? duration = const Duration(milliseconds: 200),
     Curve curve = Curves.linear,
     ScrollController? scrollController,
+    bool force = false,
   }) async {
     await _state?._callRefresh(
       overOffset: overOffset,
       duration: duration,
       curve: curve,
       scrollController: scrollController,
+      force: force,
     );
   }
 
@@ -48,17 +51,20 @@ class EasyRefreshController {
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
   /// [scrollController] When position is not [ScrollPosition], you can use [ScrollController].
+  /// [force] Enforce execution even if the task is in progress. But you have to handle the completion event.
   Future callLoad({
     double? overOffset,
     Duration? duration = const Duration(milliseconds: 300),
     Curve curve = Curves.linear,
     ScrollController? scrollController,
+    bool force = false,
   }) async {
     await _state?._callLoad(
       overOffset: overOffset,
       duration: duration,
       curve: curve,
       scrollController: scrollController,
+      force: force,
     );
   }
 

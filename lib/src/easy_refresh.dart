@@ -200,7 +200,7 @@ class EasyRefresh extends StatefulWidget {
         super(key: key);
 
   @override
-  _EasyRefreshState createState() => _EasyRefreshState();
+  State<StatefulWidget> createState() => _EasyRefreshState();
 
   static EasyRefreshData of(BuildContext context) {
     final inheritedEasyRefresh =
@@ -418,17 +418,20 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
   /// [scrollController] When position is not [ScrollPosition], you can use [ScrollController].
+  /// [force] Enforce execution even if the task is in progress. But you have to handle the completion event.
   Future _callRefresh({
     double? overOffset,
     Duration? duration,
     Curve curve = Curves.linear,
     ScrollController? scrollController,
+    bool force = false,
   }) {
     return _headerNotifier.callTask(
       overOffset: overOffset ?? widget.callRefreshOverOffset,
       duration: duration,
       curve: curve,
       scrollController: scrollController ?? widget.scrollController,
+      force: force,
     );
   }
 
@@ -437,17 +440,20 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
   /// [scrollController] When position is not [ScrollPosition], you can use [ScrollController].
+  /// [force] Enforce execution even if the task is in progress. But you have to handle the completion event.
   Future _callLoad({
     double? overOffset,
     Duration? duration,
     Curve curve = Curves.linear,
     ScrollController? scrollController,
+    bool force = false,
   }) {
     return _footerNotifier.callTask(
       overOffset: overOffset ?? widget.callRefreshOverOffset,
       duration: duration,
       curve: curve,
       scrollController: scrollController ?? widget.scrollController,
+      force: force,
     );
   }
 

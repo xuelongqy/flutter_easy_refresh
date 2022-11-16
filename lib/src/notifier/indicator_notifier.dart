@@ -14,7 +14,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   Indicator _indicator;
 
   /// Used to provide [clamping] animation.
-  final _EasyRefreshState vsync;
+  final TickerProviderStateMixin vsync;
 
   /// User triggered notifier.
   /// Record user triggers and releases.
@@ -387,14 +387,21 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// [duration] See [ScrollPosition.animateTo].
   /// [curve] See [ScrollPosition.animateTo].
   /// [scrollController] When position is not [ScrollPosition], you can use [ScrollController].
+  /// [force] Enforce execution even if the task is in progress. But you have to handle the completion event.
   Future callTask({
     required double overOffset,
     Duration? duration,
     Curve curve = Curves.linear,
     ScrollController? scrollController,
+    bool force = false,
   }) {
-    if (modeLocked || noMoreLocked || secondaryLocked || !_canProcess) {
-      return Future.value();
+    if (!force) {
+      if (modeLocked || noMoreLocked || secondaryLocked || !_canProcess) {
+        return Future.value();
+      }
+    } else {
+      _mode = IndicatorMode.inactive;
+      _processing = false;
     }
     return animateToOffset(
       offset: actualTriggerOffset + overOffset,
@@ -665,8 +672,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Finish task and return the result.
   /// [result] Result of task completion.
   void _finishTask([IndicatorResult result = IndicatorResult.success]) {
-    if (!_waitTaskResult && _result != result && _mode != IndicatorMode.inactive) {
-      _result = result;
+    _result = result;
+    if (!_waitTaskResult && mode == IndicatorMode.processing) {
       _setMode(IndicatorMode.processed);
       _processing = false;
     }
@@ -831,7 +838,7 @@ class HeaderNotifier extends IndicatorNotifier {
   HeaderNotifier({
     required Header header,
     required ValueNotifier<bool> userOffsetNotifier,
-    required _EasyRefreshState vsync,
+    required TickerProviderStateMixin vsync,
     required CanProcessCallBack onCanRefresh,
     bool noMoreRefresh = false,
     FutureOr Function()? onRefresh,
@@ -978,7 +985,7 @@ class FooterNotifier extends IndicatorNotifier {
   FooterNotifier({
     required Footer footer,
     required ValueNotifier<bool> userOffsetNotifier,
-    required _EasyRefreshState vsync,
+    required TickerProviderStateMixin vsync,
     required CanProcessCallBack onCanLoad,
     bool noMoreLoad = false,
     FutureOr Function()? onLoad,

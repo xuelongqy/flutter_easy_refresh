@@ -1,3 +1,6 @@
+## Next
+> fix: [EasyRefreshController.callRefresh] and [EasyRefreshController.callLoad] add force [#633](https://github.com/xuelongqy/flutter_easy_refresh/issues/633) [#642](https://github.com/xuelongqy/flutter_easy_refresh/issues/642). Thanks percival888 for [PR#639](https://github.com/xuelongqy/flutter_easy_refresh/issues/639).
+
 ## V 3.0.4+4
 > fix: Type 'SpringDescription' not found [#638](https://github.com/xuelongqy/flutter_easy_refresh/issues/638).
 

@@ -65,14 +65,6 @@ class _SamplePageState extends State<SamplePage> {
                 onTap: () => Get.toNamed(Routes.refreshOnStartSample),
               ),
               ListItem(
-                title: 'Refresh mutiple times'.tr,
-                subtitle:
-                'Modify the filter conditions during the refresh process and refresh again'
-                    .tr,
-                icon: Icons.refresh,
-                onTap: () => Get.toNamed(Routes.refreshMutipleTimes),
-              ),
-              ListItem(
                 title: 'Listener'.tr,
                 subtitle: 'Use listener to respond anywhere'.tr,
                 icon: Icons.earbuds,
