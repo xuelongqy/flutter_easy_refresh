@@ -743,25 +743,29 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       // Completion delay
       if (processedDuration == Duration.zero) {
         _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((timeStamp) {
-          _mode = IndicatorMode.done;
-          if (offset == 0) {
-            _mode = IndicatorMode.inactive;
-          }
-          // Trigger [Scrollable] rollback
-          if (oldMode == IndicatorMode.processing &&
-              !userOffsetNotifier.value) {
-            _resetBallistic();
+          if (this.mode == IndicatorMode.processed) {
+            _mode = IndicatorMode.done;
+            if (offset == 0) {
+              _mode = IndicatorMode.inactive;
+            }
+            // Trigger [Scrollable] rollback
+            if (oldMode == IndicatorMode.processing &&
+                !userOffsetNotifier.value) {
+              _resetBallistic();
+            }
           }
         });
       } else {
         Future.delayed(processedDuration, () {
-          _setMode(IndicatorMode.done);
-          if (offset == 0) {
-            _mode = IndicatorMode.inactive;
-          }
-          // Trigger [Scrollable] rollback
-          if (!userOffsetNotifier.value) {
-            _resetBallistic();
+          if (this.mode == IndicatorMode.processed) {
+            _setMode(IndicatorMode.done);
+            if (offset == 0) {
+              _mode = IndicatorMode.inactive;
+            }
+            // Trigger [Scrollable] rollback
+            if (!userOffsetNotifier.value) {
+              _resetBallistic();
+            }
           }
         });
       }
