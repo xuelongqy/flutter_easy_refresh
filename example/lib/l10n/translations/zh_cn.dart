@@ -67,6 +67,9 @@ const zhCN = {
   'Chat': '聊天',
   'Chat page example': '聊天页面示例',
   'PageView example': 'PageView 示例',
+  'CustomScrollBehavior': '自定义滚动行为',
+  'use a custom scroll behavior to support more pointer device':
+      '使用一个自定义的滚动行为支持更多指针设备',
   'Join discussion': '加入讨论',
   'Join the QQ group (554981921)': '加入QQ群(554981921)',
   'Repository': '项目地址',
