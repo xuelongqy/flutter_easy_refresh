@@ -20,6 +20,18 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         super(parent: parent) {
     headerNotifier._bindPhysics(this);
     footerNotifier._bindPhysics(this);
+    _headerSimulationCreationState =
+        ValueNotifier(_BallisticSimulationCreationState(
+      mode: headerNotifier.mode,
+      offset: headerNotifier.offset,
+      actualTriggerOffset: headerNotifier.actualTriggerOffset,
+    ));
+    _footerSimulationCreationState =
+        ValueNotifier(_BallisticSimulationCreationState(
+      mode: footerNotifier.mode,
+      offset: footerNotifier.offset,
+      actualTriggerOffset: footerNotifier.actualTriggerOffset,
+    ));
   }
 
   @override
@@ -42,20 +54,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   final SpringDescription? _spring;
 
   /// The state of the indicator when the BallisticSimulation is created.
-  final _headerSimulationCreationState =
-      ValueNotifier<_BallisticSimulationCreationState>(
-    const _BallisticSimulationCreationState(
-      mode: IndicatorMode.inactive,
-      offset: 0,
-    ),
-  );
-  final _footerSimulationCreationState =
-      ValueNotifier<_BallisticSimulationCreationState>(
-    const _BallisticSimulationCreationState(
-      mode: IndicatorMode.inactive,
-      offset: 0,
-    ),
-  );
+  late final ValueNotifier<_BallisticSimulationCreationState>
+      _headerSimulationCreationState;
+  late final ValueNotifier<_BallisticSimulationCreationState>
+      _footerSimulationCreationState;
 
   /// Get the current [SpringDescription] to be used.
   @override
@@ -424,10 +426,12 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     final hState = _BallisticSimulationCreationState(
       mode: headerNotifier._mode,
       offset: headerNotifier._offset,
+      actualTriggerOffset: footerNotifier.actualTriggerOffset,
     );
     final fState = _BallisticSimulationCreationState(
       mode: footerNotifier._mode,
       offset: footerNotifier._offset,
+      actualTriggerOffset: footerNotifier.actualTriggerOffset,
     );
     Simulation? simulation;
     bool hSecondary = !headerNotifier.clamping &&
@@ -479,14 +483,19 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 class _BallisticSimulationCreationState {
   final IndicatorMode mode;
   final double offset;
+  final double actualTriggerOffset;
 
   const _BallisticSimulationCreationState({
     required this.mode,
     required this.offset,
+    required this.actualTriggerOffset,
   });
 
   bool needCreation(_BallisticSimulationCreationState newState) {
-    return mode != newState.mode || offset != newState.offset;
+    return mode != newState.mode ||
+        offset != newState.offset ||
+        (newState.mode == IndicatorMode.ready &&
+            newState.offset >= actualTriggerOffset);
   }
 }
 
