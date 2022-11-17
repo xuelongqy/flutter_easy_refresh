@@ -128,7 +128,7 @@ class EasyRefresh extends StatefulWidget {
 
   /// use [ERScrollBehavior] by default.
   ///
-  /// example: 
+  /// example:
   /// ```dart
   /// EasyRefresh(
   ///   scrollBehaviorBuilder: (ScrollPhysics? physics) {
@@ -153,6 +153,10 @@ class EasyRefresh extends StatefulWidget {
   static Footer Function() defaultFooterBuilder = _defaultFooterBuilder;
 
   static Footer _defaultFooterBuilder() => const ClassicFooter();
+
+  /// Default ScrollBehavior builder.
+  static ScrollBehavior Function(ScrollPhysics? physics)
+      defaultScrollBehaviorBuilder = _defaultScrollBehaviorBuilder;
 
   static ScrollBehavior _defaultScrollBehaviorBuilder(ScrollPhysics? physics) =>
       ERScrollBehavior(physics);
@@ -581,7 +585,7 @@ class _EasyRefreshState extends State<EasyRefresh>
 
   // a builder of scroll behavior
   ERScrollBehaviorBuilder get _scrollBehaviorBuilder =>
-      widget.scrollBehaviorBuilder ?? EasyRefresh._defaultScrollBehaviorBuilder;
+      widget.scrollBehaviorBuilder ?? EasyRefresh.defaultScrollBehaviorBuilder;
 
   /// Build content widget.
   Widget _buildContent() {

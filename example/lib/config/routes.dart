@@ -4,7 +4,6 @@ import 'package:example/page/more/support_me_page.dart';
 import 'package:example/page/more/theme_page.dart';
 import 'package:example/page/sample/carousel_page.dart';
 import 'package:example/page/sample/chat_page.dart';
-import 'package:example/page/sample/custom_scroll_behavior_page.dart';
 import 'package:example/page/sample/listener_header_page.dart';
 import 'package:example/page/sample/nested_scroll_view.dart';
 import 'package:example/page/sample/page_view_page.dart';
@@ -41,7 +40,6 @@ class Routes {
   static const secondarySample = '/sample/secondary';
   static const chatSample = '/sample/chat';
   static const pageViewSample = '/sample/page-view';
-  static const customScrollBehaviorSample = '/sample/custom-scroll-behavior';
   static const tabBarViewSample = '/sample/tab-bar-view';
   // Style
   static const style = '/style';
@@ -76,9 +74,6 @@ class Routes {
     GetPage(name: secondarySample, page: () => const SecondaryPage()),
     GetPage(name: chatSample, page: () => const ChatPage()),
     GetPage(name: pageViewSample, page: () => const PageViewPage()),
-    GetPage(
-        name: customScrollBehaviorSample,
-        page: () => const CustomScrollBehaviorPage()),
     GetPage(name: tabBarViewSample, page: () => const TabBarViewPage()),
     // Style
     GetPage(name: style, page: () => const StylePage()),
