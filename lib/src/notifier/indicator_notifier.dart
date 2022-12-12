@@ -716,11 +716,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       // Temporary solution like this, there is a better way to replace.
       double pixels = _position.pixels;
       const tiny = 0.001;
-      if (pixels > tiny) {
-        pixels -= tiny;
-      } else {
-        pixels += tiny;
-      }
+      pixels -= tiny;
       (_position as ScrollPosition).jumpTo(pixels);
     }
   }

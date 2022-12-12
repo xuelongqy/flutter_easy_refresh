@@ -1,3 +1,6 @@
+## 3.0.5+1
+- fix: Clamping refresh, causing Material3 AppBar to change color.
+
 ## 3.0.5
 - fix: [EasyRefreshController.callRefresh] and [EasyRefreshController.callLoad] add force [#633](https://github.com/xuelongqy/flutter_easy_refresh/issues/633) [#642](https://github.com/xuelongqy/flutter_easy_refresh/issues/642). Thanks percival888 for [PR#639](https://github.com/xuelongqy/flutter_easy_refresh/issues/639).   
 - fix: When the height changes when callTask causes the list not to rebound.   
