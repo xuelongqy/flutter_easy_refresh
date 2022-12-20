@@ -86,4 +86,7 @@ const zhCN = {
   '%s copied!': '%s 已复制!',
   'Trigger immediately': '立即触发',
   'TabBarView example': 'NestedScrollView + TabBarView示例',
+  'Paging': '分页',
+  'Paging example': '分页示例',
+  'No Data': '暂无数据',
 };

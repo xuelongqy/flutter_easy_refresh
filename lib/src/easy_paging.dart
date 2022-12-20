@@ -1,5 +1,9 @@
 part of easy_paging;
 
+/// Paging item builder.
+typedef EasyPagingItemBuilder = Widget Function<ItemType>(
+    BuildContext context, int index, ItemType item);
+
 /// A flutter widget that convenient pagination.
 abstract class EasyPaging<DataType, ItemType> extends StatefulWidget {
   /// When true, use [EasyRefresh];
@@ -54,6 +58,15 @@ abstract class EasyPaging<DataType, ItemType> extends StatefulWidget {
   /// See [Stack.clipBehavior].
   final Clip clipBehavior;
 
+  /// Item builder.
+  final EasyPagingItemBuilder? itemBuilder;
+
+  /// Refresh on start widget builder.
+  final WidgetBuilder? refreshOnStartWidgetBuilder;
+
+  /// Empty widget builder.
+  final WidgetBuilder? emptyWidgetBuilder;
+
   const EasyPaging({
     Key? key,
     this.useDefaultPhysics = false,
@@ -71,6 +84,9 @@ abstract class EasyPaging<DataType, ItemType> extends StatefulWidget {
     this.callLoadOverOffset = 20,
     this.fit = StackFit.loose,
     this.clipBehavior = Clip.hardEdge,
+    this.itemBuilder,
+    this.refreshOnStartWidgetBuilder,
+    this.emptyWidgetBuilder,
   }) : super(key: key);
 
   @override
@@ -97,10 +113,21 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
   ItemType getItem(int index);
 
   /// Check if there is no data.
-  bool get isEmpty => count == 0;
+  bool get isEmpty => data != null && count == 0;
 
   /// Check if there are no more.
-  bool get isNoMore => false;
+  bool get isNoMore {
+    if (data == null) {
+      return false;
+    }
+    if (totalCount != null) {
+      return count >= totalCount!;
+    }
+    if (page != null && totalPage != null) {
+      return page! >= totalPage!;
+    }
+    return false;
+  }
 
   /// Enable refresh.
   bool get enableRefresh => true;
@@ -135,10 +162,14 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
   }
 
   /// Empty widget.
-  Widget? buildEmptyWidget() => null;
+  Widget? buildEmptyWidget() {
+    return widget.emptyWidgetBuilder?.call(context);
+  }
 
   /// Refresh on start widget.
-  Widget? buildRefreshOnStartWidget() => null;
+  Widget? buildRefreshOnStartWidget() {
+    return widget.refreshOnStartWidgetBuilder?.call(context);
+  }
 
   /// Build header.
   Header buildHeader() => EasyRefresh.defaultHeaderBuilder();
@@ -166,8 +197,13 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
       if (header.position == IndicatorPosition.locator)
         const HeaderLocator.sliver(),
       if (emptyWidget != null)
-        SliverToBoxAdapter(
-          child: emptyWidget,
+        SliverFillViewport(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return emptyWidget;
+            },
+            childCount: 1,
+          ),
         ),
       buildSliver(),
       if (footer.position == IndicatorPosition.locator)
@@ -188,7 +224,9 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
   }
 
   /// Build item widget.
-  Widget buildItem(BuildContext context, int index, ItemType item);
+  Widget buildItem(BuildContext context, int index, ItemType item) {
+    return widget.itemBuilder!<ItemType>(context, index, item);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +234,7 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
     final footer = buildFooter();
     Header? startHeader;
     Widget? startWidget = buildRefreshOnStartWidget();
-    if (startHeader != null) {
+    if (startWidget != null) {
       startHeader = BuilderHeader(
         triggerOffset: 70,
         clamping: true,
@@ -207,7 +245,15 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
               state.mode == IndicatorMode.done) {
             return const SizedBox();
           }
-          return startWidget!;
+          return SizedBox(
+            width: state.axis == Axis.vertical
+                ? double.infinity
+                : state.viewportDimension,
+            height: state.axis == Axis.horizontal
+                ? double.infinity
+                : state.viewportDimension,
+            child: startWidget,
+          );
         },
       );
     }

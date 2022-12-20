@@ -7,6 +7,7 @@ import 'package:example/page/sample/chat_page.dart';
 import 'package:example/page/sample/listener_header_page.dart';
 import 'package:example/page/sample/nested_scroll_view.dart';
 import 'package:example/page/sample/page_view_page.dart';
+import 'package:example/page/sample/paging_page.dart';
 import 'package:example/page/sample/refresh_on_start_page.dart';
 import 'package:example/page/sample/sample_page.dart';
 import 'package:example/page/sample/secondary_page.dart';
@@ -41,6 +42,7 @@ class Routes {
   static const chatSample = '/sample/chat';
   static const pageViewSample = '/sample/page-view';
   static const tabBarViewSample = '/sample/tab-bar-view';
+  static const pagingSample = '/sample/paging';
   // Style
   static const style = '/style';
   static const classicStyle = '/style/classic';
@@ -75,6 +77,7 @@ class Routes {
     GetPage(name: chatSample, page: () => const ChatPage()),
     GetPage(name: pageViewSample, page: () => const PageViewPage()),
     GetPage(name: tabBarViewSample, page: () => const TabBarViewPage()),
+    GetPage(name: pagingSample, page: () => const PagingPage()),
     // Style
     GetPage(name: style, page: () => const StylePage()),
     GetPage(name: classicStyle, page: () => const ClassicPage()),

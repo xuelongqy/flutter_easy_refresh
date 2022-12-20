@@ -88,4 +88,7 @@ const en = {
   '%s copied!': '%s copied!',
   'Trigger immediately': 'Trigger immediately',
   'TabBarView example': 'NestedScrollView + TabBarView example',
+  'Paging': 'Paging',
+  'Paging example': 'Paging example',
+  'No Data': 'No Data',
 };

@@ -1,3 +1,6 @@
+## Next
+- feat: Add paging widget [EasyPaging].
+
 ## 3.0.5+1
 - fix: Clamping refresh, causing Material3 AppBar to change color.
 

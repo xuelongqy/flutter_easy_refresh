@@ -88,6 +88,12 @@ class _SamplePageState extends State<SamplePage> {
                 icon: Icons.pages,
                 onTap: () => Get.toNamed(Routes.pageViewSample),
               ),
+              ListItem(
+                title: 'Paging',
+                subtitle: 'Paging example'.tr,
+                icon: Icons.drag_indicator,
+                onTap: () => Get.toNamed(Routes.pagingSample),
+              ),
               if (kDebugMode)
                 ListItem(
                   title: 'Test',
