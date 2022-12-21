@@ -67,7 +67,7 @@ class CustomPagingState extends EasyPagingState<List<String>, String> {
   int? page;
 
   @override
-  int? totalCount;
+  int? total;
 
   @override
   int? totalPage;
@@ -124,7 +124,7 @@ class CustomPagingState extends EasyPagingState<List<String>, String> {
     return ResponseData(
       page: page,
       pageSize: size,
-      totalCount: count,
+      total: count,
       data: List.filled(dataSize, ''),
     );
   }
@@ -142,7 +142,7 @@ class CustomPagingState extends EasyPagingState<List<String>, String> {
     final response = await fetchData(page: 1);
     setState(() {
       data = response.data.toList();
-      totalCount = response.totalCount;
+      total = response.total;
       page = response.page;
     });
   }
@@ -152,7 +152,7 @@ class CustomPagingState extends EasyPagingState<List<String>, String> {
     final response = await fetchData(page: page! + 1);
     setState(() {
       data!.addAll(response.data);
-      totalCount = response.totalCount;
+      total = response.total;
       page = response.page;
     });
   }
@@ -161,13 +161,13 @@ class CustomPagingState extends EasyPagingState<List<String>, String> {
 class ResponseData {
   final int page;
   final int pageSize;
-  final int totalCount;
+  final int total;
   final List<String> data;
 
   ResponseData({
     required this.page,
     required this.pageSize,
-    required this.totalCount,
+    required this.total,
     required this.data,
   });
 }

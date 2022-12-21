@@ -103,8 +103,8 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
   /// Current page.
   int? get page;
 
-  /// Total count.
-  int? get totalCount;
+  /// All items count.
+  int? get total;
 
   /// Current items count.
   int get count;
@@ -120,8 +120,8 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
     if (data == null) {
       return false;
     }
-    if (totalCount != null) {
-      return count >= totalCount!;
+    if (total != null) {
+      return count >= total!;
     }
     if (page != null && totalPage != null) {
       return page! >= totalPage!;

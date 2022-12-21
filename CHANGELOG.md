@@ -1,4 +1,4 @@
-## Next
+## 3.1.0
 - feat: Add paging widget [EasyPaging].
 
 ## 3.0.5+1
