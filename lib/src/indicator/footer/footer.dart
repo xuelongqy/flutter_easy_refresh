@@ -270,6 +270,7 @@ class NotLoadFooter extends Footer {
   }) : super(
           triggerOffset: 0,
           clamping: clamping,
+          infiniteOffset: clamping ? null : 0,
           position: position,
           spring: spring,
           horizontalSpring: horizontalSpring,
