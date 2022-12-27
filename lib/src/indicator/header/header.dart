@@ -26,6 +26,7 @@ abstract class Header extends Indicator {
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
     bool triggerWhenReach = false,
+    double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -50,6 +51,7 @@ abstract class Header extends Indicator {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          maxOverOffset: maxOverOffset,
         );
 }
 
@@ -83,6 +85,7 @@ class BuilderHeader extends Header {
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
     bool triggerWhenReach = false,
+    double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -107,6 +110,7 @@ class BuilderHeader extends Header {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          maxOverOffset: maxOverOffset,
         );
 
   @override
@@ -141,6 +145,7 @@ class ListenerHeader extends Header {
     double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
     bool triggerWhenReach = false,
+    double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -165,6 +170,7 @@ class ListenerHeader extends Header {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          maxOverOffset: maxOverOffset,
         );
 
   @override
@@ -210,6 +216,7 @@ abstract class SecondaryHeader extends Header {
           notifyWhenInvisible: header.notifyWhenInvisible,
           listenable: listenable ?? header.listenable,
           triggerWhenReach: header.triggerWhenReach,
+          maxOverOffset: header.maxOverOffset,
         );
 
   @override
@@ -308,7 +315,8 @@ class OverrideHeader extends Header {
     double? secondaryCloseTriggerOffset,
     bool? notifyWhenInvisible,
     IndicatorStateListenable? listenable,
-    bool triggerWhenReach = false,
+    bool? triggerWhenReach,
+    double? maxOverOffset,
   }) : super(
           triggerOffset: triggerOffset ?? header.triggerOffset,
           clamping: clamping ?? header.clamping,
@@ -337,7 +345,8 @@ class OverrideHeader extends Header {
           notifyWhenInvisible:
               notifyWhenInvisible ?? header.notifyWhenInvisible,
           listenable: listenable ?? header.listenable,
-          triggerWhenReach: triggerWhenReach,
+          triggerWhenReach: triggerWhenReach ?? header.triggerWhenReach,
+          maxOverOffset: maxOverOffset ?? header.maxOverOffset,
         );
 
   @override

@@ -342,6 +342,10 @@ abstract class Indicator {
   /// Trigger immediately when reaching the [triggerOffset].
   final bool triggerWhenReach;
 
+  /// Maximum overscroll offset, will no longer scroll.
+  /// When [double.infinity], no limit.
+  final double maxOverOffset;
+
   const Indicator({
     required this.triggerOffset,
     required this.clamping,
@@ -366,6 +370,7 @@ abstract class Indicator {
     this.notifyWhenInvisible = false,
     this.listenable,
     this.triggerWhenReach = false,
+    this.maxOverOffset = double.infinity,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
         assert(infiniteOffset == null || infiniteOffset >= 0,

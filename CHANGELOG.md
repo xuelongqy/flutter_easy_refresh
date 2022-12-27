@@ -1,3 +1,6 @@
+## Next
+- feat: Add maxOverOffset [#590](https://github.com/xuelongqy/flutter_easy_refresh/issues/590).
+
 ## 3.1.0
 - feat: Add paging widget [EasyPaging].
 

@@ -227,8 +227,16 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         // Header does not disappear,
         // and the list does not shift.
         bounds = value - position.pixels;
+        // Maximum overscroll offset
       }
     } else {
+      // Maximum overscroll offset
+      if (headerNotifier.maxOverOffset != double.infinity &&
+          value < -headerNotifier.maxOverOffset) {
+        _updateIndicatorOffset(position, -headerNotifier.maxOverOffset, value);
+        return (value + headerNotifier.maxOverOffset) -
+            position.minScrollExtent;
+      }
       // hit top over
       if (!(headerNotifier.hitOver || headerNotifier.modeLocked) &&
           headerNotifier.mode != IndicatorMode.ready &&
@@ -318,6 +326,14 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         bounds = value - position.pixels;
       }
     } else {
+      // Maximum overscroll offset
+      if (footerNotifier.maxOverOffset != double.infinity &&
+          position.maxScrollExtent < value - headerNotifier.maxOverOffset) {
+        _updateIndicatorOffset(position,
+            position.maxScrollExtent + headerNotifier.maxOverOffset, value);
+        return (value - headerNotifier.maxOverOffset) -
+            position.maxScrollExtent;
+      }
       // hit bottom over
       if (!(footerNotifier.hitOver || footerNotifier.modeLocked) &&
           footerNotifier.mode != IndicatorMode.ready &&

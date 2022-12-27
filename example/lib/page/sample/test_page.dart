@@ -60,9 +60,10 @@ class _TestPageState extends State<TestPage> {
           },
         ),
         header: const ClassicHeader(
-          clamping: true,
-          position: IndicatorPosition.locator,
+          clamping: false,
+          // position: IndicatorPosition.locator,
           mainAxisAlignment: MainAxisAlignment.end,
+          maxOverOffset: 100,
         ),
         footer: const ClassicFooter(
           position: IndicatorPosition.locator,
@@ -120,7 +121,7 @@ class _TestPageState extends State<TestPage> {
           scrollDirection: _scrollDirection,
           reverse: false,
           slivers: [
-            const HeaderLocator.sliver(),
+            // const HeaderLocator.sliver(),
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {

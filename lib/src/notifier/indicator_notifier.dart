@@ -70,6 +70,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   double get secondaryVelocity => _indicator.secondaryVelocity;
 
+  double get maxOverOffset => _indicator.maxOverOffset;
+
   /// Spring description.
   SpringDescription? get _spring {
     if (_axis == Axis.horizontal) {
@@ -886,6 +888,10 @@ class HeaderNotifier extends IndicatorNotifier {
           // Cannot exceed secondary offset.
           return secondaryDimension;
         }
+        // Maximum overscroll offset
+        if (maxOverOffset != double.infinity) {
+          return math.min(mOffset, maxOverOffset);
+        }
         return mOffset;
       }
     } else {
@@ -1045,6 +1051,10 @@ class FooterNotifier extends IndicatorNotifier {
         if (hasSecondary && mOffset > secondaryDimension) {
           // Cannot exceed secondary offset.
           return secondaryDimension;
+        }
+        // Maximum overscroll offset
+        if (maxOverOffset != double.infinity) {
+          return math.min(mOffset, maxOverOffset);
         }
         return mOffset;
       }

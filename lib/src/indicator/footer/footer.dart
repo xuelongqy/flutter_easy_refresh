@@ -26,6 +26,7 @@ abstract class Footer extends Indicator {
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
     bool triggerWhenReach = false,
+    double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -50,6 +51,7 @@ abstract class Footer extends Indicator {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          maxOverOffset: maxOverOffset,
         );
 }
 
@@ -83,6 +85,7 @@ class BuilderFooter extends Footer {
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
     bool triggerWhenReach = false,
+    double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -107,6 +110,7 @@ class BuilderFooter extends Footer {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          maxOverOffset: maxOverOffset,
         );
 
   @override
@@ -141,6 +145,7 @@ class ListenerFooter extends Footer {
     double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
     bool triggerWhenReach = false,
+    double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
           clamping: clamping,
@@ -165,6 +170,7 @@ class ListenerFooter extends Footer {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          maxOverOffset: maxOverOffset,
         );
 
   @override
@@ -210,6 +216,7 @@ abstract class SecondaryFooter extends Footer {
           notifyWhenInvisible: footer.notifyWhenInvisible,
           listenable: listenable ?? footer.listenable,
           triggerWhenReach: footer.triggerWhenReach,
+          maxOverOffset: footer.maxOverOffset,
         );
 
   @override
@@ -308,7 +315,8 @@ class OverrideFooter extends Footer {
     double? secondaryCloseTriggerOffset,
     bool? notifyWhenInvisible,
     IndicatorStateListenable? listenable,
-    bool triggerWhenReach = false,
+    bool? triggerWhenReach,
+    double? maxOverOffset,
   }) : super(
           triggerOffset: triggerOffset ?? footer.triggerOffset,
           clamping: clamping ?? footer.clamping,
@@ -337,7 +345,8 @@ class OverrideFooter extends Footer {
           notifyWhenInvisible:
               notifyWhenInvisible ?? footer.notifyWhenInvisible,
           listenable: listenable ?? footer.listenable,
-          triggerWhenReach: triggerWhenReach,
+          triggerWhenReach: triggerWhenReach ?? footer.triggerWhenReach,
+          maxOverOffset: maxOverOffset ?? footer.maxOverOffset,
         );
 
   @override
