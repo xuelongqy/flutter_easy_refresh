@@ -33,6 +33,7 @@ class CupertinoHeader extends Header {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
+    double maxOverOffset = double.infinity,
     this.foregroundColor,
     this.userWaterDrop = true,
     this.backgroundColor,
@@ -55,6 +56,7 @@ class CupertinoHeader extends Header {
           infiniteHitOver: infiniteHitOver,
           position: position,
           hapticFeedback: hapticFeedback,
+          maxOverOffset: maxOverOffset,
         );
 
   @override

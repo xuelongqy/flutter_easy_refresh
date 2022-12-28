@@ -52,6 +52,7 @@ class MaterialFooter extends Footer {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
+    double maxOverOffset = double.infinity,
     this.backgroundColor,
     this.color,
     this.valueColor,
@@ -86,6 +87,7 @@ class MaterialFooter extends Footer {
           infiniteHitOver: infiniteHitOver,
           position: position,
           hapticFeedback: hapticFeedback,
+          maxOverOffset: maxOverOffset,
         );
 
   @override

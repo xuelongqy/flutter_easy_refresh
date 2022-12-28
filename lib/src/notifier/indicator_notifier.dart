@@ -72,6 +72,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   double get maxOverOffset => _indicator.maxOverOffset;
 
+  double get actualMaxOverOffset => maxOverOffset == double.infinity
+      ? maxOverOffset
+      : (maxOverOffset + safeOffset);
+
   /// Spring description.
   SpringDescription? get _spring {
     if (_axis == Axis.horizontal) {
@@ -684,7 +688,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Start [clamping] animation
   void _startClampingAnimation(Simulation simulation) {
-    if (_offset <= 0) {
+    if (_offset <= 0 || _clampingAnimationController!.isAnimating) {
       return;
     }
     _clampingAnimationController!.animateWith(simulation);
@@ -889,8 +893,8 @@ class HeaderNotifier extends IndicatorNotifier {
           return secondaryDimension;
         }
         // Maximum overscroll offset
-        if (maxOverOffset != double.infinity) {
-          return math.min(mOffset, maxOverOffset);
+        if (actualMaxOverOffset != double.infinity) {
+          return math.min(mOffset, actualMaxOverOffset);
         }
         return mOffset;
       }
@@ -1053,8 +1057,8 @@ class FooterNotifier extends IndicatorNotifier {
           return secondaryDimension;
         }
         // Maximum overscroll offset
-        if (maxOverOffset != double.infinity) {
-          return math.min(mOffset, maxOverOffset);
+        if (actualMaxOverOffset != double.infinity) {
+          return math.min(mOffset, actualMaxOverOffset);
         }
         return mOffset;
       }

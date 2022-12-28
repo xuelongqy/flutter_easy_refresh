@@ -60,13 +60,15 @@ class _TestPageState extends State<TestPage> {
           },
         ),
         header: const ClassicHeader(
-          clamping: false,
+          clamping: true,
           // position: IndicatorPosition.locator,
           mainAxisAlignment: MainAxisAlignment.end,
           maxOverOffset: 100,
         ),
         footer: const ClassicFooter(
           position: IndicatorPosition.locator,
+          infiniteOffset: null,
+          maxOverOffset: 100,
         ),
         onRefresh: () async {
           print('Refreshing');
@@ -91,7 +93,7 @@ class _TestPageState extends State<TestPage> {
             _count += 0;
           });
           print('Loaded');
-          return IndicatorResult.noMore;
+          // return IndicatorResult.noMore;
         },
         // child: ListView.builder(
         //   padding: EdgeInsets.zero,
