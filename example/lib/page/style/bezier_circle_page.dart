@@ -37,6 +37,9 @@ class _BezierCirclePageState extends State<BezierCirclePage> {
       appBar: AppBar(
         backgroundColor: themeData.colorScheme.primary,
         foregroundColor: themeData.colorScheme.onPrimary,
+        leading: BackButton(
+          color: themeData.colorScheme.onPrimary,
+        ),
         title: Text('Bezier circle'.tr),
       ),
       body: EasyRefresh(

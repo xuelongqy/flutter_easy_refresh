@@ -87,6 +87,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
               foregroundColor: themeData.colorScheme.onPrimary,
               expandedHeight: _expandedHeight,
               pinned: true,
+              leading: BackButton(
+                color: themeData.colorScheme.onPrimary,
+              ),
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(
                   'Codiss',

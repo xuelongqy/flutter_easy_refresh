@@ -12,6 +12,7 @@ import 'package:example/page/sample/refresh_on_start_page.dart';
 import 'package:example/page/sample/sample_page.dart';
 import 'package:example/page/sample/secondary_page.dart';
 import 'package:example/page/sample/tab_bar_view_page.dart';
+import 'package:example/page/sample/theme_switch_page.dart';
 import 'package:example/page/sample/user_profile_page.dart';
 import 'package:example/page/style/bezier_circle_page.dart';
 import 'package:example/page/style/bezier_page.dart';
@@ -43,6 +44,7 @@ class Routes {
   static const pageViewSample = '/sample/page-view';
   static const tabBarViewSample = '/sample/tab-bar-view';
   static const pagingSample = '/sample/paging';
+  static const themeSwitchSample = '/sample/theme-switch';
   // Style
   static const style = '/style';
   static const classicStyle = '/style/classic';
@@ -78,6 +80,7 @@ class Routes {
     GetPage(name: pageViewSample, page: () => const PageViewPage()),
     GetPage(name: tabBarViewSample, page: () => const TabBarViewPage()),
     GetPage(name: pagingSample, page: () => const PagingPage()),
+    GetPage(name: themeSwitchSample, page: () => const ThemeSwitchPage()),
     // Style
     GetPage(name: style, page: () => const StylePage()),
     GetPage(name: classicStyle, page: () => const ClassicPage()),

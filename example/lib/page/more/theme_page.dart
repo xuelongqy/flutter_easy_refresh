@@ -1,5 +1,6 @@
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class ThemeModel {
@@ -15,17 +16,26 @@ class ThemeModel {
     this.icon,
   });
 
-  static final light = ThemeData(
+  static final light = generateTheme(
     brightness: Brightness.light,
-    useMaterial3: true,
     colorSchemeSeed: Colors.green,
   );
 
-  static final dark = ThemeData(
+  static final dark = generateTheme(
     brightness: Brightness.dark,
-    useMaterial3: true,
     colorSchemeSeed: Colors.green,
   );
+
+  static ThemeData generateTheme({
+    required Brightness brightness,
+    required Color colorSchemeSeed,
+  }) {
+    return ThemeData(
+      brightness: brightness,
+      useMaterial3: true,
+      colorSchemeSeed: colorSchemeSeed,
+    );
+  }
 
   static final themes = [
     ThemeModel(
@@ -168,10 +178,9 @@ class _ThemePageState extends State<ThemePage> {
                     Get.changeTheme(ThemeModel.light);
                     Get.changeThemeMode(model.mode!);
                   } else if (model.color != null) {
-                    final themeData = ThemeData(
+                    final themeData = ThemeModel.generateTheme(
                       brightness: Get.theme.brightness,
                       colorSchemeSeed: model.color!,
-                      useMaterial3: true,
                     );
                     Get.changeTheme(themeData);
                     // ??

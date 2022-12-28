@@ -91,4 +91,6 @@ const en = {
   'Paging': 'Paging',
   'Paging example': 'Paging example',
   'No Data': 'No Data',
+  'Theme switch': 'Theme switch',
+  'Theme switch example': 'Theme switch example',
 };

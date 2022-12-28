@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
@@ -122,8 +122,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       builder: (context, widget) {
         if (_checkSize) {
           final size = Get.size;
-          final _hasFrame = size.width > _mobileWidthThreshold;
-          if (_hasFrame) {
+          final hasFrame = size.width > _mobileWidthThreshold;
+          if (hasFrame) {
             return _buildFrame(widget!);
           }
         }

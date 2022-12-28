@@ -94,6 +94,12 @@ class _SamplePageState extends State<SamplePage> {
                 icon: Icons.drag_indicator,
                 onTap: () => Get.toNamed(Routes.pagingSample),
               ),
+              ListItem(
+                title: 'Theme switch'.tr,
+                subtitle: 'Theme switch example'.tr,
+                icon: Icons.style,
+                onTap: () => Get.toNamed(Routes.themeSwitchSample),
+              ),
               if (kDebugMode)
                 ListItem(
                   title: 'Test',

@@ -72,6 +72,9 @@ class _TaurusPageState extends State<TaurusPage> {
             SliverAppBar(
               backgroundColor: themeData.colorScheme.primary,
               foregroundColor: themeData.colorScheme.onPrimary,
+              leading: BackButton(
+                color: themeData.colorScheme.onPrimary,
+              ),
               expandedHeight: 120,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(

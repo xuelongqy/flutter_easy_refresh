@@ -226,6 +226,9 @@ class _BezierPageState extends State<BezierPage> {
       appBar: AppBar(
         backgroundColor: themeData.colorScheme.primary,
         foregroundColor: themeData.colorScheme.onPrimary,
+        leading: BackButton(
+          color: themeData.colorScheme.onPrimary,
+        ),
         title: const Text('Bezier'),
       ),
       body: EasyRefresh(

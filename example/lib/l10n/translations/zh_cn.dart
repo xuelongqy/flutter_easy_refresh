@@ -89,4 +89,6 @@ const zhCN = {
   'Paging': '分页',
   'Paging example': '分页示例',
   'No Data': '暂无数据',
+  'Theme switch': '主题切换',
+  'Theme switch example': '主题切换示例',
 };
