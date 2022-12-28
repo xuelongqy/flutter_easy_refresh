@@ -277,6 +277,8 @@ class _EasyRefreshState extends State<EasyRefresh>
           position: h.position,
           spring: h.spring,
           frictionFactor: h.frictionFactor,
+          hitOver: h.hitOver,
+          maxOverOffset: h.maxOverOffset,
         );
       }
     } else {
@@ -301,6 +303,8 @@ class _EasyRefreshState extends State<EasyRefresh>
           position: f.position,
           spring: f.spring,
           frictionFactor: f.frictionFactor,
+          hitOver: f.hitOver,
+          maxOverOffset: f.maxOverOffset,
         );
       }
     } else {

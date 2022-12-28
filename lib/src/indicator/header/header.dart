@@ -267,15 +267,20 @@ class NotRefreshHeader extends Header {
     SpringDescription? horizontalSpring,
     FrictionFactor? frictionFactor,
     FrictionFactor? horizontalFrictionFactor,
+    bool? hitOver,
+    double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: 0,
           clamping: clamping,
+          infiniteOffset: null,
           position: position,
           spring: spring,
           horizontalSpring: horizontalSpring,
           frictionFactor: frictionFactor,
           horizontalFrictionFactor: horizontalFrictionFactor,
           processedDuration: const Duration(seconds: 0),
+          hitOver: hitOver,
+          maxOverOffset: maxOverOffset,
         );
 
   @override

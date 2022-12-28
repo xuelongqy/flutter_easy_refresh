@@ -267,16 +267,20 @@ class NotLoadFooter extends Footer {
     SpringDescription? horizontalSpring,
     FrictionFactor? frictionFactor,
     FrictionFactor? horizontalFrictionFactor,
+    bool? hitOver,
+    double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: 0,
           clamping: clamping,
-          infiniteOffset: clamping ? null : 0,
+          infiniteOffset: null,
           position: position,
           spring: spring,
           horizontalSpring: horizontalSpring,
           frictionFactor: frictionFactor,
           horizontalFrictionFactor: horizontalFrictionFactor,
           processedDuration: const Duration(seconds: 0),
+          hitOver: hitOver,
+          maxOverOffset: maxOverOffset,
         );
 
   @override
