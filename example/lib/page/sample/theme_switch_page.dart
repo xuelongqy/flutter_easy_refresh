@@ -1,3 +1,5 @@
+/// Design from https://dribbble.com/shots/15283144-Pull-to-change
+
 import 'dart:math' as math;
 
 import 'package:easy_refresh/easy_refresh.dart';
