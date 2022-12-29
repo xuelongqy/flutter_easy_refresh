@@ -33,6 +33,7 @@ class CupertinoFooter extends Footer {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
+    bool triggerWhenRelease = false,
     double maxOverOffset = double.infinity,
     this.foregroundColor,
     this.userWaterDrop = false,
@@ -56,6 +57,7 @@ class CupertinoFooter extends Footer {
           infiniteHitOver: infiniteHitOver,
           position: position,
           hapticFeedback: hapticFeedback,
+          triggerWhenRelease: triggerWhenRelease,
           maxOverOffset: maxOverOffset,
         );
 

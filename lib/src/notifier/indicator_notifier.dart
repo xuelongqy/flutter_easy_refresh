@@ -628,9 +628,24 @@ abstract class IndicatorNotifier extends ChangeNotifier {
                 ? IndicatorMode.processing
                 : IndicatorMode.armed;
           } else {
-            _mode = (_releaseOffset > actualTriggerOffset
-                ? IndicatorMode.ready
-                : IndicatorMode.armed);
+            if (_releaseOffset > actualTriggerOffset) {
+              if (_indicator.triggerWhenReleaseNoWait) {
+                // Immediately trigger the task.
+                // No need to wait for events to complete.
+                // Mode changes to IndicatorMode.done.
+                if (_task != null) {
+                  Future.sync(_task!);
+                }
+                _mode = IndicatorMode.done;
+              } else if (_indicator.triggerWhenRelease) {
+                // Immediately trigger the task.
+                _mode = IndicatorMode.processing;
+              } else {
+                _mode = IndicatorMode.ready;
+              }
+            } else {
+              _mode = IndicatorMode.armed;
+            }
           }
         }
       }

@@ -93,4 +93,6 @@ const en = {
   'No Data': 'No Data',
   'Theme switch': 'Theme switch',
   'Theme switch example': 'Theme switch example',
+  'Theme switch describe':
+      'Pull down to display the switching panel, slide left and right to select the theme color, and release to switch.',
 };

@@ -26,6 +26,8 @@ abstract class Header extends Indicator {
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
     bool triggerWhenReach = false,
+    bool triggerWhenRelease = false,
+    bool triggerWhenReleaseNoWait = false,
     double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
@@ -51,6 +53,8 @@ abstract class Header extends Indicator {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          triggerWhenRelease: triggerWhenRelease,
+          triggerWhenReleaseNoWait: triggerWhenReleaseNoWait,
           maxOverOffset: maxOverOffset,
         );
 }
@@ -85,6 +89,8 @@ class BuilderHeader extends Header {
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
     bool triggerWhenReach = false,
+    bool triggerWhenRelease = false,
+    bool triggerWhenReleaseNoWait = false,
     double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
@@ -110,6 +116,8 @@ class BuilderHeader extends Header {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          triggerWhenRelease: triggerWhenRelease,
+          triggerWhenReleaseNoWait: triggerWhenReleaseNoWait,
           maxOverOffset: maxOverOffset,
         );
 
@@ -145,6 +153,8 @@ class ListenerHeader extends Header {
     double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
     bool triggerWhenReach = false,
+    bool triggerWhenRelease = false,
+    bool triggerWhenReleaseNoWait = false,
     double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
@@ -170,6 +180,8 @@ class ListenerHeader extends Header {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          triggerWhenRelease: triggerWhenRelease,
+          triggerWhenReleaseNoWait: triggerWhenReleaseNoWait,
           maxOverOffset: maxOverOffset,
         );
 
@@ -216,6 +228,8 @@ abstract class SecondaryHeader extends Header {
           notifyWhenInvisible: header.notifyWhenInvisible,
           listenable: listenable ?? header.listenable,
           triggerWhenReach: header.triggerWhenReach,
+          triggerWhenRelease: header.triggerWhenRelease,
+          triggerWhenReleaseNoWait: header.triggerWhenReleaseNoWait,
           maxOverOffset: header.maxOverOffset,
         );
 
@@ -321,6 +335,8 @@ class OverrideHeader extends Header {
     bool? notifyWhenInvisible,
     IndicatorStateListenable? listenable,
     bool? triggerWhenReach,
+    bool? triggerWhenRelease,
+    bool? triggerWhenReleaseNoWait,
     double? maxOverOffset,
   }) : super(
           triggerOffset: triggerOffset ?? header.triggerOffset,
@@ -351,6 +367,9 @@ class OverrideHeader extends Header {
               notifyWhenInvisible ?? header.notifyWhenInvisible,
           listenable: listenable ?? header.listenable,
           triggerWhenReach: triggerWhenReach ?? header.triggerWhenReach,
+          triggerWhenRelease: triggerWhenRelease ?? header.triggerWhenRelease,
+          triggerWhenReleaseNoWait:
+              triggerWhenReleaseNoWait ?? header.triggerWhenReleaseNoWait,
           maxOverOffset: maxOverOffset ?? header.maxOverOffset,
         );
 

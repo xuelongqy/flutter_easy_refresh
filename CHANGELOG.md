@@ -1,4 +1,5 @@
 ## Next
+- feat: Add triggerWhenRelease and triggerWhenReleaseNoWait.
 - fix: Error when using NotLoadFooter with clamping. Thanks Pwuts for [PR#659](https://github.com/xuelongqy/flutter_easy_refresh/issues/659).
 - feat: Add maxOverOffset [#590](https://github.com/xuelongqy/flutter_easy_refresh/issues/590).
 

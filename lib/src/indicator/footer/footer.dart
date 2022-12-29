@@ -26,6 +26,8 @@ abstract class Footer extends Indicator {
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
     bool triggerWhenReach = false,
+    bool triggerWhenRelease = false,
+    bool triggerWhenReleaseNoWait = false,
     double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
@@ -51,6 +53,8 @@ abstract class Footer extends Indicator {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          triggerWhenRelease: triggerWhenRelease,
+          triggerWhenReleaseNoWait: triggerWhenReleaseNoWait,
           maxOverOffset: maxOverOffset,
         );
 }
@@ -85,6 +89,8 @@ class BuilderFooter extends Footer {
     bool notifyWhenInvisible = false,
     IndicatorStateListenable? listenable,
     bool triggerWhenReach = false,
+    bool triggerWhenRelease = false,
+    bool triggerWhenReleaseNoWait = false,
     double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
@@ -110,6 +116,8 @@ class BuilderFooter extends Footer {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          triggerWhenRelease: triggerWhenRelease,
+          triggerWhenReleaseNoWait: triggerWhenReleaseNoWait,
           maxOverOffset: maxOverOffset,
         );
 
@@ -145,6 +153,8 @@ class ListenerFooter extends Footer {
     double secondaryCloseTriggerOffset = kDefaultSecondaryCloseTriggerOffset,
     bool notifyWhenInvisible = false,
     bool triggerWhenReach = false,
+    bool triggerWhenRelease = false,
+    bool triggerWhenReleaseNoWait = false,
     double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
@@ -170,6 +180,8 @@ class ListenerFooter extends Footer {
           notifyWhenInvisible: notifyWhenInvisible,
           listenable: listenable,
           triggerWhenReach: triggerWhenReach,
+          triggerWhenRelease: triggerWhenRelease,
+          triggerWhenReleaseNoWait: triggerWhenReleaseNoWait,
           maxOverOffset: maxOverOffset,
         );
 
@@ -216,6 +228,8 @@ abstract class SecondaryFooter extends Footer {
           notifyWhenInvisible: footer.notifyWhenInvisible,
           listenable: listenable ?? footer.listenable,
           triggerWhenReach: footer.triggerWhenReach,
+          triggerWhenRelease: footer.triggerWhenRelease,
+          triggerWhenReleaseNoWait: footer.triggerWhenReleaseNoWait,
           maxOverOffset: footer.maxOverOffset,
         );
 
@@ -321,6 +335,8 @@ class OverrideFooter extends Footer {
     bool? notifyWhenInvisible,
     IndicatorStateListenable? listenable,
     bool? triggerWhenReach,
+    bool? triggerWhenRelease,
+    bool? triggerWhenReleaseNoWait,
     double? maxOverOffset,
   }) : super(
           triggerOffset: triggerOffset ?? footer.triggerOffset,
@@ -351,6 +367,9 @@ class OverrideFooter extends Footer {
               notifyWhenInvisible ?? footer.notifyWhenInvisible,
           listenable: listenable ?? footer.listenable,
           triggerWhenReach: triggerWhenReach ?? footer.triggerWhenReach,
+          triggerWhenRelease: triggerWhenRelease ?? footer.triggerWhenRelease,
+          triggerWhenReleaseNoWait:
+              triggerWhenReleaseNoWait ?? footer.triggerWhenReleaseNoWait,
           maxOverOffset: maxOverOffset ?? footer.maxOverOffset,
         );
 
