@@ -26,7 +26,7 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
   final _headerHeight = 120.0;
   final _count = 20;
 
-  late final Rx<double> _positionRx;
+  final Rx<double> _positionRx = (Get.width / 2).obs;
 
   late final AnimationController _fireworksController;
 
@@ -44,10 +44,11 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
 
   final List<_FireworkLineModel> _lines = [];
 
+  double _maxWidth = 0.0;
+
   @override
   void initState() {
     super.initState();
-    _positionRx = (Get.width / 2).obs;
     _fireworksController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
@@ -58,7 +59,7 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
     _pointers.clear();
     _lines.clear();
     final random = math.Random();
-    final width = Get.width;
+    final width = _maxWidth;
     double columnWidth = 24.0;
     int columnCount = (width / columnWidth).floor();
     columnWidth = width / columnCount;
@@ -99,280 +100,273 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildHeader(BuildContext context, IndicatorState state) {
     final themeData = Theme.of(context);
-    return Scaffold(
-      body: Stack(
-        children: [
-          EasyRefresh(
-            onRefresh: () {
-              final themeData = ThemeModel.generateTheme(
-                brightness: Get.theme.brightness,
-                colorSchemeSeed: _colorsMap[_currentColorRx.value]!,
-              );
-              Get.changeTheme(themeData);
-              // ??
-              Get.changeThemeMode(ThemeMode.light);
-              if (!_fireworksController.isAnimating) {
-                _generateFireworks();
-                _fireworksController.forward(from: 0);
-              }
-            },
-            header: BuilderHeader(
-              triggerOffset: _headerHeight - 20,
-              maxOverOffset: _headerHeight,
-              clamping: true,
-              position: IndicatorPosition.locator,
-              processedDuration: Duration.zero,
-              triggerWhenReleaseNoWait: true,
-              builder: (ctx, state) {
-                double height = state.safeOffset + _headerHeight;
-                final scale =
-                    math.min(1, state.offset / ((height - 20))).toDouble();
-                return ColoredBox(
-                  color: themeData.colorScheme.primary,
-                  child: Opacity(
-                    opacity: scale,
+    double height = state.safeOffset + _headerHeight;
+    final scale = math.min(1, state.offset / ((height - 20))).toDouble();
+    return ColoredBox(
+      color: themeData.colorScheme.primary,
+      child: Opacity(
+        opacity: scale,
+        child: Stack(
+          children: [
+            Container(
+              color: themeData.colorScheme.inverseSurface,
+              width: double.infinity,
+              height: state.offset,
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: height,
                     child: Stack(
                       children: [
-                        Container(
-                          color: themeData.colorScheme.inverseSurface,
-                          width: double.infinity,
-                          height: state.offset,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                top: 0,
-                                height: height,
-                                child: Stack(
-                                  children: [
-                                    Obx(() {
-                                      final textStyle = themeData
-                                          .textTheme.titleMedium!
-                                          .copyWith(
-                                        color: themeData.colorScheme.onPrimary,
-                                      );
-                                      final TextPainter textPainter =
-                                          TextPainter(
-                                              textDirection: TextDirection.ltr,
-                                              text: TextSpan(
-                                                  text: _currentColorRx.value,
-                                                  style: textStyle),
-                                              maxLines: 1)
-                                            ..layout(maxWidth: Get.width);
-                                      final textWidth = textPainter.size.width;
-                                      int index = 0;
-                                      final entries =
-                                          _colorsMap.entries.toList();
-                                      for (int i = 0; i < entries.length; i++) {
-                                        final entry = entries[i];
-                                        if (entry.key ==
-                                            _currentColorRx.value) {
-                                          index = i;
-                                          break;
-                                        }
-                                      }
-                                      return Positioned(
-                                        left: (Get.width - _positionRx.value) -
-                                            (_ballBoxSize / 2) +
-                                            _ballBoxSize * index +
-                                            (_ballBoxSize - textWidth) / 2,
-                                        bottom: _pointerHeight +
+                        Obx(() {
+                          final textStyle =
+                              themeData.textTheme.titleMedium!.copyWith(
+                            color: themeData.colorScheme.onPrimary,
+                          );
+                          final TextPainter textPainter = TextPainter(
+                              textDirection: TextDirection.ltr,
+                              text: TextSpan(
+                                  text: _currentColorRx.value,
+                                  style: textStyle),
+                              maxLines: 1)
+                            ..layout(maxWidth: _maxWidth);
+                          final textWidth = textPainter.size.width;
+                          int index = 0;
+                          final entries = _colorsMap.entries.toList();
+                          for (int i = 0; i < entries.length; i++) {
+                            final entry = entries[i];
+                            if (entry.key == _currentColorRx.value) {
+                              index = i;
+                              break;
+                            }
+                          }
+                          return Positioned(
+                            left: (_maxWidth - _positionRx.value) -
+                                (_ballBoxSize / 2) +
+                                _ballBoxSize * index +
+                                (_ballBoxSize - textWidth) / 2,
+                            bottom: _pointerHeight +
+                                8 +
+                                _ballBoxSize +
+                                (height -
+                                        (_pointerHeight +
                                             8 +
                                             _ballBoxSize +
-                                            (height -
-                                                    (_pointerHeight +
-                                                        8 +
-                                                        _ballBoxSize +
-                                                        state.safeOffset)) *
-                                                (1 - scale),
-                                        child: Text(
-                                          _currentColorRx.value,
-                                          style: textStyle,
-                                        ),
-                                      );
-                                    }),
-                                    Obx(() {
-                                      return Positioned(
-                                        left: (Get.width - _positionRx.value) -
-                                            (_ballBoxSize / 2),
-                                        bottom: _pointerHeight +
+                                            state.safeOffset)) *
+                                    (1 - scale),
+                            child: Text(
+                              _currentColorRx.value,
+                              style: textStyle,
+                            ),
+                          );
+                        }),
+                        Obx(() {
+                          return Positioned(
+                            left: (_maxWidth - _positionRx.value) -
+                                (_ballBoxSize / 2),
+                            bottom: _pointerHeight +
+                                8 +
+                                (height -
+                                        (_pointerHeight +
                                             8 +
-                                            (height -
-                                                    (_pointerHeight +
-                                                        8 +
-                                                        _ballBoxSize +
-                                                        state.safeOffset)) *
-                                                (1 - scale),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            for (final entry
-                                                in _colorsMap.entries)
-                                              Container(
-                                                alignment: Alignment.center,
-                                                width: _ballBoxSize,
-                                                height: _ballBoxSize,
-                                                child: Obx(() {
-                                                  return AnimatedContainer(
-                                                    duration: const Duration(
-                                                        milliseconds: 400),
-                                                    curve: Curves.easeInOutBack,
-                                                    width:
-                                                        _currentColorRx.value ==
-                                                                entry.key
-                                                            ? _currentBallSize
-                                                            : _ballSize,
-                                                    height:
-                                                        _currentColorRx.value ==
-                                                                entry.key
-                                                            ? _currentBallSize
-                                                            : _ballSize,
-                                                    decoration: BoxDecoration(
-                                                      color: _currentColorRx
-                                                                  .value ==
-                                                              entry.key
-                                                          ? entry.value
-                                                          : null,
-                                                      borderRadius: BorderRadius
-                                                          .all(Radius.circular(
-                                                              _currentColorRx
-                                                                          .value ==
-                                                                      entry.key
-                                                                  ? _currentBallSize /
-                                                                      2
-                                                                  : _ballSize /
-                                                                      2)),
-                                                      border: _currentColorRx
-                                                                  .value ==
-                                                              entry.key
-                                                          ? null
-                                                          : Border.all(
-                                                              width: 2,
-                                                              color:
-                                                                  entry.value,
-                                                            ),
+                                            _ballBoxSize +
+                                            state.safeOffset)) *
+                                    (1 - scale),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                for (final entry in _colorsMap.entries)
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: _ballBoxSize,
+                                    height: _ballBoxSize,
+                                    child: Obx(() {
+                                      return AnimatedContainer(
+                                        duration:
+                                            const Duration(milliseconds: 400),
+                                        curve: Curves.easeInOutBack,
+                                        width:
+                                            _currentColorRx.value == entry.key
+                                                ? _currentBallSize
+                                                : _ballSize,
+                                        height:
+                                            _currentColorRx.value == entry.key
+                                                ? _currentBallSize
+                                                : _ballSize,
+                                        decoration: BoxDecoration(
+                                          color:
+                                              _currentColorRx.value == entry.key
+                                                  ? entry.value
+                                                  : null,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(
+                                                  _currentColorRx.value ==
+                                                          entry.key
+                                                      ? _currentBallSize / 2
+                                                      : _ballSize / 2)),
+                                          border:
+                                              _currentColorRx.value == entry.key
+                                                  ? null
+                                                  : Border.all(
+                                                      width: 2,
+                                                      color: entry.value,
                                                     ),
-                                                  );
-                                                }),
-                                              ),
-                                          ],
                                         ),
                                       );
                                     }),
-                                    Obx(() {
-                                      return Positioned(
-                                        bottom: 0,
-                                        left: _positionRx.value -
-                                            (_pointerWidth / 2),
-                                        child: Container(
-                                          width: _pointerWidth,
-                                          height: _pointerHeight,
-                                          decoration: BoxDecoration(
-                                              color: themeData
-                                                  .colorScheme.onInverseSurface,
-                                              borderRadius:
-                                                  BorderRadius.vertical(
-                                                      top: Radius.circular(
-                                                          _pointerWidth / 2))),
-                                        ),
-                                      );
-                                    }),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                                  ),
+                              ],
+                            ),
+                          );
+                        }),
+                        Obx(() {
+                          return Positioned(
+                            bottom: 0,
+                            left: _positionRx.value - (_pointerWidth / 2),
+                            child: Container(
+                              width: _pointerWidth,
+                              height: _pointerHeight,
+                              decoration: BoxDecoration(
+                                  color: themeData.colorScheme.onInverseSurface,
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(_pointerWidth / 2))),
+                            ),
+                          );
+                        }),
                       ],
-                    ),
-                  ),
-                );
-              },
-            ),
-            child: Listener(
-              onPointerMove: (event) {
-                final entries = _colorsMap.entries.toList();
-                double position = _positionRx.value + event.delta.dx;
-                double min = Get.width / 2;
-                double max =
-                    Get.width / 2 + ((entries.length - 1) * _ballBoxSize / 2);
-                if (position < min) {
-                  position = min;
-                }
-                if (position > max) {
-                  position = max;
-                }
-                _positionRx.value = position;
-                double offset = position - min;
-                if (offset < _ballBoxSize / 4) {
-                  _currentColorRx.value = entries.first.key;
-                } else if (offset >= max - (_ballBoxSize / 4)) {
-                  _currentColorRx.value = entries.last.key;
-                } else {
-                  _currentColorRx.value = entries[
-                          ((offset - _ballBoxSize / 4) / (_ballBoxSize / 2))
-                              .ceil()]
-                      .key;
-                }
-              },
-              child: CustomScrollView(
-                slivers: [
-                  const HeaderLocator.sliver(clearExtent: false),
-                  SliverAppBar(
-                    backgroundColor: themeData.colorScheme.primary,
-                    foregroundColor: themeData.colorScheme.onPrimary,
-                    leading: BackButton(
-                      color: themeData.colorScheme.onPrimary,
-                    ),
-                    title: Text('Theme switch'.tr),
-                    pinned: true,
-                    bottom: PreferredSize(
-                      preferredSize: const Size.fromHeight(100),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        height: 100,
-                        width: double.infinity,
-                        child: Text(
-                          'Theme switch describe'.tr,
-                          style: themeData.textTheme.bodyLarge?.copyWith(
-                            color: themeData.colorScheme.onPrimary,
-                            height: 1.8,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return const SkeletonItem();
-                      },
-                      childCount: _count,
                     ),
                   ),
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    return LayoutBuilder(
+      builder: (context, constraint) {
+        if (_maxWidth != constraint.maxWidth) {
+          _maxWidth = constraint.maxWidth;
+          _positionRx.value = _maxWidth / 2;
+        }
+        return Scaffold(
+          body: Stack(
+            children: [
+              EasyRefresh(
+                onRefresh: () {
+                  final themeData = ThemeModel.generateTheme(
+                    brightness: Get.theme.brightness,
+                    colorSchemeSeed: _colorsMap[_currentColorRx.value]!,
+                  );
+                  Get.changeTheme(themeData);
+                  // ??
+                  Get.changeThemeMode(ThemeMode.light);
+                  if (!_fireworksController.isAnimating) {
+                    _generateFireworks();
+                    _fireworksController.forward(from: 0);
+                  }
+                },
+                header: BuilderHeader(
+                  triggerOffset: _headerHeight - 20,
+                  maxOverOffset: _headerHeight,
+                  clamping: true,
+                  position: IndicatorPosition.locator,
+                  processedDuration: Duration.zero,
+                  triggerWhenReleaseNoWait: true,
+                  builder: _buildHeader,
+                ),
+                child: Listener(
+                  onPointerMove: (event) {
+                    final entries = _colorsMap.entries.toList();
+                    double position = _positionRx.value + event.delta.dx;
+                    double min = _maxWidth / 2;
+                    double max = _maxWidth / 2 +
+                        ((entries.length - 1) * _ballBoxSize / 2);
+                    if (position < min) {
+                      position = min;
+                    }
+                    if (position > max) {
+                      position = max;
+                    }
+                    _positionRx.value = position;
+                    double offset = position - min;
+                    if (offset < _ballBoxSize / 4) {
+                      _currentColorRx.value = entries.first.key;
+                    } else if (offset >= max - (_ballBoxSize / 4)) {
+                      _currentColorRx.value = entries.last.key;
+                    } else {
+                      _currentColorRx.value = entries[
+                              ((offset - _ballBoxSize / 4) / (_ballBoxSize / 2))
+                                  .ceil()]
+                          .key;
+                    }
+                  },
+                  child: CustomScrollView(
+                    slivers: [
+                      const HeaderLocator.sliver(clearExtent: false),
+                      SliverAppBar(
+                        backgroundColor: themeData.colorScheme.primary,
+                        foregroundColor: themeData.colorScheme.onPrimary,
+                        leading: BackButton(
+                          color: themeData.colorScheme.onPrimary,
+                        ),
+                        title: Text('Theme switch'.tr),
+                        pinned: true,
+                        bottom: PreferredSize(
+                          preferredSize: const Size.fromHeight(100),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            height: 100,
+                            width: double.infinity,
+                            child: Text(
+                              'Theme switch describe'.tr,
+                              style: themeData.textTheme.bodyLarge?.copyWith(
+                                color: themeData.colorScheme.onPrimary,
+                                height: 1.8,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return const SkeletonItem();
+                          },
+                          childCount: _count,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Obx(() {
+                return _Fireworks(
+                  color: _colorsMap[_currentColorRx.value]!,
+                  controller: _fireworksController,
+                  pointers: _pointers,
+                  lines: _lines,
+                );
+              }),
+            ],
           ),
-          Obx(() {
-            return _Fireworks(
-              color: _colorsMap[_currentColorRx.value]!,
-              controller: _fireworksController,
-              pointers: _pointers,
-              lines: _lines,
-            );
-          }),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text('Theme'.tr),
-        icon: const Icon(Icons.color_lens),
-        onPressed: () => Get.toNamed(Routes.theme),
-      ),
+          floatingActionButton: FloatingActionButton.extended(
+            label: Text('Theme'.tr),
+            icon: const Icon(Icons.color_lens),
+            onPressed: () => Get.toNamed(Routes.theme),
+          ),
+        );
+      },
     );
   }
 }
