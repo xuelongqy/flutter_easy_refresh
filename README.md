@@ -166,47 +166,10 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
   );
 ```
 
-# Contributions welcome
+## Contributions welcome
 One's maintenance is lonely. If you have good suggestions and changes, welcome to contribute your code. If you have really cool styles， It's even cooler to share with everyone.
 
-# Donate
-If you like my project, please in the upper right corner of the project "Star". Your support is my biggest encouragement! ^_^ You can also use cryptocurrencies, buy me a coffee.
-
-<details>
-<summary>Ethereum</summary>
-<p>Ethereum series, ETH, BNB, MATIC, USDT and other tokens</p>
-<pre>
-0x949A007161651015b8A07D0255B75731d60be804
-</pre>
-<img src="https://raw.githubusercontent.com/xuelongqy/donation/master/ethereum_qr.png?raw=true" alt="Ethereum">
-</details>
-
-<details>
-<summary>Tron</summary>
-<p>Tron chain, TRX, USDT, USDC and other tokens</p>
-<pre>
-TKqkkyrjeox37cVG8G2HfHZrNMET1YbEfw
-</pre>
-<img src="https://raw.githubusercontent.com/xuelongqy/donation/master/tron_qr.png?raw=true" alt="Tron">
-</details>
-
-<details>
-<summary>Bitcoin</summary>
-<pre>
-bc1qutj3gmn46vwmcsjnc5sjqax7kxx5xm6fvyg5vp
-</pre>
-<img src="https://raw.githubusercontent.com/xuelongqy/donation/master/bitcoin_qr.png?raw=true" alt="Bitcoin">
-</details>
-
-<details>
-<summary>Dogecoin</summary>
-<pre>
-DLs1Btam1M13o9LxiErbe1UXy7iqfZyNRg
-</pre>
-<img src="https://raw.githubusercontent.com/xuelongqy/donation/master/dogecoin_qr.png?raw=true" alt="Dogecoin">
-</details>
-
-### QQ Group - 554981921
+## QQ Group - 554981921
 #### Into the group of instructions
 The group is not only solve the problem of EasyreFresh, any Flutter related issues can be discussed. Just as its name, craigslist, as long as there is time, group of Lord will help you solve problems together.
 

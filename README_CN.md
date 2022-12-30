@@ -117,15 +117,10 @@
   EasyRefresh.defaultFooterBuilder = () => ClassicFooter();
 ```
 
-# 欢迎贡献
+## 欢迎贡献
 一个人的维护是孤独的。如果你有好的建议和改动，欢迎贡献你的代码。如果你有非常酷的样式，能够分享给大家那就更酷了。
 
-# 赞赏
-如果你喜欢我的项目，请在项目右上角 "Star" 一下。你的支持是我最大的鼓励！ ^_^ 你还可以扫描下面的二维码，对作者进行打赏。  
-
-![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_alipay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_wxpay.jpg?raw=true) ![](https://raw.githubusercontent.com/xuelongqy/donation/master/pay_tencent.jpg?raw=true)
-
-### QQ讨论群 - 554981921
+## QQ讨论群 - 554981921
 #### 进群须知
 这个群不仅仅是解决EasyreFresh的问题，任何Flutter相关的问题都可以进行讨论。正如它的名字一样，有问必答，只要群主有时间，都会帮大家一起解决问题。
 
