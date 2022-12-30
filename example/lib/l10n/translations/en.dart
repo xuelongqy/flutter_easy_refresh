@@ -95,4 +95,5 @@ const en = {
   'Theme switch example': 'Theme switch example',
   'Theme switch describe':
       'Pull down to display the switching panel, slide left and right to select the theme color, and release to switch.',
+  'Bubbles launch': 'Bubbles launch',
 };

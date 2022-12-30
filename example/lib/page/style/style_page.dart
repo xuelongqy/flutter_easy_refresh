@@ -102,6 +102,12 @@ class _StylePageState extends State<StylePage> {
                 icon: Icons.whatshot,
                 onTap: () => Get.toNamed(Routes.halloweenStyle),
               ),
+              ListItem(
+                title: 'Bubbles',
+                subtitle: 'Bubbles launch'.tr,
+                icon: Icons.rocket_launch,
+                onTap: () => Get.toNamed(Routes.bubblesStyle),
+              ),
             ]),
           ),
         ],

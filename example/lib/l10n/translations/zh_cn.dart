@@ -92,4 +92,5 @@ const zhCN = {
   'Theme switch': '主题切换',
   'Theme switch example': '主题切换示例',
   'Theme switch describe': '下拉显示切换面板，左右滑动选中主题色，释放进行切换。',
+  'Bubbles launch': '泡泡发射',
 };

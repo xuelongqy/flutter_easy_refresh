@@ -1,6 +1,6 @@
 name: easy_refresh_space
 description: Space Indicator on EasyRefresh. Provides SpaceHeader and SpaceFooter. Animation with Rive.
-version: 1.0.1
+version: 1.0.2
 homepage: https://xuelongqy.github.io/flutter_easy_refresh/#/style/space
 repository: https://github.com/xuelongqy/flutter_easy_refresh/tree/v3/styles/easy_refresh_space
 issue_tracker: https://github.com/xuelongqy/flutter_easy_refresh/issues

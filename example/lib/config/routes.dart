@@ -16,6 +16,7 @@ import 'package:example/page/sample/theme_switch_page.dart';
 import 'package:example/page/sample/user_profile_page.dart';
 import 'package:example/page/style/bezier_circle_page.dart';
 import 'package:example/page/style/bezier_page.dart';
+import 'package:example/page/style/bubbles_page.dart';
 import 'package:example/page/style/classical_page.dart';
 import 'package:example/page/style/cupertino_page.dart';
 import 'package:example/page/style/delivery_page.dart';
@@ -59,6 +60,7 @@ class Routes {
   static const squatsStyle = '/style/squats';
   static const skatingStyle = '/style/skating';
   static const halloweenStyle = '/style/halloween';
+  static const bubblesStyle = '/style/bubbles';
   // More
   static const theme = '/theme';
   static const supportMe = '/support-me';
@@ -95,6 +97,7 @@ class Routes {
     GetPage(name: squatsStyle, page: () => const SquatsPage()),
     GetPage(name: skatingStyle, page: () => const SkatingPage()),
     GetPage(name: halloweenStyle, page: () => const HalloweenPage()),
+    GetPage(name: bubblesStyle, page: () => const BubblesPage()),
     // More
     GetPage(name: theme, page: () => const ThemePage()),
     GetPage(name: supportMe, page: () => const SupportMePage()),

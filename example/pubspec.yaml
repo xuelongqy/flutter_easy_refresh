@@ -41,6 +41,8 @@ dependencies:
     path: ../styles/easy_refresh_skating
   easy_refresh_halloween:
     path: ../styles/easy_refresh_halloween
+  easy_refresh_bubbles:
+    path: ../styles/easy_refresh_bubbles
 
 dev_dependencies:
   flutter_test:

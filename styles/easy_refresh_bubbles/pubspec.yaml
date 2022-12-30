@@ -1,8 +1,8 @@
-name: easy_refresh_squats
-description: Squats Indicator on EasyRefresh. Provides SquatsHeader and SquatsFooter. Animation with Rive.
-version: 1.0.2
-homepage: https://xuelongqy.github.io/flutter_easy_refresh/#/style/squats
-repository: https://github.com/xuelongqy/flutter_easy_refresh/tree/v3/styles/easy_refresh_squats
+name: easy_refresh_bubbles
+description: Bubbles Indicator on EasyRefresh. Provides BubblesHeader and BubblesFooter. Animation with Rive.
+version: 1.0.0
+homepage: https://xuelongqy.github.io/flutter_easy_refresh/#/style/bubbles
+repository: https://github.com/xuelongqy/flutter_easy_refresh/tree/v3/styles/easy_refresh_bubbles
 issue_tracker: https://github.com/xuelongqy/flutter_easy_refresh/issues
 
 environment:
@@ -29,7 +29,7 @@ flutter:
 
   # To add assets to your package, add an assets section, like this:
  assets:
-   - assets/lumberjack_squats.riv
+   - assets/bubbles.riv
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
