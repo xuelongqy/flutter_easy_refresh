@@ -208,4 +208,10 @@ class EasyRefreshController {
   void dispose() {
     _state = null;
   }
+
+  /// Get header state.
+  IndicatorState? get headerState => _state?._headerNotifier.indicatorState;
+
+  /// Get footer state.
+  IndicatorState? get footerState => _state?._footerNotifier.indicatorState;
 }
