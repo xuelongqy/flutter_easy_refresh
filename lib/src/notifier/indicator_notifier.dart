@@ -38,11 +38,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     required CanProcessCallBack onCanProcess,
     required bool noMoreProcess,
     bool waitTaskResult = true,
+    double dragSpeed = 1,
     FutureOr Function()? task,
   })  : _indicator = indicator,
         _onCanProcess = onCanProcess,
         _noMoreProcess = noMoreProcess,
         _waitTaskResult = waitTaskResult,
+        _dragSpeed = dragSpeed,
         _task = task {
     _initClampingAnimation();
     userOffsetNotifier.addListener(_onUserOffset);
@@ -135,6 +137,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Overscroll offset.
   double _offset = 0;
+
+  /// scroll move speed
+  double _dragSpeed = 1;
 
   double get offset => _offset;
 
@@ -885,6 +890,7 @@ class HeaderNotifier extends IndicatorNotifier {
           noMoreProcess: noMoreRefresh,
           task: onRefresh,
           waitTaskResult: waitRefreshResult,
+          dragSpeed: header.dragSpeed
         );
 
   @override
@@ -895,7 +901,7 @@ class HeaderNotifier extends IndicatorNotifier {
       return 0;
     }
     // Moving distance
-    final move = position.minScrollExtent - value;
+    final move = (position.minScrollExtent - value)*_dragSpeed;
     if (clamping) {
       if (value > position.minScrollExtent) {
         // Rollback first minus offset.

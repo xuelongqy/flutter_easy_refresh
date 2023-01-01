@@ -53,6 +53,7 @@ class MaterialHeader extends Header {
     bool? infiniteHitOver,
     bool hapticFeedback = false,
     double maxOverOffset = double.infinity,
+    double dragSpeed = 1,
     this.backgroundColor,
     this.color,
     this.valueColor,
@@ -87,6 +88,7 @@ class MaterialHeader extends Header {
           infiniteHitOver: infiniteHitOver,
           position: position,
           hapticFeedback: hapticFeedback,
+          dragSpeed: dragSpeed,
           maxOverOffset: maxOverOffset,
         );
 

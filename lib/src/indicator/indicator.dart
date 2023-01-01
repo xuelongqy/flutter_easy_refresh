@@ -355,6 +355,9 @@ abstract class Indicator {
   /// When [double.infinity], no limit.
   final double maxOverOffset;
 
+  /// speed of drag
+  final double dragSpeed;
+
   const Indicator({
     required this.triggerOffset,
     required this.clamping,
@@ -381,6 +384,7 @@ abstract class Indicator {
     this.triggerWhenReach = false,
     this.triggerWhenRelease = false,
     this.triggerWhenReleaseNoWait = false,
+    this.dragSpeed = 1,
     this.maxOverOffset = double.infinity,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
