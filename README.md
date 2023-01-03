@@ -167,7 +167,7 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
 ```
 
 ## Feel free to contribute
-One's maintenance is lonely. If you have good suggestions and changes, feel free to contribute your code. If you have really cool styles， It's even cooler to share with everyone.
+One's maintenance is lonely. If you have good suggestions and changes, feel free to contribute your code. If you have really cool styles, It's even cooler to share with everyone.
 
 ## QQ Group - [554981921](mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q)
 #### Into the group of instructions

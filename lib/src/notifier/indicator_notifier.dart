@@ -462,10 +462,14 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       });
     }
     this.position = position;
+    final oldMode = _mode;
     // Update offset on release
     _updateOffset(position, position.pixels, true);
     // If clamping is true and offset is greater than 0, start animation
-    if (clamping && _offset > 0 && !(modeLocked || secondaryLocked)) {
+    if (clamping &&
+        _offset > 0 &&
+        ((_indicator.triggerWhenRelease && oldMode == IndicatorMode.armed) ||
+            !(modeLocked || secondaryLocked))) {
       final simulation = createBallisticSimulation(position, velocity);
       if (simulation != null) {
         _startClampingAnimation(simulation);

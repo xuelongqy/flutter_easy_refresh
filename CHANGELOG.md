@@ -1,3 +1,7 @@
+## 3.2.0+1
+- fix: When clamping, triggerWhenRelease is true causing the indicator to be stuck.
+- feat: Material indicator support triggerWhenRelease.
+
 ## 3.2.0
 - feat: EasyRefreshController add headerState, footerState [#635](https://github.com/xuelongqy/flutter_easy_refresh/issues/635)
 - feat: Add triggerWhenRelease and triggerWhenReleaseNoWait [#593](https://github.com/xuelongqy/flutter_easy_refresh/issues/593).
