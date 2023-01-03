@@ -149,6 +149,11 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
         alignment: Alignment.center,
         children: [
           AnimatedScale(
+            duration: widget.disappearDuration,
+            scale:
+                _mode == IndicatorMode.processed || _mode == IndicatorMode.done
+                    ? 0
+                    : 1,
             child: RefreshProgressIndicator(
               value: _value,
               backgroundColor: widget.backgroundColor,
@@ -157,11 +162,6 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
               semanticsLabel: widget.semanticsLabel,
               semanticsValue: widget.semanticsValue,
             ),
-            duration: widget.disappearDuration,
-            scale:
-                _mode == IndicatorMode.processed || _mode == IndicatorMode.done
-                    ? 0
-                    : 1,
           ),
           if (_mode == IndicatorMode.inactive &&
               _result == IndicatorResult.noMore)

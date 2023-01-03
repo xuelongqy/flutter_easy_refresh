@@ -166,12 +166,12 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
   );
 ```
 
-## Contributions welcome
-One's maintenance is lonely. If you have good suggestions and changes, welcome to contribute your code. If you have really cool styles， It's even cooler to share with everyone.
+## Feel free to contribute
+One's maintenance is lonely. If you have good suggestions and changes, feel free to contribute your code. If you have really cool styles， It's even cooler to share with everyone.
 
-## QQ Group - 554981921
+## QQ Group - [554981921](mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q)
 #### Into the group of instructions
-The group is not only solve the problem of EasyreFresh, any Flutter related issues can be discussed. Just as its name, craigslist, as long as there is time, group of Lord will help you solve problems together.
+The group is not only solve the problem of EasyRefresh, any Flutter related issues can be discussed. Just as its name, craigslist, as long as there is time, group of Lord will help you solve problems together.
 
 ## Thanks 
 [SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)  
