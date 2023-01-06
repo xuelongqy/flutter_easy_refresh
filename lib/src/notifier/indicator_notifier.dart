@@ -528,11 +528,17 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       return;
     }
     // Haptic feedback
-    if (hapticFeedback &&
-        _mode == IndicatorMode.armed &&
-        oldMode != IndicatorMode.armed &&
-        userOffsetNotifier.value) {
-      HapticFeedback.mediumImpact();
+    if (hapticFeedback && userOffsetNotifier.value) {
+      if (_indicator.triggerWhenReach) {
+        if (_mode == IndicatorMode.processing &&
+            oldMode == IndicatorMode.drag) {
+          HapticFeedback.mediumImpact();
+        }
+      } else {
+        if (_mode == IndicatorMode.armed && oldMode != IndicatorMode.armed) {
+          HapticFeedback.mediumImpact();
+        }
+      }
     }
     // Avoid setState() during drawing
     if (bySimulation) {
