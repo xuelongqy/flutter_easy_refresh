@@ -1,4 +1,5 @@
 ## Next
+- fix: When there is no task, the mode still changes [#608](https://github.com/xuelongqy/flutter_easy_refresh/issues/608).
 - fix: HapticFeedback does not work when triggerWhenReach is true.
 
 ## 3.2.0+1
@@ -6,7 +7,7 @@
 - feat: Material indicator support triggerWhenRelease.
 
 ## 3.2.0
-- feat: EasyRefreshController add headerState, footerState [#635](https://github.com/xuelongqy/flutter_easy_refresh/issues/635)
+- feat: EasyRefreshController add headerState, footerState [#635](https://github.com/xuelongqy/flutter_easy_refresh/issues/635).
 - feat: Add triggerWhenRelease and triggerWhenReleaseNoWait [#593](https://github.com/xuelongqy/flutter_easy_refresh/issues/593).
 - fix: Error when using NotLoadFooter with clamping. Thanks Pwuts for [PR#659](https://github.com/xuelongqy/flutter_easy_refresh/issues/659).
 - feat: Add maxOverOffset [#590](https://github.com/xuelongqy/flutter_easy_refresh/issues/590).

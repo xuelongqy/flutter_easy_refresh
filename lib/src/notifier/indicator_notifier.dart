@@ -560,6 +560,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       if (_mode != IndicatorMode.inactive) {
         _mode = IndicatorMode.inactive;
       }
+      return;
     }
     // Not updated during task execution and task completion.
     if (!(modeLocked || noMoreLocked || secondaryLocked)) {
