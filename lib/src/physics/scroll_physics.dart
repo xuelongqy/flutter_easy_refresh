@@ -330,12 +330,12 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       // Maximum overscroll offset
       if (footerNotifier.actualMaxOverOffset != double.infinity &&
           position.maxScrollExtent <
-              value - headerNotifier.actualMaxOverOffset) {
+              value - footerNotifier.actualMaxOverOffset) {
         _updateIndicatorOffset(
             position,
-            position.maxScrollExtent + headerNotifier.actualMaxOverOffset,
+            position.maxScrollExtent + footerNotifier.actualMaxOverOffset,
             value);
-        return (value - headerNotifier.actualMaxOverOffset) -
+        return (value - footerNotifier.actualMaxOverOffset) -
             position.maxScrollExtent;
       }
       // hit bottom over
