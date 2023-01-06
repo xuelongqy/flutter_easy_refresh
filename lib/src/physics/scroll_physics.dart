@@ -469,10 +469,12 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       double mVelocity = velocity;
       if (mVelocity < 0 &&
           headerNotifier.actualMaxOverOffset != double.infinity &&
+          headerNotifier._offset != 0 &&
           headerNotifier._offset >= headerNotifier.actualMaxOverOffset) {
         mVelocity = 0;
       } else if (mVelocity > 0 &&
           footerNotifier.actualMaxOverOffset != double.infinity &&
+          footerNotifier._offset != 0 &&
           footerNotifier._offset >= footerNotifier.actualMaxOverOffset) {
         mVelocity = 0;
       }

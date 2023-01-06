@@ -1,4 +1,5 @@
 ## Next
+- fix: When maxOverOffset is 0, list scrolling loses inertia.
 - fix: When there is no task, the mode still changes [#608](https://github.com/xuelongqy/flutter_easy_refresh/issues/608).
 - fix: HapticFeedback does not work when triggerWhenReach is true.
 
