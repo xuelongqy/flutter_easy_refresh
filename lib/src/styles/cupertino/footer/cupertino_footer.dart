@@ -24,7 +24,7 @@ class CupertinoFooter extends Footer {
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.behind,
     Duration processedDuration = Duration.zero,
-    SpringDescription? spring,
+    physics.SpringDescription? spring,
     SpringBuilder? readySpringBuilder,
     bool springRebound = true,
     FrictionFactor? frictionFactor,

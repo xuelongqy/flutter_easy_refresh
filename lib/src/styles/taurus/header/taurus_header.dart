@@ -13,7 +13,7 @@ class TaurusHeader extends Header {
     double triggerOffset = 100,
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.above,
-    SpringDescription? spring,
+    physics.SpringDescription? spring,
     SpringBuilder? readySpringBuilder,
     bool springRebound = false,
     FrictionFactor? frictionFactor,

@@ -1,7 +1,7 @@
 part of easy_refresh;
 
 /// Spring used by bezier curves.
-SpringDescription kBezierSpringBuilder({
+physics.SpringDescription kBezierSpringBuilder({
   required IndicatorMode mode,
   required double offset,
   required double actualTriggerOffset,
@@ -10,7 +10,7 @@ SpringDescription kBezierSpringBuilder({
   double mass = 6 + (offset - actualTriggerOffset) / 36;
   double damping = 0.75 + velocity.abs() / 10000;
   double stiffness = 1000 + velocity.abs() / 6;
-  return SpringDescription(
+  return physics.SpringDescription(
     mass: mass,
     stiffness: stiffness,
     damping: damping,

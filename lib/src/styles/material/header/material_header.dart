@@ -43,7 +43,7 @@ class MaterialHeader extends Header {
     bool clamping = true,
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = const Duration(milliseconds: 200),
-    SpringDescription? spring,
+    physics.SpringDescription? spring,
     bool springRebound = false,
     SpringBuilder? readySpringBuilder,
     FrictionFactor? frictionFactor,

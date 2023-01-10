@@ -14,7 +14,7 @@ class PhoenixHeader extends Header {
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = const Duration(seconds: 1),
-    SpringDescription? spring,
+    physics.SpringDescription? spring,
     SpringBuilder? readySpringBuilder,
     bool springRebound = false,
     FrictionFactor? frictionFactor,

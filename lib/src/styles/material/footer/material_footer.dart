@@ -43,7 +43,7 @@ class MaterialFooter extends Footer {
     bool clamping = true,
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = const Duration(milliseconds: 200),
-    SpringDescription? spring,
+    physics.SpringDescription? spring,
     SpringBuilder? readySpringBuilder,
     bool springRebound = false,
     FrictionFactor? frictionFactor,

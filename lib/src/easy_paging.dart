@@ -23,7 +23,7 @@ abstract class EasyPaging<DataType, ItemType> extends StatefulWidget {
 
   /// Structure that describes a spring's constants.
   /// When spring is not set in [Header] and [Footer].
-  final SpringDescription? spring;
+  final physics.SpringDescription? spring;
 
   /// Friction factor when list is out of bounds.
   final FrictionFactor? frictionFactor;

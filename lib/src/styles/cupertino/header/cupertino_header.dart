@@ -24,7 +24,7 @@ class CupertinoHeader extends Header {
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.behind,
     Duration processedDuration = Duration.zero,
-    SpringDescription? spring,
+    physics.SpringDescription? spring,
     SpringBuilder? readySpringBuilder,
     bool springRebound = false,
     FrictionFactor? frictionFactor,

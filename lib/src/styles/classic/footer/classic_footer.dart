@@ -96,7 +96,7 @@ class ClassicFooter extends Footer {
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = Duration.zero,
-    SpringDescription? spring,
+    physics.SpringDescription? spring,
     SpringBuilder? readySpringBuilder,
     bool springRebound = true,
     FrictionFactor? frictionFactor,

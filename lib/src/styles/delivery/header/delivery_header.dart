@@ -13,7 +13,7 @@ class DeliveryHeader extends Header {
     double triggerOffset = kDeliveryTriggerOffset,
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.above,
-    SpringDescription? spring,
+    physics.SpringDescription? spring,
     SpringBuilder? readySpringBuilder,
     bool springRebound = false,
     FrictionFactor? frictionFactor,

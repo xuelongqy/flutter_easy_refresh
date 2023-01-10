@@ -77,7 +77,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       : (maxOverOffset + safeOffset);
 
   /// Spring description.
-  SpringDescription? get _spring {
+  physics.SpringDescription? get _spring {
     if (_axis == Axis.horizontal) {
       return _indicator.horizontalSpring ?? _indicator.spring;
     } else {
@@ -85,7 +85,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
   }
 
-  SpringDescription get spring => _physics.spring;
+  physics.SpringDescription get spring => _physics.spring;
 
   SpringBuilder? get readySpringBuilder {
     if (_axis == Axis.horizontal) {

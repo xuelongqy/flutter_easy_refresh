@@ -28,7 +28,7 @@ class BezierFooter extends Footer {
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.above,
     Duration processedDuration = kBezierBackgroundDisappearDuration,
-    SpringDescription? spring,
+    physics.SpringDescription? spring,
     SpringBuilder readySpringBuilder = kBezierSpringBuilder,
     bool springRebound = false,
     FrictionFactor frictionFactor = kBezierFrictionFactor,

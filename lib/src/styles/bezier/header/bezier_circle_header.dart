@@ -16,7 +16,7 @@ class BezierCircleHeader extends Header {
     double triggerOffset = 100,
     bool clamping = false,
     IndicatorPosition position = IndicatorPosition.above,
-    SpringDescription? spring,
+    physics.SpringDescription? spring,
     SpringBuilder readySpringBuilder = kBezierSpringBuilder,
     bool springRebound = false,
     FrictionFactor frictionFactor = kBezierFrictionFactor,

@@ -11,7 +11,7 @@ const kDefaultSecondaryCloseTriggerOffset = 70.0;
 /// [offset] Indicator offset.
 /// [actualTriggerOffset] Indicator actual trigger offset.
 /// [velocity] Indicator actual trigger offset.
-typedef SpringBuilder = SpringDescription Function({
+typedef SpringBuilder = physics.SpringDescription Function({
   required IndicatorMode mode,
   required double offset,
   required double actualTriggerOffset,
@@ -270,10 +270,10 @@ abstract class Indicator {
   final Duration processedDuration;
 
   /// Spring effect when scrollable goes back.
-  final SpringDescription? spring;
+  final physics.SpringDescription? spring;
 
   /// Horizontal spring effect when scrollable goes back.
-  final SpringDescription? horizontalSpring;
+  final physics.SpringDescription? horizontalSpring;
 
   /// Spring effect when the mode is [IndicatorMode.ready].
   final SpringBuilder? readySpringBuilder;

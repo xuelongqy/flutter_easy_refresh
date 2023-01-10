@@ -12,13 +12,13 @@ double kMaterialHorizontalFrictionFactor(double overscrollFraction) =>
     1.0 * math.pow(1 - overscrollFraction, 2);
 
 /// Spring description used by material.
-SpringDescription kMaterialSpringBuilder({
+physics.SpringDescription kMaterialSpringBuilder({
   required IndicatorMode mode,
   required double offset,
   required double actualTriggerOffset,
   required double velocity,
 }) =>
-    SpringDescription.withDampingRatio(
+    physics.SpringDescription.withDampingRatio(
       mass: 1,
       stiffness: 500,
       ratio: 1.1,

@@ -13,7 +13,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     required this.userOffsetNotifier,
     required this.headerNotifier,
     required this.footerNotifier,
-    SpringDescription? spring,
+    physics.SpringDescription? spring,
     FrictionFactor? frictionFactor,
   })  : _spring = spring,
         _frictionFactor = frictionFactor,
@@ -51,7 +51,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   final FooterNotifier footerNotifier;
 
   /// The spring to use for ballistic simulations.
-  final SpringDescription? _spring;
+  final physics.SpringDescription? _spring;
 
   /// The state of the indicator when the BallisticSimulation is created.
   late final ValueNotifier<_BallisticSimulationCreationState>
@@ -61,7 +61,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
   /// Get the current [SpringDescription] to be used.
   @override
-  SpringDescription get spring {
+  physics.SpringDescription get spring {
     if (headerNotifier.outOfRange) {
       if (headerNotifier._mode == IndicatorMode.ready &&
           headerNotifier.readySpringBuilder != null) {
