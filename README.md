@@ -37,7 +37,7 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
     child: ListView(),
   );
 ```
-#### 2. builder constructor
+#### 2. Builder constructor
 ```dart
   EasyRefresh.builder(
     onRefresh: () async {
