@@ -108,7 +108,7 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
         indicator = Opacity(
           key: const ValueKey('indicator'),
           opacity: opacityCurve.transform(scale),
-          child: CupertinoActivityIndicator.partiallyRevealed(
+          child: _CupertinoActivityIndicator.partiallyRevealed(
             radius: _radius,
             progress: scale,
             color: widget.foregroundColor,
@@ -118,17 +118,19 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
       case IndicatorMode.ready:
       case IndicatorMode.processing:
       case IndicatorMode.processed:
-        indicator = CupertinoActivityIndicator(
+        indicator = _CupertinoActivityIndicator(
           key: const ValueKey('indicator'),
           radius: _radius,
           color: widget.foregroundColor,
+          animating: true,
         );
         break;
       case IndicatorMode.done:
-        indicator = CupertinoActivityIndicator(
+        indicator = _CupertinoActivityIndicator(
           key: const ValueKey('indicator'),
           radius: _radius * scale,
           color: widget.foregroundColor,
+          animating: true,
         );
         break;
       default:

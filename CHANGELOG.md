@@ -1,3 +1,6 @@
+## 3.2.2+1
+- fix: CupertinoActivityIndicator renamed to avoid conflicts.
+
 ## 3.2.2
 - fix: Compatible with Flutter2.8.1 and below [#619](https://github.com/xuelongqy/flutter_easy_refresh/issues/619).
 - perf: Pub scores.

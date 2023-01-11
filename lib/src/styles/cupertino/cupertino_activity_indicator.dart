@@ -13,7 +13,7 @@ const Color _kActiveTickColor = CupertinoDynamicColor.withBrightness(
 /// {@youtube 560 315 https://www.youtube.com/watch?v=AENVH-ZqKDQ}
 ///
 /// {@tool dartpad}
-/// This example shows how [CupertinoActivityIndicator] can be customized.
+/// This example shows how [_CupertinoActivityIndicator] can be customized.
 ///
 /// ** See code in examples/api/lib/cupertino/activity_indicator/cupertino_activity_indicator.0.dart **
 /// {@end-tool}
@@ -21,9 +21,9 @@ const Color _kActiveTickColor = CupertinoDynamicColor.withBrightness(
 /// See also:
 ///
 ///  * <https://developer.apple.com/ios/human-interface-guidelines/controls/progress-indicators/#activity-indicators>
-class CupertinoActivityIndicator extends StatefulWidget {
+class _CupertinoActivityIndicator extends StatefulWidget {
   /// Creates an iOS-style activity indicator that spins clockwise.
-  const CupertinoActivityIndicator({
+  const _CupertinoActivityIndicator({
     Key? key,
     this.color,
     this.animating = true,
@@ -38,7 +38,7 @@ class CupertinoActivityIndicator extends StatefulWidget {
   /// When provided, the value of [progress] must be between 0.0 (zero ticks
   /// will be shown) and 1.0 (all ticks will be shown) inclusive. Defaults
   /// to 1.0.
-  const CupertinoActivityIndicator.partiallyRevealed({
+  const _CupertinoActivityIndicator.partiallyRevealed({
     Key? key,
     this.color,
     this.radius = _kDefaultIndicatorRadius,
@@ -73,11 +73,12 @@ class CupertinoActivityIndicator extends StatefulWidget {
   final double progress;
 
   @override
-  State<CupertinoActivityIndicator> createState() =>
+  State<_CupertinoActivityIndicator> createState() =>
       _CupertinoActivityIndicatorState();
 }
 
-class _CupertinoActivityIndicatorState extends State<CupertinoActivityIndicator>
+class _CupertinoActivityIndicatorState
+    extends State<_CupertinoActivityIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -95,7 +96,7 @@ class _CupertinoActivityIndicatorState extends State<CupertinoActivityIndicator>
   }
 
   @override
-  void didUpdateWidget(CupertinoActivityIndicator oldWidget) {
+  void didUpdateWidget(_CupertinoActivityIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.animating != oldWidget.animating) {
       if (widget.animating) {

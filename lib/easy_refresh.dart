@@ -3,7 +3,7 @@ library easy_refresh;
 import 'dart:math' as math;
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart' hide CupertinoActivityIndicator;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
