@@ -27,7 +27,7 @@ dependencies:
   get: ^4.6.5
   convert: ^3.1.1
   carousel_slider: ^4.2.1
-  rive: 0.9.1
+  rive: ^0.10.1
   qr_flutter: ^4.0.0
   flutter_svg: ^1.1.6
   flutter_sticky_header: ^0.6.5

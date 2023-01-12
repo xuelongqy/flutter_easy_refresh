@@ -439,6 +439,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     // User stopped scrolling.
     final oldUserOffset = userOffsetNotifier.value;
     userOffsetNotifier.value = false;
+    final oldMaxScrollExtent =
+        headerNotifier._lastMaxScrollExtent ?? position.maxScrollExtent;
     // Simulation update.
     headerNotifier._updateBySimulation(position, velocity);
     footerNotifier._updateBySimulation(position, velocity);
@@ -462,6 +464,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
             footerNotifier._mode == IndicatorMode.secondaryOpen);
     bool secondary = hSecondary || fSecondary;
     if (velocity.abs() >= tolerance.velocity ||
+        (oldMaxScrollExtent != position.maxScrollExtent) ||
         (position.outOfRange || (secondary && oldUserOffset)) &&
             (oldUserOffset ||
                 _headerSimulationCreationState.value.needCreation(hState) ||

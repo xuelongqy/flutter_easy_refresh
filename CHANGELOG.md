@@ -1,3 +1,6 @@
+## Next
+- fix: The indicator does not retract when the height of the list changes [#618](https://github.com/xuelongqy/flutter_easy_refresh/issues/618).
+
 ## 3.2.2+1
 - fix: CupertinoActivityIndicator renamed to avoid conflicts.
 

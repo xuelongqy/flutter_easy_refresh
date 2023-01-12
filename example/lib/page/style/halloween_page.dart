@@ -35,10 +35,10 @@ class _HalloweenPageState extends State<HalloweenPage> {
     return Scaffold(
       body: EasyRefresh(
         controller: _controller,
-        header: HalloweenHeader(
+        header: const HalloweenHeader(
           position: IndicatorPosition.locator,
         ),
-        footer: HalloweenFooter(
+        footer: const HalloweenFooter(
           position: IndicatorPosition.locator,
         ),
         onRefresh: () async {
