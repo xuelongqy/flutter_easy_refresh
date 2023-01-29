@@ -368,6 +368,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
           padding: const EdgeInsets.only(top: 4),
           child: Text(
             _messageText,
+            // ignore: deprecated_member_use
             style: widget.messageStyle ?? Theme.of(context).textTheme.caption,
           ),
         );
