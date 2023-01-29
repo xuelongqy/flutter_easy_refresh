@@ -355,6 +355,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
     return widget.textBuilder?.call(context, widget.state, _currentText) ??
         Text(
           _currentText,
+          // ignore: deprecated_member_use
           style: widget.textStyle ?? Theme.of(context).textTheme.subtitle1,
         );
   }
