@@ -1,3 +1,6 @@
+## Next
+- fix: NestedScrollView resize error [#666](https://github.com/xuelongqy/flutter_easy_refresh/issues/666).
+
 ## 3.3.0+1
 - fix: Removed compatibility code for list height changes [#646](https://github.com/xuelongqy/flutter_easy_refresh/issues/646), [#671](https://github.com/xuelongqy/flutter_easy_refresh/issues/671).
 

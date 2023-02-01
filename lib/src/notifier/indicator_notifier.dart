@@ -145,9 +145,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (value.isNestedOuter) {
       _viewportDimension = value.viewportDimension;
     } else if (value.isNestedInner) {
-      _viewportDimension = value.axis == Axis.vertical
-          ? vsync.context.size?.height
-          : vsync.context.size?.width;
+      if (_ambiguate(WidgetsBinding.instance)!.schedulerPhase !=
+          SchedulerPhase.persistentCallbacks) {
+        _viewportDimension = value.axis == Axis.vertical
+            ? vsync.context.size?.height
+            : vsync.context.size?.width;
+      }
     } else {
       _viewportDimension = null;
     }
