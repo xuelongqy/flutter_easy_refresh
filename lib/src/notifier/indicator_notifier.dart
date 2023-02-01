@@ -748,14 +748,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         }
       }
     }
-    if (clamping && !userOffsetNotifier.value) {
-      // Sucks. When clamping, the position will not change after the task is completed.
-      // Temporary solution like this, there is a better way to replace.
-      double pixels = position.pixels;
-      const tiny = 0.001;
-      pixels -= tiny;
-      (_position as ScrollPosition).jumpTo(pixels);
-    }
   }
 
   /// Set mode.

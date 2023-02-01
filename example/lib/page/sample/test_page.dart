@@ -175,8 +175,7 @@ class _TestPageState extends State<TestPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.play_arrow),
-        onPressed: () =>
-            _controller.callRefresh(scrollController: _scrollController),
+        onPressed: () => _controller.callRefresh(),
       ),
     );
   }

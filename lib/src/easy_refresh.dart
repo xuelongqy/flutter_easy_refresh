@@ -140,6 +140,7 @@ class EasyRefresh extends StatefulWidget {
 
   /// When the position cannot be determined, such as [NestedScrollView].
   /// Mainly used to trigger events.
+  /// NOTE: You also need to bind this to your [Scrollable.controller].
   final ScrollController? scrollController;
 
   /// Default header indicator.
