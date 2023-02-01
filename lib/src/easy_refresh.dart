@@ -76,6 +76,11 @@ class EasyRefresh extends StatefulWidget {
   /// When null, disable refresh.
   /// The Header current state is [IndicatorMode.processing].
   /// More see [IndicatorNotifier._onTask].
+  /// The return value can be [IndicatorResult],
+  /// the default processing result is [IndicatorResult.success],
+  /// and [IndicatorResult.fail] when an exception occurs.
+  /// When [EasyRefreshController.controlFinishRefresh] is true,
+  /// the return value is invalid.
   final FutureOr Function()? onRefresh;
 
   /// Load callback.
@@ -83,6 +88,11 @@ class EasyRefresh extends StatefulWidget {
   /// When null, disable load.
   /// The Footer current state is [IndicatorMode.processing].
   /// More see [IndicatorNotifier._onTask].
+  /// The return value can be [IndicatorResult],
+  /// the default processing result is [IndicatorResult.success],
+  /// and [IndicatorResult.fail] when an exception occurs.
+  /// When [EasyRefreshController.controlFinishLoad] is true,
+  /// the return value is invalid.
   final FutureOr Function()? onLoad;
 
   /// Structure that describes a spring's constants.
