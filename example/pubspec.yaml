@@ -21,16 +21,15 @@ dependencies:
 
   cupertino_icons: ^1.0.5
 
-  url_launcher: ^6.1.7
+  url_launcher: ^6.1.9
   flutter_spinkit: ^5.1.0
-  extended_nested_scroll_view:
-    git: https://github.com/VB10/extended_nested_scroll_view
+  extended_nested_scroll_view: ^6.0.0
   get: ^4.6.5
   convert: ^3.1.1
   carousel_slider: ^4.2.1
   rive: ^0.10.1
   qr_flutter: ^4.0.0
-  flutter_svg: ^1.1.6
+  flutter_svg: ^2.0.0+1
   flutter_sticky_header: ^0.6.5
   easy_refresh:
     path: ../

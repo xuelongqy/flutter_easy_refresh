@@ -108,7 +108,7 @@ class EasyRefresh extends StatefulWidget {
   /// Is it possible to refresh after there is no more.
   final bool noMoreRefresh;
 
-  /// Is it loadable after no more.
+  /// Is it possible to load after there is no more.
   final bool noMoreLoad;
 
   /// Reset after refresh when no more deactivation is loaded.
@@ -154,16 +154,14 @@ class EasyRefresh extends StatefulWidget {
   final ScrollController? scrollController;
 
   /// Default header indicator.
-  static Header get _defaultHeader => defaultHeaderBuilder.call();
   static Header Function() defaultHeaderBuilder = _defaultHeaderBuilder;
-
   static Header _defaultHeaderBuilder() => const ClassicHeader();
+  static Header get _defaultHeader => defaultHeaderBuilder.call();
 
   /// Default footer indicator.
-  static Footer get _defaultFooter => defaultFooterBuilder.call();
   static Footer Function() defaultFooterBuilder = _defaultFooterBuilder;
-
   static Footer _defaultFooterBuilder() => const ClassicFooter();
+  static Footer get _defaultFooter => defaultFooterBuilder.call();
 
   /// Default ScrollBehavior builder.
   static ScrollBehavior Function(ScrollPhysics? physics)
