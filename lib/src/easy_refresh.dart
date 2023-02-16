@@ -486,7 +486,7 @@ class _EasyRefreshState extends State<EasyRefresh>
     bool force = false,
   }) {
     return _footerNotifier.callTask(
-      overOffset: overOffset ?? widget.callRefreshOverOffset,
+      overOffset: overOffset ?? widget.callLoadOverOffset,
       duration: duration,
       curve: curve,
       scrollController: scrollController ?? widget.scrollController,
