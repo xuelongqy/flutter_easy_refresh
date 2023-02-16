@@ -436,6 +436,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
+    // Avoid an endless loop caused by multiple ListViews nested.
+    if (position.maxScrollExtent == 0) return null;
+
     // User stopped scrolling.
     final oldUserOffset = userOffsetNotifier.value;
     userOffsetNotifier.value = false;
