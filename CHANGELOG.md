@@ -1,4 +1,6 @@
-## Next
+## 3.3.1
+- fix: Avoid an endless loop caused by multiple ListViews nested, Thanks LinXunFeng for [PR#681](https://github.com/xuelongqy/flutter_easy_refresh/pull/681).
+- fix: FooterNotifier.callTask use callRefreshOverOffset, Thanks AWarmHug for [PR#680](https://github.com/xuelongqy/flutter_easy_refresh/pull/680).
 - fix: NestedScrollView resize error [#666](https://github.com/xuelongqy/flutter_easy_refresh/issues/666).
 
 ## 3.3.0+1
@@ -30,7 +32,7 @@
 ## 3.2.0
 - feat: EasyRefreshController add headerState, footerState [#635](https://github.com/xuelongqy/flutter_easy_refresh/issues/635).
 - feat: Add triggerWhenRelease and triggerWhenReleaseNoWait [#593](https://github.com/xuelongqy/flutter_easy_refresh/issues/593).
-- fix: Error when using NotLoadFooter with clamping. Thanks Pwuts for [PR#659](https://github.com/xuelongqy/flutter_easy_refresh/issues/659).
+- fix: Error when using NotLoadFooter with clamping. Thanks Pwuts for [PR#659](https://github.com/xuelongqy/flutter_easy_refresh/pull/659).
 - feat: Add maxOverOffset [#590](https://github.com/xuelongqy/flutter_easy_refresh/issues/590).
 
 ## 3.1.0
@@ -42,7 +44,7 @@
 ## 3.0.5
 - fix: [EasyRefreshController.callRefresh] and [EasyRefreshController.callLoad] add force [#633](https://github.com/xuelongqy/flutter_easy_refresh/issues/633) [#642](https://github.com/xuelongqy/flutter_easy_refresh/issues/642). Thanks percival888 for [PR#639](https://github.com/xuelongqy/flutter_easy_refresh/issues/639).
 - fix: When the height changes when callTask causes the list not to rebound.
-- feat: Add [EasyRefresh.scrollBehaviorBuilder] and [EasyRefresh.defaultScrollBehaviorBuilder]. Thanks laiiihz for [PR#614](https://github.com/xuelongqy/flutter_easy_refresh/issues/614).
+- feat: Add [EasyRefresh.scrollBehaviorBuilder] and [EasyRefresh.defaultScrollBehaviorBuilder]. Thanks laiiihz for [PR#614](https://github.com/xuelongqy/flutter_easy_refresh/pull/614).
 
 ## 3.0.4+4
 - fix: Type 'SpringDescription' not found [#638](https://github.com/xuelongqy/flutter_easy_refresh/issues/638).
@@ -87,8 +89,8 @@
 - fix: CupertinoActivityIndicator radius == 0.
 
 ## 3.0.1
-- fix: Use notifyListeners after ChangeNotifier disposed. Thanks laiiihz for [PR#555](https://github.com/xuelongqy/flutter_easy_refresh/issues/555).
-- feat: ClassicHeader、ClassicFooter add IconThemeData. Thanks Lay523 for [PR#562](https://github.com/xuelongqy/flutter_easy_refresh/issues/562).
+- fix: Use notifyListeners after ChangeNotifier disposed. Thanks laiiihz for [PR#555](https://github.com/xuelongqy/flutter_easy_refresh/pull/555).
+- feat: ClassicHeader、ClassicFooter add IconThemeData. Thanks Lay523 for [PR#562](https://github.com/xuelongqy/flutter_easy_refresh/pull/562).
 - feat: ClassicIndicator add [progressIndicatorSize] and [progressIndicatorStrokeWidth].
 - feat: Add CupertinoIndicator.
 - fix: finishLoad asset [#563](https://github.com/xuelongqy/flutter_easy_refresh/issues/563).
