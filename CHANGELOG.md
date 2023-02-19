@@ -1,3 +1,6 @@
+## Next
+- fix: Increase the priority of ClassicIndicator.pullIconBuilder [#674](https://github.com/xuelongqy/flutter_easy_refresh/issues/674).
+
 ## 3.3.1
 - fix: Avoid an endless loop caused by multiple ListViews nested, Thanks LinXunFeng for [PR#681](https://github.com/xuelongqy/flutter_easy_refresh/pull/681).
 - fix: FooterNotifier.callTask use callRefreshOverOffset, Thanks AWarmHug for [PR#680](https://github.com/xuelongqy/flutter_easy_refresh/pull/680).
