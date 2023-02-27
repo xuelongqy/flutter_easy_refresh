@@ -78,7 +78,7 @@ class _ChatPageState extends State<ChatPage> {
     });
     _inputController.clear();
     Future(() {
-      PrimaryScrollController.of(context)?.jumpTo(0);
+      PrimaryScrollController.of(context).jumpTo(0);
     });
   }
 
@@ -278,7 +278,8 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
             ),
-            BottomAppBar(
+            Container(
+              color: themeData.colorScheme.onInverseSurface,
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 8),

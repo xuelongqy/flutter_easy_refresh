@@ -21,15 +21,15 @@ dependencies:
 
   cupertino_icons: ^1.0.5
 
-  url_launcher: ^6.1.9
+  url_launcher: ^6.1.10
   flutter_spinkit: ^5.1.0
   extended_nested_scroll_view: ^6.0.0
   get: ^4.6.5
   convert: ^3.1.1
   carousel_slider: ^4.2.1
-  rive: ^0.10.1
+  rive: ^0.10.2
   qr_flutter: ^4.0.0
-  flutter_svg: ^2.0.0+1
+  flutter_svg: ^2.0.0+2
   flutter_sticky_header: ^0.6.5
   easy_refresh:
     path: ../
