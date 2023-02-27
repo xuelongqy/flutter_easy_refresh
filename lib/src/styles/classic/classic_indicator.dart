@@ -86,7 +86,7 @@ class _ClassicIndicator extends StatefulWidget {
   /// Icon when [IndicatorResult.noMore].
   final Widget? noMoreIcon;
 
-  /// Icon on pull.
+  /// Icon on pull builder.
   final CIPullIconBuilder? pullIconBuilder;
 
   /// Text style.
@@ -265,6 +265,10 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
 
   /// Build icon.
   Widget _buildIcon() {
+    if (widget.pullIconBuilder != null) {
+      return widget.pullIconBuilder!
+          .call(context, widget.state, _iconAnimationController.value);
+    }
     Widget icon;
     final iconTheme = widget.iconTheme ?? Theme.of(context).iconTheme;
     ValueKey iconKey;
@@ -315,18 +319,14 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
     } else {
       iconKey = const ValueKey(IndicatorMode.drag);
       icon = SizedBox(
-        child: widget.pullIconBuilder
-                ?.call(context, widget.state, _iconAnimationController.value) ??
-            Transform.rotate(
-              angle: -math.pi * _iconAnimationController.value,
-              child: Icon(widget.reverse
-                  ? (_axis == Axis.vertical
-                      ? Icons.arrow_upward
-                      : Icons.arrow_back)
-                  : (_axis == Axis.vertical
-                      ? Icons.arrow_downward
-                      : Icons.arrow_forward)),
-            ),
+        child: Transform.rotate(
+          angle: -math.pi * _iconAnimationController.value,
+          child: Icon(widget.reverse
+              ? (_axis == Axis.vertical ? Icons.arrow_upward : Icons.arrow_back)
+              : (_axis == Axis.vertical
+                  ? Icons.arrow_downward
+                  : Icons.arrow_forward)),
+        ),
       );
     }
     return AnimatedSwitcher(
