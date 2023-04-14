@@ -1,5 +1,6 @@
-## Next
+## 3.3.1+1
 - fix: Increase the priority of ClassicIndicator.pullIconBuilder [#674](https://github.com/xuelongqy/flutter_easy_refresh/issues/674).
+- fix: fit parameter is invalid [#708](https://github.com/xuelongqy/flutter_easy_refresh/issues/708).
 
 ## 3.3.1
 - fix: Avoid an endless loop caused by multiple ListViews nested, Thanks LinXunFeng for [PR#681](https://github.com/xuelongqy/flutter_easy_refresh/pull/681).

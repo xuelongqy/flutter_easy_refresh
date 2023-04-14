@@ -648,7 +648,7 @@ class _EasyRefreshState extends State<EasyRefresh>
       clipBehavior: widget.clipBehavior,
       child: Stack(
         clipBehavior: Clip.none,
-        fit: StackFit.loose,
+        fit: widget.fit,
         children: children,
       ),
     );
