@@ -211,7 +211,8 @@ class _HeaderLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
       // No cache extent.
       cacheExtent: math.min(childExtent, paintExtent),
       maxPaintExtent: math.max(childExtent, paintExtent),
-      hitTestExtent: paintedChildSize,
+      // fix: second Event failure
+      hitTestExtent: math.max(childExtent, paintedChildSize),
       hasVisualOverflow: childExtent > constraints.remainingPaintExtent ||
           constraints.scrollOffset > 0,
       visible: true,
