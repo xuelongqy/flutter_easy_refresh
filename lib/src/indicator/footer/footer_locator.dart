@@ -210,7 +210,7 @@ class _FooterLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
       // No cache extent.
       cacheExtent: math.min(childExtent, paintExtent),
       maxPaintExtent: math.max(childExtent, paintExtent),
-      hitTestExtent: paintedChildSize,
+      hitTestExtent: math.max(childExtent, paintedChildSize),
       hasVisualOverflow: childExtent > constraints.remainingPaintExtent ||
           constraints.scrollOffset > 0,
       visible: true,
