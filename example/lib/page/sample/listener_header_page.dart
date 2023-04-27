@@ -112,7 +112,6 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
                       );
                     } else {
                       indicator = RefreshProgressIndicator(
-                        backgroundColor: Colors.transparent,
                         value: value,
                       );
                     }
@@ -127,11 +126,11 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
                             reverseDuration: const Duration(milliseconds: 100),
                             transitionBuilder: (child, animation) {
                               return FadeTransition(
-                                child: ScaleTransition(
-                                  child: child,
-                                  scale: animation,
-                                ),
                                 opacity: animation,
+                                child: ScaleTransition(
+                                  scale: animation,
+                                  child: child,
+                                ),
                               );
                             },
                             child: indicator,
