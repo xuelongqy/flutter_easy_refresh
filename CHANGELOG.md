@@ -1,3 +1,6 @@
+## 3.3.1+2
+- fix: Secondary click event hit area [#688](https://github.com/xuelongqy/flutter_easy_refresh/issues/688), Thanks notbucai for [PR#714](https://github.com/xuelongqy/flutter_easy_refresh/pull/714).
+
 ## 3.3.1+1
 - fix: Increase the priority of ClassicIndicator.pullIconBuilder [#674](https://github.com/xuelongqy/flutter_easy_refresh/issues/674).
 - fix: fit parameter is invalid [#708](https://github.com/xuelongqy/flutter_easy_refresh/issues/708).
