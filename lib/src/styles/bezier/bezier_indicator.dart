@@ -105,19 +105,22 @@ class _BezierIndicatorState extends State<_BezierIndicator>
 
   /// Build spin widget.
   Widget _buildSpin() {
+    Widget spinWidget;
     if (widget.spinBuilder != null) {
-      widget.spinBuilder!(context, _animationController.value);
+      spinWidget = widget.spinBuilder!(context, _animationController.value);
+    } else {
+      spinWidget = widget.spinWidget ??
+          _SpinKitHourGlass(
+            color: _foregroundColor,
+            size: 32,
+          );
     }
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, _) {
         return Transform.scale(
           scale: _animationController.value,
-          child: widget.spinWidget ??
-              _SpinKitHourGlass(
-                color: _foregroundColor,
-                size: 32,
-              ),
+          child: spinWidget,
         );
       },
     );
