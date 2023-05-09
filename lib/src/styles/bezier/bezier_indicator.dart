@@ -37,12 +37,16 @@ class _BezierIndicator extends StatefulWidget {
   /// Background color.
   final Color? backgroundColor;
 
+  /// Whether the spin widget is in the center.
+  final bool spinInCenter;
+
   const _BezierIndicator({
     Key? key,
     required this.state,
     required this.reverse,
     required this.processedDuration,
     this.showBalls = true,
+    this.spinInCenter = true,
     this.spinWidget,
     this.noMoreWidget,
     this.spinBuilder,
@@ -115,7 +119,7 @@ class _BezierIndicatorState extends State<_BezierIndicator>
             size: 32,
           );
     }
-    return AnimatedBuilder(
+    Widget animatedWidget = AnimatedBuilder(
       animation: _animationController,
       builder: (context, _) {
         return Transform.scale(
@@ -124,6 +128,20 @@ class _BezierIndicatorState extends State<_BezierIndicator>
         );
       },
     );
+    if (!widget.spinInCenter) {
+      return Positioned(
+        top: 0,
+        bottom: null,
+        left: 0,
+        right: 0,
+        height: _axis == Axis.vertical ? _actualTriggerOffset : null,
+        width: _axis == Axis.vertical ? null : _actualTriggerOffset,
+        child: Center(
+          child: animatedWidget,
+        ),
+      );
+    }
+    return animatedWidget;
   }
 
   @override
