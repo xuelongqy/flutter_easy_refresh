@@ -35,6 +35,7 @@ const zhCN = {
   'Bezier curve': '贝塞尔曲线',
   'Disable': '禁用',
   'Display balls': '显示小球',
+  'Spin in center': 'Spin居中',
   'Bezier circle': '弹出圆圈',
   'Golden campus': '金色校园',
   'Rush to the sky': '冲上云霄',

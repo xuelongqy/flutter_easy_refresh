@@ -1,5 +1,6 @@
 ## Next
 - fix: BezierIndicator.spinBuilder doesn't work. 
+- feat: Add BezierIndicator.spinInCenter.
 
 ## 3.3.1+2
 - fix: Secondary click event hit area [#688](https://github.com/xuelongqy/flutter_easy_refresh/issues/688), Thanks notbucai for [PR#714](https://github.com/xuelongqy/flutter_easy_refresh/pull/714).

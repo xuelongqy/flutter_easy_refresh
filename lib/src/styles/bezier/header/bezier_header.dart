@@ -22,6 +22,9 @@ class BezierHeader extends Header {
   /// Background color.
   final Color? backgroundColor;
 
+  /// Whether the spin widget is in the center.
+  final bool spinInCenter;
+
   const BezierHeader({
     this.key,
     double triggerOffset = 100,
@@ -38,6 +41,7 @@ class BezierHeader extends Header {
     bool? infiniteHitOver,
     bool hapticFeedback = false,
     this.showBalls = true,
+    this.spinInCenter = true,
     this.spinWidget,
     this.noMoreWidget,
     this.spinBuilder,
@@ -67,6 +71,7 @@ class BezierHeader extends Header {
       reverse: state.reverse,
       processedDuration: processedDuration,
       showBalls: showBalls,
+      spinInCenter: spinInCenter,
       spinWidget: spinWidget,
       noMoreWidget: noMoreWidget,
       spinBuilder: spinBuilder,

@@ -239,6 +239,7 @@ class _BezierPageState extends State<BezierPage> {
           foregroundColor: themeData.colorScheme.onPrimary,
           clamping: _headerProperties.clamping,
           showBalls: _headerProperties.displayBalls,
+          spinInCenter: _headerProperties.spinInCenter,
           spinWidget: _spinWidget(
               _headerProperties.spin, themeData.colorScheme.onPrimary),
         ),
@@ -246,7 +247,8 @@ class _BezierPageState extends State<BezierPage> {
           backgroundColor: themeData.colorScheme.primary,
           foregroundColor: themeData.colorScheme.onPrimary,
           clamping: _footerProperties.clamping,
-          showBalls: _headerProperties.displayBalls,
+          showBalls: _footerProperties.displayBalls,
+          spinInCenter: _footerProperties.spinInCenter,
           spinWidget: _spinWidget(
               _headerProperties.spin, themeData.colorScheme.onPrimary),
         ),
@@ -394,6 +396,17 @@ class _BezierPageState extends State<BezierPage> {
                                 },
                               ),
                             ),
+                            ListTile(
+                              title: Text('Spin in center'.tr),
+                              trailing: Switch(
+                                value: properties.spinInCenter,
+                                onChanged: (value) {
+                                  setState(() {
+                                    properties.spinInCenter = value;
+                                  });
+                                },
+                              ),
+                            ),
                             const ListTile(
                               title: Text('Spin'),
                             ),
@@ -441,6 +454,7 @@ class _BIProperties {
   bool clamping = false;
   bool displayBalls = true;
   String spin = 'HourGlass';
+  bool spinInCenter = true;
 
   _BIProperties({
     required this.name,

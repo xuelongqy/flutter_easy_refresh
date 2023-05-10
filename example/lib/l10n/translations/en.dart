@@ -35,6 +35,7 @@ const en = {
   'Bezier curve': 'Bezier curve',
   'Disable': 'Disable',
   'Display balls': 'Display balls',
+  'Spin in center': 'Spin in center',
   'Bezier circle': 'Bezier circle',
   'Golden campus': 'Golden campus',
   'Rush to the sky': 'Rush to the sky',
