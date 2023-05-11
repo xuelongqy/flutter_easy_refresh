@@ -10,7 +10,7 @@ description: EasyRefresh example.
 version: 3.3.0+54
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=2.17.0"
   flutter: ">=1.24.0"
 
 dependencies:
@@ -22,8 +22,8 @@ dependencies:
   cupertino_icons: ^1.0.5
 
   url_launcher: ^6.1.10
-  flutter_spinkit: ^5.1.0
-  extended_nested_scroll_view: ^6.0.0
+  flutter_spinkit: ^5.2.0
+  extended_nested_scroll_view: ^6.1.0
   get: ^4.6.5
   convert: ^3.1.1
   carousel_slider: ^4.2.1

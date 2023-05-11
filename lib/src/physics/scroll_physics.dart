@@ -436,6 +436,13 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
+    Tolerance tolerance;
+    try {
+      // This feature after v3.7.0-13.0.pre.
+      tolerance = (this as dynamic).toleranceFor(position);
+    } catch (_) {
+      tolerance = this.tolerance;
+    }
     // User stopped scrolling.
     final oldUserOffset = userOffsetNotifier.value;
     userOffsetNotifier.value = false;
