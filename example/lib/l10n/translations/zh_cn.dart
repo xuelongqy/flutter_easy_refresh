@@ -36,6 +36,7 @@ const zhCN = {
   'Disable': '禁用',
   'Display balls': '显示小球',
   'Spin in center': 'Spin居中',
+  'Only show spin': '只显示Spin',
   'Bezier circle': '弹出圆圈',
   'Golden campus': '金色校园',
   'Rush to the sky': '冲上云霄',

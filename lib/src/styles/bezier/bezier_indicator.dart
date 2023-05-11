@@ -40,6 +40,10 @@ class _BezierIndicator extends StatefulWidget {
   /// Whether the spin widget is in the center.
   final bool spinInCenter;
 
+  /// Only display the spin.
+  /// When true, the balls are no longer displayed.
+  final bool onlySpin;
+
   const _BezierIndicator({
     Key? key,
     required this.state,
@@ -47,6 +51,7 @@ class _BezierIndicator extends StatefulWidget {
     required this.processedDuration,
     this.showBalls = true,
     this.spinInCenter = true,
+    this.onlySpin = false,
     this.spinWidget,
     this.noMoreWidget,
     this.spinBuilder,
@@ -111,8 +116,11 @@ class _BezierIndicatorState extends State<_BezierIndicator>
 
   /// Build balls.
   Widget _buildBalls() {
-    final extent = (!widget.spinInCenter && _offset > _actualTriggerOffset) ? _actualTriggerOffset : null;
-    final full = widget.spinInCenter || (!widget.spinInCenter && _offset <= _actualTriggerOffset);
+    final extent = (!widget.spinInCenter && _offset > _actualTriggerOffset)
+        ? _actualTriggerOffset
+        : null;
+    final full = widget.spinInCenter ||
+        (!widget.spinInCenter && _offset <= _actualTriggerOffset);
     return Positioned(
       top: (_axis == Axis.vertical && _reverse && !full) ? null : 0,
       bottom: (_axis == Axis.vertical && !_reverse && !full) ? null : 0,
@@ -135,11 +143,11 @@ class _BezierIndicatorState extends State<_BezierIndicator>
                 Positioned(
                   left: _axis == Axis.vertical
                       ? ((length - ballSize) / 2) +
-                      (ballArea / 8 * scale) * (i - 3)
+                          (ballArea / 8 * scale) * (i - 3)
                       : null,
                   bottom: _axis == Axis.horizontal
                       ? ((length - ballSize) / 2) +
-                      (ballArea / 8 * scale) * (i - 3)
+                          (ballArea / 8 * scale) * (i - 3)
                       : null,
                   child: AnimatedBuilder(
                     animation: _animationController,
@@ -163,8 +171,8 @@ class _BezierIndicatorState extends State<_BezierIndicator>
                           height: ballSize,
                           decoration: BoxDecoration(
                             color: _foregroundColor,
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(ballSize / 2)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(ballSize / 2)),
                           ),
                         ),
                       );
@@ -194,11 +202,32 @@ class _BezierIndicatorState extends State<_BezierIndicator>
       animation: _animationController,
       builder: (context, _) {
         return Transform.scale(
-          scale: _animationController.value,
+          scale: widget.onlySpin ? 1 : _animationController.value,
           child: spinWidget,
         );
       },
     );
+    if (widget.onlySpin && _offset < _actualTriggerOffset) {
+      return Positioned(
+        top: (_axis == Axis.vertical && !_reverse)
+            ? -(_actualTriggerOffset - _offset) / 2
+            : null,
+        bottom: (_axis == Axis.vertical && _reverse)
+            ? -(_actualTriggerOffset - _offset) / 2
+            : null,
+        left: (_axis == Axis.horizontal && !_reverse)
+            ? -(_actualTriggerOffset - _offset) / 2
+            : null,
+        right: (_axis == Axis.horizontal && _reverse)
+            ? -(_actualTriggerOffset - _offset) / 2
+            : null,
+        height: _axis == Axis.vertical ? _actualTriggerOffset : null,
+        width: _axis == Axis.vertical ? null : _actualTriggerOffset,
+        child: Center(
+          child: animatedWidget,
+        ),
+      );
+    }
     if (!widget.spinInCenter) {
       return Positioned(
         top: (_axis == Axis.vertical && _reverse) ? null : 0,
@@ -233,10 +262,14 @@ class _BezierIndicatorState extends State<_BezierIndicator>
           color: widget.backgroundColor,
         ),
         if (widget.showBalls &&
+            !widget.onlySpin &&
             _offset > _safeOffset &&
             widget.state.result != IndicatorResult.noMore)
           _buildBalls(),
-        if (_mode == IndicatorMode.ready || _mode == IndicatorMode.processing)
+        if (_mode == IndicatorMode.ready ||
+            _mode == IndicatorMode.processing ||
+            (widget.onlySpin &&
+                (_mode == IndicatorMode.drag || _mode == IndicatorMode.armed)))
           _buildSpin(),
         if (widget.state.result == IndicatorResult.noMore)
           Positioned(

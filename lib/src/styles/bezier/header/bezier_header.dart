@@ -25,6 +25,10 @@ class BezierHeader extends Header {
   /// Whether the spin widget is in the center.
   final bool spinInCenter;
 
+  /// Only display the spin.
+  /// When true, the balls are no longer displayed.
+  final bool onlySpin;
+
   const BezierHeader({
     this.key,
     double triggerOffset = 100,
@@ -42,6 +46,7 @@ class BezierHeader extends Header {
     bool hapticFeedback = false,
     this.showBalls = true,
     this.spinInCenter = true,
+    this.onlySpin = false,
     this.spinWidget,
     this.noMoreWidget,
     this.spinBuilder,
@@ -72,6 +77,7 @@ class BezierHeader extends Header {
       processedDuration: processedDuration,
       showBalls: showBalls,
       spinInCenter: spinInCenter,
+      onlySpin: onlySpin,
       spinWidget: spinWidget,
       noMoreWidget: noMoreWidget,
       spinBuilder: spinBuilder,
