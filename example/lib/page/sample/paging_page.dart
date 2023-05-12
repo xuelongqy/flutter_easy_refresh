@@ -29,15 +29,15 @@ class _PagingPageState extends State<PagingPage> {
 
 class CustomPaging extends EasyPaging<List<String>, String> {
   const CustomPaging({
-    Key? key,
+    super.key,
     super.callLoadOverOffset,
     super.callRefreshOverOffset,
     super.clipBehavior,
     super.controller,
     super.fit,
     super.frictionFactor,
-    super.noMoreLoad,
-    super.noMoreRefresh,
+    super.canLoadAfterNoMore,
+    super.canRefreshAfterNoMore,
     super.notLoadFooter,
     super.notRefreshHeader,
     super.refreshOnStart = true,
@@ -48,7 +48,7 @@ class CustomPaging extends EasyPaging<List<String>, String> {
     super.itemBuilder,
     super.refreshOnStartWidgetBuilder,
     super.emptyWidgetBuilder,
-  }) : super(key: key);
+  });
 
   @override
   EasyPagingState<List<String>, String> createState() => CustomPagingState();

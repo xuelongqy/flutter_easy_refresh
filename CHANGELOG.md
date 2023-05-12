@@ -3,6 +3,9 @@
 - feat: Add BezierIndicator.spinInCenter.
 - feat: Add BezierIndicator.onlySpin [#689](https://github.com/xuelongqy/flutter_easy_refresh/issues/689).
 - feat: Add support for ScrollPhysics.toleranceFor.
+- feat: After failure, continue to scroll to trigger the task [#718](https://github.com/xuelongqy/flutter_easy_refresh/issues/718).
+- feat: [EasyRefresh] noMoreRefresh -> canRefreshAfterNoMore, noMoreLoad -> canRefreshAfterLoad
+- fix: Use canRefreshAfterNoMore or canRefreshAfterLoad, abnormal NoMore status.
 
 ## 3.3.1+2
 - fix: Secondary click event hit area [#688](https://github.com/xuelongqy/flutter_easy_refresh/issues/688), Thanks notbucai for [PR#714](https://github.com/xuelongqy/flutter_easy_refresh/pull/714).

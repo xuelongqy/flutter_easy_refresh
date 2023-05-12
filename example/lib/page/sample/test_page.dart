@@ -37,8 +37,8 @@ class _TestPageState extends State<TestPage> {
         title: const Text('EasyRefresh'),
       ),
       body: EasyRefresh(
-        noMoreRefresh: false,
-        noMoreLoad: false,
+        canRefreshAfterNoMore: false,
+        canLoadAfterNoMore: false,
         refreshOnStart: false,
         controller: _controller,
         refreshOnStartHeader: BuilderHeader(

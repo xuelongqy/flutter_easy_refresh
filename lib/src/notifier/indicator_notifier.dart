@@ -36,12 +36,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     required this.vsync,
     required this.userOffsetNotifier,
     required CanProcessCallBack onCanProcess,
-    required bool noMoreProcess,
+    required bool canProcessAfterNoMore,
     bool waitTaskResult = true,
     FutureOr Function()? task,
   })  : _indicator = indicator,
         _onCanProcess = onCanProcess,
-        _noMoreProcess = noMoreProcess,
+        _canProcessAfterNoMore = canProcessAfterNoMore,
         _waitTaskResult = waitTaskResult,
         _task = task {
     _initClampingAnimation();
@@ -262,11 +262,11 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   IndicatorResult _result = IndicatorResult.none;
 
   /// Whether to execute the task after no more.
-  bool _noMoreProcess;
+  bool _canProcessAfterNoMore;
 
   /// State lock when no more.
   bool get noMoreLocked =>
-      !_noMoreProcess &&
+      !_canProcessAfterNoMore &&
       _result == IndicatorResult.noMore &&
       _mode == IndicatorMode.inactive;
 
@@ -367,7 +367,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// When the EasyRefresh parameters is updated.
   void _update({
     Indicator? indicator,
-    bool? noMoreProcess,
+    bool? canProcessAfterNoMore,
     FutureOr Function()? task,
     bool? waitTaskRefresh,
   }) {
@@ -376,7 +376,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       indicator.listenable?._bind(this);
       _indicator = indicator;
     }
-    _noMoreProcess = noMoreProcess ?? _noMoreProcess;
+    _canProcessAfterNoMore = canProcessAfterNoMore ?? _canProcessAfterNoMore;
     _task = task;
     _waitTaskResult = waitTaskRefresh ?? _waitTaskResult;
     if (_indicator.clamping && _clampingAnimationController == null) {
@@ -521,7 +521,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
               !bySimulation &&
               !_infiniteExclude(position, value))) {
         // Update mode
-        _updateMode();
+        _updateMode(oldOffset);
         notifyListeners();
       }
       if (_indicator.notifyWhenInvisible && !bySimulation) {
@@ -530,7 +530,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       return;
     }
     // Update mode
-    _updateMode();
+    _updateMode(oldOffset);
     // Need notify
     if (oldOffset == _offset && oldMode == _mode) {
       return;
@@ -562,7 +562,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   }
 
   /// Update indicator state.
-  void _updateMode() {
+  void _updateMode([double? oldOffset]) {
     // No task, keep IndicatorMode.inactive state.
     if (_task == null) {
       if (_mode != IndicatorMode.inactive) {
@@ -582,14 +582,25 @@ abstract class IndicatorNotifier extends ChangeNotifier {
           (!position.isNestedOuter && edgeOffset < infiniteOffset!)) {
         if (_mode == IndicatorMode.done &&
             position.maxScrollExtent != position.minScrollExtent) {
-          // The state does not change until the end
-          return;
+          if ((_result == IndicatorResult.fail ||
+                  (_result == IndicatorResult.noMore &&
+                      _canProcessAfterNoMore)) &&
+              oldOffset != null &&
+              oldOffset < _offset) {
+            // Trigger task if in failed state.
+            _result = IndicatorResult.none;
+            _mode = IndicatorMode.processing;
+          } else {
+            // The state does not change until the end
+            return;
+          }
         } else {
           if (_mode == IndicatorMode.done) {
             if (offset == 0) {
               _mode = IndicatorMode.inactive;
             }
           } else {
+            _result = IndicatorResult.none;
             _mode = IndicatorMode.processing;
           }
         }
@@ -600,12 +611,17 @@ abstract class IndicatorNotifier extends ChangeNotifier {
         if (!(_mode == IndicatorMode.ready && !userOffsetNotifier.value)) {
           // Prevent Spring from having repeated rebounds.
           _mode = IndicatorMode.inactive;
-          if (_result != IndicatorResult.noMore || _noMoreProcess) {
+          if (_result != IndicatorResult.noMore || _canProcessAfterNoMore) {
             _result = IndicatorResult.none;
           }
           _releaseOffset = 0;
         }
       } else if (_offset < actualTriggerOffset) {
+        if (_canProcessAfterNoMore &&
+            _result == IndicatorResult.noMore &&
+            userOffsetNotifier.value) {
+          _result = IndicatorResult.none;
+        }
         if (!(_mode == IndicatorMode.ready && !userOffsetNotifier.value)) {
           // Prevent Spring from having repeated rebounds.
           _mode = IndicatorMode.drag;
@@ -885,7 +901,8 @@ class HeaderNotifier extends IndicatorNotifier {
     required ValueNotifier<bool> userOffsetNotifier,
     required TickerProviderStateMixin vsync,
     required CanProcessCallBack onCanRefresh,
-    bool noMoreRefresh = false,
+    bool canProcessAfterNoMore = false,
+    bool canProcessAfterFail = true,
     FutureOr Function()? onRefresh,
     bool waitRefreshResult = true,
   }) : super(
@@ -893,7 +910,7 @@ class HeaderNotifier extends IndicatorNotifier {
           userOffsetNotifier: userOffsetNotifier,
           vsync: vsync,
           onCanProcess: onCanRefresh,
-          noMoreProcess: noMoreRefresh,
+          canProcessAfterNoMore: canProcessAfterNoMore,
           task: onRefresh,
           waitTaskResult: waitRefreshResult,
         );
@@ -1037,7 +1054,8 @@ class FooterNotifier extends IndicatorNotifier {
     required ValueNotifier<bool> userOffsetNotifier,
     required TickerProviderStateMixin vsync,
     required CanProcessCallBack onCanLoad,
-    bool noMoreLoad = false,
+    bool canProcessAfterNoMore = false,
+    bool canProcessAfterFail = true,
     FutureOr Function()? onLoad,
     bool waitLoadResult = true,
   }) : super(
@@ -1045,7 +1063,7 @@ class FooterNotifier extends IndicatorNotifier {
           userOffsetNotifier: userOffsetNotifier,
           vsync: vsync,
           onCanProcess: onCanLoad,
-          noMoreProcess: noMoreLoad,
+          canProcessAfterNoMore: canProcessAfterNoMore,
           task: onLoad,
           waitTaskResult: waitLoadResult,
         );

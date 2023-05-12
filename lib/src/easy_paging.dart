@@ -32,10 +32,10 @@ abstract class EasyPaging<DataType, ItemType> extends StatefulWidget {
   final bool simultaneously;
 
   /// Is it possible to refresh after there is no more.
-  final bool noMoreRefresh;
+  final bool canRefreshAfterNoMore;
 
   /// Is it loadable after no more.
-  final bool noMoreLoad;
+  final bool canLoadAfterNoMore;
 
   /// Reset after refresh when no more deactivation is loaded.
   final bool resetAfterRefresh;
@@ -76,8 +76,8 @@ abstract class EasyPaging<DataType, ItemType> extends StatefulWidget {
     this.notRefreshHeader,
     this.notLoadFooter,
     this.simultaneously = false,
-    this.noMoreRefresh = false,
-    this.noMoreLoad = false,
+    this.canRefreshAfterNoMore = false,
+    this.canLoadAfterNoMore = false,
     this.resetAfterRefresh = true,
     this.refreshOnStart = false,
     this.callRefreshOverOffset = 20,
@@ -270,8 +270,8 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
         notRefreshHeader: widget.notRefreshHeader,
         notLoadFooter: widget.notLoadFooter,
         simultaneously: widget.simultaneously,
-        noMoreRefresh: widget.noMoreRefresh,
-        noMoreLoad: widget.noMoreLoad,
+        canRefreshAfterNoMore: widget.canRefreshAfterNoMore,
+        canLoadAfterNoMore: widget.canLoadAfterNoMore,
         resetAfterRefresh: widget.resetAfterRefresh,
         refreshOnStart: widget.refreshOnStart,
         callRefreshOverOffset: widget.callRefreshOverOffset,
@@ -293,8 +293,8 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
       notRefreshHeader: widget.notRefreshHeader,
       notLoadFooter: widget.notLoadFooter,
       simultaneously: widget.simultaneously,
-      noMoreRefresh: widget.noMoreRefresh,
-      noMoreLoad: widget.noMoreLoad,
+      canRefreshAfterNoMore: widget.canRefreshAfterNoMore,
+      canLoadAfterNoMore: widget.canLoadAfterNoMore,
       resetAfterRefresh: widget.resetAfterRefresh,
       refreshOnStart: widget.refreshOnStart,
       callRefreshOverOffset: widget.callRefreshOverOffset,
