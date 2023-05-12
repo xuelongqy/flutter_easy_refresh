@@ -54,7 +54,6 @@ class _ClassicPageState extends State<ClassicPage> {
       body: EasyRefresh(
         clipBehavior: Clip.none,
         controller: _controller,
-        canLoadAfterNoMore: true,
         header: ClassicHeader(
           clamping: _headerProperties.clamping,
           backgroundColor: _headerProperties.background
@@ -114,9 +113,7 @@ class _ClassicPageState extends State<ClassicPage> {
                   return;
                 }
                 setState(() {
-                  if (_count < 20) {
-                    _count += 5;
-                  }
+                  _count += 5;
                 });
                 _controller.finishLoad(_count >= 20
                     ? IndicatorResult.noMore
