@@ -141,6 +141,13 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
 
   Future _onRefresh() async {
     final result = await onRefresh();
+    if (!_refreshController.controlFinishRefresh && isNoMore) {
+      _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((timeStamp) {
+        if (mounted) {
+          _refreshController.finishLoad(IndicatorResult.noMore, true);
+        }
+      });
+    }
     if (result is IndicatorResult) {
       return result;
     }
@@ -159,6 +166,23 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
       return IndicatorResult.noMore;
     }
     return IndicatorResult.success;
+  }
+
+  /// EasyRefresh controller.
+  late EasyRefreshController _refreshController;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshController = widget.controller ?? EasyRefreshController();
+  }
+
+  @override
+  void didUpdateWidget(covariant EasyPaging oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      _refreshController = widget.controller ?? EasyRefreshController();
+    }
   }
 
   /// Empty widget.
@@ -287,7 +311,7 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
       refreshOnStartHeader: startHeader,
       onRefresh: _onRefresh,
       onLoad: _onLoad,
-      controller: widget.controller,
+      controller: _refreshController,
       spring: widget.spring,
       frictionFactor: widget.frictionFactor,
       notRefreshHeader: widget.notRefreshHeader,
