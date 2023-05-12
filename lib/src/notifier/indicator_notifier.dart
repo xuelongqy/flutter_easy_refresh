@@ -967,7 +967,7 @@ class HeaderNotifier extends IndicatorNotifier {
         velocity: mVelocity,
         leadingExtent: position.minScrollExtent - overExtent,
         trailingExtent: 0,
-        tolerance: _physics.tolerance,
+        tolerance: _physics.getTolerance(position),
       );
     }
     return null;
@@ -1132,7 +1132,7 @@ class FooterNotifier extends IndicatorNotifier {
         velocity: mVelocity,
         leadingExtent: 0,
         trailingExtent: position.maxScrollExtent + overExtent,
-        tolerance: _physics.tolerance,
+        tolerance: _physics.getTolerance(position),
       );
     }
     return null;

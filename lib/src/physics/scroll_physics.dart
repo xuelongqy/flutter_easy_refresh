@@ -383,13 +383,6 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         return (value - footerNotifier.actualTriggerOffset) -
             position.maxScrollExtent;
       }
-      // if (!userOffsetNotifier.value &&
-      //     (footerNotifier._mode == IndicatorMode.done ||
-      //         footerNotifier._mode == IndicatorMode.drag) &&
-      //     value < position.maxScrollExtent) {
-      //   _updateIndicatorOffset(position, position.maxScrollExtent);
-      //   return value - position.maxScrollExtent;
-      // }
       // Cannot over the secondary.
       if (footerNotifier.hasSecondary) {
         if (position.maxScrollExtent + footerNotifier.secondaryDimension <=
@@ -433,16 +426,27 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     footerNotifier._updateOffset(position, hClamping ? 0 : offset, false);
   }
 
+  /// The tolerance to use for ballistic simulations.
+  Tolerance getTolerance(ScrollMetrics metrics) {
+    try {
+      // This feature after v3.7.0-13.0.pre.
+      return (this as dynamic).toleranceFor(metrics);
+    } catch (_) {
+      try {
+        return (this as dynamic).tolerance;
+      } catch (_) {
+        return Tolerance(
+          velocity: 1.0 / (0.050 * metrics.devicePixelRatio),
+          distance: 1.0 / metrics.devicePixelRatio,
+        );
+      }
+    }
+  }
+
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
-    Tolerance tolerance;
-    try {
-      // This feature after v3.7.0-13.0.pre.
-      tolerance = (this as dynamic).toleranceFor(position);
-    } catch (_) {
-      tolerance = this.tolerance;
-    }
+    Tolerance tolerance = getTolerance(position);
     // User stopped scrolling.
     final oldUserOffset = userOffsetNotifier.value;
     userOffsetNotifier.value = false;
