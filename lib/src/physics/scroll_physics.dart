@@ -250,7 +250,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         return value - position.minScrollExtent;
       }
       // infinite hit top over
-      if ((!headerNotifier.infiniteHitOver ||
+      if (headerNotifier._isSupportAxis &&
+          (!headerNotifier.infiniteHitOver ||
               (!headerNotifier.hitOver && headerNotifier.modeLocked)) &&
           (headerNotifier._canProcess || headerNotifier.noMoreLocked) &&
           (value + headerNotifier.actualTriggerOffset) <
@@ -278,13 +279,6 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
             value -
             position.minScrollExtent;
       }
-      // if (!userOffsetNotifier.value &&
-      //     (headerNotifier._mode == IndicatorMode.done ||
-      //         headerNotifier._mode == IndicatorMode.drag) &&
-      //     value > position.minScrollExtent) {
-      //   _updateIndicatorOffset(position, 0);
-      //   return value - position.minScrollExtent;
-      // }
       // Cannot over the secondary.
       if (headerNotifier.hasSecondary) {
         if (value < position.pixels &&
@@ -350,7 +344,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         return value - position.maxScrollExtent;
       }
       // infinite hit bottom over
-      if (!(footerNotifier.infiniteOffset != null &&
+      if (footerNotifier._isSupportAxis &&
+          !(footerNotifier.infiniteOffset != null &&
               position.maxScrollExtent <= position.minScrollExtent) &&
           (!footerNotifier.infiniteHitOver ||
               !footerNotifier.hitOver && footerNotifier.modeLocked) &&

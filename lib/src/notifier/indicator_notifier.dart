@@ -31,17 +31,23 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Mounted on EasyRefresh.
   bool _mounted = false;
 
+  /// Direction of execution.
+  /// Other scroll directions will not show indicators and perform task.
+  Axis? _triggerAxis;
+
   IndicatorNotifier({
     required Indicator indicator,
     required this.vsync,
     required this.userOffsetNotifier,
     required CanProcessCallBack onCanProcess,
     required bool canProcessAfterNoMore,
+    Axis? triggerAxis,
     bool waitTaskResult = true,
     FutureOr Function()? task,
   })  : _indicator = indicator,
         _onCanProcess = onCanProcess,
         _canProcessAfterNoMore = canProcessAfterNoMore,
+        _triggerAxis = triggerAxis,
         _waitTaskResult = waitTaskResult,
         _task = task {
     _initClampingAnimation();
@@ -209,8 +215,20 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   double get actualSecondaryTriggerOffset =>
       secondaryTriggerOffset! + safeOffset;
 
+  /// Whether to support the direction.
+  bool get _isSupportAxis {
+    if (_triggerAxis == null || _axis == null) {
+      return true;
+    }
+    return _axis == _triggerAxis;
+  }
+
   /// Keep the extent of the [Scrollable] out of bounds.
   double get overExtent {
+    // If the direction is different do not change.
+    if (!_isSupportAxis) {
+      return 0;
+    }
     // State that doesn't change.
     if (_task == null ||
         (!_canProcess && !noMoreLocked) ||
@@ -368,6 +386,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   void _update({
     Indicator? indicator,
     bool? canProcessAfterNoMore,
+    Axis? triggerAxis,
     FutureOr Function()? task,
     bool? waitTaskRefresh,
   }) {
@@ -377,6 +396,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       _indicator = indicator;
     }
     _canProcessAfterNoMore = canProcessAfterNoMore ?? _canProcessAfterNoMore;
+    _triggerAxis = triggerAxis;
     _task = task;
     _waitTaskResult = waitTaskRefresh ?? _waitTaskResult;
     if (_indicator.clamping && _clampingAnimationController == null) {
@@ -563,6 +583,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Update indicator state.
   void _updateMode([double? oldOffset]) {
+    // When the orientation is different, no modification is made.
+    if (!_isSupportAxis) {
+      return;
+    }
     // No task, keep IndicatorMode.inactive state.
     if (_task == null) {
       if (_mode != IndicatorMode.inactive) {
@@ -847,6 +871,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (_axis == null || _axisDirection == null) {
       return const SizedBox();
     }
+    if (!_isSupportAxis) {
+      return const SizedBox();
+    }
     return _indicator.build(
       context,
       indicatorState!,
@@ -903,6 +930,7 @@ class HeaderNotifier extends IndicatorNotifier {
     required CanProcessCallBack onCanRefresh,
     bool canProcessAfterNoMore = false,
     bool canProcessAfterFail = true,
+    Axis? triggerAxis,
     FutureOr Function()? onRefresh,
     bool waitRefreshResult = true,
   }) : super(
@@ -911,6 +939,7 @@ class HeaderNotifier extends IndicatorNotifier {
           vsync: vsync,
           onCanProcess: onCanRefresh,
           canProcessAfterNoMore: canProcessAfterNoMore,
+          triggerAxis: triggerAxis,
           task: onRefresh,
           waitTaskResult: waitRefreshResult,
         );
@@ -1056,6 +1085,7 @@ class FooterNotifier extends IndicatorNotifier {
     required CanProcessCallBack onCanLoad,
     bool canProcessAfterNoMore = false,
     bool canProcessAfterFail = true,
+    Axis? triggerAxis,
     FutureOr Function()? onLoad,
     bool waitLoadResult = true,
   }) : super(
@@ -1064,6 +1094,7 @@ class FooterNotifier extends IndicatorNotifier {
           vsync: vsync,
           onCanProcess: onCanLoad,
           canProcessAfterNoMore: canProcessAfterNoMore,
+          triggerAxis: triggerAxis,
           task: onLoad,
           waitTaskResult: waitLoadResult,
         );

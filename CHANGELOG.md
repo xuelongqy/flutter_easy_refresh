@@ -7,6 +7,7 @@
 - feat: [EasyRefresh] noMoreRefresh -> canRefreshAfterNoMore, noMoreLoad -> canRefreshAfterLoad
 - fix: Use canRefreshAfterNoMore or canRefreshAfterLoad, abnormal NoMore status.
 - feat: EasyRefreshController.finishRefresh and EasyRefreshController.finishLoad add force parameter.
+- feat: Add EasyRefresh.triggerAxis, specifies the direction of the trigger.
 
 ## 3.3.1+2
 - fix: Secondary click event hit area [#688](https://github.com/xuelongqy/flutter_easy_refresh/issues/688), Thanks notbucai for [PR#714](https://github.com/xuelongqy/flutter_easy_refresh/pull/714).

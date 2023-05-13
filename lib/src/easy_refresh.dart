@@ -153,6 +153,10 @@ class EasyRefresh extends StatefulWidget {
   /// NOTE: You also need to bind this to your [Scrollable.controller].
   final ScrollController? scrollController;
 
+  /// Direction of execution.
+  /// Other scroll directions will not show indicators and perform task.
+  final Axis? triggerAxis;
+
   /// Default header indicator.
   static Header Function() defaultHeaderBuilder = _defaultHeaderBuilder;
   static Header _defaultHeaderBuilder() => const ClassicHeader();
@@ -194,6 +198,7 @@ class EasyRefresh extends StatefulWidget {
     this.clipBehavior = Clip.hardEdge,
     this.scrollBehaviorBuilder,
     this.scrollController,
+    this.triggerAxis,
   })  : childBuilder = null,
         assert(callRefreshOverOffset > 0,
             'callRefreshOverOffset must be greater than 0.'),
@@ -225,6 +230,7 @@ class EasyRefresh extends StatefulWidget {
     this.clipBehavior = Clip.hardEdge,
     this.scrollBehaviorBuilder,
     this.scrollController,
+    this.triggerAxis,
   })  : child = null,
         assert(callRefreshOverOffset > 0,
             'callRefreshOverOffset must be greater than 0.'),
@@ -347,12 +353,14 @@ class _EasyRefreshState extends State<EasyRefresh>
     _headerNotifier._update(
       indicator: _header,
       canProcessAfterNoMore: widget.canRefreshAfterNoMore,
+      triggerAxis: widget.triggerAxis,
       task: _onRefresh,
       waitTaskRefresh: _waitRefreshResult,
     );
     _footerNotifier._update(
       indicator: _footer,
       canProcessAfterNoMore: widget.canLoadAfterNoMore,
+      triggerAxis: widget.triggerAxis,
       task: widget.onLoad,
       waitTaskRefresh: _waitLoadResult,
     );
@@ -382,6 +390,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         vsync: this,
         onRefresh: _onRefresh,
         canProcessAfterNoMore: widget.canRefreshAfterNoMore,
+        triggerAxis: widget.triggerAxis,
         waitRefreshResult: _waitRefreshResult,
         onCanRefresh: () {
           if (widget.simultaneously) {
@@ -397,6 +406,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         vsync: this,
         onLoad: widget.onLoad,
         canProcessAfterNoMore: widget.canLoadAfterNoMore,
+        triggerAxis: widget.triggerAxis,
         waitLoadResult: _waitLoadResult,
         onCanLoad: () {
           if (widget.simultaneously) {
