@@ -1,3 +1,6 @@
+## 3.3.2+1
+- fix: Compatible with versions below Flutter3.10 [#722](https://github.com/xuelongqy/flutter_easy_refresh/issues/722).
+
 ## 3.3.2
 - fix: BezierIndicator.spinBuilder doesn't work. 
 - feat: Add BezierIndicator.spinInCenter.

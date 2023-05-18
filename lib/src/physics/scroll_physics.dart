@@ -427,14 +427,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       // This feature after v3.7.0-13.0.pre.
       return (this as dynamic).toleranceFor(metrics);
     } catch (_) {
-      try {
-        return (this as dynamic).tolerance;
-      } catch (_) {
-        return Tolerance(
-          velocity: 1.0 / (0.050 * metrics.devicePixelRatio),
-          distance: 1.0 / metrics.devicePixelRatio,
-        );
-      }
+      return this.tolerance;
     }
   }
 
