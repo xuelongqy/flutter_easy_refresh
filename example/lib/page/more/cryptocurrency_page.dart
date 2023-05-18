@@ -104,7 +104,7 @@ class _CryptocurrencyPageState extends State<CryptocurrencyPage>
       width: double.infinity,
       child: Column(
         children: [
-          QrImage(
+          QrImageView(
             data: info.address,
             size: 240,
             backgroundColor: Colors.white,
