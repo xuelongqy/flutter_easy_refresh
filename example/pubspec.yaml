@@ -10,7 +10,7 @@ description: EasyRefresh example.
 version: 3.3.2+55
 
 environment:
-  sdk: ">=2.17.0"
+  sdk: ">=2.17.0 <4.0.0"
   flutter: ">=1.24.0"
 
 dependencies:
