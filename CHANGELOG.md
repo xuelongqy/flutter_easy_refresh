@@ -1,4 +1,4 @@
-## Next
+## 3.3.2
 - fix: BezierIndicator.spinBuilder doesn't work. 
 - feat: Add BezierIndicator.spinInCenter.
 - feat: Add BezierIndicator.onlySpin [#689](https://github.com/xuelongqy/flutter_easy_refresh/issues/689).
