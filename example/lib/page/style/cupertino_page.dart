@@ -59,76 +59,82 @@ class _CupertinoIndicatorPageState extends State<CupertinoIndicatorPage> {
                       : Icons.vertical_distribute),
                 ),
               ),
-        child: EasyRefresh(
-          controller: _controller,
-          header: const CupertinoHeader(
-            position: IndicatorPosition.locator,
-            safeArea: false,
-          ),
-          footer: const CupertinoFooter(
-            position: IndicatorPosition.locator,
-          ),
-          onRefresh: () async {
-            await Future.delayed(const Duration(seconds: 2));
-            if (!mounted) {
-              return;
-            }
-            setState(() {
-              _count = 10;
-            });
-            _controller.finishRefresh();
-            _controller.resetFooter();
-          },
-          onLoad: () async {
-            await Future.delayed(const Duration(seconds: 2));
-            if (!mounted) {
-              return;
-            }
-            setState(() {
-              _count += 5;
-            });
-            _controller.finishLoad(_count >= 20
-                ? IndicatorResult.noMore
-                : IndicatorResult.success);
-          },
-          child: CustomScrollView(
-            scrollDirection: _scrollDirection,
-            slivers: [
-              if (_scrollDirection == Axis.vertical)
-                CupertinoSliverNavigationBar(
-                  largeTitle: Text(
-                    'iOS Cupertino',
-                    style: TextStyle(
-                      color: themeData.textTheme.titleMedium?.color,
+        child: SafeArea(
+          top: _scrollDirection == Axis.horizontal,
+          bottom: false,
+          left: false,
+          right: false,
+          child: EasyRefresh(
+            controller: _controller,
+            header: const CupertinoHeader(
+              position: IndicatorPosition.locator,
+              safeArea: false,
+            ),
+            footer: const CupertinoFooter(
+              position: IndicatorPosition.locator,
+            ),
+            onRefresh: () async {
+              await Future.delayed(const Duration(seconds: 2));
+              if (!mounted) {
+                return;
+              }
+              setState(() {
+                _count = 10;
+              });
+              _controller.finishRefresh();
+              _controller.resetFooter();
+            },
+            onLoad: () async {
+              await Future.delayed(const Duration(seconds: 2));
+              if (!mounted) {
+                return;
+              }
+              setState(() {
+                _count += 5;
+              });
+              _controller.finishLoad(_count >= 20
+                  ? IndicatorResult.noMore
+                  : IndicatorResult.success);
+            },
+            child: CustomScrollView(
+              scrollDirection: _scrollDirection,
+              slivers: [
+                if (_scrollDirection == Axis.vertical)
+                  CupertinoSliverNavigationBar(
+                    largeTitle: Text(
+                      'iOS Cupertino',
+                      style: TextStyle(
+                        color: themeData.textTheme.titleMedium?.color,
+                      ),
+                    ),
+                    trailing: IconButton(
+                      iconSize: 24,
+                      onPressed: () {
+                        setState(() {
+                          _scrollDirection = _scrollDirection == Axis.horizontal
+                              ? Axis.vertical
+                              : Axis.horizontal;
+                        });
+                      },
+                      icon: Icon(_scrollDirection == Axis.horizontal
+                          ? Icons.horizontal_distribute
+                          : Icons.vertical_distribute),
                     ),
                   ),
-                  trailing: IconButton(
-                    iconSize: 24,
-                    onPressed: () {
-                      setState(() {
-                        _scrollDirection = _scrollDirection == Axis.horizontal
-                            ? Axis.vertical
-                            : Axis.horizontal;
-                      });
+                const HeaderLocator.sliver(),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return SkeletonItem(
+                        direction: _scrollDirection,
+                      );
                     },
-                    icon: Icon(_scrollDirection == Axis.horizontal
-                        ? Icons.horizontal_distribute
-                        : Icons.vertical_distribute),
+                    childCount: _count,
                   ),
                 ),
-              const HeaderLocator.sliver(),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return SkeletonItem(
-                      direction: _scrollDirection,
-                    );
-                  },
-                  childCount: _count,
-                ),
-              ),
-              const FooterLocator.sliver(),
-            ],
+                const FooterLocator.sliver(),
+              ],
+            ),
           ),
         ),
       ),
