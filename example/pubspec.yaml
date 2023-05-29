@@ -27,9 +27,9 @@ dependencies:
   get: ^4.6.5
   convert: ^3.1.1
   carousel_slider: ^4.2.1
-  rive: ^0.11.0
+  rive: ^0.11.1
   qr_flutter: ^4.1.0
-  flutter_svg: ^2.0.5
+  flutter_svg: ^2.0.6
   flutter_sticky_header: ^0.6.5
   easy_refresh:
     path: ../
