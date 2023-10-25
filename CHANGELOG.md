@@ -1,3 +1,6 @@
+## 3.3.2+2
+- feat: All kind of pointer device are supported by default [#777](https://github.com/xuelongqy/flutter_easy_refresh/issues/777).
+
 ## 3.3.2+1
 - fix: Compatible with versions below Flutter3.10 [#722](https://github.com/xuelongqy/flutter_easy_refresh/issues/722).
 
