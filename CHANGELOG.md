@@ -1,3 +1,6 @@
+## Next
+- feat: Use Flutter default scroll bar [#775](https://github.com/xuelongqy/flutter_easy_refresh/issues/775).
+
 ## 3.3.2+4
 - fix: IndicatorNotifier._onCanProcess. Null check operator used on a null value [#782](https://github.com/xuelongqy/flutter_easy_refresh/issues/782), [#774](https://github.com/xuelongqy/flutter_easy_refresh/issues/774).
 
