@@ -1,4 +1,4 @@
-## 3.3.2+3
+## 3.3.2+4
 - fix: IndicatorNotifier._onCanProcess. Null check operator used on a null value [#782](https://github.com/xuelongqy/flutter_easy_refresh/issues/782), [#774](https://github.com/xuelongqy/flutter_easy_refresh/issues/774).
 
 ## 3.3.2+2

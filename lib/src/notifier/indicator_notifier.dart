@@ -429,7 +429,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     ScrollController? scrollController,
     bool force = false,
   }) {
-    if (_mounted) {
+    if (!_mounted) {
       return Future.value();
     }
     if (!force) {
