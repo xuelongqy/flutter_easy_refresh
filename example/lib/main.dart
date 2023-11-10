@@ -120,8 +120,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       initialRoute: '/',
       getPages: Routes.getPages,
       builder: (context, widget) {
+        final window = View.of(context);
         if (_checkSize) {
-          final size = Get.size;
+          final size = window.physicalSize / window.devicePixelRatio;
           final hasFrame = size.width > _mobileWidthThreshold;
           if (hasFrame) {
             return _buildFrame(widget!);
