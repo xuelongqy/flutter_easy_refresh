@@ -274,7 +274,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Can it be process.
   CanProcessCallBack? _onCanProcess;
 
-  bool get _canProcess => _onCanProcess!.call();
+  bool get _canProcess => _onCanProcess?.call() ?? false;
 
   /// Task completion result.
   IndicatorResult _result = IndicatorResult.none;
@@ -429,6 +429,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     ScrollController? scrollController,
     bool force = false,
   }) {
+    if (_mounted) {
+      return Future.value();
+    }
     if (!force) {
       if (modeLocked || noMoreLocked || secondaryLocked || !_canProcess) {
         return Future.value();
