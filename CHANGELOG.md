@@ -1,4 +1,5 @@
-## Next
+## 3.3.3
+- fix: When start on refresh, interrupted by loading [#785](https://github.com/xuelongqy/flutter_easy_refresh/issues/785).
 - feat: Use Flutter default scroll bar [#775](https://github.com/xuelongqy/flutter_easy_refresh/issues/775).
 
 ## 3.3.2+4

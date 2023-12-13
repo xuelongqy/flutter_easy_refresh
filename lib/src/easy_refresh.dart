@@ -159,12 +159,16 @@ class EasyRefresh extends StatefulWidget {
 
   /// Default header indicator.
   static Header Function() defaultHeaderBuilder = _defaultHeaderBuilder;
+
   static Header _defaultHeaderBuilder() => const ClassicHeader();
+
   static Header get _defaultHeader => defaultHeaderBuilder.call();
 
   /// Default footer indicator.
   static Footer Function() defaultFooterBuilder = _defaultFooterBuilder;
+
   static Footer _defaultFooterBuilder() => const ClassicFooter();
+
   static Footer get _defaultFooter => defaultFooterBuilder.call();
 
   /// Default ScrollBehavior builder.
@@ -299,7 +303,10 @@ class _EasyRefreshState extends State<EasyRefresh>
     } else {
       Header h = widget.header ?? EasyRefresh._defaultHeader;
       if (_isRefreshOnStart) {
-        h = widget.refreshOnStartHeader ?? h;
+        h = OverrideHeader(
+          header: widget.refreshOnStartHeader ?? h,
+          triggerWhenReach: true,
+        );
       }
       return h;
     }
@@ -333,13 +340,11 @@ class _EasyRefreshState extends State<EasyRefresh>
     // Refresh on start.
     if (widget.refreshOnStart && widget.onRefresh != null) {
       _isRefreshOnStart = true;
-      Future(() {
-        _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((timeStamp) {
-          _callRefresh(
-            overOffset: widget.callRefreshOverOffset,
-            duration: null,
-          );
-        });
+      _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((timeStamp) {
+        _callRefresh(
+          overOffset: widget.callRefreshOverOffset,
+          duration: null,
+        );
       });
     }
     _initData();
@@ -412,7 +417,7 @@ class _EasyRefreshState extends State<EasyRefresh>
           if (widget.simultaneously) {
             return true;
           } else {
-            return !_headerNotifier._processing;
+            return !_headerNotifier._processing && !_isRefreshOnStart;
           }
         },
       ),
