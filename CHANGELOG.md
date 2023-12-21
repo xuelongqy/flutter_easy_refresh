@@ -1,3 +1,6 @@
+## Next
+- fix: Using refreshOnStart, scrolling to the bottom when the Header is visible cannot trigger loading [#787](https://github.com/xuelongqy/flutter_easy_refresh/issues/787). 
+
 ## 3.3.3+1
 - fix: All styles are lost.
 

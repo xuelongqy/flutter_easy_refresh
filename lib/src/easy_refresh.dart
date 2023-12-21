@@ -435,7 +435,8 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// From [IndicatorMode.processing] to [IndicatorMode.inactive].
   /// When back to inactive, end listening.
   void _refreshOnStartListener() {
-    if (_headerNotifier._mode == IndicatorMode.inactive) {
+    if (_headerNotifier._mode == IndicatorMode.done ||
+        _headerNotifier._mode == IndicatorMode.inactive) {
       _isRefreshOnStart = false;
       _headerNotifier.removeListener(_refreshOnStartListener);
       _headerNotifier._update(
