@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({Key? key}) : super(key: key);
+  const UserProfilePage({super.key});
 
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
@@ -96,6 +96,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   style: TextStyle(color: themeData.colorScheme.onPrimary),
                 ),
                 centerTitle: true,
+                titlePadding: const EdgeInsets.only(bottom: 16),
               ),
             ),
             const HeaderLocator.sliver(paintExtent: 80),
