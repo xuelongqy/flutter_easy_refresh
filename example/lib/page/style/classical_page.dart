@@ -196,7 +196,7 @@ class _ClassicPageState extends State<ClassicPage> {
               dividerColor: Colors.transparent,
               expansionCallback: (panelIndex, isExpanded) {
                 setState(() {
-                  if (!isExpanded) {
+                  if (isExpanded) {
                     _expandedIndex = panelIndex;
                   } else {
                     _expandedIndex = -1;

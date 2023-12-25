@@ -353,7 +353,7 @@ class _BezierPageState extends State<BezierPage> {
               dividerColor: Colors.transparent,
               expansionCallback: (panelIndex, isExpanded) {
                 setState(() {
-                  if (!isExpanded) {
+                  if (isExpanded) {
                     _expandedIndex = panelIndex;
                   } else {
                     _expandedIndex = -1;
@@ -432,7 +432,7 @@ class _BezierPageState extends State<BezierPage> {
                                     Padding(
                                       padding: EdgeInsets.only(
                                           right: 8,
-                                          bottom: GetPlatform.isWeb ? 8 : 0),
+                                          bottom: GetPlatform.isDesktop || GetPlatform.isWeb ? 8 : 0),
                                       child: RawChip(
                                         label: Text(spin),
                                         onPressed: () {
