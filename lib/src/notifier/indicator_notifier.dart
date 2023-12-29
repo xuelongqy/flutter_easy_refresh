@@ -831,7 +831,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
           if (this.mode == IndicatorMode.processed) {
             _setMode(IndicatorMode.done);
             if (offset == 0) {
-              _mode = IndicatorMode.inactive;
+              _setMode(IndicatorMode.inactive);
             }
             // Trigger [Scrollable] rollback
             if (!userOffsetNotifier.value) {
