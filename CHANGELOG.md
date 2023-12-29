@@ -1,4 +1,4 @@
-## Next
+## 3.3.4
 - fix: EasyPaging.itemBuilder type inference [#762](https://github.com/xuelongqy/flutter_easy_refresh/issues/762).
 - fix: Event notification after dispose [#726](https://github.com/xuelongqy/flutter_easy_refresh/issues/726). 
 - fix: Using refreshOnStart, onRefresh may not be triggered [#789](https://github.com/xuelongqy/flutter_easy_refresh/issues/789).

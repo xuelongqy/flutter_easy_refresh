@@ -432,7 +432,10 @@ class _BezierPageState extends State<BezierPage> {
                                     Padding(
                                       padding: EdgeInsets.only(
                                           right: 8,
-                                          bottom: GetPlatform.isDesktop || GetPlatform.isWeb ? 8 : 0),
+                                          bottom: GetPlatform.isDesktop ||
+                                                  GetPlatform.isWeb
+                                              ? 8
+                                              : 0),
                                       child: RawChip(
                                         label: Text(spin),
                                         onPressed: () {
