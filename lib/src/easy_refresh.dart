@@ -340,11 +340,13 @@ class _EasyRefreshState extends State<EasyRefresh>
     // Refresh on start.
     if (widget.refreshOnStart && widget.onRefresh != null) {
       _isRefreshOnStart = true;
-      _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((timeStamp) {
-        _callRefresh(
-          overOffset: widget.callRefreshOverOffset,
-          duration: null,
-        );
+      Future(() {
+        _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((timeStamp) {
+          _callRefresh(
+            overOffset: widget.callRefreshOverOffset,
+            duration: null,
+          );
+        });
       });
     }
     _initData();
