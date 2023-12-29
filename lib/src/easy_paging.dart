@@ -1,7 +1,7 @@
 part of easy_paging;
 
 /// Paging item builder.
-typedef EasyPagingItemBuilder = Widget Function<ItemType>(
+typedef EasyPagingItemBuilder<ItemType> = Widget Function(
     BuildContext context, int index, ItemType item);
 
 /// A flutter widget that convenient pagination.
@@ -59,7 +59,7 @@ abstract class EasyPaging<DataType, ItemType> extends StatefulWidget {
   final Clip clipBehavior;
 
   /// Item builder.
-  final EasyPagingItemBuilder? itemBuilder;
+  final EasyPagingItemBuilder<ItemType>? itemBuilder;
 
   /// Refresh on start widget builder.
   final WidgetBuilder? refreshOnStartWidgetBuilder;
@@ -249,7 +249,7 @@ abstract class EasyPagingState<DataType, ItemType> extends State<EasyPaging> {
 
   /// Build item widget.
   Widget buildItem(BuildContext context, int index, ItemType item) {
-    return widget.itemBuilder!<ItemType>(context, index, item);
+    return widget.itemBuilder!(context, index, item);
   }
 
   @override

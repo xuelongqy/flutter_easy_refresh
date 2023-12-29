@@ -19,7 +19,7 @@ class _PagingPageState extends State<PagingPage> {
         title: Text('Paging example'.tr),
       ),
       body: CustomPaging(
-        itemBuilder: <ItemType>(context, index, item) {
+        itemBuilder: <String>(context, index, item) {
           return const SkeletonItem();
         },
       ),
