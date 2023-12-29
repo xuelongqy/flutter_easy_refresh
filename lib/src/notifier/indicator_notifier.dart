@@ -489,7 +489,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       _axis = position.axis;
       _axisDirection = position.axisDirection;
       Future(() {
-        notifyListeners();
+        if (_mounted) {
+          notifyListeners();
+        }
       });
     }
     this.position = position;
@@ -576,7 +578,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       // Notify when list length changes
       if (_offset <= actualTriggerOffset) {
         Future(() {
-          notifyListeners();
+          if (_mounted) {
+            notifyListeners();
+          }
         });
       }
       return;
