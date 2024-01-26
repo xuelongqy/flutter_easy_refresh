@@ -216,7 +216,9 @@ class IndicatorStateListenable extends ValueListenable<IndicatorState?> {
     _indicatorNotifier = indicatorNotifier;
     if (_listeners.isNotEmpty) {
       indicatorNotifier.addListener(_onNotify);
-      Future(_onNotify);
+      _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((timeStamp) {
+        _onNotify();
+      });
     }
   }
 
@@ -224,6 +226,15 @@ class IndicatorStateListenable extends ValueListenable<IndicatorState?> {
   void _unbind() {
     _indicatorNotifier?.removeListener(_onNotify);
     _indicatorNotifier = null;
+  }
+
+  /// Rebind [IndicatorNotifier].
+  void _rebind(IndicatorNotifier indicatorNotifier) {
+    if (_indicatorNotifier == indicatorNotifier) {
+      return;
+    }
+    _unbind();
+    _bind(indicatorNotifier);
   }
 
   /// Listen for notifications

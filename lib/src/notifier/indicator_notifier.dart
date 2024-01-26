@@ -391,9 +391,14 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     bool? waitTaskRefresh,
   }) {
     if (indicator != null) {
-      _indicator.listenable?._unbind();
-      indicator.listenable?._bind(this);
-      _indicator = indicator;
+      if (indicator.listenable == _indicator.listenable) {
+        indicator.listenable?._rebind(this);
+        return;
+      } else {
+        _indicator.listenable?._unbind();
+        indicator.listenable?._bind(this);
+        _indicator = indicator;
+      }
     }
     _canProcessAfterNoMore = canProcessAfterNoMore ?? _canProcessAfterNoMore;
     _triggerAxis = triggerAxis;

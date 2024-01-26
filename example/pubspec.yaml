@@ -21,7 +21,7 @@ dependencies:
 
   cupertino_icons: ^1.0.6
 
-  url_launcher: ^6.2.2
+  url_launcher: ^6.2.4
   flutter_spinkit: ^5.2.0
   extended_nested_scroll_view: ^6.2.1
   get: ^4.6.6
