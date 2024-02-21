@@ -419,6 +419,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     final fClamping = footerNotifier.clamping && footerNotifier.offset > 0;
     headerNotifier._updateOffset(position, fClamping ? 0 : offset, false);
     footerNotifier._updateOffset(position, hClamping ? 0 : offset, false);
+    if (headerNotifier.__mode == IndicatorMode.done) {
+      headerNotifier._setMode(IndicatorMode.drag);
+    }
   }
 
   /// The tolerance to use for ballistic simulations.
