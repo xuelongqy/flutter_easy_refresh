@@ -52,7 +52,7 @@ class MaterialFooter extends Footer {
     bool? hitOver,
     bool? infiniteHitOver,
     bool hapticFeedback = false,
-    bool triggerWhenRelease = false,
+    bool triggerWhenRelease = true,
     double maxOverOffset = double.infinity,
     this.backgroundColor,
     this.color,
