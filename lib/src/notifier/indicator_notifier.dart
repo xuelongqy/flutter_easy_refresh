@@ -391,7 +391,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     bool? waitTaskRefresh,
   }) {
     if (indicator != null) {
-      if (indicator.listenable == _indicator.listenable) {
+      // print(indicator.listenable == null);
+      // indicator.listenable得到的是null值，导致_rebind不会执行，从而造成刷新器的属性变化未同步更新bug
+      if (indicator.listenable == _indicator.listenable &&
+          indicator.listenable != null) {
         indicator.listenable?._rebind(this);
         return;
       } else {
