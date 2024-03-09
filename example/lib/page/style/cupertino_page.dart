@@ -69,6 +69,7 @@ class _CupertinoIndicatorPageState extends State<CupertinoIndicatorPage> {
             header: const CupertinoHeader(
               position: IndicatorPosition.locator,
               safeArea: false,
+              triggerWhenDone: true,
             ),
             footer: const CupertinoFooter(
               position: IndicatorPosition.locator,

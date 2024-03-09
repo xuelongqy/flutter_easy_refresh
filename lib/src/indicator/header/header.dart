@@ -28,6 +28,7 @@ abstract class Header extends Indicator {
     bool triggerWhenReach = false,
     bool triggerWhenRelease = false,
     bool triggerWhenReleaseNoWait = false,
+    bool triggerWhenDone = false,
     double maxOverOffset = double.infinity,
   }) : super(
           triggerOffset: triggerOffset,
@@ -55,6 +56,7 @@ abstract class Header extends Indicator {
           triggerWhenReach: triggerWhenReach,
           triggerWhenRelease: triggerWhenRelease,
           triggerWhenReleaseNoWait: triggerWhenReleaseNoWait,
+          triggerWhenDone: triggerWhenDone,
           maxOverOffset: maxOverOffset,
         );
 }

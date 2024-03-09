@@ -62,6 +62,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   bool get safeArea => _indicator.safeArea;
 
+  bool get triggerWhenDone => _indicator.triggerWhenDone;
+
   Duration get processedDuration => _indicator.processedDuration;
 
   double? get infiniteOffset => _indicator.infiniteOffset;

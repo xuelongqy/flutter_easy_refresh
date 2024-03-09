@@ -34,6 +34,7 @@ class CupertinoHeader extends Header {
     bool? infiniteHitOver,
     bool hapticFeedback = false,
     bool triggerWhenRelease = false,
+    bool triggerWhenDone = false,
     double maxOverOffset = double.infinity,
     this.foregroundColor,
     this.userWaterDrop = true,
@@ -58,6 +59,7 @@ class CupertinoHeader extends Header {
           position: position,
           hapticFeedback: hapticFeedback,
           triggerWhenRelease: triggerWhenRelease,
+          triggerWhenDone: triggerWhenDone,
           maxOverOffset: maxOverOffset,
         );
 

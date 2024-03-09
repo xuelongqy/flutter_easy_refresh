@@ -72,6 +72,7 @@ class _ClassicPageState extends State<ClassicPage> {
           noMoreText: 'No more'.tr,
           failedText: 'Failed'.tr,
           messageText: 'Last updated at %T'.tr,
+          triggerWhenDone: true,
         ),
         footer: ClassicFooter(
           clamping: _footerProperties.clamping,

@@ -362,6 +362,14 @@ abstract class Indicator {
   /// or external custom indicators.
   final bool triggerWhenReleaseNoWait;
 
+  /// When in the done state, Whether to allow the drop-down refresh to be triggered again,
+  /// if false, You must wait for the animation to end before you can refresh it again,
+  /// This option is not currently compatible with all refresher indicator, so default is false.
+  ///
+  /// 当处于done状态时，是否允许再次触发下拉刷新，若为false，则必须等待动画结束才能再次刷新，
+  /// 该选项目前没有兼容所有刷新器，因此默认为false。
+  final bool triggerWhenDone;
+
   /// Maximum overscroll offset, will no longer scroll.
   /// When [double.infinity], no limit.
   final double maxOverOffset;
@@ -392,6 +400,7 @@ abstract class Indicator {
     this.triggerWhenReach = false,
     this.triggerWhenRelease = false,
     this.triggerWhenReleaseNoWait = false,
+    this.triggerWhenDone = false,
     this.maxOverOffset = double.infinity,
   })  : hitOver = hitOver ?? infiniteOffset != null,
         infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,

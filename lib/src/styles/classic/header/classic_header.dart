@@ -107,6 +107,7 @@ class ClassicHeader extends Header {
     bool hapticFeedback = false,
     bool triggerWhenReach = false,
     bool triggerWhenRelease = false,
+    bool triggerWhenDone = false,
     double maxOverOffset = double.infinity,
     this.mainAxisAlignment = MainAxisAlignment.center,
     this.backgroundColor,
@@ -151,6 +152,7 @@ class ClassicHeader extends Header {
           hapticFeedback: hapticFeedback,
           triggerWhenReach: triggerWhenReach,
           triggerWhenRelease: triggerWhenRelease,
+          triggerWhenDone: triggerWhenDone,
           maxOverOffset: maxOverOffset,
         );
 

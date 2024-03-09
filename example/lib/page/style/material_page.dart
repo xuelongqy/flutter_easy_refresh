@@ -57,6 +57,7 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
           bezierBackgroundBounce: _headerProperties.bounce,
           infiniteOffset: _headerProperties.infinite ? 100 : null,
           springRebound: _headerProperties.listSpring,
+          triggerWhenDone: true,
         ),
         footer: MaterialFooter(
           clamping: _footerProperties.clamping,
