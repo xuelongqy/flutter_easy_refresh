@@ -96,14 +96,11 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
   /// Indicator value.
   /// See [ProgressIndicator.value].
   double? get _value {
-    if (_result == IndicatorResult.noMore) {
-      return 0;
-    }
+    if (_result == IndicatorResult.noMore) return 0;
+    if (_mode == IndicatorMode.inactive) return 0;
     if (_mode == IndicatorMode.drag || _mode == IndicatorMode.armed) {
       const noneOffset = _kCircularProgressIndicatorSize * 0.25;
-      if (_offset < noneOffset) {
-        return 0;
-      }
+      if (_offset < noneOffset) return 0;
       return math.min(
               (_offset - noneOffset) /
                   (_actualTriggerOffset * 1.25 - noneOffset),
