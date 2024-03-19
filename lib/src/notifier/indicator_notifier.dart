@@ -393,6 +393,11 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (indicator != null) {
       if (indicator.listenable == _indicator.listenable) {
         indicator.listenable?._rebind(this);
+        _canProcessAfterNoMore =
+            canProcessAfterNoMore ?? _canProcessAfterNoMore;
+        _triggerAxis = triggerAxis;
+        _task = task;
+        _waitTaskResult = waitTaskRefresh ?? _waitTaskResult;
         return;
       } else {
         _indicator.listenable?._unbind();
