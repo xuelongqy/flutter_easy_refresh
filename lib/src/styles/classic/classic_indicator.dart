@@ -356,7 +356,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
         Text(
           _currentText,
           // ignore: deprecated_member_use
-          style: widget.textStyle ?? Theme.of(context).textTheme.subtitle1,
+          style: widget.textStyle ?? Theme.of(context).textTheme.titleMedium,
         );
   }
 
@@ -369,7 +369,7 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
           child: Text(
             _messageText,
             // ignore: deprecated_member_use
-            style: widget.messageStyle ?? Theme.of(context).textTheme.caption,
+            style: widget.messageStyle ?? Theme.of(context).textTheme.bodySmall,
           ),
         );
   }
