@@ -227,8 +227,8 @@ class _ClassicIndicatorState extends State<_ClassicIndicator>
 
   @override
   void dispose() {
-    super.dispose();
     _iconAnimationController.dispose();
+    super.dispose();
   }
 
   /// The text of the current state.
