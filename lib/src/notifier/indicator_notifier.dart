@@ -546,7 +546,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     // Clamping
     // In the case of release, and offset is greater than 0, it is controlled by animation.
     if ((clamping && _mode == IndicatorMode.done && bySimulation) ||
-        (!userOffsetNotifier.value && clamping && _offset > 0 && !bySimulation)) {
+        (!userOffsetNotifier.value &&
+            clamping &&
+            _offset > 0 &&
+            !bySimulation)) {
       return;
     }
     this.position = position;
@@ -840,9 +843,23 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       if (processedDuration == Duration.zero) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           if (this.mode == IndicatorMode.processed) {
-            _mode = IndicatorMode.done;
+            if (!userOffsetNotifier.value &&
+                _offset != 0 &&
+                _position != null &&
+                !_position!.outOfRange) {
+              final oldOffset = _offset;
+              if (clamping) {
+                _offset = 0;
+              } else {
+                _offset = _calculateOffset(_position!, _position!.pixels);
+              }
+              if (_offset != oldOffset) {
+                notifyListeners();
+              }
+            }
+            _setMode(IndicatorMode.done);
             if (offset == 0) {
-              _mode = IndicatorMode.inactive;
+              _setMode(IndicatorMode.inactive);
             }
             // Trigger [Scrollable] rollback
             if (oldMode == IndicatorMode.processing &&
@@ -854,6 +871,20 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       } else {
         Future.delayed(processedDuration, () {
           if (this.mode == IndicatorMode.processed) {
+            if (!userOffsetNotifier.value &&
+                _offset != 0 &&
+                _position != null &&
+                !_position!.outOfRange) {
+              final oldOffset = _offset;
+              if (clamping) {
+                _offset = 0;
+              } else {
+                _offset = _calculateOffset(_position!, _position!.pixels);
+              }
+              if (_offset != oldOffset) {
+                notifyListeners();
+              }
+            }
             _setMode(IndicatorMode.done);
             if (offset == 0) {
               _setMode(IndicatorMode.inactive);
