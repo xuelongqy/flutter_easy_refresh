@@ -80,8 +80,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         return footerNotifier.readySpringBuilder!(
           mode: footerNotifier._mode,
           offset: footerNotifier._offset,
-          actualTriggerOffset: headerNotifier.actualTriggerOffset,
-          velocity: headerNotifier.velocity,
+          actualTriggerOffset: footerNotifier.actualTriggerOffset,
+          velocity: footerNotifier.velocity,
         );
       } else if (footerNotifier._spring != null) {
         return footerNotifier._spring!;
@@ -437,7 +437,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     final hState = _BallisticSimulationCreationState(
       mode: headerNotifier._mode,
       offset: headerNotifier._offset,
-      actualTriggerOffset: footerNotifier.actualTriggerOffset,
+      actualTriggerOffset: headerNotifier.actualTriggerOffset,
     );
     final fState = _BallisticSimulationCreationState(
       mode: footerNotifier._mode,
@@ -448,7 +448,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     bool hSecondary = !headerNotifier.clamping &&
         (headerNotifier._mode == IndicatorMode.secondaryReady ||
             headerNotifier._mode == IndicatorMode.secondaryOpen);
-    bool fSecondary = !headerNotifier.clamping &&
+    bool fSecondary = !footerNotifier.clamping &&
         (footerNotifier._mode == IndicatorMode.secondaryReady ||
             footerNotifier._mode == IndicatorMode.secondaryOpen);
     bool secondary = hSecondary || fSecondary;
