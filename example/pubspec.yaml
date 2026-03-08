@@ -1,5 +1,6 @@
 name: example
 description: EasyRefresh example.
+resolution: workspace
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -10,8 +11,7 @@ description: EasyRefresh example.
 version: 3.3.4+57
 
 environment:
-  sdk: ">=2.17.0 <4.0.0"
-  flutter: ">=1.24.0"
+  sdk: ">=3.5.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -32,23 +32,18 @@ dependencies:
   flutter_svg: ^2.2.4
   flutter_sticky_header: ^0.8.0
   path_drawing: ^1.0.1
-  easy_refresh:
-    path: ../
-  easy_refresh_space:
-    path: ../styles/easy_refresh_space
-  easy_refresh_squats:
-    path: ../styles/easy_refresh_squats
-  easy_refresh_skating:
-    path: ../styles/easy_refresh_skating
-  easy_refresh_halloween:
-    path: ../styles/easy_refresh_halloween
-  easy_refresh_bubbles:
-    path: ../styles/easy_refresh_bubbles
+  easy_refresh: ^3.4.0
+  easy_refresh_space: ^1.0.2
+  easy_refresh_squats: ^1.0.2
+  easy_refresh_skating: ^1.0.2
+  easy_refresh_halloween: ^1.0.2
+  easy_refresh_bubbles: ^1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^6.0.0
+  very_good_analysis: ^10.0.0
 
 module:
   androidX: true
