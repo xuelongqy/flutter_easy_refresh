@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 class _ClassicIndicatorHarness extends StatefulWidget {
   final ClassicHeader? header;
   final ClassicFooter? footer;
-  final bool useDefaultIndicators  = false;
+  final bool useDefaultIndicators = false;
 
   const _ClassicIndicatorHarness({
     super.key,
