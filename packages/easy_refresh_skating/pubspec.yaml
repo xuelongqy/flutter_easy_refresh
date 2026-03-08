@@ -14,8 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
   rive: any
-  easy_refresh:
-    path: ../../
+  easy_refresh: ^3.4.0
 
 dev_dependencies:
   flutter_test:
