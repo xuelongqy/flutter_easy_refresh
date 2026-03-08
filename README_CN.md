@@ -117,6 +117,16 @@
   EasyRefresh.defaultFooterBuilder = () => ClassicFooter();
 ```
 
+## 样式搜集
+
+| 包名 | Pub |
+| --- | --- |
+| [easy_refresh_bubbles](https://pub.dev/packages/easy_refresh_bubbles) | [![Pub](https://img.shields.io/pub/v/easy_refresh_bubbles)](https://pub.dev/packages/easy_refresh_bubbles) |
+| [easy_refresh_halloween](https://pub.dev/packages/easy_refresh_halloween) | [![Pub](https://img.shields.io/pub/v/easy_refresh_halloween)](https://pub.dev/packages/easy_refresh_halloween) |
+| [easy_refresh_skating](https://pub.dev/packages/easy_refresh_skating) | [![Pub](https://img.shields.io/pub/v/easy_refresh_skating)](https://pub.dev/packages/easy_refresh_skating) |
+| [easy_refresh_space](https://pub.dev/packages/easy_refresh_space) | [![Pub](https://img.shields.io/pub/v/easy_refresh_space)](https://pub.dev/packages/easy_refresh_space) |
+| [easy_refresh_squats](https://pub.dev/packages/easy_refresh_squats) | [![Pub](https://img.shields.io/pub/v/easy_refresh_squats)](https://pub.dev/packages/easy_refresh_squats) |
+
 ## 欢迎贡献
 一个人的维护是孤独的。如果你有好的建议和改动，欢迎贡献你的代码。如果你有非常酷的样式，能够分享给大家那就更酷了。
 

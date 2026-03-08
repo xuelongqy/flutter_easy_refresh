@@ -9,10 +9,13 @@
 Just like the name, EasyRefresh can easily implement pull-down refresh and pull-up load on Flutter applications. It supports almost all Flutter Scrollable widgets. Its function is very similar to Android's SmartRefreshLayout, and it also absorbs the advantages of many third-party libraries. EasyRefresh integrates various styles of Header and Footer, but it has no limitations, you can easily customize it. Using Flutter's powerful animations, even just a simple control can be done. The goal of EasyRefresh is to create a powerful, stable and mature pull-to-refresh framework for Flutter.
 
 ### [Online demo](https://xuelongqy.github.io/flutter_easy_refresh/)
+
 ### [APK download](https://github.com/xuelongqy/flutter_easy_refresh/releases)
+
 ### [API reference](https://pub.dev/documentation/easy_refresh/latest/)
 
 ## Features:
+
 - Supports all scrollable widgets
 - Scrolling physics scope, exactly matching scrollable widgets
 - Integrate multiple cool Header and Footer
@@ -24,8 +27,11 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
 - Customize scroll parameters to allow lists to have different scrolling feedback and inertia
 
 ## Sample
+
 #### 1. Default constructor
+
 - In the child scope, all scrolling components will share one physics. If there is scroll nesting, use EasyRefresh.builder or set the scope with ScrollConfiguration
+
 ```dart
   EasyRefresh(
     onRefresh: () async {
@@ -37,12 +43,14 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
     child: ListView(),
   );
 ```
+
 #### 2. Builder constructor
+
 ```dart
   EasyRefresh.builder(
     onRefresh: () async {
       ....
-      return IndicatorResult.success; 
+      return IndicatorResult.success;
     },
     onLoad: () async {
       ....
@@ -54,7 +62,9 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
     },
   );
 ```
+
 #### 3. Indicator locate
+
 ```dart
   EasyRefresh(
     header: Header(
@@ -80,7 +90,9 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
     ),
   );
 ```
+
 #### 4. Use controller
+
 ```dart
   EasyRefreshController _controller = EasyRefreshController(
     controlFinishRefresh: true,
@@ -104,7 +116,9 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
   _controller.callRefresh();
   _controller.callLoad();
 ```
+
 #### 5. Specify Header and Footer
+
 ```dart
   EasyRefresh(
     header: MaterialHeader(),
@@ -116,7 +130,9 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
   EasyRefresh.defaultHeaderBuilder = () => ClassicHeader();
   EasyRefresh.defaultFooterBuilder = () => ClassicFooter();
 ```
+
 #### 6. NestedScrollView
+
 ```dart
   EasyRefresh.builder(
     header: MaterialHeader(
@@ -166,7 +182,18 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
   );
 ```
 
+## Style Packages
+
+| Package                                                                   | Pub                                                                                                            |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [easy_refresh_bubbles](https://pub.dev/packages/easy_refresh_bubbles)     | [![Pub](https://img.shields.io/pub/v/easy_refresh_bubbles)](https://pub.dev/packages/easy_refresh_bubbles)     |
+| [easy_refresh_halloween](https://pub.dev/packages/easy_refresh_halloween) | [![Pub](https://img.shields.io/pub/v/easy_refresh_halloween)](https://pub.dev/packages/easy_refresh_halloween) |
+| [easy_refresh_skating](https://pub.dev/packages/easy_refresh_skating)     | [![Pub](https://img.shields.io/pub/v/easy_refresh_skating)](https://pub.dev/packages/easy_refresh_skating)     |
+| [easy_refresh_space](https://pub.dev/packages/easy_refresh_space)         | [![Pub](https://img.shields.io/pub/v/easy_refresh_space)](https://pub.dev/packages/easy_refresh_space)         |
+| [easy_refresh_squats](https://pub.dev/packages/easy_refresh_squats)       | [![Pub](https://img.shields.io/pub/v/easy_refresh_squats)](https://pub.dev/packages/easy_refresh_squats)       |
+
 ## Feel free to contribute
+
 One's maintenance is lonely. If you have good suggestions and changes, feel free to contribute your code. If you have really cool styles, It's even cooler to share with everyone.
 
 #### Thanks to all the people who already contributed!
@@ -176,17 +203,20 @@ One's maintenance is lonely. If you have good suggestions and changes, feel free
 </a>
 
 ## QQ Group - 554981921
+
 #### Into the group of instructions
+
 The group is not only solve the problem of EasyRefresh, any Flutter related issues can be discussed. Just as its name, craigslist, as long as there is time, group of Lord will help you solve problems together.
 
-## Thanks 
+## Thanks
+
 [SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)  
-[flutter_spinkit](https://github.com/jogboms/flutter_spinkit)  
+[flutter_spinkit](https://github.com/jogboms/flutter_spinkit)
 
 ## Licenses
 
 ```
- 
+
 MIT License
 
 Copyright (c) 2018 xuelongqy
@@ -209,5 +239,5 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
- 
+
 ```
