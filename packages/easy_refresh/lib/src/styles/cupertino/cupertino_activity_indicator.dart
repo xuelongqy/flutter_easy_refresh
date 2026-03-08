@@ -38,6 +38,7 @@ class _CupertinoActivityIndicator extends StatefulWidget {
   /// will be shown) and 1.0 (all ticks will be shown) inclusive. Defaults
   /// to 1.0.
   const _CupertinoActivityIndicator.partiallyRevealed({
+    // ignore: unused_element_parameter
     super.key,
     this.color,
     this.radius = _kDefaultIndicatorRadius,

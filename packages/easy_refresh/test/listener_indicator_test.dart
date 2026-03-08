@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../lib/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -103,7 +103,7 @@ class _ListenerIndicatorHarnessState extends State<_ListenerIndicatorHarness> {
                 }
                 return Container(
                   height: 50,
-                  color: Colors.blue.withOpacity(0.2),
+                  color: Colors.blue.withValues(alpha: 0.2),
                   alignment: Alignment.center,
                   child: Text(
                     'External: ${state.mode.name} - ${state.offset.toStringAsFixed(1)}',

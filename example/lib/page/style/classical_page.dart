@@ -166,29 +166,21 @@ class _ClassicPageState extends State<ClassicPage> {
             ListTile(
               title: Text('Direction'.tr),
               trailing: IntrinsicWidth(
-                child: Row(
-                  children: [
-                    Radio<Axis>(
-                      value: Axis.vertical,
-                      groupValue: _scrollDirection,
-                      onChanged: (value) {
-                        setState(() {
-                          _scrollDirection = value!;
-                        });
-                      },
-                    ),
-                    Text('Vertical'.tr),
-                    Radio<Axis>(
-                      value: Axis.horizontal,
-                      groupValue: _scrollDirection,
-                      onChanged: (value) {
-                        setState(() {
-                          _scrollDirection = value!;
-                        });
-                      },
-                    ),
-                    Text('Horizontal'.tr),
-                  ],
+                child: RadioGroup<Axis>(
+                  groupValue: _scrollDirection,
+                  onChanged: (value) {
+                    setState(() {
+                      _scrollDirection = value!;
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      Radio<Axis>(value: Axis.vertical),
+                      Text('Vertical'.tr),
+                      Radio<Axis>(value: Axis.horizontal),
+                      Text('Horizontal'.tr),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -257,39 +249,26 @@ class _ClassicPageState extends State<ClassicPage> {
                             ListTile(
                               title: Text('Alignment'.tr),
                               trailing: IntrinsicWidth(
-                                child: Row(
-                                  children: [
-                                    Radio<MainAxisAlignment>(
-                                      value: MainAxisAlignment.center,
-                                      groupValue: properties.alignment,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          properties.alignment = value!;
-                                        });
-                                      },
-                                    ),
-                                    Text('Center'.tr),
-                                    Radio<MainAxisAlignment>(
-                                      value: MainAxisAlignment.start,
-                                      groupValue: properties.alignment,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          properties.alignment = value!;
-                                        });
-                                      },
-                                    ),
-                                    Text('Start'.tr),
-                                    Radio<MainAxisAlignment>(
-                                      value: MainAxisAlignment.end,
-                                      groupValue: properties.alignment,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          properties.alignment = value!;
-                                        });
-                                      },
-                                    ),
-                                    Text('End'.tr),
-                                  ],
+                                child: RadioGroup<MainAxisAlignment>(
+                                  groupValue: properties.alignment,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      properties.alignment = value!;
+                                    });
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Radio<MainAxisAlignment>(
+                                          value: MainAxisAlignment.center),
+                                      Text('Center'.tr),
+                                      Radio<MainAxisAlignment>(
+                                          value: MainAxisAlignment.start),
+                                      Text('Start'.tr),
+                                      Radio<MainAxisAlignment>(
+                                          value: MainAxisAlignment.end),
+                                      Text('End'.tr),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

@@ -78,7 +78,9 @@ class _ChatPageState extends State<ChatPage> {
     });
     _inputController.clear();
     Future(() {
-      PrimaryScrollController.of(context).jumpTo(0);
+      if (mounted) {
+        PrimaryScrollController.of(context).jumpTo(0);
+      }
     });
   }
 

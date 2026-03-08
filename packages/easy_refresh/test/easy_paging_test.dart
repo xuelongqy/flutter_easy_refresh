@@ -1,7 +1,5 @@
-import 'dart:async';
-
-import '../lib/easy_refresh.dart';
-import '../lib/easy_paging.dart';
+import 'package:easy_refresh/easy_refresh.dart';
+import 'package:easy_refresh/easy_paging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -138,16 +136,14 @@ class _EasyPagingHarness extends StatefulWidget {
   final int itemsPerPage;
   final int maxPages;
   final bool refreshOnStart;
-  final WidgetBuilder? refreshOnStartWidgetBuilder;
-  final WidgetBuilder? emptyWidgetBuilder;
+  final WidgetBuilder? refreshOnStartWidgetBuilder = null;
+  final WidgetBuilder? emptyWidgetBuilder = null;
 
   const _EasyPagingHarness({
     super.key,
     this.itemsPerPage = 10,
     this.maxPages = 3,
     this.refreshOnStart = false,
-    this.refreshOnStartWidgetBuilder,
-    this.emptyWidgetBuilder,
   });
 
   @override
@@ -525,7 +521,7 @@ void main() {
             itemBuilder: (context, index, item) => Container(
               key: Key('custom-item-${item.id}'),
               height: 50,
-              color: Colors.blue.withOpacity(0.1),
+              color: Colors.blue.withValues(alpha: 0.1),
               child: Text('Custom: ${item.name}'),
             ),
           ),

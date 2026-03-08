@@ -1,35 +1,24 @@
-part of easy_refresh_skating;
+part of '../easy_refresh_skating.dart';
 
 class SkatingFooter extends Footer {
   final Key? key;
 
   const SkatingFooter({
     this.key,
-    bool clamping = false,
-    double triggerOffset = _kDefaultSkatingTriggerOffset,
-    IndicatorPosition position = IndicatorPosition.above,
-    physics.SpringDescription? spring,
-    SpringBuilder? readySpringBuilder,
-    bool springRebound = false,
-    FrictionFactor? frictionFactor,
-    double? infiniteOffset,
-    bool? hitOver,
-    bool? infiniteHitOver,
-    bool hapticFeedback = false,
+    super.clamping = false,
+    super.triggerOffset = _kDefaultSkatingTriggerOffset,
+    super.position,
+    super.spring,
+    super.readySpringBuilder,
+    super.springRebound = false,
+    super.frictionFactor,
+    super.infiniteOffset = null,
+    super.hitOver,
+    super.infiniteHitOver,
+    super.hapticFeedback,
   }) : super(
-          triggerOffset: triggerOffset,
-          clamping: clamping,
           processedDuration: _kSkatingProcessed,
-          spring: spring,
-          readySpringBuilder: readySpringBuilder,
-          springRebound: springRebound,
-          frictionFactor: frictionFactor,
           safeArea: false,
-          infiniteOffset: infiniteOffset,
-          hitOver: hitOver,
-          infiniteHitOver: infiniteHitOver,
-          position: position,
-          hapticFeedback: hapticFeedback,
         );
 
   @override

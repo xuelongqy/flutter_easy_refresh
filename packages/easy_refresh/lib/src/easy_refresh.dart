@@ -32,6 +32,7 @@ class _InheritedEasyRefresh extends InheritedWidget {
   final EasyRefreshData data;
 
   const _InheritedEasyRefresh({
+    // ignore: unused_element_parameter
     super.key,
     required this.data,
     required super.child,

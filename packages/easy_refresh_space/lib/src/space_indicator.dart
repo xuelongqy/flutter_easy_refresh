@@ -1,4 +1,4 @@
-part of easy_refresh_space;
+part of '../easy_refresh_space.dart';
 
 const _kDefaultSpaceTriggerOffset = 180.0;
 
@@ -13,10 +13,10 @@ class _SpaceIndicator extends StatefulWidget {
   final bool reverse;
 
   const _SpaceIndicator({
-    Key? key,
+    super.key,
     required this.state,
     required this.reverse,
-  }) : super(key: key);
+  });
 
   @override
   State<_SpaceIndicator> createState() => _SpaceIndicatorState();

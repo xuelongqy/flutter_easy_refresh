@@ -1,16 +1,15 @@
 import 'dart:async';
 
-import '../lib/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for reverse scroll (chat-like UI)
 class _ReverseScrollHarness extends StatefulWidget {
-  final bool shrinkWrap;
+  final bool shrinkWrap = false;
 
   const _ReverseScrollHarness({
     super.key,
-    this.shrinkWrap = false,
   });
 
   @override
@@ -89,7 +88,7 @@ class _ReverseScrollHarnessState extends State<_ReverseScrollHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.blue.withOpacity(0.3),
+              color: Colors.blue.withValues(alpha: 0.3),
               alignment: Alignment.center,
               child: Text(
                 'Header: ${state.mode.name}',
@@ -107,7 +106,7 @@ class _ReverseScrollHarnessState extends State<_ReverseScrollHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.green.withOpacity(0.3),
+              color: Colors.green.withValues(alpha: 0.3),
               alignment: Alignment.center,
               child: Text(
                 'Footer: ${state.mode.name}',
@@ -212,7 +211,7 @@ class _ShrinkWrapHarnessState extends State<_ShrinkWrapHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.green.withOpacity(0.3),
+              color: Colors.green.withValues(alpha: 0.3),
               alignment: Alignment.center,
               child: Text('Footer: ${state.mode.name}'),
             ),

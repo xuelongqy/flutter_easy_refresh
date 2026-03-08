@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../lib/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -440,8 +440,8 @@ void main() {
       await tester.pumpAndSettle();
 
       // Initially states may be null or inactive
-      final headerState = controller.headerState;
-      final footerState = controller.footerState;
+      // final headerState = controller.headerState;
+      // final footerState = controller.footerState;
 
       // Trigger refresh to verify state access
       controller.callRefresh();

@@ -182,8 +182,8 @@ class _DeliveryIndicatorState extends State<_DeliveryIndicator>
                               _mode != IndicatorMode.done
                           ? 1
                           : 0,
-                      child: widget!,
                       duration: kDeliveryDisappearDuration,
+                      child: widget!,
                     ),
                   );
                 },

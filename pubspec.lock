@@ -634,14 +634,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
-  very_good_analysis:
-    dependency: transitive
-    description:
-      name: very_good_analysis
-      sha256: d1cb1d66a5aae2c702d68caca6c8347306d35e728fd94555fa21fa0448a972e0
-      url: "https://pub.dev"
-    source: hosted
-    version: "10.2.0"
   visibility_detector:
     dependency: transitive
     description:
@@ -691,5 +683,5 @@ packages:
     source: hosted
     version: "2.2.4"
 sdks:
-  dart: ">=3.11.0 <4.0.0"
+  dart: ">=3.10.0 <4.0.0"
   flutter: ">=3.38.0"

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../lib/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -84,7 +84,7 @@ class _HorizontalScrollHarnessState extends State<_HorizontalScrollHarness> {
             builder: (context, state) => Container(
               width: state.offset,
               height: double.infinity,
-              color: Colors.blue.withOpacity(0.3),
+              color: Colors.blue.withValues(alpha: 0.3),
               alignment: Alignment.center,
               child: RotatedBox(
                 quarterTurns: 1,
@@ -105,7 +105,7 @@ class _HorizontalScrollHarnessState extends State<_HorizontalScrollHarness> {
             builder: (context, state) => Container(
               width: state.offset,
               height: double.infinity,
-              color: Colors.green.withOpacity(0.3),
+              color: Colors.green.withValues(alpha: 0.3),
               alignment: Alignment.center,
               child: RotatedBox(
                 quarterTurns: 1,
@@ -292,7 +292,6 @@ void main() {
         (tester) async {
       final key = GlobalKey<_HorizontalScrollHarnessState>();
       await tester.pumpWidget(_HorizontalScrollHarness(key: key));
-      final state = key.currentState!;
 
       await tester.pumpAndSettle();
 

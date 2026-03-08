@@ -1,4 +1,4 @@
-part of easy_refresh_squats;
+part of '../easy_refresh_squats.dart';
 
 const _kDefaultSquatsTriggerOffset = 190.0;
 
@@ -16,11 +16,11 @@ class _SquatsIndicator extends StatefulWidget {
   final Color? backgroundColor;
 
   const _SquatsIndicator({
-    Key? key,
+    super.key,
     required this.state,
     required this.reverse,
     this.backgroundColor,
-  }) : super(key: key);
+  });
 
   @override
   State<_SquatsIndicator> createState() => _SquatsIndicatorState();

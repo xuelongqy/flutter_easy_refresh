@@ -1,36 +1,24 @@
-part of easy_refresh_bubbles;
+part of '../easy_refresh_bubbles.dart';
 
 class BubblesHeader extends Header {
   final Key? key;
 
   const BubblesHeader({
     this.key,
-    bool clamping = false,
-    double triggerOffset = _kDefaultBubblesTriggerOffset,
-    IndicatorPosition position = IndicatorPosition.above,
-    Duration processedDuration = _kBubblesProcessed,
-    physics.SpringDescription? spring,
-    SpringBuilder? readySpringBuilder,
-    bool springRebound = false,
-    FrictionFactor? frictionFactor,
-    double? infiniteOffset,
-    bool? hitOver,
-    bool? infiniteHitOver,
-    bool hapticFeedback = false,
+    super.clamping = false,
+    super.triggerOffset = _kDefaultBubblesTriggerOffset,
+    super.position,
+    super.processedDuration,
+    super.spring,
+    super.readySpringBuilder,
+    super.springRebound = false,
+    super.frictionFactor,
+    super.infiniteOffset,
+    super.hitOver,
+    super.infiniteHitOver,
+    super.hapticFeedback,
   }) : super(
-          triggerOffset: triggerOffset,
-          clamping: clamping,
-          processedDuration: processedDuration,
-          spring: spring,
-          readySpringBuilder: readySpringBuilder,
-          springRebound: springRebound,
-          frictionFactor: frictionFactor,
           safeArea: false,
-          infiniteOffset: infiniteOffset,
-          hitOver: hitOver,
-          infiniteHitOver: infiniteHitOver,
-          position: position,
-          hapticFeedback: hapticFeedback,
           triggerWhenRelease: true,
         );
 

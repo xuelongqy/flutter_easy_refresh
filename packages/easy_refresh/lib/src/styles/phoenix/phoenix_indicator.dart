@@ -159,8 +159,8 @@ class _PhoenixIndicatorState extends State<_PhoenixIndicator>
                     angle: _animationController.isAnimating
                         ? -_animationController.value * (2 * math.pi)
                         : _offset / math.pi / 4,
-                    child: child,
                     origin: const Offset(1, 1),
+                    child: child,
                   );
                 },
                 child: PathsPaint(

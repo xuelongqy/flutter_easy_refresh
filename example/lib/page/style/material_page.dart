@@ -135,29 +135,21 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
             ListTile(
               title: Text('Direction'.tr),
               trailing: IntrinsicWidth(
-                child: Row(
-                  children: [
-                    Radio<Axis>(
-                      value: Axis.vertical,
-                      groupValue: _scrollDirection,
-                      onChanged: (value) {
-                        setState(() {
-                          _scrollDirection = value!;
-                        });
-                      },
-                    ),
-                    Text('Vertical'.tr),
-                    Radio<Axis>(
-                      value: Axis.horizontal,
-                      groupValue: _scrollDirection,
-                      onChanged: (value) {
-                        setState(() {
-                          _scrollDirection = value!;
-                        });
-                      },
-                    ),
-                    Text('Horizontal'.tr),
-                  ],
+                child: RadioGroup<Axis>(
+                  groupValue: _scrollDirection,
+                  onChanged: (value) {
+                    setState(() {
+                      _scrollDirection = value!;
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      Radio<Axis>(value: Axis.vertical),
+                      Text('Vertical'.tr),
+                      Radio<Axis>(value: Axis.horizontal),
+                      Text('Horizontal'.tr),
+                    ],
+                  ),
                 ),
               ),
             ),

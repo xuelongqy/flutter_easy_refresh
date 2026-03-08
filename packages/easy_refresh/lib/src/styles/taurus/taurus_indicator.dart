@@ -125,10 +125,10 @@ class _TaurusIndicatorState extends State<_TaurusIndicator>
     final random = math.Random();
     _windWidth = _minWindWidth + random.nextDouble() * 30;
     _windOffsets.clear();
-    final _windSegment = _windViewHeight / 10;
+    final windSegment = _windViewHeight / 10;
     for (int i = 0; i < 10; i++) {
       final dx = random.nextDouble() * 40;
-      final dy = _windSegment * i + random.nextDouble() * _windSegment;
+      final dy = windSegment * i + random.nextDouble() * windSegment;
       _windOffsets.add(Offset(dx, dy));
     }
   }

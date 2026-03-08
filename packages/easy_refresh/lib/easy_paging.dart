@@ -1,4 +1,4 @@
-library easy_paging;
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart' as physics;

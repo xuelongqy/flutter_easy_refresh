@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../lib/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -84,7 +84,7 @@ class _NestedScrollHarnessState extends State<_NestedScrollHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.blue.withOpacity(0.3),
+              color: Colors.blue.withValues(alpha: 0.3),
               alignment: Alignment.center,
               child: Text(
                 'Header: ${state.mode.name}',
@@ -106,7 +106,7 @@ class _NestedScrollHarnessState extends State<_NestedScrollHarness> {
                   pinned: true,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Container(
-                      color: Colors.blue.withOpacity(0.3),
+                      color: Colors.blue.withValues(alpha: 0.3),
                       child: const Center(
                         child: Text('Flexible Space'),
                       ),
@@ -185,7 +185,7 @@ class _BuilderPatternHarnessState extends State<_BuilderPatternHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.blue.withOpacity(0.3),
+              color: Colors.blue.withValues(alpha: 0.3),
               alignment: Alignment.center,
               child: Text(
                 'Header: ${state.mode.name}',

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../lib/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,14 +9,13 @@ class _BasicRefreshHarness extends StatefulWidget {
   final bool controlFinishRefresh;
   final bool controlFinishLoad;
   final Duration processedDuration;
-  final double triggerOffset;
+  final double triggerOffset = 70;
 
   const _BasicRefreshHarness({
     super.key,
     this.controlFinishRefresh = false,
     this.controlFinishLoad = false,
     this.processedDuration = Duration.zero,
-    this.triggerOffset = 70,
   });
 
   @override

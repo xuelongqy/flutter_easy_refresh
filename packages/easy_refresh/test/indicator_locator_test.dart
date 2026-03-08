@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../lib/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -81,7 +81,7 @@ class _IndicatorLocatorHarnessState extends State<_IndicatorLocatorHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.blue.withOpacity(0.3),
+              color: Colors.blue.withValues(alpha: 0.3),
               alignment: Alignment.center,
               child: Text(
                 'Header: ${state.mode.name}',
@@ -99,7 +99,7 @@ class _IndicatorLocatorHarnessState extends State<_IndicatorLocatorHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.green.withOpacity(0.3),
+              color: Colors.green.withValues(alpha: 0.3),
               alignment: Alignment.center,
               child: Text(
                 'Footer: ${state.mode.name}',
@@ -200,7 +200,7 @@ class _BoxLocatorHarnessState extends State<_BoxLocatorHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.blue.withOpacity(0.3),
+              color: Colors.blue.withValues(alpha: 0.3),
               alignment: Alignment.center,
               child: const Text('Header'),
             ),
@@ -214,7 +214,7 @@ class _BoxLocatorHarnessState extends State<_BoxLocatorHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.green.withOpacity(0.3),
+              color: Colors.green.withValues(alpha: 0.3),
               alignment: Alignment.center,
               child: const Text('Footer'),
             ),

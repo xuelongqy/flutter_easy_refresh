@@ -61,9 +61,9 @@ class HeaderLocator extends StatelessWidget {
               : headerWidget;
         }
         return _HeaderLocatorRenderWidget(
-          child: headerWidget,
           isSliver: _isSliver,
           paintExtent: paintExtent,
+          child: headerWidget,
         );
       },
     );
@@ -76,6 +76,7 @@ class _HeaderLocatorRenderWidget extends SingleChildRenderObjectWidget {
   final double paintExtent;
 
   const _HeaderLocatorRenderWidget({
+    // ignore: unused_element_parameter
     super.key,
     required super.child,
     required this.isSliver,
@@ -170,6 +171,7 @@ class _HeaderLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
   _HeaderLocatorRenderSliver({
     required this.context,
     required this.paintExtent,
+    // ignore: unused_element_parameter
     super.child,
   });
 

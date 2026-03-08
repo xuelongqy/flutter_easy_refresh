@@ -18,7 +18,9 @@ class ColorUtils {
   /// Generate foreground color from string.
   static Color foregroundColorWithString(String value) {
     final bgColor = backgroundColorWithString(value);
-    return bgColor.red * 0.299 + bgColor.green * 0.587 + bgColor.blue * 0.114 >
+    return (bgColor.r * 255.0).round().clamp(0, 255) * 0.299 +
+                (bgColor.g * 255.0).round().clamp(0, 255) * 0.587 +
+                (bgColor.b * 255.0).round().clamp(0, 255) * 0.114 >
             186
         ? Colors.black
         : Colors.white;

@@ -43,7 +43,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  very_good_analysis: ^10.0.0
 
 module:
   androidX: true

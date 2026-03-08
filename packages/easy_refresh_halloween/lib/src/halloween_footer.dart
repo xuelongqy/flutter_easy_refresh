@@ -1,36 +1,24 @@
-part of easy_refresh_halloween;
+part of '../easy_refresh_halloween.dart';
 
 class HalloweenFooter extends Footer {
   final Key? key;
 
   const HalloweenFooter({
     this.key,
-    bool clamping = false,
-    double triggerOffset = _kDefaultHalloweenTriggerOffset,
-    IndicatorPosition position = IndicatorPosition.above,
-    Duration processedDuration = Duration.zero,
-    physics.SpringDescription? spring,
-    SpringBuilder? readySpringBuilder,
-    bool springRebound = false,
-    FrictionFactor? frictionFactor,
-    double? infiniteOffset,
-    bool? hitOver,
-    bool? infiniteHitOver,
-    bool hapticFeedback = false,
+    super.clamping = false,
+    super.triggerOffset = _kDefaultHalloweenTriggerOffset,
+    super.position,
+    super.processedDuration = Duration.zero,
+    super.spring,
+    super.readySpringBuilder,
+    super.springRebound = false,
+    super.frictionFactor,
+    super.infiniteOffset = null,
+    super.hitOver,
+    super.infiniteHitOver,
+    super.hapticFeedback,
   }) : super(
-          triggerOffset: triggerOffset,
-          clamping: clamping,
-          processedDuration: processedDuration,
-          spring: spring,
-          readySpringBuilder: readySpringBuilder,
-          springRebound: springRebound,
-          frictionFactor: frictionFactor,
           safeArea: false,
-          infiniteOffset: infiniteOffset,
-          hitOver: hitOver,
-          infiniteHitOver: infiniteHitOver,
-          position: position,
-          hapticFeedback: hapticFeedback,
         );
 
   @override

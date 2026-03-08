@@ -1,4 +1,4 @@
-library easy_refresh;
+library;
 
 import 'dart:math' as math;
 import 'dart:async';

@@ -1,19 +1,18 @@
 import 'dart:async';
 
-import '../lib/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for refreshOnStart functionality
 class _RefreshOnStartHarness extends StatefulWidget {
   final bool refreshOnStart;
-  final Header? refreshOnStartHeader;
+  final Header? refreshOnStartHeader = null;
   final double callRefreshOverOffset;
 
   const _RefreshOnStartHarness({
     super.key,
     this.refreshOnStart = true,
-    this.refreshOnStartHeader,
     this.callRefreshOverOffset = 20,
   });
 
@@ -101,7 +100,7 @@ class _RefreshOnStartHarnessState extends State<_RefreshOnStartHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.blue.withOpacity(0.3),
+              color: Colors.blue.withValues(alpha: 0.3),
               alignment: Alignment.center,
               child: Text(
                 'Mode: ${state.mode.name}',
@@ -187,7 +186,7 @@ class _CustomRefreshOnStartHeaderHarnessState
               return Container(
                 height: state.offset,
                 width: double.infinity,
-                color: Colors.orange.withOpacity(0.3),
+                color: Colors.orange.withValues(alpha: 0.3),
                 alignment: Alignment.center,
                 child: const Text(
                   'Custom Start Header',

@@ -1,8 +1,6 @@
-part of easy_refresh_bubbles;
+part of '../easy_refresh_bubbles.dart';
 
 const _kDefaultBubblesTriggerOffset = 180.0;
-
-const _kBubblesProcessed = Duration(seconds: 1);
 
 /// Bubbles indicator.
 /// Base widget for [BubblesHeader] and [BubblesFooter].
@@ -15,10 +13,10 @@ class _BubblesIndicator extends StatefulWidget {
   final bool reverse;
 
   const _BubblesIndicator({
-    Key? key,
+    super.key,
     required this.state,
     required this.reverse,
-  }) : super(key: key);
+  });
 
   @override
   State<_BubblesIndicator> createState() => _BubblesIndicatorState();

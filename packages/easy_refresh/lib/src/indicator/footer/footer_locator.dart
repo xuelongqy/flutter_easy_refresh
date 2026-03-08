@@ -61,9 +61,9 @@ class FooterLocator extends StatelessWidget {
               : footerWidget;
         }
         return _FooterLocatorRenderWidget(
-          child: footerWidget,
           isSliver: _isSliver,
           paintExtent: paintExtent,
+          child: footerWidget,
         );
       },
     );
@@ -76,7 +76,6 @@ class _FooterLocatorRenderWidget extends SingleChildRenderObjectWidget {
   final double paintExtent;
 
   const _FooterLocatorRenderWidget({
-    super.key,
     required super.child,
     required this.isSliver,
     required this.paintExtent,
@@ -170,6 +169,7 @@ class _FooterLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
   _FooterLocatorRenderSliver({
     required this.context,
     required this.paintExtent,
+    // ignore: unused_element_parameter
     super.child,
   });
 

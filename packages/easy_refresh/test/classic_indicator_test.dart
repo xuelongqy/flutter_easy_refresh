@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../lib/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,13 +8,12 @@ import 'package:flutter_test/flutter_test.dart';
 class _ClassicIndicatorHarness extends StatefulWidget {
   final ClassicHeader? header;
   final ClassicFooter? footer;
-  final bool useDefaultIndicators;
+  final bool useDefaultIndicators  = false;
 
   const _ClassicIndicatorHarness({
     super.key,
     this.header,
     this.footer,
-    this.useDefaultIndicators = false,
   });
 
   @override

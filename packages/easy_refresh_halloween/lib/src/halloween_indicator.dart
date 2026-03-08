@@ -1,4 +1,4 @@
-part of easy_refresh_halloween;
+part of '../easy_refresh_halloween.dart';
 
 const _kDefaultHalloweenTriggerOffset = 200.0;
 
@@ -13,10 +13,10 @@ class _HalloweenIndicator extends StatefulWidget {
   final bool reverse;
 
   const _HalloweenIndicator({
-    Key? key,
+    super.key,
     required this.state,
     required this.reverse,
-  }) : super(key: key);
+  });
 
   @override
   State<_HalloweenIndicator> createState() => _HalloweenIndicatorState();
@@ -124,11 +124,10 @@ class _OneShotCustomAnimation extends SimpleAnimation {
   final VoidCallback? onStop;
 
   _OneShotCustomAnimation(
-    String animationName, {
-    double mix = 1,
-    bool autoplay = true,
+    super.animationName, {
+    super.autoplay = true,
     this.onStop,
-  }) : super(animationName, mix: mix, autoplay: autoplay) {
+  }) {
     isActiveChanged.addListener(onActiveChanged);
   }
 

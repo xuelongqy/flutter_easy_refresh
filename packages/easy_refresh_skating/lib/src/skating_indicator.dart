@@ -1,4 +1,4 @@
-part of easy_refresh_skating;
+part of '../easy_refresh_skating.dart';
 
 const _kDefaultSkatingTriggerOffset = 180.0;
 
@@ -15,10 +15,10 @@ class _SkatingIndicator extends StatefulWidget {
   final bool reverse;
 
   const _SkatingIndicator({
-    Key? key,
+    super.key,
     required this.state,
     required this.reverse,
-  }) : super(key: key);
+  });
 
   @override
   State<_SkatingIndicator> createState() => _SkatingIndicatorState();

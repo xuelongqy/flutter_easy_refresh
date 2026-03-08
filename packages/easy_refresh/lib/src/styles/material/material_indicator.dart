@@ -124,7 +124,7 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
     final color = widget.color ??
         ProgressIndicatorTheme.of(context).color ??
         Theme.of(context).colorScheme.primary;
-    return color.withOpacity(math.min(_offset / _actualTriggerOffset, 1));
+    return color.withValues(alpha: math.min(_offset / _actualTriggerOffset, 1));
   }
 
   IndicatorMode get _mode => widget.state.mode;

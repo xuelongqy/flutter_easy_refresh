@@ -17,8 +17,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.4'
-          channel: 'stable'
+          flutter-version: "3.41.4"
+          channel: "stable"
           cache: true
 
       - name: Install dependencies
@@ -31,12 +31,13 @@ jobs:
         run: flutter analyze --no-fatal-infos
 
       - name: Run tests
+        working-directory: packages/easy_refresh
         run: flutter test --coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
-          file: coverage/lcov.info
+          file: packages/easy_refresh/coverage/lcov.info
           fail_ci_if_error: false
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

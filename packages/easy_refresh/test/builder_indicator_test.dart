@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../lib/easy_refresh.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -92,7 +92,7 @@ class _BuilderIndicatorHarnessState extends State<_BuilderIndicatorHarness> {
                     height: state.offset,
                     width: double.infinity,
                     child: ColoredBox(
-                      color: Colors.blue.withOpacity(0.3),
+                      color: Colors.blue.withValues(alpha: 0.3),
                       child: state.offset > 60
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -131,7 +131,7 @@ class _BuilderIndicatorHarnessState extends State<_BuilderIndicatorHarness> {
                     height: state.offset,
                     width: double.infinity,
                     child: ColoredBox(
-                      color: Colors.green.withOpacity(0.3),
+                      color: Colors.green.withValues(alpha: 0.3),
                       child: state.offset > 30
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -460,7 +460,7 @@ void main() {
     testWidgets('BuilderHeader can render any custom widget', (tester) async {
       await tester.pumpWidget(_BuilderIndicatorHarness(
         headerBuilder: (context, state) {
-          return Container(
+          return SizedBox(
             key: const Key('custom-header'),
             height: state.offset,
             width: double.infinity,
@@ -488,7 +488,7 @@ void main() {
       await tester.pumpWidget(_BuilderIndicatorHarness(
         key: key,
         footerBuilder: (context, state) {
-          return Container(
+          return SizedBox(
             key: const Key('custom-footer'),
             height: state.offset,
             width: double.infinity,
