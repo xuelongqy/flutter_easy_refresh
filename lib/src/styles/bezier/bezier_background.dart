@@ -1,7 +1,40 @@
 part of '../../../easy_refresh.dart';
 
 /// Spring used by bezier curves.
+/// Creates a rubber band-like bouncing effect with gradual damping.
 physics.SpringDescription kBezierSpringBuilder({
+  required IndicatorMode mode,
+  required double offset,
+  required double actualTriggerOffset,
+  required double velocity,
+}) {
+  // Mass increases with pull distance, making larger pulls feel "heavier"
+  final overscroll = (offset - actualTriggerOffset).clamp(0.0, 100.0);
+  final double mass = 1.0 + overscroll / 100.0; // 1.0 ~ 2.0
+
+  // High stiffness for fast, energetic bounces
+  const double stiffness = 280.0;
+
+  // Very low damping ratio (0.30) for highly pronounced bounces
+  // Fast oscillations with large amplitude - snappy rubber band effect
+  double dampingRatio = 0.30;
+  if (velocity.abs() > 2000) {
+    // Increase damping for very high velocity to prevent excessive bouncing
+    dampingRatio += (velocity.abs() - 2000) / 10000 * 0.18;
+    dampingRatio = dampingRatio.clamp(0.30, 0.58);
+  }
+
+  return physics.SpringDescription.withDampingRatio(
+    mass: mass,
+    stiffness: stiffness,
+    ratio: dampingRatio,
+  );
+}
+
+/// Spring used by bezier curves.
+/// Below Flutter 3.32.0
+/// https://github.com/flutter/flutter/issues/163858
+physics.SpringDescription kBezierSpringBuilderBelow3_32({
   required IndicatorMode mode,
   required double offset,
   required double actualTriggerOffset,
