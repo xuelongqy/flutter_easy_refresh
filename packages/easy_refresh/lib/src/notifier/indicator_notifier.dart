@@ -793,6 +793,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Start [clamping] animation
   void _startClampingAnimation(Simulation simulation) {
+    if (!clamping) {
+      return;
+    }
+    if (_clampingAnimationController == null) {
+      _initClampingAnimation();
+    }
     if (_offset <= 0 || _clampingAnimationController!.isAnimating) {
       return;
     }
