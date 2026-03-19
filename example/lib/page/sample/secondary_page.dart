@@ -20,6 +20,7 @@ class _SecondaryPageState extends State<SecondaryPage> {
   final _secondaryPageKey = GlobalKey();
   late EasyRefreshController _controller;
   final _listenable = IndicatorStateListenable();
+  late final FileLoader _riveFileLoader;
 
   @override
   void initState() {
@@ -28,11 +29,16 @@ class _SecondaryPageState extends State<SecondaryPage> {
       controlFinishRefresh: true,
       controlFinishLoad: true,
     );
+    _riveFileLoader = FileLoader.fromAsset(
+      'assets/rive/machine-game.riv',
+      riveFactory: Factory.rive,
+    );
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _riveFileLoader.dispose();
     super.dispose();
   }
 
@@ -98,9 +104,26 @@ class _SecondaryPageState extends State<SecondaryPage> {
                           opacity: 1 - scale,
                           child: Stack(
                             children: [
-                              const RiveAnimation.asset(
-                                'assets/rive/raster_graphics.riv',
-                                fit: BoxFit.cover,
+                              Positioned.fill(
+                                child: RiveWidgetBuilder(
+                                  fileLoader: _riveFileLoader,
+                                  builder: (context, state) => switch (state) {
+                                    RiveLoading() => const SizedBox(),
+                                    RiveFailed() => SizedBox(
+                                        child: Center(
+                                          child: Text(
+                                            state.error.toString(),
+                                            style:
+                                                themeData.textTheme.titleMedium,
+                                          ),
+                                        ),
+                                      ),
+                                    RiveLoaded() => RiveWidget(
+                                        controller: state.controller,
+                                        fit: Fit.cover,
+                                      ),
+                                  },
+                                ),
                               ),
                               Column(
                                 children: [

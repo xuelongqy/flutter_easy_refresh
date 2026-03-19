@@ -25,10 +25,13 @@ class _SkatingIndicator extends StatefulWidget {
 }
 
 class _SkatingIndicatorState extends State<_SkatingIndicator> {
-  StateMachineController? _controller;
-  SMIInput<double>? _pullAmountInput;
-  SMITrigger? _pullReleaseTrigger;
-  SMITrigger? _loadFinishedTrigger;
+  File? _file;
+  RiveWidgetController? _riveController;
+  NumberInput? _pullAmountInput;
+  TriggerInput? _pullReleaseTrigger;
+  TriggerInput? _loadFinishedTrigger;
+  bool _pullReleaseFired = false;
+  bool _loadFinishedFired = false;
 
   int _key = 0;
 
@@ -40,12 +43,47 @@ class _SkatingIndicatorState extends State<_SkatingIndicator> {
   void initState() {
     super.initState();
     widget.state.notifier.addModeChangeListener(_onModeChange);
+    _initRive();
+  }
+
+  Future<void> _initRive() async {
+    final file = await File.asset(
+      'packages/easy_refresh_skating/assets/skating.riv',
+      riveFactory: Factory.rive,
+    );
+    if (!mounted || file == null) return;
+    _file = file;
+    _setupController();
+  }
+
+  void _setupController() {
+    final file = _file;
+    if (file == null) return;
+    _pullAmountInput?.dispose();
+    _pullReleaseTrigger?.dispose();
+    _loadFinishedTrigger?.dispose();
+    _riveController?.dispose();
+    _riveController = RiveWidgetController(
+      file,
+      stateMachineSelector: StateMachineNamed('Reload'),
+    );
+    _pullAmountInput = _riveController!.stateMachine.number('pullAmount');
+    _pullReleaseTrigger = _riveController!.stateMachine.trigger('pullRelease');
+    _loadFinishedTrigger =
+        _riveController!.stateMachine.trigger('loadFinished');
+    _pullReleaseFired = false;
+    _loadFinishedFired = false;
+    if (mounted) setState(() {});
   }
 
   @override
   void dispose() {
     widget.state.notifier.removeModeChangeListener(_onModeChange);
-    _controller?.dispose();
+    _pullAmountInput?.dispose();
+    _pullReleaseTrigger?.dispose();
+    _loadFinishedTrigger?.dispose();
+    _riveController?.dispose();
+    _file?.dispose();
     super.dispose();
   }
 
@@ -61,41 +99,29 @@ class _SkatingIndicatorState extends State<_SkatingIndicator> {
     super.didUpdateWidget(oldWidget);
   }
 
-  void _onRiveInit(Artboard artboard) {
-    _controller?.dispose();
-    _controller = StateMachineController.fromArtboard(artboard, 'Reload')!;
-    artboard.addController(_controller!);
-    _pullAmountInput = _controller!.findInput<double>('pullAmount')!;
-    _pullReleaseTrigger =
-        _controller!.findInput<bool>('pullRelease')! as SMITrigger;
-    _loadFinishedTrigger =
-        _controller!.findInput<bool>('loadFinished')! as SMITrigger;
-  }
-
   /// Mode change listener.
   void _onModeChange(IndicatorMode mode, double offset) {
     if (mode == IndicatorMode.ready || mode == IndicatorMode.processing) {
-      if (_pullReleaseTrigger?.value == false) {
-        _pullReleaseTrigger!.fire();
+      if (!_pullReleaseFired) {
+        _pullReleaseTrigger?.fire();
+        _pullReleaseFired = true;
       }
     } else {
-      if (_pullReleaseTrigger?.value == true) {
-        _pullReleaseTrigger!.advance();
-      }
+      _pullReleaseFired = false;
     }
     if (mode == IndicatorMode.processed) {
-      if (_loadFinishedTrigger?.value == false) {
-        _loadFinishedTrigger!.fire();
+      if (!_loadFinishedFired) {
+        _loadFinishedTrigger?.fire();
+        _loadFinishedFired = true;
       }
     } else {
-      if (_loadFinishedTrigger?.value == true) {
-        _loadFinishedTrigger!.advance();
-      }
+      _loadFinishedFired = false;
     }
     if (mode == IndicatorMode.inactive) {
       setState(() {
         _key++;
       });
+      _setupController();
     }
   }
 
@@ -115,12 +141,12 @@ class _SkatingIndicatorState extends State<_SkatingIndicator> {
             key: ValueKey(_key),
             width: double.infinity,
             height: _offset < 140 ? 140 : _offset,
-            child: RiveAnimation.asset(
-              'packages/easy_refresh_skating/assets/skating.riv',
-              fit: BoxFit.cover,
-              onInit: _onRiveInit,
-              antialiasing: false,
-            ),
+            child: _riveController != null
+                ? RiveWidget(
+                    controller: _riveController!,
+                    fit: Fit.cover,
+                  )
+                : const SizedBox(),
           ),
         ),
       ],

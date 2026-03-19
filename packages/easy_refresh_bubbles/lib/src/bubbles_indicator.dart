@@ -24,9 +24,10 @@ class _BubblesIndicator extends StatefulWidget {
 
 class _BubblesIndicatorState extends State<_BubblesIndicator>
     with SingleTickerProviderStateMixin {
-  StateMachineController? _controller;
-  SMIInput<double>? _numDragInput;
-  SMIInput<double>? _numLoadInput;
+  File? _file;
+  RiveWidgetController? _riveController;
+  NumberInput? _numDragInput;
+  NumberInput? _numLoadInput;
   late final AnimationController _loadController;
 
   int _key = 0;
@@ -46,12 +47,52 @@ class _BubblesIndicatorState extends State<_BubblesIndicator>
       duration: const Duration(seconds: 2),
     );
     _loadController.addListener(_onLoadChanged);
+    _initRive();
+  }
+
+  Future<void> _initRive() async {
+    final file = await File.asset(
+      'packages/easy_refresh_bubbles/assets/bubbles.riv',
+      riveFactory: Factory.rive,
+    );
+    if (!mounted || file == null) return;
+    _file = file;
+    _setupController();
+  }
+
+  void _setupController() {
+    final file = _file;
+    if (file == null) return;
+    _numDragInput?.dispose();
+    _numLoadInput?.dispose();
+    _riveController?.dispose();
+    _riveController = RiveWidgetController(
+      file,
+      stateMachineSelector: StateMachineNamed('Motion'),
+    );
+    _numDragInput = _riveController!.stateMachine.number('numDrag');
+    _numLoadInput = _riveController!.stateMachine.number('numLoad');
+    if (mounted) setState(() {});
+  }
+
+  void _resetLoadController() {
+    if (_loadController.isAnimating) {
+      _loadController.stop();
+    }
+    if (_loadController.value != 0) {
+      _loadController.reset();
+    } else {
+      _numLoadInput?.value = 0;
+    }
   }
 
   @override
   void dispose() {
     widget.state.notifier.removeModeChangeListener(_onModeChange);
-    _controller?.dispose();
+    _numDragInput?.dispose();
+    _numLoadInput?.dispose();
+    _riveController?.dispose();
+    _file?.dispose();
     _loadController.removeListener(_onLoadChanged);
     _loadController.dispose();
     super.dispose();
@@ -73,14 +114,6 @@ class _BubblesIndicatorState extends State<_BubblesIndicator>
     super.didUpdateWidget(oldWidget);
   }
 
-  void _onRiveInit(Artboard artboard) {
-    _controller?.dispose();
-    _controller = StateMachineController.fromArtboard(artboard, 'Motion')!;
-    artboard.addController(_controller!);
-    _numDragInput = _controller!.findInput<double>('numDrag')!;
-    _numLoadInput = _controller!.findInput<double>('numLoad')!;
-  }
-
   /// Mode change listener.
   void _onModeChange(IndicatorMode mode, double offset) {
     if (mode == IndicatorMode.processing) {
@@ -95,9 +128,11 @@ class _BubblesIndicatorState extends State<_BubblesIndicator>
       _numLoadInput?.value = 100;
     }
     if (mode == IndicatorMode.inactive) {
+      _resetLoadController();
       setState(() {
         _key++;
       });
+      _setupController();
     }
   }
 
@@ -122,12 +157,12 @@ class _BubblesIndicatorState extends State<_BubblesIndicator>
             width: double.infinity,
             height:
                 _offset < _actualTriggerOffset ? _actualTriggerOffset : _offset,
-            child: RiveAnimation.asset(
-              'packages/easy_refresh_bubbles/assets/bubbles.riv',
-              fit: BoxFit.cover,
-              onInit: _onRiveInit,
-              antialiasing: false,
-            ),
+            child: _riveController != null
+                ? RiveWidget(
+                    controller: _riveController!,
+                    fit: Fit.cover,
+                  )
+                : const SizedBox(),
           ),
         ),
       ],

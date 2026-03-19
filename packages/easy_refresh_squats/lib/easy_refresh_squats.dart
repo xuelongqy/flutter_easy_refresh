@@ -1,6 +1,6 @@
 library;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Animation;
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:rive/rive.dart';
 

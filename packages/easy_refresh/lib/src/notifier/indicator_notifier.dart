@@ -849,23 +849,26 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       if (processedDuration == Duration.zero) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           if (this.mode == IndicatorMode.processed) {
-            if (!userOffsetNotifier.value &&
-                _offset != 0 &&
-                _position != null &&
-                !_position!.outOfRange) {
-              final oldOffset = _offset;
-              if (clamping) {
-                _offset = 0;
-              } else {
-                _offset = _calculateOffset(_position!, _position!.pixels);
-              }
-              if (_offset != oldOffset) {
-                notifyListeners();
-              }
-            }
-            _setMode(IndicatorMode.done);
+            // if (!userOffsetNotifier.value &&
+            //     _offset != 0 &&
+            //     _position != null &&
+            //     !_position!.outOfRange &&
+            //     this is FooterNotifier) {
+            //   final oldOffset = _offset;
+            //   if (clamping) {
+            //     _offset = 0;
+            //   } else {
+            //     _offset = _calculateOffset(_position!, _position!.pixels);
+            //   }
+            //   if (_offset != oldOffset) {
+            //     notifyListeners();
+            //   }
+            // }
+            // _setMode(IndicatorMode.done);
+            _mode = IndicatorMode.done;
             if (offset == 0) {
-              _setMode(IndicatorMode.inactive);
+              // _setMode(IndicatorMode.inactive);
+              _mode = IndicatorMode.inactive;
             }
             // Trigger [Scrollable] rollback
             if (oldMode == IndicatorMode.processing &&
@@ -877,20 +880,21 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       } else {
         Future.delayed(processedDuration, () {
           if (this.mode == IndicatorMode.processed) {
-            if (!userOffsetNotifier.value &&
-                _offset != 0 &&
-                _position != null &&
-                !_position!.outOfRange) {
-              final oldOffset = _offset;
-              if (clamping) {
-                _offset = 0;
-              } else {
-                _offset = _calculateOffset(_position!, _position!.pixels);
-              }
-              if (_offset != oldOffset) {
-                notifyListeners();
-              }
-            }
+            // if (!userOffsetNotifier.value &&
+            //     _offset != 0 &&
+            //     _position != null &&
+            //     !_position!.outOfRange &&
+            //     this is FooterNotifier) {
+            //   final oldOffset = _offset;
+            //   if (clamping) {
+            //     _offset = 0;
+            //   } else {
+            //     _offset = _calculateOffset(_position!, _position!.pixels);
+            //   }
+            //   if (_offset != oldOffset) {
+            //     notifyListeners();
+            //   }
+            // }
             _setMode(IndicatorMode.done);
             if (offset == 0) {
               _setMode(IndicatorMode.inactive);

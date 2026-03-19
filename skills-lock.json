@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "skills": {
+    "flutter-accessibility": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "5ab24655bb7dfafd883525d4cdcf6d2dc5b9110a86ad82d4308ce56abf240fee"
+    },
+    "flutter-animation": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "3e574c64df9afb6fb6f61b0ab1e6e8012776e18e88c62311fa95019e64203ca4"
+    },
+    "flutter-app-size": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "5410b082eed6e651db81a15e3637f57bb4e85b9bfcfeed212556b06fa768f247"
+    },
+    "flutter-architecture": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "abccd43bb4b439a91de8c10b4a89ff52e65d53a5174c9db4293c33551ce45e0b"
+    },
+    "flutter-concurrency": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "db089c87db629845fe4fc13b37c2a27ae68b37d5e78af53fc32af5fdd41d2557"
+    },
+    "flutter-environment-setup-macos": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "19d5ec030553684b90775f1e36dbd2a7c3d8848d6fa98d72cc4e8037853e860f"
+    },
+    "flutter-home-screen-widget": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "4e380f668812bc4e462f978e9c408264a286450b83e3b14829d1260d42af8d16"
+    },
+    "flutter-layout": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "39097d1c7f69f59a965f4475f1d11f649ded2680c154c072579f75ac536138b9"
+    },
+    "flutter-localization": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "2e0ddcc1c1303582612e11a85d6b2a35709e2adead6dde6bacc57ac0ea705ba3"
+    },
+    "flutter-native-interop": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "29dbda76f50104505980282bbb1bb55c29d1336f4866a2867c0cf3501ea2c291"
+    },
+    "flutter-performance": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "66ce2d80fdefd9ce89ec11d85e6f904bcf842cb64893b3e68eabbaf28523e8bc"
+    },
+    "flutter-routing-and-navigation": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "0228bc83a0362403993aee95ab66087fcf7d058cb7603f06756cb96a5b408df6"
+    },
+    "flutter-state-management": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "dbf88314019bed1a261368aa1c6b0964f05c89cc83f3c6c971f84b9bbbf08369"
+    },
+    "flutter-testing": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "287b6e96a6ee2db273478ced4ba4f16c4880054daa5e6099dfaa3e21d2f15f7e"
+    },
+    "flutter-theming": {
+      "source": "flutter/skills",
+      "sourceType": "github",
+      "computedHash": "f13a39f9b33925cc1a63d55e74d93a18d422a6a9e991f869b7a58155b5276dfd"
+    }
+  }
+}

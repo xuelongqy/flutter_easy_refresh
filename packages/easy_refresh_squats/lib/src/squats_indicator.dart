@@ -1,6 +1,47 @@
 part of '../easy_refresh_squats.dart';
 
 const _kDefaultSquatsTriggerOffset = 190.0;
+const _kSquatsFitSwitchOffset = 214.0;
+
+/// Custom painter for Squats animations.
+base class _SquatsPainter extends BasicArtboardPainter {
+  Animation? _idleAnimation;
+  Animation? _squatsAnimation;
+  bool _squatting = false;
+
+  @override
+  void artboardChanged(Artboard artboard) {
+    super.artboardChanged(artboard);
+    _idleAnimation = artboard.animationNamed('Idle');
+    _squatsAnimation = artboard.animationNamed('Demo');
+  }
+
+  @override
+  bool advance(double elapsedSeconds) {
+    bool needsRepaint = super.advance(elapsedSeconds);
+    if (_squatting) {
+      needsRepaint =
+          (_squatsAnimation?.advanceAndApply(elapsedSeconds) ?? false) ||
+              needsRepaint;
+    } else {
+      needsRepaint =
+          (_idleAnimation?.advanceAndApply(elapsedSeconds) ?? false) ||
+              needsRepaint;
+    }
+    return needsRepaint;
+  }
+
+  void setSquatting(bool value) {
+    if (_squatting == value) return;
+    _squatting = value;
+    if (!value) {
+      _squatsAnimation?.time = 0;
+    } else {
+      _idleAnimation?.time = 0;
+    }
+    notifyListeners();
+  }
+}
 
 /// Squats indicator.
 /// Base widget for [SquatsHeader] and [SquatsFooter].
@@ -27,24 +68,37 @@ class _SquatsIndicator extends StatefulWidget {
 }
 
 class _SquatsIndicatorState extends State<_SquatsIndicator> {
-  late SimpleAnimation _idleController;
-  late SimpleAnimation _squatsController;
+  File? _file;
+  Artboard? _artboard;
+  late final _SquatsPainter _painter;
 
   double get _offset => widget.state.offset;
 
   @override
   void initState() {
     super.initState();
-    _idleController = SimpleAnimation('Idle');
-    _squatsController = SimpleAnimation('Demo');
+    _painter = _SquatsPainter();
     widget.state.notifier.addModeChangeListener(_onModeChange);
+    _initRive();
+  }
+
+  Future<void> _initRive() async {
+    final file = await File.asset(
+      'packages/easy_refresh_squats/assets/lumberjack_squats.riv',
+      riveFactory: Factory.rive,
+    );
+    if (!mounted || file == null) return;
+    _file = file;
+    _artboard = file.defaultArtboard();
+    if (mounted) setState(() {});
   }
 
   @override
   void dispose() {
     widget.state.notifier.removeModeChangeListener(_onModeChange);
-    _idleController.dispose();
-    _squatsController.dispose();
+    _painter.dispose();
+    _artboard?.dispose();
+    _file?.dispose();
     super.dispose();
   }
 
@@ -53,42 +107,30 @@ class _SquatsIndicatorState extends State<_SquatsIndicator> {
     if (mode == IndicatorMode.processing ||
         mode == IndicatorMode.processed ||
         mode == IndicatorMode.done) {
-      if (_idleController.isActive) {
-        _idleController.isActive = false;
-        _idleController.reset();
-      }
-      if (!_squatsController.isActive) {
-        _squatsController.isActive = true;
-      }
+      _painter.setSquatting(true);
     } else {
-      if (_squatsController.isActive) {
-        _squatsController.isActive = false;
-        _squatsController.reset();
-      }
-      if (!_idleController.isActive) {
-        _idleController.isActive = true;
-      }
+      _painter.setSquatting(false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final artboard = _artboard;
+    _painter.fit = Fit.fitWidth;
     return Container(
       alignment: Alignment.center,
       width: double.infinity,
       height: _offset,
       color: widget.backgroundColor,
       child: SizedBox(
-        width: _offset > 214 ? null : 214,
+        width: _kSquatsFitSwitchOffset,
         height: _offset,
-        child: RiveAnimation.asset(
-          'packages/easy_refresh_squats/assets/lumberjack_squats.riv',
-          controllers: [
-            _squatsController,
-            _idleController,
-          ],
-          fit: _offset > 214 ? BoxFit.fitHeight : BoxFit.fitWidth,
-        ),
+        child: artboard != null
+            ? RiveArtboardWidget(
+                artboard: artboard,
+                painter: _painter,
+              )
+            : const SizedBox(),
       ),
     );
   }
