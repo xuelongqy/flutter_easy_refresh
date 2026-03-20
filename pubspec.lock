@@ -454,7 +454,7 @@ packages:
     source: hosted
     version: "4.1.0"
   rive:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: rive
       sha256: "2d7f0b0dd6c8368c3e5a47d0a38ee68306896920aa665b5bf59e7c589a6d35a2"

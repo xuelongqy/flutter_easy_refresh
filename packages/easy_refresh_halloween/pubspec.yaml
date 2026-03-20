@@ -13,7 +13,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  rive: any
+  rive: ^0.14.4
   easy_refresh: ^3.4.0
 
 dev_dependencies:
