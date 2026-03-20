@@ -2,96 +2,6 @@ part of '../easy_refresh_space.dart';
 
 const _kDefaultSpaceTriggerOffset = 180.0;
 
-/// Custom painter for Space animations.
-base class _SpacePainter extends BasicArtboardPainter {
-  _SpacePainter({super.fit});
-
-  Animation? _pullAnimation;
-  Animation? _triggerAnimation;
-  Animation? _loadAnimation;
-
-  bool _triggerActive = false;
-  bool _triggerCompleted = false;
-  bool _loadActive = false;
-
-  VoidCallback? onTriggerComplete;
-
-  @override
-  void artboardChanged(Artboard artboard) {
-    super.artboardChanged(artboard);
-    _pullAnimation = artboard.animationNamed('Pull');
-    _triggerAnimation = artboard.animationNamed('Trigger');
-    _loadAnimation = artboard.animationNamed('Loading');
-  }
-
-  @override
-  bool advance(double elapsedSeconds) {
-    bool needsRepaint = super.advance(elapsedSeconds);
-    if (_triggerActive) {
-      final playing =
-          _triggerAnimation?.advanceAndApply(elapsedSeconds) ?? false;
-      if (!playing && !_triggerCompleted) {
-        _triggerCompleted = true;
-        _triggerActive = false;
-        onTriggerComplete?.call();
-      }
-      needsRepaint = true;
-    }
-    if (_loadActive) {
-      _loadAnimation?.advanceAndApply(elapsedSeconds);
-      needsRepaint = true;
-    }
-    return needsRepaint;
-  }
-
-  void applyPull(double scale) {
-    final anim = _pullAnimation;
-    if (anim == null) return;
-    anim.time = scale;
-    anim.apply();
-    scheduleRepaint();
-  }
-
-  void startTrigger() {
-    if (_triggerActive) return;
-    _triggerActive = true;
-    _triggerCompleted = false;
-    _triggerAnimation?.time = 0;
-    notifyListeners();
-  }
-
-  void stopTrigger() {
-    _triggerActive = false;
-    _triggerCompleted = false;
-    _triggerAnimation?.time = 0;
-    _triggerAnimation?.apply();
-    notifyListeners();
-  }
-
-  void startLoad() {
-    _loadActive = true;
-    notifyListeners();
-  }
-
-  void stopLoad() {
-    _loadActive = false;
-    _loadAnimation?.time = 0;
-    _loadAnimation?.apply();
-    notifyListeners();
-  }
-
-  void reset() {
-    _triggerActive = false;
-    _loadActive = false;
-    _triggerCompleted = false;
-    _triggerAnimation?.time = 0;
-    _triggerAnimation?.apply();
-    _loadAnimation?.time = 0;
-    _loadAnimation?.apply();
-    notifyListeners();
-  }
-}
-
 /// Space indicator.
 /// Base widget for [SpaceHeader] and [SpaceFooter].
 class _SpaceIndicator extends StatefulWidget {
@@ -114,8 +24,12 @@ class _SpaceIndicator extends StatefulWidget {
 
 class _SpaceIndicatorState extends State<_SpaceIndicator> {
   File? _file;
-  Artboard? _artboard;
-  late final _SpacePainter _painter;
+  RiveWidgetController? _riveController;
+  NumberInput? _pullAmountInput;
+  dynamic _startInput;
+
+  int _key = 0;
+  bool _startActive = false;
 
   IndicatorMode get _mode => widget.state.mode;
 
@@ -126,12 +40,6 @@ class _SpaceIndicatorState extends State<_SpaceIndicator> {
   @override
   void initState() {
     super.initState();
-    _painter = _SpacePainter(fit: Fit.cover);
-    _painter.onTriggerComplete = () {
-      if (_mode == IndicatorMode.processing) {
-        _painter.startLoad();
-      }
-    };
     widget.state.notifier.addModeChangeListener(_onModeChange);
     _initRive();
   }
@@ -143,59 +51,124 @@ class _SpaceIndicatorState extends State<_SpaceIndicator> {
     );
     if (!mounted || file == null) return;
     _file = file;
-    _artboard = file.defaultArtboard();
+    _setupController();
+  }
+
+  void _setupController() {
+    final file = _file;
+    if (file == null) return;
+    _pullAmountInput?.dispose();
+    _startInput?.dispose();
+    _riveController?.dispose();
+    _riveController = RiveWidgetController(
+      file,
+      stateMachineSelector: StateMachineNamed('Reload'),
+    );
+    // ignore: deprecated_member_use
+    _pullAmountInput = _riveController!.stateMachine.number('Pull Amount');
+    // ignore: deprecated_member_use
+    _startInput = _riveController!.stateMachine.boolean('Start');
+    _startActive = false;
+    _setPullAmount(0);
+    _setStart(false);
     if (mounted) setState(() {});
   }
 
   @override
   void dispose() {
     widget.state.notifier.removeModeChangeListener(_onModeChange);
-    _painter.dispose();
-    _artboard?.dispose();
+    _pullAmountInput?.dispose();
+    _startInput?.dispose();
+    _riveController?.dispose();
     _file?.dispose();
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(covariant _SpaceIndicator oldWidget) {
+    if (_mode == IndicatorMode.drag ||
+        _mode == IndicatorMode.armed ||
+        _mode == IndicatorMode.ready ||
+        _mode == IndicatorMode.done) {
+      final scale = (_offset / _actualTriggerOffset).clamp(0.0, 1.0);
+      _setPullAmount(scale * 100);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _setPullAmount(double value) {
+    _pullAmountInput?.value = value;
+  }
+
+  void _setStart(bool value) {
+    if (_startActive == value) return;
+    _startActive = value;
+    _startInput?.value = value;
+  }
+
+  void _resetController() {
+    _setStart(false);
+    _setPullAmount(0);
+    setState(() {
+      _key++;
+    });
+    _setupController();
+  }
+
   /// Mode change listener.
   void _onModeChange(IndicatorMode mode, double offset) {
-    if (mode == IndicatorMode.ready) {
-      _painter.startTrigger();
+    if (mode == IndicatorMode.drag || mode == IndicatorMode.armed) {
+      final scale = (offset / _actualTriggerOffset).clamp(0.0, 1.0);
+      _setStart(false);
+      _setPullAmount(scale * 100);
       return;
     }
-    if (mode == IndicatorMode.drag || mode == IndicatorMode.armed) {
-      _painter.stopTrigger();
+    if (mode == IndicatorMode.ready) {
+      _setPullAmount(100);
+      _setStart(true);
+      return;
+    }
+    if (mode == IndicatorMode.processing || mode == IndicatorMode.processed) {
+      _setPullAmount(100);
+      _setStart(true);
+      return;
     }
     if (mode == IndicatorMode.done) {
-      _painter.stopTrigger();
-      _painter.stopLoad();
+      _setPullAmount(100);
       return;
     }
     if (mode == IndicatorMode.inactive) {
-      _painter.reset();
-      return;
+      _resetController();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final artboard = _artboard;
-    if (artboard != null) {
-      if (_mode == IndicatorMode.drag ||
-          _mode == IndicatorMode.armed ||
-          _mode == IndicatorMode.done) {
-        final scale = (_offset / _actualTriggerOffset).clamp(0.0, 1.0);
-        _painter.applyPull(scale);
-      }
-    }
-    return SizedBox(
-      width: double.infinity,
-      height: _offset,
-      child: artboard != null
-          ? RiveArtboardWidget(
-              artboard: artboard,
-              painter: _painter,
-            )
-          : const SizedBox(),
+    return Stack(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: _offset,
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: SizedBox(
+            key: ValueKey(_key),
+            width: double.infinity,
+            height: _offset < _kDefaultSpaceTriggerOffset
+                ? _kDefaultSpaceTriggerOffset
+                : _offset,
+            child: _riveController != null
+                ? RiveWidget(
+                    controller: _riveController!,
+                    fit: Fit.cover,
+                  )
+                : const SizedBox(),
+          ),
+        ),
+      ],
     );
   }
 }
