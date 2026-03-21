@@ -29,6 +29,7 @@ class _SecondaryPageState extends State<SecondaryPage> {
       controlFinishRefresh: true,
       controlFinishLoad: true,
     );
+    // https://rive.app/marketplace/25759-48234-slot-machine-game-with-scripting/
     _riveFileLoader = FileLoader.fromAsset(
       'assets/rive/machine-game.riv',
       riveFactory: Factory.rive,
@@ -47,6 +48,8 @@ class _SecondaryPageState extends State<SecondaryPage> {
     final themeData = Theme.of(context);
     final mediaQuery = MediaQuery.of(context);
     final size = mediaQuery.size;
+    final appBarBackgroundColor =
+        themeData.appBarTheme.backgroundColor ?? themeData.colorScheme.surface;
     return Scaffold(
       body: EasyRefresh(
         controller: _controller,
@@ -125,16 +128,6 @@ class _SecondaryPageState extends State<SecondaryPage> {
                                   },
                                 ),
                               ),
-                              Column(
-                                children: [
-                                  AppBar(
-                                    backgroundColor: Colors.transparent,
-                                    systemOverlayStyle:
-                                        SystemUiOverlayStyle.dark,
-                                    foregroundColor: Colors.black,
-                                  ),
-                                ],
-                              )
                             ],
                           ),
                         );
@@ -210,6 +203,10 @@ class _SecondaryPageState extends State<SecondaryPage> {
             ValueListenableBuilder<IndicatorState?>(
               valueListenable: _listenable,
               builder: (context, state, child) {
+                final mode = state?.mode;
+                final isSecondaryForeground =
+                    mode == IndicatorMode.secondaryOpen ||
+                        mode == IndicatorMode.secondaryClosing;
                 double scale = 1;
                 if (state != null) {
                   if (state.offset > state.actualTriggerOffset) {
@@ -220,22 +217,37 @@ class _SecondaryPageState extends State<SecondaryPage> {
                                 state.actualTriggerOffset));
                   }
                 }
-                return SliverOpacity(
-                  opacity: scale,
-                  sliver: SliverAppBar(
-                    title: Text('Secondary'.tr),
-                    pinned: true,
-                    actions: [
-                      IconButton(
-                        onPressed: () async {
-                          _callOpenSecondary = true;
-                          await _controller.openHeaderSecondary();
-                          _callOpenSecondary = false;
-                        },
-                        icon: const Icon(Icons.more_horiz),
-                      ),
-                    ],
+                return SliverAppBar(
+                  pinned: true,
+                  automaticallyImplyLeading: !isSecondaryForeground,
+                  leading: isSecondaryForeground
+                      ? BackButton(
+                          onPressed: _controller.closeHeaderSecondary,
+                        )
+                      : null,
+                  backgroundColor: Color.lerp(
+                      Colors.transparent, appBarBackgroundColor, scale),
+                  surfaceTintColor: Colors.transparent,
+                  systemOverlayStyle: SystemUiOverlayStyle.dark,
+                  foregroundColor: Colors.black,
+                  title: Opacity(
+                    opacity: scale,
+                    child: Text('Secondary'.tr),
                   ),
+                  actions: [
+                    if (!isSecondaryForeground)
+                      Opacity(
+                        opacity: scale,
+                        child: IconButton(
+                          onPressed: () async {
+                            _callOpenSecondary = true;
+                            await _controller.openHeaderSecondary();
+                            _callOpenSecondary = false;
+                          },
+                          icon: const Icon(Icons.more_horiz),
+                        ),
+                      ),
+                  ],
                 );
               },
             ),

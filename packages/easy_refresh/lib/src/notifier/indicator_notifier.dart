@@ -161,7 +161,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (!(scrollController?.hasClients ?? false)) {
       return null;
     }
-    return scrollController!.positions.contains(position) ? scrollController : null;
+    return scrollController!.positions.contains(position)
+        ? scrollController
+        : null;
   }
 
   /// Handling NestedScrollView
