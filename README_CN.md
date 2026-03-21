@@ -23,6 +23,17 @@
  - 支持安全区域，不再有遮挡
  - 自定义滚动参数，让列表具有不同的滚动反馈和惯性
 
+## 配套包
+
+分页能力现在拆分到了独立的 `easy_paging` [![Pub](https://img.shields.io/pub/v/easy_paging)](https://pub.dev/packages/easy_paging) 包中。
+
+```dart
+import 'package:easy_paging/easy_paging.dart';
+import 'package:easy_refresh/easy_refresh.dart';
+```
+
+示例实现见：`example/lib/page/sample/paging_page.dart`
+
 ## 简单用例
 #### 1.默认构造器
  - child作用域内，所有滚动组件会公用一个physics。如果有滚动嵌套，请使用EasyRefresh.builder或用ScrollConfiguration设置作用域

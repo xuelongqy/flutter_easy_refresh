@@ -26,6 +26,17 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
 - Support safe area, no more occlusion
 - Customize scroll parameters to allow lists to have different scrolling feedback and inertia
 
+## Companion Packages
+
+For pagination helpers, use the standalone `easy_paging` [![Pub](https://img.shields.io/pub/v/easy_paging)](https://pub.dev/packages/easy_paging) package.
+
+```dart
+import 'package:easy_paging/easy_paging.dart';
+import 'package:easy_refresh/easy_refresh.dart';
+```
+
+Sample implementation: `example/lib/page/sample/paging_page.dart`
+
 ## Sample
 
 #### 1. Default constructor

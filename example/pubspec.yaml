@@ -33,6 +33,7 @@ dependencies:
   flutter_sticky_header: ^0.8.0
   path_drawing: ^1.0.1
   easy_refresh: ^3.4.0
+  easy_paging: ^3.4.0
   easy_refresh_space: ^1.0.2
   easy_refresh_squats: ^1.0.2
   easy_refresh_skating: ^1.0.2

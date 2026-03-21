@@ -1,4 +1,5 @@
-import 'package:easy_refresh/easy_paging.dart';
+import 'package:easy_paging/easy_paging.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:example/widget/skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -51,10 +52,12 @@ class CustomPaging extends EasyPaging<List<String>, String> {
   });
 
   @override
-  EasyPagingState<List<String>, String> createState() => CustomPagingState();
+  EasyPagingState<List<String>, String, CustomPaging> createState() =>
+      CustomPagingState();
 }
 
-class CustomPagingState extends EasyPagingState<List<String>, String> {
+class CustomPagingState
+    extends EasyPagingState<List<String>, String, CustomPaging> {
   @override
   int get count => data?.length ?? 0;
 
@@ -71,6 +74,11 @@ class CustomPagingState extends EasyPagingState<List<String>, String> {
 
   @override
   int? totalPage;
+
+  @override
+  Widget buildItem(BuildContext context, int index, String item) {
+    return buildItemByBuilder(context, index, item);
+  }
 
   @override
   Widget? buildRefreshOnStartWidget() {
@@ -130,14 +138,14 @@ class CustomPagingState extends EasyPagingState<List<String>, String> {
   }
 
   @override
-  Future onRefresh() async {
+  Future<IndicatorResult?> onRefresh() async {
     if (data == null) {
       await Future.delayed(const Duration(seconds: 2));
       setState(() {
         data = [];
         page = 0;
       });
-      return;
+      return null;
     }
     final response = await fetchData(page: 1);
     setState(() {
@@ -145,16 +153,18 @@ class CustomPagingState extends EasyPagingState<List<String>, String> {
       total = response.total;
       page = response.page;
     });
+    return null;
   }
 
   @override
-  Future onLoad() async {
+  Future<IndicatorResult?> onLoad() async {
     final response = await fetchData(page: page! + 1);
     setState(() {
       data!.addAll(response.data);
       total = response.total;
       page = response.page;
     });
+    return null;
   }
 }
 
