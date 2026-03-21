@@ -226,6 +226,53 @@ void main() {
       await disposeAndFlush(tester);
     });
 
+    testWidgets(
+        'controller.callRefresh(scrollController: ...) is ignored before notifier caches position',
+        (tester) async {
+      final key = GlobalKey<_ControllerHarnessState>();
+      await tester.pumpWidget(_ControllerHarness(
+        key: key,
+        controlFinishRefresh: true,
+      ));
+      final state = key.currentState!;
+
+      await tester.pump();
+
+      state.controller.callRefresh(scrollController: state.scrollController);
+      await tester.pump();
+
+      expect(state.refreshCalled, isFalse);
+      expect(state.headerState?.mode, isNot(IndicatorMode.processing));
+
+      await disposeAndFlush(tester);
+    });
+
+    testWidgets(
+        'controller.callRefresh(scrollController: ...) works when controller matches cached position',
+        (tester) async {
+      final key = GlobalKey<_ControllerHarnessState>();
+      await tester.pumpWidget(_ControllerHarness(
+        key: key,
+        controlFinishRefresh: true,
+      ));
+      final state = key.currentState!;
+
+      await tester.pumpAndSettle();
+
+      state.controller.callRefresh(scrollController: state.scrollController);
+      await tester.pumpAndSettle();
+
+      expect(state.refreshCalled, isTrue);
+      expect(state.headerState, isNotNull);
+      expect(state.headerState!.mode, IndicatorMode.processing);
+
+      state.controller.finishRefresh();
+      await tester.pump();
+      await tester.pump();
+
+      await disposeAndFlush(tester);
+    });
+
     testWidgets('controller.callRefresh() with custom overOffset',
         (tester) async {
       final key = GlobalKey<_ControllerHarnessState>();
@@ -285,6 +332,81 @@ void main() {
               footerMode == IndicatorMode.done,
           isTrue);
 
+      await disposeAndFlush(tester);
+    });
+
+    testWidgets(
+        'controller.callLoad(scrollController: ...) is ignored before notifier caches position',
+        (tester) async {
+      final key = GlobalKey<_ControllerHarnessState>();
+      await tester.pumpWidget(_ControllerHarness(
+        key: key,
+        controlFinishLoad: true,
+      ));
+      final state = key.currentState!;
+
+      await tester.pump();
+
+      state.controller.callLoad(scrollController: state.scrollController);
+      await tester.pump();
+
+      expect(state.loadCalled, isFalse);
+      expect(state.footerState?.mode, isNot(IndicatorMode.processing));
+
+      await disposeAndFlush(tester);
+    });
+
+    testWidgets(
+        'controller.callLoad(scrollController: ...) works when controller matches cached position',
+        (tester) async {
+      final key = GlobalKey<_ControllerHarnessState>();
+      await tester.pumpWidget(_ControllerHarness(
+        key: key,
+        controlFinishLoad: true,
+      ));
+      final state = key.currentState!;
+
+      await tester.pumpAndSettle();
+
+      state.controller.callLoad(scrollController: state.scrollController);
+      await tester.pumpAndSettle();
+
+      expect(state.loadCalled, isTrue);
+      expect(state.footerState, isNotNull);
+      expect(state.footerState!.mode, IndicatorMode.processing);
+
+      state.controller.finishLoad();
+      await tester.pump();
+      await tester.pump();
+
+      await disposeAndFlush(tester);
+    });
+
+    testWidgets(
+        'controller.callRefresh() and callLoad() ignore unattached external scrollController',
+        (tester) async {
+      final key = GlobalKey<_ControllerHarnessState>();
+      await tester.pumpWidget(_ControllerHarness(
+        key: key,
+        controlFinishRefresh: true,
+        controlFinishLoad: true,
+      ));
+      final state = key.currentState!;
+      final detachedController = ScrollController();
+
+      await tester.pump();
+
+      state.controller.callRefresh(scrollController: detachedController);
+      await tester.pump();
+      expect(state.refreshCalled, isFalse);
+      expect(state.headerState?.mode, isNot(IndicatorMode.processing));
+
+      state.controller.callLoad(scrollController: detachedController);
+      await tester.pump();
+      expect(state.loadCalled, isFalse);
+      expect(state.footerState?.mode, isNot(IndicatorMode.processing));
+
+      detachedController.dispose();
       await disposeAndFlush(tester);
     });
   });

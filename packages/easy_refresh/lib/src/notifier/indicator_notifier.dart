@@ -149,6 +149,21 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// The current scroll position.
   ScrollMetrics get position => _position!;
 
+  ScrollPosition? _effectiveScrollPosition() {
+    if (_position is ScrollPosition) {
+      return _position as ScrollPosition;
+    }
+    return null;
+  }
+
+  ScrollController? _matchingScrollController(
+      ScrollController? scrollController, ScrollPosition position) {
+    if (!(scrollController?.hasClients ?? false)) {
+      return null;
+    }
+    return scrollController!.positions.contains(position) ? scrollController : null;
+  }
+
   /// Handling NestedScrollView
   bool _isNested;
 
@@ -808,6 +823,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Reset ballistic.
   /// Trigger [_ERScrollPhysics.createBallisticSimulation].
   void _resetBallistic() {
+    if (!_mounted) {
+      return;
+    }
     ScrollActivityDelegate? delegate;
     double velocity = 0;
     if (_position is ScrollPosition) {
@@ -849,6 +867,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       // Actively update the offset if the user does not release
       if (!clamping && userOffsetNotifier.value) {
         Future(() {
+          if (!_mounted || _position == null) {
+            return;
+          }
           _updateOffset(position, position.pixels, false);
         });
       }
@@ -868,6 +889,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   }
 
   void _completeProcessedMode(IndicatorMode oldMode) {
+    if (!_mounted) {
+      return;
+    }
     if (mode != IndicatorMode.processed) {
       return;
     }
@@ -883,7 +907,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   }
 
   void _syncFooterOffsetAfterProcessed() {
-    if (userOffsetNotifier.value ||
+    if (!_mounted ||
+        userOffsetNotifier.value ||
         _offset == 0 ||
         _position == null ||
         _position!.outOfRange ||
@@ -1070,56 +1095,52 @@ class HeaderNotifier extends IndicatorNotifier {
     Curve curve = Curves.linear,
     ScrollController? scrollController,
   }) async {
-    try {
-      if (scrollController == null && _position is! ScrollPosition) {
-        return;
-      }
-    } catch (_) {
+    final effectivePosition = _effectiveScrollPosition();
+    if (effectivePosition == null) {
       return;
     }
+    final matchedController =
+        _matchingScrollController(scrollController, effectivePosition);
     final scrollTo = -offset;
     _releaseOffset = offset;
     if (jumpToEdge) {
-      if (scrollController != null) {
-        scrollController
-            .jumpTo(scrollController.positions.first.minScrollExtent);
+      if (matchedController != null) {
+        matchedController.jumpTo(effectivePosition.minScrollExtent);
       } else {
-        (_position as ScrollPosition).jumpTo(position.minScrollExtent);
+        effectivePosition.jumpTo(effectivePosition.minScrollExtent);
       }
     }
     if (clamping) {
       if (duration == null) {
         _offset = offset;
         _mode = mode;
-        _updateBySimulation(position, 0);
+        _updateBySimulation(effectivePosition, 0);
       } else {
         userOffsetNotifier.value = true;
-        _clampingAnimationController!.value = position.minScrollExtent;
+        _clampingAnimationController!.value = effectivePosition.minScrollExtent;
         await _clampingAnimationController!
             .animateTo(scrollTo, duration: duration, curve: curve);
         userOffsetNotifier.value = false;
-        _updateBySimulation(position, 0);
+        _updateBySimulation(effectivePosition, 0);
       }
     } else {
-      if (_position is ScrollPosition) {
-        if (duration == null) {
-          if (scrollController != null) {
-            scrollController.jumpTo(scrollTo);
-          } else {
-            (_position as ScrollPosition).jumpTo(scrollTo);
-          }
+      if (duration == null) {
+        if (matchedController != null) {
+          matchedController.jumpTo(scrollTo);
         } else {
-          userOffsetNotifier.value = true;
-          if (scrollController != null) {
-            await scrollController.animateTo(scrollTo,
-                duration: duration, curve: curve);
-          } else {
-            await (_position as ScrollPosition)
-                .animateTo(scrollTo, duration: duration, curve: curve);
-          }
-          userOffsetNotifier.value = false;
-          notifyListeners();
+          effectivePosition.jumpTo(scrollTo);
         }
+      } else {
+        userOffsetNotifier.value = true;
+        if (matchedController != null) {
+          await matchedController.animateTo(scrollTo,
+              duration: duration, curve: curve);
+        } else {
+          await effectivePosition.animateTo(scrollTo,
+              duration: duration, curve: curve);
+        }
+        userOffsetNotifier.value = false;
+        notifyListeners();
       }
     }
   }
@@ -1234,56 +1255,52 @@ class FooterNotifier extends IndicatorNotifier {
     bool jumpToEdge = true,
     ScrollController? scrollController,
   }) async {
-    try {
-      if (scrollController == null && _position is! ScrollPosition) {
-        return;
-      }
-    } catch (_) {
+    final effectivePosition = _effectiveScrollPosition();
+    if (effectivePosition == null) {
       return;
     }
-    final scrollTo = position.maxScrollExtent + offset;
+    final matchedController =
+        _matchingScrollController(scrollController, effectivePosition);
+    final scrollTo = effectivePosition.maxScrollExtent + offset;
     _releaseOffset = offset;
     if (jumpToEdge) {
-      if (scrollController != null) {
-        scrollController
-            .jumpTo(scrollController.positions.first.maxScrollExtent);
+      if (matchedController != null) {
+        matchedController.jumpTo(effectivePosition.maxScrollExtent);
       } else {
-        (_position as ScrollPosition).jumpTo(position.maxScrollExtent);
+        effectivePosition.jumpTo(effectivePosition.maxScrollExtent);
       }
     }
     if (clamping) {
       if (duration == null) {
         _offset = offset;
         _mode = mode;
-        _updateBySimulation(position, 0);
+        _updateBySimulation(effectivePosition, 0);
       } else {
         userOffsetNotifier.value = true;
-        _clampingAnimationController!.value = position.maxScrollExtent;
+        _clampingAnimationController!.value = effectivePosition.maxScrollExtent;
         await _clampingAnimationController!
             .animateTo(scrollTo, duration: duration, curve: curve);
         userOffsetNotifier.value = false;
-        _updateBySimulation(position, 0);
+        _updateBySimulation(effectivePosition, 0);
       }
     } else {
-      if (_position is ScrollPosition) {
-        if (duration == null) {
-          if (scrollController != null) {
-            scrollController.jumpTo(scrollTo);
-          } else {
-            (_position as ScrollPosition).jumpTo(scrollTo);
-          }
+      if (duration == null) {
+        if (matchedController != null) {
+          matchedController.jumpTo(scrollTo);
         } else {
-          userOffsetNotifier.value = true;
-          if (scrollController != null) {
-            await scrollController.animateTo(scrollTo,
-                duration: duration, curve: curve);
-          } else {
-            await (_position as ScrollPosition)
-                .animateTo(scrollTo, duration: duration, curve: curve);
-          }
-          userOffsetNotifier.value = false;
-          notifyListeners();
+          effectivePosition.jumpTo(scrollTo);
         }
+      } else {
+        userOffsetNotifier.value = true;
+        if (matchedController != null) {
+          await matchedController.animateTo(scrollTo,
+              duration: duration, curve: curve);
+        } else {
+          await effectivePosition.animateTo(scrollTo,
+              duration: duration, curve: curve);
+        }
+        userOffsetNotifier.value = false;
+        notifyListeners();
       }
     }
   }
