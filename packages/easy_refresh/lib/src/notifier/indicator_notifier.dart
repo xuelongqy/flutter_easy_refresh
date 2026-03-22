@@ -910,7 +910,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   void _syncFooterOffsetAfterProcessed() {
     if (!_mounted ||
-        userOffsetNotifier.value ||
         _offset == 0 ||
         _position == null ||
         _position!.outOfRange ||
