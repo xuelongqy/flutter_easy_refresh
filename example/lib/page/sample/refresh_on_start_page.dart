@@ -45,6 +45,7 @@ class _RefreshOnStartPageState extends State<RefreshOnStartPage> {
           clamping: true,
           position: IndicatorPosition.above,
           processedDuration: Duration.zero,
+          spring: kMaterialSpring,
           builder: (ctx, state) {
             if (state.mode == IndicatorMode.inactive ||
                 state.mode == IndicatorMode.done) {
