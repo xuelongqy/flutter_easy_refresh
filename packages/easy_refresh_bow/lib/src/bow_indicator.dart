@@ -159,7 +159,6 @@ class _BowIndicatorState extends State<_BowIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    final isFooter = widget.state.indicator is Footer;
     final indicatorHeight = _offset < _kDefaultBowTriggerOffset
         ? _kDefaultBowTriggerOffset
         : _offset;
