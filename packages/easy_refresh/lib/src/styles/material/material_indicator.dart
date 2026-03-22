@@ -12,7 +12,7 @@ double kMaterialHorizontalFrictionFactor(double overscrollFraction) =>
     1.0 * math.pow(1 - overscrollFraction, 2);
 
 /// Spring description used by material.
-physics.SpringDescription kMaterialSpringBuilder({
+physics.SpringDescription kMaterialReadySpringBuilder({
   required IndicatorMode mode,
   required double offset,
   required double actualTriggerOffset,
@@ -23,6 +23,13 @@ physics.SpringDescription kMaterialSpringBuilder({
       stiffness: 500,
       ratio: 1.1,
     );
+
+/// Spring description used by material when bezier background animation is true.
+const kMaterialSpring = physics.SpringDescription(
+  mass: 1,
+  stiffness: 2000,
+  damping: 50,
+);
 
 /// Material indicator.
 /// Base widget for [MaterialHeader] and [MaterialFooter].

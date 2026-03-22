@@ -43,7 +43,7 @@ class MaterialFooter extends Footer {
     super.clamping = true,
     super.position,
     super.processedDuration = const Duration(milliseconds: 200),
-    super.spring,
+    physics.SpringDescription? spring,
     SpringBuilder? readySpringBuilder,
     super.springRebound = false,
     FrictionFactor? frictionFactor,
@@ -65,10 +65,12 @@ class MaterialFooter extends Footer {
     this.bezierBackgroundAnimation = false,
     this.bezierBackgroundBounce = false,
   }) : super(
+          spring: spring ??
+              (clamping && !bezierBackgroundAnimation ? kMaterialSpring : null),
           readySpringBuilder: readySpringBuilder ??
               (bezierBackgroundAnimation
                   ? kBezierSpringBuilder
-                  : kMaterialSpringBuilder),
+                  : kMaterialReadySpringBuilder),
           frictionFactor: frictionFactor ??
               (showBezierBackground
                   ? kBezierFrictionFactor

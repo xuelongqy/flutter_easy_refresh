@@ -43,7 +43,7 @@ class MaterialHeader extends Header {
     super.clamping = true,
     super.position,
     super.processedDuration = const Duration(milliseconds: 200),
-    super.spring,
+    physics.SpringDescription? spring,
     super.springRebound = false,
     SpringBuilder? readySpringBuilder,
     FrictionFactor? frictionFactor,
@@ -65,10 +65,12 @@ class MaterialHeader extends Header {
     this.bezierBackgroundAnimation = false,
     this.bezierBackgroundBounce = false,
   }) : super(
+          spring: spring ??
+              (clamping && !showBezierBackground ? kMaterialSpring : null),
           readySpringBuilder: readySpringBuilder ??
               (bezierBackgroundAnimation
                   ? kBezierSpringBuilder
-                  : kMaterialSpringBuilder),
+                  : kMaterialReadySpringBuilder),
           frictionFactor: frictionFactor ??
               (showBezierBackground
                   ? kBezierFrictionFactor
