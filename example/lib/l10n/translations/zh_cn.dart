@@ -45,6 +45,7 @@ const zhCN = {
   'Lumberjack Squats': '暴力深蹲',
   'Skating boy': '滑雪少年',
   'Halloween horror': '万圣节惊魂',
+  'Bow and arrow': '弓箭手',
   'User profile': '个人中心',
   'User personal center': '用户个人中心',
   'QQ group': 'QQ群',

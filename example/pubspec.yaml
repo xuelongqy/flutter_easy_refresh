@@ -39,6 +39,7 @@ dependencies:
   easy_refresh_skating: ^1.0.2
   easy_refresh_halloween: ^1.0.2
   easy_refresh_bubbles: ^1.0.0
+  easy_refresh_bow: ^1.0.0
 
 dev_dependencies:
   flutter_test:

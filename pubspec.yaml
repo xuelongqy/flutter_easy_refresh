@@ -4,6 +4,7 @@ workspace:
   - packages/easy_refresh
   - packages/easy_paging
   - packages/easy_refresh_bubbles
+  - packages/easy_refresh_bow
   - packages/easy_refresh_halloween
   - packages/easy_refresh_skating
   - packages/easy_refresh_space

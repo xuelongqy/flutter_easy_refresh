@@ -198,6 +198,7 @@ Sample implementation: `example/lib/page/sample/paging_page.dart`
 | Package                                                                   | Pub                                                                                                            |
 | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | [easy_refresh_bubbles](https://pub.dev/packages/easy_refresh_bubbles)     | [![Pub](https://img.shields.io/pub/v/easy_refresh_bubbles)](https://pub.dev/packages/easy_refresh_bubbles)     |
+| [easy_refresh_bow](https://pub.dev/packages/easy_refresh_bow)             | [![Pub](https://img.shields.io/pub/v/easy_refresh_bow)](https://pub.dev/packages/easy_refresh_bow)             |
 | [easy_refresh_halloween](https://pub.dev/packages/easy_refresh_halloween) | [![Pub](https://img.shields.io/pub/v/easy_refresh_halloween)](https://pub.dev/packages/easy_refresh_halloween) |
 | [easy_refresh_skating](https://pub.dev/packages/easy_refresh_skating)     | [![Pub](https://img.shields.io/pub/v/easy_refresh_skating)](https://pub.dev/packages/easy_refresh_skating)     |
 | [easy_refresh_space](https://pub.dev/packages/easy_refresh_space)         | [![Pub](https://img.shields.io/pub/v/easy_refresh_space)](https://pub.dev/packages/easy_refresh_space)         |

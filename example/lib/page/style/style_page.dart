@@ -108,6 +108,12 @@ class _StylePageState extends State<StylePage> {
                 icon: Icons.rocket_launch,
                 onTap: () => Get.toNamed(Routes.bubblesStyle),
               ),
+              ListItem(
+                title: 'Bow',
+                subtitle: 'Bow and arrow'.tr,
+                icon: Icons.architecture,
+                onTap: () => Get.toNamed(Routes.bowStyle),
+              ),
             ]),
           ),
         ],
