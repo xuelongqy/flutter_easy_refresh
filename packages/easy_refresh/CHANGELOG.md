@@ -1,3 +1,16 @@
+## 3.5.0
+
+ - **FIX**: material clamping spring (https://github.com/xuelongqy/flutter_easy_refresh/issues/885) (https://github.com/xuelongqy/flutter_easy_refresh/issues/620).
+ - **FIX**: mode unchange when not released (https://github.com/xuelongqy/flutter_easy_refresh/issues/894).
+ - **FIX**: secondary page.
+ - **FIX**: effective scroll position.
+ - **FIX**: footer mode (https://github.com/xuelongqy/flutter_easy_refresh/pull/905).
+ - **FIX**: clamping animation controller (https://github.com/xuelongqy/flutter_easy_refresh/issues/907).
+ - **FEAT**: easy paging.
+ - **FEAT**: update rive.
+ - **FEAT**: update readme.
+ - **FEAT**: workspace.
+
 ## Next
 - feat: Added EasyRefresh.isNested parameter to determine whether to handle NestedScrollView. In versions 3.4.0 and earlier, no setting is required.
 - fix: Adjust the Flutter version, Flutter >=3.10.0.
