@@ -1,5 +1,6 @@
 name: example
 description: EasyRefresh example.
+publish_to: none
 resolution: workspace
 
 # The following defines the version and build number for your application.
@@ -8,7 +9,7 @@ resolution: workspace
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 3.3.4+57
+version: 3.5.0+1
 
 environment:
   sdk: ">=3.5.0 <4.0.0"
