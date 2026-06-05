@@ -88,7 +88,7 @@ class _ReverseScrollHarnessState extends State<_ReverseScrollHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.blue.withValues(alpha: 0.3),
+              color: Colors.blue.withAlpha(77),
               alignment: Alignment.center,
               child: Text(
                 'Header: ${state.mode.name}',
@@ -106,7 +106,7 @@ class _ReverseScrollHarnessState extends State<_ReverseScrollHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.green.withValues(alpha: 0.3),
+              color: Colors.green.withAlpha(77),
               alignment: Alignment.center,
               child: Text(
                 'Footer: ${state.mode.name}',
@@ -211,7 +211,7 @@ class _ShrinkWrapHarnessState extends State<_ShrinkWrapHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.green.withValues(alpha: 0.3),
+              color: Colors.green.withAlpha(77),
               alignment: Alignment.center,
               child: Text('Footer: ${state.mode.name}'),
             ),

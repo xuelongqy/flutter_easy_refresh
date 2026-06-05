@@ -92,7 +92,7 @@ class _BuilderIndicatorHarnessState extends State<_BuilderIndicatorHarness> {
                     height: state.offset,
                     width: double.infinity,
                     child: ColoredBox(
-                      color: Colors.blue.withValues(alpha: 0.3),
+                      color: Colors.blue.withAlpha(77),
                       child: state.offset > 60
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -131,7 +131,7 @@ class _BuilderIndicatorHarnessState extends State<_BuilderIndicatorHarness> {
                     height: state.offset,
                     width: double.infinity,
                     child: ColoredBox(
-                      color: Colors.green.withValues(alpha: 0.3),
+                      color: Colors.green.withAlpha(77),
                       child: state.offset > 30
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,

@@ -84,7 +84,7 @@ class _NestedScrollHarnessState extends State<_NestedScrollHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.blue.withValues(alpha: 0.3),
+              color: Colors.blue.withAlpha(77),
               alignment: Alignment.center,
               child: Text(
                 'Header: ${state.mode.name}',
@@ -106,7 +106,7 @@ class _NestedScrollHarnessState extends State<_NestedScrollHarness> {
                   pinned: true,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Container(
-                      color: Colors.blue.withValues(alpha: 0.3),
+                      color: Colors.blue.withAlpha(77),
                       child: const Center(
                         child: Text('Flexible Space'),
                       ),
@@ -185,7 +185,7 @@ class _BuilderPatternHarnessState extends State<_BuilderPatternHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.blue.withValues(alpha: 0.3),
+              color: Colors.blue.withAlpha(77),
               alignment: Alignment.center,
               child: Text(
                 'Header: ${state.mode.name}',

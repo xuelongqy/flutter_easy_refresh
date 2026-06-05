@@ -84,7 +84,7 @@ class _HorizontalScrollHarnessState extends State<_HorizontalScrollHarness> {
             builder: (context, state) => Container(
               width: state.offset,
               height: double.infinity,
-              color: Colors.blue.withValues(alpha: 0.3),
+              color: Colors.blue.withAlpha(77),
               alignment: Alignment.center,
               child: RotatedBox(
                 quarterTurns: 1,
@@ -105,7 +105,7 @@ class _HorizontalScrollHarnessState extends State<_HorizontalScrollHarness> {
             builder: (context, state) => Container(
               width: state.offset,
               height: double.infinity,
-              color: Colors.green.withValues(alpha: 0.3),
+              color: Colors.green.withAlpha(77),
               alignment: Alignment.center,
               child: RotatedBox(
                 quarterTurns: 1,

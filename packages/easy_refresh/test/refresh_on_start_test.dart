@@ -100,7 +100,7 @@ class _RefreshOnStartHarnessState extends State<_RefreshOnStartHarness> {
             builder: (context, state) => Container(
               height: state.offset,
               width: double.infinity,
-              color: Colors.blue.withValues(alpha: 0.3),
+              color: Colors.blue.withAlpha(77),
               alignment: Alignment.center,
               child: Text(
                 'Mode: ${state.mode.name}',
@@ -186,7 +186,7 @@ class _CustomRefreshOnStartHeaderHarnessState
               return Container(
                 height: state.offset,
                 width: double.infinity,
-                color: Colors.orange.withValues(alpha: 0.3),
+                color: Colors.orange.withAlpha(77),
                 alignment: Alignment.center,
                 child: const Text(
                   'Custom Start Header',

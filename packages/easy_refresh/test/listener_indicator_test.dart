@@ -103,7 +103,7 @@ class _ListenerIndicatorHarnessState extends State<_ListenerIndicatorHarness> {
                 }
                 return Container(
                   height: 50,
-                  color: Colors.blue.withValues(alpha: 0.2),
+                  color: Colors.blue.withAlpha(51),
                   alignment: Alignment.center,
                   child: Text(
                     'External: ${state.mode.name} - ${state.offset.toStringAsFixed(1)}',

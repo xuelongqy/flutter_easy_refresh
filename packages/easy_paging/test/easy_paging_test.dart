@@ -584,7 +584,7 @@ void main() {
             itemBuilder: (context, index, item) => Container(
               key: Key('custom-item-${item.id}'),
               height: 50,
-              color: Colors.blue.withValues(alpha: 0.1),
+              color: Colors.blue.withAlpha(26),
               child: Text('Custom: ${item.name}'),
             ),
           ),
