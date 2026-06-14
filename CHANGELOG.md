@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-06-14
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`easy_paging` - `v3.5.1`](#easy_paging---v351)
+ - [`easy_refresh` - `v3.5.1`](#easy_refresh---v351)
+ - [`easy_refresh_bubbles` - `v1.0.2`](#easy_refresh_bubbles---v102)
+ - [`easy_refresh_bow` - `v1.1.1`](#easy_refresh_bow---v111)
+ - [`easy_refresh_halloween` - `v1.0.4`](#easy_refresh_halloween---v104)
+ - [`easy_refresh_skating` - `v1.0.4`](#easy_refresh_skating---v104)
+ - [`easy_refresh_space` - `v1.0.4`](#easy_refresh_space---v104)
+ - [`easy_refresh_squats` - `v1.0.4`](#easy_refresh_squats---v104)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `easy_refresh_bubbles` - `v1.0.2`
+ - `easy_refresh_bow` - `v1.1.1`
+ - `easy_refresh_halloween` - `v1.0.4`
+ - `easy_refresh_skating` - `v1.0.4`
+ - `easy_refresh_space` - `v1.0.4`
+ - `easy_refresh_squats` - `v1.0.4`
+
+---
+
+#### `easy_paging` - `v3.5.1`
+
+ - **FIX**: Use withAlpha instead of withValues (https://github.com/xuelongqy/flutter_easy_refresh/issues/911).
+
+#### `easy_refresh` - `v3.5.1`
+
+ - **FIX**: Use withAlpha instead of withValues (https://github.com/xuelongqy/flutter_easy_refresh/issues/911).
+
+
 ## 2026-03-24
 
 ### Changes

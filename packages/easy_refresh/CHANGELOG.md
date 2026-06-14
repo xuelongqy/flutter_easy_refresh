@@ -1,3 +1,7 @@
+## 3.5.1
+
+ - **FIX**: Use withAlpha instead of withValues (https://github.com/xuelongqy/flutter_easy_refresh/issues/911).
+
 ## 3.5.0
 
  - **FIX**: material clamping spring (https://github.com/xuelongqy/flutter_easy_refresh/issues/885) (https://github.com/xuelongqy/flutter_easy_refresh/issues/620).

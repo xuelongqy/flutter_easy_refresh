@@ -1,7 +1,7 @@
 name: easy_paging
 resolution: workspace
 description: Pagination widgets built on top of easy_refresh.
-version: 3.5.0
+version: 3.5.1
 homepage: https://xuelongqy.github.io/flutter_easy_refresh
 repository: https://github.com/xuelongqy/flutter_easy_refresh
 issue_tracker: https://github.com/xuelongqy/flutter_easy_refresh/issues
@@ -13,7 +13,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  easy_refresh: ^3.5.0
+  easy_refresh: ^3.5.1
 
 dev_dependencies:
   flutter_test:
