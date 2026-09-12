@@ -7,14 +7,15 @@ repository: https://github.com/xuelongqy/flutter_easy_refresh
 issue_tracker: https://github.com/xuelongqy/flutter_easy_refresh/issues
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
-  flutter: ">=1.24.0"
+  sdk: ^3.13.0
+  flutter: ">=3.47.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  rive: ^0.14.4
+  rive: ^0.14.11
   easy_refresh: ^3.5.1
+  material_ui: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -22,5 +23,5 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 flutter:
- assets:
-   - assets/bow.riv
+  assets:
+    - assets/bow.riv

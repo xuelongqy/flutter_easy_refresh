@@ -9,10 +9,11 @@ resolution: workspace
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 3.5.0+1
+version: 4.0.0+1
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ^3.13.0
+  flutter: ">=3.47.0"
 
 dependencies:
   flutter:
@@ -28,7 +29,7 @@ dependencies:
   get: ^4.7.3
   convert: ^3.1.2
   carousel_slider: ^5.1.2
-  rive: ^0.14.4
+  rive: ^0.14.11
   qr_flutter: ^4.1.0
   flutter_svg: ^2.2.4
   flutter_sticky_header: ^0.8.0
@@ -41,6 +42,8 @@ dependencies:
   easy_refresh_halloween: ^1.0.4
   easy_refresh_bubbles: ^1.0.2
   easy_refresh_bow: ^1.1.1
+  material_ui: ^1.2.0
+  cupertino_ui: ^1.0.2
 
 dev_dependencies:
   flutter_test:

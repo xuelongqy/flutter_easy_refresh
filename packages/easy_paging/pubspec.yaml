@@ -7,13 +7,14 @@ repository: https://github.com/xuelongqy/flutter_easy_refresh
 issue_tracker: https://github.com/xuelongqy/flutter_easy_refresh/issues
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
-  flutter: ">=3.10.0"
+  sdk: ^3.13.0
+  flutter: ">=3.47.0"
 
 dependencies:
   flutter:
     sdk: flutter
   easy_refresh: ^3.5.1
+  material_ui: ^1.2.0
 
 dev_dependencies:
   flutter_test:
