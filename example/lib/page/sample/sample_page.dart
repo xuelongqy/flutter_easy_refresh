@@ -2,7 +2,7 @@ import 'package:example/config/routes.dart';
 import 'package:example/page/sample/test_page.dart';
 import 'package:example/widget/list_item.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:get/get.dart';
 
 class SamplePage extends StatefulWidget {
@@ -25,7 +25,8 @@ class _SamplePageState extends State<SamplePage> {
               title: Text(
                 'Sample'.tr,
                 style: TextStyle(
-                    color: Theme.of(context).textTheme.titleLarge?.color),
+                  color: Theme.of(context).textTheme.titleLarge?.color,
+                ),
               ),
               centerTitle: false,
             ),

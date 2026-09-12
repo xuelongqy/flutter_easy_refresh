@@ -3,12 +3,15 @@ library;
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/physics.dart' as physics;
 
 /// Paging item builder.
 typedef EasyPagingItemBuilder<ItemType> = Widget Function(
-    BuildContext context, int index, ItemType item);
+  BuildContext context,
+  int index,
+  ItemType item,
+);
 
 /// A flutter widget that convenient pagination.
 abstract class EasyPaging<DataType, ItemType> extends StatefulWidget {
@@ -93,18 +96,25 @@ abstract class EasyPaging<DataType, ItemType> extends StatefulWidget {
     this.itemBuilder,
     this.refreshOnStartWidgetBuilder,
     this.emptyWidgetBuilder,
-  })  : assert(callRefreshOverOffset > 0,
-            'callRefreshOverOffset must be greater than 0.'),
-        assert(callLoadOverOffset > 0,
-            'callLoadOverOffset must be greater than 0.');
+  }) : assert(
+         callRefreshOverOffset > 0,
+         'callRefreshOverOffset must be greater than 0.',
+       ),
+       assert(
+         callLoadOverOffset > 0,
+         'callLoadOverOffset must be greater than 0.',
+       );
 
   @override
   EasyPagingState<DataType, ItemType, EasyPaging<DataType, ItemType>>
-      createState();
+  createState();
 }
 
-abstract class EasyPagingState<DataType, ItemType,
-        PagingWidget extends EasyPaging<DataType, ItemType>>
+abstract class EasyPagingState<
+  DataType,
+  ItemType,
+  PagingWidget extends EasyPaging<DataType, ItemType>
+>
     extends State<PagingWidget> {
   /// All data.
   DataType? data;
@@ -241,11 +251,7 @@ abstract class EasyPagingState<DataType, ItemType,
   Widget buildScrollView([ScrollPhysics? physics]) {
     final header = buildHeader();
     final footer = buildFooter();
-    return _buildScrollView(
-      header: header,
-      footer: footer,
-      physics: physics,
-    );
+    return _buildScrollView(header: header, footer: footer, physics: physics);
   }
 
   @protected
@@ -256,10 +262,7 @@ abstract class EasyPagingState<DataType, ItemType,
   }) {
     return CustomScrollView(
       physics: physics,
-      slivers: _buildSlivers(
-        header: header,
-        footer: footer,
-      ),
+      slivers: _buildSlivers(header: header, footer: footer),
     );
   }
 
@@ -268,17 +271,11 @@ abstract class EasyPagingState<DataType, ItemType,
   List<Widget> buildSlivers() {
     final header = buildHeader();
     final footer = buildFooter();
-    return _buildSlivers(
-      header: header,
-      footer: footer,
-    );
+    return _buildSlivers(header: header, footer: footer);
   }
 
   @protected
-  List<Widget> _buildSlivers({
-    required Header header,
-    required Footer footer,
-  }) {
+  List<Widget> _buildSlivers({required Header header, required Footer footer}) {
     Widget? emptyWidget;
     if (isEmpty) {
       emptyWidget = buildEmptyWidget();
@@ -288,12 +285,9 @@ abstract class EasyPagingState<DataType, ItemType,
         const HeaderLocator.sliver(),
       if (emptyWidget != null)
         SliverFillViewport(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return emptyWidget;
-            },
-            childCount: 1,
-          ),
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return emptyWidget;
+          }, childCount: 1),
         ),
       buildSliver(),
       if (footer.position == IndicatorPosition.locator)
@@ -305,12 +299,9 @@ abstract class EasyPagingState<DataType, ItemType,
   @protected
   Widget buildSliver() {
     return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return buildItem(context, index, getItem(index));
-        },
-        childCount: count,
-      ),
+      delegate: SliverChildBuilderDelegate((context, index) {
+        return buildItem(context, index, getItem(index));
+      }, childCount: count),
     );
   }
 

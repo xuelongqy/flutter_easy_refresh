@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for DeliveryHeader/DeliveryFooter
@@ -9,11 +9,7 @@ class _DeliveryIndicatorHarness extends StatefulWidget {
   final DeliveryHeader? header;
   final DeliveryFooter? footer;
 
-  const _DeliveryIndicatorHarness({
-    super.key,
-    this.header,
-    this.footer,
-  });
+  const _DeliveryIndicatorHarness({super.key, this.header, this.footer});
 
   @override
   State<_DeliveryIndicatorHarness> createState() =>
@@ -75,10 +71,8 @@ class _DeliveryIndicatorHarnessState extends State<_DeliveryIndicatorHarness> {
             controller: scrollController,
             itemExtent: 50,
             itemCount: itemCount,
-            itemBuilder: (context, index) => ListTile(
-              key: Key('item-$index'),
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) =>
+                ListTile(key: Key('item-$index'), title: Text('Item $index')),
           ),
         ),
       ),
@@ -95,10 +89,9 @@ void main() {
   group('DeliveryHeader Tests', () {
     testWidgets('DeliveryHeader renders correctly', (tester) async {
       final key = GlobalKey<_DeliveryIndicatorHarnessState>();
-      await tester.pumpWidget(_DeliveryIndicatorHarness(
-        key: key,
-        header: const DeliveryHeader(),
-      ));
+      await tester.pumpWidget(
+        _DeliveryIndicatorHarness(key: key, header: const DeliveryHeader()),
+      );
 
       await tester.pumpAndSettle();
 
@@ -118,12 +111,12 @@ void main() {
 
     testWidgets('DeliveryHeader with custom skyColor', (tester) async {
       final key = GlobalKey<_DeliveryIndicatorHarnessState>();
-      await tester.pumpWidget(_DeliveryIndicatorHarness(
-        key: key,
-        header: const DeliveryHeader(
-          skyColor: Colors.lightBlue,
+      await tester.pumpWidget(
+        _DeliveryIndicatorHarness(
+          key: key,
+          header: const DeliveryHeader(skyColor: Colors.lightBlue),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -144,8 +137,9 @@ void main() {
       expect(header.clamping, false);
     });
 
-    testWidgets('DeliveryHeader default springRebound is false',
-        (tester) async {
+    testWidgets('DeliveryHeader default springRebound is false', (
+      tester,
+    ) async {
       const header = DeliveryHeader();
       expect(header.springRebound, false);
     });
@@ -159,10 +153,9 @@ void main() {
   group('DeliveryFooter Tests', () {
     testWidgets('DeliveryFooter renders correctly', (tester) async {
       final key = GlobalKey<_DeliveryIndicatorHarnessState>();
-      await tester.pumpWidget(_DeliveryIndicatorHarness(
-        key: key,
-        footer: const DeliveryFooter(),
-      ));
+      await tester.pumpWidget(
+        _DeliveryIndicatorHarness(key: key, footer: const DeliveryFooter()),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -189,12 +182,12 @@ void main() {
 
     testWidgets('DeliveryFooter with custom skyColor', (tester) async {
       final key = GlobalKey<_DeliveryIndicatorHarnessState>();
-      await tester.pumpWidget(_DeliveryIndicatorHarness(
-        key: key,
-        footer: const DeliveryFooter(
-          skyColor: Colors.amber,
+      await tester.pumpWidget(
+        _DeliveryIndicatorHarness(
+          key: key,
+          footer: const DeliveryFooter(skyColor: Colors.amber),
         ),
-      ));
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();

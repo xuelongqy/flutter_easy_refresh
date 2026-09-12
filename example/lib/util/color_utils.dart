@@ -1,11 +1,12 @@
 import 'package:convert/convert.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ColorUtils {
   /// Generate background color from string.
   static Color backgroundColorWithString(String value) {
-    final strHex =
-        hex.encode('${value}color'.codeUnits.map((e) => e % 256).toList());
+    final strHex = hex.encode(
+      '${value}color'.codeUnits.map((e) => e % 256).toList(),
+    );
     String colorStr = '';
     const hexLength = 6;
     final spacing = strHex.length ~/ hexLength;

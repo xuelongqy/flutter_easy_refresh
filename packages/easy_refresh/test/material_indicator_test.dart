@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for MaterialHeader/MaterialFooter
@@ -9,11 +9,7 @@ class _MaterialIndicatorHarness extends StatefulWidget {
   final MaterialHeader? header;
   final MaterialFooter? footer;
 
-  const _MaterialIndicatorHarness({
-    super.key,
-    this.header,
-    this.footer,
-  });
+  const _MaterialIndicatorHarness({super.key, this.header, this.footer});
 
   @override
   State<_MaterialIndicatorHarness> createState() =>
@@ -75,10 +71,8 @@ class _MaterialIndicatorHarnessState extends State<_MaterialIndicatorHarness> {
             controller: scrollController,
             itemExtent: 50,
             itemCount: itemCount,
-            itemBuilder: (context, index) => ListTile(
-              key: Key('item-$index'),
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) =>
+                ListTile(key: Key('item-$index'), title: Text('Item $index')),
           ),
         ),
       ),
@@ -95,10 +89,9 @@ void main() {
   group('MaterialHeader Tests', () {
     testWidgets('MaterialHeader renders correctly', (tester) async {
       final key = GlobalKey<_MaterialIndicatorHarnessState>();
-      await tester.pumpWidget(_MaterialIndicatorHarness(
-        key: key,
-        header: const MaterialHeader(),
-      ));
+      await tester.pumpWidget(
+        _MaterialIndicatorHarness(key: key, header: const MaterialHeader()),
+      );
 
       await tester.pumpAndSettle();
 
@@ -118,12 +111,12 @@ void main() {
 
     testWidgets('MaterialHeader with custom color', (tester) async {
       final key = GlobalKey<_MaterialIndicatorHarnessState>();
-      await tester.pumpWidget(_MaterialIndicatorHarness(
-        key: key,
-        header: const MaterialHeader(
-          color: Colors.red,
+      await tester.pumpWidget(
+        _MaterialIndicatorHarness(
+          key: key,
+          header: const MaterialHeader(color: Colors.red),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -142,12 +135,12 @@ void main() {
 
     testWidgets('MaterialHeader with backgroundColor', (tester) async {
       final key = GlobalKey<_MaterialIndicatorHarnessState>();
-      await tester.pumpWidget(_MaterialIndicatorHarness(
-        key: key,
-        header: const MaterialHeader(
-          backgroundColor: Colors.white,
+      await tester.pumpWidget(
+        _MaterialIndicatorHarness(
+          key: key,
+          header: const MaterialHeader(backgroundColor: Colors.white),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -165,13 +158,15 @@ void main() {
 
     testWidgets('MaterialHeader with showBezierBackground', (tester) async {
       final key = GlobalKey<_MaterialIndicatorHarnessState>();
-      await tester.pumpWidget(_MaterialIndicatorHarness(
-        key: key,
-        header: const MaterialHeader(
-          showBezierBackground: true,
-          bezierBackgroundColor: Colors.blue,
+      await tester.pumpWidget(
+        _MaterialIndicatorHarness(
+          key: key,
+          header: const MaterialHeader(
+            showBezierBackground: true,
+            bezierBackgroundColor: Colors.blue,
+          ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -190,12 +185,12 @@ void main() {
 
     testWidgets('MaterialHeader with clamping: true', (tester) async {
       final key = GlobalKey<_MaterialIndicatorHarnessState>();
-      await tester.pumpWidget(_MaterialIndicatorHarness(
-        key: key,
-        header: const MaterialHeader(
-          clamping: true,
+      await tester.pumpWidget(
+        _MaterialIndicatorHarness(
+          key: key,
+          header: const MaterialHeader(clamping: true),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -225,10 +220,9 @@ void main() {
   group('MaterialFooter Tests', () {
     testWidgets('MaterialFooter renders correctly', (tester) async {
       final key = GlobalKey<_MaterialIndicatorHarnessState>();
-      await tester.pumpWidget(_MaterialIndicatorHarness(
-        key: key,
-        footer: const MaterialFooter(),
-      ));
+      await tester.pumpWidget(
+        _MaterialIndicatorHarness(key: key, footer: const MaterialFooter()),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -255,13 +249,15 @@ void main() {
 
     testWidgets('MaterialFooter with custom properties', (tester) async {
       final key = GlobalKey<_MaterialIndicatorHarnessState>();
-      await tester.pumpWidget(_MaterialIndicatorHarness(
-        key: key,
-        footer: const MaterialFooter(
-          color: Colors.green,
-          backgroundColor: Colors.white,
+      await tester.pumpWidget(
+        _MaterialIndicatorHarness(
+          key: key,
+          footer: const MaterialFooter(
+            color: Colors.green,
+            backgroundColor: Colors.white,
+          ),
         ),
-      ));
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -286,9 +282,7 @@ void main() {
 
   group('MaterialIndicator Properties', () {
     testWidgets('MaterialHeader has noMoreIcon property', (tester) async {
-      const header = MaterialHeader(
-        noMoreIcon: Icon(Icons.check),
-      );
+      const header = MaterialHeader(noMoreIcon: Icon(Icons.check));
       expect(header.noMoreIcon, isNotNull);
     });
 
@@ -297,24 +291,28 @@ void main() {
       expect(header.processedDuration, const Duration(milliseconds: 200));
     });
 
-    testWidgets('MaterialHeader springRebound default is false',
-        (tester) async {
+    testWidgets('MaterialHeader springRebound default is false', (
+      tester,
+    ) async {
       const header = MaterialHeader();
       expect(header.springRebound, false);
     });
   });
 
   group('MaterialIndicator Bezier Animation', () {
-    testWidgets('MaterialHeader with bezierBackgroundAnimation',
-        (tester) async {
+    testWidgets('MaterialHeader with bezierBackgroundAnimation', (
+      tester,
+    ) async {
       final key = GlobalKey<_MaterialIndicatorHarnessState>();
-      await tester.pumpWidget(_MaterialIndicatorHarness(
-        key: key,
-        header: const MaterialHeader(
-          showBezierBackground: true,
-          bezierBackgroundAnimation: true,
+      await tester.pumpWidget(
+        _MaterialIndicatorHarness(
+          key: key,
+          header: const MaterialHeader(
+            showBezierBackground: true,
+            bezierBackgroundAnimation: true,
+          ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -333,13 +331,15 @@ void main() {
 
     testWidgets('MaterialHeader with bezierBackgroundBounce', (tester) async {
       final key = GlobalKey<_MaterialIndicatorHarnessState>();
-      await tester.pumpWidget(_MaterialIndicatorHarness(
-        key: key,
-        header: const MaterialHeader(
-          showBezierBackground: true,
-          bezierBackgroundBounce: true,
+      await tester.pumpWidget(
+        _MaterialIndicatorHarness(
+          key: key,
+          header: const MaterialHeader(
+            showBezierBackground: true,
+            bezierBackgroundBounce: true,
+          ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 

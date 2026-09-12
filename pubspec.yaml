@@ -11,7 +11,7 @@ workspace:
   - packages/easy_refresh_squats
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  sdk: ^3.13.0
 
 dev_dependencies:
-  melos: ^7.4.0
+  melos: ^8.7.0

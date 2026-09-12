@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
@@ -35,9 +35,7 @@ class _CarouselPageState extends State<CarouselPage> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Carousel example'.tr),
-      ),
+      appBar: AppBar(title: Text('Carousel example'.tr)),
       body: EasyRefresh(
         controller: _controller,
         onRefresh: () async {
@@ -60,7 +58,8 @@ class _CarouselPageState extends State<CarouselPage> {
             _count += 5;
           });
           _controller.finishLoad(
-              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
+            _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success,
+          );
         },
         child: CustomScrollView(
           slivers: [
@@ -98,21 +97,16 @@ class _CarouselPageState extends State<CarouselPage> {
                       Card(
                         elevation: 0,
                         color: themeData.colorScheme.surfaceContainerHighest,
-                        child: Center(
-                          child: Text((i + 1).toString()),
-                        ),
+                        child: Center(child: Text((i + 1).toString())),
                       ),
                   ],
                 ),
               ),
             ),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return const SkeletonItem();
-                },
-                childCount: _count,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return const SkeletonItem();
+              }, childCount: _count),
             ),
           ],
         ),

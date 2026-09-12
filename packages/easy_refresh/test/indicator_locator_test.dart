@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for HeaderLocator/FooterLocator with CustomScrollView
@@ -251,8 +251,9 @@ Future<void> disposeAndFlush(WidgetTester tester) async {
 
 void main() {
   group('HeaderLocator.sliver Tests', () {
-    testWidgets('HeaderLocator.sliver renders in CustomScrollView',
-        (tester) async {
+    testWidgets('HeaderLocator.sliver renders in CustomScrollView', (
+      tester,
+    ) async {
       final key = GlobalKey<_IndicatorLocatorHarnessState>();
       await tester.pumpWidget(_IndicatorLocatorHarness(key: key));
 
@@ -274,10 +275,9 @@ void main() {
 
     testWidgets('HeaderLocator.sliver with clearExtent: false', (tester) async {
       final key = GlobalKey<_IndicatorLocatorHarnessState>();
-      await tester.pumpWidget(_IndicatorLocatorHarness(
-        key: key,
-        clearExtent: false,
-      ));
+      await tester.pumpWidget(
+        _IndicatorLocatorHarness(key: key, clearExtent: false),
+      );
 
       await tester.pumpAndSettle();
 
@@ -297,10 +297,9 @@ void main() {
 
     testWidgets('HeaderLocator.sliver with custom paintExtent', (tester) async {
       final key = GlobalKey<_IndicatorLocatorHarnessState>();
-      await tester.pumpWidget(_IndicatorLocatorHarness(
-        key: key,
-        paintExtent: 10,
-      ));
+      await tester.pumpWidget(
+        _IndicatorLocatorHarness(key: key, paintExtent: 10),
+      );
 
       await tester.pumpAndSettle();
 
@@ -320,8 +319,9 @@ void main() {
   });
 
   group('FooterLocator.sliver Tests', () {
-    testWidgets('FooterLocator.sliver renders in CustomScrollView',
-        (tester) async {
+    testWidgets('FooterLocator.sliver renders in CustomScrollView', (
+      tester,
+    ) async {
       final key = GlobalKey<_IndicatorLocatorHarnessState>();
       await tester.pumpWidget(_IndicatorLocatorHarness(key: key));
       final state = key.currentState!;
@@ -399,64 +399,69 @@ void main() {
   });
 
   group('IndicatorPosition.locator Tests', () {
-    testWidgets('Header with IndicatorPosition.locator requires HeaderLocator',
-        (tester) async {
-      final key = GlobalKey<_IndicatorLocatorHarnessState>();
-      await tester.pumpWidget(_IndicatorLocatorHarness(key: key));
-      final state = key.currentState!;
+    testWidgets(
+      'Header with IndicatorPosition.locator requires HeaderLocator',
+      (tester) async {
+        final key = GlobalKey<_IndicatorLocatorHarnessState>();
+        await tester.pumpWidget(_IndicatorLocatorHarness(key: key));
+        final state = key.currentState!;
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      // Use controller to trigger refresh (more reliable)
-      state.controller.callRefresh();
-      await tester.pump();
-      // Wait for refresh to trigger
-      for (int i = 0; i < 50 && state.headerState == null; i++) {
-        await tester.pump(const Duration(milliseconds: 50));
-      }
+        // Use controller to trigger refresh (more reliable)
+        state.controller.callRefresh();
+        await tester.pump();
+        // Wait for refresh to trigger
+        for (int i = 0; i < 50 && state.headerState == null; i++) {
+          await tester.pump(const Duration(milliseconds: 50));
+        }
 
-      // Now header state should be available
-      expect(state.headerState, isNotNull);
+        // Now header state should be available
+        expect(state.headerState, isNotNull);
 
-      state.finishRefresh();
-      await tester.pump();
-      await tester.pump();
+        state.finishRefresh();
+        await tester.pump();
+        await tester.pump();
 
-      await disposeAndFlush(tester);
-    });
+        await disposeAndFlush(tester);
+      },
+    );
 
-    testWidgets('Footer with IndicatorPosition.locator requires FooterLocator',
-        (tester) async {
-      final key = GlobalKey<_IndicatorLocatorHarnessState>();
-      await tester.pumpWidget(_IndicatorLocatorHarness(key: key));
-      final state = key.currentState!;
+    testWidgets(
+      'Footer with IndicatorPosition.locator requires FooterLocator',
+      (tester) async {
+        final key = GlobalKey<_IndicatorLocatorHarnessState>();
+        await tester.pumpWidget(_IndicatorLocatorHarness(key: key));
+        final state = key.currentState!;
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      // Scroll to bottom
-      state.scrollController.jumpTo(
-        state.scrollController.position.maxScrollExtent,
-      );
-      await tester.pump();
+        // Scroll to bottom
+        state.scrollController.jumpTo(
+          state.scrollController.position.maxScrollExtent,
+        );
+        await tester.pump();
 
-      // Trigger load
-      await tester.drag(find.byType(CustomScrollView), const Offset(0, -200));
-      await tester.pump();
+        // Trigger load
+        await tester.drag(find.byType(CustomScrollView), const Offset(0, -200));
+        await tester.pump();
 
-      // Footer state should be available
-      expect(state.footerState, isNotNull);
+        // Footer state should be available
+        expect(state.footerState, isNotNull);
 
-      state.finishLoad();
-      await tester.pump();
-      await tester.pump();
+        state.finishLoad();
+        await tester.pump();
+        await tester.pump();
 
-      await disposeAndFlush(tester);
-    });
+        await disposeAndFlush(tester);
+      },
+    );
   });
 
   group('Locator State Updates', () {
-    testWidgets('HeaderLocator updates state during refresh cycle',
-        (tester) async {
+    testWidgets('HeaderLocator updates state during refresh cycle', (
+      tester,
+    ) async {
       final key = GlobalKey<_IndicatorLocatorHarnessState>();
       await tester.pumpWidget(_IndicatorLocatorHarness(key: key));
       final state = key.currentState!;

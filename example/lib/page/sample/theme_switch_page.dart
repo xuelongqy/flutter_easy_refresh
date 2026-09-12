@@ -4,7 +4,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:example/config/routes.dart';
 import 'package:example/page/more/theme_page.dart';
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:get/get.dart';
 
 /// Design from https://dribbble.com/shots/15283144-Pull-to-change
@@ -68,27 +68,34 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
         int pointerNum = random.nextInt(3) + 1;
         for (int j = 0; j < pointerNum; j++) {
           final size = random.nextInt(7) + 4;
-          _pointers.add(_FireworkPointerModel(
-            size: size.toDouble(),
-            left:
-                random.nextDouble() * (columnWidth - size) + (i * columnWidth),
-            rotateSpeed: random.nextDouble() * 2 + 4,
-            minBottom: -random.nextInt(80).toDouble(),
-            maxBottom: random.nextDouble() * (150 / pointerNum * (j + 1)) + 150,
-          ));
+          _pointers.add(
+            _FireworkPointerModel(
+              size: size.toDouble(),
+              left:
+                  random.nextDouble() * (columnWidth - size) +
+                  (i * columnWidth),
+              rotateSpeed: random.nextDouble() * 2 + 4,
+              minBottom: -random.nextInt(80).toDouble(),
+              maxBottom:
+                  random.nextDouble() * (150 / pointerNum * (j + 1)) + 150,
+            ),
+          );
         }
       } else {
         final width = random.nextInt(4) + 3;
         final maxHeight = random.nextInt(80) + 40;
         final minBottom = random.nextInt(100) - 80;
         final maxBottom = random.nextInt(80) + 220;
-        _lines.add(_FireworkLineModel(
-          width: width.toDouble(),
-          maxHeight: maxHeight.toDouble(),
-          minBottom: minBottom.toDouble(),
-          maxBottom: maxBottom.toDouble(),
-          left: random.nextDouble() * (columnWidth - width) + (i * columnWidth),
-        ));
+        _lines.add(
+          _FireworkLineModel(
+            width: width.toDouble(),
+            maxHeight: maxHeight.toDouble(),
+            minBottom: minBottom.toDouble(),
+            maxBottom: maxBottom.toDouble(),
+            left:
+                random.nextDouble() * (columnWidth - width) + (i * columnWidth),
+          ),
+        );
       }
     }
   }
@@ -123,17 +130,16 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
                     child: Stack(
                       children: [
                         Obx(() {
-                          final textStyle =
-                              themeData.textTheme.titleMedium!.copyWith(
-                            color: themeData.colorScheme.onPrimary,
-                          );
+                          final textStyle = themeData.textTheme.titleMedium!
+                              .copyWith(color: themeData.colorScheme.onPrimary);
                           final TextPainter textPainter = TextPainter(
-                              textDirection: TextDirection.ltr,
-                              text: TextSpan(
-                                  text: _currentColorRx.value,
-                                  style: textStyle),
-                              maxLines: 1)
-                            ..layout(maxWidth: _maxWidth);
+                            textDirection: TextDirection.ltr,
+                            text: TextSpan(
+                              text: _currentColorRx.value,
+                              style: textStyle,
+                            ),
+                            maxLines: 1,
+                          )..layout(maxWidth: _maxWidth);
                           final textWidth = textPainter.size.width;
                           int index = 0;
                           final entries = _colorsMap.entries.toList();
@@ -145,11 +151,13 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
                             }
                           }
                           return Positioned(
-                            left: (_maxWidth - _positionRx.value) -
+                            left:
+                                (_maxWidth - _positionRx.value) -
                                 (_ballBoxSize / 2) +
                                 _ballBoxSize * index +
                                 (_ballBoxSize - textWidth) / 2,
-                            bottom: _pointerHeight +
+                            bottom:
+                                _pointerHeight +
                                 8 +
                                 _ballBoxSize +
                                 (height -
@@ -166,9 +174,11 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
                         }),
                         Obx(() {
                           return Positioned(
-                            left: (_maxWidth - _positionRx.value) -
+                            left:
+                                (_maxWidth - _positionRx.value) -
                                 (_ballBoxSize / 2),
-                            bottom: _pointerHeight +
+                            bottom:
+                                _pointerHeight +
                                 8 +
                                 (height -
                                         (_pointerHeight +
@@ -186,35 +196,37 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
                                     height: _ballBoxSize,
                                     child: Obx(() {
                                       return AnimatedContainer(
-                                        duration:
-                                            const Duration(milliseconds: 400),
+                                        duration: const Duration(
+                                          milliseconds: 400,
+                                        ),
                                         curve: Curves.easeInOutBack,
                                         width:
                                             _currentColorRx.value == entry.key
-                                                ? _currentBallSize
-                                                : _ballSize,
+                                            ? _currentBallSize
+                                            : _ballSize,
                                         height:
                                             _currentColorRx.value == entry.key
-                                                ? _currentBallSize
-                                                : _ballSize,
+                                            ? _currentBallSize
+                                            : _ballSize,
                                         decoration: BoxDecoration(
                                           color:
                                               _currentColorRx.value == entry.key
-                                                  ? entry.value
-                                                  : null,
+                                              ? entry.value
+                                              : null,
                                           borderRadius: BorderRadius.all(
-                                              Radius.circular(
-                                                  _currentColorRx.value ==
-                                                          entry.key
-                                                      ? _currentBallSize / 2
-                                                      : _ballSize / 2)),
+                                            Radius.circular(
+                                              _currentColorRx.value == entry.key
+                                                  ? _currentBallSize / 2
+                                                  : _ballSize / 2,
+                                            ),
+                                          ),
                                           border:
                                               _currentColorRx.value == entry.key
-                                                  ? null
-                                                  : Border.all(
-                                                      width: 2,
-                                                      color: entry.value,
-                                                    ),
+                                              ? null
+                                              : Border.all(
+                                                  width: 2,
+                                                  color: entry.value,
+                                                ),
                                         ),
                                       );
                                     }),
@@ -231,9 +243,11 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
                               width: _pointerWidth,
                               height: _pointerHeight,
                               decoration: BoxDecoration(
-                                  color: themeData.colorScheme.onInverseSurface,
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(_pointerWidth / 2))),
+                                color: themeData.colorScheme.onInverseSurface,
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(_pointerWidth / 2),
+                                ),
+                              ),
                             ),
                           );
                         }),
@@ -263,13 +277,8 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
             children: [
               EasyRefresh(
                 onRefresh: () {
-                  final themeData = ThemeModel.generateTheme(
-                    brightness: Get.theme.brightness,
-                    colorSchemeSeed: _colorsMap[_currentColorRx.value]!,
-                  );
-                  Get.changeTheme(themeData);
-                  // ??
-                  Get.changeThemeMode(ThemeMode.light);
+                  ThemeController.i.seedColor.value =
+                      _colorsMap[_currentColorRx.value]!;
                   if (!_fireworksController.isAnimating) {
                     _generateFireworks();
                     _fireworksController.forward(from: 0);
@@ -289,7 +298,8 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
                     final entries = _colorsMap.entries.toList();
                     double position = _positionRx.value + event.delta.dx;
                     double min = _maxWidth / 2;
-                    double max = _maxWidth / 2 +
+                    double max =
+                        _maxWidth / 2 +
                         ((entries.length - 1) * _ballBoxSize / 2);
                     if (position < min) {
                       position = min;
@@ -304,10 +314,11 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
                     } else if (offset >= max - (_ballBoxSize / 4)) {
                       _currentColorRx.value = entries.last.key;
                     } else {
-                      _currentColorRx.value = entries[
-                              ((offset - _ballBoxSize / 4) / (_ballBoxSize / 2))
+                      _currentColorRx.value =
+                          entries[((offset - _ballBoxSize / 4) /
+                                      (_ballBoxSize / 2))
                                   .ceil()]
-                          .key;
+                              .key;
                     }
                   },
                   child: CustomScrollView(
@@ -338,12 +349,9 @@ class _ThemeSwitchPageState extends State<ThemeSwitchPage>
                         ),
                       ),
                       SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            return const SkeletonItem();
-                          },
-                          childCount: _count,
-                        ),
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          return const SkeletonItem();
+                        }, childCount: _count),
                       ),
                     ],
                   ),
@@ -419,11 +427,7 @@ class _FireworksState extends State<_Fireworks> {
           ),
         );
       },
-      child: Container(
-        width: model.size,
-        height: model.size,
-        color: _color,
-      ),
+      child: Container(width: model.size, height: model.size, color: _color),
     );
   }
 
@@ -440,16 +444,13 @@ class _FireworksState extends State<_Fireworks> {
             : model.maxHeight * ((1 - value) / 0.5);
         return Positioned(
           left: model.left,
-          bottom: model.minBottom +
+          bottom:
+              model.minBottom +
               (model.maxBottom - model.minBottom) * value -
               height,
           child: Opacity(
             opacity: _value < 0.8 ? 1 : (1 - _value) / 0.2,
-            child: Container(
-              width: model.width,
-              height: height,
-              color: _color,
-            ),
+            child: Container(width: model.width, height: height, color: _color),
           ),
         );
       },

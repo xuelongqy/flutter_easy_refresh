@@ -1,16 +1,14 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for reverse scroll (chat-like UI)
 class _ReverseScrollHarness extends StatefulWidget {
   final bool shrinkWrap = false;
 
-  const _ReverseScrollHarness({
-    super.key,
-  });
+  const _ReverseScrollHarness({super.key});
 
   @override
   State<_ReverseScrollHarness> createState() => _ReverseScrollHarnessState();
@@ -247,8 +245,9 @@ Future<void> disposeAndFlush(WidgetTester tester) async {
 
 void main() {
   group('Reverse Scroll Tests', () {
-    testWidgets('EasyRefresh with CustomScrollView(reverse: true)',
-        (tester) async {
+    testWidgets('EasyRefresh with CustomScrollView(reverse: true)', (
+      tester,
+    ) async {
       final key = GlobalKey<_ReverseScrollHarnessState>();
       await tester.pumpWidget(_ReverseScrollHarness(key: key));
 
@@ -259,15 +258,17 @@ void main() {
       expect(find.byType(CustomScrollView), findsOneWidget);
 
       // Verify reverse is true
-      final scrollView =
-          tester.widget<CustomScrollView>(find.byType(CustomScrollView));
+      final scrollView = tester.widget<CustomScrollView>(
+        find.byType(CustomScrollView),
+      );
       expect(scrollView.reverse, isTrue);
 
       await disposeAndFlush(tester);
     });
 
-    testWidgets('Load behavior at visual top (scroll position bottom)',
-        (tester) async {
+    testWidgets('Load behavior at visual top (scroll position bottom)', (
+      tester,
+    ) async {
       final key = GlobalKey<_ReverseScrollHarnessState>();
       await tester.pumpWidget(_ReverseScrollHarness(key: key));
       final state = key.currentState!;
@@ -361,8 +362,9 @@ void main() {
       expect(find.byType(CustomScrollView), findsOneWidget);
 
       // Verify shrinkWrap is true
-      final scrollView =
-          tester.widget<CustomScrollView>(find.byType(CustomScrollView));
+      final scrollView = tester.widget<CustomScrollView>(
+        find.byType(CustomScrollView),
+      );
       expect(scrollView.shrinkWrap, isTrue);
 
       await disposeAndFlush(tester);
@@ -396,8 +398,9 @@ void main() {
   });
 
   group('Reverse Mode AxisDirection', () {
-    testWidgets('AxisDirection is AxisDirection.up in reverse mode',
-        (tester) async {
+    testWidgets('AxisDirection is AxisDirection.up in reverse mode', (
+      tester,
+    ) async {
       final key = GlobalKey<_ReverseScrollHarnessState>();
       await tester.pumpWidget(_ReverseScrollHarness(key: key));
       final state = key.currentState!;
@@ -420,8 +423,9 @@ void main() {
   });
 
   group('Chat-like UI Simulation', () {
-    testWidgets('Chat UI loads older messages when scrolling up',
-        (tester) async {
+    testWidgets('Chat UI loads older messages when scrolling up', (
+      tester,
+    ) async {
       final key = GlobalKey<_ReverseScrollHarnessState>();
       await tester.pumpWidget(_ReverseScrollHarness(key: key));
       final state = key.currentState!;

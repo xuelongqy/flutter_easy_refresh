@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for controller functionality
@@ -78,7 +78,8 @@ class _ControllerHarnessState extends State<_ControllerHarness> {
   @override
   void initState() {
     super.initState();
-    controller = widget.externalController ??
+    controller =
+        widget.externalController ??
         EasyRefreshController(
           controlFinishRefresh: widget.controlFinishRefresh,
           controlFinishLoad: widget.controlFinishLoad,
@@ -139,10 +140,8 @@ class _ControllerHarnessState extends State<_ControllerHarness> {
             controller: scrollController,
             itemExtent: 50,
             itemCount: itemCount,
-            itemBuilder: (context, index) => ListTile(
-              key: Key('item-$index'),
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) =>
+                ListTile(key: Key('item-$index'), title: Text('Item $index')),
           ),
         ),
       ),
@@ -159,30 +158,35 @@ Future<void> disposeAndFlush(WidgetTester tester) async {
 void main() {
   group('Controller Creation Tests', () {
     testWidgets(
-        'EasyRefreshController creation with controlFinishRefresh: false',
-        (tester) async {
-      final controller = EasyRefreshController(controlFinishRefresh: false);
-      expect(controller.controlFinishRefresh, isFalse);
-      controller.dispose();
-    });
+      'EasyRefreshController creation with controlFinishRefresh: false',
+      (tester) async {
+        final controller = EasyRefreshController(controlFinishRefresh: false);
+        expect(controller.controlFinishRefresh, isFalse);
+        controller.dispose();
+      },
+    );
 
     testWidgets(
-        'EasyRefreshController creation with controlFinishRefresh: true',
-        (tester) async {
-      final controller = EasyRefreshController(controlFinishRefresh: true);
-      expect(controller.controlFinishRefresh, isTrue);
-      controller.dispose();
-    });
+      'EasyRefreshController creation with controlFinishRefresh: true',
+      (tester) async {
+        final controller = EasyRefreshController(controlFinishRefresh: true);
+        expect(controller.controlFinishRefresh, isTrue);
+        controller.dispose();
+      },
+    );
 
-    testWidgets('EasyRefreshController creation with controlFinishLoad: false',
-        (tester) async {
-      final controller = EasyRefreshController(controlFinishLoad: false);
-      expect(controller.controlFinishLoad, isFalse);
-      controller.dispose();
-    });
+    testWidgets(
+      'EasyRefreshController creation with controlFinishLoad: false',
+      (tester) async {
+        final controller = EasyRefreshController(controlFinishLoad: false);
+        expect(controller.controlFinishLoad, isFalse);
+        controller.dispose();
+      },
+    );
 
-    testWidgets('EasyRefreshController creation with controlFinishLoad: true',
-        (tester) async {
+    testWidgets('EasyRefreshController creation with controlFinishLoad: true', (
+      tester,
+    ) async {
       final controller = EasyRefreshController(controlFinishLoad: true);
       expect(controller.controlFinishLoad, isTrue);
       controller.dispose();
@@ -190,13 +194,13 @@ void main() {
   });
 
   group('Controller callRefresh Tests', () {
-    testWidgets('controller.callRefresh() triggers programmatic refresh',
-        (tester) async {
+    testWidgets('controller.callRefresh() triggers programmatic refresh', (
+      tester,
+    ) async {
       final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishRefresh: true,
-      ));
+      await tester.pumpWidget(
+        _ControllerHarness(key: key, controlFinishRefresh: true),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -219,67 +223,68 @@ void main() {
       // Mode should be done or inactive after finishing
       final headerMode = state.headerState!.mode;
       expect(
-          headerMode == IndicatorMode.inactive ||
-              headerMode == IndicatorMode.done,
-          isTrue);
+        headerMode == IndicatorMode.inactive ||
+            headerMode == IndicatorMode.done,
+        isTrue,
+      );
 
       await disposeAndFlush(tester);
     });
 
     testWidgets(
-        'controller.callRefresh(scrollController: ...) is ignored before notifier caches position',
-        (tester) async {
-      final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishRefresh: true,
-      ));
-      final state = key.currentState!;
+      'controller.callRefresh(scrollController: ...) is ignored before notifier caches position',
+      (tester) async {
+        final key = GlobalKey<_ControllerHarnessState>();
+        await tester.pumpWidget(
+          _ControllerHarness(key: key, controlFinishRefresh: true),
+        );
+        final state = key.currentState!;
 
-      await tester.pump();
+        await tester.pump();
 
-      state.controller.callRefresh(scrollController: state.scrollController);
-      await tester.pump();
+        state.controller.callRefresh(scrollController: state.scrollController);
+        await tester.pump();
 
-      expect(state.refreshCalled, isFalse);
-      expect(state.headerState?.mode, isNot(IndicatorMode.processing));
+        expect(state.refreshCalled, isFalse);
+        expect(state.headerState?.mode, isNot(IndicatorMode.processing));
 
-      await disposeAndFlush(tester);
-    });
+        await disposeAndFlush(tester);
+      },
+    );
 
     testWidgets(
-        'controller.callRefresh(scrollController: ...) works when controller matches cached position',
-        (tester) async {
+      'controller.callRefresh(scrollController: ...) works when controller matches cached position',
+      (tester) async {
+        final key = GlobalKey<_ControllerHarnessState>();
+        await tester.pumpWidget(
+          _ControllerHarness(key: key, controlFinishRefresh: true),
+        );
+        final state = key.currentState!;
+
+        await tester.pumpAndSettle();
+
+        state.controller.callRefresh(scrollController: state.scrollController);
+        await tester.pumpAndSettle();
+
+        expect(state.refreshCalled, isTrue);
+        expect(state.headerState, isNotNull);
+        expect(state.headerState!.mode, IndicatorMode.processing);
+
+        state.controller.finishRefresh();
+        await tester.pump();
+        await tester.pump();
+
+        await disposeAndFlush(tester);
+      },
+    );
+
+    testWidgets('controller.callRefresh() with custom overOffset', (
+      tester,
+    ) async {
       final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishRefresh: true,
-      ));
-      final state = key.currentState!;
-
-      await tester.pumpAndSettle();
-
-      state.controller.callRefresh(scrollController: state.scrollController);
-      await tester.pumpAndSettle();
-
-      expect(state.refreshCalled, isTrue);
-      expect(state.headerState, isNotNull);
-      expect(state.headerState!.mode, IndicatorMode.processing);
-
-      state.controller.finishRefresh();
-      await tester.pump();
-      await tester.pump();
-
-      await disposeAndFlush(tester);
-    });
-
-    testWidgets('controller.callRefresh() with custom overOffset',
-        (tester) async {
-      final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishRefresh: true,
-      ));
+      await tester.pumpWidget(
+        _ControllerHarness(key: key, controlFinishRefresh: true),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -299,13 +304,13 @@ void main() {
   });
 
   group('Controller callLoad Tests', () {
-    testWidgets('controller.callLoad() triggers programmatic load',
-        (tester) async {
+    testWidgets('controller.callLoad() triggers programmatic load', (
+      tester,
+    ) async {
       final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishLoad: true,
-      ));
+      await tester.pumpWidget(
+        _ControllerHarness(key: key, controlFinishLoad: true),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -328,97 +333,101 @@ void main() {
       // Mode should be done or inactive after finishing
       final footerMode = state.footerState!.mode;
       expect(
-          footerMode == IndicatorMode.inactive ||
-              footerMode == IndicatorMode.done,
-          isTrue);
+        footerMode == IndicatorMode.inactive ||
+            footerMode == IndicatorMode.done,
+        isTrue,
+      );
 
       await disposeAndFlush(tester);
     });
 
     testWidgets(
-        'controller.callLoad(scrollController: ...) is ignored before notifier caches position',
-        (tester) async {
-      final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishLoad: true,
-      ));
-      final state = key.currentState!;
+      'controller.callLoad(scrollController: ...) is ignored before notifier caches position',
+      (tester) async {
+        final key = GlobalKey<_ControllerHarnessState>();
+        await tester.pumpWidget(
+          _ControllerHarness(key: key, controlFinishLoad: true),
+        );
+        final state = key.currentState!;
 
-      await tester.pump();
+        await tester.pump();
 
-      state.controller.callLoad(scrollController: state.scrollController);
-      await tester.pump();
+        state.controller.callLoad(scrollController: state.scrollController);
+        await tester.pump();
 
-      expect(state.loadCalled, isFalse);
-      expect(state.footerState?.mode, isNot(IndicatorMode.processing));
+        expect(state.loadCalled, isFalse);
+        expect(state.footerState?.mode, isNot(IndicatorMode.processing));
 
-      await disposeAndFlush(tester);
-    });
-
-    testWidgets(
-        'controller.callLoad(scrollController: ...) works when controller matches cached position',
-        (tester) async {
-      final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishLoad: true,
-      ));
-      final state = key.currentState!;
-
-      await tester.pumpAndSettle();
-
-      state.controller.callLoad(scrollController: state.scrollController);
-      await tester.pumpAndSettle();
-
-      expect(state.loadCalled, isTrue);
-      expect(state.footerState, isNotNull);
-      expect(state.footerState!.mode, IndicatorMode.processing);
-
-      state.controller.finishLoad();
-      await tester.pump();
-      await tester.pump();
-
-      await disposeAndFlush(tester);
-    });
+        await disposeAndFlush(tester);
+      },
+    );
 
     testWidgets(
-        'controller.callRefresh() and callLoad() ignore unattached external scrollController',
-        (tester) async {
-      final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishRefresh: true,
-        controlFinishLoad: true,
-      ));
-      final state = key.currentState!;
-      final detachedController = ScrollController();
+      'controller.callLoad(scrollController: ...) works when controller matches cached position',
+      (tester) async {
+        final key = GlobalKey<_ControllerHarnessState>();
+        await tester.pumpWidget(
+          _ControllerHarness(key: key, controlFinishLoad: true),
+        );
+        final state = key.currentState!;
 
-      await tester.pump();
+        await tester.pumpAndSettle();
 
-      state.controller.callRefresh(scrollController: detachedController);
-      await tester.pump();
-      expect(state.refreshCalled, isFalse);
-      expect(state.headerState?.mode, isNot(IndicatorMode.processing));
+        state.controller.callLoad(scrollController: state.scrollController);
+        await tester.pumpAndSettle();
 
-      state.controller.callLoad(scrollController: detachedController);
-      await tester.pump();
-      expect(state.loadCalled, isFalse);
-      expect(state.footerState?.mode, isNot(IndicatorMode.processing));
+        expect(state.loadCalled, isTrue);
+        expect(state.footerState, isNotNull);
+        expect(state.footerState!.mode, IndicatorMode.processing);
 
-      detachedController.dispose();
-      await disposeAndFlush(tester);
-    });
+        state.controller.finishLoad();
+        await tester.pump();
+        await tester.pump();
+
+        await disposeAndFlush(tester);
+      },
+    );
+
+    testWidgets(
+      'controller.callRefresh() and callLoad() ignore unattached external scrollController',
+      (tester) async {
+        final key = GlobalKey<_ControllerHarnessState>();
+        await tester.pumpWidget(
+          _ControllerHarness(
+            key: key,
+            controlFinishRefresh: true,
+            controlFinishLoad: true,
+          ),
+        );
+        final state = key.currentState!;
+        final detachedController = ScrollController();
+
+        await tester.pump();
+
+        state.controller.callRefresh(scrollController: detachedController);
+        await tester.pump();
+        expect(state.refreshCalled, isFalse);
+        expect(state.headerState?.mode, isNot(IndicatorMode.processing));
+
+        state.controller.callLoad(scrollController: detachedController);
+        await tester.pump();
+        expect(state.loadCalled, isFalse);
+        expect(state.footerState?.mode, isNot(IndicatorMode.processing));
+
+        detachedController.dispose();
+        await disposeAndFlush(tester);
+      },
+    );
   });
 
   group('Controller finishRefresh Tests', () {
-    testWidgets('controller.finishRefresh() completes refresh task',
-        (tester) async {
+    testWidgets('controller.finishRefresh() completes refresh task', (
+      tester,
+    ) async {
       final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishRefresh: true,
-      ));
+      await tester.pumpWidget(
+        _ControllerHarness(key: key, controlFinishRefresh: true),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -438,20 +447,21 @@ void main() {
       // Mode should be done or inactive after finishing
       final headerMode = state.headerState!.mode;
       expect(
-          headerMode == IndicatorMode.inactive ||
-              headerMode == IndicatorMode.done,
-          isTrue);
+        headerMode == IndicatorMode.inactive ||
+            headerMode == IndicatorMode.done,
+        isTrue,
+      );
 
       await disposeAndFlush(tester);
     });
 
-    testWidgets('controller.finishRefresh() with IndicatorResult.fail',
-        (tester) async {
+    testWidgets('controller.finishRefresh() with IndicatorResult.fail', (
+      tester,
+    ) async {
       final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishRefresh: true,
-      ));
+      await tester.pumpWidget(
+        _ControllerHarness(key: key, controlFinishRefresh: true),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -470,13 +480,13 @@ void main() {
   });
 
   group('Controller finishLoad Tests', () {
-    testWidgets('controller.finishLoad() with different IndicatorResults',
-        (tester) async {
+    testWidgets('controller.finishLoad() with different IndicatorResults', (
+      tester,
+    ) async {
       final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishLoad: true,
-      ));
+      await tester.pumpWidget(
+        _ControllerHarness(key: key, controlFinishLoad: true),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -492,13 +502,13 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('controller.finishLoad() with IndicatorResult.noMore',
-        (tester) async {
+    testWidgets('controller.finishLoad() with IndicatorResult.noMore', (
+      tester,
+    ) async {
       final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishLoad: true,
-      ));
+      await tester.pumpWidget(
+        _ControllerHarness(key: key, controlFinishLoad: true),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -517,10 +527,9 @@ void main() {
   group('Controller resetFooter Tests', () {
     testWidgets('controller.resetFooter() resets noMore state', (tester) async {
       final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishLoad: true,
-      ));
+      await tester.pumpWidget(
+        _ControllerHarness(key: key, controlFinishLoad: true),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -544,20 +553,23 @@ void main() {
   });
 
   group('Controller headerState and footerState Tests', () {
-    testWidgets('controller provides access to header and footer state',
-        (tester) async {
+    testWidgets('controller provides access to header and footer state', (
+      tester,
+    ) async {
       final controller = EasyRefreshController(
         controlFinishRefresh: true,
         controlFinishLoad: true,
       );
 
       final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishRefresh: true,
-        controlFinishLoad: true,
-        externalController: controller,
-      ));
+      await tester.pumpWidget(
+        _ControllerHarness(
+          key: key,
+          controlFinishRefresh: true,
+          controlFinishLoad: true,
+          externalController: controller,
+        ),
+      );
 
       await tester.pumpAndSettle();
 
@@ -582,13 +594,13 @@ void main() {
   });
 
   group('Controller with async callbacks', () {
-    testWidgets('waiting for task result when controlFinishRefresh is false',
-        (tester) async {
+    testWidgets('waiting for task result when controlFinishRefresh is false', (
+      tester,
+    ) async {
       final key = GlobalKey<_ControllerHarnessState>();
-      await tester.pumpWidget(_ControllerHarness(
-        key: key,
-        controlFinishRefresh: false,
-      ));
+      await tester.pumpWidget(
+        _ControllerHarness(key: key, controlFinishRefresh: false),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -612,9 +624,10 @@ void main() {
       // Mode should be done or inactive after finishing
       final headerMode = state.headerState!.mode;
       expect(
-          headerMode == IndicatorMode.inactive ||
-              headerMode == IndicatorMode.done,
-          isTrue);
+        headerMode == IndicatorMode.inactive ||
+            headerMode == IndicatorMode.done,
+        isTrue,
+      );
 
       await disposeAndFlush(tester);
     });

@@ -100,11 +100,7 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
     switch (_mode) {
       case IndicatorMode.drag:
       case IndicatorMode.armed:
-        const Curve opacityCurve = Interval(
-          0.0,
-          0.8,
-          curve: Curves.easeInOut,
-        );
+        const Curve opacityCurve = Interval(0.0, 0.8, curve: Curves.easeInOut);
         indicator = Opacity(
           key: const ValueKey('indicator'),
           opacity: opacityCurve.transform(scale),
@@ -134,9 +130,7 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
         );
         break;
       default:
-        indicator = const SizedBox(
-          key: ValueKey('indicator'),
-        );
+        indicator = const SizedBox(key: ValueKey('indicator'));
         break;
     }
     return AnimatedSwitcher(
@@ -144,15 +138,15 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
       reverseDuration: const Duration(milliseconds: 100),
       child: widget.state.result == IndicatorResult.noMore
           ? widget.emptyWidget != null
-              ? SizedBox(
-                  key: const ValueKey('noMore'),
-                  child: widget.emptyWidget!,
-                )
-              : Icon(
-                  CupertinoIcons.archivebox,
-                  key: const ValueKey('noMore'),
-                  color: widget.foregroundColor,
-                )
+                ? SizedBox(
+                    key: const ValueKey('noMore'),
+                    child: widget.emptyWidget!,
+                  )
+                : Icon(
+                    CupertinoIcons.archivebox,
+                    key: const ValueKey('noMore'),
+                    color: widget.foregroundColor,
+                  )
           : indicator,
     );
   }
@@ -188,10 +182,7 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
         } else {
           opacity = 0;
         }
-        return Opacity(
-          opacity: opacity,
-          child: waterDropWidget,
-        );
+        return Opacity(opacity: opacity, child: waterDropWidget);
       },
     );
   }
@@ -233,10 +224,12 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
           bottom: _axis == Axis.vertical ? null : 0,
           child: Container(
             alignment: Alignment.center,
-            height:
-                _axis == Axis.vertical ? _actualTriggerOffset : double.infinity,
-            width:
-                _axis == Axis.vertical ? double.infinity : _actualTriggerOffset,
+            height: _axis == Axis.vertical
+                ? _actualTriggerOffset
+                : double.infinity,
+            width: _axis == Axis.vertical
+                ? double.infinity
+                : _actualTriggerOffset,
             child: _buildIndicator(),
           ),
         ),
@@ -262,10 +255,11 @@ class _WaterDropPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..color = color;
     canvas.drawPath(
-        axis == Axis.vertical
-            ? _buildVerticalPath(size)
-            : _buildHorizontalPath(size),
-        paint);
+      axis == Axis.vertical
+          ? _buildVerticalPath(size)
+          : _buildHorizontalPath(size),
+      paint,
+    );
   }
 
   Path _buildVerticalPath(Size size) {
@@ -275,7 +269,8 @@ class _WaterDropPainter extends CustomPainter {
     double bottomRadius = _maxCircleRadius;
     if (offset > actualTriggerOffset) {
       const radiusLimit = _maxCircleRadius - _minCircleRadius;
-      final radiusDifference = radiusLimit *
+      final radiusDifference =
+          radiusLimit *
           (1 - math.pow(100, -(offset - actualTriggerOffset) / 200));
       topRadius = topRadius - radiusDifference / 4;
       bottomRadius = bottomRadius - radiusDifference;
@@ -284,10 +279,7 @@ class _WaterDropPainter extends CustomPainter {
     final centerX = width / 2;
     path.addOval(
       Rect.fromCircle(
-        center: Offset(
-          centerX,
-          actualTriggerOffset / 2,
-        ),
+        center: Offset(centerX, actualTriggerOffset / 2),
         radius: topRadius,
       ),
     );
@@ -296,17 +288,15 @@ class _WaterDropPainter extends CustomPainter {
           offset - (actualTriggerOffset / 2 - topRadius) - bottomRadius;
       path.addOval(
         Rect.fromCircle(
-          center: Offset(
-            centerX,
-            bottomCenterY,
-          ),
+          center: Offset(centerX, bottomCenterY),
           radius: bottomRadius,
         ),
       );
 
       final bezierPath = Path();
-      final angle =
-          math.asin((topRadius - bottomRadius) / (topCenterY - bottomCenterY));
+      final angle = math.asin(
+        (topRadius - bottomRadius) / (topCenterY - bottomCenterY),
+      );
       final topX1 = centerX - topRadius * math.cos(angle);
       final topY1 = topCenterY + topRadius * math.sin(angle);
       final topX2 = centerX + topRadius * math.cos(angle);
@@ -317,11 +307,19 @@ class _WaterDropPainter extends CustomPainter {
       final bottomY2 = bottomY1;
       bezierPath.moveTo(centerX, topCenterY);
       bezierPath.lineTo(topX1, topY1);
-      bezierPath.quadraticBezierTo((centerX - bottomRadius),
-          (bottomCenterY + topCenterY) / 2, bottomX1, bottomY1);
+      bezierPath.quadraticBezierTo(
+        (centerX - bottomRadius),
+        (bottomCenterY + topCenterY) / 2,
+        bottomX1,
+        bottomY1,
+      );
       bezierPath.lineTo(bottomX2, bottomY2);
       bezierPath.quadraticBezierTo(
-          (centerX + bottomRadius), (bottomCenterY + topY2) / 2, topX2, topY2);
+        (centerX + bottomRadius),
+        (bottomCenterY + topY2) / 2,
+        topX2,
+        topY2,
+      );
       bezierPath.close();
 
       path = Path.combine(PathOperation.union, path, bezierPath);
@@ -336,7 +334,8 @@ class _WaterDropPainter extends CustomPainter {
     double bottomRadius = _maxCircleRadius;
     if (offset > actualTriggerOffset) {
       const radiusLimit = _maxCircleRadius - _minCircleRadius;
-      final radiusDifference = radiusLimit *
+      final radiusDifference =
+          radiusLimit *
           (1 - math.pow(100, -(offset - actualTriggerOffset) / 200));
       topRadius = topRadius - radiusDifference / 4;
       bottomRadius = bottomRadius - radiusDifference;
@@ -345,10 +344,7 @@ class _WaterDropPainter extends CustomPainter {
     final centerY = height / 2;
     path.addOval(
       Rect.fromCircle(
-        center: Offset(
-          actualTriggerOffset / 2,
-          centerY,
-        ),
+        center: Offset(actualTriggerOffset / 2, centerY),
         radius: topRadius,
       ),
     );
@@ -357,17 +353,15 @@ class _WaterDropPainter extends CustomPainter {
           offset - (actualTriggerOffset / 2 - topRadius) - bottomRadius;
       path.addOval(
         Rect.fromCircle(
-          center: Offset(
-            bottomCenterX,
-            centerY,
-          ),
+          center: Offset(bottomCenterX, centerY),
           radius: bottomRadius,
         ),
       );
 
       final bezierPath = Path();
-      final angle =
-          math.asin((topRadius - bottomRadius) / (topCenterX - bottomCenterX));
+      final angle = math.asin(
+        (topRadius - bottomRadius) / (topCenterX - bottomCenterX),
+      );
       final topY1 = centerY - topRadius * math.cos(angle);
       final topX1 = topCenterX + topRadius * math.sin(angle);
       final topY2 = centerY + topRadius * math.cos(angle);
@@ -378,11 +372,19 @@ class _WaterDropPainter extends CustomPainter {
       final bottomX2 = bottomX1;
       bezierPath.moveTo(topCenterX, centerY);
       bezierPath.lineTo(topX1, topY1);
-      bezierPath.quadraticBezierTo((bottomCenterX + topCenterX) / 2,
-          (centerY - bottomRadius), bottomX1, bottomY1);
+      bezierPath.quadraticBezierTo(
+        (bottomCenterX + topCenterX) / 2,
+        (centerY - bottomRadius),
+        bottomX1,
+        bottomY1,
+      );
       bezierPath.lineTo(bottomX2, bottomY2);
       bezierPath.quadraticBezierTo(
-          (bottomCenterX + topX2) / 2, (centerY + bottomRadius), topX2, topY2);
+        (bottomCenterX + topX2) / 2,
+        (centerY + bottomRadius),
+        topX2,
+        topY2,
+      );
       bezierPath.close();
 
       path = Path.combine(PathOperation.union, path, bezierPath);

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for horizontal scroll support
@@ -217,8 +217,9 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('Header state updates correctly during horizontal drag',
-        (tester) async {
+    testWidgets('Header state updates correctly during horizontal drag', (
+      tester,
+    ) async {
       final key = GlobalKey<_HorizontalScrollHarnessState>();
       await tester.pumpWidget(_HorizontalScrollHarness(key: key));
       final state = key.currentState!;
@@ -253,8 +254,9 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('Footer state updates correctly during horizontal drag',
-        (tester) async {
+    testWidgets('Footer state updates correctly during horizontal drag', (
+      tester,
+    ) async {
       final key = GlobalKey<_HorizontalScrollHarnessState>();
       await tester.pumpWidget(_HorizontalScrollHarness(key: key));
       final state = key.currentState!;
@@ -288,8 +290,9 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('Vertical drag does not trigger in horizontal mode',
-        (tester) async {
+    testWidgets('Vertical drag does not trigger in horizontal mode', (
+      tester,
+    ) async {
       final key = GlobalKey<_HorizontalScrollHarnessState>();
       await tester.pumpWidget(_HorizontalScrollHarness(key: key));
 
@@ -308,28 +311,31 @@ void main() {
   });
 
   group('Horizontal ClassicHeader/Footer Tests', () {
-    testWidgets('ClassicHeader renders correctly in horizontal mode',
-        (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: EasyRefresh(
-            header: const ClassicHeader(),
-            footer: const ClassicFooter(infiniteOffset: null),
-            onRefresh: () async {},
-            onLoad: () async {},
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemExtent: 100,
-              itemCount: 20,
-              itemBuilder: (context, index) => Container(
-                width: 100,
-                alignment: Alignment.center,
-                child: Text('Item $index'),
+    testWidgets('ClassicHeader renders correctly in horizontal mode', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: EasyRefresh(
+              header: const ClassicHeader(),
+              footer: const ClassicFooter(infiniteOffset: null),
+              onRefresh: () async {},
+              onLoad: () async {},
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemExtent: 100,
+                itemCount: 20,
+                itemBuilder: (context, index) => Container(
+                  width: 100,
+                  alignment: Alignment.center,
+                  child: Text('Item $index'),
+                ),
               ),
             ),
           ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -346,13 +352,13 @@ void main() {
   });
 
   group('triggerAxis Property Tests', () {
-    testWidgets('triggerAxis: Axis.horizontal only responds to horizontal',
-        (tester) async {
+    testWidgets('triggerAxis: Axis.horizontal only responds to horizontal', (
+      tester,
+    ) async {
       final key = GlobalKey<_HorizontalScrollHarnessState>();
-      await tester.pumpWidget(_HorizontalScrollHarness(
-        key: key,
-        triggerAxis: Axis.horizontal,
-      ));
+      await tester.pumpWidget(
+        _HorizontalScrollHarness(key: key, triggerAxis: Axis.horizontal),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -376,8 +382,9 @@ void main() {
   });
 
   group('Horizontal Offset Tracking', () {
-    testWidgets('Header offset increases during horizontal pull',
-        (tester) async {
+    testWidgets('Header offset increases during horizontal pull', (
+      tester,
+    ) async {
       final key = GlobalKey<_HorizontalScrollHarnessState>();
       await tester.pumpWidget(_HorizontalScrollHarness(key: key));
       final state = key.currentState!;

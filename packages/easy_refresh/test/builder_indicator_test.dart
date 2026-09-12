@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for BuilderHeader/BuilderFooter
@@ -83,7 +83,8 @@ class _BuilderIndicatorHarnessState extends State<_BuilderIndicatorHarness> {
             clamping: false,
             processedDuration: widget.processedDuration,
             position: IndicatorPosition.above,
-            builder: widget.headerBuilder ??
+            builder:
+                widget.headerBuilder ??
                 (context, state) {
                   headerModes.add(state.mode);
                   headerOffsets.add(state.offset);
@@ -123,7 +124,8 @@ class _BuilderIndicatorHarnessState extends State<_BuilderIndicatorHarness> {
             processedDuration: widget.processedDuration,
             position: widget.footerPosition,
             infiniteOffset: null,
-            builder: widget.footerBuilder ??
+            builder:
+                widget.footerBuilder ??
                 (context, state) {
                   footerModes.add(state.mode);
                   footerOffsets.add(state.offset);
@@ -158,10 +160,8 @@ class _BuilderIndicatorHarnessState extends State<_BuilderIndicatorHarness> {
             controller: scrollController,
             itemExtent: 50,
             itemCount: itemCount,
-            itemBuilder: (context, index) => ListTile(
-              key: Key('item-$index'),
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) =>
+                ListTile(key: Key('item-$index'), title: Text('Item $index')),
           ),
         ),
       ),
@@ -176,8 +176,9 @@ Future<void> disposeAndFlush(WidgetTester tester) async {
 
 void main() {
   group('BuilderHeader Tests', () {
-    testWidgets('BuilderHeader custom builder function receives state',
-        (tester) async {
+    testWidgets('BuilderHeader custom builder function receives state', (
+      tester,
+    ) async {
       final key = GlobalKey<_BuilderIndicatorHarnessState>();
       await tester.pumpWidget(_BuilderIndicatorHarness(key: key));
       final state = key.currentState!;
@@ -205,8 +206,9 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('BuilderHeader state.mode values during lifecycle',
-        (tester) async {
+    testWidgets('BuilderHeader state.mode values during lifecycle', (
+      tester,
+    ) async {
       final key = GlobalKey<_BuilderIndicatorHarnessState>();
       await tester.pumpWidget(_BuilderIndicatorHarness(key: key));
       final state = key.currentState!;
@@ -224,9 +226,10 @@ void main() {
 
       // Should record drag/armed modes during pull
       expect(
-          state.headerModes.contains(IndicatorMode.drag) ||
-              state.headerModes.contains(IndicatorMode.armed),
-          isTrue);
+        state.headerModes.contains(IndicatorMode.drag) ||
+            state.headerModes.contains(IndicatorMode.armed),
+        isTrue,
+      );
 
       // Release to trigger refresh
       await gesture.up();
@@ -247,8 +250,9 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('BuilderHeader state.offset values during pull',
-        (tester) async {
+    testWidgets('BuilderHeader state.offset values during pull', (
+      tester,
+    ) async {
       final key = GlobalKey<_BuilderIndicatorHarnessState>();
       await tester.pumpWidget(_BuilderIndicatorHarness(key: key));
       final state = key.currentState!;
@@ -280,13 +284,13 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('BuilderHeader state.actualTriggerOffset access',
-        (tester) async {
+    testWidgets('BuilderHeader state.actualTriggerOffset access', (
+      tester,
+    ) async {
       final key = GlobalKey<_BuilderIndicatorHarnessState>();
-      await tester.pumpWidget(_BuilderIndicatorHarness(
-        key: key,
-        triggerOffset: 100,
-      ));
+      await tester.pumpWidget(
+        _BuilderIndicatorHarness(key: key, triggerOffset: 100),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -308,10 +312,12 @@ void main() {
 
     testWidgets('BuilderHeader with processedDuration', (tester) async {
       final key = GlobalKey<_BuilderIndicatorHarnessState>();
-      await tester.pumpWidget(_BuilderIndicatorHarness(
-        key: key,
-        processedDuration: const Duration(milliseconds: 200),
-      ));
+      await tester.pumpWidget(
+        _BuilderIndicatorHarness(
+          key: key,
+          processedDuration: const Duration(milliseconds: 200),
+        ),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -344,8 +350,9 @@ void main() {
   });
 
   group('BuilderFooter Tests', () {
-    testWidgets('BuilderFooter custom builder function receives state',
-        (tester) async {
+    testWidgets('BuilderFooter custom builder function receives state', (
+      tester,
+    ) async {
       final key = GlobalKey<_BuilderIndicatorHarnessState>();
       await tester.pumpWidget(_BuilderIndicatorHarness(key: key));
       final state = key.currentState!;
@@ -382,13 +389,16 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('BuilderFooter with position: IndicatorPosition.above',
-        (tester) async {
+    testWidgets('BuilderFooter with position: IndicatorPosition.above', (
+      tester,
+    ) async {
       final key = GlobalKey<_BuilderIndicatorHarnessState>();
-      await tester.pumpWidget(_BuilderIndicatorHarness(
-        key: key,
-        footerPosition: IndicatorPosition.above,
-      ));
+      await tester.pumpWidget(
+        _BuilderIndicatorHarness(
+          key: key,
+          footerPosition: IndicatorPosition.above,
+        ),
+      );
 
       await tester.pumpAndSettle();
 
@@ -413,8 +423,9 @@ void main() {
   });
 
   group('BuilderIndicator Mode Transitions', () {
-    testWidgets('mode transitions are recorded during drag gesture',
-        (tester) async {
+    testWidgets('mode transitions are recorded during drag gesture', (
+      tester,
+    ) async {
       final key = GlobalKey<_BuilderIndicatorHarnessState>();
       await tester.pumpWidget(_BuilderIndicatorHarness(key: key));
       final state = key.currentState!;
@@ -458,18 +469,18 @@ void main() {
 
   group('BuilderIndicator Custom Widgets', () {
     testWidgets('BuilderHeader can render any custom widget', (tester) async {
-      await tester.pumpWidget(_BuilderIndicatorHarness(
-        headerBuilder: (context, state) {
-          return SizedBox(
-            key: const Key('custom-header'),
-            height: state.offset,
-            width: double.infinity,
-            child: const Center(
-              child: Icon(Icons.refresh, size: 32),
-            ),
-          );
-        },
-      ));
+      await tester.pumpWidget(
+        _BuilderIndicatorHarness(
+          headerBuilder: (context, state) {
+            return SizedBox(
+              key: const Key('custom-header'),
+              height: state.offset,
+              width: double.infinity,
+              child: const Center(child: Icon(Icons.refresh, size: 32)),
+            );
+          },
+        ),
+      );
 
       await tester.pumpAndSettle();
 
@@ -485,19 +496,19 @@ void main() {
 
     testWidgets('BuilderFooter can render any custom widget', (tester) async {
       final key = GlobalKey<_BuilderIndicatorHarnessState>();
-      await tester.pumpWidget(_BuilderIndicatorHarness(
-        key: key,
-        footerBuilder: (context, state) {
-          return SizedBox(
-            key: const Key('custom-footer'),
-            height: state.offset,
-            width: double.infinity,
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        },
-      ));
+      await tester.pumpWidget(
+        _BuilderIndicatorHarness(
+          key: key,
+          footerBuilder: (context, state) {
+            return SizedBox(
+              key: const Key('custom-footer'),
+              height: state.offset,
+              width: double.infinity,
+              child: const Center(child: CircularProgressIndicator()),
+            );
+          },
+        ),
+      );
       final state = key.currentState!;
 
       // Just pump a few times instead of pumpAndSettle to avoid timeout

@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:example/page/sample/user_profile_page.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -21,10 +21,7 @@ class _ChatPageState extends State<ChatPage> {
   double? _viewportDimension;
 
   final List<MessageEntity> _messages = [
-    MessageEntity(
-      own: true,
-      msg: "It's good!",
-    ),
+    MessageEntity(own: true, msg: "It's good!"),
     MessageEntity(
       own: false,
       img: 'assets/image/user_head.jpg',
@@ -69,12 +66,7 @@ class _ChatPageState extends State<ChatPage> {
       return;
     }
     setState(() {
-      _messages.insert(
-          0,
-          MessageEntity(
-            own: true,
-            msg: _inputController.text,
-          ));
+      _messages.insert(0, MessageEntity(own: true, msg: _inputController.text));
     });
     _inputController.clear();
     Future(() {
@@ -103,9 +95,7 @@ class _ChatPageState extends State<ChatPage> {
                   color: themeData.colorScheme.tertiaryContainer,
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                 ),
-                constraints: BoxConstraints(
-                  maxWidth: maxWidth,
-                ),
+                constraints: BoxConstraints(maxWidth: maxWidth),
                 child: Image.asset(message.img!),
               );
             },
@@ -121,15 +111,15 @@ class _ChatPageState extends State<ChatPage> {
               borderRadius: BorderRadius.only(
                 topLeft: const Radius.circular(24),
                 topRight: const Radius.circular(24),
-                bottomLeft:
-                    Radius.circular(message.own || continuously ? 24 : 8),
-                bottomRight:
-                    Radius.circular(message.own && !continuously ? 8 : 24),
+                bottomLeft: Radius.circular(
+                  message.own || continuously ? 24 : 8,
+                ),
+                bottomRight: Radius.circular(
+                  message.own && !continuously ? 8 : 24,
+                ),
               ),
             ),
-            constraints: BoxConstraints(
-              maxWidth: maxWidth,
-            ),
+            constraints: BoxConstraints(maxWidth: maxWidth),
             child: Text(message.msg!),
           );
         }
@@ -137,17 +127,19 @@ class _ChatPageState extends State<ChatPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (imgWidget != null) imgWidget,
+            ?imgWidget,
             if (imgWidget != null && msgWidget != null)
-              const SizedBox(
-                height: 8,
-              ),
-            if (msgWidget != null) msgWidget,
+              const SizedBox(height: 8),
+            ?msgWidget,
           ],
         );
         return Container(
           margin: EdgeInsets.only(
-              top: 8, bottom: continuously ? 0 : 8, left: 16, right: 16),
+            top: 8,
+            bottom: continuously ? 0 : 8,
+            left: 16,
+            right: 16,
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -157,9 +149,7 @@ class _ChatPageState extends State<ChatPage> {
                   padding: const EdgeInsets.only(right: 8),
                   child: ClipOval(
                     child: continuously
-                        ? const SizedBox(
-                            width: 36,
-                          )
+                        ? const SizedBox(width: 36)
                         : InkWell(
                             onTap: () {
                               Get.to(() => const UserProfilePage());
@@ -215,10 +205,7 @@ class _ChatPageState extends State<ChatPage> {
                     }
                     setState(() {
                       _messages.addAll([
-                        MessageEntity(
-                          own: true,
-                          msg: "It's good!",
-                        ),
+                        MessageEntity(own: true, msg: "It's good!"),
                         MessageEntity(
                           own: false,
                           img: 'assets/image/user_head.jpg',
@@ -234,47 +221,42 @@ class _ChatPageState extends State<ChatPage> {
                   clamping: false,
                 ),
                 footer: BuilderFooter(
-                    triggerOffset: 40,
-                    clamping: false,
-                    position: IndicatorPosition.above,
-                    infiniteOffset: null,
-                    processedDuration: Duration.zero,
-                    builder: (context, state) {
-                      return Stack(
-                        children: [
-                          SizedBox(
-                            height: state.offset,
+                  triggerOffset: 40,
+                  clamping: false,
+                  position: IndicatorPosition.above,
+                  infiniteOffset: null,
+                  processedDuration: Duration.zero,
+                  builder: (context, state) {
+                    return Stack(
+                      children: [
+                        SizedBox(height: state.offset, width: double.infinity),
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            alignment: Alignment.center,
                             width: double.infinity,
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: double.infinity,
-                              height: 40,
-                              child: SpinKitCircle(
-                                size: 24,
-                                color: themeData.colorScheme.primary,
-                              ),
+                            height: 40,
+                            child: SpinKitCircle(
+                              size: 24,
+                              color: themeData.colorScheme.primary,
                             ),
-                          )
-                        ],
-                      );
-                    }),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
                 child: CustomScrollView(
                   reverse: true,
                   shrinkWrap: _shrinkWrap,
                   clipBehavior: Clip.none,
                   slivers: [
                     SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          return _buildMessageItem(index);
-                        },
-                        childCount: _messages.length,
-                      ),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        return _buildMessageItem(index);
+                      }, childCount: _messages.length),
                     ),
                   ],
                 ),
@@ -283,8 +265,10 @@ class _ChatPageState extends State<ChatPage> {
             Container(
               color: themeData.colorScheme.onInverseSurface,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 8,
+                ),
                 child: Row(
                   children: [
                     IconButton(
@@ -322,9 +306,11 @@ class _ChatPageState extends State<ChatPage> {
                                   _onSend();
                                 }
                               },
-                              icon: Icon(_inputController.text.isNotEmpty
-                                  ? Icons.send
-                                  : Icons.keyboard_voice_outlined),
+                              icon: Icon(
+                                _inputController.text.isNotEmpty
+                                    ? Icons.send
+                                    : Icons.keyboard_voice_outlined,
+                              ),
                             ),
                           ),
                           onSubmitted: (_) => _onSend(),
@@ -347,9 +333,5 @@ class MessageEntity {
   String? msg;
   String? img;
 
-  MessageEntity({
-    required this.own,
-    required this.msg,
-    this.img,
-  });
+  MessageEntity({required this.own, required this.msg, this.img});
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:get/get.dart';
@@ -52,7 +52,8 @@ class NestedScrollViewPageState extends State<NestedScrollViewPage>
                 title: Text(
                   'NestedScrollView',
                   style: TextStyle(
-                      color: Theme.of(context).textTheme.titleLarge?.color),
+                    color: Theme.of(context).textTheme.titleLarge?.color,
+                  ),
                 ),
                 centerTitle: false,
               ),
@@ -71,12 +72,8 @@ class NestedScrollViewPageState extends State<NestedScrollViewPage>
                 });
               },
               tabs: const <Widget>[
-                Tab(
-                  text: 'List',
-                ),
-                Tab(
-                  text: 'Grid',
-                ),
+                Tab(text: 'List'),
+                Tab(text: 'Grid'),
               ],
             ),
             Expanded(
@@ -111,10 +108,13 @@ class NestedScrollViewPageState extends State<NestedScrollViewPage>
                       child: CustomScrollView(
                         slivers: [
                           SliverList(
-                              delegate:
-                                  SliverChildBuilderDelegate((context, index) {
-                            return const SkeletonItem();
-                          }, childCount: _listCount)),
+                            delegate: SliverChildBuilderDelegate((
+                              context,
+                              index,
+                            ) {
+                              return const SkeletonItem();
+                            }, childCount: _listCount),
+                          ),
                           const FooterLocator.sliver(),
                         ],
                       ),
@@ -166,17 +166,20 @@ class NestedScrollViewPageState extends State<NestedScrollViewPage>
                       child: CustomScrollView(
                         slivers: [
                           SliverGrid(
-                              delegate:
-                                  SliverChildBuilderDelegate((context, index) {
-                                return const SkeletonItem(
-                                  direction: Axis.horizontal,
-                                );
-                              }, childCount: _gridCount),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 6 / 7,
-                              )),
+                            delegate: SliverChildBuilderDelegate((
+                              context,
+                              index,
+                            ) {
+                              return const SkeletonItem(
+                                direction: Axis.horizontal,
+                              );
+                            }, childCount: _gridCount),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 6 / 7,
+                                ),
+                          ),
                           const FooterLocator.sliver(),
                         ],
                       ),

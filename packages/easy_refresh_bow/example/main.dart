@@ -1,6 +1,6 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:easy_refresh_bow/easy_refresh_bow.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() => runApp(const MyApp());
 
@@ -9,10 +9,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Bow',
-      home: HomePage(),
-    );
+    return const MaterialApp(title: 'Bow', home: HomePage());
   }
 }
 
@@ -29,9 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bow'),
-      ),
+      appBar: AppBar(title: const Text('Bow')),
       body: EasyRefresh(
         header: const BowHeader(),
         footer: const BowFooter(),

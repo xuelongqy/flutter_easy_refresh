@@ -23,14 +23,14 @@ class TaurusFooter extends Footer {
     super.infiniteHitOver,
     super.hapticFeedback,
     this.skyColor,
-  }) : super(
-          processedDuration: kTaurusDisappearDuration,
-        );
+  }) : super(processedDuration: kTaurusDisappearDuration);
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    assert(state.axis == Axis.vertical,
-        'TaurusFooter does not support horizontal scrolling.');
+    assert(
+      state.axis == Axis.vertical,
+      'TaurusFooter does not support horizontal scrolling.',
+    );
     return _TaurusIndicator(
       key: key,
       state: state,

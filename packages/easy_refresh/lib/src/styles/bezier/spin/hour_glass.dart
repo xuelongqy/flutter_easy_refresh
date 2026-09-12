@@ -26,13 +26,19 @@ class _SpinKitHourGlassState extends State<_SpinKitHourGlass>
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1200))
-      ..addListener(() => setState(() {}))
-      ..repeat();
-    _animation = Tween(begin: 0.0, end: 8.0).animate(CurvedAnimation(
+    _controller =
+        AnimationController(
+            vsync: this,
+            duration: const Duration(milliseconds: 1200),
+          )
+          ..addListener(() => setState(() {}))
+          ..repeat();
+    _animation = Tween(begin: 0.0, end: 8.0).animate(
+      CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.0, 1.0, curve: Curves.easeOut)));
+        curve: const Interval(0.0, 1.0, curve: Curves.easeOut),
+      ),
+    );
   }
 
   @override
@@ -58,9 +64,9 @@ class _SpinKitHourGlassState extends State<_SpinKitHourGlass>
 
 class _HourGlassPainter extends CustomPainter {
   _HourGlassPainter({required this.weight, required Color color})
-      : _paint = Paint()
-          ..color = color
-          ..strokeWidth = 1.0;
+    : _paint = Paint()
+        ..color = color
+        ..strokeWidth = 1.0;
 
   final Paint _paint;
   final double weight;

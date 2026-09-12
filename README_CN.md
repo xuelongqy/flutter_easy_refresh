@@ -23,6 +23,18 @@
  - 支持安全区域，不再有遮挡
  - 自定义滚动参数，让列表具有不同的滚动反馈和惯性
 
+## 环境要求（v4.0+）
+
+从 4.0.0 开始，EasyRefresh 要求 **Flutter >= 3.47**，并基于独立的
+[material_ui](https://pub.dev/packages/material_ui) / [cupertino_ui](https://pub.dev/packages/cupertino_ui) 包构建，
+不再依赖 `package:flutter/material.dart` 与 `package:flutter/cupertino.dart`。
+
+- 如果你的 App 已迁移到 `material_ui`（`dart fix --apply --code=migrate_design_widgets`），无需额外处理。
+- 如果你的 App 仍使用 `package:flutter/material.dart` 的 `MaterialApp`，内置指示器会回退到 `material_ui` 的默认主题。
+  如需主题与本地化生效，请在 `localizationsDelegates` 中加入 `material_ui` 的 `GlobalMaterialLocalizations.delegates`，
+  并在 `MaterialApp.builder` 中用 `material_ui` 的 `Theme` 包裹整个 App（参考 `example/lib/main.dart`）；
+  否则请继续使用 `easy_refresh: ^3.5.1`。
+
 ## 配套包
 
 分页能力现在拆分到了独立的 `easy_paging` [![Pub](https://img.shields.io/pub/v/easy_paging)](https://pub.dev/packages/easy_paging) 包中。

@@ -65,21 +65,25 @@ class MaterialHeader extends Header {
     this.bezierBackgroundAnimation = false,
     this.bezierBackgroundBounce = false,
   }) : super(
-          spring: spring ??
-              (clamping && !showBezierBackground ? kMaterialSpring : null),
-          readySpringBuilder: readySpringBuilder ??
-              (bezierBackgroundAnimation
-                  ? kBezierSpringBuilder
-                  : kMaterialReadySpringBuilder),
-          frictionFactor: frictionFactor ??
-              (showBezierBackground
-                  ? kBezierFrictionFactor
-                  : kMaterialFrictionFactor),
-          horizontalFrictionFactor: frictionFactor ??
-              (showBezierBackground
-                  ? kBezierHorizontalFrictionFactor
-                  : kMaterialHorizontalFrictionFactor),
-        );
+         spring:
+             spring ??
+             (clamping && !showBezierBackground ? kMaterialSpring : null),
+         readySpringBuilder:
+             readySpringBuilder ??
+             (bezierBackgroundAnimation
+                 ? kBezierSpringBuilder
+                 : kMaterialReadySpringBuilder),
+         frictionFactor:
+             frictionFactor ??
+             (showBezierBackground
+                 ? kBezierFrictionFactor
+                 : kMaterialFrictionFactor),
+         horizontalFrictionFactor:
+             frictionFactor ??
+             (showBezierBackground
+                 ? kBezierHorizontalFrictionFactor
+                 : kMaterialHorizontalFrictionFactor),
+       );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {

@@ -51,12 +51,17 @@ class _BezierCircleIndicatorState extends State<_BezierCircleIndicator>
     super.initState();
     widget.state.notifier.addModeChangeListener(_onModeChange);
     _animationController = AnimationController.unbounded(
-        vsync: this, duration: _animationDuration);
-    _processedAnimationController =
-        AnimationController(vsync: this, duration: _processedAnimationDuration);
+      vsync: this,
+      duration: _animationDuration,
+    );
+    _processedAnimationController = AnimationController(
+      vsync: this,
+      duration: _processedAnimationDuration,
+    );
     _disappearAnimationController = AnimationController.unbounded(
-        vsync: this,
-        duration: kBezierCircleDisappearDuration - _processedAnimationDuration);
+      vsync: this,
+      duration: kBezierCircleDisappearDuration - _processedAnimationDuration,
+    );
   }
 
   @override
@@ -89,8 +94,9 @@ class _BezierCircleIndicatorState extends State<_BezierCircleIndicator>
           // Disappear animation.
           _disappearAnimationController.value =
               _actualTriggerOffset / 2 - _kBallRadius;
-          _disappearAnimationController
-              .animateTo(_kBallRadius * 2 + _actualTriggerOffset);
+          _disappearAnimationController.animateTo(
+            _kBallRadius * 2 + _actualTriggerOffset,
+          );
         });
       }
       return;
@@ -131,7 +137,8 @@ class _BezierCircleIndicatorState extends State<_BezierCircleIndicator>
         painter: _BallTailPaint(
           color: _foregroundColor,
           ballCenterY: _animationController.value + _kBallRadius,
-          scale: (_actualTriggerOffset - _animationController.value) /
+          scale:
+              (_actualTriggerOffset - _animationController.value) /
               (_actualTriggerOffset / 2 + _kBallRadius),
           reboundOffset: _reboundOffsetNotifier.value,
         ),
@@ -223,9 +230,11 @@ class _BezierCircleIndicatorState extends State<_BezierCircleIndicator>
                   !_processedAnimationController.isAnimating) {
                 return const SizedBox();
               }
-              return _buildBall(_disappearAnimationController.isAnimating
-                  ? _disappearAnimationController.value
-                  : _actualTriggerOffset / 2 - _kBallRadius);
+              return _buildBall(
+                _disappearAnimationController.isAnimating
+                    ? _disappearAnimationController.value
+                    : _actualTriggerOffset / 2 - _kBallRadius,
+              );
             },
           ),
           AnimatedBuilder(
@@ -286,8 +295,12 @@ class _BallPaint extends CustomPainter {
     final width = size.width;
     final height = size.height;
     final path = Path();
-    path.addOval(Rect.fromCircle(
-        center: Offset(width / 2, ballCenterY), radius: _kBallRadius));
+    path.addOval(
+      Rect.fromCircle(
+        center: Offset(width / 2, ballCenterY),
+        radius: _kBallRadius,
+      ),
+    );
     final bgPath = _getBezierBackgroundPath(size, reboundOffset ?? height);
     canvas.drawPath(Path.combine(PathOperation.intersect, path, bgPath), paint);
   }
@@ -333,7 +346,8 @@ class _BallTailPaint extends CustomPainter {
     final width = size.width;
     final bottom = reboundOffset;
     final startY = ballCenterY + _kBallRadius * scale / 2;
-    final startX = width / 2 +
+    final startX =
+        width / 2 +
         math.sqrt(_kBallRadius * _kBallRadius * (1 - scale * scale / 4));
     final bezier1x = (width / 2 + (_kBallRadius * 3 / 4) * (1 - scale));
     final bezier2x = bezier1x + _kBallRadius;
@@ -373,10 +387,7 @@ class _BallDropPaint extends CustomPainter {
   final Color color;
   final double ballCenterY;
 
-  _BallDropPaint({
-    required this.color,
-    required this.ballCenterY,
-  });
+  _BallDropPaint({required this.color, required this.ballCenterY});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -385,25 +396,32 @@ class _BallDropPaint extends CustomPainter {
     final width = size.width;
     Path path = Path();
     final rectPath = Path();
-    rectPath.addRect(Rect.fromPoints(
-      const Offset(0, 0),
-      Offset(width, height),
-    ));
+    rectPath.addRect(
+      Rect.fromPoints(const Offset(0, 0), Offset(width, height)),
+    );
     if (ballCenterY > height) {
-      final bezierHeight = _kBallRadius *
+      final bezierHeight =
+          _kBallRadius *
           ((height + 2 * _kBallRadius - ballCenterY) / (3 * _kBallRadius));
       final bezierWidth = _kBallRadius * _kBallRadius * 2 / bezierHeight;
       path.moveTo((width - bezierWidth) / 2, height);
-      path.quadraticBezierTo(width / 2, height - bezierHeight * 2,
-          (width + bezierWidth) / 2, height);
+      path.quadraticBezierTo(
+        width / 2,
+        height - bezierHeight * 2,
+        (width + bezierWidth) / 2,
+        height,
+      );
       path.close();
       canvas.drawPath(
-          Path.combine(PathOperation.intersect, path, rectPath), paint);
+        Path.combine(PathOperation.intersect, path, rectPath),
+        paint,
+      );
     } else if (ballCenterY > height - _kBallRadius * 2) {
       final scale = 1 - ((ballCenterY - _kBallRadius) / height);
       final bottom = height;
       final startY = ballCenterY + _kBallRadius * scale / 2;
-      final startX = width / 2 +
+      final startX =
+          width / 2 +
           math.sqrt(_kBallRadius * _kBallRadius * (1 - scale * scale / 4));
       final bezier1x = (width / 2 + (_kBallRadius * 3 / 4) * (1 - scale));
       final bezier2x = bezier1x + _kBallRadius;
@@ -412,7 +430,9 @@ class _BallDropPaint extends CustomPainter {
       path.lineTo(width - bezier2x, bottom);
       path.quadraticBezierTo(width - bezier1x, bottom, width - startX, startY);
       canvas.drawPath(
-          Path.combine(PathOperation.intersect, path, rectPath), paint);
+        Path.combine(PathOperation.intersect, path, rectPath),
+        paint,
+      );
     }
   }
 
