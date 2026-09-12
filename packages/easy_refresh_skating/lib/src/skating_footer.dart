@@ -16,19 +16,14 @@ class SkatingFooter extends Footer {
     super.hitOver,
     super.infiniteHitOver,
     super.hapticFeedback,
-  }) : super(
-          processedDuration: _kSkatingProcessed,
-          safeArea: false,
-        );
+  }) : super(processedDuration: _kSkatingProcessed, safeArea: false);
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    assert(state.axis == Axis.vertical,
-        'SkatingFooter does not support horizontal scrolling.');
-    return _SkatingIndicator(
-      key: key,
-      state: state,
-      reverse: state.reverse,
+    assert(
+      state.axis == Axis.vertical,
+      'SkatingFooter does not support horizontal scrolling.',
     );
+    return _SkatingIndicator(key: key, state: state, reverse: state.reverse);
   }
 }

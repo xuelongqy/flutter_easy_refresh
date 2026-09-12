@@ -13,24 +13,25 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     required this.userOffsetNotifier,
     required this.headerNotifier,
     required this.footerNotifier,
-    physics.SpringDescription? spring,
-    FrictionFactor? frictionFactor,
-  })  : _spring = spring,
-        _frictionFactor = frictionFactor {
+    this._spring,
+    this._frictionFactor,
+  }) {
     headerNotifier._bindPhysics(this);
     footerNotifier._bindPhysics(this);
-    _headerSimulationCreationState =
-        ValueNotifier(_BallisticSimulationCreationState(
-      mode: headerNotifier.mode,
-      offset: headerNotifier.offset,
-      actualTriggerOffset: headerNotifier.actualTriggerOffset,
-    ));
-    _footerSimulationCreationState =
-        ValueNotifier(_BallisticSimulationCreationState(
-      mode: footerNotifier.mode,
-      offset: footerNotifier.offset,
-      actualTriggerOffset: footerNotifier.actualTriggerOffset,
-    ));
+    _headerSimulationCreationState = ValueNotifier(
+      _BallisticSimulationCreationState(
+        mode: headerNotifier.mode,
+        offset: headerNotifier.offset,
+        actualTriggerOffset: headerNotifier.actualTriggerOffset,
+      ),
+    );
+    _footerSimulationCreationState = ValueNotifier(
+      _BallisticSimulationCreationState(
+        mode: footerNotifier.mode,
+        offset: footerNotifier.offset,
+        actualTriggerOffset: footerNotifier.actualTriggerOffset,
+      ),
+    );
   }
 
   @override
@@ -54,9 +55,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
   /// The state of the indicator when the BallisticSimulation is created.
   late final ValueNotifier<_BallisticSimulationCreationState>
-      _headerSimulationCreationState;
+  _headerSimulationCreationState;
   late final ValueNotifier<_BallisticSimulationCreationState>
-      _footerSimulationCreationState;
+  _footerSimulationCreationState;
 
   /// Get the current [SpringDescription] to be used.
   @override
@@ -135,7 +136,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
     if (headerNotifier.secondaryLocked) {
       // Header secondary
-      pixels = headerNotifier.secondaryDimension +
+      pixels =
+          headerNotifier.secondaryDimension +
           (headerNotifier.secondaryDimension + position.pixels);
       minScrollExtent = 0;
       maxScrollExtent = headerNotifier.secondaryDimension;
@@ -143,7 +145,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
     if (footerNotifier.secondaryLocked) {
       // Footer secondary
-      pixels = position.pixels -
+      pixels =
+          position.pixels -
           footerNotifier.secondaryDimension -
           position.maxScrollExtent;
       minScrollExtent = 0;
@@ -152,9 +155,12 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
     final double overscrollPastStart = math.max(minScrollExtent - pixels, 0.0);
     final double overscrollPastEnd = math.max(pixels - maxScrollExtent, 0.0);
-    final double overscrollPast =
-        math.max(overscrollPastStart, overscrollPastEnd);
-    final bool easing = (overscrollPastStart > 0.0 && offset < 0.0) ||
+    final double overscrollPast = math.max(
+      overscrollPastStart,
+      overscrollPastEnd,
+    );
+    final bool easing =
+        (overscrollPastStart > 0.0 && offset < 0.0) ||
         (overscrollPastEnd > 0.0 && offset > 0.0);
 
     // Scrollable viewport dimension;
@@ -163,7 +169,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       if (headerNotifier._viewportDimension != null) {
         viewportDimension = headerNotifier._viewportDimension!;
       } else {
-        viewportDimension = (position.axis == Axis.vertical
+        viewportDimension =
+            (position.axis == Axis.vertical
                 ? headerNotifier.vsync.context.size?.height
                 : headerNotifier.vsync.context.size?.width) ??
             viewportDimension;
@@ -180,7 +187,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
   }
 
   static double _applyFriction(
-      double extentOutside, double absDelta, double gamma) {
+    double extentOutside,
+    double absDelta,
+    double gamma,
+  ) {
     assert(absDelta > 0);
     double total = 0.0;
     if (extentOutside > 0) {
@@ -233,7 +243,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       if (headerNotifier.actualMaxOverOffset != double.infinity &&
           value < -headerNotifier.actualMaxOverOffset) {
         _updateIndicatorOffset(
-            position, -headerNotifier.actualMaxOverOffset, value);
+          position,
+          -headerNotifier.actualMaxOverOffset,
+          value,
+        );
         return (value + headerNotifier.actualMaxOverOffset) -
             position.minScrollExtent;
       }
@@ -263,7 +276,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
                       (position.pixels +
                           headerNotifier.actualTriggerOffset)))) {
         _updateIndicatorOffset(
-            position, -headerNotifier.actualTriggerOffset, value);
+          position,
+          -headerNotifier.actualTriggerOffset,
+          value,
+        );
         return (value + headerNotifier.actualTriggerOffset) -
             position.minScrollExtent;
       }
@@ -273,7 +289,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
           !headerNotifier._indicator.springRebound &&
           -value < headerNotifier.actualTriggerOffset) {
         _updateIndicatorOffset(
-            position, -headerNotifier.actualTriggerOffset, value);
+          position,
+          -headerNotifier.actualTriggerOffset,
+          value,
+        );
         return headerNotifier.actualTriggerOffset +
             value -
             position.minScrollExtent;
@@ -291,7 +310,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
                 position.pixels + headerNotifier.secondaryDimension) {
           // hit top secondary
           _updateIndicatorOffset(
-              position, -headerNotifier.secondaryDimension, value);
+            position,
+            -headerNotifier.secondaryDimension,
+            value,
+          );
           return value +
               headerNotifier.secondaryDimension -
               position.minScrollExtent;
@@ -325,9 +347,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
           position.maxScrollExtent <
               value - footerNotifier.actualMaxOverOffset) {
         _updateIndicatorOffset(
-            position,
-            position.maxScrollExtent + footerNotifier.actualMaxOverOffset,
-            value);
+          position,
+          position.maxScrollExtent + footerNotifier.actualMaxOverOffset,
+          value,
+        );
         return (value - footerNotifier.actualMaxOverOffset) -
             position.maxScrollExtent;
       }
@@ -358,9 +381,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
           position.maxScrollExtent <
               (value - footerNotifier.actualTriggerOffset)) {
         _updateIndicatorOffset(
-            position,
-            position.maxScrollExtent + footerNotifier.actualTriggerOffset,
-            value);
+          position,
+          position.maxScrollExtent + footerNotifier.actualTriggerOffset,
+          value,
+        );
         return (value - footerNotifier.actualTriggerOffset) -
             position.maxScrollExtent;
       }
@@ -371,9 +395,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
           value <
               position.maxScrollExtent + footerNotifier.actualTriggerOffset) {
         _updateIndicatorOffset(
-            position,
-            position.maxScrollExtent + footerNotifier.actualTriggerOffset,
-            value);
+          position,
+          position.maxScrollExtent + footerNotifier.actualTriggerOffset,
+          value,
+        );
         return (value - footerNotifier.actualTriggerOffset) -
             position.maxScrollExtent;
       }
@@ -390,9 +415,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
                 value - footerNotifier.secondaryDimension) {
           // hit bottom edge
           _updateIndicatorOffset(
-              position,
-              position.maxScrollExtent + footerNotifier.secondaryDimension,
-              value);
+            position,
+            position.maxScrollExtent + footerNotifier.secondaryDimension,
+            value,
+          );
           return value -
               footerNotifier.secondaryDimension -
               position.maxScrollExtent;
@@ -406,7 +432,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
   /// Update indicator offset
   void _updateIndicatorOffset(
-      ScrollMetrics position, double offset, double value) {
+    ScrollMetrics position,
+    double offset,
+    double value,
+  ) {
     // NestedScrollView special handling.
     if (headerNotifier.isNested &&
         position.isNestedOuter &&
@@ -423,7 +452,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
   @override
   Simulation? createBallisticSimulation(
-      ScrollMetrics position, double velocity) {
+    ScrollMetrics position,
+    double velocity,
+  ) {
     Tolerance tolerance = toleranceFor(position);
     // User stopped scrolling.
     final oldUserOffset = userOffsetNotifier.value;
@@ -445,10 +476,12 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       actualTriggerOffset: footerNotifier.actualTriggerOffset,
     );
     Simulation? simulation;
-    bool hSecondary = !headerNotifier.clamping &&
+    bool hSecondary =
+        !headerNotifier.clamping &&
         (headerNotifier._mode == IndicatorMode.secondaryReady ||
             headerNotifier._mode == IndicatorMode.secondaryOpen);
-    bool fSecondary = !footerNotifier.clamping &&
+    bool fSecondary =
+        !footerNotifier.clamping &&
         (footerNotifier._mode == IndicatorMode.secondaryReady ||
             footerNotifier._mode == IndicatorMode.secondaryOpen);
     bool secondary = hSecondary || fSecondary;

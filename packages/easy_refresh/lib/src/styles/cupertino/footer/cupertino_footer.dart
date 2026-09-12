@@ -40,12 +40,13 @@ class CupertinoFooter extends Footer {
     this.backgroundColor,
     this.emptyWidget,
   }) : super(
-          frictionFactor: frictionFactor ??
-              (userWaterDrop && infiniteOffset == null
-                  ? kCupertinoFrictionFactor
-                  : null),
-          horizontalFrictionFactor: kCupertinoHorizontalFrictionFactor,
-        );
+         frictionFactor:
+             frictionFactor ??
+             (userWaterDrop && infiniteOffset == null
+                 ? kCupertinoFrictionFactor
+                 : null),
+         horizontalFrictionFactor: kCupertinoHorizontalFrictionFactor,
+       );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {

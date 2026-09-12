@@ -4,10 +4,13 @@ part of '../easy_refresh.dart';
 /// Provide [ScrollPhysics], and use it in your [ScrollView].
 /// [ScrollPhysics] will not be scoped.
 typedef ERChildBuilder = Widget Function(
-    BuildContext context, ScrollPhysics physics);
+  BuildContext context,
+  ScrollPhysics physics,
+);
 
 typedef ERScrollBehaviorBuilder = ScrollBehavior Function(
-    ScrollPhysics? physics);
+  ScrollPhysics? physics,
+);
 
 /// EasyRefresh needs to share data
 class EasyRefreshData {
@@ -181,7 +184,7 @@ class EasyRefresh extends StatefulWidget {
 
   /// Default ScrollBehavior builder.
   static ScrollBehavior Function(ScrollPhysics? physics)
-      defaultScrollBehaviorBuilder = _defaultScrollBehaviorBuilder;
+  defaultScrollBehaviorBuilder = _defaultScrollBehaviorBuilder;
 
   static ScrollBehavior _defaultScrollBehaviorBuilder(ScrollPhysics? physics) =>
       ERScrollBehavior(physics);
@@ -212,11 +215,15 @@ class EasyRefresh extends StatefulWidget {
     this.scrollController,
     this.triggerAxis,
     this.isNested = false,
-  })  : childBuilder = null,
-        assert(callRefreshOverOffset > 0,
-            'callRefreshOverOffset must be greater than 0.'),
-        assert(callLoadOverOffset > 0,
-            'callLoadOverOffset must be greater than 0.');
+  }) : childBuilder = null,
+       assert(
+         callRefreshOverOffset > 0,
+         'callRefreshOverOffset must be greater than 0.',
+       ),
+       assert(
+         callLoadOverOffset > 0,
+         'callLoadOverOffset must be greater than 0.',
+       );
 
   const EasyRefresh.builder({
     super.key,
@@ -244,20 +251,26 @@ class EasyRefresh extends StatefulWidget {
     this.scrollController,
     this.triggerAxis,
     this.isNested = false,
-  })  : child = null,
-        assert(callRefreshOverOffset > 0,
-            'callRefreshOverOffset must be greater than 0.'),
-        assert(callLoadOverOffset > 0,
-            'callLoadOverOffset must be greater than 0.');
+  }) : child = null,
+       assert(
+         callRefreshOverOffset > 0,
+         'callRefreshOverOffset must be greater than 0.',
+       ),
+       assert(
+         callLoadOverOffset > 0,
+         'callLoadOverOffset must be greater than 0.',
+       );
 
   @override
   State<StatefulWidget> createState() => _EasyRefreshState();
 
   static EasyRefreshData of(BuildContext context) {
-    final inheritedEasyRefresh =
-        context.dependOnInheritedWidgetOfExactType<_InheritedEasyRefresh>();
-    assert(inheritedEasyRefresh != null,
-        'Please use it in the scope of EasyRefresh!');
+    final inheritedEasyRefresh = context
+        .dependOnInheritedWidgetOfExactType<_InheritedEasyRefresh>();
+    assert(
+      inheritedEasyRefresh != null,
+      'Please use it in the scope of EasyRefresh!',
+    );
     return inheritedEasyRefresh!.data;
   }
 }
@@ -452,10 +465,7 @@ class _EasyRefreshState extends State<EasyRefresh>
     if (_headerNotifier._mode == IndicatorMode.inactive) {
       _isRefreshOnStart = false;
       _headerNotifier.removeListener(_refreshOnStartListener);
-      _headerNotifier._update(
-        indicator: _header,
-        task: _onRefresh,
-      );
+      _headerNotifier._update(indicator: _header, task: _onRefresh);
     }
   }
 
@@ -542,31 +552,31 @@ class _EasyRefreshState extends State<EasyRefresh>
         final safePadding = MediaQuery.of(context).padding;
         _headerNotifier._safeOffset = axis == Axis.vertical
             ? axisDirection == AxisDirection.down
-                ? safePadding.top
-                : safePadding.bottom
+                  ? safePadding.top
+                  : safePadding.bottom
             : axisDirection == AxisDirection.right
-                ? safePadding.left
-                : safePadding.right;
+            ? safePadding.left
+            : safePadding.right;
         return Positioned(
           top: axis == Axis.vertical
               ? axisDirection == AxisDirection.down
-                  ? 0
-                  : null
+                    ? 0
+                    : null
               : 0,
           bottom: axis == Axis.vertical
               ? axisDirection == AxisDirection.up
-                  ? 0
-                  : null
+                    ? 0
+                    : null
               : 0,
           left: axis == Axis.horizontal
               ? axisDirection == AxisDirection.right
-                  ? 0
-                  : null
+                    ? 0
+                    : null
               : 0,
           right: axis == Axis.horizontal
               ? axisDirection == AxisDirection.left
-                  ? 0
-                  : null
+                    ? 0
+                    : null
               : 0,
           child: _headerNotifier._build(context),
         );
@@ -593,31 +603,31 @@ class _EasyRefreshState extends State<EasyRefresh>
         final safePadding = MediaQuery.of(context).padding;
         _footerNotifier._safeOffset = axis == Axis.vertical
             ? axisDirection == AxisDirection.down
-                ? safePadding.bottom
-                : safePadding.top
+                  ? safePadding.bottom
+                  : safePadding.top
             : axisDirection == AxisDirection.right
-                ? safePadding.right
-                : safePadding.left;
+            ? safePadding.right
+            : safePadding.left;
         return Positioned(
           top: axis == Axis.vertical
               ? axisDirection == AxisDirection.up
-                  ? 0
-                  : null
+                    ? 0
+                    : null
               : 0,
           bottom: axis == Axis.vertical
               ? axisDirection == AxisDirection.down
-                  ? 0
-                  : null
+                    ? 0
+                    : null
               : 0,
           left: axis == Axis.horizontal
               ? axisDirection == AxisDirection.left
-                  ? 0
-                  : null
+                    ? 0
+                    : null
               : 0,
           right: axis == Axis.horizontal
               ? axisDirection == AxisDirection.right
-                  ? 0
-                  : null
+                    ? 0
+                    : null
               : 0,
           child: _footerNotifier._build(context),
         );
@@ -643,10 +653,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         child: widget.child!,
       );
     }
-    return _InheritedEasyRefresh(
-      data: _data,
-      child: child,
-    );
+    return _InheritedEasyRefresh(data: _data, child: child);
   }
 
   @override

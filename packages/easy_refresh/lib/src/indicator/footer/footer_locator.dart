@@ -32,9 +32,10 @@ class FooterLocator extends StatelessWidget {
   Widget build(BuildContext context) {
     final footerNotifier = EasyRefresh.of(context).footerNotifier;
     assert(
-        footerNotifier.iPosition == IndicatorPosition.locator ||
-            footerNotifier.iPosition == IndicatorPosition.custom,
-        'Cannot use FooterLocator when header position is not IndicatorPosition.locator.');
+      footerNotifier.iPosition == IndicatorPosition.locator ||
+          footerNotifier.iPosition == IndicatorPosition.custom,
+      'Cannot use FooterLocator when header position is not IndicatorPosition.locator.',
+    );
     return ValueListenableBuilder(
       valueListenable: footerNotifier.listenable(),
       builder: (ctx, notifier, _) {
@@ -46,18 +47,16 @@ class FooterLocator extends StatelessWidget {
           final safePadding = MediaQuery.of(context).padding;
           footerNotifier._safeOffset = axis == Axis.vertical
               ? axisDirection == AxisDirection.down
-                  ? safePadding.bottom
-                  : safePadding.top
+                    ? safePadding.bottom
+                    : safePadding.top
               : axisDirection == AxisDirection.right
-                  ? safePadding.right
-                  : safePadding.left;
+              ? safePadding.right
+              : safePadding.left;
         }
         final footerWidget = footerNotifier._build(context);
         if (!clearExtent) {
           return _isSliver
-              ? SliverToBoxAdapter(
-                  child: footerWidget,
-                )
+              ? SliverToBoxAdapter(child: footerWidget)
               : footerWidget;
         }
         return _FooterLocatorRenderWidget(
@@ -83,14 +82,8 @@ class _FooterLocatorRenderWidget extends SingleChildRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) => isSliver
-      ? _FooterLocatorRenderSliver(
-          context: context,
-          paintExtent: paintExtent,
-        )
-      : _FooterLocatorRenderBox(
-          context: context,
-          paintExtent: paintExtent,
-        );
+      ? _FooterLocatorRenderSliver(context: context, paintExtent: paintExtent)
+      : _FooterLocatorRenderBox(context: context, paintExtent: paintExtent);
 }
 
 /// User in Box
@@ -119,12 +112,14 @@ class _FooterLocatorRenderBox extends RenderProxyBox {
       size = constraints.smallest;
     } else {
       size = Size(
-        constraints
-            .constrainWidth(axis == Axis.vertical ? double.infinity : extend),
+        constraints.constrainWidth(
+          axis == Axis.vertical ? double.infinity : extend,
+        ),
 
         /// Not 0 will be paint
-        constraints
-            .constrainHeight(axis == Axis.vertical ? extend : double.infinity),
+        constraints.constrainHeight(
+          axis == Axis.vertical ? extend : double.infinity,
+        ),
       );
     }
     if (child != null) {
@@ -145,13 +140,13 @@ class _FooterLocatorRenderBox extends RenderProxyBox {
       final double dx = axis == Axis.vertical
           ? 0
           : axisDirection == AxisDirection.left
-              ? -extend
-              : 0;
+          ? -extend
+          : 0;
       final double dy = axis == Axis.horizontal
           ? 0
           : axisDirection == AxisDirection.up
-              ? -extend
-              : 0;
+          ? -extend
+          : 0;
       mOffset = Offset(dx, dy);
     }
     if (child != null) {
@@ -190,8 +185,11 @@ class _FooterLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
         childExtent = child!.size.height;
         break;
     }
-    final double paintedChildSize =
-        calculatePaintOffset(constraints, from: 0, to: childExtent);
+    final double paintedChildSize = calculatePaintOffset(
+      constraints,
+      from: 0,
+      to: childExtent,
+    );
     // final double cacheExtent =
     //     calculateCacheOffset(constraints, from: 0, to: childExtent);
 
@@ -201,7 +199,8 @@ class _FooterLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
     geometry = SliverGeometry(
       scrollExtent: 0,
       paintExtent: math.min(childExtent, paintExtent),
-      paintOrigin: constraints.axisDirection == AxisDirection.down ||
+      paintOrigin:
+          constraints.axisDirection == AxisDirection.down ||
               constraints.axisDirection == AxisDirection.right
           ? 0
           : math.min(footerNotifier.offset, constraints.remainingPaintExtent),
@@ -209,7 +208,8 @@ class _FooterLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
       cacheExtent: math.min(childExtent, paintExtent),
       maxPaintExtent: math.max(childExtent, paintExtent),
       hitTestExtent: math.max(childExtent, paintedChildSize),
-      hasVisualOverflow: childExtent > constraints.remainingPaintExtent ||
+      hasVisualOverflow:
+          childExtent > constraints.remainingPaintExtent ||
           constraints.scrollOffset > 0,
       visible: true,
     );

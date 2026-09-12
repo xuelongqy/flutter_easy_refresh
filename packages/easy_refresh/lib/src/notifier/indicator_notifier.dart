@@ -39,19 +39,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     required Indicator indicator,
     required this.vsync,
     required this.userOffsetNotifier,
-    required CanProcessCallBack onCanProcess,
-    required bool canProcessAfterNoMore,
-    required bool isNested,
-    Axis? triggerAxis,
-    bool waitTaskResult = true,
-    FutureOr Function()? task,
-  })  : _indicator = indicator,
-        _onCanProcess = onCanProcess,
-        _canProcessAfterNoMore = canProcessAfterNoMore,
-        _isNested = isNested,
-        _triggerAxis = triggerAxis,
-        _waitTaskResult = waitTaskResult,
-        _task = task {
+    required CanProcessCallBack this._onCanProcess,
+    required this._canProcessAfterNoMore,
+    required this._isNested,
+    this._triggerAxis,
+    this._waitTaskResult = true,
+    this._task,
+  }) : _indicator = indicator {
     _initClampingAnimation();
     userOffsetNotifier.addListener(_onUserOffset);
     indicator.listenable?._bind(this);
@@ -157,7 +151,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   }
 
   ScrollController? _matchingScrollController(
-      ScrollController? scrollController, ScrollPosition position) {
+    ScrollController? scrollController,
+    ScrollPosition position,
+  ) {
     if (!(scrollController?.hasClients ?? false)) {
       return null;
     }
@@ -402,7 +398,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Create a ballistic simulation.
   /// Use for [clamping].
   Simulation? createBallisticSimulation(
-      ScrollMetrics position, double velocity);
+    ScrollMetrics position,
+    double velocity,
+  );
 
   /// Calculate distance from edge.
   double get edgeOffset;
@@ -489,7 +487,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Animation listener for [clamping].
   void _clampingTick() {
     final mOffset = calculateOffsetWithPixels(
-        position, _clampingAnimationController!.value);
+      position,
+      _clampingAnimationController!.value,
+    );
     if (hasSecondary &&
         !noMoreLocked &&
         mOffset > secondaryDimension &&
@@ -953,10 +953,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (!_isSupportAxis) {
       return const SizedBox();
     }
-    return _indicator.build(
-      context,
-      indicatorState!,
-    );
+    return _indicator.build(context, indicatorState!);
   }
 }
 
@@ -1014,11 +1011,11 @@ class HeaderNotifier extends IndicatorNotifier {
     FutureOr Function()? onRefresh,
     bool waitRefreshResult = true,
   }) : super(
-          indicator: header,
-          onCanProcess: onCanRefresh,
-          task: onRefresh,
-          waitTaskResult: waitRefreshResult,
-        );
+         indicator: header,
+         onCanProcess: onCanRefresh,
+         task: onRefresh,
+         waitTaskResult: waitRefreshResult,
+       );
 
   @override
   double _calculateOffset(ScrollMetrics position, double value) {
@@ -1059,16 +1056,19 @@ class HeaderNotifier extends IndicatorNotifier {
   /// See [IndicatorNotifier.createBallisticSimulation].
   @override
   Simulation? createBallisticSimulation(
-      ScrollMetrics position, double velocity) {
+    ScrollMetrics position,
+    double velocity,
+  ) {
     final mVelocity =
         hasSecondary && !noMoreLocked && _offset >= actualSecondaryTriggerOffset
-            ? -secondaryVelocity
-            : velocity;
+        ? -secondaryVelocity
+        : velocity;
     if (_offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
-        position:
-            clamping ? position.minScrollExtent - _offset : position.pixels,
+        position: clamping
+            ? position.minScrollExtent - _offset
+            : position.pixels,
         velocity: mVelocity,
         leadingExtent: position.minScrollExtent - overExtent,
         trailingExtent: 0,
@@ -1100,8 +1100,10 @@ class HeaderNotifier extends IndicatorNotifier {
     if (effectivePosition == null) {
       return;
     }
-    final matchedController =
-        _matchingScrollController(scrollController, effectivePosition);
+    final matchedController = _matchingScrollController(
+      scrollController,
+      effectivePosition,
+    );
     final scrollTo = -offset;
     _releaseOffset = offset;
     if (jumpToEdge) {
@@ -1119,8 +1121,11 @@ class HeaderNotifier extends IndicatorNotifier {
       } else {
         userOffsetNotifier.value = true;
         _clampingAnimationController!.value = effectivePosition.minScrollExtent;
-        await _clampingAnimationController!
-            .animateTo(scrollTo, duration: duration, curve: curve);
+        await _clampingAnimationController!.animateTo(
+          scrollTo,
+          duration: duration,
+          curve: curve,
+        );
         userOffsetNotifier.value = false;
         _updateBySimulation(effectivePosition, 0);
       }
@@ -1134,11 +1139,17 @@ class HeaderNotifier extends IndicatorNotifier {
       } else {
         userOffsetNotifier.value = true;
         if (matchedController != null) {
-          await matchedController.animateTo(scrollTo,
-              duration: duration, curve: curve);
+          await matchedController.animateTo(
+            scrollTo,
+            duration: duration,
+            curve: curve,
+          );
         } else {
-          await effectivePosition.animateTo(scrollTo,
-              duration: duration, curve: curve);
+          await effectivePosition.animateTo(
+            scrollTo,
+            duration: duration,
+            curve: curve,
+          );
         }
         userOffsetNotifier.value = false;
         notifyListeners();
@@ -1162,11 +1173,11 @@ class FooterNotifier extends IndicatorNotifier {
     FutureOr Function()? onLoad,
     bool waitLoadResult = true,
   }) : super(
-          indicator: footer,
-          onCanProcess: onCanLoad,
-          task: onLoad,
-          waitTaskResult: waitLoadResult,
-        );
+         indicator: footer,
+         onCanProcess: onCanLoad,
+         task: onLoad,
+         waitTaskResult: waitLoadResult,
+       );
 
   /// Keep the extent of the [Scrollable] out of bounds.
   @override
@@ -1219,16 +1230,19 @@ class FooterNotifier extends IndicatorNotifier {
   /// See [IndicatorNotifier.createBallisticSimulation].
   @override
   Simulation? createBallisticSimulation(
-      ScrollMetrics position, double velocity) {
+    ScrollMetrics position,
+    double velocity,
+  ) {
     final mVelocity =
         hasSecondary && !noMoreLocked && _offset >= actualSecondaryTriggerOffset
-            ? secondaryVelocity
-            : velocity;
+        ? secondaryVelocity
+        : velocity;
     if (_offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
-        position:
-            clamping ? position.maxScrollExtent + _offset : position.pixels,
+        position: clamping
+            ? position.maxScrollExtent + _offset
+            : position.pixels,
         velocity: mVelocity,
         leadingExtent: 0,
         trailingExtent: position.maxScrollExtent + overExtent,
@@ -1260,8 +1274,10 @@ class FooterNotifier extends IndicatorNotifier {
     if (effectivePosition == null) {
       return;
     }
-    final matchedController =
-        _matchingScrollController(scrollController, effectivePosition);
+    final matchedController = _matchingScrollController(
+      scrollController,
+      effectivePosition,
+    );
     final scrollTo = effectivePosition.maxScrollExtent + offset;
     _releaseOffset = offset;
     if (jumpToEdge) {
@@ -1279,8 +1295,11 @@ class FooterNotifier extends IndicatorNotifier {
       } else {
         userOffsetNotifier.value = true;
         _clampingAnimationController!.value = effectivePosition.maxScrollExtent;
-        await _clampingAnimationController!
-            .animateTo(scrollTo, duration: duration, curve: curve);
+        await _clampingAnimationController!.animateTo(
+          scrollTo,
+          duration: duration,
+          curve: curve,
+        );
         userOffsetNotifier.value = false;
         _updateBySimulation(effectivePosition, 0);
       }
@@ -1294,11 +1313,17 @@ class FooterNotifier extends IndicatorNotifier {
       } else {
         userOffsetNotifier.value = true;
         if (matchedController != null) {
-          await matchedController.animateTo(scrollTo,
-              duration: duration, curve: curve);
+          await matchedController.animateTo(
+            scrollTo,
+            duration: duration,
+            curve: curve,
+          );
         } else {
-          await effectivePosition.animateTo(scrollTo,
-              duration: duration, curve: curve);
+          await effectivePosition.animateTo(
+            scrollTo,
+            duration: duration,
+            curve: curve,
+          );
         }
         userOffsetNotifier.value = false;
         notifyListeners();

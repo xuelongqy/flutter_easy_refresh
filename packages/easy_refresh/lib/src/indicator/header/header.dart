@@ -102,9 +102,7 @@ class ListenerHeader extends Header {
     super.triggerWhenRelease,
     super.triggerWhenReleaseNoWait,
     super.maxOverOffset,
-  }) : super(
-          position: IndicatorPosition.custom,
-        );
+  }) : super(position: IndicatorPosition.custom);
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
@@ -126,29 +124,29 @@ abstract class SecondaryHeader extends Header {
     super.secondaryCloseTriggerOffset,
     IndicatorStateListenable? listenable,
   }) : super(
-          triggerOffset: header.triggerOffset,
-          clamping: header.clamping,
-          processedDuration: header.processedDuration,
-          spring: header.spring,
-          horizontalSpring: header.horizontalSpring,
-          readySpringBuilder: header.readySpringBuilder,
-          horizontalReadySpringBuilder: header.horizontalReadySpringBuilder,
-          springRebound: header.springRebound,
-          frictionFactor: header.frictionFactor,
-          horizontalFrictionFactor: header.horizontalFrictionFactor,
-          safeArea: header.safeArea,
-          infiniteOffset: header.infiniteOffset,
-          hitOver: header.hitOver,
-          infiniteHitOver: header.infiniteHitOver,
-          position: header.position,
-          hapticFeedback: header.hapticFeedback,
-          notifyWhenInvisible: header.notifyWhenInvisible,
-          listenable: listenable ?? header.listenable,
-          triggerWhenReach: header.triggerWhenReach,
-          triggerWhenRelease: header.triggerWhenRelease,
-          triggerWhenReleaseNoWait: header.triggerWhenReleaseNoWait,
-          maxOverOffset: header.maxOverOffset,
-        );
+         triggerOffset: header.triggerOffset,
+         clamping: header.clamping,
+         processedDuration: header.processedDuration,
+         spring: header.spring,
+         horizontalSpring: header.horizontalSpring,
+         readySpringBuilder: header.readySpringBuilder,
+         horizontalReadySpringBuilder: header.horizontalReadySpringBuilder,
+         springRebound: header.springRebound,
+         frictionFactor: header.frictionFactor,
+         horizontalFrictionFactor: header.horizontalFrictionFactor,
+         safeArea: header.safeArea,
+         infiniteOffset: header.infiniteOffset,
+         hitOver: header.hitOver,
+         infiniteHitOver: header.infiniteHitOver,
+         position: header.position,
+         hapticFeedback: header.hapticFeedback,
+         notifyWhenInvisible: header.notifyWhenInvisible,
+         listenable: listenable ?? header.listenable,
+         triggerWhenReach: header.triggerWhenReach,
+         triggerWhenRelease: header.triggerWhenRelease,
+         triggerWhenReleaseNoWait: header.triggerWhenReleaseNoWait,
+         maxOverOffset: header.maxOverOffset,
+       );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
@@ -156,7 +154,10 @@ abstract class SecondaryHeader extends Header {
   }
 
   Widget secondaryBuild(
-      BuildContext context, IndicatorState state, Indicator indicator);
+    BuildContext context,
+    IndicatorState state,
+    Indicator indicator,
+  );
 }
 
 /// Secondary builder header.
@@ -176,7 +177,10 @@ class SecondaryBuilderHeader extends SecondaryHeader {
 
   @override
   Widget secondaryBuild(
-      BuildContext context, IndicatorState state, Indicator indicator) {
+    BuildContext context,
+    IndicatorState state,
+    Indicator indicator,
+  ) {
     return builder(context, state, indicator);
   }
 }
@@ -194,10 +198,10 @@ class NotRefreshHeader extends Header {
     super.hitOver,
     super.maxOverOffset,
   }) : super(
-          triggerOffset: 0,
-          infiniteOffset: null,
-          processedDuration: const Duration(seconds: 0),
-        );
+         triggerOffset: 0,
+         infiniteOffset: null,
+         processedDuration: const Duration(seconds: 0),
+       );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
@@ -241,39 +245,39 @@ class OverrideHeader extends Header {
     bool? triggerWhenReleaseNoWait,
     double? maxOverOffset,
   }) : super(
-          triggerOffset: triggerOffset ?? header.triggerOffset,
-          clamping: clamping ?? header.clamping,
-          processedDuration: processedDuration ?? header.processedDuration,
-          spring: spring ?? header.spring,
-          horizontalSpring: horizontalSpring ?? header.horizontalSpring,
-          readySpringBuilder: readySpringBuilder ?? header.readySpringBuilder,
-          horizontalReadySpringBuilder: horizontalReadySpringBuilder ??
-              header.horizontalReadySpringBuilder,
-          springRebound: springRebound ?? header.springRebound,
-          frictionFactor: frictionFactor ?? header.frictionFactor,
-          horizontalFrictionFactor:
-              horizontalFrictionFactor ?? header.horizontalFrictionFactor,
-          safeArea: safeArea ?? header.safeArea,
-          infiniteOffset: infiniteOffset ?? header.infiniteOffset,
-          hitOver: hitOver ?? header.hitOver,
-          infiniteHitOver: infiniteHitOver ?? header.infiniteHitOver,
-          position: position ?? header.position,
-          hapticFeedback: hapticFeedback ?? header.hapticFeedback,
-          secondaryTriggerOffset:
-              secondaryTriggerOffset ?? header.secondaryTriggerOffset,
-          secondaryVelocity: secondaryVelocity ?? header.secondaryVelocity,
-          secondaryDimension: secondaryDimension ?? header.secondaryDimension,
-          secondaryCloseTriggerOffset:
-              secondaryCloseTriggerOffset ?? header.secondaryCloseTriggerOffset,
-          notifyWhenInvisible:
-              notifyWhenInvisible ?? header.notifyWhenInvisible,
-          listenable: listenable ?? header.listenable,
-          triggerWhenReach: triggerWhenReach ?? header.triggerWhenReach,
-          triggerWhenRelease: triggerWhenRelease ?? header.triggerWhenRelease,
-          triggerWhenReleaseNoWait:
-              triggerWhenReleaseNoWait ?? header.triggerWhenReleaseNoWait,
-          maxOverOffset: maxOverOffset ?? header.maxOverOffset,
-        );
+         triggerOffset: triggerOffset ?? header.triggerOffset,
+         clamping: clamping ?? header.clamping,
+         processedDuration: processedDuration ?? header.processedDuration,
+         spring: spring ?? header.spring,
+         horizontalSpring: horizontalSpring ?? header.horizontalSpring,
+         readySpringBuilder: readySpringBuilder ?? header.readySpringBuilder,
+         horizontalReadySpringBuilder:
+             horizontalReadySpringBuilder ??
+             header.horizontalReadySpringBuilder,
+         springRebound: springRebound ?? header.springRebound,
+         frictionFactor: frictionFactor ?? header.frictionFactor,
+         horizontalFrictionFactor:
+             horizontalFrictionFactor ?? header.horizontalFrictionFactor,
+         safeArea: safeArea ?? header.safeArea,
+         infiniteOffset: infiniteOffset ?? header.infiniteOffset,
+         hitOver: hitOver ?? header.hitOver,
+         infiniteHitOver: infiniteHitOver ?? header.infiniteHitOver,
+         position: position ?? header.position,
+         hapticFeedback: hapticFeedback ?? header.hapticFeedback,
+         secondaryTriggerOffset:
+             secondaryTriggerOffset ?? header.secondaryTriggerOffset,
+         secondaryVelocity: secondaryVelocity ?? header.secondaryVelocity,
+         secondaryDimension: secondaryDimension ?? header.secondaryDimension,
+         secondaryCloseTriggerOffset:
+             secondaryCloseTriggerOffset ?? header.secondaryCloseTriggerOffset,
+         notifyWhenInvisible: notifyWhenInvisible ?? header.notifyWhenInvisible,
+         listenable: listenable ?? header.listenable,
+         triggerWhenReach: triggerWhenReach ?? header.triggerWhenReach,
+         triggerWhenRelease: triggerWhenRelease ?? header.triggerWhenRelease,
+         triggerWhenReleaseNoWait:
+             triggerWhenReleaseNoWait ?? header.triggerWhenReleaseNoWait,
+         maxOverOffset: maxOverOffset ?? header.maxOverOffset,
+       );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {

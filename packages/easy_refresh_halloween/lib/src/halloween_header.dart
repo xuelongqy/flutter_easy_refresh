@@ -17,18 +17,14 @@ class HalloweenHeader extends Header {
     super.hitOver,
     super.infiniteHitOver,
     super.hapticFeedback,
-  }) : super(
-          safeArea: false,
-        );
+  }) : super(safeArea: false);
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    assert(state.axis == Axis.vertical,
-        'HalloweenHeader does not support horizontal scrolling.');
-    return _HalloweenIndicator(
-      key: key,
-      state: state,
-      reverse: state.reverse,
+    assert(
+      state.axis == Axis.vertical,
+      'HalloweenHeader does not support horizontal scrolling.',
     );
+    return _HalloweenIndicator(key: key, state: state, reverse: state.reverse);
   }
 }
