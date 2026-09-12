@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for basic refresh/load functionality
@@ -161,10 +161,8 @@ class _BasicRefreshHarnessState extends State<_BasicRefreshHarness> {
             controller: scrollController,
             itemExtent: 50,
             itemCount: itemCount,
-            itemBuilder: (context, index) => ListTile(
-              key: Key('item-$index'),
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) =>
+                ListTile(key: Key('item-$index'), title: Text('Item $index')),
           ),
         ),
       ),
@@ -224,9 +222,10 @@ void main() {
       // Mode should be done or inactive after finishing
       final headerMode = state.headerState!.mode;
       expect(
-          headerMode == IndicatorMode.inactive ||
-              headerMode == IndicatorMode.done,
-          isTrue);
+        headerMode == IndicatorMode.inactive ||
+            headerMode == IndicatorMode.done,
+        isTrue,
+      );
 
       await disposeAndFlush(tester);
     });
@@ -258,15 +257,17 @@ void main() {
       // Mode should be done or inactive after finishing
       final footerMode = state.footerState!.mode;
       expect(
-          footerMode == IndicatorMode.inactive ||
-              footerMode == IndicatorMode.done,
-          isTrue);
+        footerMode == IndicatorMode.inactive ||
+            footerMode == IndicatorMode.done,
+        isTrue,
+      );
 
       await disposeAndFlush(tester);
     });
 
-    testWidgets('refresh callback execution updates item count',
-        (tester) async {
+    testWidgets('refresh callback execution updates item count', (
+      tester,
+    ) async {
       final key = GlobalKey<_BasicRefreshHarnessState>();
       await tester.pumpWidget(_BasicRefreshHarness(key: key));
       final state = key.currentState!;
@@ -347,19 +348,19 @@ void main() {
       // Mode should be done or inactive after success
       final headerMode = state.headerState!.mode;
       expect(
-          headerMode == IndicatorMode.inactive ||
-              headerMode == IndicatorMode.done,
-          isTrue);
+        headerMode == IndicatorMode.inactive ||
+            headerMode == IndicatorMode.done,
+        isTrue,
+      );
 
       await disposeAndFlush(tester);
     });
 
     testWidgets('IndicatorResult.noMore handling for footer', (tester) async {
       final key = GlobalKey<_BasicRefreshHarnessState>();
-      await tester.pumpWidget(_BasicRefreshHarness(
-        key: key,
-        controlFinishLoad: true,
-      ));
+      await tester.pumpWidget(
+        _BasicRefreshHarness(key: key, controlFinishLoad: true),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -383,10 +384,9 @@ void main() {
 
     testWidgets('IndicatorResult.fail handling', (tester) async {
       final key = GlobalKey<_BasicRefreshHarnessState>();
-      await tester.pumpWidget(_BasicRefreshHarness(
-        key: key,
-        controlFinishRefresh: true,
-      ));
+      await tester.pumpWidget(
+        _BasicRefreshHarness(key: key, controlFinishRefresh: true),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -408,13 +408,16 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('processedDuration delays transition to inactive',
-        (tester) async {
+    testWidgets('processedDuration delays transition to inactive', (
+      tester,
+    ) async {
       final key = GlobalKey<_BasicRefreshHarnessState>();
-      await tester.pumpWidget(_BasicRefreshHarness(
-        key: key,
-        processedDuration: const Duration(milliseconds: 200),
-      ));
+      await tester.pumpWidget(
+        _BasicRefreshHarness(
+          key: key,
+          processedDuration: const Duration(milliseconds: 200),
+        ),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -438,9 +441,10 @@ void main() {
       // Should now be done or inactive
       final headerMode = state.headerState!.mode;
       expect(
-          headerMode == IndicatorMode.inactive ||
-              headerMode == IndicatorMode.done,
-          isTrue);
+        headerMode == IndicatorMode.inactive ||
+            headerMode == IndicatorMode.done,
+        isTrue,
+      );
 
       await disposeAndFlush(tester);
     });
@@ -453,8 +457,9 @@ void main() {
       await tester.pumpAndSettle();
 
       // Start drag without releasing
-      final gesture =
-          await tester.startGesture(tester.getCenter(find.byType(ListView)));
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byType(ListView)),
+      );
       await gesture.moveBy(const Offset(0, 50));
       await tester.pump();
 

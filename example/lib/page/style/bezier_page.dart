@@ -2,7 +2,7 @@ import 'package:example/config/routes.dart';
 import 'package:example/page/more/theme_page.dart';
 import 'package:example/widget/menu_bottom_bar.dart';
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -19,12 +19,8 @@ class _BezierPageState extends State<BezierPage> {
   int _count = 10;
   Axis _scrollDirection = Axis.vertical;
   int _expandedIndex = -1;
-  final _BIProperties _headerProperties = _BIProperties(
-    name: 'Header',
-  );
-  final _BIProperties _footerProperties = _BIProperties(
-    name: 'Footer',
-  );
+  final _BIProperties _headerProperties = _BIProperties(name: 'Header');
+  final _BIProperties _footerProperties = _BIProperties(name: 'Footer');
 
   @override
   void initState() {
@@ -75,145 +71,61 @@ class _BezierPageState extends State<BezierPage> {
   Widget? _spinWidget(String spin, Color color) {
     switch (spin) {
       case 'RotatingPlain':
-        return SpinKitRotatingPlain(
-          size: 32,
-          color: color,
-        );
+        return SpinKitRotatingPlain(size: 32, color: color);
       case 'DoubleBounce':
-        return SpinKitDoubleBounce(
-          size: 32,
-          color: color,
-        );
+        return SpinKitDoubleBounce(size: 32, color: color);
       case 'Wave':
-        return SpinKitWave(
-          size: 32,
-          color: color,
-        );
+        return SpinKitWave(size: 32, color: color);
       case 'WanderingCubes':
-        return SpinKitWanderingCubes(
-          size: 32,
-          color: color,
-        );
+        return SpinKitWanderingCubes(size: 32, color: color);
       case 'FadingFour':
-        return SpinKitFadingFour(
-          size: 32,
-          color: color,
-        );
+        return SpinKitFadingFour(size: 32, color: color);
       case 'FadingCube':
-        return SpinKitFadingCube(
-          size: 32,
-          color: color,
-        );
+        return SpinKitFadingCube(size: 32, color: color);
       case 'Pulse':
-        return SpinKitPulse(
-          size: 32,
-          color: color,
-        );
+        return SpinKitPulse(size: 32, color: color);
       case 'ChasingDots':
-        return SpinKitChasingDots(
-          size: 32,
-          color: color,
-        );
+        return SpinKitChasingDots(size: 32, color: color);
       case 'ThreeBounce':
-        return SpinKitThreeBounce(
-          size: 32,
-          color: color,
-        );
+        return SpinKitThreeBounce(size: 32, color: color);
       case 'Circle':
-        return SpinKitCircle(
-          size: 32,
-          color: color,
-        );
+        return SpinKitCircle(size: 32, color: color);
       case 'CubeGrid':
-        return SpinKitCubeGrid(
-          size: 32,
-          color: color,
-        );
+        return SpinKitCubeGrid(size: 32, color: color);
       case 'FadingCircle':
-        return SpinKitFadingCircle(
-          size: 32,
-          color: color,
-        );
+        return SpinKitFadingCircle(size: 32, color: color);
       case 'RotatingCircle':
-        return SpinKitRotatingCircle(
-          size: 32,
-          color: color,
-        );
+        return SpinKitRotatingCircle(size: 32, color: color);
       case 'FoldingCube':
-        return SpinKitFoldingCube(
-          size: 32,
-          color: color,
-        );
+        return SpinKitFoldingCube(size: 32, color: color);
       case 'PumpingHeart':
-        return SpinKitPumpingHeart(
-          size: 32,
-          color: color,
-        );
+        return SpinKitPumpingHeart(size: 32, color: color);
       case 'HourGlass':
-        return SpinKitHourGlass(
-          size: 32,
-          color: color,
-        );
+        return SpinKitHourGlass(size: 32, color: color);
       case 'PouringHourGlass':
-        return SpinKitPouringHourGlass(
-          size: 32,
-          color: color,
-        );
+        return SpinKitPouringHourGlass(size: 32, color: color);
       case 'PouringHourGlassRefined':
-        return SpinKitPouringHourGlassRefined(
-          size: 32,
-          color: color,
-        );
+        return SpinKitPouringHourGlassRefined(size: 32, color: color);
       case 'FadingGrid':
-        return SpinKitFadingGrid(
-          size: 32,
-          color: color,
-        );
+        return SpinKitFadingGrid(size: 32, color: color);
       case 'Ring':
-        return SpinKitRing(
-          size: 32,
-          color: color,
-        );
+        return SpinKitRing(size: 32, color: color);
       case 'Ripple':
-        return SpinKitRipple(
-          size: 32,
-          color: color,
-        );
+        return SpinKitRipple(size: 32, color: color);
       case 'SpinningCircle':
-        return SpinKitSpinningCircle(
-          size: 32,
-          color: color,
-        );
+        return SpinKitSpinningCircle(size: 32, color: color);
       case 'SpinningLines':
-        return SpinKitSpinningLines(
-          size: 32,
-          color: color,
-        );
+        return SpinKitSpinningLines(size: 32, color: color);
       case 'SquareCircle':
-        return SpinKitSquareCircle(
-          size: 32,
-          color: color,
-        );
+        return SpinKitSquareCircle(size: 32, color: color);
       case 'DualRing':
-        return SpinKitDualRing(
-          size: 32,
-          color: color,
-        );
+        return SpinKitDualRing(size: 32, color: color);
       case 'PianoWave':
-        return SpinKitPianoWave(
-          size: 32,
-          color: color,
-        );
+        return SpinKitPianoWave(size: 32, color: color);
       case 'DancingSquare':
-        return SpinKitDancingSquare(
-          size: 32,
-          color: color,
-        );
+        return SpinKitDancingSquare(size: 32, color: color);
       case 'ThreeInOut':
-        return SpinKitThreeInOut(
-          size: 32,
-          color: color,
-        );
+        return SpinKitThreeInOut(size: 32, color: color);
     }
     return null;
   }
@@ -226,9 +138,7 @@ class _BezierPageState extends State<BezierPage> {
       appBar: AppBar(
         backgroundColor: themeData.colorScheme.primary,
         foregroundColor: themeData.colorScheme.onPrimary,
-        leading: BackButton(
-          color: themeData.colorScheme.onPrimary,
-        ),
+        leading: BackButton(color: themeData.colorScheme.onPrimary),
         title: const Text('Bezier'),
       ),
       body: EasyRefresh(
@@ -242,7 +152,9 @@ class _BezierPageState extends State<BezierPage> {
           spinInCenter: _headerProperties.spinInCenter,
           onlySpin: _headerProperties.onlySpin,
           spinWidget: _spinWidget(
-              _headerProperties.spin, themeData.colorScheme.onPrimary),
+            _headerProperties.spin,
+            themeData.colorScheme.onPrimary,
+          ),
         ),
         footer: BezierFooter(
           backgroundColor: themeData.colorScheme.primary,
@@ -252,7 +164,9 @@ class _BezierPageState extends State<BezierPage> {
           spinInCenter: _footerProperties.spinInCenter,
           onlySpin: _footerProperties.onlySpin,
           spinWidget: _spinWidget(
-              _headerProperties.spin, themeData.colorScheme.onPrimary),
+            _headerProperties.spin,
+            themeData.colorScheme.onPrimary,
+          ),
         ),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));
@@ -274,7 +188,8 @@ class _BezierPageState extends State<BezierPage> {
             _count += 5;
           });
           _controller.finishLoad(
-              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
+            _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success,
+          );
         },
         child: ListView.builder(
           clipBehavior: Clip.none,
@@ -282,9 +197,7 @@ class _BezierPageState extends State<BezierPage> {
           padding: EdgeInsets.zero,
           itemCount: _count,
           itemBuilder: (ctx, index) {
-            return SkeletonItem(
-              direction: _scrollDirection,
-            );
+            return SkeletonItem(direction: _scrollDirection);
           },
         ),
       ),
@@ -308,8 +221,9 @@ class _BezierPageState extends State<BezierPage> {
                           width: 24,
                           decoration: BoxDecoration(
                             color: themeMode.color,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12)),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(12),
+                            ),
                           ),
                         ),
                       const SizedBox(width: 16),
@@ -412,22 +326,23 @@ class _BezierPageState extends State<BezierPage> {
                                 },
                               ),
                             ),
-                            const ListTile(
-                              title: Text('Spin'),
-                            ),
+                            const ListTile(title: Text('Spin')),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
                               child: Wrap(
                                 children: [
                                   for (final spin in _spins)
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          right: 8,
-                                          bottom: GetPlatform.isDesktop ||
-                                                  GetPlatform.isWeb
-                                              ? 8
-                                              : 0),
+                                        right: 8,
+                                        bottom:
+                                            GetPlatform.isDesktop ||
+                                                GetPlatform.isWeb
+                                            ? 8
+                                            : 0,
+                                      ),
                                       child: RawChip(
                                         label: Text(spin),
                                         onPressed: () {
@@ -465,7 +380,5 @@ class _BIProperties {
   bool spinInCenter = true;
   bool onlySpin = false;
 
-  _BIProperties({
-    required this.name,
-  });
+  _BIProperties({required this.name});
 }

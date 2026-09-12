@@ -1,6 +1,6 @@
 import 'package:example/util/color_utils.dart';
 import 'package:example/widget/paths_painter.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// List item.
 class ListItem extends StatelessWidget {
@@ -48,10 +48,7 @@ class ListItem extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(18)),
         ),
         alignment: Alignment.center,
-        child: Icon(
-          icon!,
-          color: ColorUtils.foregroundColorWithString(title),
-        ),
+        child: Icon(icon!, color: ColorUtils.foregroundColorWithString(title)),
       );
     }
     if (iconPaths != null) {
@@ -66,7 +63,9 @@ class ListItem extends StatelessWidget {
         child: PathsPaint(
           paths: iconPaths!,
           colors: List.filled(
-              iconPaths!.length, ColorUtils.foregroundColorWithString(title)),
+            iconPaths!.length,
+            ColorUtils.foregroundColorWithString(title),
+          ),
           width: 24,
         ),
       );
@@ -89,11 +88,10 @@ class ListItem extends StatelessWidget {
         if (divider)
           Padding(
             padding: EdgeInsets.only(
-                left: leading == null && icon == null ? 16 : 72, right: 16),
-            child: const Divider(
-              thickness: 1,
-              height: 1,
+              left: leading == null && icon == null ? 16 : 72,
+              right: 16,
             ),
+            child: const Divider(thickness: 1, height: 1),
           ),
       ],
     );

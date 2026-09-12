@@ -2,7 +2,7 @@ import 'package:example/config/routes.dart';
 import 'package:example/page/more/theme_page.dart';
 import 'package:example/widget/menu_bottom_bar.dart';
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
@@ -18,12 +18,8 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
   int _count = 10;
   Axis _scrollDirection = Axis.vertical;
   int _expandedIndex = -1;
-  final _MIProperties _headerProperties = _MIProperties(
-    name: 'Header',
-  );
-  final _MIProperties _footerProperties = _MIProperties(
-    name: 'Footer',
-  );
+  final _MIProperties _headerProperties = _MIProperties(name: 'Header');
+  final _MIProperties _footerProperties = _MIProperties(name: 'Footer');
 
   @override
   void initState() {
@@ -44,9 +40,7 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
   Widget build(BuildContext context) {
     final propertiesItems = [_headerProperties, _footerProperties];
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Material'),
-      ),
+      appBar: AppBar(title: const Text('Material')),
       body: EasyRefresh(
         clipBehavior: Clip.none,
         controller: _controller,
@@ -86,7 +80,8 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
             _count += 5;
           });
           _controller.finishLoad(
-              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
+            _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success,
+          );
         },
         child: ListView.builder(
           clipBehavior: Clip.none,
@@ -94,9 +89,7 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
           padding: EdgeInsets.zero,
           itemCount: _count,
           itemBuilder: (ctx, index) {
-            return SkeletonItem(
-              direction: _scrollDirection,
-            );
+            return SkeletonItem(direction: _scrollDirection);
           },
         ),
       ),
@@ -120,8 +113,9 @@ class _MaterialIndicatorPageState extends State<MaterialIndicatorPage> {
                           width: 24,
                           decoration: BoxDecoration(
                             color: themeMode.color,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12)),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(12),
+                            ),
                           ),
                         ),
                       const SizedBox(width: 16),
@@ -276,7 +270,5 @@ class _MIProperties {
   bool infinite = false;
   bool listSpring = false;
 
-  _MIProperties({
-    required this.name,
-  });
+  _MIProperties({required this.name});
 }

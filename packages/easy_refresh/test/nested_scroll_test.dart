@@ -1,17 +1,14 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for NestedScrollView integration
 class _NestedScrollHarness extends StatefulWidget {
   final bool isNested;
 
-  const _NestedScrollHarness({
-    super.key,
-    this.isNested = true,
-  });
+  const _NestedScrollHarness({super.key, this.isNested = true});
 
   @override
   State<_NestedScrollHarness> createState() => _NestedScrollHarnessState();
@@ -107,9 +104,7 @@ class _NestedScrollHarnessState extends State<_NestedScrollHarness> {
                   flexibleSpace: FlexibleSpaceBar(
                     background: Container(
                       color: Colors.blue.withAlpha(77),
-                      child: const Center(
-                        child: Text('Flexible Space'),
-                      ),
+                      child: const Center(child: Text('Flexible Space')),
                     ),
                   ),
                 ),
@@ -117,10 +112,8 @@ class _NestedScrollHarnessState extends State<_NestedScrollHarness> {
             },
             body: ListView.builder(
               itemCount: itemCount,
-              itemBuilder: (context, index) => ListTile(
-                key: Key('item-$index'),
-                title: Text('Item $index'),
-              ),
+              itemBuilder: (context, index) =>
+                  ListTile(key: Key('item-$index'), title: Text('Item $index')),
             ),
           ),
         ),
@@ -322,13 +315,11 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('isNested: true property works with NestedScrollView',
-        (tester) async {
+    testWidgets('isNested: true property works with NestedScrollView', (
+      tester,
+    ) async {
       final key = GlobalKey<_NestedScrollHarnessState>();
-      await tester.pumpWidget(_NestedScrollHarness(
-        key: key,
-        isNested: true,
-      ));
+      await tester.pumpWidget(_NestedScrollHarness(key: key, isNested: true));
 
       await tester.pumpAndSettle();
 
@@ -337,8 +328,9 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('Scroll controller works with NestedScrollView',
-        (tester) async {
+    testWidgets('Scroll controller works with NestedScrollView', (
+      tester,
+    ) async {
       final key = GlobalKey<_NestedScrollHarnessState>();
       await tester.pumpWidget(_NestedScrollHarness(key: key));
       final state = key.currentState!;
@@ -359,8 +351,9 @@ void main() {
   });
 
   group('EasyRefresh.builder with childBuilder Tests', () {
-    testWidgets('EasyRefresh.builder renders with childBuilder',
-        (tester) async {
+    testWidgets('EasyRefresh.builder renders with childBuilder', (
+      tester,
+    ) async {
       final key = GlobalKey<_BuilderPatternHarnessState>();
       await tester.pumpWidget(_BuilderPatternHarness(key: key));
 
@@ -464,19 +457,20 @@ void main() {
 
   group('ERScrollBehavior Tests', () {
     testWidgets('ERScrollBehavior is used by default', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: EasyRefresh(
-            onRefresh: () async {},
-            child: ListView.builder(
-              itemCount: 20,
-              itemBuilder: (context, index) => ListTile(
-                title: Text('Item $index'),
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: EasyRefresh(
+              onRefresh: () async {},
+              child: ListView.builder(
+                itemCount: 20,
+                itemBuilder: (context, index) =>
+                    ListTile(title: Text('Item $index')),
               ),
             ),
           ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -489,23 +483,24 @@ void main() {
     testWidgets('Custom scrollBehaviorBuilder can be provided', (tester) async {
       bool customBuilderCalled = false;
 
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: EasyRefresh(
-            scrollBehaviorBuilder: (physics) {
-              customBuilderCalled = true;
-              return ERScrollBehavior(physics);
-            },
-            onRefresh: () async {},
-            child: ListView.builder(
-              itemCount: 20,
-              itemBuilder: (context, index) => ListTile(
-                title: Text('Item $index'),
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: EasyRefresh(
+              scrollBehaviorBuilder: (physics) {
+                customBuilderCalled = true;
+                return ERScrollBehavior(physics);
+              },
+              onRefresh: () async {},
+              child: ListView.builder(
+                itemCount: 20,
+                itemBuilder: (context, index) =>
+                    ListTile(title: Text('Item $index')),
               ),
             ),
           ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -516,27 +511,29 @@ void main() {
   });
 
   group('Physics Passed to Child Scrollables', () {
-    testWidgets('Physics from EasyRefresh.builder is passed to child',
-        (tester) async {
+    testWidgets('Physics from EasyRefresh.builder is passed to child', (
+      tester,
+    ) async {
       ScrollPhysics? receivedPhysics;
 
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: EasyRefresh.builder(
-            onRefresh: () async {},
-            childBuilder: (context, physics) {
-              receivedPhysics = physics;
-              return ListView.builder(
-                physics: physics,
-                itemCount: 20,
-                itemBuilder: (context, index) => ListTile(
-                  title: Text('Item $index'),
-                ),
-              );
-            },
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: EasyRefresh.builder(
+              onRefresh: () async {},
+              childBuilder: (context, physics) {
+                receivedPhysics = physics;
+                return ListView.builder(
+                  physics: physics,
+                  itemCount: 20,
+                  itemBuilder: (context, index) =>
+                      ListTile(title: Text('Item $index')),
+                );
+              },
+            ),
           ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 

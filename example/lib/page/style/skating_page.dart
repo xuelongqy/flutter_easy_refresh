@@ -1,6 +1,6 @@
 import 'package:easy_refresh_skating/easy_refresh_skating.dart';
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
@@ -35,12 +35,8 @@ class _SkatingPageState extends State<SkatingPage> {
     return Scaffold(
       body: EasyRefresh(
         controller: _controller,
-        header: const SkatingHeader(
-          position: IndicatorPosition.locator,
-        ),
-        footer: const SkatingFooter(
-          position: IndicatorPosition.locator,
-        ),
+        header: const SkatingHeader(position: IndicatorPosition.locator),
+        footer: const SkatingFooter(position: IndicatorPosition.locator),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 4));
           if (!mounted) {
@@ -61,22 +57,17 @@ class _SkatingPageState extends State<SkatingPage> {
             _count += 5;
           });
           _controller.finishLoad(
-              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
+            _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success,
+          );
         },
         child: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              title: Text('Skating boy'.tr),
-              pinned: true,
-            ),
+            SliverAppBar(title: Text('Skating boy'.tr), pinned: true),
             const HeaderLocator.sliver(),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return const SkeletonItem();
-                },
-                childCount: _count,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return const SkeletonItem();
+              }, childCount: _count),
             ),
             const FooterLocator.sliver(),
           ],

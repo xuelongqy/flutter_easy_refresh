@@ -2,7 +2,7 @@ import 'package:example/config/routes.dart';
 import 'package:example/page/more/theme_page.dart';
 import 'package:example/widget/menu_bottom_bar.dart';
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
@@ -48,9 +48,7 @@ class _ClassicPageState extends State<ClassicPage> {
   Widget build(BuildContext context) {
     final propertiesItems = [_headerProperties, _footerProperties];
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Classic'.tr),
-      ),
+      appBar: AppBar(title: Text('Classic'.tr)),
       body: EasyRefresh(
         clipBehavior: Clip.none,
         controller: _controller,
@@ -115,9 +113,11 @@ class _ClassicPageState extends State<ClassicPage> {
                 setState(() {
                   _count += 5;
                 });
-                _controller.finishLoad(_count >= 20
-                    ? IndicatorResult.noMore
-                    : IndicatorResult.success);
+                _controller.finishLoad(
+                  _count >= 20
+                      ? IndicatorResult.noMore
+                      : IndicatorResult.success,
+                );
               },
         child: ListView.builder(
           clipBehavior: Clip.none,
@@ -125,9 +125,7 @@ class _ClassicPageState extends State<ClassicPage> {
           padding: EdgeInsets.zero,
           itemCount: _count,
           itemBuilder: (ctx, index) {
-            return SkeletonItem(
-              direction: _scrollDirection,
-            );
+            return SkeletonItem(direction: _scrollDirection);
           },
         ),
       ),
@@ -151,8 +149,9 @@ class _ClassicPageState extends State<ClassicPage> {
                           width: 24,
                           decoration: BoxDecoration(
                             color: themeMode.color,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12)),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(12),
+                            ),
                           ),
                         ),
                       const SizedBox(width: 16),
@@ -259,13 +258,16 @@ class _ClassicPageState extends State<ClassicPage> {
                                   child: Row(
                                     children: [
                                       Radio<MainAxisAlignment>(
-                                          value: MainAxisAlignment.center),
+                                        value: MainAxisAlignment.center,
+                                      ),
                                       Text('Center'.tr),
                                       Radio<MainAxisAlignment>(
-                                          value: MainAxisAlignment.start),
+                                        value: MainAxisAlignment.start,
+                                      ),
                                       Text('Start'.tr),
                                       Radio<MainAxisAlignment>(
-                                          value: MainAxisAlignment.end),
+                                        value: MainAxisAlignment.end,
+                                      ),
                                       Text('End'.tr),
                                     ],
                                   ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 
 void main() => runApp(const MyApp());
@@ -8,10 +8,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'EasyRefresh',
-      home: HomePage(),
-    );
+    return const MaterialApp(title: 'EasyRefresh', home: HomePage());
   }
 }
 
@@ -44,9 +41,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('EasyRefresh'),
-      ),
+      appBar: AppBar(title: const Text('EasyRefresh')),
       body: EasyRefresh(
         controller: _controller,
         header: const ClassicHeader(),
@@ -71,7 +66,8 @@ class _HomePageState extends State<HomePage> {
             _count += 5;
           });
           _controller.finishLoad(
-              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
+            _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success,
+          );
         },
         child: ListView.builder(
           itemBuilder: (context, index) {

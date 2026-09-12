@@ -26,6 +26,18 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
 - Support safe area, no more occlusion
 - Customize scroll parameters to allow lists to have different scrolling feedback and inertia
 
+## Requirements (v4.0+)
+
+Starting from 4.0.0, EasyRefresh requires **Flutter >= 3.47** and is built on the standalone
+[material_ui](https://pub.dev/packages/material_ui) / [cupertino_ui](https://pub.dev/packages/cupertino_ui) packages
+instead of `package:flutter/material.dart` and `package:flutter/cupertino.dart`.
+
+- If your app has already migrated to `material_ui` (`dart fix --apply --code=migrate_design_widgets`), nothing else is needed.
+- If your app still uses `MaterialApp` from `package:flutter/material.dart`, the indicators fall back to the default
+  `material_ui` theme. To theme and localize them, add `material_ui`'s `GlobalMaterialLocalizations.delegates` to
+  `localizationsDelegates` and wrap the app (e.g. in `MaterialApp.builder`) with a `material_ui` `Theme`, as done in
+  `example/lib/main.dart`. Otherwise stay on `easy_refresh: ^3.5.1`.
+
 ## Companion Packages
 
 For pagination helpers, use the standalone `easy_paging` [![Pub](https://img.shields.io/pub/v/easy_paging)](https://pub.dev/packages/easy_paging) package.

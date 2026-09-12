@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for ListenerHeader with IndicatorStateListenable
@@ -96,10 +96,7 @@ class _ListenerIndicatorHarnessState extends State<_ListenerIndicatorHarness> {
               valueListenable: headerListenable,
               builder: (context, state, child) {
                 if (state == null) {
-                  return const SizedBox(
-                    height: 50,
-                    child: Text('No state'),
-                  );
+                  return const SizedBox(height: 50, child: Text('No state'));
                 }
                 return Container(
                   height: 50,
@@ -180,8 +177,9 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('ValueListenableBuilder updates on state changes',
-        (tester) async {
+    testWidgets('ValueListenableBuilder updates on state changes', (
+      tester,
+    ) async {
       final key = GlobalKey<_ListenerIndicatorHarnessState>();
       await tester.pumpWidget(_ListenerIndicatorHarness(key: key));
       final state = key.currentState!;
@@ -237,11 +235,13 @@ void main() {
 
     testWidgets('High triggerOffset scenario', (tester) async {
       final key = GlobalKey<_ListenerIndicatorHarnessState>();
-      await tester.pumpWidget(_ListenerIndicatorHarness(
-        key: key,
-        triggerOffset: 200,
-        clamping: false,
-      ));
+      await tester.pumpWidget(
+        _ListenerIndicatorHarness(
+          key: key,
+          triggerOffset: 200,
+          clamping: false,
+        ),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -315,8 +315,9 @@ void main() {
   });
 
   group('IndicatorStateListenable Tests', () {
-    testWidgets('IndicatorStateListenable can add and remove listeners',
-        (tester) async {
+    testWidgets('IndicatorStateListenable can add and remove listeners', (
+      tester,
+    ) async {
       final listenable = IndicatorStateListenable();
       int callCount = 0;
 
@@ -331,8 +332,9 @@ void main() {
       // Should not throw
     });
 
-    testWidgets('IndicatorStateListenable value is null initially',
-        (tester) async {
+    testWidgets('IndicatorStateListenable value is null initially', (
+      tester,
+    ) async {
       final listenable = IndicatorStateListenable();
       expect(listenable.value, isNull);
     });
@@ -391,8 +393,9 @@ void main() {
   });
 
   group('Listener with External Widget Updates', () {
-    testWidgets('External widget updates in real-time during drag',
-        (tester) async {
+    testWidgets('External widget updates in real-time during drag', (
+      tester,
+    ) async {
       final key = GlobalKey<_ListenerIndicatorHarnessState>();
       await tester.pumpWidget(_ListenerIndicatorHarness(key: key));
       final state = key.currentState!;

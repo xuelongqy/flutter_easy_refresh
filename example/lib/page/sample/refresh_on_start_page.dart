@@ -1,5 +1,5 @@
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -34,9 +34,7 @@ class _RefreshOnStartPageState extends State<RefreshOnStartPage> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Refresh on start'.tr),
-      ),
+      appBar: AppBar(title: Text('Refresh on start'.tr)),
       body: EasyRefresh(
         controller: _controller,
         refreshOnStart: true,
@@ -83,17 +81,15 @@ class _RefreshOnStartPageState extends State<RefreshOnStartPage> {
             _count += 10;
           });
           _controller.finishLoad(
-              _count >= 30 ? IndicatorResult.noMore : IndicatorResult.success);
+            _count >= 30 ? IndicatorResult.noMore : IndicatorResult.success,
+          );
         },
         child: CustomScrollView(
           slivers: [
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return const SkeletonItem();
-                },
-                childCount: _count,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return const SkeletonItem();
+              }, childCount: _count),
             ),
           ],
         ),

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _LoadHarness extends StatefulWidget {
@@ -105,8 +105,9 @@ Future<void> _triggerBottomOverscrollLoad(
   _LoadHarnessState state,
 ) async {
   await tester.pumpAndSettle();
-  state.scrollController
-      .jumpTo(state.scrollController.position.maxScrollExtent);
+  state.scrollController.jumpTo(
+    state.scrollController.position.maxScrollExtent,
+  );
   await tester.pump();
 
   await tester.drag(find.byType(ListView), const Offset(0, -200));
@@ -255,91 +256,88 @@ void main() {
     },
   );
 
-  testWidgets(
-    'completion sync clears footer offset in clamping mode',
-    (tester) async {
-      final key = GlobalKey<_LoadHarnessState>();
-      await tester.pumpWidget(
-        _LoadHarness(
-          key: key,
-          controlFinishLoad: true,
-          processedDuration: Duration.zero,
-          clamping: true,
-        ),
-      );
-      final state = key.currentState!;
+  testWidgets('completion sync clears footer offset in clamping mode', (
+    tester,
+  ) async {
+    final key = GlobalKey<_LoadHarnessState>();
+    await tester.pumpWidget(
+      _LoadHarness(
+        key: key,
+        controlFinishLoad: true,
+        processedDuration: Duration.zero,
+        clamping: true,
+      ),
+    );
+    final state = key.currentState!;
 
-      await _triggerBottomOverscrollLoad(tester, state);
+    await _triggerBottomOverscrollLoad(tester, state);
 
-      state.appendItems(200);
-      await tester.pump();
+    state.appendItems(200);
+    await tester.pump();
 
-      state.finishLoad();
-      await tester.pump();
-      await tester.pump();
+    state.finishLoad();
+    await tester.pump();
+    await tester.pump();
 
-      expect(state.footerState, isNotNull);
-      expect(state.footerState!.mode, IndicatorMode.inactive);
-      expect(state.footerState!.offset, 0);
+    expect(state.footerState, isNotNull);
+    expect(state.footerState!.mode, IndicatorMode.inactive);
+    expect(state.footerState!.offset, 0);
 
-      await _disposeAndFlush(tester);
-    },
-  );
+    await _disposeAndFlush(tester);
+  });
 
-  testWidgets(
-    'dispose during delayed processed completion does not throw',
-    (tester) async {
-      final key = GlobalKey<_LoadHarnessState>();
-      await tester.pumpWidget(
-        _LoadHarness(
-          key: key,
-          controlFinishLoad: true,
-          processedDuration: const Duration(milliseconds: 80),
-        ),
-      );
-      final state = key.currentState!;
+  testWidgets('dispose during delayed processed completion does not throw', (
+    tester,
+  ) async {
+    final key = GlobalKey<_LoadHarnessState>();
+    await tester.pumpWidget(
+      _LoadHarness(
+        key: key,
+        controlFinishLoad: true,
+        processedDuration: const Duration(milliseconds: 80),
+      ),
+    );
+    final state = key.currentState!;
 
-      await _triggerBottomOverscrollLoad(tester, state);
+    await _triggerBottomOverscrollLoad(tester, state);
 
-      state.appendItems(200);
-      await tester.pump();
+    state.appendItems(200);
+    await tester.pump();
 
-      state.finishLoad();
-      await tester.pump(); // processed
+    state.finishLoad();
+    await tester.pump(); // processed
 
-      expect(state.footerState, isNotNull);
-      expect(state.footerState!.mode, IndicatorMode.processed);
+    expect(state.footerState, isNotNull);
+    expect(state.footerState!.mode, IndicatorMode.processed);
 
-      await tester.pumpWidget(const SizedBox.shrink());
-      await tester.pump(const Duration(milliseconds: 120));
-      await tester.pump(const Duration(milliseconds: 1));
-    },
-  );
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump(const Duration(milliseconds: 120));
+    await tester.pump(const Duration(milliseconds: 1));
+  });
 
-  testWidgets(
-    'dispose before post-frame processed completion does not throw',
-    (tester) async {
-      final key = GlobalKey<_LoadHarnessState>();
-      await tester.pumpWidget(
-        _LoadHarness(
-          key: key,
-          controlFinishLoad: true,
-          processedDuration: Duration.zero,
-        ),
-      );
-      final state = key.currentState!;
+  testWidgets('dispose before post-frame processed completion does not throw', (
+    tester,
+  ) async {
+    final key = GlobalKey<_LoadHarnessState>();
+    await tester.pumpWidget(
+      _LoadHarness(
+        key: key,
+        controlFinishLoad: true,
+        processedDuration: Duration.zero,
+      ),
+    );
+    final state = key.currentState!;
 
-      await _triggerBottomOverscrollLoad(tester, state);
+    await _triggerBottomOverscrollLoad(tester, state);
 
-      state.appendItems(200);
-      await tester.pump();
+    state.appendItems(200);
+    await tester.pump();
 
-      state.finishLoad();
-      await tester.pump(); // processed
+    state.finishLoad();
+    await tester.pump(); // processed
 
-      expect(state.footerState, isNotNull);
+    expect(state.footerState, isNotNull);
 
-      await _disposeAndFlush(tester);
-    },
-  );
+    await _disposeAndFlush(tester);
+  });
 }

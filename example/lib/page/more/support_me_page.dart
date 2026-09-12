@@ -1,7 +1,7 @@
 import 'package:example/config/routes.dart';
 import 'package:example/widget/icon/path_icons.dart';
 import 'package:example/widget/list_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,7 +30,8 @@ class _SupportMePageState extends State<SupportMePage> {
               title: Text(
                 'Support me'.tr,
                 style: TextStyle(
-                    color: Theme.of(context).textTheme.titleLarge?.color),
+                  color: Theme.of(context).textTheme.titleLarge?.color,
+                ),
               ),
               centerTitle: false,
             ),
@@ -54,11 +55,7 @@ class _SupportMePageState extends State<SupportMePage> {
                 subtitle: 'https://pub.dev/packages/easy_refresh',
                 iconPaths: PathIcons.dart,
                 onTap: () {
-                  launchUrl(
-                    Uri.parse(
-                      'https://pub.dev/packages/easy_refresh',
-                    ),
-                  );
+                  launchUrl(Uri.parse('https://pub.dev/packages/easy_refresh'));
                 },
               ),
               ListItem(
@@ -70,9 +67,9 @@ class _SupportMePageState extends State<SupportMePage> {
                     const MethodChannel(_alipayChannel)
                         .invokeMethod(_alipayDonation);
                   } else {
-                    Get.dialog(Dialog(
-                      child: Image.asset('assets/image/pay_alipay.jpg'),
-                    ));
+                    Get.dialog(
+                      Dialog(child: Image.asset('assets/image/pay_alipay.jpg')),
+                    );
                   }
                 },
               ),
@@ -81,9 +78,9 @@ class _SupportMePageState extends State<SupportMePage> {
                 subtitle: 'Wechat donation'.tr,
                 iconPaths: PathIcons.wechat,
                 onTap: () {
-                  Get.dialog(Dialog(
-                    child: Image.asset('assets/image/pay_wechat.jpg'),
-                  ));
+                  Get.dialog(
+                    Dialog(child: Image.asset('assets/image/pay_wechat.jpg')),
+                  );
                 },
               ),
               ListItem(

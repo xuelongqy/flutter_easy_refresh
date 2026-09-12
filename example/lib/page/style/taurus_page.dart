@@ -1,6 +1,6 @@
 import 'package:example/config/routes.dart';
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
@@ -65,16 +65,15 @@ class _TaurusPageState extends State<TaurusPage> {
             _count += 5;
           });
           _controller.finishLoad(
-              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
+            _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success,
+          );
         },
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
               backgroundColor: themeData.colorScheme.primary,
               foregroundColor: themeData.colorScheme.onPrimary,
-              leading: BackButton(
-                color: themeData.colorScheme.onPrimary,
-              ),
+              leading: BackButton(color: themeData.colorScheme.onPrimary),
               expandedHeight: 120,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
@@ -84,12 +83,9 @@ class _TaurusPageState extends State<TaurusPage> {
             ),
             const HeaderLocator.sliver(),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return const SkeletonItem();
-                },
-                childCount: _count,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return const SkeletonItem();
+              }, childCount: _count),
             ),
             const FooterLocator.sliver(),
           ],

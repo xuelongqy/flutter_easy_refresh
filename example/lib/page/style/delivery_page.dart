@@ -1,6 +1,6 @@
 import 'package:example/config/routes.dart';
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
@@ -36,12 +36,8 @@ class _DeliveryPageState extends State<DeliveryPage> {
     return Scaffold(
       body: EasyRefresh(
         controller: _controller,
-        header: const DeliveryHeader(
-          position: IndicatorPosition.locator,
-        ),
-        footer: const DeliveryFooter(
-          position: IndicatorPosition.locator,
-        ),
+        header: const DeliveryHeader(position: IndicatorPosition.locator),
+        footer: const DeliveryFooter(position: IndicatorPosition.locator),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 4));
           if (!mounted) {
@@ -62,7 +58,8 @@ class _DeliveryPageState extends State<DeliveryPage> {
             _count += 5;
           });
           _controller.finishLoad(
-              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
+            _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success,
+          );
         },
         child: CustomScrollView(
           slivers: [
@@ -73,12 +70,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
             ),
             const HeaderLocator.sliver(),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return const SkeletonItem();
-                },
-                childCount: _count,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return const SkeletonItem();
+              }, childCount: _count),
             ),
             const FooterLocator.sliver(),
           ],

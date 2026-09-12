@@ -1,6 +1,6 @@
 import 'package:example/config/routes.dart';
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
@@ -37,9 +37,7 @@ class _BezierCirclePageState extends State<BezierCirclePage> {
       appBar: AppBar(
         backgroundColor: themeData.colorScheme.primary,
         foregroundColor: themeData.colorScheme.onPrimary,
-        leading: BackButton(
-          color: themeData.colorScheme.onPrimary,
-        ),
+        leading: BackButton(color: themeData.colorScheme.onPrimary),
         title: Text('Bezier circle'.tr),
       ),
       body: EasyRefresh(
@@ -68,7 +66,8 @@ class _BezierCirclePageState extends State<BezierCirclePage> {
             _count += 5;
           });
           _controller.finishLoad(
-              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
+            _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success,
+          );
         },
         child: ListView.builder(
           clipBehavior: Clip.none,

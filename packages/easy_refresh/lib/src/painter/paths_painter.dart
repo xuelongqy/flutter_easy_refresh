@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:path_drawing/path_drawing.dart';
 
 /// Paths paint.
@@ -95,12 +95,7 @@ class _PathsPaintState extends State<PathsPaint> {
 
 /// Paths painter.
 class PathsPainter extends CustomPainter {
-  PathsPainter({
-    required this.paths,
-    required this.colors,
-    this.sx,
-    this.sy,
-  });
+  PathsPainter({required this.paths, required this.colors, this.sx, this.sy});
 
   /// Paths.
   final List<Path> paths;

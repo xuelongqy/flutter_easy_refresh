@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -87,9 +87,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               foregroundColor: themeData.colorScheme.onPrimary,
               expandedHeight: _expandedHeight,
               pinned: true,
-              leading: BackButton(
-                color: themeData.colorScheme.onPrimary,
-              ),
+              leading: BackButton(color: themeData.colorScheme.onPrimary),
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(
                   'Codiss',
@@ -115,7 +113,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       onTap: () {
                         launchUrl(
                           Uri.parse(
-                              'mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q'),
+                            'mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q',
+                          ),
                         );
                       },
                     ),
@@ -176,8 +175,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title: Text('Mail'.tr),
                       subtitle: const Text('xuelongqy@qq.com'),
                       onTap: () {
-                        launchUrl(Uri.parse(
-                            'mailto:xuelongqy@foxmail.com?subject=EasyRefresh&body=I found a bug'));
+                        launchUrl(
+                          Uri.parse(
+                            'mailto:xuelongqy@foxmail.com?subject=EasyRefresh&body=I found a bug',
+                          ),
+                        );
                       },
                     ),
                   ],

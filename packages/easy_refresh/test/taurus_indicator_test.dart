@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for TaurusHeader/TaurusFooter
@@ -9,11 +9,7 @@ class _TaurusIndicatorHarness extends StatefulWidget {
   final TaurusHeader? header;
   final TaurusFooter? footer;
 
-  const _TaurusIndicatorHarness({
-    super.key,
-    this.header,
-    this.footer,
-  });
+  const _TaurusIndicatorHarness({super.key, this.header, this.footer});
 
   @override
   State<_TaurusIndicatorHarness> createState() =>
@@ -75,10 +71,8 @@ class _TaurusIndicatorHarnessState extends State<_TaurusIndicatorHarness> {
             controller: scrollController,
             itemExtent: 50,
             itemCount: itemCount,
-            itemBuilder: (context, index) => ListTile(
-              key: Key('item-$index'),
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) =>
+                ListTile(key: Key('item-$index'), title: Text('Item $index')),
           ),
         ),
       ),
@@ -95,10 +89,9 @@ void main() {
   group('TaurusHeader Tests', () {
     testWidgets('TaurusHeader renders correctly', (tester) async {
       final key = GlobalKey<_TaurusIndicatorHarnessState>();
-      await tester.pumpWidget(_TaurusIndicatorHarness(
-        key: key,
-        header: const TaurusHeader(),
-      ));
+      await tester.pumpWidget(
+        _TaurusIndicatorHarness(key: key, header: const TaurusHeader()),
+      );
 
       await tester.pumpAndSettle();
 
@@ -118,12 +111,12 @@ void main() {
 
     testWidgets('TaurusHeader with custom skyColor', (tester) async {
       final key = GlobalKey<_TaurusIndicatorHarnessState>();
-      await tester.pumpWidget(_TaurusIndicatorHarness(
-        key: key,
-        header: const TaurusHeader(
-          skyColor: Colors.indigo,
+      await tester.pumpWidget(
+        _TaurusIndicatorHarness(
+          key: key,
+          header: const TaurusHeader(skyColor: Colors.indigo),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -158,10 +151,9 @@ void main() {
   group('TaurusFooter Tests', () {
     testWidgets('TaurusFooter renders correctly', (tester) async {
       final key = GlobalKey<_TaurusIndicatorHarnessState>();
-      await tester.pumpWidget(_TaurusIndicatorHarness(
-        key: key,
-        footer: const TaurusFooter(),
-      ));
+      await tester.pumpWidget(
+        _TaurusIndicatorHarness(key: key, footer: const TaurusFooter()),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -188,12 +180,12 @@ void main() {
 
     testWidgets('TaurusFooter with custom skyColor', (tester) async {
       final key = GlobalKey<_TaurusIndicatorHarnessState>();
-      await tester.pumpWidget(_TaurusIndicatorHarness(
-        key: key,
-        footer: const TaurusFooter(
-          skyColor: Colors.teal,
+      await tester.pumpWidget(
+        _TaurusIndicatorHarness(
+          key: key,
+          footer: const TaurusFooter(skyColor: Colors.teal),
         ),
-      ));
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
