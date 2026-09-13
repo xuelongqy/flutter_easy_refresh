@@ -1,5 +1,5 @@
 import 'package:easy_refresh_squats/easy_refresh_squats.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 
 void main() => runApp(const MyApp());
@@ -9,10 +9,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Squats',
-      home: HomePage(),
-    );
+    return const MaterialApp(title: 'Squats', home: HomePage());
   }
 }
 
@@ -29,9 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Squats'),
-      ),
+      appBar: AppBar(title: const Text('Squats')),
       body: EasyRefresh(
         header: const SquatsHeader(),
         footer: const SquatsFooter(),

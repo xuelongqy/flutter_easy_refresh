@@ -102,9 +102,7 @@ class ListenerFooter extends Footer {
     super.triggerWhenRelease,
     super.triggerWhenReleaseNoWait,
     super.maxOverOffset,
-  }) : super(
-          position: IndicatorPosition.custom,
-        );
+  }) : super(position: IndicatorPosition.custom);
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
@@ -126,29 +124,29 @@ abstract class SecondaryFooter extends Footer {
     super.secondaryCloseTriggerOffset,
     IndicatorStateListenable? listenable,
   }) : super(
-          triggerOffset: footer.triggerOffset,
-          clamping: footer.clamping,
-          processedDuration: footer.processedDuration,
-          spring: footer.spring,
-          horizontalSpring: footer.horizontalSpring,
-          readySpringBuilder: footer.readySpringBuilder,
-          horizontalReadySpringBuilder: footer.horizontalReadySpringBuilder,
-          springRebound: footer.springRebound,
-          frictionFactor: footer.frictionFactor,
-          horizontalFrictionFactor: footer.horizontalFrictionFactor,
-          safeArea: footer.safeArea,
-          infiniteOffset: footer.infiniteOffset,
-          hitOver: footer.hitOver,
-          infiniteHitOver: footer.infiniteHitOver,
-          position: footer.position,
-          hapticFeedback: footer.hapticFeedback,
-          notifyWhenInvisible: footer.notifyWhenInvisible,
-          listenable: listenable ?? footer.listenable,
-          triggerWhenReach: footer.triggerWhenReach,
-          triggerWhenRelease: footer.triggerWhenRelease,
-          triggerWhenReleaseNoWait: footer.triggerWhenReleaseNoWait,
-          maxOverOffset: footer.maxOverOffset,
-        );
+         triggerOffset: footer.triggerOffset,
+         clamping: footer.clamping,
+         processedDuration: footer.processedDuration,
+         spring: footer.spring,
+         horizontalSpring: footer.horizontalSpring,
+         readySpringBuilder: footer.readySpringBuilder,
+         horizontalReadySpringBuilder: footer.horizontalReadySpringBuilder,
+         springRebound: footer.springRebound,
+         frictionFactor: footer.frictionFactor,
+         horizontalFrictionFactor: footer.horizontalFrictionFactor,
+         safeArea: footer.safeArea,
+         infiniteOffset: footer.infiniteOffset,
+         hitOver: footer.hitOver,
+         infiniteHitOver: footer.infiniteHitOver,
+         position: footer.position,
+         hapticFeedback: footer.hapticFeedback,
+         notifyWhenInvisible: footer.notifyWhenInvisible,
+         listenable: listenable ?? footer.listenable,
+         triggerWhenReach: footer.triggerWhenReach,
+         triggerWhenRelease: footer.triggerWhenRelease,
+         triggerWhenReleaseNoWait: footer.triggerWhenReleaseNoWait,
+         maxOverOffset: footer.maxOverOffset,
+       );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
@@ -156,7 +154,10 @@ abstract class SecondaryFooter extends Footer {
   }
 
   Widget secondaryBuild(
-      BuildContext context, IndicatorState state, Indicator indicator);
+    BuildContext context,
+    IndicatorState state,
+    Indicator indicator,
+  );
 }
 
 /// Secondary builder footer.
@@ -176,7 +177,10 @@ class SecondaryBuilderFooter extends SecondaryFooter {
 
   @override
   Widget secondaryBuild(
-      BuildContext context, IndicatorState state, Indicator indicator) {
+    BuildContext context,
+    IndicatorState state,
+    Indicator indicator,
+  ) {
     return builder(context, state, indicator);
   }
 }
@@ -194,10 +198,10 @@ class NotLoadFooter extends Footer {
     super.hitOver,
     super.maxOverOffset,
   }) : super(
-          triggerOffset: 0,
-          infiniteOffset: null,
-          processedDuration: const Duration(seconds: 0),
-        );
+         triggerOffset: 0,
+         infiniteOffset: null,
+         processedDuration: const Duration(seconds: 0),
+       );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
@@ -241,39 +245,39 @@ class OverrideFooter extends Footer {
     bool? triggerWhenReleaseNoWait,
     double? maxOverOffset,
   }) : super(
-          triggerOffset: triggerOffset ?? footer.triggerOffset,
-          clamping: clamping ?? footer.clamping,
-          processedDuration: processedDuration ?? footer.processedDuration,
-          spring: spring ?? footer.spring,
-          horizontalSpring: horizontalSpring ?? footer.horizontalSpring,
-          readySpringBuilder: readySpringBuilder ?? footer.readySpringBuilder,
-          horizontalReadySpringBuilder: horizontalReadySpringBuilder ??
-              footer.horizontalReadySpringBuilder,
-          springRebound: springRebound ?? footer.springRebound,
-          frictionFactor: frictionFactor ?? footer.frictionFactor,
-          horizontalFrictionFactor:
-              horizontalFrictionFactor ?? footer.horizontalFrictionFactor,
-          safeArea: safeArea ?? footer.safeArea,
-          infiniteOffset: infiniteOffset ?? footer.infiniteOffset,
-          hitOver: hitOver ?? footer.hitOver,
-          infiniteHitOver: infiniteHitOver ?? footer.infiniteHitOver,
-          position: position ?? footer.position,
-          hapticFeedback: hapticFeedback ?? footer.hapticFeedback,
-          secondaryTriggerOffset:
-              secondaryTriggerOffset ?? footer.secondaryTriggerOffset,
-          secondaryVelocity: secondaryVelocity ?? footer.secondaryVelocity,
-          secondaryDimension: secondaryDimension ?? footer.secondaryDimension,
-          secondaryCloseTriggerOffset:
-              secondaryCloseTriggerOffset ?? footer.secondaryCloseTriggerOffset,
-          notifyWhenInvisible:
-              notifyWhenInvisible ?? footer.notifyWhenInvisible,
-          listenable: listenable ?? footer.listenable,
-          triggerWhenReach: triggerWhenReach ?? footer.triggerWhenReach,
-          triggerWhenRelease: triggerWhenRelease ?? footer.triggerWhenRelease,
-          triggerWhenReleaseNoWait:
-              triggerWhenReleaseNoWait ?? footer.triggerWhenReleaseNoWait,
-          maxOverOffset: maxOverOffset ?? footer.maxOverOffset,
-        );
+         triggerOffset: triggerOffset ?? footer.triggerOffset,
+         clamping: clamping ?? footer.clamping,
+         processedDuration: processedDuration ?? footer.processedDuration,
+         spring: spring ?? footer.spring,
+         horizontalSpring: horizontalSpring ?? footer.horizontalSpring,
+         readySpringBuilder: readySpringBuilder ?? footer.readySpringBuilder,
+         horizontalReadySpringBuilder:
+             horizontalReadySpringBuilder ??
+             footer.horizontalReadySpringBuilder,
+         springRebound: springRebound ?? footer.springRebound,
+         frictionFactor: frictionFactor ?? footer.frictionFactor,
+         horizontalFrictionFactor:
+             horizontalFrictionFactor ?? footer.horizontalFrictionFactor,
+         safeArea: safeArea ?? footer.safeArea,
+         infiniteOffset: infiniteOffset ?? footer.infiniteOffset,
+         hitOver: hitOver ?? footer.hitOver,
+         infiniteHitOver: infiniteHitOver ?? footer.infiniteHitOver,
+         position: position ?? footer.position,
+         hapticFeedback: hapticFeedback ?? footer.hapticFeedback,
+         secondaryTriggerOffset:
+             secondaryTriggerOffset ?? footer.secondaryTriggerOffset,
+         secondaryVelocity: secondaryVelocity ?? footer.secondaryVelocity,
+         secondaryDimension: secondaryDimension ?? footer.secondaryDimension,
+         secondaryCloseTriggerOffset:
+             secondaryCloseTriggerOffset ?? footer.secondaryCloseTriggerOffset,
+         notifyWhenInvisible: notifyWhenInvisible ?? footer.notifyWhenInvisible,
+         listenable: listenable ?? footer.listenable,
+         triggerWhenReach: triggerWhenReach ?? footer.triggerWhenReach,
+         triggerWhenRelease: triggerWhenRelease ?? footer.triggerWhenRelease,
+         triggerWhenReleaseNoWait:
+             triggerWhenReleaseNoWait ?? footer.triggerWhenReleaseNoWait,
+         maxOverOffset: maxOverOffset ?? footer.maxOverOffset,
+       );
 
   @override
   Widget build(BuildContext context, IndicatorState state) {

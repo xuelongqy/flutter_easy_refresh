@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for ClassicHeader/ClassicFooter
@@ -10,11 +10,7 @@ class _ClassicIndicatorHarness extends StatefulWidget {
   final ClassicFooter? footer;
   final bool useDefaultIndicators = false;
 
-  const _ClassicIndicatorHarness({
-    super.key,
-    this.header,
-    this.footer,
-  });
+  const _ClassicIndicatorHarness({super.key, this.header, this.footer});
 
   @override
   State<_ClassicIndicatorHarness> createState() =>
@@ -79,10 +75,8 @@ class _ClassicIndicatorHarnessState extends State<_ClassicIndicatorHarness> {
             controller: scrollController,
             itemExtent: 50,
             itemCount: itemCount,
-            itemBuilder: (context, index) => ListTile(
-              key: Key('item-$index'),
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) =>
+                ListTile(key: Key('item-$index'), title: Text('Item $index')),
           ),
         ),
       ),
@@ -100,10 +94,9 @@ void main() {
   group('ClassicHeader Tests', () {
     testWidgets('ClassicHeader renders correctly', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        header: const ClassicHeader(),
-      ));
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(key: key, header: const ClassicHeader()),
+      );
 
       await tester.pumpAndSettle();
 
@@ -123,12 +116,12 @@ void main() {
 
     testWidgets('ClassicHeader with custom dragText', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        header: const ClassicHeader(
-          dragText: 'Custom drag text',
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          header: const ClassicHeader(dragText: 'Custom drag text'),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -150,12 +143,12 @@ void main() {
 
     testWidgets('ClassicHeader with custom armedText', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        header: const ClassicHeader(
-          armedText: 'Release now!',
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          header: const ClassicHeader(armedText: 'Release now!'),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -178,12 +171,12 @@ void main() {
 
     testWidgets('ClassicHeader with custom processingText', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        header: const ClassicHeader(
-          processingText: 'Loading data...',
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          header: const ClassicHeader(processingText: 'Loading data...'),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -206,12 +199,12 @@ void main() {
 
     testWidgets('ClassicHeader with showText: false', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        header: const ClassicHeader(
-          showText: false,
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          header: const ClassicHeader(showText: false),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -232,12 +225,12 @@ void main() {
 
     testWidgets('ClassicHeader with showMessage: false', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        header: const ClassicHeader(
-          showMessage: false,
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          header: const ClassicHeader(showMessage: false),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -260,12 +253,12 @@ void main() {
 
     testWidgets('ClassicHeader with custom triggerOffset', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        header: const ClassicHeader(
-          triggerOffset: 100,
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          header: const ClassicHeader(triggerOffset: 100),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -289,12 +282,14 @@ void main() {
     testWidgets('ClassicHeader mainAxisAlignment options', (tester) async {
       // Test MainAxisAlignment.start
       var key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        header: const ClassicHeader(
-          mainAxisAlignment: MainAxisAlignment.start,
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          header: const ClassicHeader(
+            mainAxisAlignment: MainAxisAlignment.start,
+          ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -310,12 +305,12 @@ void main() {
 
       // Test MainAxisAlignment.end
       key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        header: const ClassicHeader(
-          mainAxisAlignment: MainAxisAlignment.end,
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          header: const ClassicHeader(mainAxisAlignment: MainAxisAlignment.end),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -333,12 +328,12 @@ void main() {
 
     testWidgets('ClassicHeader with clamping: true', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        header: const ClassicHeader(
-          clamping: true,
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          header: const ClassicHeader(clamping: true),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -358,12 +353,12 @@ void main() {
 
     testWidgets('ClassicHeader with backgroundColor', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        header: const ClassicHeader(
-          backgroundColor: Colors.blue,
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          header: const ClassicHeader(backgroundColor: Colors.blue),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -384,10 +379,9 @@ void main() {
   group('ClassicFooter Tests', () {
     testWidgets('ClassicFooter renders correctly', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        footer: const ClassicFooter(),
-      ));
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(key: key, footer: const ClassicFooter()),
+      );
 
       await tester.pumpAndSettle();
 
@@ -412,12 +406,12 @@ void main() {
 
     testWidgets('ClassicFooter with infiniteOffset', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        footer: const ClassicFooter(
-          infiniteOffset: 70,
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          footer: const ClassicFooter(infiniteOffset: 70),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -440,18 +434,20 @@ void main() {
 
     testWidgets('ClassicFooter with custom text properties', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        footer: const ClassicFooter(
-          dragText: 'Pull up to load',
-          armedText: 'Release to load',
-          processingText: 'Loading more...',
-          processedText: 'Load complete',
-          noMoreText: 'No more items',
-          failedText: 'Load failed',
-          infiniteOffset: null,
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          footer: const ClassicFooter(
+            dragText: 'Pull up to load',
+            armedText: 'Release to load',
+            processingText: 'Loading more...',
+            processedText: 'Load complete',
+            noMoreText: 'No more items',
+            failedText: 'Load failed',
+            infiniteOffset: null,
+          ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -479,13 +475,15 @@ void main() {
 
     testWidgets('ClassicFooter with triggerWhenReach', (tester) async {
       final key = GlobalKey<_ClassicIndicatorHarnessState>();
-      await tester.pumpWidget(_ClassicIndicatorHarness(
-        key: key,
-        footer: const ClassicFooter(
-          triggerWhenReach: true,
-          infiniteOffset: null,
+      await tester.pumpWidget(
+        _ClassicIndicatorHarness(
+          key: key,
+          footer: const ClassicFooter(
+            triggerWhenReach: true,
+            infiniteOffset: null,
+          ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -520,14 +518,22 @@ void main() {
     testWidgets('ClassicHeader has correct default texts', (tester) async {
       const header = ClassicHeader();
 
-      expect(header.dragText,
-          isNull); // Uses 'Pull to refresh' as default in build
       expect(
-          header.armedText, isNull); // Uses 'Release ready' as default in build
-      expect(header.processingText,
-          isNull); // Uses 'Refreshing...' as default in build
+        header.dragText,
+        isNull,
+      ); // Uses 'Pull to refresh' as default in build
       expect(
-          header.processedText, isNull); // Uses 'Succeeded' as default in build
+        header.armedText,
+        isNull,
+      ); // Uses 'Release ready' as default in build
+      expect(
+        header.processingText,
+        isNull,
+      ); // Uses 'Refreshing...' as default in build
+      expect(
+        header.processedText,
+        isNull,
+      ); // Uses 'Succeeded' as default in build
       expect(header.noMoreText, isNull); // Uses 'No more' as default in build
       expect(header.failedText, isNull); // Uses 'Failed' as default in build
     });
@@ -536,13 +542,21 @@ void main() {
       const footer = ClassicFooter();
 
       expect(
-          footer.dragText, isNull); // Uses 'Pull to load' as default in build
+        footer.dragText,
+        isNull,
+      ); // Uses 'Pull to load' as default in build
       expect(
-          footer.armedText, isNull); // Uses 'Release ready' as default in build
-      expect(footer.processingText,
-          isNull); // Uses 'Loading...' as default in build
+        footer.armedText,
+        isNull,
+      ); // Uses 'Release ready' as default in build
       expect(
-          footer.processedText, isNull); // Uses 'Succeeded' as default in build
+        footer.processingText,
+        isNull,
+      ); // Uses 'Loading...' as default in build
+      expect(
+        footer.processedText,
+        isNull,
+      ); // Uses 'Succeeded' as default in build
       expect(footer.noMoreText, isNull); // Uses 'No more' as default in build
       expect(footer.failedText, isNull); // Uses 'Failed' as default in build
     });
@@ -574,14 +588,16 @@ void main() {
       expect(footer.infiniteOffset, 70);
     });
 
-    testWidgets('ClassicHeader default mainAxisAlignment is center',
-        (tester) async {
+    testWidgets('ClassicHeader default mainAxisAlignment is center', (
+      tester,
+    ) async {
       const header = ClassicHeader();
       expect(header.mainAxisAlignment, MainAxisAlignment.center);
     });
 
-    testWidgets('ClassicFooter default mainAxisAlignment is start',
-        (tester) async {
+    testWidgets('ClassicFooter default mainAxisAlignment is start', (
+      tester,
+    ) async {
       const footer = ClassicFooter();
       expect(footer.mainAxisAlignment, MainAxisAlignment.start);
     });

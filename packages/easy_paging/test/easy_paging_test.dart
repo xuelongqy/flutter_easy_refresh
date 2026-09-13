@@ -1,6 +1,6 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:easy_paging/easy_paging.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Simple data model for testing
@@ -136,10 +136,7 @@ class TestEasyPagingState
     if (widget.itemBuilder != null) {
       return buildItemByBuilder(context, index, item);
     }
-    return ListTile(
-      key: Key('paging-item-${item.id}'),
-      title: Text(item.name),
-    );
+    return ListTile(key: Key('paging-item-${item.id}'), title: Text(item.name));
   }
 }
 
@@ -237,13 +234,13 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('EasyPaging with refreshOnStart loads data on mount',
-        (tester) async {
+    testWidgets('EasyPaging with refreshOnStart loads data on mount', (
+      tester,
+    ) async {
       final key = GlobalKey<_EasyPagingHarnessState>();
-      await tester.pumpWidget(_EasyPagingHarness(
-        key: key,
-        refreshOnStart: true,
-      ));
+      await tester.pumpWidget(
+        _EasyPagingHarness(key: key, refreshOnStart: true),
+      );
       final state = key.currentState!;
 
       // Process initial frames and wait for refresh
@@ -269,10 +266,9 @@ void main() {
   group('EasyPaging onRefresh and onLoad Callbacks', () {
     testWidgets('onRefresh triggers when pulling down', (tester) async {
       final key = GlobalKey<_EasyPagingHarnessState>();
-      await tester.pumpWidget(_EasyPagingHarness(
-        key: key,
-        refreshOnStart: true,
-      ));
+      await tester.pumpWidget(
+        _EasyPagingHarness(key: key, refreshOnStart: true),
+      );
       final state = key.currentState!;
 
       // Wait for initial refresh
@@ -294,11 +290,13 @@ void main() {
 
     testWidgets('onLoad triggers when scrolling to bottom', (tester) async {
       final key = GlobalKey<_EasyPagingHarnessState>();
-      await tester.pumpWidget(_EasyPagingHarness(
-        key: key,
-        refreshOnStart: true,
-        itemsPerPage: 20, // More items to fill the screen
-      ));
+      await tester.pumpWidget(
+        _EasyPagingHarness(
+          key: key,
+          refreshOnStart: true,
+          itemsPerPage: 20, // More items to fill the screen
+        ),
+      );
       final state = key.currentState!;
 
       // Wait for initial refresh
@@ -323,12 +321,14 @@ void main() {
   group('EasyPaging State Management Tests', () {
     testWidgets('page, total, totalPage state management', (tester) async {
       final key = GlobalKey<_EasyPagingHarnessState>();
-      await tester.pumpWidget(_EasyPagingHarness(
-        key: key,
-        refreshOnStart: true,
-        itemsPerPage: 10,
-        maxPages: 3,
-      ));
+      await tester.pumpWidget(
+        _EasyPagingHarness(
+          key: key,
+          refreshOnStart: true,
+          itemsPerPage: 10,
+          maxPages: 3,
+        ),
+      );
       final state = key.currentState!;
 
       // Wait for initial refresh with pump loop
@@ -356,11 +356,9 @@ void main() {
 
     testWidgets('count and getItem work correctly', (tester) async {
       final key = GlobalKey<_EasyPagingHarnessState>();
-      await tester.pumpWidget(_EasyPagingHarness(
-        key: key,
-        refreshOnStart: true,
-        itemsPerPage: 5,
-      ));
+      await tester.pumpWidget(
+        _EasyPagingHarness(key: key, refreshOnStart: true, itemsPerPage: 5),
+      );
       final state = key.currentState!;
 
       // Wait for initial refresh with pump loop
@@ -387,20 +385,19 @@ void main() {
 
   group('EasyPaging Empty State Tests', () {
     testWidgets('Empty state widget shows when no data', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: TestEasyPaging(
-            itemsPerPage: 0, // No items
-            emptyWidgetBuilder: (context) => const Center(
-              child: Text(
-                'No data available',
-                key: Key('empty-widget'),
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TestEasyPaging(
+              itemsPerPage: 0, // No items
+              emptyWidgetBuilder: (context) => const Center(
+                child: Text('No data available', key: Key('empty-widget')),
               ),
+              refreshOnStart: true,
             ),
-            refreshOnStart: true,
           ),
         ),
-      ));
+      );
 
       // Wait for initial load with proper timing
       await tester.pump();
@@ -417,20 +414,21 @@ void main() {
   });
 
   group('EasyPaging Refresh On Start Widget Tests', () {
-    testWidgets('refreshOnStartWidgetBuilder shows during initial load',
-        (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: TestEasyPaging(
-            refreshOnStart: true,
-            refreshOnStartWidgetBuilder: (context) => const Center(
-              child: CircularProgressIndicator(
-                key: Key('loading-indicator'),
+    testWidgets('refreshOnStartWidgetBuilder shows during initial load', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TestEasyPaging(
+              refreshOnStart: true,
+              refreshOnStartWidgetBuilder: (context) => const Center(
+                child: CircularProgressIndicator(key: Key('loading-indicator')),
               ),
             ),
           ),
         ),
-      ));
+      );
 
       // The loading indicator might be visible briefly during refresh
       await tester.pump();
@@ -448,12 +446,14 @@ void main() {
   group('EasyPaging isNoMore Tests', () {
     testWidgets('isNoMore returns true when all pages loaded', (tester) async {
       final key = GlobalKey<_EasyPagingHarnessState>();
-      await tester.pumpWidget(_EasyPagingHarness(
-        key: key,
-        refreshOnStart: true,
-        itemsPerPage: 10,
-        maxPages: 2,
-      ));
+      await tester.pumpWidget(
+        _EasyPagingHarness(
+          key: key,
+          refreshOnStart: true,
+          itemsPerPage: 10,
+          maxPages: 2,
+        ),
+      );
       final state = key.currentState!;
 
       // Wait for initial refresh with pump loop
@@ -496,10 +496,9 @@ void main() {
 
   group('EasyPaging Properties Tests', () {
     testWidgets('useDefaultPhysics property works', (tester) async {
-      await tester.pumpWidget(const _EasyPagingHarness(
-        refreshOnStart: true,
-        useDefaultPhysics: true,
-      ));
+      await tester.pumpWidget(
+        const _EasyPagingHarness(refreshOnStart: true, useDefaultPhysics: true),
+      );
 
       await tester.pumpAndSettle();
 
@@ -511,14 +510,13 @@ void main() {
     testWidgets('controller property works', (tester) async {
       final controller = EasyRefreshController();
 
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: TestEasyPaging(
-            controller: controller,
-            refreshOnStart: true,
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TestEasyPaging(controller: controller, refreshOnStart: true),
           ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -530,11 +528,13 @@ void main() {
 
     testWidgets('builder path respects enableRefresh false', (tester) async {
       final key = GlobalKey<_EasyPagingHarnessState>();
-      await tester.pumpWidget(_EasyPagingHarness(
-        key: key,
-        refreshOnStart: true,
-        enableRefresh: false,
-      ));
+      await tester.pumpWidget(
+        _EasyPagingHarness(
+          key: key,
+          refreshOnStart: true,
+          enableRefresh: false,
+        ),
+      );
       final state = key.currentState!;
 
       for (int i = 0; i < 20; i++) {
@@ -548,11 +548,9 @@ void main() {
 
     testWidgets('builder path respects enableLoad false', (tester) async {
       final key = GlobalKey<_EasyPagingHarnessState>();
-      await tester.pumpWidget(_EasyPagingHarness(
-        key: key,
-        refreshOnStart: true,
-        enableLoad: false,
-      ));
+      await tester.pumpWidget(
+        _EasyPagingHarness(key: key, refreshOnStart: true, enableLoad: false),
+      );
       final state = key.currentState!;
 
       await tester.pump();
@@ -576,20 +574,22 @@ void main() {
 
   group('EasyPaging Custom Item Builder Tests', () {
     testWidgets('Custom itemBuilder is used', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: TestEasyPaging(
-            refreshOnStart: true,
-            itemsPerPage: 5,
-            itemBuilder: (context, index, item) => Container(
-              key: Key('custom-item-${item.id}'),
-              height: 50,
-              color: Colors.blue.withAlpha(26),
-              child: Text('Custom: ${item.name}'),
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TestEasyPaging(
+              refreshOnStart: true,
+              itemsPerPage: 5,
+              itemBuilder: (context, index, item) => Container(
+                key: Key('custom-item-${item.id}'),
+                height: 50,
+                color: Colors.blue.withAlpha(26),
+                child: Text('Custom: ${item.name}'),
+              ),
             ),
           ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 

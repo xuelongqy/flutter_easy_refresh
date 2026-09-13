@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
@@ -46,9 +46,11 @@ class _PageViewPageState extends State<PageViewPage> {
                     : Axis.horizontal;
               });
             },
-            icon: Icon(_scrollDirection == Axis.horizontal
-                ? Icons.horizontal_distribute
-                : Icons.vertical_distribute),
+            icon: Icon(
+              _scrollDirection == Axis.horizontal
+                  ? Icons.horizontal_distribute
+                  : Icons.vertical_distribute,
+            ),
           ),
         ],
       ),
@@ -95,7 +97,8 @@ class _PageViewPageState extends State<PageViewPage> {
             _count += 5;
           });
           _controller.finishLoad(
-              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
+            _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success,
+          );
         },
         child: PageView.builder(
           controller: _pageController,
@@ -103,9 +106,7 @@ class _PageViewPageState extends State<PageViewPage> {
           itemBuilder: (context, index) {
             return Card(
               margin: const EdgeInsets.all(16),
-              child: Center(
-                child: Text('${index + 1}'),
-              ),
+              child: Center(child: Text('${index + 1}')),
             );
           },
           itemCount: _count,

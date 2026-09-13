@@ -1,7 +1,7 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:material_ui/material_ui.dart';
 
 class CupertinoIndicatorPage extends StatefulWidget {
   const CupertinoIndicatorPage({super.key});
@@ -54,9 +54,11 @@ class _CupertinoIndicatorPageState extends State<CupertinoIndicatorPage> {
                           : Axis.horizontal;
                     });
                   },
-                  icon: Icon(_scrollDirection == Axis.horizontal
-                      ? Icons.horizontal_distribute
-                      : Icons.vertical_distribute),
+                  icon: Icon(
+                    _scrollDirection == Axis.horizontal
+                        ? Icons.horizontal_distribute
+                        : Icons.vertical_distribute,
+                  ),
                 ),
               ),
         child: SafeArea(
@@ -70,9 +72,7 @@ class _CupertinoIndicatorPageState extends State<CupertinoIndicatorPage> {
               position: IndicatorPosition.locator,
               safeArea: false,
             ),
-            footer: const CupertinoFooter(
-              position: IndicatorPosition.locator,
-            ),
+            footer: const CupertinoFooter(position: IndicatorPosition.locator),
             onRefresh: () async {
               await Future.delayed(const Duration(seconds: 2));
               if (!mounted) {
@@ -92,9 +92,9 @@ class _CupertinoIndicatorPageState extends State<CupertinoIndicatorPage> {
               setState(() {
                 _count += 5;
               });
-              _controller.finishLoad(_count >= 20
-                  ? IndicatorResult.noMore
-                  : IndicatorResult.success);
+              _controller.finishLoad(
+                _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success,
+              );
             },
             child: CustomScrollView(
               scrollDirection: _scrollDirection,
@@ -116,21 +116,18 @@ class _CupertinoIndicatorPageState extends State<CupertinoIndicatorPage> {
                               : Axis.horizontal;
                         });
                       },
-                      icon: Icon(_scrollDirection == Axis.horizontal
-                          ? Icons.horizontal_distribute
-                          : Icons.vertical_distribute),
+                      icon: Icon(
+                        _scrollDirection == Axis.horizontal
+                            ? Icons.horizontal_distribute
+                            : Icons.vertical_distribute,
+                      ),
                     ),
                   ),
                 const HeaderLocator.sliver(),
                 SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return SkeletonItem(
-                        direction: _scrollDirection,
-                      );
-                    },
-                    childCount: _count,
-                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    return SkeletonItem(direction: _scrollDirection);
+                  }, childCount: _count),
                 ),
                 const FooterLocator.sliver(),
               ],

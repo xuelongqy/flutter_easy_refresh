@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for PhoenixHeader/PhoenixFooter
@@ -9,11 +9,7 @@ class _PhoenixIndicatorHarness extends StatefulWidget {
   final PhoenixHeader? header;
   final PhoenixFooter? footer;
 
-  const _PhoenixIndicatorHarness({
-    super.key,
-    this.header,
-    this.footer,
-  });
+  const _PhoenixIndicatorHarness({super.key, this.header, this.footer});
 
   @override
   State<_PhoenixIndicatorHarness> createState() =>
@@ -75,10 +71,8 @@ class _PhoenixIndicatorHarnessState extends State<_PhoenixIndicatorHarness> {
             controller: scrollController,
             itemExtent: 50,
             itemCount: itemCount,
-            itemBuilder: (context, index) => ListTile(
-              key: Key('item-$index'),
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) =>
+                ListTile(key: Key('item-$index'), title: Text('Item $index')),
           ),
         ),
       ),
@@ -95,10 +89,9 @@ void main() {
   group('PhoenixHeader Tests', () {
     testWidgets('PhoenixHeader renders correctly', (tester) async {
       final key = GlobalKey<_PhoenixIndicatorHarnessState>();
-      await tester.pumpWidget(_PhoenixIndicatorHarness(
-        key: key,
-        header: const PhoenixHeader(),
-      ));
+      await tester.pumpWidget(
+        _PhoenixIndicatorHarness(key: key, header: const PhoenixHeader()),
+      );
 
       await tester.pumpAndSettle();
 
@@ -118,12 +111,12 @@ void main() {
 
     testWidgets('PhoenixHeader with custom skyColor', (tester) async {
       final key = GlobalKey<_PhoenixIndicatorHarnessState>();
-      await tester.pumpWidget(_PhoenixIndicatorHarness(
-        key: key,
-        header: const PhoenixHeader(
-          skyColor: Colors.orange,
+      await tester.pumpWidget(
+        _PhoenixIndicatorHarness(
+          key: key,
+          header: const PhoenixHeader(skyColor: Colors.orange),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -158,10 +151,9 @@ void main() {
   group('PhoenixFooter Tests', () {
     testWidgets('PhoenixFooter renders correctly', (tester) async {
       final key = GlobalKey<_PhoenixIndicatorHarnessState>();
-      await tester.pumpWidget(_PhoenixIndicatorHarness(
-        key: key,
-        footer: const PhoenixFooter(),
-      ));
+      await tester.pumpWidget(
+        _PhoenixIndicatorHarness(key: key, footer: const PhoenixFooter()),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -188,12 +180,12 @@ void main() {
 
     testWidgets('PhoenixFooter with custom skyColor', (tester) async {
       final key = GlobalKey<_PhoenixIndicatorHarnessState>();
-      await tester.pumpWidget(_PhoenixIndicatorHarness(
-        key: key,
-        footer: const PhoenixFooter(
-          skyColor: Colors.purple,
+      await tester.pumpWidget(
+        _PhoenixIndicatorHarness(
+          key: key,
+          footer: const PhoenixFooter(skyColor: Colors.purple),
         ),
-      ));
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();

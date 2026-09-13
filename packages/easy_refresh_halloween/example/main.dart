@@ -1,5 +1,5 @@
 import 'package:easy_refresh_halloween/easy_refresh_halloween.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 
 void main() => runApp(const MyApp());
@@ -9,10 +9,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Halloween',
-      home: HomePage(),
-    );
+    return const MaterialApp(title: 'Halloween', home: HomePage());
   }
 }
 
@@ -29,9 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Halloween'),
-      ),
+      appBar: AppBar(title: const Text('Halloween')),
       body: EasyRefresh(
         header: const HalloweenHeader(),
         footer: const HalloweenFooter(),

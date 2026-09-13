@@ -90,8 +90,10 @@ class _BezierIndicatorState extends State<_BezierIndicator>
   void initState() {
     super.initState();
     widget.state.notifier.addModeChangeListener(_onModeChange);
-    _animationController =
-        AnimationController(vsync: this, duration: _animationDuration);
+    _animationController = AnimationController(
+      vsync: this,
+      duration: _animationDuration,
+    );
   }
 
   @override
@@ -119,7 +121,8 @@ class _BezierIndicatorState extends State<_BezierIndicator>
     final extent = (!widget.spinInCenter && _offset > _actualTriggerOffset)
         ? _actualTriggerOffset
         : null;
-    final full = widget.spinInCenter ||
+    final full =
+        widget.spinInCenter ||
         (!widget.spinInCenter && _offset <= _actualTriggerOffset);
     return Positioned(
       top: (_axis == Axis.vertical && _reverse && !full) ? null : 0,
@@ -143,11 +146,11 @@ class _BezierIndicatorState extends State<_BezierIndicator>
                 Positioned(
                   left: _axis == Axis.vertical
                       ? ((length - ballSize) / 2) +
-                          (ballArea / 8 * scale) * (i - 3)
+                            (ballArea / 8 * scale) * (i - 3)
                       : null,
                   bottom: _axis == Axis.horizontal
                       ? ((length - ballSize) / 2) +
-                          (ballArea / 8 * scale) * (i - 3)
+                            (ballArea / 8 * scale) * (i - 3)
                       : null,
                   child: AnimatedBuilder(
                     animation: _animationController,
@@ -163,7 +166,8 @@ class _BezierIndicatorState extends State<_BezierIndicator>
                             : 0;
                       }
                       return Opacity(
-                        opacity: (1 - ((0.8 / 3) * (i - 3).abs())) *
+                        opacity:
+                            (1 - ((0.8 / 3) * (i - 3).abs())) *
                             math.min(1, scale) *
                             aValue,
                         child: Container(
@@ -171,8 +175,9 @@ class _BezierIndicatorState extends State<_BezierIndicator>
                           height: ballSize,
                           decoration: BoxDecoration(
                             color: _foregroundColor,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(ballSize / 2)),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(ballSize / 2),
+                            ),
                           ),
                         ),
                       );
@@ -192,11 +197,9 @@ class _BezierIndicatorState extends State<_BezierIndicator>
     if (widget.spinBuilder != null) {
       spinWidget = widget.spinBuilder!(context, _animationController.value);
     } else {
-      spinWidget = widget.spinWidget ??
-          _SpinKitHourGlass(
-            color: _foregroundColor,
-            size: 32,
-          );
+      spinWidget =
+          widget.spinWidget ??
+          _SpinKitHourGlass(color: _foregroundColor, size: 32);
     }
     Widget animatedWidget = AnimatedBuilder(
       animation: _animationController,
@@ -223,9 +226,7 @@ class _BezierIndicatorState extends State<_BezierIndicator>
             : null,
         height: _axis == Axis.vertical ? _actualTriggerOffset : null,
         width: _axis == Axis.vertical ? null : _actualTriggerOffset,
-        child: Center(
-          child: animatedWidget,
-        ),
+        child: Center(child: animatedWidget),
       );
     }
     if (!widget.spinInCenter) {
@@ -236,9 +237,7 @@ class _BezierIndicatorState extends State<_BezierIndicator>
         right: (_axis == Axis.horizontal && !_reverse) ? null : 0,
         height: _axis == Axis.vertical ? _actualTriggerOffset : null,
         width: _axis == Axis.vertical ? null : _actualTriggerOffset,
-        child: Center(
-          child: animatedWidget,
-        ),
+        child: Center(child: animatedWidget),
       );
     }
     return animatedWidget;
@@ -275,16 +274,16 @@ class _BezierIndicatorState extends State<_BezierIndicator>
           Positioned(
             left: _axis == Axis.horizontal
                 ? (_offset < _actualTriggerOffset
-                    ? -(_actualTriggerOffset - _offset) / 2
-                    : 0)
+                      ? -(_actualTriggerOffset - _offset) / 2
+                      : 0)
                 : 0,
             right: _axis == Axis.horizontal
                 ? (_offset < _actualTriggerOffset ? null : 0)
                 : 0,
             top: _axis == Axis.vertical
                 ? (_offset < _actualTriggerOffset
-                    ? -(_actualTriggerOffset - _offset) / 2
-                    : 0)
+                      ? -(_actualTriggerOffset - _offset) / 2
+                      : 0)
                 : 0,
             bottom: _axis == Axis.vertical
                 ? (_offset < _actualTriggerOffset ? null : 0)
@@ -296,12 +295,9 @@ class _BezierIndicatorState extends State<_BezierIndicator>
                 ? (_offset < _actualTriggerOffset ? _actualTriggerOffset : null)
                 : null,
             child: Center(
-              child: widget.noMoreWidget ??
-                  Icon(
-                    Icons.inbox_outlined,
-                    color: _foregroundColor,
-                    size: 32,
-                  ),
+              child:
+                  widget.noMoreWidget ??
+                  Icon(Icons.inbox_outlined, color: _foregroundColor, size: 32),
             ),
           ),
       ],

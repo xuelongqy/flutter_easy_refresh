@@ -70,7 +70,10 @@ class _BubblesIndicatorState extends State<_BubblesIndicator>
       file,
       stateMachineSelector: StateMachineNamed('Motion'),
     );
+    // The bundled .riv drives its state machine via inputs, not data binding.
+    // ignore: deprecated_member_use
     _numDragInput = _riveController!.stateMachine.number('numDrag');
+    // ignore: deprecated_member_use
     _numLoadInput = _riveController!.stateMachine.number('numLoad');
     if (mounted) setState(() {});
   }
@@ -104,7 +107,8 @@ class _BubblesIndicatorState extends State<_BubblesIndicator>
       if (_offset < _actualTriggerOffset / 7 * 4) {
         _numDragInput?.value = 0;
       } else if (_offset < _actualTriggerOffset) {
-        _numDragInput?.value = (_offset - (_actualTriggerOffset / 7 * 4)) /
+        _numDragInput?.value =
+            (_offset - (_actualTriggerOffset / 7 * 4)) /
             (_actualTriggerOffset / 7 * 3) *
             99;
       } else {
@@ -144,10 +148,7 @@ class _BubblesIndicatorState extends State<_BubblesIndicator>
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        SizedBox(
-          width: double.infinity,
-          height: _offset,
-        ),
+        SizedBox(width: double.infinity, height: _offset),
         Positioned(
           top: 0,
           left: 0,
@@ -155,13 +156,11 @@ class _BubblesIndicatorState extends State<_BubblesIndicator>
           child: SizedBox(
             key: ValueKey(_key),
             width: double.infinity,
-            height:
-                _offset < _actualTriggerOffset ? _actualTriggerOffset : _offset,
+            height: _offset < _actualTriggerOffset
+                ? _actualTriggerOffset
+                : _offset,
             child: _riveController != null
-                ? RiveWidget(
-                    controller: _riveController!,
-                    fit: Fit.cover,
-                  )
+                ? RiveWidget(controller: _riveController!, fit: Fit.cover)
                 : const SizedBox(),
           ),
         ),

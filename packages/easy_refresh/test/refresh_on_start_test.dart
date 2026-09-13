@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for refreshOnStart functionality
@@ -113,10 +113,8 @@ class _RefreshOnStartHarnessState extends State<_RefreshOnStartHarness> {
             controller: scrollController,
             itemExtent: 50,
             itemCount: itemCount,
-            itemBuilder: (context, index) => ListTile(
-              key: Key('item-$index'),
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) =>
+                ListTile(key: Key('item-$index'), title: Text('Item $index')),
           ),
         ),
       ),
@@ -200,10 +198,8 @@ class _CustomRefreshOnStartHeaderHarnessState
             controller: scrollController,
             itemExtent: 50,
             itemCount: itemCount,
-            itemBuilder: (context, index) => ListTile(
-              key: Key('item-$index'),
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) =>
+                ListTile(key: Key('item-$index'), title: Text('Item $index')),
           ),
         ),
       ),
@@ -218,13 +214,13 @@ Future<void> disposeAndFlush(WidgetTester tester) async {
 
 void main() {
   group('refreshOnStart: true Tests', () {
-    testWidgets('refreshOnStart: true triggers refresh on widget mount',
-        (tester) async {
+    testWidgets('refreshOnStart: true triggers refresh on widget mount', (
+      tester,
+    ) async {
       final key = GlobalKey<_RefreshOnStartHarnessState>();
-      await tester.pumpWidget(_RefreshOnStartHarness(
-        key: key,
-        refreshOnStart: true,
-      ));
+      await tester.pumpWidget(
+        _RefreshOnStartHarness(key: key, refreshOnStart: true),
+      );
       final state = key.currentState!;
 
       // Process initial frames
@@ -249,13 +245,13 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('refreshOnStart: false does not trigger refresh on mount',
-        (tester) async {
+    testWidgets('refreshOnStart: false does not trigger refresh on mount', (
+      tester,
+    ) async {
       final key = GlobalKey<_RefreshOnStartHarnessState>();
-      await tester.pumpWidget(_RefreshOnStartHarness(
-        key: key,
-        refreshOnStart: false,
-      ));
+      await tester.pumpWidget(
+        _RefreshOnStartHarness(key: key, refreshOnStart: false),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -269,8 +265,9 @@ void main() {
   });
 
   group('refreshOnStartHeader Tests', () {
-    testWidgets('refreshOnStartHeader custom header is used for initial load',
-        (tester) async {
+    testWidgets('refreshOnStartHeader custom header is used for initial load', (
+      tester,
+    ) async {
       final key = GlobalKey<_CustomRefreshOnStartHeaderHarnessState>();
       await tester.pumpWidget(_CustomRefreshOnStartHeaderHarness(key: key));
       final state = key.currentState!;
@@ -293,38 +290,40 @@ void main() {
       await disposeAndFlush(tester);
     });
 
-    testWidgets('refreshOnStartHeader shows custom widget during auto-refresh',
-        (tester) async {
-      final key = GlobalKey<_CustomRefreshOnStartHeaderHarnessState>();
-      await tester.pumpWidget(_CustomRefreshOnStartHeaderHarness(key: key));
-      final state = key.currentState!;
+    testWidgets(
+      'refreshOnStartHeader shows custom widget during auto-refresh',
+      (tester) async {
+        final key = GlobalKey<_CustomRefreshOnStartHeaderHarnessState>();
+        await tester.pumpWidget(_CustomRefreshOnStartHeaderHarness(key: key));
+        final state = key.currentState!;
 
-      // Process initial frames and wait for refresh
-      await tester.pump();
-      await tester.pump();
-      for (int i = 0; i < 50 && !state.customHeaderShown; i++) {
-        await tester.pump(const Duration(milliseconds: 50));
-      }
+        // Process initial frames and wait for refresh
+        await tester.pump();
+        await tester.pump();
+        for (int i = 0; i < 50 && !state.customHeaderShown; i++) {
+          await tester.pump(const Duration(milliseconds: 50));
+        }
 
-      // Custom header text should be visible
-      expect(find.byKey(const Key('custom-start-header')), findsOneWidget);
+        // Custom header text should be visible
+        expect(find.byKey(const Key('custom-start-header')), findsOneWidget);
 
-      state.finishRefresh();
-      await tester.pump();
-      await tester.pumpAndSettle();
+        state.finishRefresh();
+        await tester.pump();
+        await tester.pumpAndSettle();
 
-      await disposeAndFlush(tester);
-    });
+        await disposeAndFlush(tester);
+      },
+    );
   });
 
   group('Indicator State Transitions During Auto-Refresh', () {
-    testWidgets('indicator state transitions during auto-refresh',
-        (tester) async {
+    testWidgets('indicator state transitions during auto-refresh', (
+      tester,
+    ) async {
       final key = GlobalKey<_RefreshOnStartHarnessState>();
-      await tester.pumpWidget(_RefreshOnStartHarness(
-        key: key,
-        refreshOnStart: true,
-      ));
+      await tester.pumpWidget(
+        _RefreshOnStartHarness(key: key, refreshOnStart: true),
+      );
       final state = key.currentState!;
 
       // Process initial frames and wait for refresh
@@ -339,9 +338,10 @@ void main() {
 
       // Should reach processing state
       expect(
-          state.headerModes.contains(IndicatorMode.processing) ||
-              state.headerModes.contains(IndicatorMode.ready),
-          isTrue);
+        state.headerModes.contains(IndicatorMode.processing) ||
+            state.headerModes.contains(IndicatorMode.ready),
+        isTrue,
+      );
 
       // Finish the refresh
       state.finishRefresh();
@@ -350,24 +350,28 @@ void main() {
 
       // Should transition to processed/inactive
       expect(
-          state.headerModes.contains(IndicatorMode.processed) ||
-              state.headerModes.contains(IndicatorMode.inactive) ||
-              state.headerModes.contains(IndicatorMode.done),
-          isTrue);
+        state.headerModes.contains(IndicatorMode.processed) ||
+            state.headerModes.contains(IndicatorMode.inactive) ||
+            state.headerModes.contains(IndicatorMode.done),
+        isTrue,
+      );
 
       await disposeAndFlush(tester);
     });
   });
 
   group('callRefreshOverOffset Tests', () {
-    testWidgets('callRefreshOverOffset affects auto-refresh animation',
-        (tester) async {
+    testWidgets('callRefreshOverOffset affects auto-refresh animation', (
+      tester,
+    ) async {
       final key = GlobalKey<_RefreshOnStartHarnessState>();
-      await tester.pumpWidget(_RefreshOnStartHarness(
-        key: key,
-        refreshOnStart: true,
-        callRefreshOverOffset: 50,
-      ));
+      await tester.pumpWidget(
+        _RefreshOnStartHarness(
+          key: key,
+          refreshOnStart: true,
+          callRefreshOverOffset: 50,
+        ),
+      );
       final state = key.currentState!;
 
       // Process initial frames and wait for refresh
@@ -389,13 +393,13 @@ void main() {
   });
 
   group('refreshOnStart with Data Loading', () {
-    testWidgets('refreshOnStart can update item count after loading',
-        (tester) async {
+    testWidgets('refreshOnStart can update item count after loading', (
+      tester,
+    ) async {
       final key = GlobalKey<_RefreshOnStartHarnessState>();
-      await tester.pumpWidget(_RefreshOnStartHarness(
-        key: key,
-        refreshOnStart: true,
-      ));
+      await tester.pumpWidget(
+        _RefreshOnStartHarness(key: key, refreshOnStart: true),
+      );
       final state = key.currentState!;
 
       // Initial count
@@ -421,13 +425,13 @@ void main() {
   });
 
   group('refreshOnStart Only Triggers Once', () {
-    testWidgets('refreshOnStart only triggers once on initial mount',
-        (tester) async {
+    testWidgets('refreshOnStart only triggers once on initial mount', (
+      tester,
+    ) async {
       final key = GlobalKey<_RefreshOnStartHarnessState>();
-      await tester.pumpWidget(_RefreshOnStartHarness(
-        key: key,
-        refreshOnStart: true,
-      ));
+      await tester.pumpWidget(
+        _RefreshOnStartHarness(key: key, refreshOnStart: true),
+      );
       final state = key.currentState!;
 
       // Process initial frames and wait for refresh
@@ -454,13 +458,13 @@ void main() {
   });
 
   group('refreshOnStart with Controller', () {
-    testWidgets('manual refresh can be triggered after auto-refresh',
-        (tester) async {
+    testWidgets('manual refresh can be triggered after auto-refresh', (
+      tester,
+    ) async {
       final key = GlobalKey<_RefreshOnStartHarnessState>();
-      await tester.pumpWidget(_RefreshOnStartHarness(
-        key: key,
-        refreshOnStart: true,
-      ));
+      await tester.pumpWidget(
+        _RefreshOnStartHarness(key: key, refreshOnStart: true),
+      );
       final state = key.currentState!;
 
       // Process initial frames and wait for auto-refresh

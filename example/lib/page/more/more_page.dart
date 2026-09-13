@@ -1,7 +1,7 @@
 import 'package:example/config/routes.dart';
 import 'package:example/page/more/theme_page.dart';
 import 'package:example/widget/list_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,7 +25,8 @@ class _MorePageState extends State<MorePage> {
               title: Text(
                 'More'.tr,
                 style: TextStyle(
-                    color: Theme.of(context).textTheme.titleLarge?.color),
+                  color: Theme.of(context).textTheme.titleLarge?.color,
+                ),
               ),
               centerTitle: false,
             ),
@@ -47,7 +48,8 @@ class _MorePageState extends State<MorePage> {
                 onTap: () {
                   launchUrl(
                     Uri.parse(
-                        'mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q'),
+                      'mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DMNLtkvnn4n28UIB0gEgm2-WBmqmGWk0Q',
+                    ),
                   );
                 },
               ),
@@ -58,7 +60,8 @@ class _MorePageState extends State<MorePage> {
                 onTap: () {
                   launchUrl(
                     Uri.parse(
-                        'https://github.com/xuelongqy/flutter_easy_refresh'),
+                      'https://github.com/xuelongqy/flutter_easy_refresh',
+                    ),
                   );
                 },
               ),

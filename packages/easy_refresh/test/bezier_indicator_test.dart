@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for BezierHeader/BezierCircleHeader/BezierFooter
@@ -9,11 +9,7 @@ class _BezierIndicatorHarness extends StatefulWidget {
   final Header? header;
   final Footer? footer;
 
-  const _BezierIndicatorHarness({
-    super.key,
-    this.header,
-    this.footer,
-  });
+  const _BezierIndicatorHarness({super.key, this.header, this.footer});
 
   @override
   State<_BezierIndicatorHarness> createState() =>
@@ -75,10 +71,8 @@ class _BezierIndicatorHarnessState extends State<_BezierIndicatorHarness> {
             controller: scrollController,
             itemExtent: 50,
             itemCount: itemCount,
-            itemBuilder: (context, index) => ListTile(
-              key: Key('item-$index'),
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) =>
+                ListTile(key: Key('item-$index'), title: Text('Item $index')),
           ),
         ),
       ),
@@ -95,10 +89,9 @@ void main() {
   group('BezierHeader Tests', () {
     testWidgets('BezierHeader renders correctly', (tester) async {
       final key = GlobalKey<_BezierIndicatorHarnessState>();
-      await tester.pumpWidget(_BezierIndicatorHarness(
-        key: key,
-        header: const BezierHeader(),
-      ));
+      await tester.pumpWidget(
+        _BezierIndicatorHarness(key: key, header: const BezierHeader()),
+      );
 
       await tester.pumpAndSettle();
 
@@ -118,12 +111,12 @@ void main() {
 
     testWidgets('BezierHeader with showBalls: true', (tester) async {
       final key = GlobalKey<_BezierIndicatorHarnessState>();
-      await tester.pumpWidget(_BezierIndicatorHarness(
-        key: key,
-        header: const BezierHeader(
-          showBalls: true,
+      await tester.pumpWidget(
+        _BezierIndicatorHarness(
+          key: key,
+          header: const BezierHeader(showBalls: true),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -141,12 +134,12 @@ void main() {
 
     testWidgets('BezierHeader with showBalls: false', (tester) async {
       final key = GlobalKey<_BezierIndicatorHarnessState>();
-      await tester.pumpWidget(_BezierIndicatorHarness(
-        key: key,
-        header: const BezierHeader(
-          showBalls: false,
+      await tester.pumpWidget(
+        _BezierIndicatorHarness(
+          key: key,
+          header: const BezierHeader(showBalls: false),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -164,13 +157,15 @@ void main() {
 
     testWidgets('BezierHeader with custom colors', (tester) async {
       final key = GlobalKey<_BezierIndicatorHarnessState>();
-      await tester.pumpWidget(_BezierIndicatorHarness(
-        key: key,
-        header: const BezierHeader(
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.blue,
+      await tester.pumpWidget(
+        _BezierIndicatorHarness(
+          key: key,
+          header: const BezierHeader(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.blue,
+          ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -188,12 +183,12 @@ void main() {
 
     testWidgets('BezierHeader with spinInCenter: true', (tester) async {
       final key = GlobalKey<_BezierIndicatorHarnessState>();
-      await tester.pumpWidget(_BezierIndicatorHarness(
-        key: key,
-        header: const BezierHeader(
-          spinInCenter: true,
+      await tester.pumpWidget(
+        _BezierIndicatorHarness(
+          key: key,
+          header: const BezierHeader(spinInCenter: true),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -211,12 +206,12 @@ void main() {
 
     testWidgets('BezierHeader with onlySpin: true', (tester) async {
       final key = GlobalKey<_BezierIndicatorHarnessState>();
-      await tester.pumpWidget(_BezierIndicatorHarness(
-        key: key,
-        header: const BezierHeader(
-          onlySpin: true,
+      await tester.pumpWidget(
+        _BezierIndicatorHarness(
+          key: key,
+          header: const BezierHeader(onlySpin: true),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -234,12 +229,12 @@ void main() {
 
     testWidgets('BezierHeader with custom spinWidget', (tester) async {
       final key = GlobalKey<_BezierIndicatorHarnessState>();
-      await tester.pumpWidget(_BezierIndicatorHarness(
-        key: key,
-        header: const BezierHeader(
-          spinWidget: Icon(Icons.refresh),
+      await tester.pumpWidget(
+        _BezierIndicatorHarness(
+          key: key,
+          header: const BezierHeader(spinWidget: Icon(Icons.refresh)),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -274,10 +269,9 @@ void main() {
   group('BezierCircleHeader Tests', () {
     testWidgets('BezierCircleHeader renders correctly', (tester) async {
       final key = GlobalKey<_BezierIndicatorHarnessState>();
-      await tester.pumpWidget(_BezierIndicatorHarness(
-        key: key,
-        header: const BezierCircleHeader(),
-      ));
+      await tester.pumpWidget(
+        _BezierIndicatorHarness(key: key, header: const BezierCircleHeader()),
+      );
 
       await tester.pumpAndSettle();
 
@@ -295,13 +289,15 @@ void main() {
 
     testWidgets('BezierCircleHeader with custom colors', (tester) async {
       final key = GlobalKey<_BezierIndicatorHarnessState>();
-      await tester.pumpWidget(_BezierIndicatorHarness(
-        key: key,
-        header: const BezierCircleHeader(
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.purple,
+      await tester.pumpWidget(
+        _BezierIndicatorHarness(
+          key: key,
+          header: const BezierCircleHeader(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.purple,
+          ),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -321,10 +317,9 @@ void main() {
   group('BezierFooter Tests', () {
     testWidgets('BezierFooter renders correctly', (tester) async {
       final key = GlobalKey<_BezierIndicatorHarnessState>();
-      await tester.pumpWidget(_BezierIndicatorHarness(
-        key: key,
-        footer: const BezierFooter(),
-      ));
+      await tester.pumpWidget(
+        _BezierIndicatorHarness(key: key, footer: const BezierFooter()),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -350,13 +345,15 @@ void main() {
 
     testWidgets('BezierFooter with custom colors', (tester) async {
       final key = GlobalKey<_BezierIndicatorHarnessState>();
-      await tester.pumpWidget(_BezierIndicatorHarness(
-        key: key,
-        footer: const BezierFooter(
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.green,
+      await tester.pumpWidget(
+        _BezierIndicatorHarness(
+          key: key,
+          footer: const BezierFooter(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.green,
+          ),
         ),
-      ));
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();

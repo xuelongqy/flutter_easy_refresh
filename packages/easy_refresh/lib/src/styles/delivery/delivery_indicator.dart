@@ -60,18 +60,16 @@ class _DeliveryIndicatorState extends State<_DeliveryIndicator>
   static const _balloonWidth = 200.0;
 
   static const _cloudPaths = [
-    "M63,0A22.6,22 0,0 0,42 14,17 17,0 0,0 30.9,10 17,17 0,0 0,13.7 26,9 9,0 0,0 9,24 9,9 0,0 0,0 32h99a8,8 0,0 0,0 -.6,8 8,0 0,0 -8,-8 8,8 0,0 0,-6 2.6,22.6 22,0 0,0 0,-3.6A22.6,22 0,0 0,63 0Z"
+    "M63,0A22.6,22 0,0 0,42 14,17 17,0 0,0 30.9,10 17,17 0,0 0,13.7 26,9 9,0 0,0 9,24 9,9 0,0 0,0 32h99a8,8 0,0 0,0 -.6,8 8,0 0,0 -8,-8 8,8 0,0 0,-6 2.6,22.6 22,0 0,0 0,-3.6A22.6,22 0,0 0,63 0Z",
   ];
-  static const _cloudColors = [
-    Color(0xffffffff),
-  ];
+  static const _cloudColors = [Color(0xffffffff)];
 
   static const _boxPaths = [
     "M0,17.5 L3,30 2.9,76 47.5,93 92.8,76V30L95,18 47,.5Z",
     "M3,30 L48,46 47.5,93 2.9,76ZM0,17.5 L48,35 48,46 0,29Z",
     "m56.5,18c0,2 -3.8,3.8 -8.5,3.8 -4.7,0 -8.5,-1.7 -8.5,-3.8 0,-2 3.8,-3.8 8.5,-3.8 4.7,0 8.5,1.7 8.5,3.8zM3,30 L3,34.7l44.7,17 0,-5z",
     "M48,35 L47.5,93 92.8,76V30l2,-.8 0,-10.9z",
-    "M82.6,80 L92.8,62 92.8,76ZM47.6,80 L60,88 47.5,93ZM48,46 L92.8,30 92.8,34 48,51.6Z"
+    "M82.6,80 L92.8,62 92.8,76ZM47.6,80 L60,88 47.5,93ZM48,46 L92.8,30 92.8,34 48,51.6Z",
   ];
   static const _boxColors = [
     Color(0xfff8b147),
@@ -102,8 +100,10 @@ class _DeliveryIndicatorState extends State<_DeliveryIndicator>
   void initState() {
     super.initState();
     widget.state.notifier.addModeChangeListener(_onModeChange);
-    _animationController =
-        AnimationController(vsync: this, duration: _animationDuration);
+    _animationController = AnimationController(
+      vsync: this,
+      duration: _animationDuration,
+    );
     _animationController.addListener(() {
       _updateClouds();
       _lastAnimationValue = _animationController.value;
@@ -178,7 +178,8 @@ class _DeliveryIndicatorState extends State<_DeliveryIndicator>
                     left: _cloudsX[i] % (size * 2 + width) - size,
                     top: _cloudsY[i],
                     child: AnimatedOpacity(
-                      opacity: _animationController.isAnimating &&
+                      opacity:
+                          _animationController.isAnimating &&
                               _mode != IndicatorMode.done
                           ? 1
                           : 0,
@@ -205,16 +206,20 @@ class _DeliveryIndicatorState extends State<_DeliveryIndicator>
                   boxBottom = 30;
                   balloonTop = 70;
                 }
-                double angleSin =
-                    math.sin(_animationController.value * math.pi * 2);
-                double offsetSin =
-                    math.sin(_animationController.value * math.pi * 4);
+                double angleSin = math.sin(
+                  _animationController.value * math.pi * 2,
+                );
+                double offsetSin = math.sin(
+                  _animationController.value * math.pi * 4,
+                );
                 return AnimatedPositioned(
-                  duration: _mode == IndicatorMode.processed ||
+                  duration:
+                      _mode == IndicatorMode.processed ||
                           _mode == IndicatorMode.done
                       ? kDeliveryDisappearDuration
                       : Duration.zero,
-                  bottom: _mode == IndicatorMode.processed ||
+                  bottom:
+                      _mode == IndicatorMode.processed ||
                           _mode == IndicatorMode.done
                       ? _balloonWidth * 2
                       : offsetSin * 16,

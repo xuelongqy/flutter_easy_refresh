@@ -21,14 +21,14 @@ class SquatsHeader extends Header {
     super.infiniteHitOver,
     super.hapticFeedback,
     this.backgroundColor,
-  }) : super(
-          safeArea: false,
-        );
+  }) : super(safeArea: false);
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    assert(state.axis == Axis.vertical,
-        'SquatsHeader does not support horizontal scrolling.');
+    assert(
+      state.axis == Axis.vertical,
+      'SquatsHeader does not support horizontal scrolling.',
+    );
     return _SquatsIndicator(
       key: key,
       state: state,

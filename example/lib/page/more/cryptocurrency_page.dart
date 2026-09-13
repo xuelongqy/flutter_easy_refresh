@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -48,17 +48,13 @@ class _CryptocurrencyPageState extends State<CryptocurrencyPage>
         name: 'Bitcoin',
         address: 'bc1qutj3gmn46vwmcsjnc5sjqax7kxx5xm6fvyg5vp',
         des: 'Bitcoin donation'.tr,
-        coins: [
-          'assets/image/cryptocurrency/bitcoin.svg',
-        ],
+        coins: ['assets/image/cryptocurrency/bitcoin.svg'],
       ),
       _CryptocurrencyInfo(
         name: 'Dogecoin',
         address: 'DLs1Btam1M13o9LxiErbe1UXy7iqfZyNRg',
         des: 'Dogecoin donation'.tr,
-        coins: [
-          'assets/image/cryptocurrency/dogecoin.svg',
-        ],
+        coins: ['assets/image/cryptocurrency/dogecoin.svg'],
       ),
     ];
     _tabController = TabController(length: _infos.length, vsync: this);
@@ -77,9 +73,7 @@ class _CryptocurrencyPageState extends State<CryptocurrencyPage>
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          constraints: const BoxConstraints(
-            minHeight: 72,
-          ),
+          constraints: const BoxConstraints(minHeight: 72),
           padding: const EdgeInsets.all(16),
           child: Text(info.des),
         ),
@@ -117,23 +111,20 @@ class _CryptocurrencyPageState extends State<CryptocurrencyPage>
             child: InkWell(
               onTap: () {
                 Clipboard.setData(ClipboardData(text: info.address));
-                Get.showSnackbar(GetSnackBar(
-                  message: '%s copied!'.trArgs([info.address]),
-                  snackPosition: SnackPosition.TOP,
-                  snackStyle: SnackStyle.GROUNDED,
-                  duration: const Duration(seconds: 2),
-                  backgroundColor: themeData.colorScheme.primary,
-                ));
+                Get.showSnackbar(
+                  GetSnackBar(
+                    message: '%s copied!'.trArgs([info.address]),
+                    snackPosition: SnackPosition.TOP,
+                    snackStyle: SnackStyle.GROUNDED,
+                    duration: const Duration(seconds: 2),
+                    backgroundColor: themeData.colorScheme.primary,
+                  ),
+                );
               },
               child: Row(
                 children: [
-                  Expanded(
-                    child: Text(info.address),
-                  ),
-                  const Icon(
-                    Icons.copy,
-                    size: 16,
-                  ).marginOnly(left: 8),
+                  Expanded(child: Text(info.address)),
+                  const Icon(Icons.copy, size: 16).marginOnly(left: 8),
                 ],
               ).marginAll(8),
             ),
@@ -152,29 +143,18 @@ class _CryptocurrencyPageState extends State<CryptocurrencyPage>
       labelColor: themeData.colorScheme.primary,
       unselectedLabelColor: themeData.colorScheme.tertiary,
       indicatorSize: TabBarIndicatorSize.label,
-      tabs: [
-        for (final info in _infos)
-          Tab(
-            text: info.name,
-          ),
-      ],
+      tabs: [for (final info in _infos) Tab(text: info.name)],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Cryptocurrency'.tr),
-      ),
+      appBar: AppBar(title: Text('Cryptocurrency'.tr)),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildInfo(),
-            _buildTab(),
-            _buildAddress(),
-          ],
+          children: [_buildInfo(), _buildTab(), _buildAddress()],
         ),
       ),
     );

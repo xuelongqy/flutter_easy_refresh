@@ -32,9 +32,10 @@ class HeaderLocator extends StatelessWidget {
   Widget build(BuildContext context) {
     final headerNotifier = EasyRefresh.of(context).headerNotifier;
     assert(
-        headerNotifier.iPosition == IndicatorPosition.locator ||
-            headerNotifier.iPosition == IndicatorPosition.custom,
-        'Cannot use HeaderLocator when header position is not IndicatorPosition.locator.');
+      headerNotifier.iPosition == IndicatorPosition.locator ||
+          headerNotifier.iPosition == IndicatorPosition.custom,
+      'Cannot use HeaderLocator when header position is not IndicatorPosition.locator.',
+    );
     return ValueListenableBuilder(
       valueListenable: headerNotifier.listenable(),
       builder: (ctx, notifier, _) {
@@ -46,18 +47,16 @@ class HeaderLocator extends StatelessWidget {
           final safePadding = MediaQuery.of(context).padding;
           headerNotifier._safeOffset = axis == Axis.vertical
               ? axisDirection == AxisDirection.down
-                  ? safePadding.top
-                  : safePadding.bottom
+                    ? safePadding.top
+                    : safePadding.bottom
               : axisDirection == AxisDirection.right
-                  ? safePadding.left
-                  : safePadding.right;
+              ? safePadding.left
+              : safePadding.right;
         }
         final headerWidget = headerNotifier._build(context);
         if (!clearExtent) {
           return _isSliver
-              ? SliverToBoxAdapter(
-                  child: headerWidget,
-                )
+              ? SliverToBoxAdapter(child: headerWidget)
               : headerWidget;
         }
         return _HeaderLocatorRenderWidget(
@@ -85,14 +84,8 @@ class _HeaderLocatorRenderWidget extends SingleChildRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) => isSliver
-      ? _HeaderLocatorRenderSliver(
-          context: context,
-          paintExtent: paintExtent,
-        )
-      : _HeaderLocatorRenderBox(
-          context: context,
-          paintExtent: paintExtent,
-        );
+      ? _HeaderLocatorRenderSliver(context: context, paintExtent: paintExtent)
+      : _HeaderLocatorRenderBox(context: context, paintExtent: paintExtent);
 }
 
 /// Use in Box
@@ -121,12 +114,14 @@ class _HeaderLocatorRenderBox extends RenderProxyBox {
       size = constraints.smallest;
     } else {
       size = Size(
-        constraints
-            .constrainWidth(axis == Axis.vertical ? double.infinity : extend),
+        constraints.constrainWidth(
+          axis == Axis.vertical ? double.infinity : extend,
+        ),
 
         /// Not 0 will be paint
-        constraints
-            .constrainHeight(axis == Axis.vertical ? extend : double.infinity),
+        constraints.constrainHeight(
+          axis == Axis.vertical ? extend : double.infinity,
+        ),
       );
     }
     if (child != null) {
@@ -147,13 +142,13 @@ class _HeaderLocatorRenderBox extends RenderProxyBox {
       final double dx = axis == Axis.vertical
           ? 0
           : axisDirection == AxisDirection.right
-              ? -extend
-              : 0;
+          ? -extend
+          : 0;
       final double dy = axis == Axis.horizontal
           ? 0
           : axisDirection == AxisDirection.down
-              ? -extend
-              : 0;
+          ? -extend
+          : 0;
       mOffset = Offset(dx, dy);
     }
     if (child != null) {
@@ -192,8 +187,11 @@ class _HeaderLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
         childExtent = child!.size.height;
         break;
     }
-    final double paintedChildSize =
-        calculatePaintOffset(constraints, from: 0, to: childExtent);
+    final double paintedChildSize = calculatePaintOffset(
+      constraints,
+      from: 0,
+      to: childExtent,
+    );
     // final double cacheExtent =
     //     calculateCacheOffset(constraints, from: 0, to: childExtent);
 
@@ -203,7 +201,8 @@ class _HeaderLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
     geometry = SliverGeometry(
       scrollExtent: 0,
       paintExtent: math.min(childExtent, paintExtent),
-      paintOrigin: (constraints.axisDirection == AxisDirection.down ||
+      paintOrigin:
+          (constraints.axisDirection == AxisDirection.down ||
                   constraints.axisDirection == AxisDirection.right) &&
               !headerNotifier.clamping
           ? -headerNotifier.offset
@@ -212,7 +211,8 @@ class _HeaderLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
       cacheExtent: math.min(childExtent, paintExtent),
       maxPaintExtent: math.max(childExtent, paintExtent),
       hitTestExtent: math.max(childExtent, paintedChildSize),
-      hasVisualOverflow: childExtent > constraints.remainingPaintExtent ||
+      hasVisualOverflow:
+          childExtent > constraints.remainingPaintExtent ||
           constraints.scrollOffset > 0,
       visible: true,
     );

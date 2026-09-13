@@ -213,10 +213,7 @@ class _HalloweenIndicatorState extends State<_HalloweenIndicator> {
       width: double.infinity,
       height: _offset,
       child: artboard != null
-          ? RiveArtboardWidget(
-              artboard: artboard,
-              painter: _painter,
-            )
+          ? RiveArtboardWidget(artboard: artboard, painter: _painter)
           : const SizedBox(),
     );
   }

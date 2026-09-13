@@ -143,7 +143,9 @@ class _BezierBackgroundState extends State<BezierBackground>
     super.initState();
     _animationController = AnimationController.unbounded(vsync: this);
     _disappearAnimationController = AnimationController(
-        vsync: this, duration: widget.disappearAnimationDuration);
+      vsync: this,
+      duration: widget.disappearAnimationDuration,
+    );
     _disappearAnimationController.addListener(() {
       setState(() {});
     });
@@ -194,7 +196,9 @@ class _BezierBackgroundState extends State<BezierBackground>
   /// Start animation.
   void _startAnimation() {
     final simulation = _notifier.createBallisticSimulation(
-        _notifier.position, _notifier.velocity);
+      _notifier.position,
+      _notifier.velocity,
+    );
     if (simulation != null) {
       _simulationAnimation = true;
       _animationController.animateWith(simulation);
@@ -206,22 +210,30 @@ class _BezierBackgroundState extends State<BezierBackground>
     if (widget.bounce) {
       // Bounce animation.
       final oldOffset = _notifier.calculateOffsetWithPixels(
-          _notifier.position, _lastAnimationValue);
+        _notifier.position,
+        _lastAnimationValue,
+      );
       final offset = _notifier.calculateOffsetWithPixels(
-          _notifier.position, _animationController.value);
+        _notifier.position,
+        _animationController.value,
+      );
       if (_simulationAnimation) {
         if (offset < _actualTriggerOffset && offset > oldOffset) {
           _simulationAnimation = false;
-          _animationController.animateTo(-_actualTriggerOffset,
-              duration: const Duration(milliseconds: 600),
-              curve: Curves.bounceOut);
+          _animationController.animateTo(
+            -_actualTriggerOffset,
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.bounceOut,
+          );
         }
       }
       _lastAnimationValue = _animationController.value;
     }
     if (widget.onReboundOffsetChanged != null) {
       final reboundOffset = _notifier.calculateOffsetWithPixels(
-          _notifier.position, _animationController.value);
+        _notifier.position,
+        _animationController.value,
+      );
       widget.onReboundOffsetChanged!(reboundOffset);
     }
     setState(() {});
@@ -253,7 +265,9 @@ class _BezierBackgroundState extends State<BezierBackground>
   Widget build(BuildContext context) {
     final reboundOffset = _animationController.isAnimating
         ? _notifier.calculateOffsetWithPixels(
-            _notifier.position, _animationController.value)
+            _notifier.position,
+            _animationController.value,
+          )
         : null;
     double offset = _offset;
     if (reboundOffset != null) {
@@ -265,9 +279,7 @@ class _BezierBackgroundState extends State<BezierBackground>
         width: _axis == Axis.horizontal ? offset : double.infinity,
         height: _axis == Axis.vertical ? offset : double.infinity,
         clipBehavior: Clip.none,
-        decoration: BoxDecoration(
-          color: _color,
-        ),
+        decoration: BoxDecoration(color: _color),
       ),
     );
   }
@@ -309,8 +321,8 @@ class _BezierClipper extends CustomClipper<Path> {
         // Top
         final startHeight = reboundOffset == null
             ? height > actualTriggerOffset
-                ? height - actualTriggerOffset
-                : 0.0
+                  ? height - actualTriggerOffset
+                  : 0.0
             : height - actualTriggerOffset;
         path.moveTo(width, startHeight);
         path.lineTo(width, height);
@@ -363,8 +375,9 @@ class _BezierClipper extends CustomClipper<Path> {
     } else {
       if (reverse) {
         // Left
-        final startWidth =
-            width > actualTriggerOffset ? width - actualTriggerOffset : 0.0;
+        final startWidth = width > actualTriggerOffset
+            ? width - actualTriggerOffset
+            : 0.0;
         path.moveTo(startWidth, 0);
         path.lineTo(width, 0);
         path.lineTo(width, height);
@@ -471,8 +484,12 @@ class _BezierDisappearClipper extends CustomClipper<Path> {
     final width = size.width;
     fillPath.addRect(Rect.fromLTRB(0.0, 0.0, width, height));
     final length = height + width;
-    path.addOval(Rect.fromCircle(
-        center: Offset(width / 2, height / 2), radius: length / 2 * scale));
+    path.addOval(
+      Rect.fromCircle(
+        center: Offset(width / 2, height / 2),
+        radius: length / 2 * scale,
+      ),
+    );
     return Path.combine(PathOperation.difference, fillPath, path);
   }
 

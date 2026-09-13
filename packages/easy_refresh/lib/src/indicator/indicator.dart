@@ -202,11 +202,16 @@ class IndicatorState {
 
 /// Indicator widget builder.
 typedef IndicatorBuilder = Widget Function(
-    BuildContext context, IndicatorState state);
+  BuildContext context,
+  IndicatorState state,
+);
 
 /// Secondary indicator widget builder.
 typedef SecondaryIndicatorBuilder = Widget Function(
-    BuildContext context, IndicatorState state, Indicator indicator);
+  BuildContext context,
+  IndicatorState state,
+  Indicator indicator,
+);
 
 /// Indicator state listenable.
 class IndicatorStateListenable extends ValueListenable<IndicatorState?> {
@@ -398,26 +403,38 @@ abstract class Indicator {
     this.triggerWhenRelease = false,
     this.triggerWhenReleaseNoWait = false,
     this.maxOverOffset = double.infinity,
-  })  : hitOver = hitOver ?? infiniteOffset != null,
-        infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
-        assert(infiniteOffset == null || infiniteOffset >= 0,
-            'The infiniteOffset cannot be less than 0.'),
-        assert(infiniteOffset == null || !clamping,
-            'Cannot scroll indefinitely when clamping.'),
-        assert(!(hitOver == false && infiniteOffset != null),
-            'When hitOver is true, infinite scrolling cannot be used, please set infiniteHitOver.'),
-        assert(
-            secondaryTriggerOffset == null ||
-                secondaryTriggerOffset > triggerOffset,
-            'The secondaryTriggerOffset cannot be less than triggerOffset.'),
-        assert(!(infiniteOffset != null && secondaryTriggerOffset != null),
-            'Infinite scroll and secondary cannot be used together.'),
-        assert(
-            secondaryDimension == null ||
-                secondaryDimension > (secondaryTriggerOffset ?? 0),
-            'The secondaryDimension cannot be less than secondaryTriggerOffset.'),
-        assert(maxOverOffset == double.infinity || maxOverOffset >= 0,
-            'The maxOverOffset cannot be less than 0.');
+  }) : hitOver = hitOver ?? infiniteOffset != null,
+       infiniteHitOver = infiniteHitOver ?? infiniteOffset == null,
+       assert(
+         infiniteOffset == null || infiniteOffset >= 0,
+         'The infiniteOffset cannot be less than 0.',
+       ),
+       assert(
+         infiniteOffset == null || !clamping,
+         'Cannot scroll indefinitely when clamping.',
+       ),
+       assert(
+         !(hitOver == false && infiniteOffset != null),
+         'When hitOver is true, infinite scrolling cannot be used, please set infiniteHitOver.',
+       ),
+       assert(
+         secondaryTriggerOffset == null ||
+             secondaryTriggerOffset > triggerOffset,
+         'The secondaryTriggerOffset cannot be less than triggerOffset.',
+       ),
+       assert(
+         !(infiniteOffset != null && secondaryTriggerOffset != null),
+         'Infinite scroll and secondary cannot be used together.',
+       ),
+       assert(
+         secondaryDimension == null ||
+             secondaryDimension > (secondaryTriggerOffset ?? 0),
+         'The secondaryDimension cannot be less than secondaryTriggerOffset.',
+       ),
+       assert(
+         maxOverOffset == double.infinity || maxOverOffset >= 0,
+         'The maxOverOffset cannot be less than 0.',
+       );
 
   /// Build indicator widget.
   Widget build(BuildContext context, IndicatorState state);

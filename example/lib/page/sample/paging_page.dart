@@ -1,7 +1,7 @@
 import 'package:easy_paging/easy_paging.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
@@ -16,9 +16,7 @@ class _PagingPageState extends State<PagingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Paging example'.tr),
-      ),
+      appBar: AppBar(title: Text('Paging example'.tr)),
       body: CustomPaging(
         itemBuilder: (context, index, item) {
           return const SkeletonItem();
@@ -115,10 +113,7 @@ class CustomPagingState
     );
   }
 
-  Future<ResponseData> fetchData({
-    required int page,
-    int size = 10,
-  }) async {
+  Future<ResponseData> fetchData({required int page, int size = 10}) async {
     const count = 45;
     await Future.delayed(const Duration(seconds: 2));
     int dataSize = size;

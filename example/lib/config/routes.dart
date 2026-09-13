@@ -75,7 +75,9 @@ class Routes {
     GetPage(name: sample, page: () => const SamplePage()),
     GetPage(name: profileSample, page: () => const UserProfilePage()),
     GetPage(
-        name: nestedScrollViewSample, page: () => const NestedScrollViewPage()),
+      name: nestedScrollViewSample,
+      page: () => const NestedScrollViewPage(),
+    ),
     GetPage(name: carouselSample, page: () => const CarouselPage()),
     GetPage(name: refreshOnStartSample, page: () => const RefreshOnStartPage()),
     GetPage(name: listenerSample, page: () => const ListenerHeaderPage()),

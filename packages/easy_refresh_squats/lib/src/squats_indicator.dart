@@ -22,11 +22,11 @@ base class _SquatsPainter extends BasicArtboardPainter {
     if (_squatting) {
       needsRepaint =
           (_squatsAnimation?.advanceAndApply(elapsedSeconds) ?? false) ||
-              needsRepaint;
+          needsRepaint;
     } else {
       needsRepaint =
           (_idleAnimation?.advanceAndApply(elapsedSeconds) ?? false) ||
-              needsRepaint;
+          needsRepaint;
     }
     return needsRepaint;
   }
@@ -126,10 +126,7 @@ class _SquatsIndicatorState extends State<_SquatsIndicator> {
         width: _kSquatsFitSwitchOffset,
         height: _offset,
         child: artboard != null
-            ? RiveArtboardWidget(
-                artboard: artboard,
-                painter: _painter,
-              )
+            ? RiveArtboardWidget(artboard: artboard, painter: _painter)
             : const SizedBox(),
       ),
     );

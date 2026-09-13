@@ -27,14 +27,14 @@ class BezierCircleHeader extends Header {
     super.hapticFeedback,
     this.foregroundColor,
     this.backgroundColor,
-  }) : super(
-          processedDuration: kBezierCircleDisappearDuration,
-        );
+  }) : super(processedDuration: kBezierCircleDisappearDuration);
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    assert(state.axis == Axis.vertical,
-        'BezierCircleHeader does not support horizontal scrolling.');
+    assert(
+      state.axis == Axis.vertical,
+      'BezierCircleHeader does not support horizontal scrolling.',
+    );
     assert(!state.reverse, 'BezierCircleHeader does not support reverse.');
     return _BezierCircleIndicator(
       key: key,

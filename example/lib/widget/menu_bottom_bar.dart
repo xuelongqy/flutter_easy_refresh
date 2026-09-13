@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MenuBottomBar extends StatefulWidget {
   final Widget? expandedBody;
@@ -64,15 +64,11 @@ class _MenuBottomBarState extends State<MenuBottomBar>
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(
-                  height: 56,
-                ),
+                const SizedBox(height: 56),
                 AnimatedContainer(
                   duration: _duration,
                   height: _expanded ? _expandedHeight : 0,
-                  child: SingleChildScrollView(
-                    child: widget.expandedBody,
-                  ),
+                  child: SingleChildScrollView(child: widget.expandedBody),
                 ),
               ],
             ),

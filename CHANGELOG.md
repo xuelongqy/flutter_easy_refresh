@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-09-12
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`easy_paging` - `v4.0.0`](#easy_paging---v400)
+ - [`easy_refresh` - `v4.0.0`](#easy_refresh---v400)
+ - [`easy_refresh_bow` - `v2.0.0`](#easy_refresh_bow---v200)
+ - [`easy_refresh_bubbles` - `v2.0.0`](#easy_refresh_bubbles---v200)
+ - [`easy_refresh_halloween` - `v2.0.0`](#easy_refresh_halloween---v200)
+ - [`easy_refresh_skating` - `v2.0.0`](#easy_refresh_skating---v200)
+ - [`easy_refresh_space` - `v2.0.0`](#easy_refresh_space---v200)
+ - [`easy_refresh_squats` - `v2.0.0`](#easy_refresh_squats---v200)
+
+Packages with other changes:
+
+ - There are no other changes in this release.
+
+---
+
+#### `easy_paging` - `v4.0.0`
+
+ - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+
+#### `easy_refresh` - `v4.0.0`
+
+ - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+
+#### `easy_refresh_bow` - `v2.0.0`
+
+ - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+
+#### `easy_refresh_bubbles` - `v2.0.0`
+
+ - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+
+#### `easy_refresh_halloween` - `v2.0.0`
+
+ - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+
+#### `easy_refresh_skating` - `v2.0.0`
+
+ - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+
+#### `easy_refresh_space` - `v2.0.0`
+
+ - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+
+#### `easy_refresh_squats` - `v2.0.0`
+
+ - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+
+
 ## 2026-06-14
 
 ### Changes

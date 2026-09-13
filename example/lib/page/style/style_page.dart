@@ -1,6 +1,6 @@
 import 'package:example/config/routes.dart';
 import 'package:example/widget/list_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:get/get.dart';
 
 class StylePage extends StatefulWidget {
@@ -23,7 +23,8 @@ class _StylePageState extends State<StylePage> {
               title: Text(
                 'Style'.tr,
                 style: TextStyle(
-                    color: Theme.of(context).textTheme.titleLarge?.color),
+                  color: Theme.of(context).textTheme.titleLarge?.color,
+                ),
               ),
               centerTitle: false,
             ),

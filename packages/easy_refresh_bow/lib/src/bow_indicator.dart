@@ -18,11 +18,7 @@ class _BowIndicator extends StatefulWidget {
   /// False for down and right.
   final bool reverse;
 
-  const _BowIndicator({
-    super.key,
-    required this.state,
-    required this.reverse,
-  });
+  const _BowIndicator({super.key, required this.state, required this.reverse});
 
   @override
   State<_BowIndicator> createState() => _BowIndicatorState();
@@ -166,10 +162,7 @@ class _BowIndicatorState extends State<_BowIndicator> {
 
     return Stack(
       children: [
-        SizedBox(
-          width: double.infinity,
-          height: _offset,
-        ),
+        SizedBox(width: double.infinity, height: _offset),
         Positioned(
           top: indicatorTop,
           left: 0,

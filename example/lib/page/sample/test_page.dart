@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 
 class TestPage extends StatefulWidget {
@@ -16,9 +16,7 @@ class _TestPageState extends State<TestPage> {
 
   int _count = 5;
 
-  final _controller = EasyRefreshController(
-    controlFinishRefresh: true,
-  );
+  final _controller = EasyRefreshController(controlFinishRefresh: true);
 
   // final _scrollController = ScrollController();
 
@@ -33,9 +31,7 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('EasyRefresh'),
-      ),
+      appBar: AppBar(title: const Text('EasyRefresh')),
       body: EasyRefresh(
         canRefreshAfterNoMore: false,
         canLoadAfterNoMore: false,
@@ -121,14 +117,9 @@ class _TestPageState extends State<TestPage> {
           slivers: [
             // const HeaderLocator.sliver(),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return SkeletonItem(
-                    direction: _scrollDirection,
-                  );
-                },
-                childCount: _count,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return SkeletonItem(direction: _scrollDirection);
+              }, childCount: _count),
             ),
             const FooterLocator.sliver(),
           ],

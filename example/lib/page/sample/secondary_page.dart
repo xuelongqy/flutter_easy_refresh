@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
@@ -82,17 +82,15 @@ class _SecondaryPageState extends State<SecondaryPage> {
             double scale = 1;
             if (state.offset > state.actualTriggerOffset) {
               scale = math.max(
-                  0.0,
-                  (actualSecondaryTriggerOffset - offset) /
-                      (actualSecondaryTriggerOffset - actualTriggerOffset));
+                0.0,
+                (actualSecondaryTriggerOffset - offset) /
+                    (actualSecondaryTriggerOffset - actualTriggerOffset),
+              );
             }
             return Stack(
               clipBehavior: Clip.none,
               children: [
-                SizedBox(
-                  height: state.offset,
-                  width: double.infinity,
-                ),
+                SizedBox(height: state.offset, width: double.infinity),
                 Positioned(
                   bottom: 0,
                   left: 0,
@@ -113,18 +111,18 @@ class _SecondaryPageState extends State<SecondaryPage> {
                                   builder: (context, state) => switch (state) {
                                     RiveLoading() => const SizedBox(),
                                     RiveFailed() => SizedBox(
-                                        child: Center(
-                                          child: Text(
-                                            state.error.toString(),
-                                            style:
-                                                themeData.textTheme.titleMedium,
-                                          ),
+                                      child: Center(
+                                        child: Text(
+                                          state.error.toString(),
+                                          style:
+                                              themeData.textTheme.titleMedium,
                                         ),
                                       ),
+                                    ),
                                     RiveLoaded() => RiveWidget(
-                                        controller: state.controller,
-                                        fit: Fit.cover,
-                                      ),
+                                      controller: state.controller,
+                                      fit: Fit.cover,
+                                    ),
                                   },
                                 ),
                               ),
@@ -135,7 +133,7 @@ class _SecondaryPageState extends State<SecondaryPage> {
                             mode == IndicatorMode.secondaryClosing) {
                           return PopScope(
                             canPop: false,
-                            onPopInvokedWithResult: (_, __) {
+                            onPopInvokedWithResult: (_, _) {
                               _controller.closeHeaderSecondary();
                             },
                             child: secondaryPage,
@@ -152,7 +150,8 @@ class _SecondaryPageState extends State<SecondaryPage> {
                   right: 0,
                   child: Center(
                     child: AnimatedOpacity(
-                      opacity: mode == IndicatorMode.secondaryArmed &&
+                      opacity:
+                          mode == IndicatorMode.secondaryArmed &&
                               !_callOpenSecondary
                           ? 1
                           : 0,
@@ -165,7 +164,8 @@ class _SecondaryPageState extends State<SecondaryPage> {
                   ),
                 ),
                 Opacity(
-                  opacity: (mode == IndicatorMode.secondaryReady ||
+                  opacity:
+                      (mode == IndicatorMode.secondaryReady ||
                           mode == IndicatorMode.secondaryOpen ||
                           mode == IndicatorMode.secondaryClosing)
                       ? 0
@@ -196,7 +196,8 @@ class _SecondaryPageState extends State<SecondaryPage> {
             _count += 5;
           });
           _controller.finishLoad(
-              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
+            _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success,
+          );
         },
         child: CustomScrollView(
           slivers: [
@@ -206,34 +207,33 @@ class _SecondaryPageState extends State<SecondaryPage> {
                 final mode = state?.mode;
                 final isSecondaryForeground =
                     mode == IndicatorMode.secondaryOpen ||
-                        mode == IndicatorMode.secondaryClosing;
+                    mode == IndicatorMode.secondaryClosing;
                 double scale = 1;
                 if (state != null) {
                   if (state.offset > state.actualTriggerOffset) {
                     scale = math.max(
-                        0.0,
-                        (state.actualSecondaryTriggerOffset! - state.offset) /
-                            (state.actualSecondaryTriggerOffset! -
-                                state.actualTriggerOffset));
+                      0.0,
+                      (state.actualSecondaryTriggerOffset! - state.offset) /
+                          (state.actualSecondaryTriggerOffset! -
+                              state.actualTriggerOffset),
+                    );
                   }
                 }
                 return SliverAppBar(
                   pinned: true,
                   automaticallyImplyLeading: !isSecondaryForeground,
                   leading: isSecondaryForeground
-                      ? BackButton(
-                          onPressed: _controller.closeHeaderSecondary,
-                        )
+                      ? BackButton(onPressed: _controller.closeHeaderSecondary)
                       : null,
                   backgroundColor: Color.lerp(
-                      Colors.transparent, appBarBackgroundColor, scale),
+                    Colors.transparent,
+                    appBarBackgroundColor,
+                    scale,
+                  ),
                   surfaceTintColor: Colors.transparent,
                   systemOverlayStyle: SystemUiOverlayStyle.dark,
                   foregroundColor: Colors.black,
-                  title: Opacity(
-                    opacity: scale,
-                    child: Text('Secondary'.tr),
-                  ),
+                  title: Opacity(opacity: scale, child: Text('Secondary'.tr)),
                   actions: [
                     if (!isSecondaryForeground)
                       Opacity(
@@ -253,12 +253,9 @@ class _SecondaryPageState extends State<SecondaryPage> {
             ),
             const HeaderLocator.sliver(),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return const SkeletonItem();
-                },
-                childCount: _count,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return const SkeletonItem();
+              }, childCount: _count),
             ),
           ],
         ),

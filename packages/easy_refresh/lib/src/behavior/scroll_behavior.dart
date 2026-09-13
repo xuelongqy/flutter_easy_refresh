@@ -3,8 +3,8 @@ part of '../../easy_refresh.dart';
 /// Define [ScrollBehavior] in the scope of EasyRefresh.
 /// Add support for web and PC.
 class ERScrollBehavior extends ScrollBehavior {
-  static final Set<PointerDeviceKind> _kDragDevices =
-      PointerDeviceKind.values.toSet();
+  static final Set<PointerDeviceKind> _kDragDevices = PointerDeviceKind.values
+      .toSet();
 
   final ScrollPhysics? _physics;
 
@@ -17,13 +17,19 @@ class ERScrollBehavior extends ScrollBehavior {
 
   @override
   Widget buildOverscrollIndicator(
-      BuildContext context, Widget child, ScrollableDetails details) {
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
     return child;
   }
 
   @override
   Widget buildScrollbar(
-      BuildContext context, Widget child, ScrollableDetails details) {
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
     switch (getPlatform(context)) {
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
@@ -33,10 +39,7 @@ class ERScrollBehavior extends ScrollBehavior {
             details.controller!.debugLabel == 'inner') {
           return child;
         }
-        return Scrollbar(
-          controller: details.controller,
-          child: child,
-        );
+        return Scrollbar(controller: details.controller, child: child);
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.iOS:

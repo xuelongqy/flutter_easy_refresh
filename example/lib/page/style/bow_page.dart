@@ -1,7 +1,7 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:easy_refresh_bow/easy_refresh_bow.dart';
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:get/get.dart';
 
 class BowPage extends StatefulWidget {
@@ -35,12 +35,8 @@ class _BowPageState extends State<BowPage> {
     return Scaffold(
       body: EasyRefresh(
         controller: _controller,
-        header: const BowHeader(
-          position: IndicatorPosition.locator,
-        ),
-        footer: const BowFooter(
-          position: IndicatorPosition.locator,
-        ),
+        header: const BowHeader(position: IndicatorPosition.locator),
+        footer: const BowFooter(position: IndicatorPosition.locator),
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 2));
           if (!mounted) return;
@@ -62,10 +58,7 @@ class _BowPageState extends State<BowPage> {
         },
         child: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              title: Text('Bow and arrow'.tr),
-              pinned: true,
-            ),
+            SliverAppBar(title: Text('Bow and arrow'.tr), pinned: true),
             const HeaderLocator.sliver(),
             SliverList(
               delegate: SliverChildBuilderDelegate(

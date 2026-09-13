@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:example/widget/skeleton_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
@@ -63,7 +63,8 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
             _count += 5;
           });
           _controller.finishLoad(
-              _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
+            _count >= 20 ? IndicatorResult.noMore : IndicatorResult.success,
+          );
         },
         child: CustomScrollView(
           slivers: [
@@ -75,7 +76,8 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
                 title: Text(
                   'Listener'.tr,
                   style: TextStyle(
-                      color: Theme.of(context).textTheme.titleLarge?.color),
+                    color: Theme.of(context).textTheme.titleLarge?.color,
+                  ),
                 ),
               ),
               actions: [
@@ -111,9 +113,7 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
                         color: themeData.colorScheme.primary,
                       );
                     } else {
-                      indicator = RefreshProgressIndicator(
-                        value: value,
-                      );
+                      indicator = RefreshProgressIndicator(value: value);
                     }
                     return SizedBox(
                       width: 56,
@@ -143,12 +143,9 @@ class _ListenerHeaderPageState extends State<ListenerHeaderPage> {
               ],
             ),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return const SkeletonItem();
-                },
-                childCount: _count,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return const SkeletonItem();
+              }, childCount: _count),
             ),
           ],
         ),

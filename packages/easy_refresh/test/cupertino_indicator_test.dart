@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Test harness for CupertinoHeader/CupertinoFooter
@@ -9,11 +9,7 @@ class _CupertinoIndicatorHarness extends StatefulWidget {
   final CupertinoHeader? header;
   final CupertinoFooter? footer;
 
-  const _CupertinoIndicatorHarness({
-    super.key,
-    this.header,
-    this.footer,
-  });
+  const _CupertinoIndicatorHarness({super.key, this.header, this.footer});
 
   @override
   State<_CupertinoIndicatorHarness> createState() =>
@@ -76,10 +72,8 @@ class _CupertinoIndicatorHarnessState
             controller: scrollController,
             itemExtent: 50,
             itemCount: itemCount,
-            itemBuilder: (context, index) => ListTile(
-              key: Key('item-$index'),
-              title: Text('Item $index'),
-            ),
+            itemBuilder: (context, index) =>
+                ListTile(key: Key('item-$index'), title: Text('Item $index')),
           ),
         ),
       ),
@@ -94,13 +88,13 @@ Future<void> disposeAndFlush(WidgetTester tester) async {
 
 void main() {
   group('CupertinoHeader Tests', () {
-    testWidgets('CupertinoHeader renders with iOS-style spinner',
-        (tester) async {
+    testWidgets('CupertinoHeader renders with iOS-style spinner', (
+      tester,
+    ) async {
       final key = GlobalKey<_CupertinoIndicatorHarnessState>();
-      await tester.pumpWidget(_CupertinoIndicatorHarness(
-        key: key,
-        header: const CupertinoHeader(),
-      ));
+      await tester.pumpWidget(
+        _CupertinoIndicatorHarness(key: key, header: const CupertinoHeader()),
+      );
 
       await tester.pumpAndSettle();
 
@@ -120,12 +114,12 @@ void main() {
 
     testWidgets('CupertinoHeader with foregroundColor', (tester) async {
       final key = GlobalKey<_CupertinoIndicatorHarnessState>();
-      await tester.pumpWidget(_CupertinoIndicatorHarness(
-        key: key,
-        header: const CupertinoHeader(
-          foregroundColor: Colors.blue,
+      await tester.pumpWidget(
+        _CupertinoIndicatorHarness(
+          key: key,
+          header: const CupertinoHeader(foregroundColor: Colors.blue),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -143,12 +137,12 @@ void main() {
 
     testWidgets('CupertinoHeader with userWaterDrop: true', (tester) async {
       final key = GlobalKey<_CupertinoIndicatorHarnessState>();
-      await tester.pumpWidget(_CupertinoIndicatorHarness(
-        key: key,
-        header: const CupertinoHeader(
-          userWaterDrop: true,
+      await tester.pumpWidget(
+        _CupertinoIndicatorHarness(
+          key: key,
+          header: const CupertinoHeader(userWaterDrop: true),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -167,12 +161,12 @@ void main() {
 
     testWidgets('CupertinoHeader with userWaterDrop: false', (tester) async {
       final key = GlobalKey<_CupertinoIndicatorHarnessState>();
-      await tester.pumpWidget(_CupertinoIndicatorHarness(
-        key: key,
-        header: const CupertinoHeader(
-          userWaterDrop: false,
+      await tester.pumpWidget(
+        _CupertinoIndicatorHarness(
+          key: key,
+          header: const CupertinoHeader(userWaterDrop: false),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -191,12 +185,12 @@ void main() {
 
     testWidgets('CupertinoHeader with backgroundColor', (tester) async {
       final key = GlobalKey<_CupertinoIndicatorHarnessState>();
-      await tester.pumpWidget(_CupertinoIndicatorHarness(
-        key: key,
-        header: const CupertinoHeader(
-          backgroundColor: Colors.grey,
+      await tester.pumpWidget(
+        _CupertinoIndicatorHarness(
+          key: key,
+          header: const CupertinoHeader(backgroundColor: Colors.grey),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -214,12 +208,12 @@ void main() {
 
     testWidgets('CupertinoHeader with emptyWidget', (tester) async {
       final key = GlobalKey<_CupertinoIndicatorHarnessState>();
-      await tester.pumpWidget(_CupertinoIndicatorHarness(
-        key: key,
-        header: const CupertinoHeader(
-          emptyWidget: Text('No more content'),
+      await tester.pumpWidget(
+        _CupertinoIndicatorHarness(
+          key: key,
+          header: const CupertinoHeader(emptyWidget: Text('No more content')),
         ),
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -239,10 +233,9 @@ void main() {
   group('CupertinoFooter Tests', () {
     testWidgets('CupertinoFooter renders correctly', (tester) async {
       final key = GlobalKey<_CupertinoIndicatorHarnessState>();
-      await tester.pumpWidget(_CupertinoIndicatorHarness(
-        key: key,
-        footer: const CupertinoFooter(),
-      ));
+      await tester.pumpWidget(
+        _CupertinoIndicatorHarness(key: key, footer: const CupertinoFooter()),
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -269,12 +262,12 @@ void main() {
 
     testWidgets('CupertinoFooter with custom foregroundColor', (tester) async {
       final key = GlobalKey<_CupertinoIndicatorHarnessState>();
-      await tester.pumpWidget(_CupertinoIndicatorHarness(
-        key: key,
-        footer: const CupertinoFooter(
-          foregroundColor: Colors.green,
+      await tester.pumpWidget(
+        _CupertinoIndicatorHarness(
+          key: key,
+          footer: const CupertinoFooter(foregroundColor: Colors.green),
         ),
-      ));
+      );
       final state = key.currentState!;
 
       await tester.pumpAndSettle();
@@ -313,14 +306,16 @@ void main() {
       expect(header.position, IndicatorPosition.behind);
     });
 
-    testWidgets('CupertinoHeader default processedDuration is zero',
-        (tester) async {
+    testWidgets('CupertinoHeader default processedDuration is zero', (
+      tester,
+    ) async {
       const header = CupertinoHeader();
       expect(header.processedDuration, Duration.zero);
     });
 
-    testWidgets('CupertinoHeader default userWaterDrop is true',
-        (tester) async {
+    testWidgets('CupertinoHeader default userWaterDrop is true', (
+      tester,
+    ) async {
       const header = CupertinoHeader();
       expect(header.userWaterDrop, true);
     });

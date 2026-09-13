@@ -63,21 +63,15 @@ class _PhoenixIndicatorState extends State<_PhoenixIndicator>
 
   static const _skyPaths = [
     "M0,0L1600,0L1600,1040L0,1040z",
-    "M437 373C395 373 366 405 361 433C341 433 317 449 313 472C292 469 255 478 255 520L0 520L0 524C0 524 174 524 261 524C259 486 289 474 318 479C321 458 337 440 365 438C374 405 399 378 441 378C476 378 513 405 517 448C553 450 567 475 570 497C581 501 587 509 588 524C637 523 735 524 735 524L735 520L593 520C592 509 589 500 575 493C572 470 555 445 522 444C517 402 478 372 442 373C440 373 439 373 437 373zM1208 392L1208 401L1241 401L1241 392L1208 392zM1280 392L1280 400L1428 400L1428 392L1280 392zM1118 475C1097 475 1077 485 1063 509C1041 491 1012 508 1012 535C988 547 988 576 988 576L852 576L852 580L992 580C992 580 991 550 1016 538C1015 511 1046 496 1065 518C1098 451 1178 484 1178 538C1207 553 1204 580 1204 580L1600 580L1600 576L1208 576C1208 576 1208 545 1184 535C1182 499 1150 474 1118 475zM184 608L184 612L328 612L328 608L184 608zM904 636L904 640L1016 640L1016 636L904 636zM1200 651L1200 656L1352 656L1352 651L1200 651zM412 656L412 664L564 664L564 656L412 656z"
+    "M437 373C395 373 366 405 361 433C341 433 317 449 313 472C292 469 255 478 255 520L0 520L0 524C0 524 174 524 261 524C259 486 289 474 318 479C321 458 337 440 365 438C374 405 399 378 441 378C476 378 513 405 517 448C553 450 567 475 570 497C581 501 587 509 588 524C637 523 735 524 735 524L735 520L593 520C592 509 589 500 575 493C572 470 555 445 522 444C517 402 478 372 442 373C440 373 439 373 437 373zM1208 392L1208 401L1241 401L1241 392L1208 392zM1280 392L1280 400L1428 400L1428 392L1280 392zM1118 475C1097 475 1077 485 1063 509C1041 491 1012 508 1012 535C988 547 988 576 988 576L852 576L852 580L992 580C992 580 991 550 1016 538C1015 511 1046 496 1065 518C1098 451 1178 484 1178 538C1207 553 1204 580 1204 580L1600 580L1600 576L1208 576C1208 576 1208 545 1184 535C1182 499 1150 474 1118 475zM184 608L184 612L328 612L328 608L184 608zM904 636L904 640L1016 640L1016 636L904 636zM1200 651L1200 656L1352 656L1352 651L1200 651zM412 656L412 664L564 664L564 656L412 656z",
   ];
-  static const _skyColors = [
-    Color(0x00000000),
-    Color(0xffffffff),
-  ];
+  static const _skyColors = [Color(0x00000000), Color(0xffffffff)];
 
   static const _sunPaths = [
     "M75 125a50 50 0 0 1 100 0a50 50 0 0 1 -100 0zM10 130a5 5 0 0 1 0 -10h40a5 5 0 0 1 0 10zM200 130a5 5 0 0 1 0 -10h40a5 5 0 0 1 0 10zM120 10a5 5 0 0 1 10 0v40a5 5 0 0 1 -10 0zM120 200a5 5 0 0 1 10 0v40a5 5 0 0 1 -10 0zM23 72A5 5 0 0 1 28 63L63 84A5 5 0 0 1 58 92zM187 167A5 5 0 0 1 192 158L227 178A5 5 0 0 1 222 187zM63 28A5 5 0 0 1 72 23L92 58A5 5 0 0 1 83 63zM158 193A5 5 0 0 1 167 188L187 222A5 5 0 0 1 178 227zM72 227A5 5 0 0 1 63 222L83 187A5 5 0 0 1 92 193zM167 63A5 5 0 0 1 158 58L178 23A5 5 0 0 1 187 28zM28 187A5 5 0 0 1 23 178L58 158A5 5 0 0 1 63 167zM193 92A5 5 0 0 1 187 83L222 63A5 5 0 0 1 227 72z",
-    "M85,125 a40,40,0,0,1,80,0 a40,40,0,0,1,-80,0"
+    "M85,125 a40,40,0,0,1,80,0 a40,40,0,0,1,-80,0",
   ];
-  static const _sunColors = [
-    Color(0xfffef9e8),
-    Color(0xfff3e59c),
-  ];
+  static const _sunColors = [Color(0xfffef9e8), Color(0xfff3e59c)];
 
   Color get _skyColor => widget.skyColor ?? Colors.blue;
 
@@ -92,8 +86,10 @@ class _PhoenixIndicatorState extends State<_PhoenixIndicator>
   void initState() {
     super.initState();
     widget.state.notifier.addModeChangeListener(_onModeChange);
-    _animationController =
-        AnimationController(vsync: this, duration: _animationDuration);
+    _animationController = AnimationController(
+      vsync: this,
+      duration: _animationDuration,
+    );
   }
 
   @override
@@ -125,8 +121,9 @@ class _PhoenixIndicatorState extends State<_PhoenixIndicator>
         final width = math.min(constraints.maxWidth, _maxWidth);
         final skyHeight = 13 / 20 * width;
         final scale = ((_offset / _actualTriggerOffset) - 1) * 0.3 + 1;
-        final sunSize =
-            _offset < _actualTriggerOffset ? _sunSize : _sunSize / scale;
+        final sunSize = _offset < _actualTriggerOffset
+            ? _sunSize
+            : _sunSize / scale;
         return Stack(
           alignment: Alignment.center,
           children: [
@@ -149,7 +146,8 @@ class _PhoenixIndicatorState extends State<_PhoenixIndicator>
               top: _offset < _actualTriggerOffset
                   ? _actualTriggerOffset - (_offset * 0.9)
                   : _actualTriggerOffset * 0.1,
-              left: (constraints.maxWidth - width) / 2 +
+              left:
+                  (constraints.maxWidth - width) / 2 +
                   width * 0.3 +
                   sunSize / 2,
               child: AnimatedBuilder(

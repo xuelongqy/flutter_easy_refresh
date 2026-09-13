@@ -67,10 +67,15 @@ class _SkatingIndicatorState extends State<_SkatingIndicator> {
       file,
       stateMachineSelector: StateMachineNamed('Reload'),
     );
+    // The bundled .riv drives its state machine via inputs, not data binding.
+    // ignore: deprecated_member_use
     _pullAmountInput = _riveController!.stateMachine.number('pullAmount');
+    // ignore: deprecated_member_use
     _pullReleaseTrigger = _riveController!.stateMachine.trigger('pullRelease');
-    _loadFinishedTrigger =
-        _riveController!.stateMachine.trigger('loadFinished');
+    // ignore: deprecated_member_use
+    _loadFinishedTrigger = _riveController!.stateMachine.trigger(
+      'loadFinished',
+    );
     _pullReleaseFired = false;
     _loadFinishedFired = false;
     if (mounted) setState(() {});
@@ -129,10 +134,7 @@ class _SkatingIndicatorState extends State<_SkatingIndicator> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        SizedBox(
-          width: double.infinity,
-          height: _offset,
-        ),
+        SizedBox(width: double.infinity, height: _offset),
         Positioned(
           top: 0,
           left: 0,
@@ -142,10 +144,7 @@ class _SkatingIndicatorState extends State<_SkatingIndicator> {
             width: double.infinity,
             height: _offset < 140 ? 140 : _offset,
             child: _riveController != null
-                ? RiveWidget(
-                    controller: _riveController!,
-                    fit: Fit.cover,
-                  )
+                ? RiveWidget(controller: _riveController!, fit: Fit.cover)
                 : const SizedBox(),
           ),
         ),

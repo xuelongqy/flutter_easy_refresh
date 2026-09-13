@@ -146,10 +146,7 @@ class _SpaceIndicatorState extends State<_SpaceIndicator> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        SizedBox(
-          width: double.infinity,
-          height: _offset,
-        ),
+        SizedBox(width: double.infinity, height: _offset),
         Positioned(
           top: 0,
           left: 0,
@@ -161,10 +158,7 @@ class _SpaceIndicatorState extends State<_SpaceIndicator> {
                 ? _kDefaultSpaceTriggerOffset
                 : _offset,
             child: _riveController != null
-                ? RiveWidget(
-                    controller: _riveController!,
-                    fit: Fit.cover,
-                  )
+                ? RiveWidget(controller: _riveController!, fit: Fit.cover)
                 : const SizedBox(),
           ),
         ),

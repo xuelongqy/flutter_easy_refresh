@@ -17,19 +17,14 @@ class BubblesHeader extends Header {
     super.hitOver,
     super.infiniteHitOver,
     super.hapticFeedback,
-  }) : super(
-          safeArea: false,
-          triggerWhenRelease: true,
-        );
+  }) : super(safeArea: false, triggerWhenRelease: true);
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    assert(state.axis == Axis.vertical,
-        'BubblesHeader does not support horizontal scrolling.');
-    return _BubblesIndicator(
-      key: key,
-      state: state,
-      reverse: state.reverse,
+    assert(
+      state.axis == Axis.vertical,
+      'BubblesHeader does not support horizontal scrolling.',
     );
+    return _BubblesIndicator(key: key, state: state, reverse: state.reverse);
   }
 }

@@ -1,14 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Skeleton list item.
 class SkeletonItem extends StatelessWidget {
   /// Scrollable direction.
   final Axis direction;
 
-  const SkeletonItem({
-    super.key,
-    this.direction = Axis.vertical,
-  });
+  const SkeletonItem({super.key, this.direction = Axis.vertical});
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +35,7 @@ class SkeletonItem extends StatelessWidget {
                       margin: const EdgeInsets.only(top: 8, right: 24),
                       height: 12,
                       width: double.infinity,
-                      constraints: const BoxConstraints(
-                        maxWidth: 200,
-                      ),
+                      constraints: const BoxConstraints(maxWidth: 200),
                       color: foregroundColor,
                     ),
                     Container(
@@ -85,9 +80,7 @@ class SkeletonItem extends StatelessWidget {
                     margin: const EdgeInsets.only(left: 8, bottom: 24),
                     width: 12,
                     height: double.infinity,
-                    constraints: const BoxConstraints(
-                      maxHeight: 200,
-                    ),
+                    constraints: const BoxConstraints(maxHeight: 200),
                     color: foregroundColor,
                   ),
                   Container(
