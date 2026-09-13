@@ -29,10 +29,14 @@ Packages with other changes:
 #### `easy_paging` - `v4.0.0`
 
  - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+ - No longer depends on `material_ui` directly.
 
 #### `easy_refresh` - `v4.0.0`
 
  - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+ - Requires Flutter >= 3.47 and Dart ^3.13.
+ - Built-in indicators resolve `Theme` and localizations from `package:material_ui` / `package:cupertino_ui`.
+ - Apps still using `package:flutter/material.dart` should stay on `easy_refresh: ^3.5.1`.
 
 #### `easy_refresh_bow` - `v2.0.0`
 

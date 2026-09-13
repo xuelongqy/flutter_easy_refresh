@@ -3,6 +3,9 @@
 > Note: This release has breaking changes.
 
  - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+ - Requires Flutter >= 3.47 and Dart ^3.13.
+ - Built-in indicators resolve `Theme` and localizations from `package:material_ui` / `package:cupertino_ui`.
+ - Apps still using `package:flutter/material.dart` should stay on `easy_refresh: ^3.5.1`.
 
 ## 3.5.1
 

@@ -4,7 +4,7 @@
 [![Platform Flutter](https://img.shields.io/badge/platform-Flutter-blue.svg)](https://flutter.dev)
 [![Pub](https://img.shields.io/pub/v/easy_refresh)](https://pub.dev/packages/easy_refresh)
 
-## [English](https://github.com/xuelongqy/flutter_easy_refresh/blob/v3/README.md) | 中文
+## [English](https://github.com/xuelongqy/flutter_easy_refresh/blob/v4/README.md) | 中文
 
 正如名字一样，EasyRefresh很容易就能在Flutter应用上实现下拉刷新以及上拉加载操作，它支持几乎所有的Flutter滚动组件。它的功能与Android的SmartRefreshLayout很相似，同样也吸取了很多三方库的优点。EasyRefresh中集成了多种风格的Header和Footer，但是它并没有局限性，你可以很轻松的自定义。使用Flutter强大的动画，甚至随便一个简单的控件也可以完成。EasyRefresh的目标是为Flutter打造一个强大，稳定，成熟的下拉刷新框架。
 
@@ -25,15 +25,37 @@
 
 ## 环境要求（v4.0+）
 
-从 4.0.0 开始，EasyRefresh 要求 **Flutter >= 3.47**，并基于独立的
-[material_ui](https://pub.dev/packages/material_ui) / [cupertino_ui](https://pub.dev/packages/cupertino_ui) 包构建，
-不再依赖 `package:flutter/material.dart` 与 `package:flutter/cupertino.dart`。
+EasyRefresh 4.x 要求 **Flutter >= 3.47**，并基于独立的
+[material_ui](https://pub.dev/packages/material_ui) / [cupertino_ui](https://pub.dev/packages/cupertino_ui) 包。
 
-- 如果你的 App 已迁移到 `material_ui`（`dart fix --apply --code=migrate_design_widgets`），无需额外处理。
-- 如果你的 App 仍使用 `package:flutter/material.dart` 的 `MaterialApp`，内置指示器会回退到 `material_ui` 的默认主题。
-  如需主题与本地化生效，请在 `localizationsDelegates` 中加入 `material_ui` 的 `GlobalMaterialLocalizations.delegates`，
-  并在 `MaterialApp.builder` 中用 `material_ui` 的 `Theme` 包裹整个 App（参考 `example/lib/main.dart`）；
-  否则请继续使用 `easy_refresh: ^3.5.1`。
+**4.0 只面向已经完成迁移的应用**（`dart fix --apply --code=migrate_design_widgets`）。
+仍在使用 `package:flutter/material.dart` 的应用请继续使用 `easy_refresh: ^3.5.1`（`v3` 分支），完成迁移后再升级。
+
+内置指示器从 `material_ui` 读取 `Theme` 与本地化。典型用法：
+
+```dart
+import 'package:material_ui/material_ui.dart';
+import 'package:easy_refresh/easy_refresh.dart';
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+      ),
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      home: EasyRefresh(
+        onRefresh: () async {},
+        onLoad: () async {},
+        child: ListView(),
+      ),
+    );
+  }
+}
+```
 
 ## 配套包
 

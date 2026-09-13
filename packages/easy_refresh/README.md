@@ -4,7 +4,7 @@
 [![Platform Flutter](https://img.shields.io/badge/platform-Flutter-blue.svg)](https://flutter.dev)
 [![Pub](https://img.shields.io/pub/v/easy_refresh)](https://pub.dev/packages/easy_refresh)
 
-## English | [中文](https://github.com/xuelongqy/flutter_easy_refresh/blob/v3/README_CN.md)
+## English | [中文](https://github.com/xuelongqy/flutter_easy_refresh/blob/v4/README_CN.md)
 
 Just like the name, EasyRefresh can easily implement pull-down refresh and pull-up load on Flutter applications. It supports almost all Flutter Scrollable widgets. Its function is very similar to Android's SmartRefreshLayout, and it also absorbs the advantages of many third-party libraries. EasyRefresh integrates various styles of Header and Footer, but it has no limitations, you can easily customize it. Using Flutter's powerful animations, even just a simple control can be done. The goal of EasyRefresh is to create a powerful, stable and mature pull-to-refresh framework for Flutter.
 
@@ -28,15 +28,37 @@ Just like the name, EasyRefresh can easily implement pull-down refresh and pull-
 
 ## Requirements (v4.0+)
 
-Starting from 4.0.0, EasyRefresh requires **Flutter >= 3.47** and is built on the standalone
-[material_ui](https://pub.dev/packages/material_ui) / [cupertino_ui](https://pub.dev/packages/cupertino_ui) packages
-instead of `package:flutter/material.dart` and `package:flutter/cupertino.dart`.
+EasyRefresh 4.x requires **Flutter >= 3.47** and uses the standalone
+[material_ui](https://pub.dev/packages/material_ui) / [cupertino_ui](https://pub.dev/packages/cupertino_ui) packages.
 
-- If your app has already migrated to `material_ui` (`dart fix --apply --code=migrate_design_widgets`), nothing else is needed.
-- If your app still uses `MaterialApp` from `package:flutter/material.dart`, the indicators fall back to the default
-  `material_ui` theme. To theme and localize them, add `material_ui`'s `GlobalMaterialLocalizations.delegates` to
-  `localizationsDelegates` and wrap the app (e.g. in `MaterialApp.builder`) with a `material_ui` `Theme`, as done in
-  `example/lib/main.dart`. Otherwise stay on `easy_refresh: ^3.5.1`.
+**4.0 is for apps that have already migrated** (`dart fix --apply --code=migrate_design_widgets`).
+Apps still on `package:flutter/material.dart` should stay on `easy_refresh: ^3.5.1` (the `v3` branch) until they migrate.
+
+Built-in indicators read `Theme` and localizations from `material_ui`. A typical app looks like this:
+
+```dart
+import 'package:material_ui/material_ui.dart';
+import 'package:easy_refresh/easy_refresh.dart';
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+      ),
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      home: EasyRefresh(
+        onRefresh: () async {},
+        onLoad: () async {},
+        child: ListView(),
+      ),
+    );
+  }
+}
+```
 
 ## Companion Packages
 

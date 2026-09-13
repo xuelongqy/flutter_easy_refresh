@@ -3,8 +3,8 @@ library;
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:flutter/physics.dart' as physics;
+import 'package:flutter/widgets.dart';
 
 /// Paging item builder.
 typedef EasyPagingItemBuilder<ItemType> = Widget Function(

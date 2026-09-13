@@ -9,9 +9,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'EasyRefresh',
-      home: HomePage(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+      ),
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      home: const HomePage(),
     );
   }
 }

@@ -3,6 +3,7 @@
 > Note: This release has breaking changes.
 
  - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+ - No longer depends on `material_ui` directly; use `package:flutter/widgets.dart`.
 
 ## 3.5.1
 

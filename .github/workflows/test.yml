@@ -34,6 +34,10 @@ jobs:
         working-directory: packages/easy_refresh
         run: flutter test --coverage
 
+      - name: Run paging tests
+        working-directory: packages/easy_paging
+        run: flutter test
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
