@@ -5,6 +5,7 @@ import 'package:example/page/more/theme_page.dart';
 import 'package:example/page/sample/carousel_page.dart';
 import 'package:example/page/sample/chat_page.dart';
 import 'package:example/page/sample/listener_header_page.dart';
+import 'package:example/page/sample/easy_refresh_nested_page.dart';
 import 'package:example/page/sample/nested_scroll_view.dart';
 import 'package:example/page/sample/page_view_page.dart';
 import 'package:example/page/sample/paging_page.dart';
@@ -38,6 +39,7 @@ class Routes {
   static const sample = '/sample';
   static const profileSample = '/sample/profile';
   static const nestedScrollViewSample = '/sample/nested-scroll-view';
+  static const easyRefreshNestedSample = '/sample/easy-refresh-nested';
   static const carouselSample = '/sample/carousel';
   static const refreshOnStartSample = '/sample/refresh-on-start';
   static const listenerSample = '/sample/listener';
@@ -77,6 +79,10 @@ class Routes {
     GetPage(
       name: nestedScrollViewSample,
       page: () => const NestedScrollViewPage(),
+    ),
+    GetPage(
+      name: easyRefreshNestedSample,
+      page: () => const EasyRefreshNestedPage(),
     ),
     GetPage(name: carouselSample, page: () => const CarouselPage()),
     GetPage(name: refreshOnStartSample, page: () => const RefreshOnStartPage()),

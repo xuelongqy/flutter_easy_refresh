@@ -178,53 +178,146 @@ Sample implementation: `example/lib/page/sample/paging_page.dart`
 
 #### 6. NestedScrollView
 
+`EasyRefresh.nested` is the first-class wrapper for Flutter's **official** `NestedScrollView`. It creates that view, applies NestedScrollView-safe physics, and (when `onRefresh` is set) inserts `HeaderLocator` as the first outer sliver. You do **not** pass `physics` on `body`. Header must be **clamping** (non-clamping Headers are promoted). Inner bouncing pull-to-refresh and secondary Header + Nested are **not supported**. Nested `onLoad` should keep ClassicFooter's **infinite** load (`clamping: false`); `clamping: true` + `infiniteOffset: null` cannot enter NestedScrollView overscroll.
+
+A Footer on this layer binds the **visible** inner (current `TabBarView` tab). Split `onLoad` by tab yourself. Independent `noMore` / Footer state per tab needs Recipe B.
+
+Do **not** wrap `ExtendedNestedScrollView` (or any custom nested view) with `EasyRefresh.nested` — it can only construct Flutter's `NestedScrollView`. Use `EasyRefresh.builder(isNested: true)` and assign the builder `physics` to that view.
+
+`isNested: true` means NestedScrollView-safe physics, not extra `if`s on the bouncing path.
+
+**Recipe A — page refresh (recommended)**
+
+One EasyRefresh around NestedScrollView. One `onRefresh`. Sample: `example/lib/page/sample/easy_refresh_nested_page.dart`. ExtendedNested uses `builder` (`tab_bar_view_page.dart`).
+
 ```dart
-  EasyRefresh.builder(
-    header: MaterialHeader(
-      clamping: true,
-    ),
-    onRefresh: () async {
-      ....
-    },
-    onLoad: () async {
-      ....
-    },
-    childBuilder: (context, physics) {
-      return NestedScrollView(
+EasyRefresh.nested(
+  header: MaterialHeader(
+    clamping: true,
+    position: IndicatorPosition.locator,
+  ),
+  onRefresh: () async {
+    ....
+  },
+  onLoad: () async {
+    ....
+  },
+  headerSliverBuilder: (context, innerBoxIsScrolled) {
+    return [
+      const SliverAppBar(pinned: true, expandedHeight: 120),
+    ];
+  },
+  body: ListView(),
+);
+
+// ExtendedNestedScrollView or a custom nested view:
+EasyRefresh.builder(
+  isNested: true,
+  header: MaterialHeader(
+    clamping: true,
+    position: IndicatorPosition.locator,
+  ),
+  onRefresh: () async {
+    ....
+  },
+  childBuilder: (context, physics) {
+    return ExtendedNestedScrollView(
+      physics: physics,
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          const HeaderLocator.sliver(clearExtent: false),
+          ....
+        ];
+      },
+      body: ListView(
         physics: physics,
-        body: ListView(
-          physics: physics,
-        );
-      );
-    },
-  );
-  // or
-  EasyRefresh.builder(
-    header: MaterialHeader(
-      clamping: true,
-      position: IndicatorPosition.locator,
-    ),
-    onRefresh: () async {
-      ....
-    },
-    onLoad: () async {
-      ....
-    },
-    childBuilder: (context, physics) {
-      return NestedScrollView(
-        physics: physics,
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            const HeaderLocator.sliver(clearExtent: false),
-            ....
-          ];
+      ),
+    );
+  },
+);
+```
+
+**Recipe B — page Header + per-tab Footer**
+
+Outer `EasyRefresh.nested` (or `builder(isNested: true)`) refreshes only (`onLoad: null`). Each tab has its own `EasyRefresh` with `onRefresh: null` and `NotRefreshHeader()`.
+
+```dart
+EasyRefresh.nested(
+  header: MaterialHeader(
+    clamping: true,
+    position: IndicatorPosition.locator,
+  ),
+  onRefresh: () async {
+    ....
+  },
+  headerSliverBuilder: (context, innerBoxIsScrolled) {
+    return [
+      const SliverAppBar(pinned: true, expandedHeight: 120),
+    ];
+  },
+  body: TabBarView(
+    children: [
+      EasyRefresh(
+        header: const NotRefreshHeader(),
+        onLoad: () async {
+          ....
         },
-        body: ListView(
-          physics: physics,
-        );
-      );
-    },
-  );
+        child: ListView(),
+      ),
+    ],
+  ),
+);
+```
+
+**Recipe C — per-tab Header (NestedScrollView sample)**
+
+When Header sits in each tab's inner slivers (below the TabBar), the outer layer **must not** set `onRefresh`, or you get a page Header. The NestedScrollView **outer still needs nested-safe physics**, or pushing up collapses the AppBar before the Header retracts.
+
+Use an outer `EasyRefresh.builder(isNested: true)` **without** `onRefresh` / `onLoad`: it only passes `physics` into the nested view. Each tab has a real `EasyRefresh` with its own Header/Footer. Those physics instances are **not** shared — outer freezes the AppBar; inner drives that tab's indicators.
+
+Sample: `example/lib/page/sample/nested_scroll_view.dart`.
+
+```dart
+EasyRefresh.builder(
+  isNested: true,
+  childBuilder: (context, physics) {
+    return NestedScrollView(
+      physics: physics,
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          const SliverAppBar(pinned: true, expandedHeight: 120),
+        ];
+      },
+      body: TabBarView(
+        children: [
+          EasyRefresh.builder(
+            isNested: true,
+            header: MaterialHeader(
+              clamping: true,
+              position: IndicatorPosition.locator,
+            ),
+            onRefresh: () async {
+              ....
+            },
+            onLoad: () async {
+              ....
+            },
+            childBuilder: (context, innerPhysics) {
+              return CustomScrollView(
+                physics: innerPhysics,
+                slivers: [
+                  const HeaderLocator.sliver(clearExtent: false),
+                  ....
+                  const FooterLocator.sliver(clearExtent: false),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  },
+);
 ```
 
 ## Style Packages

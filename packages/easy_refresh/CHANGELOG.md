@@ -6,6 +6,14 @@
  - Requires Flutter >= 3.47 and Dart ^3.13.
  - Built-in indicators resolve `Theme` and localizations from `package:material_ui` / `package:cupertino_ui`.
  - Apps still using `package:flutter/material.dart` should stay on `easy_refresh: ^3.5.1`.
+ - **FEAT**: NestedScrollView-safe physics, `EasyRefresh.nested`, and `isNested` as nested-safe physics (not bouncing patches).
+ - **FIX**: NestedScrollView retracts Header before collapsing the AppBar when pushing up, so releasing below trigger no longer starts a refresh.
+ - **FIX**: Completing refresh while the NestedScrollView AppBar is collapsed no longer flashes the AppBar background.
+ - **FIX**: Nested TabBarView Footer / callLoad bind the visible inner instead of the first attached tab ([#735](https://github.com/xuelongqy/flutter_easy_refresh/issues/735)).
+ - **FIX**: Inner EasyRefresh auto-adopted into NestedScrollView keeps nested-safe state across parent rebuilds ([#758](https://github.com/xuelongqy/flutter_easy_refresh/issues/758)).
+ - **FIX**: NestedScrollView ballistic `result` / `RenderBox.size` asserts after refresh or load ([#627](https://github.com/xuelongqy/flutter_easy_refresh/issues/627), [#652](https://github.com/xuelongqy/flutter_easy_refresh/issues/652), [#908](https://github.com/xuelongqy/flutter_easy_refresh/issues/908)).
+ - **FIX**: NestedScrollView ClassicFooter remaining after load ([#678](https://github.com/xuelongqy/flutter_easy_refresh/issues/678)).
+ - **FIX**: Page-level Nested refresh, per-tab Footer, and per-tab EasyRefresh isolation ([#508](https://github.com/xuelongqy/flutter_easy_refresh/issues/508), [#725](https://github.com/xuelongqy/flutter_easy_refresh/issues/725), [#838](https://github.com/xuelongqy/flutter_easy_refresh/issues/838)).
 
 ## 3.5.1
 

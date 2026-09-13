@@ -162,11 +162,35 @@ class EasyRefresh extends StatefulWidget {
   final Axis? triggerAxis;
 
   /// Use false by default.
-  /// When true, EasyRefresh handles NestedScrollView.
-  /// In versions 3.4.0 and earlier, no setting is required.
-  /// Because of automatic judgment, it will add burden to scenes that do not
-  /// need NestedScrollView.
+  /// When true, EasyRefresh uses NestedScrollView-safe physics: Header offset
+  /// is tracked from the outer position at the global top, Footer from the
+  /// current inner. Pass the same physics to NestedScrollView and its body.
+  /// This does not mean "enable extra Nested ifs" on the default bouncing path.
   final bool isNested;
+
+  /// Optional NestedScrollView outer [ScrollController].
+  /// Used when wrapping a custom nested view (for example ExtendedNestedScrollView).
+  final ScrollController? nestedOuterController;
+
+  /// Optional NestedScrollView inner [ScrollController].
+  /// When the body has multiple inners, this should be the active inner.
+  final ScrollController? nestedInnerController;
+
+  final NestedScrollViewHeaderSliversBuilder? _nestedHeaderSliverBuilder;
+
+  final Widget? _nestedBody;
+
+  final Axis _nestedScrollDirection;
+
+  final bool _nestedReverse;
+
+  final bool _nestedFloatHeaderSlivers;
+
+  final Clip _nestedClipBehavior;
+
+  final DragStartBehavior _nestedDragStartBehavior;
+
+  final String? _nestedRestorationId;
 
   /// Default header indicator.
   static Header Function() defaultHeaderBuilder = _defaultHeaderBuilder;
@@ -215,7 +239,17 @@ class EasyRefresh extends StatefulWidget {
     this.scrollController,
     this.triggerAxis,
     this.isNested = false,
+    this.nestedOuterController,
+    this.nestedInnerController,
   }) : childBuilder = null,
+       _nestedHeaderSliverBuilder = null,
+       _nestedBody = null,
+       _nestedScrollDirection = Axis.vertical,
+       _nestedReverse = false,
+       _nestedFloatHeaderSlivers = false,
+       _nestedClipBehavior = Clip.hardEdge,
+       _nestedDragStartBehavior = DragStartBehavior.start,
+       _nestedRestorationId = null,
        assert(
          callRefreshOverOffset > 0,
          'callRefreshOverOffset must be greater than 0.',
@@ -251,7 +285,90 @@ class EasyRefresh extends StatefulWidget {
     this.scrollController,
     this.triggerAxis,
     this.isNested = false,
+    this.nestedOuterController,
+    this.nestedInnerController,
   }) : child = null,
+       _nestedHeaderSliverBuilder = null,
+       _nestedBody = null,
+       _nestedScrollDirection = Axis.vertical,
+       _nestedReverse = false,
+       _nestedFloatHeaderSlivers = false,
+       _nestedClipBehavior = Clip.hardEdge,
+       _nestedDragStartBehavior = DragStartBehavior.start,
+       _nestedRestorationId = null,
+       assert(
+         callRefreshOverOffset > 0,
+         'callRefreshOverOffset must be greater than 0.',
+       ),
+       assert(
+         callLoadOverOffset > 0,
+         'callLoadOverOffset must be greater than 0.',
+       );
+
+  /// First-class integration for Flutter's [NestedScrollView].
+  ///
+  /// Builds a [NestedScrollView], applies NestedScrollView-safe physics, and
+  /// inserts a [HeaderLocator] ahead of [headerSliverBuilder] when [onRefresh]
+  /// is not null. A non-clamping Header is promoted to clamping + locator.
+  /// [body] does not need an explicit `physics`; this widget's
+  /// [ScrollConfiguration] already carries it.
+  ///
+  /// Do not wrap ExtendedNestedScrollView or other custom nested views —
+  /// this constructor can only create the Flutter [NestedScrollView]. Use
+  /// [EasyRefresh.builder] with [isNested] `true` and assign the builder
+  /// `physics` to that view instead.
+  ///
+  /// A Footer on this widget binds the **visible** inner (for example the
+  /// current [TabBarView] tab). Independent per-tab load should use a
+  /// Footer-only [EasyRefresh] inside [body] instead of [onLoad] here.
+  /// When each tab owns its Header, omit [onRefresh] on this layer (physics
+  /// for the nested view only) and put Header/Footer on the inner
+  /// [EasyRefresh]; see the NestedScrollView sample.
+  const EasyRefresh.nested({
+    super.key,
+    required NestedScrollViewHeaderSliversBuilder headerSliverBuilder,
+    required Widget body,
+    this.controller,
+    this.header,
+    this.footer,
+    this.onRefresh,
+    this.onLoad,
+    this.spring,
+    this.frictionFactor,
+    this.notRefreshHeader,
+    this.notLoadFooter,
+    this.simultaneously = false,
+    this.canRefreshAfterNoMore = false,
+    this.canLoadAfterNoMore = false,
+    this.resetAfterRefresh = true,
+    this.refreshOnStart = false,
+    this.refreshOnStartHeader,
+    this.callRefreshOverOffset = 20,
+    this.callLoadOverOffset = 20,
+    this.fit = StackFit.loose,
+    this.clipBehavior = Clip.hardEdge,
+    this.scrollBehaviorBuilder,
+    this.scrollController,
+    this.triggerAxis,
+    this.nestedOuterController,
+    this.nestedInnerController,
+    Axis scrollDirection = Axis.vertical,
+    bool reverse = false,
+    bool floatHeaderSlivers = false,
+    Clip nestedClipBehavior = Clip.hardEdge,
+    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
+    String? restorationId,
+  }) : child = null,
+       childBuilder = null,
+       isNested = true,
+       _nestedHeaderSliverBuilder = headerSliverBuilder,
+       _nestedBody = body,
+       _nestedScrollDirection = scrollDirection,
+       _nestedReverse = reverse,
+       _nestedFloatHeaderSlivers = floatHeaderSlivers,
+       _nestedClipBehavior = nestedClipBehavior,
+       _nestedDragStartBehavior = dragStartBehavior,
+       _nestedRestorationId = restorationId,
        assert(
          callRefreshOverOffset > 0,
          'callRefreshOverOffset must be greater than 0.',
@@ -281,6 +398,9 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// [ScrollPhysics] use it in EasyRefresh.
   late _ERScrollPhysics _physics;
 
+  final GlobalKey<NestedScrollViewState> _nestedViewKey =
+      GlobalKey<NestedScrollViewState>();
+
   /// Needs to share data.
   late EasyRefreshData _data;
 
@@ -307,12 +427,13 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// Use [EasyRefresh._defaultHeader] without [EasyRefresh.header].
   /// Use [NotRefreshHeader] when [EasyRefresh.onRefresh] is null.
   Header get _header {
+    Header header;
     if (widget.onRefresh == null) {
       if (widget.notRefreshHeader != null) {
-        return widget.notRefreshHeader!;
+        header = widget.notRefreshHeader!;
       } else {
         final h = widget.header ?? EasyRefresh._defaultHeader;
-        return NotRefreshHeader(
+        header = NotRefreshHeader(
           clamping: h.clamping,
           position: h.position,
           spring: h.spring,
@@ -322,15 +443,43 @@ class _EasyRefreshState extends State<EasyRefresh>
         );
       }
     } else {
-      Header h = widget.header ?? EasyRefresh._defaultHeader;
+      header = widget.header ?? EasyRefresh._defaultHeader;
       if (_isRefreshOnStart) {
-        h = OverrideHeader(
-          header: widget.refreshOnStartHeader ?? h,
+        header = OverrideHeader(
+          header: widget.refreshOnStartHeader ?? header,
           triggerWhenReach: true,
         );
       }
-      return h;
+      header = _nestedCompatibleHeader(header);
     }
+    return header;
+  }
+
+  Header _nestedCompatibleHeader(Header header) {
+    if (!widget.isNested) {
+      return header;
+    }
+    final wantLocator = widget._nestedHeaderSliverBuilder != null;
+    final needClamping = !header.clamping;
+    final needLocator =
+        wantLocator &&
+        header.position != IndicatorPosition.locator &&
+        header.position != IndicatorPosition.custom;
+    if (!needClamping && !needLocator) {
+      return header;
+    }
+    assert(() {
+      debugPrint(
+        'EasyRefresh.nested uses a clamping Header'
+        '${needLocator ? ' with IndicatorPosition.locator' : ''}.',
+      );
+      return true;
+    }());
+    return OverrideHeader(
+      header: header,
+      clamping: true,
+      position: needLocator ? IndicatorPosition.locator : header.position,
+    );
   }
 
   /// Use [EasyRefresh._defaultFooter] without [EasyRefresh.footer].
@@ -372,19 +521,35 @@ class _EasyRefreshState extends State<EasyRefresh>
     }
     _initData();
     widget.controller?._bind(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _syncNestedHost();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _syncNestedHost();
+    });
   }
 
   @override
   void didUpdateWidget(covariant EasyRefresh oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Update header and footer.
+    if (oldWidget.isNested != widget.isNested) {
+      _physics = _createPhysics();
+    }
+    // Recipe B inner widgets keep [isNested] false on the widget and are
+    // promoted to nested physics at runtime. Preserve that adopted flag.
+    final isNested = widget.isNested || _physics is _ERNestedScrollPhysics;
     _headerNotifier._update(
       indicator: _header,
       canProcessAfterNoMore: widget.canRefreshAfterNoMore,
       triggerAxis: widget.triggerAxis,
       task: _onRefresh,
       waitTaskRefresh: _waitRefreshResult,
-      isNested: widget.isNested,
+      isNested: isNested,
     );
     _footerNotifier._update(
       indicator: _footer,
@@ -392,13 +557,16 @@ class _EasyRefreshState extends State<EasyRefresh>
       triggerAxis: widget.triggerAxis,
       task: widget.onLoad,
       waitTaskRefresh: _waitLoadResult,
-      isNested: widget.isNested,
+      isNested: isNested,
     );
     // Update controller.
     if (widget.controller != null &&
         oldWidget.controller != widget.controller) {
       widget.controller?._bind(this);
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _syncNestedHost();
+    });
   }
 
   @override
@@ -449,13 +617,361 @@ class _EasyRefreshState extends State<EasyRefresh>
         },
       ),
     );
-    _physics = _ERScrollPhysics(
+    _physics = _createPhysics();
+  }
+
+  _ERScrollPhysics _createPhysics() {
+    if (widget.isNested) {
+      return _ERNestedScrollPhysics(
+        userOffsetNotifier: _userOffsetNotifier,
+        headerNotifier: _headerNotifier,
+        footerNotifier: _footerNotifier,
+        spring: widget.spring,
+        frictionFactor: widget.frictionFactor,
+      );
+    }
+    return _ERScrollPhysics(
       userOffsetNotifier: _userOffsetNotifier,
       headerNotifier: _headerNotifier,
       footerNotifier: _footerNotifier,
       spring: widget.spring,
       frictionFactor: widget.frictionFactor,
     );
+  }
+
+  NestedScrollViewState? get _nestedHostState {
+    return _nestedViewKey.currentState ??
+        context.findAncestorStateOfType<NestedScrollViewState>();
+  }
+
+  /// Official [NestedScrollViewState] or ExtendedNestedScrollViewState.
+  /// The latter does not extend [NestedScrollViewState], but exposes the
+  /// same `outerController` / `innerController` getters.
+  Object? _nestedHostLike() {
+    final official = _nestedHostState;
+    if (official != null) {
+      return official;
+    }
+    State? found;
+    context.visitAncestorElements((element) {
+      if (element is StatefulElement) {
+        final name = element.state.runtimeType.toString();
+        if (name.contains('NestedScrollViewState')) {
+          found = element.state;
+          return false;
+        }
+      }
+      return true;
+    });
+    return found;
+  }
+
+  ScrollController? _nestedHostOuterController() {
+    try {
+      return (_nestedHostLike() as dynamic)?.outerController
+          as ScrollController?;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  ScrollController? _nestedHostInnerController() {
+    try {
+      return (_nestedHostLike() as dynamic)?.innerController
+          as ScrollController?;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  bool _hasAncestorNestedScrollView() {
+    if (context.findAncestorStateOfType<NestedScrollViewState>() != null) {
+      return true;
+    }
+    var found = false;
+    context.visitAncestorElements((element) {
+      final name = element.widget.runtimeType.toString();
+      if (element.widget is NestedScrollView ||
+          name.contains('NestedScrollView')) {
+        found = true;
+        return false;
+      }
+      return true;
+    });
+    return found;
+  }
+
+  void _syncNestedHost() {
+    if (!mounted) {
+      return;
+    }
+    _adoptNestedHostIfNeeded();
+    _attachAncestorHeaderIfNeeded();
+    _bindNestedControllers();
+  }
+
+  bool _hasDescendantNestedScrollView() {
+    var found = false;
+    void visit(Element element) {
+      if (found) {
+        return;
+      }
+      final typeName = element.widget.runtimeType.toString();
+      if (element.widget is NestedScrollView ||
+          typeName.contains('NestedScrollView')) {
+        found = true;
+        return;
+      }
+      element.visitChildren(visit);
+    }
+
+    context.visitChildElements(visit);
+    return found;
+  }
+
+  void _switchToNestedPhysics({
+    HeaderNotifier? headerNotifier,
+    bool bindHeaderPhysics = true,
+  }) {
+    final header = headerNotifier ?? _headerNotifier;
+    _headerNotifier._isNested = true;
+    _footerNotifier._isNested = true;
+    _headerNotifier._ensureClampingAnimation();
+    _footerNotifier._ensureClampingAnimation();
+    header._isNested = true;
+    header._ensureClampingAnimation();
+    setState(() {
+      _physics = _ERNestedScrollPhysics(
+        userOffsetNotifier: _userOffsetNotifier,
+        headerNotifier: header,
+        footerNotifier: _footerNotifier,
+        spring: widget.spring,
+        frictionFactor: widget.frictionFactor,
+        bindHeaderPhysics: bindHeaderPhysics,
+      );
+    });
+  }
+
+  /// Pattern B inner lists must drive the page Header, not a no-op
+  /// [NotRefreshHeader] on this EasyRefresh.
+  void _attachAncestorHeaderIfNeeded() {
+    if (widget.onRefresh != null || widget.isNested) {
+      return;
+    }
+    final inherited = context
+        .getInheritedWidgetOfExactType<_InheritedEasyRefresh>();
+    final host = inherited?.data.headerNotifier;
+    if (host == null ||
+        host._task == null ||
+        identical(host, _headerNotifier)) {
+      return;
+    }
+    if (identical(_physics.headerNotifier, host)) {
+      return;
+    }
+    _switchToNestedPhysics(headerNotifier: host, bindHeaderPhysics: false);
+  }
+
+  /// Pattern B: an EasyRefresh inside NestedScrollView (often Footer-only)
+  /// must use nested-safe physics even when [EasyRefresh.isNested] is false.
+  void _adoptNestedHostIfNeeded() {
+    if (widget.isNested) {
+      return;
+    }
+    if (_physics is _ERNestedScrollPhysics) {
+      _headerNotifier._isNested = true;
+      _footerNotifier._isNested = true;
+      _headerNotifier._ensureClampingAnimation();
+      _footerNotifier._ensureClampingAnimation();
+      return;
+    }
+    if (_hasAncestorNestedScrollView()) {
+      _switchToNestedPhysics();
+      return;
+    }
+    // Wrapping a NestedScrollView with isNested: false must stay bouncing.
+    if (_hasDescendantNestedScrollView()) {
+      return;
+    }
+    final local = _findLocalScrollPosition();
+    if (local != null &&
+        (local.debugLabel == 'inner' ||
+            local.debugLabel == 'outer' ||
+            local.runtimeType.toString().contains('NestedScrollPosition'))) {
+      _switchToNestedPhysics();
+    }
+  }
+
+  bool _isNestedInnerPosition(ScrollPosition position) {
+    if (position.debugLabel == 'outer' || position.axis != Axis.vertical) {
+      return false;
+    }
+    return position.debugLabel == 'inner' ||
+        position.runtimeType.toString().contains('NestedScrollPosition');
+  }
+
+  /// TabBarView / IndexedStack keep every tab's inner attached. Prefer the
+  /// one that is actually on screen so Footer / callLoad follow the visible tab.
+  double _currentInnerScore(BuildContext context, ScrollPosition position) {
+    if (!_isNestedInnerPosition(position)) {
+      return double.negativeInfinity;
+    }
+    try {
+      if (!TickerMode.valuesOf(context).enabled || !Visibility.of(context)) {
+        return double.negativeInfinity;
+      }
+    } catch (_) {
+      return double.negativeInfinity;
+    }
+    final offstage = context.findAncestorWidgetOfExactType<Offstage>();
+    if (offstage != null && offstage.offstage) {
+      return double.negativeInfinity;
+    }
+    final renderObject = context.findRenderObject();
+    if (renderObject is! RenderBox ||
+        !renderObject.hasSize ||
+        !renderObject.attached ||
+        renderObject.size.isEmpty) {
+      return double.negativeInfinity;
+    }
+    final viewSize = MediaQuery.sizeOf(context);
+    final center = renderObject.localToGlobal(
+      renderObject.size.center(Offset.zero),
+    );
+    const slop = 8.0;
+    if (center.dx < -slop ||
+        center.dx > viewSize.width + slop ||
+        center.dy < -slop ||
+        center.dy > viewSize.height + slop) {
+      return double.negativeInfinity;
+    }
+    final viewCenter = Offset(viewSize.width / 2, viewSize.height / 2);
+    return -(center - viewCenter).distanceSquared;
+  }
+
+  ScrollPosition? _findInnerScrollPosition() {
+    ScrollPosition? best;
+    var bestScore = double.negativeInfinity;
+    ScrollPosition? firstInner;
+    void visit(Element element) {
+      if (element is StatefulElement && element.state is ScrollableState) {
+        final state = element.state as ScrollableState;
+        try {
+          final position = state.position;
+          if (position.hasContentDimensions &&
+              _isNestedInnerPosition(position)) {
+            firstInner ??= position;
+            final score = _currentInnerScore(state.context, position);
+            if (score > bestScore) {
+              bestScore = score;
+              best = position;
+            }
+          }
+        } catch (_) {}
+      }
+      element.visitChildren(visit);
+    }
+
+    context.visitChildElements(visit);
+    return best ?? firstInner;
+  }
+
+  ScrollPosition? _findLocalScrollPosition() {
+    ScrollPosition? inner = _findInnerScrollPosition();
+    if (inner != null) {
+      return inner;
+    }
+    ScrollPosition? fallback;
+    void visit(Element element) {
+      if (fallback != null) {
+        return;
+      }
+      if (element is StatefulElement && element.state is ScrollableState) {
+        final state = element.state as ScrollableState;
+        try {
+          final position = state.position;
+          if (position.hasContentDimensions &&
+              position.debugLabel != 'outer' &&
+              position.axis == Axis.vertical) {
+            fallback = position;
+          }
+        } catch (_) {}
+      }
+      element.visitChildren(visit);
+    }
+
+    context.visitChildElements(visit);
+    return fallback;
+  }
+
+  void _bindLocalNestedPositions() {
+    ScrollPosition? outerPos;
+    void visit(Element element) {
+      if (element is StatefulElement && element.state is ScrollableState) {
+        final state = element.state as ScrollableState;
+        try {
+          final position = state.position;
+          if (position.hasContentDimensions && position.debugLabel == 'outer') {
+            outerPos ??= position;
+          }
+        } catch (_) {}
+      }
+      element.visitChildren(visit);
+    }
+
+    context.visitChildElements(visit);
+    final resolvedOuter = outerPos;
+    final resolvedInner = _findInnerScrollPosition();
+    if (resolvedOuter != null) {
+      _headerNotifier._nestedOuterPosition = resolvedOuter;
+      _footerNotifier._nestedOuterPosition = resolvedOuter;
+      _headerNotifier.position = resolvedOuter;
+    }
+    if (resolvedInner != null) {
+      _headerNotifier._nestedInnerPosition = resolvedInner;
+      _footerNotifier._nestedInnerPosition = resolvedInner;
+      _footerNotifier.position = resolvedInner;
+    }
+  }
+
+  void _bindNestedControllers() {
+    if (!mounted) {
+      return;
+    }
+    ScrollController? outer = widget.nestedOuterController;
+    ScrollController? inner = widget.nestedInnerController;
+    final nestedState = _nestedHostLike();
+    if (nestedState != null) {
+      outer ??= _nestedHostOuterController();
+      inner ??= _nestedHostInnerController();
+    }
+    if (outer == null && inner == null && nestedState == null) {
+      if (!widget.isNested && _hasDescendantNestedScrollView()) {
+        return;
+      }
+      _bindLocalNestedPositions();
+      return;
+    }
+    if (outer != null && outer.hasClients) {
+      final position = outer.position;
+      _headerNotifier._nestedOuterPosition = position;
+      _footerNotifier._nestedOuterPosition = position;
+      _headerNotifier.position = position;
+    }
+    ScrollPosition? innerPosition = _findInnerScrollPosition();
+    if (innerPosition == null && inner != null && inner.hasClients) {
+      final current = _footerNotifier._nestedInnerPosition;
+      if (current != null && inner.positions.contains(current)) {
+        innerPosition = current;
+      } else {
+        innerPosition = inner.positions.last;
+      }
+    }
+    if (innerPosition != null) {
+      _headerNotifier._nestedInnerPosition = innerPosition;
+      _footerNotifier._nestedInnerPosition = innerPosition;
+      _footerNotifier.position = innerPosition;
+    }
   }
 
   /// Refresh on start listener.
@@ -502,11 +1018,16 @@ class _EasyRefreshState extends State<EasyRefresh>
     ScrollController? scrollController,
     bool force = false,
   }) {
+    _bindNestedControllers();
     return _headerNotifier.callTask(
       overOffset: overOffset ?? widget.callRefreshOverOffset,
       duration: duration,
       curve: curve,
-      scrollController: scrollController ?? widget.scrollController,
+      scrollController:
+          scrollController ??
+          widget.nestedOuterController ??
+          _nestedHostOuterController() ??
+          widget.scrollController,
       force: force,
     );
   }
@@ -524,11 +1045,16 @@ class _EasyRefreshState extends State<EasyRefresh>
     ScrollController? scrollController,
     bool force = false,
   }) {
+    _bindNestedControllers();
     return _footerNotifier.callTask(
       overOffset: overOffset ?? widget.callLoadOverOffset,
       duration: duration,
       curve: curve,
-      scrollController: scrollController ?? widget.scrollController,
+      scrollController:
+          scrollController ??
+          widget.nestedInnerController ??
+          _nestedHostInnerController() ??
+          widget.scrollController,
       force: force,
     );
   }
@@ -642,7 +1168,33 @@ class _EasyRefreshState extends State<EasyRefresh>
   /// Build content widget.
   Widget _buildContent() {
     Widget child;
-    if (widget.childBuilder != null) {
+    if (widget._nestedHeaderSliverBuilder != null) {
+      child = ScrollConfiguration(
+        behavior: _scrollBehaviorBuilder(_physics),
+        child: NestedScrollView(
+          key: _nestedViewKey,
+          controller: widget.scrollController,
+          physics: _physics,
+          scrollDirection: widget._nestedScrollDirection,
+          reverse: widget._nestedReverse,
+          floatHeaderSlivers: widget._nestedFloatHeaderSlivers,
+          clipBehavior: widget._nestedClipBehavior,
+          dragStartBehavior: widget._nestedDragStartBehavior,
+          restorationId: widget._nestedRestorationId,
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              if (widget.onRefresh != null)
+                const HeaderLocator.sliver(clearExtent: false),
+              ...widget._nestedHeaderSliverBuilder!(
+                context,
+                innerBoxIsScrolled,
+              ),
+            ];
+          },
+          body: widget._nestedBody!,
+        ),
+      );
+    } else if (widget.childBuilder != null) {
       child = ScrollConfiguration(
         behavior: _scrollBehaviorBuilder(null),
         child: widget.childBuilder!(context, _physics),

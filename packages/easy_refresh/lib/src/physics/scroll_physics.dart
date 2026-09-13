@@ -15,8 +15,11 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     required this.footerNotifier,
     this._spring,
     this._frictionFactor,
+    this.bindHeaderPhysics = true,
   }) {
-    headerNotifier._bindPhysics(this);
+    if (bindHeaderPhysics) {
+      headerNotifier._bindPhysics(this);
+    }
     footerNotifier._bindPhysics(this);
     _headerSimulationCreationState = ValueNotifier(
       _BallisticSimulationCreationState(
@@ -36,19 +39,35 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
   @override
   _ERScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    final parent = buildParent(ancestor);
+    if (this is _ERNestedScrollPhysics ||
+        headerNotifier.isNested ||
+        footerNotifier.isNested) {
+      return _ERNestedScrollPhysics(
+        parent: parent,
+        userOffsetNotifier: userOffsetNotifier,
+        headerNotifier: headerNotifier,
+        footerNotifier: footerNotifier,
+        spring: _spring,
+        frictionFactor: _frictionFactor,
+        bindHeaderPhysics: bindHeaderPhysics,
+      );
+    }
     return _ERScrollPhysics(
-      parent: buildParent(ancestor),
+      parent: parent,
       userOffsetNotifier: userOffsetNotifier,
       headerNotifier: headerNotifier,
       footerNotifier: footerNotifier,
       spring: _spring,
       frictionFactor: _frictionFactor,
+      bindHeaderPhysics: bindHeaderPhysics,
     );
   }
 
   final ValueNotifier<bool> userOffsetNotifier;
   final HeaderNotifier headerNotifier;
   final FooterNotifier footerNotifier;
+  final bool bindHeaderPhysics;
 
   /// The spring to use for ballistic simulations.
   final physics.SpringDescription? _spring;
@@ -110,6 +129,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
+    if (_shouldUseNestedPhysics(position)) {
+      return _applyNestedPhysicsToUserOffset(position, offset);
+    }
     // User started scrolling.
     userOffsetNotifier.value = true;
     assert(offset != 0.0);
@@ -164,18 +186,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         (overscrollPastEnd > 0.0 && offset > 0.0);
 
     // Scrollable viewport dimension;
-    double viewportDimension = position.viewportDimension;
-    if ((headerNotifier.isNested && position.isNestedInner)) {
-      if (headerNotifier._viewportDimension != null) {
-        viewportDimension = headerNotifier._viewportDimension!;
-      } else {
-        viewportDimension =
-            (position.axis == Axis.vertical
-                ? headerNotifier.vsync.context.size?.height
-                : headerNotifier.vsync.context.size?.width) ??
-            viewportDimension;
-      }
-    }
+    final double viewportDimension = position.viewportDimension;
 
     final double friction = easing
         // Apply less resistance when easing the overscroll vs tensioning.
@@ -204,6 +215,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
   @override
   double applyBoundaryConditions(ScrollMetrics position, double value) {
+    if (_shouldUseNestedPhysics(position)) {
+      return _applyNestedBoundaryConditions(position, value);
+    }
     if (headerNotifier._axis != position.axis ||
         headerNotifier._axisDirection != position.axisDirection) {
       headerNotifier._axis = position.axis;
@@ -220,10 +234,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     // Header
     if (headerNotifier.clamping == true) {
       if (value < position.minScrollExtent &&
-          (position.minScrollExtent < position.pixels ||
-              // NestedScrollView
-              (!userOffsetNotifier.value &&
-                  position.minScrollExtent == position.pixels))) {
+          position.minScrollExtent < position.pixels) {
         // hit top edge
         _updateIndicatorOffset(position, 0, value);
         return value - position.minScrollExtent;
@@ -254,10 +265,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       if (!(headerNotifier.hitOver || headerNotifier.modeLocked) &&
           headerNotifier.mode != IndicatorMode.ready &&
           value < position.minScrollExtent &&
-          (position.minScrollExtent < position.pixels ||
-              // NestedScrollView
-              (!userOffsetNotifier.value &&
-                  position.minScrollExtent == position.pixels))) {
+          position.minScrollExtent < position.pixels) {
         _updateIndicatorOffset(position, 0, value);
         return value - position.minScrollExtent;
       }
@@ -269,12 +277,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
           (value + headerNotifier.actualTriggerOffset) <
               position.minScrollExtent &&
           (position.minScrollExtent <
-                  (position.pixels + headerNotifier.actualTriggerOffset) ||
-              // NestedScrollView
-              (!userOffsetNotifier.value &&
-                  position.minScrollExtent ==
-                      (position.pixels +
-                          headerNotifier.actualTriggerOffset)))) {
+              (position.pixels + headerNotifier.actualTriggerOffset))) {
         _updateIndicatorOffset(
           position,
           -headerNotifier.actualTriggerOffset,
@@ -323,10 +326,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
 
     // Footer
     if (footerNotifier.clamping == true) {
-      if ((position.pixels < position.maxScrollExtent ||
-              // NestedScrollView
-              (!userOffsetNotifier.value &&
-                  position.pixels == position.maxScrollExtent)) &&
+      if (position.pixels < position.maxScrollExtent &&
           position.maxScrollExtent < value) {
         // hit bottom edge
         _updateIndicatorOffset(position, position.maxScrollExtent, value);
@@ -357,10 +357,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       // hit bottom over
       if (!(footerNotifier.hitOver || footerNotifier.modeLocked) &&
           footerNotifier.mode != IndicatorMode.ready &&
-          (position.pixels < position.maxScrollExtent ||
-              // NestedScrollView
-              (!userOffsetNotifier.value &&
-                  position.pixels == position.maxScrollExtent)) &&
+          position.pixels < position.maxScrollExtent &&
           position.maxScrollExtent < value) {
         _updateIndicatorOffset(position, position.maxScrollExtent, value);
         return value - position.maxScrollExtent;
@@ -372,12 +369,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
           (!footerNotifier.infiniteHitOver ||
               !footerNotifier.hitOver && footerNotifier.modeLocked) &&
           (footerNotifier._canProcess || footerNotifier.noMoreLocked) &&
-          ((position.pixels - footerNotifier.actualTriggerOffset) <
-                  position.maxScrollExtent ||
-              // NestedScrollView
-              (!userOffsetNotifier.value &&
-                  (position.pixels - footerNotifier.actualTriggerOffset) ==
-                      position.maxScrollExtent)) &&
+          (position.pixels - footerNotifier.actualTriggerOffset) <
+              position.maxScrollExtent &&
           position.maxScrollExtent <
               (value - footerNotifier.actualTriggerOffset)) {
         _updateIndicatorOffset(
@@ -436,14 +429,6 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     double offset,
     double value,
   ) {
-    // NestedScrollView special handling.
-    if (headerNotifier.isNested &&
-        position.isNestedOuter &&
-        headerNotifier._offset > 0 &&
-        value > position.minScrollExtent &&
-        !headerNotifier.modeLocked) {
-      return;
-    }
     final hClamping = headerNotifier.clamping && headerNotifier.offset > 0;
     final fClamping = footerNotifier.clamping && footerNotifier.offset > 0;
     headerNotifier._updateOffset(position, fClamping ? 0 : offset, false);
@@ -455,6 +440,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     ScrollMetrics position,
     double velocity,
   ) {
+    if (_shouldUseNestedPhysics(position)) {
+      return _createNestedBallisticSimulation(position, velocity);
+    }
     Tolerance tolerance = toleranceFor(position);
     // User stopped scrolling.
     final oldUserOffset = userOffsetNotifier.value;
@@ -535,6 +523,315 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     _footerSimulationCreationState.value = fState;
     return simulation;
   }
+
+  bool _shouldUseNestedPhysics(ScrollMetrics position) {
+    return this is _ERNestedScrollPhysics ||
+        headerNotifier.isNested ||
+        footerNotifier.isNested ||
+        _isNestedScrollMetrics(position);
+  }
+
+  void _syncIndicatorAxis(ScrollMetrics position) {
+    if (headerNotifier._axis != position.axis ||
+        headerNotifier._axisDirection != position.axisDirection) {
+      headerNotifier._axis = position.axis;
+      headerNotifier._axisDirection = position.axisDirection;
+    }
+    if (footerNotifier._axis != position.axis ||
+        footerNotifier._axisDirection != position.axisDirection) {
+      footerNotifier._axis = position.axis;
+      footerNotifier._axisDirection = position.axisDirection;
+    }
+  }
+
+  double _nestedViewportDimension(ScrollMetrics position) {
+    return headerNotifier._viewportDimension ?? position.viewportDimension;
+  }
+
+  bool _shouldUpdateNestedHeader(ScrollMetrics position) {
+    if (headerNotifier._task == null) {
+      return false;
+    }
+    // Nested coordinator ballistic leftover would otherwise open a clamping
+    // Header without starting the retract animation, leaving it stuck.
+    if (!headerNotifier.userOffsetNotifier.value) {
+      return false;
+    }
+    // Retract even if the AppBar has already started collapsing.
+    if (headerNotifier.offset > 0) {
+      return true;
+    }
+    if (headerNotifier.isNestedOuterPosition(position)) {
+      final inner = headerNotifier._nestedInnerPosition;
+      return inner == null || inner.pixels <= inner.minScrollExtent;
+    }
+    if (headerNotifier.isNestedInnerPosition(position)) {
+      final outer = headerNotifier._nestedOuterPosition;
+      return outer == null || outer.pixels <= outer.minScrollExtent;
+    }
+    // Combined nested metrics or unlabeled inner overscroll at the top.
+    return position.pixels <= position.minScrollExtent;
+  }
+
+  bool _shouldUpdateNestedFooter(ScrollMetrics position) {
+    if (footerNotifier._task == null) {
+      return false;
+    }
+    // NestedScrollView outer never owns Footer. Any other position (inner,
+    // unlabeled ExtendedNested inner, or combined metrics) can.
+    return !headerNotifier.isNestedOuterPosition(position);
+  }
+
+  bool _nestedHeaderHoldsScroll(HeaderNotifier header) {
+    return header._task != null &&
+        header.offset > 0 &&
+        !(header.modeLocked || header.secondaryLocked);
+  }
+
+  HeaderNotifier? _heldNestedHeader() {
+    if (_nestedHeaderHoldsScroll(headerNotifier)) {
+      return headerNotifier;
+    }
+    final held = _nestedHeldHeader;
+    if (held != null && _nestedHeaderHoldsScroll(held)) {
+      return held;
+    }
+    final inner =
+        headerNotifier._nestedInnerPosition ??
+        footerNotifier._nestedInnerPosition;
+    if (inner != null) {
+      ScrollPhysics? physics = inner.physics;
+      while (physics != null) {
+        if (physics is _ERScrollPhysics &&
+            _nestedHeaderHoldsScroll(physics.headerNotifier)) {
+          return physics.headerNotifier;
+        }
+        physics = physics.parent;
+      }
+    }
+    return null;
+  }
+
+  void _setNestedUserOffset(bool value) {
+    userOffsetNotifier.value = value;
+    if (!identical(headerNotifier.userOffsetNotifier, userOffsetNotifier)) {
+      headerNotifier.userOffsetNotifier.value = value;
+    }
+    if (!identical(footerNotifier.userOffsetNotifier, userOffsetNotifier)) {
+      footerNotifier.userOffsetNotifier.value = value;
+    }
+    if (!value) {
+      _nestedHeldHeader = null;
+    }
+  }
+
+  double _applyNestedPhysicsToUserOffset(
+    ScrollMetrics position,
+    double offset,
+  ) {
+    _setNestedUserOffset(true);
+    assert(offset != 0.0);
+    headerNotifier._observeNestedPosition(position);
+    footerNotifier._observeNestedPosition(position);
+    if (_nestedHeaderHoldsScroll(headerNotifier)) {
+      _nestedHeldHeader = headerNotifier;
+    }
+    if (!(headerNotifier.outOfRange || footerNotifier.outOfRange)) {
+      return offset;
+    }
+    double pixels = position.pixels;
+    if (headerNotifier.outOfRange) {
+      pixels = position.pixels - headerNotifier._offset;
+    }
+    if (footerNotifier.outOfRange) {
+      pixels = position.pixels + footerNotifier._offset;
+    }
+    final overscrollPastStart = math.max(
+      position.minScrollExtent - pixels,
+      0.0,
+    );
+    final overscrollPastEnd = math.max(pixels - position.maxScrollExtent, 0.0);
+    final overscrollPast = math.max(overscrollPastStart, overscrollPastEnd);
+    final easing =
+        (overscrollPastStart > 0.0 && offset < 0.0) ||
+        (overscrollPastEnd > 0.0 && offset > 0.0);
+    final viewportDimension = _nestedViewportDimension(position);
+    final friction = easing
+        ? frictionFactor((overscrollPast - offset.abs()) / viewportDimension)
+        : frictionFactor(overscrollPast / viewportDimension);
+    return offset.sign * _applyFriction(overscrollPast, offset.abs(), friction);
+  }
+
+  double _applyNestedBoundaryConditions(ScrollMetrics position, double value) {
+    _syncIndicatorAxis(position);
+    headerNotifier._observeNestedPosition(position);
+    footerNotifier._observeNestedPosition(position);
+
+    final min = position.minScrollExtent;
+    final max = position.maxScrollExtent;
+    final pixels = position.pixels;
+    final isOuter = headerNotifier.isNestedOuterPosition(position);
+    final ownsHeader = headerNotifier._task != null;
+    final headerHolds = _heldNestedHeader() != null;
+
+    if (ownsHeader &&
+        (headerHolds || (value < min && pixels <= min)) &&
+        _shouldUpdateNestedHeader(position) &&
+        (!isOuter || !headerHolds)) {
+      headerNotifier._updateOffset(position, value, false);
+      if (_nestedHeaderHoldsScroll(headerNotifier)) {
+        _nestedHeldHeader = headerNotifier;
+      }
+    } else if (value > max && pixels >= max) {
+      if (_shouldUpdateNestedFooter(position)) {
+        footerNotifier._updateOffset(position, value, false);
+      }
+    } else if (isOuter) {
+      if (!(headerNotifier.offset > 0 &&
+          value > min &&
+          !headerNotifier.modeLocked)) {
+        headerNotifier._updateOffset(position, value, false);
+      }
+    } else if (_shouldUpdateNestedFooter(position)) {
+      footerNotifier._updateOffset(position, value, false);
+    }
+
+    // Don't collapse the AppBar or shift the inner list while Header is out.
+    if (headerHolds || _nestedHeaderHoldsScroll(headerNotifier)) {
+      if (ownsHeader || (isOuter && value > pixels)) {
+        return value - pixels;
+      }
+    }
+
+    // Match ClampingScrollPhysics leftover so NestedScrollView ballistic
+    // never sees an overscroll larger than the current delta.
+    if (value < pixels && pixels <= min) {
+      return value - pixels;
+    }
+    if (value < min && min < pixels) {
+      return value - min;
+    }
+    if (max <= pixels && pixels < value) {
+      return value - pixels;
+    }
+    if (pixels < max && max < value) {
+      return value - max;
+    }
+    return 0.0;
+  }
+
+  Simulation? _createNestedBallisticSimulation(
+    ScrollMetrics position,
+    double velocity,
+  ) {
+    _setNestedUserOffset(false);
+    final headerPosition =
+        headerNotifier._nestedOuterPosition ??
+        headerNotifier._nestedInnerPosition ??
+        (position is ScrollPosition ? position : null);
+    final footerPosition =
+        footerNotifier._nestedInnerPosition ??
+        (position is ScrollPosition &&
+                !headerNotifier.isNestedOuterPosition(position)
+            ? position
+            : null);
+    if (headerPosition != null) {
+      headerNotifier._updateBySimulation(headerPosition, velocity);
+    }
+    if (footerPosition != null) {
+      footerNotifier._updateBySimulation(footerPosition, velocity);
+    }
+    final tolerance = toleranceFor(position);
+    if (position.outOfRange) {
+      final end = position.pixels > position.maxScrollExtent
+          ? position.maxScrollExtent
+          : position.minScrollExtent;
+      return ScrollSpringSimulation(
+        spring,
+        position.pixels,
+        end,
+        math.min(0.0, velocity),
+        tolerance: tolerance,
+      );
+    }
+    if (velocity.abs() < tolerance.velocity) {
+      return null;
+    }
+    if (velocity > 0.0 && position.pixels >= position.maxScrollExtent) {
+      return null;
+    }
+    if (velocity < 0.0 && position.pixels <= position.minScrollExtent) {
+      return null;
+    }
+    return ClampingScrollSimulation(
+      position: position.pixels,
+      velocity: velocity,
+      tolerance: tolerance,
+    );
+  }
+}
+
+/// NestedScrollView-safe physics.
+/// Keeps pixels inside [min, max] so the coordinator ballistic assert cannot
+/// fire, and accounts Header/Footer offset with clamping bookkeeping.
+class _ERNestedScrollPhysics extends _ERScrollPhysics {
+  _ERNestedScrollPhysics({
+    super.parent,
+    required super.userOffsetNotifier,
+    required super.headerNotifier,
+    required super.footerNotifier,
+    super.spring,
+    super.frictionFactor,
+    super.bindHeaderPhysics,
+  });
+
+  @override
+  _ERNestedScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return _ERNestedScrollPhysics(
+      parent: buildParent(ancestor),
+      userOffsetNotifier: userOffsetNotifier,
+      headerNotifier: headerNotifier,
+      footerNotifier: footerNotifier,
+      spring: _spring,
+      frictionFactor: _frictionFactor,
+      bindHeaderPhysics: bindHeaderPhysics,
+    );
+  }
+
+  @override
+  double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
+    return _applyNestedPhysicsToUserOffset(position, offset);
+  }
+
+  @override
+  double applyBoundaryConditions(ScrollMetrics position, double value) {
+    return _applyNestedBoundaryConditions(position, value);
+  }
+
+  @override
+  Simulation? createBallisticSimulation(
+    ScrollMetrics position,
+    double velocity,
+  ) {
+    return _createNestedBallisticSimulation(position, velocity);
+  }
+}
+
+/// Inner nested Header currently held by a user drag. Outer physics uses this
+/// so NestedScrollView cannot collapse the AppBar before the Header retracts.
+HeaderNotifier? _nestedHeldHeader;
+
+bool _isNestedScrollMetrics(ScrollMetrics position) {
+  if (position is ScrollPosition) {
+    final label = position.debugLabel;
+    if (label == 'outer' || label == 'inner') {
+      return true;
+    }
+    if (position.runtimeType.toString().contains('NestedScrollPosition')) {
+      return true;
+    }
+  }
+  return position.runtimeType.toString().contains('NestedScrollMetrics');
 }
 
 /// The state of the indicator when the BallisticSimulation is created.
@@ -556,15 +853,4 @@ class _BallisticSimulationCreationState {
         (newState.mode == IndicatorMode.ready &&
             newState.offset >= actualTriggerOffset);
   }
-}
-
-/// ScrollMetrics extension.
-extension _ScrollMetricsExtension on ScrollMetrics {
-  // NestedScrollView outer.
-  bool get isNestedOuter =>
-      this is ScrollPosition && (this as ScrollPosition).debugLabel == 'outer';
-
-  // NestedScrollView inner.
-  bool get isNestedInner =>
-      this is ScrollPosition && (this as ScrollPosition).debugLabel == 'inner';
 }

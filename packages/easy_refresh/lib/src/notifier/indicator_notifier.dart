@@ -150,6 +150,75 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     return null;
   }
 
+  /// NestedScrollView outer position when known.
+  ScrollPosition? _nestedOuterPosition;
+
+  /// NestedScrollView inner position last driven by the user.
+  ScrollPosition? _nestedInnerPosition;
+
+  bool isNestedOuterPosition(ScrollMetrics position) {
+    if (position is! ScrollPosition) {
+      return false;
+    }
+    if (_nestedOuterPosition != null &&
+        identical(position, _nestedOuterPosition)) {
+      return true;
+    }
+    return position.debugLabel == 'outer';
+  }
+
+  bool isNestedInnerPosition(ScrollMetrics position) {
+    if (position is! ScrollPosition) {
+      return false;
+    }
+    if (_nestedOuterPosition != null &&
+        identical(position, _nestedOuterPosition)) {
+      return false;
+    }
+    if (_nestedInnerPosition != null &&
+        identical(position, _nestedInnerPosition)) {
+      return true;
+    }
+    return position.debugLabel == 'inner';
+  }
+
+  void _observeNestedPosition(ScrollMetrics position) {
+    if (position is! ScrollPosition) {
+      return;
+    }
+    if (position.debugLabel == 'outer') {
+      _nestedOuterPosition = position;
+      _viewportDimension = position.viewportDimension;
+    } else if (position.debugLabel == 'inner') {
+      if (userOffsetNotifier.value || _nestedInnerPosition == null) {
+        _nestedInnerPosition = position;
+      }
+      _viewportDimension ??=
+          _nestedOuterPosition?.viewportDimension ?? position.viewportDimension;
+    }
+  }
+
+  /// Nested coordinator cannot bounce pixels; offset is tracked as clamping.
+  bool get _useClampingOffset {
+    if (clamping) {
+      return true;
+    }
+    if (_isNested) {
+      return true;
+    }
+    if (_position is ScrollPosition) {
+      final label = (_position as ScrollPosition).debugLabel;
+      return label == 'outer' || label == 'inner';
+    }
+    return false;
+  }
+
+  void _ensureClampingAnimation() {
+    if (_clampingAnimationController == null) {
+      _initClampingAnimation();
+    }
+  }
+
   ScrollController? _matchingScrollController(
     ScrollController? scrollController,
     ScrollPosition position,
@@ -157,7 +226,12 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (!(scrollController?.hasClients ?? false)) {
       return null;
     }
-    return scrollController!.positions.contains(position)
+    // NestedScrollView's inner controller can hold one position per tab.
+    // jumpTo on that controller would move every inner; drive this position.
+    if (scrollController!.positions.length != 1) {
+      return null;
+    }
+    return scrollController.positions.contains(position)
         ? scrollController
         : null;
   }
@@ -168,18 +242,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   bool get isNested => _isNested;
 
   set position(ScrollMetrics value) {
-    if (_isNested) {
-      if (value.isNestedOuter) {
-        _viewportDimension = value.viewportDimension;
-      } else if (value.isNestedInner) {
-        if (WidgetsBinding.instance.schedulerPhase !=
-            SchedulerPhase.persistentCallbacks) {
-          _viewportDimension = value.axis == Axis.vertical
-              ? vsync.context.size?.height
-              : vsync.context.size?.width;
-        }
-      }
-    } else {
+    _observeNestedPosition(value);
+    if (!_isNested &&
+        !isNestedOuterPosition(value) &&
+        !isNestedInnerPosition(value)) {
       _viewportDimension = null;
     }
     _position = value;
@@ -253,6 +319,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     // State that doesn't change.
     if (_task == null ||
+        triggerOffset <= 0 ||
         (!_canProcess && !noMoreLocked) ||
         (noMoreLocked && infiniteOffset == null)) {
       return 0;
@@ -281,7 +348,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Out of scroll area.
   bool get outOfRange {
-    if (clamping) {
+    if (_useClampingOffset) {
       return !modeLocked && _offset > 0;
     }
     return _offset > 0;
@@ -369,7 +436,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Initialize the [clamping] animation controller
   void _initClampingAnimation() {
-    if (clamping) {
+    if (clamping || _isNested) {
       _clampingAnimationController = AnimationController.unbounded(
         vsync: vsync,
       );
@@ -382,7 +449,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (userOffsetNotifier.value) {
       // Clamping
       // Cancel animation, update offset
-      if (clamping && _clampingAnimationController!.isAnimating) {
+      if (_useClampingOffset &&
+          _clampingAnimationController != null &&
+          _clampingAnimationController!.isAnimating) {
         _clampingAnimationController!.stop(canceled: true);
       }
     } else {
@@ -430,15 +499,18 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     _triggerAxis = triggerAxis;
     _task = task;
     _waitTaskResult = waitTaskRefresh ?? _waitTaskResult;
-    if (_indicator.clamping && _clampingAnimationController == null) {
+    if (isNested != null) {
+      _isNested = isNested;
+    }
+    if ((_indicator.clamping || _isNested) &&
+        _clampingAnimationController == null) {
       _initClampingAnimation();
-    } else if (!_indicator.clamping && _clampingAnimationController != null) {
+    } else if (!_indicator.clamping &&
+        !_isNested &&
+        _clampingAnimationController != null) {
       _clampingAnimationController?.stop();
       _clampingAnimationController?.dispose();
       _clampingAnimationController = null;
-    }
-    if (isNested != null) {
-      _isNested = isNested;
     }
     notifyListeners();
   }
@@ -486,6 +558,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Animation listener for [clamping].
   void _clampingTick() {
+    final oldOffset = _offset;
     final mOffset = calculateOffsetWithPixels(
       position,
       _clampingAnimationController!.value,
@@ -514,6 +587,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     _slightDeviation();
     _updateMode();
+    _compensateNestedHeaderExtent(oldOffset, _offset);
     notifyListeners();
   }
 
@@ -535,10 +609,11 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     // Update offset on release
     _updateOffset(position, position.pixels, true);
     // If clamping is true and offset is greater than 0, start animation
-    if (clamping &&
+    if (_useClampingOffset &&
         _offset > 0 &&
         ((_indicator.triggerWhenRelease && oldMode == IndicatorMode.armed) ||
             !(modeLocked || secondaryLocked))) {
+      _ensureClampingAnimation();
       final simulation = createBallisticSimulation(position, velocity);
       if (simulation != null) {
         _startClampingAnimation(simulation);
@@ -557,16 +632,23 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   void _updateOffset(ScrollMetrics position, double value, bool bySimulation) {
     // Clamping
     // In task processing, do nothing.
-    if (clamping && (modeLocked || secondaryLocked)) {
+    if (_useClampingOffset && (modeLocked || secondaryLocked)) {
       return;
     }
     // Clamping
     // In the case of release, and offset is greater than 0, it is controlled by animation.
-    if ((clamping && _mode == IndicatorMode.done && bySimulation) ||
+    if ((_useClampingOffset && _mode == IndicatorMode.done && bySimulation) ||
         (!userOffsetNotifier.value &&
-            clamping &&
+            _useClampingOffset &&
             _offset > 0 &&
             !bySimulation)) {
+      if (!userOffsetNotifier.value &&
+          _useClampingOffset &&
+          _offset > 0 &&
+          !bySimulation &&
+          !(_clampingAnimationController?.isAnimating ?? false)) {
+        _scheduleClampingRetract();
+      }
       return;
     }
     this.position = position;
@@ -576,12 +658,13 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     // Calculate and update the offset.
     _offset = _calculateOffset(position, value);
     _slightDeviation();
+    _compensateNestedHeaderExtent(oldOffset, _offset);
     // Do nothing if not out of bounds.
     if (oldOffset == 0 && _offset == 0) {
       if (_mode == IndicatorMode.done ||
           // Handling infinite scroll
           (infiniteOffset != null &&
-              (!(_isNested && position.isNestedOuter) &&
+              (!(_isNested && isNestedOuterPosition(position)) &&
                   edgeOffset < infiniteOffset!) &&
               !bySimulation &&
               !_infiniteExclude(position, value))) {
@@ -650,7 +733,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       }
       // Infinite scroll
       if (infiniteOffset != null &&
-          (!(_isNested && position.isNestedOuter) &&
+          (!(_isNested && isNestedOuterPosition(position)) &&
               edgeOffset < infiniteOffset!)) {
         if (_mode == IndicatorMode.done &&
             position.maxScrollExtent != position.minScrollExtent) {
@@ -810,7 +893,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Start [clamping] animation
   void _startClampingAnimation(Simulation simulation) {
-    if (!clamping) {
+    if (!_useClampingOffset) {
       return;
     }
     if (_clampingAnimationController == null) {
@@ -822,17 +905,133 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     _clampingAnimationController!.animateWith(simulation);
   }
 
+  bool _clampingRetractScheduled = false;
+
+  /// Retract a clamping Header/Footer that was left open without an animation
+  /// (NestedScrollView ballistic leftover).
+  void _scheduleClampingRetract() {
+    if (_clampingRetractScheduled || !_mounted) {
+      return;
+    }
+    _clampingRetractScheduled = true;
+    Future.microtask(() {
+      _clampingRetractScheduled = false;
+      if (!_mounted ||
+          userOffsetNotifier.value ||
+          _offset <= 0 ||
+          modeLocked ||
+          secondaryLocked) {
+        return;
+      }
+      if (_clampingAnimationController?.isAnimating ?? false) {
+        return;
+      }
+      _resetBallistic();
+    });
+  }
+
+  /// Nested Header locator occupies real scroll extent. Shrinking it while
+  /// the outer/inner view has already scrolled would let NestedScrollView
+  /// goBallistic and flash the AppBar. Keep pixels in lockstep with extent.
+  void _compensateNestedHeaderExtent(double oldOffset, double newOffset) {
+    if (this is! HeaderNotifier) {
+      return;
+    }
+    if (!_isNested) {
+      return;
+    }
+    final delta = oldOffset - newOffset;
+    if (delta <= precisionErrorTolerance) {
+      return;
+    }
+    final position = _nestedHeaderHostPosition();
+    if (position == null ||
+        !position.hasPixels ||
+        position.pixels <= precisionErrorTolerance) {
+      return;
+    }
+    final correction = math.min(position.pixels, delta);
+    if (correction <= precisionErrorTolerance) {
+      return;
+    }
+    position.correctBy(-correction);
+  }
+
+  ScrollPosition? _nestedHeaderHostPosition() {
+    if (_position is ScrollPosition) {
+      final current = _position as ScrollPosition;
+      if (current.hasPixels) {
+        return current;
+      }
+    }
+    if (_nestedOuterPosition != null && _nestedOuterPosition!.hasPixels) {
+      return _nestedOuterPosition;
+    }
+    if (_nestedInnerPosition != null && _nestedInnerPosition!.hasPixels) {
+      return _nestedInnerPosition;
+    }
+    return null;
+  }
+
+  /// Header is off the collapsed NestedScrollView. Drop extent in one frame
+  /// instead of springing it, which would call goBallistic every tick.
+  bool _snapNestedHeaderIfScrolledAway() {
+    if (this is! HeaderNotifier ||
+        !_isNested ||
+        !_useClampingOffset ||
+        _offset <= 0) {
+      return false;
+    }
+    final position = _nestedHeaderHostPosition();
+    if (position == null ||
+        !position.hasPixels ||
+        position.pixels <= precisionErrorTolerance) {
+      return false;
+    }
+    final oldOffset = _offset;
+    _offset = 0;
+    _mode = IndicatorMode.inactive;
+    _compensateNestedHeaderExtent(oldOffset, 0);
+    _clampingAnimationController?.stop();
+    notifyListeners();
+    return true;
+  }
+
   /// Reset ballistic.
   /// Trigger [_ERScrollPhysics.createBallisticSimulation].
   void _resetBallistic() {
     if (!_mounted) {
       return;
     }
+    // Nested coordinator goBallistic can assert and will not close a clamping
+    // Header/Footer. Drive the clamping animation locally.
+    if (_useClampingOffset && _offset > 0 && !(modeLocked || secondaryLocked)) {
+      _ensureClampingAnimation();
+      final metrics =
+          _effectiveScrollPosition() ??
+          (this is HeaderNotifier
+              ? _nestedOuterPosition
+              : _nestedInnerPosition) ??
+          _position;
+      if (metrics != null) {
+        final simulation = createBallisticSimulation(metrics, 0);
+        if (simulation != null) {
+          _startClampingAnimation(simulation);
+          return;
+        }
+      }
+    }
     ScrollActivityDelegate? delegate;
     double velocity = 0;
-    if (_position is ScrollPosition) {
+    final nestedPosition = this is HeaderNotifier
+        ? _nestedOuterPosition
+        : _nestedInnerPosition;
+    final scrollPosition =
+        nestedPosition ??
+        (_position is ScrollPosition ? _position as ScrollPosition : null);
+    if (scrollPosition != null) {
       // ignore: invalid_use_of_protected_member
-      final activity = (_position as ScrollPosition).activity;
+      final activity = scrollPosition.activity;
       delegate = activity?.delegate;
       velocity = activity?.velocity ?? 0;
     } else if (_position is ScrollActivityDelegate) {
@@ -840,13 +1039,6 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     if (delegate != null) {
       delegate.goBallistic(velocity);
-    } else {
-      if (clamping && _offset > 0 && !(modeLocked || secondaryLocked)) {
-        final simulation = createBallisticSimulation(position, velocity);
-        if (simulation != null) {
-          _startClampingAnimation(simulation);
-        }
-      }
     }
   }
 
@@ -867,7 +1059,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (this.mode == IndicatorMode.processed) {
       _scheduleProcessedCompletion(oldMode);
       // Actively update the offset if the user does not release
-      if (!clamping && userOffsetNotifier.value) {
+      if (!_useClampingOffset && userOffsetNotifier.value) {
         Future(() {
           if (!_mounted || _position == null) {
             return;
@@ -898,6 +1090,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       return;
     }
     _syncFooterOffsetAfterProcessed();
+    if (_snapNestedHeaderIfScrolledAway()) {
+      return;
+    }
     _setMode(IndicatorMode.done);
     if (offset == 0) {
       _setMode(IndicatorMode.inactive);
@@ -917,7 +1112,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       return;
     }
     final oldOffset = _offset;
-    if (!clamping) {
+    if (!_useClampingOffset) {
       _offset = _calculateOffset(_position!, _position!.pixels);
     }
     if (_offset != oldOffset) {
@@ -1018,15 +1213,24 @@ class HeaderNotifier extends IndicatorNotifier {
        );
 
   @override
+  ScrollPosition? _effectiveScrollPosition() {
+    if (_nestedOuterPosition != null &&
+        _nestedOuterPosition!.hasContentDimensions) {
+      return _nestedOuterPosition;
+    }
+    return super._effectiveScrollPosition();
+  }
+
+  @override
   double _calculateOffset(ScrollMetrics position, double value) {
     if (value >= position.minScrollExtent &&
         _offset != 0 &&
-        !(clamping && _offset > 0)) {
+        !(_useClampingOffset && _offset > 0)) {
       return 0;
     }
     // Moving distance
     final move = position.minScrollExtent - value;
-    if (clamping) {
+    if (_useClampingOffset) {
       if (value > position.minScrollExtent) {
         // Rollback first minus offset.
         return math.max(_offset > 0 ? (move + _offset) : 0, 0);
@@ -1066,7 +1270,7 @@ class HeaderNotifier extends IndicatorNotifier {
     if (_offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
-        position: clamping
+        position: _useClampingOffset
             ? position.minScrollExtent - _offset
             : position.pixels,
         velocity: mVelocity,
@@ -1096,7 +1300,12 @@ class HeaderNotifier extends IndicatorNotifier {
     Curve curve = Curves.linear,
     ScrollController? scrollController,
   }) async {
-    final effectivePosition = _effectiveScrollPosition();
+    var effectivePosition = _effectiveScrollPosition();
+    if (effectivePosition == null &&
+        scrollController != null &&
+        scrollController.hasClients) {
+      effectivePosition = scrollController.positions.first;
+    }
     if (effectivePosition == null) {
       return;
     }
@@ -1113,7 +1322,8 @@ class HeaderNotifier extends IndicatorNotifier {
         effectivePosition.jumpTo(effectivePosition.minScrollExtent);
       }
     }
-    if (clamping) {
+    if (_useClampingOffset) {
+      _ensureClampingAnimation();
       if (duration == null) {
         _offset = offset;
         _mode = mode;
@@ -1192,15 +1402,24 @@ class FooterNotifier extends IndicatorNotifier {
   }
 
   @override
+  ScrollPosition? _effectiveScrollPosition() {
+    if (_nestedInnerPosition != null &&
+        _nestedInnerPosition!.hasContentDimensions) {
+      return _nestedInnerPosition;
+    }
+    return super._effectiveScrollPosition();
+  }
+
+  @override
   double _calculateOffset(ScrollMetrics position, double value) {
     if (value <= position.maxScrollExtent &&
         _offset != 0 &&
-        !(clamping && _offset > 0)) {
+        !(_useClampingOffset && _offset > 0)) {
       return 0;
     }
     // Moving distance
     final move = value - position.maxScrollExtent;
-    if (clamping) {
+    if (_useClampingOffset) {
       if (value < position.maxScrollExtent) {
         // Rollback first minus offset
         return math.max(_offset > 0 ? (move + _offset) : 0, 0);
@@ -1240,7 +1459,7 @@ class FooterNotifier extends IndicatorNotifier {
     if (_offset > 0) {
       return BouncingScrollSimulation(
         spring: spring,
-        position: clamping
+        position: _useClampingOffset
             ? position.maxScrollExtent + _offset
             : position.pixels,
         velocity: mVelocity,
@@ -1270,7 +1489,12 @@ class FooterNotifier extends IndicatorNotifier {
     bool jumpToEdge = true,
     ScrollController? scrollController,
   }) async {
-    final effectivePosition = _effectiveScrollPosition();
+    var effectivePosition = _effectiveScrollPosition();
+    if (effectivePosition == null &&
+        scrollController != null &&
+        scrollController.hasClients) {
+      effectivePosition = scrollController.positions.first;
+    }
     if (effectivePosition == null) {
       return;
     }
@@ -1280,18 +1504,32 @@ class FooterNotifier extends IndicatorNotifier {
     );
     final scrollTo = effectivePosition.maxScrollExtent + offset;
     _releaseOffset = offset;
-    if (jumpToEdge) {
+    if (_axis != effectivePosition.axis ||
+        _axisDirection != effectivePosition.axisDirection) {
+      _axis = effectivePosition.axis;
+      _axisDirection = effectivePosition.axisDirection;
+    }
+    position = effectivePosition;
+    // NestedScrollPosition.jumpTo is coordinator-wide and will not leave
+    // this inner at maxScrollExtent, so clamping callLoad must not depend on it.
+    final skipJumpToEdge =
+        _isNested ||
+        effectivePosition.debugLabel == 'inner' ||
+        effectivePosition.debugLabel == 'outer';
+    if (jumpToEdge && !skipJumpToEdge) {
       if (matchedController != null) {
         matchedController.jumpTo(effectivePosition.maxScrollExtent);
       } else {
         effectivePosition.jumpTo(effectivePosition.maxScrollExtent);
       }
     }
-    if (clamping) {
+    if (_useClampingOffset) {
+      _ensureClampingAnimation();
       if (duration == null) {
         _offset = offset;
-        _mode = mode;
-        _updateBySimulation(effectivePosition, 0);
+        _mode = IndicatorMode.processing;
+        _onTask();
+        notifyListeners();
       } else {
         userOffsetNotifier.value = true;
         _clampingAnimationController!.value = effectivePosition.maxScrollExtent;

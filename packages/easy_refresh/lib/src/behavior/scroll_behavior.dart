@@ -36,7 +36,8 @@ class ERScrollBehavior extends ScrollBehavior {
       case TargetPlatform.windows:
         assert(details.controller != null);
         if (details.controller!.positions.length > 1 ||
-            details.controller!.debugLabel == 'inner') {
+            details.controller!.debugLabel == 'inner' ||
+            details.controller!.debugLabel == 'outer') {
           return child;
         }
         return Scrollbar(controller: details.controller, child: child);

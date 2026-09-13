@@ -40,6 +40,12 @@ class _SamplePageState extends State<SamplePage> {
                 onTap: () => Get.toNamed(Routes.profileSample),
               ),
               ListItem(
+                title: 'EasyRefresh.nested',
+                subtitle: 'EasyRefresh.nested example'.tr,
+                icon: Icons.view_day,
+                onTap: () => Get.toNamed(Routes.easyRefreshNestedSample),
+              ),
+              ListItem(
                 title: 'NestedScrollView',
                 subtitle: 'NestedScrollView example'.tr,
                 icon: Icons.line_style,

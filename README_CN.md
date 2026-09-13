@@ -162,6 +162,150 @@ import 'package:easy_refresh/easy_refresh.dart';
   EasyRefresh.defaultFooterBuilder = () => ClassicFooter();
 ```
 
+#### 6. NestedScrollView
+
+`EasyRefresh.nested` 是官方 **`NestedScrollView`** 的一等封装：内部创建该组件、加上 NestedScrollView 安全的 physics，并在设置了 `onRefresh` 时自动在 outer slivers 最前面插入 `HeaderLocator`。`body` **不用**再传 `physics`。Header 必须是 **clamping**（否则会提升为 clamping + locator）。不支持把 bouncing 下拉刷新塞进 Nested body，也不支持二楼 Header + Nested。上拉请用 ClassicFooter 默认的**无限加载**（`clamping: false`）；`clamping: true` 且 `infiniteOffset: null` 时 NestedScrollView 进不了 overscroll。
+
+这一层的 Footer 绑的是**当前可见** inner（当前 `TabBarView`）。需要按 Tab 自己分流 `onLoad`。要独立 `noMore` / Footer 状态时用写法 B。
+
+**不要用 `EasyRefresh.nested` 去包 `ExtendedNestedScrollView`（或其它自定义 nested）**——它只能创建 Flutter 自带的 `NestedScrollView`。这种情况用 `EasyRefresh.builder(isNested: true)`，把 `childBuilder` 给的 `physics` 赋给该 nested 的 `physics`。
+
+`isNested: true` 表示使用 NestedScrollView 安全的 physics，不是在普通 bouncing 路径上再堆 `if`。
+
+**写法 A — 页级刷新（推荐）**
+
+一个 EasyRefresh 包住 NestedScrollView，一个 `onRefresh`。示例：`example/lib/page/sample/easy_refresh_nested_page.dart`。ExtendedNested 用 `builder`（`tab_bar_view_page.dart`）。
+
+```dart
+EasyRefresh.nested(
+  header: MaterialHeader(
+    clamping: true,
+    position: IndicatorPosition.locator,
+  ),
+  onRefresh: () async {
+    ....
+  },
+  onLoad: () async {
+    ....
+  },
+  headerSliverBuilder: (context, innerBoxIsScrolled) {
+    return [
+      const SliverAppBar(pinned: true, expandedHeight: 120),
+    ];
+  },
+  body: ListView(),
+);
+
+// ExtendedNestedScrollView 或自定义 nested：
+EasyRefresh.builder(
+  isNested: true,
+  header: MaterialHeader(
+    clamping: true,
+    position: IndicatorPosition.locator,
+  ),
+  onRefresh: () async {
+    ....
+  },
+  childBuilder: (context, physics) {
+    return ExtendedNestedScrollView(
+      physics: physics,
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          const HeaderLocator.sliver(clearExtent: false),
+          ....
+        ];
+      },
+      body: ListView(
+        physics: physics,
+      ),
+    );
+  },
+);
+```
+
+**写法 B — 页级 Header + 每 Tab Footer**
+
+外层 `EasyRefresh.nested`（或 `builder(isNested: true)`）只负责刷新（`onLoad: null`）。每个 Tab 再套 `EasyRefresh`：`onRefresh: null` + `NotRefreshHeader()`。
+
+```dart
+EasyRefresh.nested(
+  header: MaterialHeader(
+    clamping: true,
+    position: IndicatorPosition.locator,
+  ),
+  onRefresh: () async {
+    ....
+  },
+  headerSliverBuilder: (context, innerBoxIsScrolled) {
+    return [
+      const SliverAppBar(pinned: true, expandedHeight: 120),
+    ];
+  },
+  body: TabBarView(
+    children: [
+      EasyRefresh(
+        header: const NotRefreshHeader(),
+        onLoad: () async {
+          ....
+        },
+        child: ListView(),
+      ),
+    ],
+  ),
+);
+```
+
+**写法 C — 每个 Tab 自己的 Header（NestedScrollView 示例）**
+
+Header 放在每个 Tab 的 inner slivers（TabBar 下面）时，外层**不能**再设 `onRefresh`，否则会变成页级 Header。但 NestedScrollView 的 **outer 仍然需要 nested physics**，否则往上推会先收 AppBar 再刷新。
+
+外层用**没有** `onRefresh` / `onLoad` 的 `EasyRefresh.builder(isNested: true)`，只把 `physics` 传给 nested。每个 Tab 再套真正的 EasyRefresh。这两层 physics **不是同一份**：外层冻 AppBar，里层驱动该 Tab 的指示器。
+
+示例：`example/lib/page/sample/nested_scroll_view.dart`。
+
+```dart
+EasyRefresh.builder(
+  isNested: true,
+  childBuilder: (context, physics) {
+    return NestedScrollView(
+      physics: physics,
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          const SliverAppBar(pinned: true, expandedHeight: 120),
+        ];
+      },
+      body: TabBarView(
+        children: [
+          EasyRefresh.builder(
+            isNested: true,
+            header: MaterialHeader(
+              clamping: true,
+              position: IndicatorPosition.locator,
+            ),
+            onRefresh: () async {
+              ....
+            },
+            onLoad: () async {
+              ....
+            },
+            childBuilder: (context, innerPhysics) {
+              return CustomScrollView(
+                physics: innerPhysics,
+                slivers: [
+                  const HeaderLocator.sliver(clearExtent: false),
+                  ....
+                  const FooterLocator.sliver(clearExtent: false),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  },
+);
+```
+
 ## 样式搜集
 
 | 包名 | Pub |

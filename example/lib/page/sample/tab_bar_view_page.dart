@@ -36,6 +36,9 @@ class TabBarViewPageState extends State<TabBarViewPage>
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    // Recipe A: one nested-safe EasyRefresh around ExtendedNestedScrollView.
+    // Shared onLoad; independent per-tab Footer state needs Recipe B
+    // (see NestedScrollView sample).
     return Scaffold(
       body: EasyRefresh.builder(
         isNested: true,
@@ -64,17 +67,21 @@ class TabBarViewPageState extends State<TabBarViewPage>
           messageText: 'Last updated at %T'.tr,
         ),
         onRefresh: () async {
-          await Future.delayed(const Duration(seconds: 2), () {
-            if (mounted) {
+          await Future.delayed(const Duration(seconds: 2));
+          if (!mounted) {
+            return;
+          }
+          if (_tabController.index == 0) {
+            if (_listCount != 20) {
               setState(() {
-                if (_tabController.index == 0) {
-                  _listCount = 20;
-                } else {
-                  _gridCount = 20;
-                }
+                _listCount = 20;
               });
             }
-          });
+          } else if (_gridCount != 20) {
+            setState(() {
+              _gridCount = 20;
+            });
+          }
         },
         onLoad: () async {
           await Future.delayed(const Duration(seconds: 2), () {
@@ -104,6 +111,7 @@ class TabBarViewPageState extends State<TabBarViewPage>
                   SliverAppBar(
                     expandedHeight: 120,
                     pinned: true,
+                    forceElevated: innerBoxIsScrolled,
                     flexibleSpace: FlexibleSpaceBar(
                       title: Text(
                         'TabBarView',
@@ -145,7 +153,7 @@ class TabBarViewPageState extends State<TabBarViewPage>
                                     return const SkeletonItem();
                                   }, childCount: _listCount),
                                 ),
-                                const FooterLocator.sliver(),
+                                const FooterLocator.sliver(clearExtent: false),
                               ],
                             ),
                           ),
@@ -171,7 +179,7 @@ class TabBarViewPageState extends State<TabBarViewPage>
                                         childAspectRatio: 6 / 7,
                                       ),
                                 ),
-                                const FooterLocator.sliver(),
+                                const FooterLocator.sliver(clearExtent: false),
                               ],
                             ),
                           ),
