@@ -452,6 +452,13 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     // Simulation update.
     headerNotifier._updateBySimulation(position, velocity);
     footerNotifier._updateBySimulation(position, velocity);
+    final leadingExtent = position.minScrollExtent - headerNotifier.overExtent;
+    final trailingExtent = position.maxScrollExtent + footerNotifier.overExtent;
+    // An unchanged snapshot does not mean the previous animation is still
+    // running: a tap can interrupt it before the position changes.
+    final needsRebound =
+        position.pixels < leadingExtent - tolerance.distance ||
+        position.pixels > trailingExtent + tolerance.distance;
     // Create simulation.
     final hState = _BallisticSimulationCreationState(
       mode: headerNotifier._mode,
@@ -473,7 +480,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         (footerNotifier._mode == IndicatorMode.secondaryReady ||
             footerNotifier._mode == IndicatorMode.secondaryOpen);
     bool secondary = hSecondary || fSecondary;
-    if (velocity.abs() >= tolerance.velocity ||
+    if (needsRebound ||
+        velocity.abs() >= tolerance.velocity ||
         ((IndicatorMode.inactive != headerNotifier.mode ||
                 IndicatorMode.inactive != footerNotifier.mode) &&
             oldMaxScrollExtent != position.maxScrollExtent &&
@@ -514,8 +522,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
         spring: spring,
         position: position.pixels,
         velocity: mVelocity,
-        leadingExtent: position.minScrollExtent - headerNotifier.overExtent,
-        trailingExtent: position.maxScrollExtent + footerNotifier.overExtent,
+        leadingExtent: leadingExtent,
+        trailingExtent: trailingExtent,
         tolerance: tolerance,
       );
     }
