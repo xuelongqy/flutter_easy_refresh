@@ -127,6 +127,24 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     return factor.call(overscrollFraction);
   }
 
+  bool get _holdsClampingSecondary =>
+      headerNotifier._holdsSecondaryDrag || footerNotifier._holdsSecondaryDrag;
+
+  bool _dragClampingSecondary(ScrollMetrics position, double delta) {
+    final indicator = headerNotifier._holdsSecondaryDrag
+        ? headerNotifier
+        : footerNotifier._holdsSecondaryDrag
+        ? footerNotifier
+        : null;
+    if (indicator == null) {
+      return false;
+    }
+    // Within the secondary page's bounds the gesture follows the pointer;
+    // the normal pull-to-refresh overscroll friction does not apply.
+    indicator._dragSecondary(position, delta);
+    return true;
+  }
+
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
     if (_shouldUseNestedPhysics(position)) {
@@ -134,6 +152,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     }
     // User started scrolling.
     userOffsetNotifier.value = true;
+    if (_dragClampingSecondary(position, offset)) {
+      return 0;
+    }
     assert(offset != 0.0);
     assert(position.minScrollExtent <= position.maxScrollExtent);
 
@@ -444,6 +465,8 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       return _createNestedBallisticSimulation(position, velocity);
     }
     Tolerance tolerance = toleranceFor(position);
+    // Do not transfer a secondary drag's release velocity to the list.
+    final secondaryHeld = _holdsClampingSecondary;
     // User stopped scrolling.
     final oldUserOffset = userOffsetNotifier.value;
     userOffsetNotifier.value = false;
@@ -452,6 +475,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     // Simulation update.
     headerNotifier._updateBySimulation(position, velocity);
     footerNotifier._updateBySimulation(position, velocity);
+    if (secondaryHeld) {
+      return null;
+    }
     final leadingExtent = position.minScrollExtent - headerNotifier.overExtent;
     final trailingExtent = position.maxScrollExtent + footerNotifier.overExtent;
     // An unchanged snapshot does not mean the previous animation is still
@@ -641,6 +667,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     assert(offset != 0.0);
     headerNotifier._observeNestedPosition(position);
     footerNotifier._observeNestedPosition(position);
+    if (_dragClampingSecondary(position, offset)) {
+      return 0;
+    }
     if (_nestedHeaderHoldsScroll(headerNotifier)) {
       _nestedHeldHeader = headerNotifier;
     }
@@ -675,6 +704,11 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     headerNotifier._observeNestedPosition(position);
     footerNotifier._observeNestedPosition(position);
 
+    // Clamped coordinator passes must leave the entire delta for the full
+    // inner drag pass, which updates the secondary once and consumes it.
+    if (_holdsClampingSecondary) {
+      return value - position.pixels;
+    }
     final min = position.minScrollExtent;
     final max = position.maxScrollExtent;
     final pixels = position.pixels;
@@ -732,6 +766,7 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     ScrollMetrics position,
     double velocity,
   ) {
+    final secondaryHeld = _holdsClampingSecondary;
     _setNestedUserOffset(false);
     final headerPosition =
         headerNotifier._nestedOuterPosition ??
@@ -748,6 +783,9 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     }
     if (footerPosition != null) {
       footerNotifier._updateBySimulation(footerPosition, velocity);
+    }
+    if (secondaryHeld) {
+      return null;
     }
     final tolerance = toleranceFor(position);
     if (position.outOfRange) {

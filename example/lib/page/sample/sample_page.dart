@@ -84,6 +84,13 @@ class _SamplePageState extends State<SamplePage> {
                 onTap: () => Get.toNamed(Routes.secondarySample),
               ),
               ListItem(
+                title: 'Nested second floor'.tr,
+                subtitle:
+                    'Open and close a second floor in NestedScrollView'.tr,
+                icon: Icons.layers_rounded,
+                onTap: () => Get.toNamed(Routes.nestedSecondarySample),
+              ),
+              ListItem(
                 title: 'Chat'.tr,
                 subtitle: 'Chat page example'.tr,
                 icon: Icons.chat,

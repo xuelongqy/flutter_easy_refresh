@@ -436,11 +436,43 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   /// Initialize the [clamping] animation controller
   void _initClampingAnimation() {
-    if (clamping || _isNested) {
+    if (_useClampingOffset && _clampingAnimationController == null) {
       _clampingAnimationController = AnimationController.unbounded(
         vsync: vsync,
       );
       _clampingAnimationController!.addListener(_clampingTick);
+    }
+  }
+
+  // Kept until release even after reaching zero: the same drag must not
+  // start a refresh or move the underlying list. Shared by all physics copies.
+  bool _secondaryDragActive = false;
+  ScrollMetrics? _secondaryDragPosition;
+
+  bool get _holdsSecondaryDrag =>
+      _useClampingOffset && (secondaryLocked || _secondaryDragActive);
+
+  void _dragSecondary(ScrollMetrics metrics, double delta) {
+    if (!_secondaryDragActive) {
+      _secondaryDragActive = true;
+      _secondaryDragPosition = metrics;
+    }
+    // A TabBarView can have multiple attached inner positions. Only the first
+    // position consuming this gesture owns the shared Header's displacement.
+    if (!identical(_secondaryDragPosition, metrics) ||
+        _mode == IndicatorMode.inactive) {
+      return;
+    }
+    position = metrics;
+    final oldOffset = _offset;
+    _offset = (_offset + (this is HeaderNotifier ? delta : -delta)).clamp(
+      0.0,
+      secondaryDimension,
+    );
+    _updateMode();
+    if (_offset != oldOffset) {
+      _compensateNestedHeaderExtent(oldOffset, _offset);
+      notifyListeners();
     }
   }
 
@@ -456,6 +488,8 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       }
     } else {
       _releaseOffset = _offset;
+      _secondaryDragActive = false;
+      _secondaryDragPosition = null;
     }
   }
 
@@ -502,12 +536,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (isNested != null) {
       _isNested = isNested;
     }
-    if ((_indicator.clamping || _isNested) &&
-        _clampingAnimationController == null) {
+    if (_useClampingOffset && _clampingAnimationController == null) {
       _initClampingAnimation();
-    } else if (!_indicator.clamping &&
-        !_isNested &&
-        _clampingAnimationController != null) {
+    } else if (!_useClampingOffset && _clampingAnimationController != null) {
       _clampingAnimationController?.stop();
       _clampingAnimationController?.dispose();
       _clampingAnimationController = null;
@@ -566,7 +597,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     if (hasSecondary &&
         !noMoreLocked &&
         mOffset > secondaryDimension &&
-        _mode == IndicatorMode.secondaryReady) {
+        (_mode == IndicatorMode.secondaryReady || secondaryLocked)) {
       // After fully opening the secondary, turn off the animation.
       _offset = secondaryDimension;
       _clampingAnimationController!.stop();
@@ -605,6 +636,16 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       });
     }
     this.position = position;
+    // Secondary offsets are independent of list pixels. On release (also
+    // after an interrupted animation), settle to the state's effective extent.
+    if (_useClampingOffset && secondaryLocked) {
+      _ensureClampingAnimation();
+      final simulation = createBallisticSimulation(position, velocity);
+      if (simulation != null) {
+        _startClampingAnimation(simulation);
+      }
+      return;
+    }
     final oldMode = _mode;
     // Update offset on release
     _updateOffset(position, position.pixels, true);
@@ -1263,6 +1304,19 @@ class HeaderNotifier extends IndicatorNotifier {
     ScrollMetrics position,
     double velocity,
   ) {
+    if (_useClampingOffset && secondaryLocked) {
+      final target = overExtent;
+      if ((_offset - target).abs() <= precisionErrorTolerance) {
+        return null;
+      }
+      return ScrollSpringSimulation(
+        spring,
+        position.minScrollExtent - _offset,
+        position.minScrollExtent - target,
+        0,
+        tolerance: _physics.toleranceFor(position),
+      );
+    }
     final mVelocity =
         hasSecondary && !noMoreLocked && _offset >= actualSecondaryTriggerOffset
         ? -secondaryVelocity
@@ -1330,9 +1384,12 @@ class HeaderNotifier extends IndicatorNotifier {
         _updateBySimulation(effectivePosition, 0);
       } else {
         userOffsetNotifier.value = true;
-        _clampingAnimationController!.value = effectivePosition.minScrollExtent;
+        // The controller stores virtual scroll pixels, not indicator offsets.
+        // Start at the visible extent so closing does not jump straight to zero.
+        _clampingAnimationController!.value =
+            effectivePosition.minScrollExtent - _offset;
         await _clampingAnimationController!.animateTo(
-          scrollTo,
+          effectivePosition.minScrollExtent - offset,
           duration: duration,
           curve: curve,
         );
@@ -1452,6 +1509,19 @@ class FooterNotifier extends IndicatorNotifier {
     ScrollMetrics position,
     double velocity,
   ) {
+    if (_useClampingOffset && secondaryLocked) {
+      final target = overExtent;
+      if ((_offset - target).abs() <= precisionErrorTolerance) {
+        return null;
+      }
+      return ScrollSpringSimulation(
+        spring,
+        position.maxScrollExtent + _offset,
+        position.maxScrollExtent + target,
+        0,
+        tolerance: _physics.toleranceFor(position),
+      );
+    }
     final mVelocity =
         hasSecondary && !noMoreLocked && _offset >= actualSecondaryTriggerOffset
         ? secondaryVelocity
@@ -1532,7 +1602,8 @@ class FooterNotifier extends IndicatorNotifier {
         notifyListeners();
       } else {
         userOffsetNotifier.value = true;
-        _clampingAnimationController!.value = effectivePosition.maxScrollExtent;
+        _clampingAnimationController!.value =
+            effectivePosition.maxScrollExtent + _offset;
         await _clampingAnimationController!.animateTo(
           scrollTo,
           duration: duration,

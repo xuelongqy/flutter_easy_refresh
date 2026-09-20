@@ -66,6 +66,18 @@ const en = {
       'Refresh when the list is displayed and specify the Header',
   'Listener': 'Listener',
   'Use listener to respond anywhere': 'Use listener to respond anywhere',
+  'Nested second floor': 'Nested second floor',
+  'Open and close a second floor in NestedScrollView':
+      'Open and close a second floor in NestedScrollView',
+  'Welcome upstairs': 'Welcome upstairs',
+  'Swipe up to close': 'Swipe up to close',
+  'Close second floor': 'Close second floor',
+  'Release to open second floor': 'Release to open second floor',
+  'Pull farther to visit the second floor':
+      'Pull farther to visit the second floor',
+  'Refresh count: @count': 'Refresh count: @count',
+  'List': 'List',
+  'Grid': 'Grid',
   'Secondary': 'Secondary',
   'Combine existing Header with secondary':
       'Combine existing Header with secondary',

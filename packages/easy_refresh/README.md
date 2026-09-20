@@ -178,7 +178,13 @@ Sample implementation: `example/lib/page/sample/paging_page.dart`
 
 #### 6. NestedScrollView
 
-`EasyRefresh.nested` is the first-class wrapper for Flutter's **official** `NestedScrollView`. It creates that view, applies NestedScrollView-safe physics, and (when `onRefresh` is set) inserts `HeaderLocator` as the first outer sliver. You do **not** pass `physics` on `body`. Header must be **clamping** (non-clamping Headers are promoted). Inner bouncing pull-to-refresh and secondary Header + Nested are **not supported**. Nested `onLoad` should keep ClassicFooter's **infinite** load (`clamping: false`); `clamping: true` + `infiniteOffset: null` cannot enter NestedScrollView overscroll.
+`EasyRefresh.nested` is the first-class wrapper for Flutter's **official** `NestedScrollView`. It creates that view, applies NestedScrollView-safe physics, and (when `onRefresh` is set) inserts `HeaderLocator` as the first outer sliver. You do **not** pass `physics` on `body`. Header must be **clamping** (non-clamping Headers are promoted). Inner bouncing pull-to-refresh is **not supported**.
+
+Secondary Headers are supported: wrap a clamping Header in `SecondaryBuilderHeader`, configure `secondaryTriggerOffset` and `secondaryDimension`, and use `EasyRefresh.nested`. Existing `EasyRefresh.builder` integrations with the official `NestedScrollView` are also supported, including `isNested: true` and automatic detection. See [Nested second floor](../../example/lib/page/sample/nested_secondary_page.dart) for the overlap layout and safe-area handling. This support does not extend to `ExtendedNestedScrollView`.
+
+While the second floor is open, vertical drags move the Header without scrolling the underlying list. Releasing after retracting `secondaryCloseTriggerOffset` (70 logical pixels by default) closes it; a smaller drag springs back open. Taps keep it open. Use `EasyRefreshController.openHeaderSecondary()` to open it programmatically and `closeHeaderSecondary()` for a close button or back action. For programmatic opening in nested layouts, use `EasyRefresh.nested` or explicitly set `isNested: true`. After it closes, the next pull can refresh normally.
+
+Nested `onLoad` should keep ClassicFooter's **infinite** load (`clamping: false`); `clamping: true` + `infiniteOffset: null` cannot enter NestedScrollView overscroll.
 
 A Footer on this layer binds the **visible** inner (current `TabBarView` tab). Split `onLoad` by tab yourself. Independent `noMore` / Footer state per tab needs Recipe B.
 

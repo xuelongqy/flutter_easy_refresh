@@ -12,6 +12,7 @@ import 'package:example/page/sample/paging_page.dart';
 import 'package:example/page/sample/refresh_on_start_page.dart';
 import 'package:example/page/sample/sample_page.dart';
 import 'package:example/page/sample/secondary_page.dart';
+import 'package:example/page/sample/nested_secondary_page.dart';
 import 'package:example/page/sample/tab_bar_view_page.dart';
 import 'package:example/page/sample/theme_switch_page.dart';
 import 'package:example/page/sample/user_profile_page.dart';
@@ -44,6 +45,7 @@ class Routes {
   static const refreshOnStartSample = '/sample/refresh-on-start';
   static const listenerSample = '/sample/listener';
   static const secondarySample = '/sample/secondary';
+  static const nestedSecondarySample = '/sample/nested-secondary';
   static const chatSample = '/sample/chat';
   static const pageViewSample = '/sample/page-view';
   static const tabBarViewSample = '/sample/tab-bar-view';
@@ -88,6 +90,10 @@ class Routes {
     GetPage(name: refreshOnStartSample, page: () => const RefreshOnStartPage()),
     GetPage(name: listenerSample, page: () => const ListenerHeaderPage()),
     GetPage(name: secondarySample, page: () => const SecondaryPage()),
+    GetPage(
+      name: nestedSecondarySample,
+      page: () => const NestedSecondaryPage(),
+    ),
     GetPage(name: chatSample, page: () => const ChatPage()),
     GetPage(name: pageViewSample, page: () => const PageViewPage()),
     GetPage(name: tabBarViewSample, page: () => const TabBarViewPage()),
