@@ -961,10 +961,7 @@ void main() {
       }
       await tester.pump();
 
-      await tester.drag(
-        find.byType(NestedScrollView),
-        const Offset(0, 280),
-      );
+      await tester.drag(find.byType(NestedScrollView), const Offset(0, 280));
       await tester.pump();
       await waitUntil(() => state.refreshCalled, tester);
 
@@ -1797,18 +1794,16 @@ void main() {
                   return NestedScrollView(
                     physics: physics,
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
-                      return [
-                        SliverAppBar(title: Text(title), pinned: true),
-                      ];
+                      return [SliverAppBar(title: Text(title), pinned: true)];
                     },
                     body: ListView(
                       physics: physics,
                       children: [
                         Builder(
                           builder: (context) {
-                            headerIsNested = EasyRefresh.of(
-                              context,
-                            ).headerNotifier.isNested;
+                            headerIsNested = EasyRefresh.of(context)
+                                .headerNotifier
+                                .isNested;
                             return const ListTile(title: Text('Item'));
                           },
                         ),
@@ -1843,33 +1838,32 @@ void main() {
       },
     );
 
-    testWidgets(
-      'auto-adopted inner EasyRefresh keeps isNested after rebuild',
-      (tester) async {
-        final key = GlobalKey<_AdoptedNestedFlagHarnessState>();
-        await tester.pumpWidget(_AdoptedNestedFlagHarness(key: key));
-        final state = key.currentState!;
-        await tester.pumpAndSettle();
+    testWidgets('auto-adopted inner EasyRefresh keeps isNested after rebuild', (
+      tester,
+    ) async {
+      final key = GlobalKey<_AdoptedNestedFlagHarnessState>();
+      await tester.pumpWidget(_AdoptedNestedFlagHarness(key: key));
+      final state = key.currentState!;
+      await tester.pumpAndSettle();
 
-        expect(state.innerHeaderNested, isTrue);
-        expect(state.innerFooterNested, isTrue);
-        expect(
-          state.innerPhysics.runtimeType.toString(),
-          contains('_ERNestedScrollPhysics'),
-        );
+      expect(state.innerHeaderNested, isTrue);
+      expect(state.innerFooterNested, isTrue);
+      expect(
+        state.innerPhysics.runtimeType.toString(),
+        contains('_ERNestedScrollPhysics'),
+      );
 
-        state.bump();
-        await tester.pump();
+      state.bump();
+      await tester.pump();
 
-        expect(state.innerHeaderNested, isTrue);
-        expect(state.innerFooterNested, isTrue);
-        expect(
-          state.innerPhysics.runtimeType.toString(),
-          contains('_ERNestedScrollPhysics'),
-        );
+      expect(state.innerHeaderNested, isTrue);
+      expect(state.innerFooterNested, isTrue);
+      expect(
+        state.innerPhysics.runtimeType.toString(),
+        contains('_ERNestedScrollPhysics'),
+      );
 
-        await disposeAndFlush(tester);
-      },
-    );
+      await disposeAndFlush(tester);
+    });
   });
 }
