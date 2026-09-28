@@ -211,7 +211,7 @@ class EasyRefresh extends StatefulWidget {
   defaultScrollBehaviorBuilder = _defaultScrollBehaviorBuilder;
 
   static ScrollBehavior _defaultScrollBehaviorBuilder(ScrollPhysics? physics) =>
-      ERScrollBehavior(physics);
+      ERScrollBehavior(physics ?? const ScrollPhysics());
 
   const EasyRefresh({
     super.key,
