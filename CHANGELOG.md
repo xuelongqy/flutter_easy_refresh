@@ -45,7 +45,6 @@ Packages with other changes:
  - **FIX**: NestedScrollView ballistic `result` / `RenderBox.size` asserts after refresh or load ([#627](https://github.com/xuelongqy/flutter_easy_refresh/issues/627), [#652](https://github.com/xuelongqy/flutter_easy_refresh/issues/652), [#908](https://github.com/xuelongqy/flutter_easy_refresh/issues/908)).
  - **FIX**: NestedScrollView ClassicFooter remaining after load ([#678](https://github.com/xuelongqy/flutter_easy_refresh/issues/678)).
  - **FIX**: Page-level Nested refresh, per-tab Footer, and per-tab EasyRefresh isolation ([#508](https://github.com/xuelongqy/flutter_easy_refresh/issues/508), [#725](https://github.com/xuelongqy/flutter_easy_refresh/issues/725), [#838](https://github.com/xuelongqy/flutter_easy_refresh/issues/838)).
- - **FIX**: `EasyRefresh.builder` preserves Footer overscroll across keyboard-driven viewport changes ([#890](https://github.com/xuelongqy/flutter_easy_refresh/issues/890)).
 
 #### `easy_refresh_bow` - `v2.0.0`
 
