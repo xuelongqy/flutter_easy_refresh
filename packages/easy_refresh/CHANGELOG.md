@@ -15,6 +15,7 @@
  - **FIX**: NestedScrollView ClassicFooter remaining after load ([#678](https://github.com/xuelongqy/flutter_easy_refresh/issues/678)).
  - **FIX**: Page-level Nested refresh, per-tab Footer, and per-tab EasyRefresh isolation ([#508](https://github.com/xuelongqy/flutter_easy_refresh/issues/508), [#725](https://github.com/xuelongqy/flutter_easy_refresh/issues/725), [#838](https://github.com/xuelongqy/flutter_easy_refresh/issues/838)).
  - **FIX**: `EasyRefresh.builder` preserves Footer overscroll across keyboard-driven viewport changes ([#890](https://github.com/xuelongqy/flutter_easy_refresh/issues/890)).
+ - **FIX**: Remove unused `ValueNotifier` wrappers from ballistic simulation state snapshots ([#916](https://github.com/xuelongqy/flutter_easy_refresh/issues/916)).
 
 ## 3.5.1
 
