@@ -106,7 +106,7 @@ class _FooterLocatorRenderBox extends RenderProxyBox {
     final footerNotifier = EasyRefresh.of(context).footerNotifier;
     final axis = footerNotifier.axis;
     final double extend = paintExtent == 0
-        ? (footerNotifier.offset == 0 ? 0 : 0.0000000001)
+        ? (footerNotifier._displayOffset == 0 ? 0 : 0.0000000001)
         : paintExtent;
     if (axis == null) {
       size = constraints.smallest;
@@ -132,7 +132,7 @@ class _FooterLocatorRenderBox extends RenderProxyBox {
     final footerNotifier = EasyRefresh.of(this.context).footerNotifier;
     final axis = footerNotifier.axis;
     final axisDirection = footerNotifier.axisDirection;
-    final extend = footerNotifier.offset;
+    final extend = footerNotifier._displayOffset;
     Offset mOffset;
     if (axis == null || axisDirection == null) {
       mOffset = offset;
@@ -203,7 +203,10 @@ class _FooterLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
           constraints.axisDirection == AxisDirection.down ||
               constraints.axisDirection == AxisDirection.right
           ? 0
-          : math.min(footerNotifier.offset, constraints.remainingPaintExtent),
+          : math.min(
+              footerNotifier._displayOffset,
+              constraints.remainingPaintExtent,
+            ),
       // No cache extent.
       cacheExtent: math.min(childExtent, paintExtent),
       maxPaintExtent: math.max(childExtent, paintExtent),

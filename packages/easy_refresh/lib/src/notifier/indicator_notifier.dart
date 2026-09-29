@@ -140,6 +140,14 @@ abstract class IndicatorNotifier extends ChangeNotifier {
 
   double get offset => _offset;
 
+  /// Offset exposed to indicator widgets.
+  /// Keep physical overscroll while the opposite task blocks this indicator,
+  /// but do not expose an indicator that cannot currently process.
+  double get _displayOffset =>
+      !_canProcess && !(modeLocked || noMoreLocked || secondaryLocked)
+      ? 0
+      : _offset;
+
   /// The current scroll position.
   ScrollMetrics get position => _position!;
 
@@ -1172,7 +1180,7 @@ abstract class IndicatorNotifier extends ChangeNotifier {
       notifier: this,
       mode: mode,
       result: _result,
-      offset: offset,
+      offset: _displayOffset,
       safeOffset: safeOffset,
       axis: _axis!,
       axisDirection: _axisDirection!,

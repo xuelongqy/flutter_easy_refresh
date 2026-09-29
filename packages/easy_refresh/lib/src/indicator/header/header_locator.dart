@@ -108,7 +108,7 @@ class _HeaderLocatorRenderBox extends RenderProxyBox {
     final headerNotifier = EasyRefresh.of(context).headerNotifier;
     final axis = headerNotifier.axis;
     final double extend = paintExtent == 0
-        ? (headerNotifier.offset == 0 ? 0 : 0.0000000001)
+        ? (headerNotifier._displayOffset == 0 ? 0 : 0.0000000001)
         : paintExtent;
     if (axis == null) {
       size = constraints.smallest;
@@ -134,7 +134,7 @@ class _HeaderLocatorRenderBox extends RenderProxyBox {
     final headerNotifier = EasyRefresh.of(this.context).headerNotifier;
     final axis = headerNotifier.axis;
     final axisDirection = headerNotifier.axisDirection;
-    final extend = headerNotifier.offset;
+    final extend = headerNotifier._displayOffset;
     Offset mOffset;
     if (axis == null || axisDirection == null) {
       mOffset = offset;
@@ -205,7 +205,7 @@ class _HeaderLocatorRenderSliver extends RenderSliverSingleBoxAdapter {
           (constraints.axisDirection == AxisDirection.down ||
                   constraints.axisDirection == AxisDirection.right) &&
               !headerNotifier.clamping
-          ? -headerNotifier.offset
+          ? -headerNotifier._displayOffset
           : 0,
       // No cache extent.
       cacheExtent: math.min(childExtent, paintExtent),
