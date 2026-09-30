@@ -480,6 +480,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     }
     final leadingExtent = position.minScrollExtent - headerNotifier.overExtent;
     final trailingExtent = position.maxScrollExtent + footerNotifier.overExtent;
+    final footerReboundConsumedByGrowth =
+        position.maxScrollExtent > oldMaxScrollExtent + tolerance.distance &&
+        position.pixels > oldMaxScrollExtent + tolerance.distance &&
+        position.pixels <= position.maxScrollExtent + tolerance.distance;
     // An unchanged snapshot does not mean the previous animation is still
     // running: a tap can interrupt it before the position changes.
     final needsRebound =
@@ -517,6 +521,11 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
                 _headerSimulationCreationState.value.needCreation(hState) ||
                 _footerSimulationCreationState.value.needCreation(fState))) {
       double mVelocity = velocity;
+      // Content growth can turn the old Footer overscroll into a valid list
+      // position. Do not carry the old rebound velocity into the new extent.
+      if (footerReboundConsumedByGrowth && mVelocity < 0) {
+        mVelocity = 0;
+      }
       if (mVelocity < 0 &&
           headerNotifier.actualMaxOverOffset != double.infinity &&
           headerNotifier._offset != 0 &&
