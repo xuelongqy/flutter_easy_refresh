@@ -71,6 +71,22 @@ import 'package:easy_refresh/easy_refresh.dart';
 
 Sample implementation: `example/lib/page/sample/paging_page.dart`
 
+## AI agent skills
+
+This package ships three skills for easy_refresh 4.x:
+
+- [Usage and controllers](skills/easy-refresh-usage/SKILL.md)
+- [Built-in styles, custom indicators and secondary panels](skills/easy-refresh-indicators/SKILL.md)
+- [NestedScrollView and per-tab integration](skills/easy-refresh-nested-scroll/SKILL.md)
+
+Run this in your app after adding the package, then select the skills to install:
+
+```sh
+dart run skills@ get
+```
+
+See [Dart package skills](https://dart.dev/ai/package-skills) for installation and updates.
+
 ## Sample
 
 #### 1. Default constructor

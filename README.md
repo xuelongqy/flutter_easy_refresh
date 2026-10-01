@@ -71,6 +71,28 @@ import 'package:easy_refresh/easy_refresh.dart';
 
 Sample implementation: `example/lib/page/sample/paging_page.dart`
 
+## AI agent skills
+
+All eight packages ship consumer skills. Run this in your app after adding the relevant dependencies:
+
+```sh
+dart run skills@ get
+```
+
+| Package | Skills |
+| --- | --- |
+| easy_paging | [easy-paging-usage](packages/easy_paging/skills/easy-paging-usage/SKILL.md) |
+| easy_refresh | [easy-refresh-indicators](packages/easy_refresh/skills/easy-refresh-indicators/SKILL.md), [easy-refresh-nested-scroll](packages/easy_refresh/skills/easy-refresh-nested-scroll/SKILL.md), [easy-refresh-usage](packages/easy_refresh/skills/easy-refresh-usage/SKILL.md) |
+| easy_refresh_bow | [easy-refresh-bow-usage](packages/easy_refresh_bow/skills/easy-refresh-bow-usage/SKILL.md) |
+| easy_refresh_bubbles | [easy-refresh-bubbles-usage](packages/easy_refresh_bubbles/skills/easy-refresh-bubbles-usage/SKILL.md) |
+| easy_refresh_halloween | [easy-refresh-halloween-usage](packages/easy_refresh_halloween/skills/easy-refresh-halloween-usage/SKILL.md) |
+| easy_refresh_skating | [easy-refresh-skating-usage](packages/easy_refresh_skating/skills/easy-refresh-skating-usage/SKILL.md) |
+| easy_refresh_space | [easy-refresh-space-usage](packages/easy_refresh_space/skills/easy-refresh-space-usage/SKILL.md) |
+| easy_refresh_squats | [easy-refresh-squats-usage](packages/easy_refresh_squats/skills/easy-refresh-squats-usage/SKILL.md) |
+
+Skills follow easy_refresh/easy_paging 4.x and style package 2.x APIs.
+See [Dart package skills](https://dart.dev/ai/package-skills) for installation and updates.
+
 ## Sample
 
 #### 1. Default constructor
@@ -178,7 +200,13 @@ Sample implementation: `example/lib/page/sample/paging_page.dart`
 
 #### 6. NestedScrollView
 
-`EasyRefresh.nested` is the first-class wrapper for Flutter's **official** `NestedScrollView`. It creates that view, applies NestedScrollView-safe physics, and (when `onRefresh` is set) inserts `HeaderLocator` as the first outer sliver. You do **not** pass `physics` on `body`. Header must be **clamping** (non-clamping Headers are promoted). Inner bouncing pull-to-refresh and secondary Header + Nested are **not supported**. Nested `onLoad` should keep ClassicFooter's **infinite** load (`clamping: false`); `clamping: true` + `infiniteOffset: null` cannot enter NestedScrollView overscroll.
+`EasyRefresh.nested` is the first-class wrapper for Flutter's **official** `NestedScrollView`. It creates that view, applies NestedScrollView-safe physics, and (when `onRefresh` is set) inserts `HeaderLocator` as the first outer sliver. You do **not** pass `physics` on `body`. Header must be **clamping** (non-clamping Headers are promoted). Inner bouncing pull-to-refresh is **not supported**.
+
+Secondary Headers are supported: wrap a clamping Header in `SecondaryBuilderHeader`, configure `secondaryTriggerOffset` and `secondaryDimension`, and use `EasyRefresh.nested`. Existing `EasyRefresh.builder` integrations with the official `NestedScrollView` are also supported, including `isNested: true` and automatic detection. See [Nested second floor](example/lib/page/sample/nested_secondary_page.dart) for the overlap layout and safe-area handling. This support does not extend to `ExtendedNestedScrollView`.
+
+While the second floor is open, vertical drags move the Header without scrolling the underlying list. Releasing after retracting `secondaryCloseTriggerOffset` (70 logical pixels by default) closes it; a smaller drag springs back open. Taps keep it open. Use `EasyRefreshController.openHeaderSecondary()` to open it programmatically and `closeHeaderSecondary()` for a close button or back action. For programmatic opening in nested layouts, use `EasyRefresh.nested` or explicitly set `isNested: true`. After it closes, the next pull can refresh normally.
+
+Nested `onLoad` should keep ClassicFooter's **infinite** load (`clamping: false`); `clamping: true` + `infiniteOffset: null` cannot enter NestedScrollView overscroll.
 
 A Footer on this layer binds the **visible** inner (current `TabBarView` tab). Split `onLoad` by tab yourself. Independent `noMore` / Footer state per tab needs Recipe B.
 
@@ -334,6 +362,22 @@ EasyRefresh.builder(
 ## Feel free to contribute
 
 One's maintenance is lonely. If you have good suggestions and changes, feel free to contribute your code. If you have really cool styles, It's even cooler to share with everyone.
+
+After editing package skills, run these commands from the repository root:
+
+```sh
+flutter pub get
+dart run tool/check_skills.dart
+```
+
+CI runs the same check. It extracts the current Markdown Dart fences, analyzes all
+16 examples, and runs 11 widget checks using the existing example dependencies.
+When adding or removing a Dart fence, update the map in
+[`tool/check_skills.dart`](tool/check_skills.dart) and the
+[behavior tests](tool/skills_test.dart.template). Generated files stay under
+`example/.dart_tool/` and are removed on success or retained for debugging on
+failure. The six Rive style examples are analyzed; native animation rendering
+still needs target-platform validation. Skills are maintained in English only.
 
 #### Thanks to all the people who already contributed!
 

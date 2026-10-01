@@ -68,6 +68,28 @@ import 'package:easy_refresh/easy_refresh.dart';
 
 示例实现见：`example/lib/page/sample/paging_page.dart`
 
+## AI 助手技能
+
+全部八个包均提供使用技能。在应用中添加相关依赖后，运行以下命令并选择需要安装的技能：
+
+```sh
+dart run skills@ get
+```
+
+| 包 | 技能 |
+| --- | --- |
+| easy_paging | [easy-paging-usage](packages/easy_paging/skills/easy-paging-usage/SKILL.md) |
+| easy_refresh | [easy-refresh-indicators](packages/easy_refresh/skills/easy-refresh-indicators/SKILL.md), [easy-refresh-nested-scroll](packages/easy_refresh/skills/easy-refresh-nested-scroll/SKILL.md), [easy-refresh-usage](packages/easy_refresh/skills/easy-refresh-usage/SKILL.md) |
+| easy_refresh_bow | [easy-refresh-bow-usage](packages/easy_refresh_bow/skills/easy-refresh-bow-usage/SKILL.md) |
+| easy_refresh_bubbles | [easy-refresh-bubbles-usage](packages/easy_refresh_bubbles/skills/easy-refresh-bubbles-usage/SKILL.md) |
+| easy_refresh_halloween | [easy-refresh-halloween-usage](packages/easy_refresh_halloween/skills/easy-refresh-halloween-usage/SKILL.md) |
+| easy_refresh_skating | [easy-refresh-skating-usage](packages/easy_refresh_skating/skills/easy-refresh-skating-usage/SKILL.md) |
+| easy_refresh_space | [easy-refresh-space-usage](packages/easy_refresh_space/skills/easy-refresh-space-usage/SKILL.md) |
+| easy_refresh_squats | [easy-refresh-squats-usage](packages/easy_refresh_squats/skills/easy-refresh-squats-usage/SKILL.md) |
+
+技能对应 easy_refresh/easy_paging 4.x 与样式包 2.x。
+安装与更新方式见 [Dart Package Skills](https://dart.dev/ai/package-skills)。
+
 ## 简单用例
 #### 1.默认构造器
  - child作用域内，所有滚动组件会公用一个physics。如果有滚动嵌套，请使用EasyRefresh.builder或用ScrollConfiguration设置作用域
@@ -164,7 +186,11 @@ import 'package:easy_refresh/easy_refresh.dart';
 
 #### 6. NestedScrollView
 
-`EasyRefresh.nested` 是官方 **`NestedScrollView`** 的一等封装：内部创建该组件、加上 NestedScrollView 安全的 physics，并在设置了 `onRefresh` 时自动在 outer slivers 最前面插入 `HeaderLocator`。`body` **不用**再传 `physics`。Header 必须是 **clamping**（否则会提升为 clamping + locator）。不支持把 bouncing 下拉刷新塞进 Nested body，也不支持二楼 Header + Nested。上拉请用 ClassicFooter 默认的**无限加载**（`clamping: false`）；`clamping: true` 且 `infiniteOffset: null` 时 NestedScrollView 进不了 overscroll。
+`EasyRefresh.nested` 是官方 **`NestedScrollView`** 的一等封装：内部创建该组件、加上 NestedScrollView 安全的 physics，并在设置了 `onRefresh` 时自动在 outer slivers 最前面插入 `HeaderLocator`。`body` **不用**再传 `physics`。Header 必须是 **clamping**（否则会提升为 clamping + locator）。不支持把 bouncing 下拉刷新塞进 Nested body。上拉请用 ClassicFooter 默认的**无限加载**（`clamping: false`）；`clamping: true` 且 `infiniteOffset: null` 时 NestedScrollView 进不了 overscroll。
+
+官方 `NestedScrollView` 支持二楼 Header：用 `SecondaryBuilderHeader` 包装 clamping Header，配置 `secondaryTriggerOffset`、`secondaryDimension`，通过 `EasyRefresh.nested` 接入；builder 接入程序化打开时显式设置 `isNested: true`。参考[嵌套二楼示例](example/lib/page/sample/nested_secondary_page.dart)处理 overlap 和安全区。此支持不扩展到 `ExtendedNestedScrollView`。
+
+二楼打开期间，Header 接管纵向拖动；回收达到 `secondaryCloseTriggerOffset`（默认 70 逻辑像素）后释放会关闭，较小拖动则回弹保持打开，点击不会关闭。使用 `openHeaderSecondary()` / `closeHeaderSecondary()` 控制按钮或返回动作；关闭后可继续正常刷新。
 
 这一层的 Footer 绑的是**当前可见** inner（当前 `TabBarView`）。需要按 Tab 自己分流 `onLoad`。要独立 `noMore` / Footer 状态时用写法 B。
 
@@ -319,6 +345,20 @@ EasyRefresh.builder(
 
 ## 欢迎贡献
 一个人的维护是孤独的。如果你有好的建议和改动，欢迎贡献你的代码。如果你有非常酷的样式，能够分享给大家那就更酷了。
+
+修改包内 skill 后，在仓库根目录运行：
+
+```sh
+flutter pub get
+dart run tool/check_skills.dart
+```
+
+CI 使用同一入口，直接提取当前 Markdown 的 Dart 代码块，静态分析全部 16 个
+示例，并复用 example 的依赖执行 11 项 widget 检查。新增或删除 Dart 代码块时，
+同步更新 [`tool/check_skills.dart`](tool/check_skills.dart) 的映射及
+[行为测试](tool/skills_test.dart.template)。生成文件位于 `example/.dart_tool/`，
+成功后删除，失败时保留以便排查。六套 Rive 样式示例参与静态分析，原生动画显示
+仍需在目标平台验证。Skill 仅维护英文版本。
 
 __感谢所有的贡献者!__
 

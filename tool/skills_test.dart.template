@@ -1,0 +1,214 @@
+// Copied beside freshly extracted Markdown by tool/check_skills.dart.
+import 'dart:async';
+
+import 'package:easy_paging/easy_paging.dart';
+import 'package:easy_refresh/easy_refresh.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
+
+import '../examples/custom.dart' as custom;
+import '../examples/grid.dart' as grid;
+import '../examples/indicators.dart' as indicators;
+import '../examples/listener.dart' as listener;
+import '../examples/locator.dart' as locator;
+import '../examples/nested.dart' as nested;
+import '../examples/nested_secondary.dart' as nested_secondary;
+import '../examples/paging.dart' as paging;
+import '../examples/secondary.dart' as secondary;
+import '../examples/usage.dart' as usage;
+
+Future<void> advance(WidgetTester tester, {VoidCallback? observe}) async {
+  // Delayed requests still need time when no frame is scheduled.
+  // Sample during completion: success resets to none when the Header retracts.
+  for (var i = 0; i < 40; i++) {
+    await tester.pump(const Duration(milliseconds: 100));
+    observe?.call();
+  }
+  expect(tester.takeException(), isNull);
+}
+
+Future<void> refreshAndCheck(
+  WidgetTester tester,
+  EasyRefreshController controller,
+) async {
+  var sawSuccess = false;
+  unawaited(controller.callRefresh());
+  await advance(
+    tester,
+    observe: () {
+      sawSuccess |= controller.headerState?.result == IndicatorResult.success;
+    },
+  );
+  expect(sawSuccess, isTrue, reason: 'Refresh must complete successfully');
+  expect(controller.headerState?.mode, IndicatorMode.inactive);
+}
+
+Future<void> dragAndCheck(WidgetTester tester, Finder scrollable) async {
+  final header = EasyRefresh.of(tester.element(scrollable)).headerNotifier;
+  var sawSuccess = false;
+  // Observe notifications too: an immediate callback can finish between frames.
+  final listenable = header.listenable();
+  void observe() {
+    sawSuccess |= header.indicatorState?.result == IndicatorResult.success;
+  }
+
+  listenable.addListener(observe);
+  try {
+    await tester.drag(scrollable, const Offset(0, 600));
+    await advance(tester, observe: observe);
+    expect(
+      sawSuccess,
+      isTrue,
+      reason: 'The pull must trigger and finish refresh',
+    );
+    expect(header.mode, IndicatorMode.inactive);
+  } finally {
+    listenable.removeListener(observe);
+  }
+}
+
+void main() {
+  for (final manual in [false, true]) {
+    testWidgets(
+      'usage manual=$manual loads, locks noMore, refreshes and reloads',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(home: usage.RefreshExample(manualCompletion: manual)),
+        );
+        var initialSuccess = false;
+        final controller = tester
+            .widget<EasyRefresh>(find.byType(EasyRefresh))
+            .controller!;
+        await advance(
+          tester,
+          observe: () {
+            initialSuccess |=
+                controller.headerState?.result == IndicatorResult.success;
+          },
+        );
+        expect(initialSuccess, isTrue, reason: 'refreshOnStart must complete');
+        expect(controller.headerState?.mode, IndicatorMode.inactive);
+        int itemCount() => tester
+            .widget<ListView>(find.byType(ListView))
+            .childrenDelegate
+            .estimatedChildCount!;
+        expect(itemCount(), 20);
+        unawaited(controller.callLoad());
+        await advance(tester);
+        expect(controller.footerState?.result, IndicatorResult.success);
+        expect(itemCount(), 40);
+        unawaited(controller.callLoad());
+        await advance(tester);
+        expect(controller.footerState?.result, IndicatorResult.noMore);
+        expect(itemCount(), 60);
+        await refreshAndCheck(tester, controller);
+        expect(controller.footerState?.result, isNot(IndicatorResult.noMore));
+        expect(itemCount(), 20);
+        unawaited(controller.callLoad());
+        await advance(tester);
+        expect(controller.footerState?.result, IndicatorResult.success);
+        expect(itemCount(), 40);
+        await tester.pumpWidget(const SizedBox.shrink());
+      },
+    );
+  }
+
+  testWidgets(
+    'paging example appends to 45 items, then refresh replaces data',
+    (tester) async {
+      await tester.pumpWidget(const MaterialApp(home: paging.PagingExample()));
+      await advance(tester);
+      final state = tester
+          .state<EasyPagingState<List<String>, String, paging.ItemsPaging>>(
+            find.byType(paging.ItemsPaging),
+          );
+      final controller = state.widget.controller!;
+      expect(state.count, 20);
+      expect(state.page, 1);
+      for (var page = 2; page <= 3; page++) {
+        unawaited(controller.callLoad());
+        await advance(tester);
+        expect(state.page, page);
+      }
+      expect(state.data, List.generate(45, (index) => 'Item $index'));
+      expect(controller.footerState?.result, IndicatorResult.noMore);
+      unawaited(controller.callRefresh());
+      await advance(tester);
+      expect(state.data, List.generate(20, (index) => 'Item $index'));
+      expect(state.page, 1);
+      expect(controller.footerState?.result, isNot(IndicatorResult.noMore));
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
+  for (final entry in <String, Widget Function()>{
+    'grid': grid.refreshGrid,
+    'custom': custom.customIndicatorExample,
+    'locator': locator.locatorExample,
+    'listener': () => const listener.ListenerExample(),
+  }.entries) {
+    testWidgets('${entry.key} renders and refreshes by gesture', (
+      tester,
+    ) async {
+      await tester.pumpWidget(MaterialApp(home: Scaffold(body: entry.value())));
+      await advance(tester);
+      await dragAndCheck(tester, find.byType(Scrollable).first);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  }
+
+  testWidgets('global indicators example applies its style and refreshes', (
+    tester,
+  ) async {
+    final previous = EasyRefresh.defaultFooterBuilder;
+    addTearDown(() => EasyRefresh.defaultFooterBuilder = previous);
+    indicators.main();
+    await tester.pump();
+    await advance(tester);
+    final footer = EasyRefresh.defaultFooterBuilder() as ClassicFooter;
+    expect(footer.noMoreText, 'All items loaded');
+    expect(footer.showMessage, isFalse);
+    await dragAndCheck(tester, find.byType(Scrollable).first);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets('nested example renders overlap and refreshes', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: nested.NestedRefreshExample()),
+    );
+    await advance(tester);
+    expect(find.byType(SliverOverlapInjector), findsOneWidget);
+    await dragAndCheck(tester, find.byType(Scrollable).last);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  for (final isNested in [false, true]) {
+    testWidgets('secondary nested=$isNested opens, closes and refreshes', (
+      tester,
+    ) async {
+      final supplied = isNested ? EasyRefreshController() : null;
+      if (supplied != null) addTearDown(supplied.dispose);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: isNested
+                ? nested_secondary.nestedSecondFloor(supplied!)
+                : const secondary.SecondaryExample(),
+          ),
+        ),
+      );
+      await advance(tester);
+      final controller = tester
+          .widget<EasyRefresh>(find.byType(EasyRefresh))
+          .controller!;
+      unawaited(controller.openHeaderSecondary());
+      await advance(tester);
+      expect(controller.headerState?.mode, IndicatorMode.secondaryOpen);
+      await tester.tap(find.text('Close second floor'));
+      await advance(tester);
+      expect(controller.headerState?.mode, IndicatorMode.inactive);
+      await refreshAndCheck(tester, controller);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  }
+}

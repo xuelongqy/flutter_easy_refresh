@@ -30,6 +30,9 @@ jobs:
       - name: Analyze project source
         run: flutter analyze --no-fatal-infos
 
+      - name: Check package skill examples
+        run: dart run tool/check_skills.dart
+
       - name: Run tests
         working-directory: packages/easy_refresh
         run: flutter test --coverage

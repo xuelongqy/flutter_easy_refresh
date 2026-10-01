@@ -1,3 +1,8 @@
+## Unreleased
+
+- Ship 1 package skill(s) with complete examples and package-specific guidance.
+- Update usage documentation and skill installation instructions.
+
 ## 4.0.0
 
 > Note: This release has breaking changes.
