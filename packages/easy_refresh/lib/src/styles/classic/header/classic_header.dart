@@ -98,6 +98,7 @@ class ClassicHeader extends Header {
     this.key,
     super.triggerOffset = 70,
     super.clamping = false,
+    super.triggerMode,
     super.position,
     super.processedDuration,
     super.spring,

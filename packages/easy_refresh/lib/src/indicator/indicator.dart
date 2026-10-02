@@ -65,6 +65,15 @@ enum IndicatorMode {
   done,
 }
 
+/// Defines how a [Header] can be triggered by a user drag.
+enum IndicatorTriggerMode {
+  /// The drag may start anywhere in the scrollable.
+  anywhere,
+
+  /// The drag must start while the scrollable is at the Header edge.
+  onEdge,
+}
+
 /// The status returned after the task is completed.
 enum IndicatorResult {
   /// No state until the task is not triggered.

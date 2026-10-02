@@ -1243,6 +1243,9 @@ class _IndicatorListenable<T extends IndicatorNotifier>
 /// [Header] notifier
 /// [Header] status and Notifications
 class HeaderNotifier extends IndicatorNotifier {
+  bool? _userDragStartedAtEdge;
+  bool _userDragStartCaptured = false;
+
   HeaderNotifier({
     required Header header,
     required super.userOffsetNotifier,
@@ -1261,6 +1264,43 @@ class HeaderNotifier extends IndicatorNotifier {
          waitTaskResult: waitRefreshResult,
        );
 
+  bool get _requiresDragStartAtEdge =>
+      (_indicator as Header)._triggerMode == IndicatorTriggerMode.onEdge;
+
+  bool get _rejectCurrentUserDrag =>
+      _requiresDragStartAtEdge &&
+      _userDragStartedAtEdge == false &&
+      !(modeLocked || noMoreLocked || secondaryLocked);
+
+  bool _positionAtHeaderEdge(ScrollMetrics position) =>
+      position.pixels <= position.minScrollExtent;
+
+  void _recordUserDragStart(ScrollMetrics position) {
+    if (!_requiresDragStartAtEdge) {
+      return;
+    }
+    if (!_userDragStartCaptured) {
+      _userDragStartedAtEdge = true;
+      _userDragStartCaptured = true;
+    }
+    _userDragStartedAtEdge =
+        _userDragStartedAtEdge! && _positionAtHeaderEdge(position);
+  }
+
+  void _finishUserDragStartCapture() {
+    _userDragStartCaptured = false;
+  }
+
+  void _recordUserDragPosition(
+    ScrollMetrics position, {
+    required bool startsDrag,
+  }) {
+    if (!_requiresDragStartAtEdge || _userDragStartCaptured || !startsDrag) {
+      return;
+    }
+    _userDragStartedAtEdge = _positionAtHeaderEdge(position);
+  }
+
   @override
   ScrollPosition? _effectiveScrollPosition() {
     if (_nestedOuterPosition != null &&
@@ -1272,6 +1312,9 @@ class HeaderNotifier extends IndicatorNotifier {
 
   @override
   double _calculateOffset(ScrollMetrics position, double value) {
+    if (_rejectCurrentUserDrag) {
+      return 0;
+    }
     if (value >= position.minScrollExtent &&
         _offset != 0 &&
         !(_useClampingOffset && _offset > 0)) {
@@ -1362,6 +1405,7 @@ class HeaderNotifier extends IndicatorNotifier {
     Curve curve = Curves.linear,
     ScrollController? scrollController,
   }) async {
+    _userDragStartedAtEdge = null;
     var effectivePosition = _effectiveScrollPosition();
     if (effectivePosition == null &&
         scrollController != null &&

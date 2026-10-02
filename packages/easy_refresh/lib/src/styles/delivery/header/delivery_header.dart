@@ -12,6 +12,7 @@ class DeliveryHeader extends Header {
     this.key,
     super.triggerOffset = kDeliveryTriggerOffset,
     super.clamping = false,
+    super.triggerMode,
     super.position,
     super.spring,
     super.readySpringBuilder,

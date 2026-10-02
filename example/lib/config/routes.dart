@@ -16,6 +16,7 @@ import 'package:example/page/sample/secondary_page.dart';
 import 'package:example/page/sample/nested_secondary_page.dart';
 import 'package:example/page/sample/tab_bar_view_page.dart';
 import 'package:example/page/sample/theme_switch_page.dart';
+import 'package:example/page/sample/trigger_mode_page.dart';
 import 'package:example/page/sample/user_profile_page.dart';
 import 'package:example/page/style/bezier_circle_page.dart';
 import 'package:example/page/style/bezier_page.dart';
@@ -53,6 +54,7 @@ class Routes {
   static const tabBarViewSample = '/sample/tab-bar-view';
   static const pagingSample = '/sample/paging';
   static const themeSwitchSample = '/sample/theme-switch';
+  static const triggerModeSample = '/sample/trigger-mode';
   // Style
   static const style = '/style';
   static const classicStyle = '/style/classic';
@@ -102,6 +104,7 @@ class Routes {
     GetPage(name: tabBarViewSample, page: () => const TabBarViewPage()),
     GetPage(name: pagingSample, page: () => const PagingPage()),
     GetPage(name: themeSwitchSample, page: () => const ThemeSwitchPage()),
+    GetPage(name: triggerModeSample, page: () => const TriggerModePage()),
     // Style
     GetPage(name: style, page: () => const StylePage()),
     GetPage(name: classicStyle, page: () => const ClassicPage()),

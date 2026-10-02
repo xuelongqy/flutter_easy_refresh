@@ -2,9 +2,12 @@ part of '../../../easy_refresh.dart';
 
 /// Header indicator.
 abstract class Header extends Indicator {
+  final IndicatorTriggerMode _triggerMode;
+
   const Header({
     required super.triggerOffset,
     required super.clamping,
+    IndicatorTriggerMode triggerMode = IndicatorTriggerMode.anywhere,
     super.processedDuration,
     super.spring,
     super.horizontalSpring,
@@ -29,7 +32,10 @@ abstract class Header extends Indicator {
     super.triggerWhenRelease,
     super.triggerWhenReleaseNoWait,
     super.maxOverOffset,
-  });
+  }) : // Keep the public constructor parameter while avoiding a new public
+       // interface member for Header implementations.
+       // ignore: prefer_initializing_formals
+       _triggerMode = triggerMode;
 }
 
 /// Build header widget use [IndicatorBuilder].
@@ -42,6 +48,7 @@ class BuilderHeader extends Header {
     required super.triggerOffset,
     required super.clamping,
     required super.position,
+    super.triggerMode,
     super.processedDuration,
     super.spring,
     super.horizontalSpring,
@@ -80,6 +87,7 @@ class ListenerHeader extends Header {
     required IndicatorStateListenable super.listenable,
     required super.triggerOffset,
     super.clamping = true,
+    super.triggerMode,
     super.processedDuration,
     super.spring,
     super.horizontalSpring,
@@ -146,6 +154,7 @@ abstract class SecondaryHeader extends Header {
          triggerWhenRelease: header.triggerWhenRelease,
          triggerWhenReleaseNoWait: header.triggerWhenReleaseNoWait,
          maxOverOffset: header.maxOverOffset,
+         triggerMode: header._triggerMode,
        );
 
   @override
@@ -244,6 +253,7 @@ class OverrideHeader extends Header {
     bool? triggerWhenRelease,
     bool? triggerWhenReleaseNoWait,
     double? maxOverOffset,
+    IndicatorTriggerMode? triggerMode,
   }) : super(
          triggerOffset: triggerOffset ?? header.triggerOffset,
          clamping: clamping ?? header.clamping,
@@ -277,6 +287,7 @@ class OverrideHeader extends Header {
          triggerWhenReleaseNoWait:
              triggerWhenReleaseNoWait ?? header.triggerWhenReleaseNoWait,
          maxOverOffset: maxOverOffset ?? header.maxOverOffset,
+         triggerMode: triggerMode ?? header._triggerMode,
        );
 
   @override

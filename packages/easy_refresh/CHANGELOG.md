@@ -25,6 +25,7 @@
  - **FIX**: Stop carrying stale Footer rebound velocity after appended content expands the scroll extent ([#831](https://github.com/xuelongqy/flutter_easy_refresh/issues/831)).
  - **FIX**: Remove duplicate Cupertino indicator keys that could conflict during `AnimatedSwitcher` transitions ([#719](https://github.com/xuelongqy/flutter_easy_refresh/issues/719)).
  - **FIX**: Allow Header/Footer positions already beyond `maxOverOffset` to rebound toward the valid range without returning an invalid boundary delta ([#650](https://github.com/xuelongqy/flutter_easy_refresh/issues/650)).
+ - **FEAT**: Add `IndicatorTriggerMode.onEdge` for Header drag-start triggering while preserving the existing `anywhere` default ([#606](https://github.com/xuelongqy/flutter_easy_refresh/issues/606)).
 
 ## 3.5.1
 

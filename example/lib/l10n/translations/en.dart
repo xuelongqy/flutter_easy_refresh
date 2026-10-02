@@ -64,6 +64,16 @@ const en = {
   'Refresh on start': 'Refresh on start',
   'Refresh when the list is displayed and specify the Header':
       'Refresh when the list is displayed and specify the Header',
+  'Header trigger mode': 'Header trigger mode',
+  'Compare anywhere and onEdge trigger modes':
+      'Compare anywhere and onEdge trigger modes',
+  'Trigger only when drag starts at the edge':
+      'Trigger only when drag starts at the edge',
+  'onEdge mode description':
+      'Start the drag at the top edge to trigger refresh.',
+  'anywhere mode description':
+      'A drag started in the list can trigger refresh after reaching the top.',
+  'Trigger mode test instruction': 'Scroll down first, then drag downward without releasing. onEdge will not refresh; anywhere can refresh after reaching the top.',
   'Centered refresh': 'Centered refresh',
   'Keep refreshed items above the current viewport':
       'Keep refreshed items above the current viewport',
