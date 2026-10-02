@@ -72,6 +72,12 @@ class _SamplePageState extends State<SamplePage> {
                 onTap: () => Get.toNamed(Routes.refreshOnStartSample),
               ),
               ListItem(
+                title: 'Centered refresh'.tr,
+                subtitle: 'Keep refreshed items above the current viewport'.tr,
+                icon: Icons.vertical_align_top,
+                onTap: () => Get.toNamed(Routes.centerRefreshSample),
+              ),
+              ListItem(
                 title: 'Listener'.tr,
                 subtitle: 'Use listener to respond anywhere'.tr,
                 icon: Icons.earbuds,

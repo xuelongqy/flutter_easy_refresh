@@ -64,6 +64,11 @@ const en = {
   'Refresh on start': 'Refresh on start',
   'Refresh when the list is displayed and specify the Header':
       'Refresh when the list is displayed and specify the Header',
+  'Centered refresh': 'Centered refresh',
+  'Keep refreshed items above the current viewport':
+      'Keep refreshed items above the current viewport',
+  'New item @index': 'New item @index',
+  'Item @index': 'Item @index',
   'Listener': 'Listener',
   'Use listener to respond anywhere': 'Use listener to respond anywhere',
   'Nested second floor': 'Nested second floor',

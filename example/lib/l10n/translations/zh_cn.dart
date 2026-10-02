@@ -63,6 +63,10 @@ const zhCN = {
   'Refresh on start': '启动时刷新',
   'Refresh when the list is displayed and specify the Header':
       '列表显示时刷新并指定Header',
+  'Centered refresh': '中心锚点刷新',
+  'Keep refreshed items above the current viewport': '刷新后将新增内容保留在当前视口上方',
+  'New item @index': '新增项目 @index',
+  'Item @index': '项目 @index',
   'Listener': '监听器',
   'Use listener to respond anywhere': '使用监听器，在任意位置响应',
   'Nested second floor': '嵌套二楼',

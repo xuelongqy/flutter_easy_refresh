@@ -3,6 +3,7 @@ import 'package:example/page/more/cryptocurrency_page.dart';
 import 'package:example/page/more/support_me_page.dart';
 import 'package:example/page/more/theme_page.dart';
 import 'package:example/page/sample/carousel_page.dart';
+import 'package:example/page/sample/center_refresh_page.dart';
 import 'package:example/page/sample/chat_page.dart';
 import 'package:example/page/sample/listener_header_page.dart';
 import 'package:example/page/sample/easy_refresh_nested_page.dart';
@@ -42,6 +43,7 @@ class Routes {
   static const nestedScrollViewSample = '/sample/nested-scroll-view';
   static const easyRefreshNestedSample = '/sample/easy-refresh-nested';
   static const carouselSample = '/sample/carousel';
+  static const centerRefreshSample = '/sample/center-refresh';
   static const refreshOnStartSample = '/sample/refresh-on-start';
   static const listenerSample = '/sample/listener';
   static const secondarySample = '/sample/secondary';
@@ -87,6 +89,7 @@ class Routes {
       page: () => const EasyRefreshNestedPage(),
     ),
     GetPage(name: carouselSample, page: () => const CarouselPage()),
+    GetPage(name: centerRefreshSample, page: () => const CenterRefreshPage()),
     GetPage(name: refreshOnStartSample, page: () => const RefreshOnStartPage()),
     GetPage(name: listenerSample, page: () => const ListenerHeaderPage()),
     GetPage(name: secondarySample, page: () => const SecondaryPage()),
