@@ -23,6 +23,7 @@
  - **FIX**: Remove unused `ValueNotifier` wrappers from ballistic simulation state snapshots ([#916](https://github.com/xuelongqy/flutter_easy_refresh/issues/916)).
  - **FIX**: Hide the opposite indicator while refresh/load tasks are mutually exclusive, while preserving non-clamping overscroll ([#872](https://github.com/xuelongqy/flutter_easy_refresh/issues/872)).
  - **FIX**: Stop carrying stale Footer rebound velocity after appended content expands the scroll extent ([#831](https://github.com/xuelongqy/flutter_easy_refresh/issues/831)).
+ - **FIX**: Remove duplicate Cupertino indicator keys that could conflict during `AnimatedSwitcher` transitions ([#719](https://github.com/xuelongqy/flutter_easy_refresh/issues/719)).
 
 ## 3.5.1
 

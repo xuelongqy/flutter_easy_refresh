@@ -102,7 +102,6 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
       case IndicatorMode.armed:
         const Curve opacityCurve = Interval(0.0, 0.8, curve: Curves.easeInOut);
         indicator = Opacity(
-          key: const ValueKey('indicator'),
           opacity: opacityCurve.transform(scale),
           child: _CupertinoActivityIndicator.partiallyRevealed(
             radius: _radius,
@@ -115,7 +114,6 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
       case IndicatorMode.processing:
       case IndicatorMode.processed:
         indicator = _CupertinoActivityIndicator(
-          key: const ValueKey('indicator'),
           radius: _radius,
           color: widget.foregroundColor,
           animating: true,
@@ -123,14 +121,13 @@ class _CupertinoIndicatorState extends State<_CupertinoIndicator>
         break;
       case IndicatorMode.done:
         indicator = _CupertinoActivityIndicator(
-          key: const ValueKey('indicator'),
           radius: _radius * scale,
           color: widget.foregroundColor,
           animating: true,
         );
         break;
       default:
-        indicator = const SizedBox(key: ValueKey('indicator'));
+        indicator = const SizedBox();
         break;
     }
     return AnimatedSwitcher(

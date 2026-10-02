@@ -26,6 +26,9 @@ class _CupertinoIndicatorHarnessState
   Completer<void>? _refreshCompleter;
   Completer<void>? _loadCompleter;
 
+  bool get loadStarted =>
+      _loadCompleter != null && !_loadCompleter!.isCompleted;
+
   void finishRefresh() {
     _refreshCompleter?.complete();
   }
@@ -285,6 +288,34 @@ void main() {
       state.finishLoad();
       await tester.pump();
       await tester.pump();
+
+      await disposeAndFlush(tester);
+    });
+
+    testWidgets('CupertinoFooter handles rapid state switches', (tester) async {
+      final key = GlobalKey<_CupertinoIndicatorHarnessState>();
+      await tester.pumpWidget(
+        _CupertinoIndicatorHarness(key: key, footer: const CupertinoFooter()),
+      );
+      final state = key.currentState!;
+      await tester.pumpAndSettle();
+
+      state.scrollController.jumpTo(
+        state.scrollController.position.maxScrollExtent,
+      );
+      await tester.pump();
+      await tester.drag(find.byType(ListView), const Offset(0, -120));
+      for (var i = 0; i < 20 && !state.loadStarted; i++) {
+        await tester.pump(const Duration(milliseconds: 10));
+      }
+      expect(state.loadStarted, isTrue);
+      expect(tester.takeException(), isNull);
+
+      state.finishLoad();
+      for (var i = 0; i < 20; i++) {
+        await tester.pump(const Duration(milliseconds: 10));
+        expect(tester.takeException(), isNull);
+      }
 
       await disposeAndFlush(tester);
     });
