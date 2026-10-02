@@ -1206,14 +1206,17 @@ class _EasyRefreshState extends State<EasyRefresh>
       );
     }
     Widget content = _InheritedEasyRefresh(data: _data, child: child);
-    if (_headerNotifier._requiresDragStartAtEdge) {
+    if (_headerNotifier._requiresDragStartAtEdge ||
+        _footerNotifier._requiresDragStartAtEdge) {
       content = NotificationListener<ScrollNotification>(
         onNotification: (notification) {
           if (notification is ScrollStartNotification &&
               notification.dragDetails != null) {
             _headerNotifier._recordUserDragStart(notification.metrics);
+            _footerNotifier._recordUserDragStart(notification.metrics);
           } else if (notification is ScrollEndNotification) {
             _headerNotifier._finishUserDragStartCapture();
+            _footerNotifier._finishUserDragStartCapture();
           }
           return false;
         },

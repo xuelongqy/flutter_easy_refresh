@@ -72,8 +72,10 @@ class _SamplePageState extends State<SamplePage> {
                 onTap: () => Get.toNamed(Routes.refreshOnStartSample),
               ),
               ListItem(
-                title: 'Header trigger mode'.tr,
-                subtitle: 'Compare anywhere and onEdge trigger modes'.tr,
+                title: 'Indicator trigger mode'.tr,
+                subtitle:
+                    'Compare Header and Footer anywhere/onEdge trigger modes'
+                        .tr,
                 icon: Icons.vertical_align_top,
                 onTap: () => Get.toNamed(Routes.triggerModeSample),
               ),

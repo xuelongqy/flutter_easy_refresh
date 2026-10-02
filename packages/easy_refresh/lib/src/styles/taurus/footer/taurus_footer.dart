@@ -12,6 +12,7 @@ class TaurusFooter extends Footer {
     this.key,
     super.triggerOffset = 100,
     super.clamping = false,
+    super.triggerMode,
     super.position,
     super.spring,
     super.readySpringBuilder,

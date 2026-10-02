@@ -155,6 +155,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       position,
       startsDrag: !userOffsetNotifier.value,
     );
+    footerNotifier._recordUserDragPosition(
+      position,
+      startsDrag: !userOffsetNotifier.value,
+    );
     userOffsetNotifier.value = true;
     if (_dragClampingSecondary(position, offset)) {
       return 0;
@@ -688,6 +692,10 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
     headerNotifier._recordUserDragPosition(
       position,
       startsDrag: !headerNotifier.userOffsetNotifier.value,
+    );
+    footerNotifier._recordUserDragPosition(
+      position,
+      startsDrag: !footerNotifier.userOffsetNotifier.value,
     );
     _setNestedUserOffset(true);
     assert(offset != 0.0);

@@ -98,6 +98,7 @@ class ClassicFooter extends Footer {
     this.key,
     super.triggerOffset = 70,
     super.clamping = false,
+    super.triggerMode,
     super.position,
     super.processedDuration = Duration.zero,
     super.spring,

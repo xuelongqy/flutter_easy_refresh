@@ -22,6 +22,7 @@ class CupertinoFooter extends Footer {
     this.key,
     super.triggerOffset = 60,
     super.clamping = false,
+    super.triggerMode,
     super.position = IndicatorPosition.behind,
     super.processedDuration = Duration.zero,
     super.spring,

@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
 void main() {
-  testWidgets('trigger mode sample switches mode and refreshes', (
+  testWidgets('trigger mode sample exposes Header and Footer modes', (
     tester,
   ) async {
     await tester.pumpWidget(const MaterialApp(home: TriggerModePage()));
@@ -12,9 +12,13 @@ void main() {
 
     var refresh = tester.widget<EasyRefresh>(find.byType(EasyRefresh));
     expect((refresh.header as ClassicHeader), isNotNull);
+    expect(refresh.footer, isA<ClassicFooter>());
+    expect(find.byType(Switch), findsNWidgets(2));
     expect(find.text('Refresh count: 0'), findsOneWidget);
+    expect(find.textContaining('Load count: 0'), findsOneWidget);
 
-    await tester.tap(find.byType(Switch));
+    await tester.tap(find.byType(Switch).at(0));
+    await tester.tap(find.byType(Switch).at(1));
     await tester.pump();
     refresh = tester.widget<EasyRefresh>(find.byType(EasyRefresh));
     expect(refresh.header, isA<ClassicHeader>());

@@ -65,12 +65,12 @@ enum IndicatorMode {
   done,
 }
 
-/// Defines how a [Header] can be triggered by a user drag.
+/// Defines how a [Header] or [Footer] can be triggered by a user drag.
 enum IndicatorTriggerMode {
   /// The drag may start anywhere in the scrollable.
   anywhere,
 
-  /// The drag must start while the scrollable is at the Header edge.
+  /// The drag must start while the scrollable is at the corresponding edge.
   onEdge,
 }
 

@@ -33,6 +33,7 @@ class BezierFooter extends Footer {
     this.key,
     super.triggerOffset = 100,
     super.clamping = false,
+    super.triggerMode,
     super.position,
     super.processedDuration = kBezierBackgroundDisappearDuration,
     super.spring,

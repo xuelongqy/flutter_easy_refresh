@@ -2,9 +2,12 @@ part of '../../../easy_refresh.dart';
 
 /// Footer indicator.
 abstract class Footer extends Indicator {
+  final IndicatorTriggerMode _triggerMode;
+
   const Footer({
     required super.triggerOffset,
     required super.clamping,
+    IndicatorTriggerMode triggerMode = IndicatorTriggerMode.anywhere,
     super.processedDuration,
     super.spring,
     super.horizontalSpring,
@@ -29,7 +32,10 @@ abstract class Footer extends Indicator {
     super.triggerWhenRelease,
     super.triggerWhenReleaseNoWait,
     super.maxOverOffset,
-  });
+  }) : // Keep the public constructor parameter while avoiding a new public
+       // interface member for Footer implementations.
+       // ignore: prefer_initializing_formals
+       _triggerMode = triggerMode;
 }
 
 /// Build footer widget use [IndicatorBuilder].
@@ -41,6 +47,7 @@ class BuilderFooter extends Footer {
     required this.builder,
     required super.triggerOffset,
     required super.clamping,
+    super.triggerMode,
     super.processedDuration,
     super.spring,
     super.horizontalSpring,
@@ -80,6 +87,7 @@ class ListenerFooter extends Footer {
     required IndicatorStateListenable super.listenable,
     required super.triggerOffset,
     super.clamping = true,
+    super.triggerMode,
     super.processedDuration,
     super.spring,
     super.horizontalSpring,
@@ -146,6 +154,7 @@ abstract class SecondaryFooter extends Footer {
          triggerWhenRelease: footer.triggerWhenRelease,
          triggerWhenReleaseNoWait: footer.triggerWhenReleaseNoWait,
          maxOverOffset: footer.maxOverOffset,
+         triggerMode: footer._triggerMode,
        );
 
   @override
@@ -244,6 +253,7 @@ class OverrideFooter extends Footer {
     bool? triggerWhenRelease,
     bool? triggerWhenReleaseNoWait,
     double? maxOverOffset,
+    IndicatorTriggerMode? triggerMode,
   }) : super(
          triggerOffset: triggerOffset ?? footer.triggerOffset,
          clamping: clamping ?? footer.clamping,
@@ -277,6 +287,7 @@ class OverrideFooter extends Footer {
          triggerWhenReleaseNoWait:
              triggerWhenReleaseNoWait ?? footer.triggerWhenReleaseNoWait,
          maxOverOffset: maxOverOffset ?? footer.maxOverOffset,
+         triggerMode: triggerMode ?? footer._triggerMode,
        );
 
   @override

@@ -64,16 +64,20 @@ const en = {
   'Refresh on start': 'Refresh on start',
   'Refresh when the list is displayed and specify the Header':
       'Refresh when the list is displayed and specify the Header',
-  'Header trigger mode': 'Header trigger mode',
-  'Compare anywhere and onEdge trigger modes':
-      'Compare anywhere and onEdge trigger modes',
-  'Trigger only when drag starts at the edge':
-      'Trigger only when drag starts at the edge',
-  'onEdge mode description':
+  'Indicator trigger mode': 'Indicator trigger mode',
+  'Compare Header and Footer anywhere/onEdge trigger modes':
+      'Compare Header and Footer anywhere/onEdge trigger modes',
+  'Header starts at edge': 'Header starts at edge',
+  'Footer starts at edge': 'Footer starts at edge',
+  'Header onEdge mode description':
       'Start the drag at the top edge to trigger refresh.',
-  'anywhere mode description':
+  'Header anywhere mode description':
       'A drag started in the list can trigger refresh after reaching the top.',
-  'Trigger mode test instruction': 'Scroll down first, then drag downward without releasing. onEdge will not refresh; anywhere can refresh after reaching the top.',
+  'Footer onEdge mode description':
+      'Start the drag at the bottom edge to trigger load.',
+  'Footer anywhere mode description':
+      'A drag started in the list can trigger load after reaching the bottom.',
+  'Trigger mode test instruction': 'Try one continuous drag from the middle toward the top or bottom. onEdge rejects it; anywhere accepts it after the edge is reached.',
   'Centered refresh': 'Centered refresh',
   'Keep refreshed items above the current viewport':
       'Keep refreshed items above the current viewport',
@@ -91,6 +95,7 @@ const en = {
   'Pull farther to visit the second floor':
       'Pull farther to visit the second floor',
   'Refresh count: @count': 'Refresh count: @count',
+  'Load count: @count': 'Load count: @count',
   'List': 'List',
   'Grid': 'Grid',
   'Secondary': 'Secondary',

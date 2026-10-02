@@ -41,6 +41,7 @@ class MaterialFooter extends Footer {
     this.key,
     super.triggerOffset = 100,
     super.clamping = true,
+    super.triggerMode,
     super.position,
     super.processedDuration = const Duration(milliseconds: 200),
     physics.SpringDescription? spring,

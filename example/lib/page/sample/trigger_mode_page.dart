@@ -10,27 +10,46 @@ class TriggerModePage extends StatefulWidget {
 }
 
 class _TriggerModePageState extends State<TriggerModePage> {
-  var _triggerMode = IndicatorTriggerMode.onEdge;
+  var _headerTriggerMode = IndicatorTriggerMode.onEdge;
+  var _footerTriggerMode = IndicatorTriggerMode.onEdge;
   var _refreshCount = 0;
+  var _loadCount = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Header trigger mode'.tr)),
+      appBar: AppBar(title: Text('Indicator trigger mode'.tr)),
       body: Column(
         children: [
           SwitchListTile(
-            title: Text('Trigger only when drag starts at the edge'.tr),
+            title: Text('Header starts at edge'.tr),
             subtitle: Text(
-              (_triggerMode == IndicatorTriggerMode.onEdge
-                      ? 'onEdge mode description'
-                      : 'anywhere mode description')
+              (_headerTriggerMode == IndicatorTriggerMode.onEdge
+                      ? 'Header onEdge mode description'
+                      : 'Header anywhere mode description')
                   .tr,
             ),
-            value: _triggerMode == IndicatorTriggerMode.onEdge,
+            value: _headerTriggerMode == IndicatorTriggerMode.onEdge,
             onChanged: (value) {
               setState(() {
-                _triggerMode = value
+                _headerTriggerMode = value
+                    ? IndicatorTriggerMode.onEdge
+                    : IndicatorTriggerMode.anywhere;
+              });
+            },
+          ),
+          SwitchListTile(
+            title: Text('Footer starts at edge'.tr),
+            subtitle: Text(
+              (_footerTriggerMode == IndicatorTriggerMode.onEdge
+                      ? 'Footer onEdge mode description'
+                      : 'Footer anywhere mode description')
+                  .tr,
+            ),
+            value: _footerTriggerMode == IndicatorTriggerMode.onEdge,
+            onChanged: (value) {
+              setState(() {
+                _footerTriggerMode = value
                     ? IndicatorTriggerMode.onEdge
                     : IndicatorTriggerMode.anywhere;
               });
@@ -38,7 +57,11 @@ class _TriggerModePageState extends State<TriggerModePage> {
           ),
           Expanded(
             child: EasyRefresh(
-              header: ClassicHeader(triggerMode: _triggerMode),
+              header: ClassicHeader(triggerMode: _headerTriggerMode),
+              footer: ClassicFooter(
+                triggerMode: _footerTriggerMode,
+                infiniteOffset: null,
+              ),
               onRefresh: () async {
                 await Future.delayed(const Duration(milliseconds: 500));
                 if (!mounted) {
@@ -46,6 +69,15 @@ class _TriggerModePageState extends State<TriggerModePage> {
                 }
                 setState(() {
                   _refreshCount++;
+                });
+              },
+              onLoad: () async {
+                await Future.delayed(const Duration(milliseconds: 500));
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  _loadCount++;
                 });
               },
               child: ListView.builder(
@@ -59,7 +91,10 @@ class _TriggerModePageState extends State<TriggerModePage> {
                           'count': '$_refreshCount',
                         }),
                       ),
-                      subtitle: Text('Trigger mode test instruction'.tr),
+                      subtitle: Text(
+                        '${'Load count: @count'.trParams({'count': '$_loadCount'})}\n'
+                        '${'Trigger mode test instruction'.tr}',
+                      ),
                     );
                   }
                   return ListTile(

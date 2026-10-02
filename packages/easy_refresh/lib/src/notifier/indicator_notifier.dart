@@ -35,6 +35,9 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   /// Other scroll directions will not show indicators and perform task.
   Axis? _triggerAxis;
 
+  bool? _userDragStartedAtEdge;
+  bool _userDragStartCaptured = false;
+
   IndicatorNotifier({
     required Indicator indicator,
     required this.vsync,
@@ -77,6 +80,58 @@ abstract class IndicatorNotifier extends ChangeNotifier {
   double get actualMaxOverOffset => maxOverOffset == double.infinity
       ? maxOverOffset
       : (maxOverOffset + safeOffset);
+
+  IndicatorTriggerMode get _triggerMode {
+    final indicator = _indicator;
+    if (indicator is Header) {
+      return indicator._triggerMode;
+    }
+    if (indicator is Footer) {
+      return indicator._triggerMode;
+    }
+    return IndicatorTriggerMode.anywhere;
+  }
+
+  bool get _requiresDragStartAtEdge =>
+      _triggerMode == IndicatorTriggerMode.onEdge;
+
+  bool get _rejectCurrentUserDrag =>
+      _requiresDragStartAtEdge &&
+      _userDragStartedAtEdge == false &&
+      !(modeLocked || noMoreLocked || secondaryLocked);
+
+  bool _positionAtTriggerEdge(ScrollMetrics position) {
+    if (_indicator is Header) {
+      return position.pixels <= position.minScrollExtent;
+    }
+    return position.pixels >= position.maxScrollExtent;
+  }
+
+  void _recordUserDragStart(ScrollMetrics position) {
+    if (!_requiresDragStartAtEdge) {
+      return;
+    }
+    if (!_userDragStartCaptured) {
+      _userDragStartedAtEdge = true;
+      _userDragStartCaptured = true;
+    }
+    _userDragStartedAtEdge =
+        _userDragStartedAtEdge! && _positionAtTriggerEdge(position);
+  }
+
+  void _finishUserDragStartCapture() {
+    _userDragStartCaptured = false;
+  }
+
+  void _recordUserDragPosition(
+    ScrollMetrics position, {
+    required bool startsDrag,
+  }) {
+    if (!_requiresDragStartAtEdge || _userDragStartCaptured || !startsDrag) {
+      return;
+    }
+    _userDragStartedAtEdge = _positionAtTriggerEdge(position);
+  }
 
   /// Spring description.
   physics.SpringDescription? get _spring {
@@ -775,6 +830,10 @@ abstract class IndicatorNotifier extends ChangeNotifier {
     }
     // Not updated during task execution and task completion.
     if (!(modeLocked || noMoreLocked || secondaryLocked)) {
+      if (_rejectCurrentUserDrag) {
+        _mode = IndicatorMode.inactive;
+        return;
+      }
       // In the non-executable task state.
       if (!_canProcess) {
         _mode = IndicatorMode.inactive;
@@ -1243,9 +1302,6 @@ class _IndicatorListenable<T extends IndicatorNotifier>
 /// [Header] notifier
 /// [Header] status and Notifications
 class HeaderNotifier extends IndicatorNotifier {
-  bool? _userDragStartedAtEdge;
-  bool _userDragStartCaptured = false;
-
   HeaderNotifier({
     required Header header,
     required super.userOffsetNotifier,
@@ -1263,43 +1319,6 @@ class HeaderNotifier extends IndicatorNotifier {
          task: onRefresh,
          waitTaskResult: waitRefreshResult,
        );
-
-  bool get _requiresDragStartAtEdge =>
-      (_indicator as Header)._triggerMode == IndicatorTriggerMode.onEdge;
-
-  bool get _rejectCurrentUserDrag =>
-      _requiresDragStartAtEdge &&
-      _userDragStartedAtEdge == false &&
-      !(modeLocked || noMoreLocked || secondaryLocked);
-
-  bool _positionAtHeaderEdge(ScrollMetrics position) =>
-      position.pixels <= position.minScrollExtent;
-
-  void _recordUserDragStart(ScrollMetrics position) {
-    if (!_requiresDragStartAtEdge) {
-      return;
-    }
-    if (!_userDragStartCaptured) {
-      _userDragStartedAtEdge = true;
-      _userDragStartCaptured = true;
-    }
-    _userDragStartedAtEdge =
-        _userDragStartedAtEdge! && _positionAtHeaderEdge(position);
-  }
-
-  void _finishUserDragStartCapture() {
-    _userDragStartCaptured = false;
-  }
-
-  void _recordUserDragPosition(
-    ScrollMetrics position, {
-    required bool startsDrag,
-  }) {
-    if (!_requiresDragStartAtEdge || _userDragStartCaptured || !startsDrag) {
-      return;
-    }
-    _userDragStartedAtEdge = _positionAtHeaderEdge(position);
-  }
 
   @override
   ScrollPosition? _effectiveScrollPosition() {
@@ -1521,6 +1540,9 @@ class FooterNotifier extends IndicatorNotifier {
 
   @override
   double _calculateOffset(ScrollMetrics position, double value) {
+    if (_rejectCurrentUserDrag) {
+      return 0;
+    }
     if (value <= position.maxScrollExtent &&
         _offset != 0 &&
         !(_useClampingOffset && _offset > 0)) {
@@ -1611,6 +1633,7 @@ class FooterNotifier extends IndicatorNotifier {
     bool jumpToEdge = true,
     ScrollController? scrollController,
   }) async {
+    _userDragStartedAtEdge = null;
     var effectivePosition = _effectiveScrollPosition();
     if (effectivePosition == null &&
         scrollController != null &&

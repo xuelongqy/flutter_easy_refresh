@@ -6,6 +6,7 @@ class _TriggerModeHarness extends StatefulWidget {
   const _TriggerModeHarness({
     super.key,
     this.triggerMode = IndicatorTriggerMode.anywhere,
+    this.footerTriggerMode = IndicatorTriggerMode.anywhere,
     this.clamping = false,
     this.triggerWhenReach = false,
     this.triggerWhenRelease = false,
@@ -15,6 +16,7 @@ class _TriggerModeHarness extends StatefulWidget {
   });
 
   final IndicatorTriggerMode triggerMode;
+  final IndicatorTriggerMode footerTriggerMode;
   final bool clamping;
   final bool triggerWhenReach;
   final bool triggerWhenRelease;
@@ -30,9 +32,12 @@ class _TriggerModeHarnessState extends State<_TriggerModeHarness> {
   final controller = EasyRefreshController();
   final scrollController = ScrollController();
   final headerListenable = IndicatorStateListenable();
+  final footerListenable = IndicatorStateListenable();
   var refreshCalls = 0;
+  var loadCalls = 0;
 
   IndicatorState? get headerState => headerListenable.value;
+  IndicatorState? get footerState => footerListenable.value;
 
   @override
   void dispose() {
@@ -71,9 +76,19 @@ class _TriggerModeHarnessState extends State<_TriggerModeHarness> {
           controller: controller,
           scrollController: scrollController,
           header: header,
-          footer: const ClassicFooter(infiniteOffset: null),
+          footer: OverrideFooter(
+            footer: ClassicFooter(
+              triggerMode: widget.footerTriggerMode,
+              clamping: widget.clamping,
+              infiniteOffset: widget.clamping ? null : 70,
+            ),
+            listenable: footerListenable,
+          ),
           onRefresh: () async {
             refreshCalls++;
+          },
+          onLoad: () async {
+            loadCalls++;
           },
           child: ListView.builder(
             key: const Key('list'),
@@ -160,6 +175,22 @@ Future<TestGesture> _dragFromMiddleToOverscroll(
   await gesture.moveBy(_pullDelta(state, 260));
   await tester.pump();
   await gesture.moveBy(_pullDelta(state, 220));
+  await tester.pump();
+  return gesture;
+}
+
+Future<TestGesture> _dragFromMiddleToFooter(
+  WidgetTester tester,
+  _TriggerModeHarnessState state,
+) async {
+  state.scrollController.jumpTo(250);
+  await tester.pump();
+  final gesture = await tester.startGesture(
+    tester.getCenter(find.byKey(const Key('list'))),
+  );
+  await gesture.moveBy(const Offset(0, -700));
+  await tester.pump();
+  await gesture.moveBy(const Offset(0, -220));
   await tester.pump();
   return gesture;
 }
@@ -379,4 +410,51 @@ void main() {
     await tester.pumpAndSettle();
     expect(key.currentState!.refreshCalls, 1);
   });
+
+  testWidgets('Footer defaults to anywhere for same-gesture load', (
+    tester,
+  ) async {
+    final key = GlobalKey<_TriggerModeHarnessState>();
+    await tester.pumpWidget(_TriggerModeHarness(key: key));
+    await tester.pumpAndSettle();
+
+    final state = key.currentState!;
+    final gesture = await _dragFromMiddleToFooter(tester, state);
+    expect(state.loadCalls, 1);
+    await gesture.up();
+    await tester.pumpAndSettle();
+  });
+
+  for (final clamping in [false, true]) {
+    testWidgets(
+      'Footer onEdge rejects a middle-start drag (clamping: $clamping)',
+      (tester) async {
+        final key = GlobalKey<_TriggerModeHarnessState>();
+        await tester.pumpWidget(
+          _TriggerModeHarness(
+            key: key,
+            footerTriggerMode: IndicatorTriggerMode.onEdge,
+            clamping: clamping,
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final state = key.currentState!;
+        final gesture = await _dragFromMiddleToFooter(tester, state);
+        expect(state.footerState?.mode, IndicatorMode.inactive);
+        expect(state.footerState?.offset ?? 0, 0);
+        expect(state.loadCalls, 0);
+        await gesture.up();
+        await tester.pumpAndSettle();
+
+        state.scrollController.jumpTo(
+          state.scrollController.position.maxScrollExtent,
+        );
+        await tester.pump();
+        await tester.drag(find.byKey(const Key('list')), const Offset(0, -180));
+        await tester.pumpAndSettle();
+        expect(state.loadCalls, 1);
+      },
+    );
+  }
 }
