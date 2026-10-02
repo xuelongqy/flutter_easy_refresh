@@ -272,15 +272,20 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       }
     } else {
       // Maximum overscroll offset
-      if (headerNotifier.actualMaxOverOffset != double.infinity &&
-          value < -headerNotifier.actualMaxOverOffset) {
-        _updateIndicatorOffset(
-          position,
-          -headerNotifier.actualMaxOverOffset,
-          value,
-        );
-        return (value + headerNotifier.actualMaxOverOffset) -
-            position.minScrollExtent;
+      if (headerNotifier.actualMaxOverOffset != double.infinity) {
+        final maxOverExtent =
+            position.minScrollExtent - headerNotifier.actualMaxOverOffset;
+        if (value < maxOverExtent) {
+          if (position.pixels < maxOverExtent) {
+            if (value < position.pixels) {
+              _updateIndicatorOffset(position, position.pixels, value);
+              return value - position.pixels;
+            }
+          } else {
+            _updateIndicatorOffset(position, maxOverExtent, value);
+            return value - maxOverExtent;
+          }
+        }
       }
       // hit top over
       if (!(headerNotifier.hitOver || headerNotifier.modeLocked) &&
@@ -364,16 +369,20 @@ class _ERScrollPhysics extends BouncingScrollPhysics {
       }
     } else {
       // Maximum overscroll offset
-      if (footerNotifier.actualMaxOverOffset != double.infinity &&
-          position.maxScrollExtent <
-              value - footerNotifier.actualMaxOverOffset) {
-        _updateIndicatorOffset(
-          position,
-          position.maxScrollExtent + footerNotifier.actualMaxOverOffset,
-          value,
-        );
-        return (value - footerNotifier.actualMaxOverOffset) -
-            position.maxScrollExtent;
+      if (footerNotifier.actualMaxOverOffset != double.infinity) {
+        final maxOverExtent =
+            position.maxScrollExtent + footerNotifier.actualMaxOverOffset;
+        if (maxOverExtent < value) {
+          if (maxOverExtent < position.pixels) {
+            if (position.pixels < value) {
+              _updateIndicatorOffset(position, position.pixels, value);
+              return value - position.pixels;
+            }
+          } else {
+            _updateIndicatorOffset(position, maxOverExtent, value);
+            return value - maxOverExtent;
+          }
+        }
       }
       // hit bottom over
       if (!(footerNotifier.hitOver || footerNotifier.modeLocked) &&

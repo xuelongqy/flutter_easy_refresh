@@ -24,6 +24,7 @@
  - **FIX**: Hide the opposite indicator while refresh/load tasks are mutually exclusive, while preserving non-clamping overscroll ([#872](https://github.com/xuelongqy/flutter_easy_refresh/issues/872)).
  - **FIX**: Stop carrying stale Footer rebound velocity after appended content expands the scroll extent ([#831](https://github.com/xuelongqy/flutter_easy_refresh/issues/831)).
  - **FIX**: Remove duplicate Cupertino indicator keys that could conflict during `AnimatedSwitcher` transitions ([#719](https://github.com/xuelongqy/flutter_easy_refresh/issues/719)).
+ - **FIX**: Allow Header/Footer positions already beyond `maxOverOffset` to rebound toward the valid range without returning an invalid boundary delta ([#650](https://github.com/xuelongqy/flutter_easy_refresh/issues/650)).
 
 ## 3.5.1
 

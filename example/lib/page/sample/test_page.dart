@@ -10,48 +10,72 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
-  int _count = 20;
-  int _loadCount = 0;
+  final _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _recoverFromOutside({required bool footer}) async {
+    final position = _scrollController.position;
+    final edge = footer ? position.maxScrollExtent : position.minScrollExtent;
+    final outside = edge + (footer ? 40 : -40);
+    _scrollController.jumpTo(outside);
+    await _scrollController.animateTo(
+      edge,
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.linear,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Issue #831 · $_count items')),
+      appBar: AppBar(title: const Text('Issue #650 · maxOverOffset')),
       body: EasyRefresh(
-        footer: const ClassicFooter(
-          position: IndicatorPosition.locator,
-          hitOver: true,
-          infiniteHitOver: true,
-        ),
-        onLoad: () async {
-          _loadCount++;
-          await Future<void>.delayed(const Duration(milliseconds: 300));
-          if (!mounted) {
-            return;
-          }
-          setState(() => _count += 10);
-        },
-        child: CustomScrollView(
-          slivers: [
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => const SkeletonItem(),
-                childCount: _count,
-              ),
-            ),
-            const FooterLocator.sliver(),
-          ],
+        header: const ClassicHeader(maxOverOffset: 0),
+        footer: const ClassicFooter(infiniteOffset: null, maxOverOffset: 0),
+        onRefresh: () async {},
+        onLoad: () async {},
+        child: ListView.builder(
+          controller: _scrollController,
+          itemCount: 20,
+          itemBuilder: (context, index) => const SkeletonItem(),
         ),
       ),
       bottomNavigationBar: SafeArea(
         top: false,
         child: Padding(
           padding: const EdgeInsets.all(12),
-          child: Text(
-            '快速上拉到底触发加载；300ms 后追加 10 条。'
-            '修复后列表不应继承旧 Footer 回弹速度继续向上滑。'
-            '  Load: $_loadCount',
-            textAlign: TextAlign.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                '模拟当前位置已经超过 maxOverOffset，然后向合法区域恢复。'
+                '修复前会触发 applyBoundaryConditions overscroll 断言。',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () => _recoverFromOutside(footer: false),
+                      child: const Text('Header 恢复'),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () => _recoverFromOutside(footer: true),
+                      child: const Text('Footer 恢复'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
