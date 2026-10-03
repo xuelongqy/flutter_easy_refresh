@@ -77,7 +77,10 @@ class _PhoenixPageState extends State<PhoenixPage> {
               expandedHeight: 120,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                title: Text('Golden campus'.tr),
+                title: Text(
+                  'Golden campus'.tr,
+                  style: TextStyle(color: themeData.colorScheme.onPrimary),
+                ),
                 centerTitle: false,
               ),
             ),

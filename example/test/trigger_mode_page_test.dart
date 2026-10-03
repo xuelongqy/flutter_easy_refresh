@@ -17,6 +17,16 @@ void main() {
     expect(find.text('Refresh count: 0'), findsOneWidget);
     expect(find.textContaining('Load count: 0'), findsOneWidget);
 
+    await tester.tap(find.byTooltip('Trigger mode help'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(
+      find.textContaining('Trigger mode test instruction'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Got it'));
+    await tester.pumpAndSettle();
+
     await tester.tap(find.byType(Switch).at(0));
     await tester.tap(find.byType(Switch).at(1));
     await tester.pump();

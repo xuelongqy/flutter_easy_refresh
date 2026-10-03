@@ -64,6 +64,8 @@ const zhCN = {
   'Refresh when the list is displayed and specify the Header':
       '列表显示时刷新并指定Header',
   'Indicator trigger mode': 'Indicator 触发模式',
+  'Trigger mode help': '触发模式说明',
+  'Got it': '知道了',
   'Compare Header and Footer anywhere/onEdge trigger modes':
       '对比 Header / Footer 的 anywhere 和 onEdge 触发模式',
   'Header starts at edge': 'Header 仅允许从边缘起手',

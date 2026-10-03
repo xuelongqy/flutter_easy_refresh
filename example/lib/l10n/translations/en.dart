@@ -65,6 +65,8 @@ const en = {
   'Refresh when the list is displayed and specify the Header':
       'Refresh when the list is displayed and specify the Header',
   'Indicator trigger mode': 'Indicator trigger mode',
+  'Trigger mode help': 'Trigger mode help',
+  'Got it': 'Got it',
   'Compare Header and Footer anywhere/onEdge trigger modes':
       'Compare Header and Footer anywhere/onEdge trigger modes',
   'Header starts at edge': 'Header starts at edge',

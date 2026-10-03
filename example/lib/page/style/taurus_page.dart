@@ -77,7 +77,10 @@ class _TaurusPageState extends State<TaurusPage> {
               expandedHeight: 120,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                title: Text('Rush to the sky'.tr),
+                title: Text(
+                  'Rush to the sky'.tr,
+                  style: TextStyle(color: themeData.colorScheme.onPrimary),
+                ),
                 centerTitle: false,
               ),
             ),
