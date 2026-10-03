@@ -71,3 +71,39 @@ Review the resulting dependency constraints and manually update the package and
 root CHANGELOGs before committing. `--no-git-commit-version` also prevents tag
 creation during version preparation. A bare `melos version` infers versions from
 Conventional Commits and generates CHANGELOG entries by default.
+
+## GitHub Release and online example
+
+Publish the pub packages before creating the repository release. Build the
+example with the same Flutter SDK and dependency lockfile used for validation:
+
+```bash
+cd example
+flutter build apk --release --no-pub
+flutter build web --release --wasm --no-pub --no-web-resources-cdn \
+  --dart-define=RIVE_NATIVE_WASM_HOST=rive/
+```
+
+Upload `example/build/app/outputs/flutter-apk/app-release.apk` to the repository
+release. The example currently uses the existing debug signing configuration;
+this APK is a demonstration build, not a Play Store distribution build. Check
+its package name, version, signing verification, and SHA-256 before uploading.
+
+For GitHub Pages, change only the generated `build/web/index.html` base from
+`<base href="/">` to `<base href="./">`. Flutter requires an absolute base at
+build time, so apply the relative base after compilation. Keep the source
+`web/index.html` placeholder unchanged.
+
+The Rive host above is also relative. Copy both `wasm/` and
+`wasm_compatibility/` from the official `@rive-app/flutter-native-wasm` npm
+package into `build/web/rive/`, including each directory's JavaScript and Wasm
+file. Use the version declared by the installed `rive_native` package's
+`lib/src/wasm_version.dart` (44.0.0 for this release), verify the npm tarball's
+integrity, and include the runtime's MIT license. `--no-web-resources-cdn`
+already includes local CanvasKit files.
+
+Serve the completed output under `/flutter_easy_refresh/` and verify that the
+app, local renderers, and Rive animations load without missing resources.
+Back up the old Pages directory, replace its complete contents with `build/web/`
+(including deletion of obsolete files), and commit only that directory. Verify
+the Pages deployment before announcing the release.
