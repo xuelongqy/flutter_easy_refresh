@@ -68,6 +68,8 @@ class _SkatingIndicatorState extends State<_SkatingIndicator> {
       stateMachineSelector: StateMachineNamed('Reload'),
     );
     // The bundled .riv drives its state machine via inputs, not data binding.
+    // The bundled .riv has no ViewModel; data binding requires re-authoring
+    // and re-exporting the animation in the Rive editor.
     // ignore: deprecated_member_use
     _pullAmountInput = _riveController!.stateMachine.number('pullAmount');
     // ignore: deprecated_member_use

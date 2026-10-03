@@ -20,7 +20,7 @@ dependencies:
     sdk: flutter
   easy_refresh: ^4.0.0
   easy_refresh_squats: ^2.0.0
-  material_ui: ^1.2.0
+  material_ui: ^1.5.0
   rive: ^0.14.11
 ```
 

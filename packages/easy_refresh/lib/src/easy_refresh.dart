@@ -355,7 +355,7 @@ class EasyRefresh extends StatefulWidget {
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
     bool floatHeaderSlivers = false,
-    Clip nestedClipBehavior = Clip.hardEdge,
+    this._nestedClipBehavior = Clip.hardEdge,
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
     String? restorationId,
   }) : child = null,
@@ -366,7 +366,6 @@ class EasyRefresh extends StatefulWidget {
        _nestedScrollDirection = scrollDirection,
        _nestedReverse = reverse,
        _nestedFloatHeaderSlivers = floatHeaderSlivers,
-       _nestedClipBehavior = nestedClipBehavior,
        _nestedDragStartBehavior = dragStartBehavior,
        _nestedRestorationId = restorationId,
        assert(

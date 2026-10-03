@@ -45,10 +45,28 @@ class _MaterialIndicator extends StatefulWidget {
   /// See [ProgressIndicator.valueColor].
   final Animation<Color?>? valueColor;
 
+  /// See [CircularProgressIndicator.strokeWidth].
+  final double? strokeWidth;
+
+  /// See [CircularProgressIndicator.strokeAlign].
+  final double? strokeAlign;
+
+  /// See [CircularProgressIndicator.strokeCap].
+  final StrokeCap? strokeCap;
+
+  /// See [RefreshProgressIndicator.elevation].
+  final double elevation;
+
+  /// See [RefreshProgressIndicator.indicatorMargin].
+  final EdgeInsetsGeometry indicatorMargin;
+
+  /// See [RefreshProgressIndicator.indicatorPadding].
+  final EdgeInsetsGeometry indicatorPadding;
+
   /// See [ProgressIndicator.semanticsLabel].
   final String? semanticsLabel;
 
-  /// See [ProgressIndicator.semanticsLabel].
+  /// See [ProgressIndicator.semanticsValue].
   final String? semanticsValue;
 
   /// Indicator disappears duration.
@@ -85,6 +103,12 @@ class _MaterialIndicator extends StatefulWidget {
     this.backgroundColor,
     this.color,
     this.valueColor,
+    this.strokeWidth = RefreshProgressIndicator.defaultStrokeWidth,
+    this.strokeAlign,
+    this.strokeCap,
+    this.elevation = 2.0,
+    this.indicatorMargin = const EdgeInsets.all(4.0),
+    this.indicatorPadding = const EdgeInsets.all(12.0),
     this.semanticsLabel,
     this.semanticsValue,
     this.noMoreIcon,
@@ -132,7 +156,7 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
         ProgressIndicatorTheme.of(context).color ??
         Theme.of(context).colorScheme.primary;
     final alpha = (_offset / _actualTriggerOffset).clamp(0.0, 1.0);
-    return color.withAlpha((alpha * 255).round());
+    return color.withValues(alpha: alpha);
   }
 
   IndicatorMode get _mode => widget.state.mode;
@@ -170,6 +194,12 @@ class _MaterialIndicatorState extends State<_MaterialIndicator> {
               backgroundColor: widget.backgroundColor,
               color: _color,
               valueColor: widget.valueColor,
+              strokeWidth: widget.strokeWidth,
+              strokeAlign: widget.strokeAlign,
+              strokeCap: widget.strokeCap,
+              elevation: widget.elevation,
+              indicatorMargin: widget.indicatorMargin,
+              indicatorPadding: widget.indicatorPadding,
               semanticsLabel: widget.semanticsLabel,
               semanticsValue: widget.semanticsValue,
             ),

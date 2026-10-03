@@ -10,7 +10,7 @@ description: >-
 
 For `easy_refresh` 4.x (Flutter >=3.47, Dart ^3.13). Import
 `package:easy_refresh/easy_refresh.dart`; Material UI examples also require a
-direct `material_ui: ^1.2.0` dependency.
+direct `material_ui: ^1.5.0` dependency.
 
 ## Choose the smallest customization
 

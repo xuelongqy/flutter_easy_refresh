@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   easy_paging: ^4.0.0
   easy_refresh: ^4.0.0
-  material_ui: ^1.2.0
+  material_ui: ^1.5.0
 ```
 
 ## What it provides

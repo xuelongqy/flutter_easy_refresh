@@ -13,10 +13,28 @@ class MaterialFooter extends Footer {
   /// See [ProgressIndicator.valueColor].
   final Animation<Color?>? valueColor;
 
+  /// See [CircularProgressIndicator.strokeWidth].
+  final double? strokeWidth;
+
+  /// See [CircularProgressIndicator.strokeAlign].
+  final double? strokeAlign;
+
+  /// See [CircularProgressIndicator.strokeCap].
+  final StrokeCap? strokeCap;
+
+  /// See [RefreshProgressIndicator.elevation].
+  final double elevation;
+
+  /// See [RefreshProgressIndicator.indicatorMargin].
+  final EdgeInsetsGeometry indicatorMargin;
+
+  /// See [RefreshProgressIndicator.indicatorPadding].
+  final EdgeInsetsGeometry indicatorPadding;
+
   /// See [ProgressIndicator.semanticsLabel].
   final String? semanticsLabel;
 
-  /// See [ProgressIndicator.semanticsLabel].
+  /// See [ProgressIndicator.semanticsValue].
   final String? semanticsValue;
 
   /// Icon when [IndicatorResult.noMore].
@@ -58,6 +76,12 @@ class MaterialFooter extends Footer {
     this.backgroundColor,
     this.color,
     this.valueColor,
+    this.strokeWidth = RefreshProgressIndicator.defaultStrokeWidth,
+    this.strokeAlign,
+    this.strokeCap,
+    this.elevation = 2.0,
+    this.indicatorMargin = const EdgeInsets.all(4.0),
+    this.indicatorPadding = const EdgeInsets.all(12.0),
     this.semanticsLabel,
     this.semanticsValue,
     this.noMoreIcon,
@@ -96,6 +120,12 @@ class MaterialFooter extends Footer {
       backgroundColor: backgroundColor,
       color: color,
       valueColor: valueColor,
+      strokeWidth: strokeWidth,
+      strokeAlign: strokeAlign,
+      strokeCap: strokeCap,
+      elevation: elevation,
+      indicatorMargin: indicatorMargin,
+      indicatorPadding: indicatorPadding,
       semanticsLabel: semanticsLabel,
       semanticsValue: semanticsValue,
       noMoreIcon: noMoreIcon,

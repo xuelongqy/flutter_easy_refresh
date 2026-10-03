@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' show ColorSpace;
 
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:material_ui/material_ui.dart';
@@ -21,6 +22,8 @@ class _MaterialIndicatorHarnessState extends State<_MaterialIndicatorHarness> {
   final scrollController = ScrollController();
 
   int itemCount = 60;
+  int refreshCount = 0;
+  int loadCount = 0;
 
   Completer<void>? _refreshCompleter;
   Completer<void>? _loadCompleter;
@@ -34,11 +37,13 @@ class _MaterialIndicatorHarnessState extends State<_MaterialIndicatorHarness> {
   }
 
   Future<void> _onRefresh() async {
+    refreshCount++;
     _refreshCompleter = Completer<void>();
     await _refreshCompleter!.future;
   }
 
   Future<void> _onLoad() async {
+    loadCount++;
     _loadCompleter = Completer<void>();
     await _loadCompleter!.future;
   }
@@ -86,6 +91,145 @@ Future<void> disposeAndFlush(WidgetTester tester) async {
 }
 
 void main() {
+  for (final isFooter in [false, true]) {
+    final name = isFooter ? 'MaterialFooter' : 'MaterialHeader';
+    testWidgets('$name forwards progress styling and completes once', (
+      tester,
+    ) async {
+      const margin = EdgeInsetsDirectional.fromSTEB(2, 3, 4, 5);
+      const padding = EdgeInsetsDirectional.fromSTEB(6, 7, 8, 9);
+      final key = GlobalKey<_MaterialIndicatorHarnessState>();
+      await tester.pumpWidget(
+        _MaterialIndicatorHarness(
+          key: key,
+          header: isFooter
+              ? null
+              : const MaterialHeader(
+                  strokeWidth: 4.5,
+                  strokeAlign: CircularProgressIndicator.strokeAlignOutside,
+                  strokeCap: StrokeCap.round,
+                  elevation: 6,
+                  indicatorMargin: margin,
+                  indicatorPadding: padding,
+                ),
+          footer: isFooter
+              ? const MaterialFooter(
+                  strokeWidth: 4.5,
+                  strokeAlign: CircularProgressIndicator.strokeAlignOutside,
+                  strokeCap: StrokeCap.round,
+                  elevation: 6,
+                  indicatorMargin: margin,
+                  indicatorPadding: padding,
+                )
+              : null,
+        ),
+      );
+      final state = key.currentState!;
+      await tester.pumpAndSettle();
+      if (isFooter) {
+        state.scrollController.jumpTo(
+          state.scrollController.position.maxScrollExtent,
+        );
+        await tester.pump();
+      }
+      await tester.drag(
+        find.byType(ListView),
+        Offset(0, isFooter ? -240 : 240),
+      );
+      for (
+        var frame = 0;
+        frame < 100 && state.refreshCount + state.loadCount == 0;
+        frame++
+      ) {
+        await tester.pump(const Duration(milliseconds: 20));
+      }
+      final progress = tester.widget<RefreshProgressIndicator>(
+        find.byType(RefreshProgressIndicator),
+      );
+      expect(progress.strokeWidth, 4.5);
+      expect(
+        progress.strokeAlign,
+        CircularProgressIndicator.strokeAlignOutside,
+      );
+      expect(progress.strokeCap, StrokeCap.round);
+      expect(progress.elevation, 6);
+      expect(progress.indicatorMargin, margin);
+      expect(progress.indicatorPadding, padding);
+      expect(progress.value, isNull);
+      expect(state.refreshCount, isFooter ? 0 : 1);
+      expect(state.loadCount, isFooter ? 1 : 0);
+      if (isFooter) {
+        state.finishLoad();
+      } else {
+        state.finishRefresh();
+      }
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+      final indicator = isFooter
+          ? state.controller.footerState!
+          : state.controller.headerState!;
+      expect(indicator.mode, IndicatorMode.inactive);
+      expect(indicator.offset, 0);
+      expect(tester.takeException(), isNull);
+      expect(tester.binding.hasScheduledFrame, isFalse);
+      await disposeAndFlush(tester);
+    });
+
+    testWidgets('$name preserves floating-point alpha and color space', (
+      tester,
+    ) async {
+      const color = Color.from(
+        alpha: 1,
+        red: 0.13,
+        green: 0.27,
+        blue: 0.91,
+        colorSpace: ColorSpace.displayP3,
+      );
+      final key = GlobalKey<_MaterialIndicatorHarnessState>();
+      await tester.pumpWidget(
+        _MaterialIndicatorHarness(
+          key: key,
+          header: isFooter ? null : const MaterialHeader(color: color),
+          footer: isFooter ? const MaterialFooter(color: color) : null,
+        ),
+      );
+      final state = key.currentState!;
+      await tester.pumpAndSettle();
+      if (isFooter) {
+        state.scrollController.jumpTo(
+          state.scrollController.position.maxScrollExtent,
+        );
+        await tester.pump();
+      }
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byType(ListView)),
+      );
+      await gesture.moveBy(Offset(0, isFooter ? -70 : 70));
+      await tester.pump();
+      final indicator = isFooter
+          ? state.controller.footerState!
+          : state.controller.headerState!;
+      final alpha = indicator.offset / indicator.actualTriggerOffset;
+      expect(alpha, greaterThan(0));
+      expect(alpha, lessThan(1));
+      final progress = tester.widget<RefreshProgressIndicator>(
+        find.byType(RefreshProgressIndicator),
+      );
+      expect(progress.color!.colorSpace, ColorSpace.displayP3);
+      expect(progress.color!.a, closeTo(alpha, 1e-10));
+      expect(progress.color!.r, color.r);
+      expect(progress.color!.g, color.g);
+      expect(progress.color!.b, color.b);
+      await gesture.up();
+      await tester.pumpAndSettle();
+      expect(state.refreshCount, 0);
+      expect(state.loadCount, 0);
+      expect(tester.takeException(), isNull);
+      await disposeAndFlush(tester);
+    });
+  }
+
   group('MaterialHeader Tests', () {
     testWidgets('MaterialHeader renders correctly', (tester) async {
       final key = GlobalKey<_MaterialIndicatorHarnessState>();

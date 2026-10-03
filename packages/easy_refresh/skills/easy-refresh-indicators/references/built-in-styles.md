@@ -25,7 +25,7 @@ Do not assume all Header options are available on every built-in constructor.
 | Style | Useful public parameters |
 | --- | --- |
 | Classic | `dragText`, `armedText`, `readyText`, `processingText`, `processedText`, `failedText`, `noMoreText`; `showText`, `showMessage`, `messageText`; `textStyle`, `messageStyle`; `textBuilder`, `messageBuilder`, `pullIconBuilder`; result icons, `iconTheme`, spacing and dimensions, progress size/stroke, `backgroundColor`, `boxDecoration`. |
-| Material | `color`, `backgroundColor`, `valueColor`, `semanticsLabel`, `semanticsValue`, `noMoreIcon`; optional `showBezierBackground`, `bezierBackgroundColor`, `bezierBackgroundAnimation`, `bezierBackgroundBounce`. |
+| Material | `color`, `backgroundColor`, `valueColor`, `strokeWidth`, `strokeAlign`, `strokeCap`, `elevation`, `indicatorMargin`, `indicatorPadding`, `semanticsLabel`, `semanticsValue`, `noMoreIcon`; optional `showBezierBackground`, `bezierBackgroundColor`, `bezierBackgroundAnimation`, `bezierBackgroundBounce`. |
 | Cupertino | `foregroundColor`, `backgroundColor`, `emptyWidget`, `userWaterDrop` (this is the actual spelling). Water drop defaults to true on Header and false on Footer. |
 | Bezier | `foregroundColor`, `backgroundColor`, `showBalls`, `spinWidget`, `spinBuilder`, `noMoreWidget`, `spinInCenter`, `onlySpin`. |
 | BezierCircle | `foregroundColor`, `backgroundColor`; built-in disappearance duration. |

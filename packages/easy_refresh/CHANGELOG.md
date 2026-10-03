@@ -8,6 +8,9 @@
 > Note: This release has breaking changes.
 
  - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+ - **BREAKING**: Remove the unused pre-Flutter 3.32 `kBezierSpringBuilderBelow3_32` helper.
+ - **FEAT**: Expose `strokeWidth`, `strokeAlign`, `strokeCap`, `elevation`, `indicatorMargin`, and `indicatorPadding` on MaterialHeader and MaterialFooter.
+ - **CHORE**: Upgrade to material_ui 1.5.0 and cupertino_ui 1.1.1; use floating-point color alpha supported by Flutter 3.47.
  - Requires Flutter >= 3.47 and Dart ^3.13.
  - Built-in indicators resolve `Theme` and localizations from `package:material_ui` / `package:cupertino_ui`.
  - Apps still using `package:flutter/material.dart` should stay on `easy_refresh: ^3.5.1`.

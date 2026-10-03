@@ -10,7 +10,7 @@ description: >-
 
 For `easy_refresh` 4.x, Flutter >=3.47 and Dart ^3.13. Use
 `package:easy_refresh/easy_refresh.dart`. Material examples require a direct
-`material_ui: ^1.2.0` dependency and `package:material_ui/material_ui.dart`.
+`material_ui: ^1.5.0` dependency and `package:material_ui/material_ui.dart`.
 Apps using the older Flutter Material library should keep a compatible 3.x
 release until they migrate; do not apply a framework migration just to add refresh.
 

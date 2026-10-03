@@ -72,6 +72,8 @@ class _BowIndicatorState extends State<_BowIndicator> {
       file,
       stateMachineSelector: StateMachineNamed('numberSimulation'),
     );
+    // The bundled .riv has no ViewModel; data binding requires re-authoring
+    // and re-exporting the animation in the Rive editor.
     // ignore: deprecated_member_use
     _pullInput = _riveController!.stateMachine.number('pull');
     // ignore: deprecated_member_use

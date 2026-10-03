@@ -1,7 +1,7 @@
 # Custom indicators, placement and secondary panels
 
 These examples target easy_refresh 4.x. Declare `easy_refresh: ^4.0.0` and
-`material_ui: ^1.2.0`. Each code block is an independent Dart library; put a
+`material_ui: ^1.5.0`. Each code block is an independent Dart library; put a
 returned widget under the consumer's MaterialApp/Scaffold.
 
 ## Builder and subclass

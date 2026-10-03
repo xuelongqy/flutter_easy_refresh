@@ -26,7 +26,7 @@ class _SpaceIndicatorState extends State<_SpaceIndicator> {
   File? _file;
   RiveWidgetController? _riveController;
   NumberInput? _pullAmountInput;
-  dynamic _startInput;
+  BooleanInput? _startInput;
 
   int _key = 0;
   bool _startActive = false;
@@ -64,6 +64,8 @@ class _SpaceIndicatorState extends State<_SpaceIndicator> {
       file,
       stateMachineSelector: StateMachineNamed('Reload'),
     );
+    // The bundled .riv has no ViewModel; data binding requires re-authoring
+    // and re-exporting the animation in the Rive editor.
     // ignore: deprecated_member_use
     _pullAmountInput = _riveController!.stateMachine.number('Pull Amount');
     // ignore: deprecated_member_use

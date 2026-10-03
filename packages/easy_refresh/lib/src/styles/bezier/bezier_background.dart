@@ -31,25 +31,6 @@ physics.SpringDescription kBezierSpringBuilder({
   );
 }
 
-/// Spring used by bezier curves.
-/// Below Flutter 3.32.0
-/// https://github.com/flutter/flutter/issues/163858
-physics.SpringDescription kBezierSpringBuilderBelow3_32({
-  required IndicatorMode mode,
-  required double offset,
-  required double actualTriggerOffset,
-  required double velocity,
-}) {
-  double mass = 6 + (offset - actualTriggerOffset) / 36;
-  double damping = 0.75 + velocity.abs() / 10000;
-  double stiffness = 1000 + velocity.abs() / 6;
-  return physics.SpringDescription(
-    mass: mass,
-    stiffness: stiffness,
-    damping: damping,
-  );
-}
-
 /// Friction factor used by bezier curves.
 double kBezierFrictionFactor(double overscrollFraction) =>
     0.4 * math.pow(1 - overscrollFraction, 2);

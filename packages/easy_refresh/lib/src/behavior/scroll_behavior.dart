@@ -45,9 +45,6 @@ class ERScrollBehavior extends ScrollBehavior {
       case TargetPlatform.fuchsia:
       case TargetPlatform.iOS:
         return child;
-      // ignore: unreachable_switch_default
-      default:
-        return child;
     }
   }
 

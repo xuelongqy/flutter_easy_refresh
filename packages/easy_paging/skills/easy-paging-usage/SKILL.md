@@ -11,7 +11,7 @@ description: >-
 
 For easy_paging 4.x with easy_refresh 4.x, Flutter >=3.47 and Dart ^3.13.
 Declare `easy_paging: ^4.0.0` and `easy_refresh: ^4.0.0`. The Material example
-also requires `material_ui: ^1.2.0`. Import both package entrypoints: easy_refresh
+also requires `material_ui: ^1.5.0`. Import both package entrypoints: easy_refresh
 does not export the separate paging package.
 
 ## Implement the actual subclass contract

@@ -21,17 +21,17 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  cupertino_icons: ^1.0.6
+  cupertino_icons: ^2.0.0
 
-  url_launcher: ^6.3.2
-  flutter_spinkit: ^5.2.1
+  url_launcher: ^6.3.3
+  flutter_spinkit: ^5.2.2
   extended_nested_scroll_view: ^6.2.1
   get: ^4.7.3
   convert: ^3.1.2
   carousel_slider: ^5.1.2
   rive: ^0.14.11
   qr_flutter: ^4.1.0
-  flutter_svg: ^2.2.4
+  flutter_svg: ^2.3.0
   flutter_sticky_header: ^0.8.0
   path_drawing: ^1.0.1
   easy_refresh: ^4.0.0
@@ -42,8 +42,8 @@ dependencies:
   easy_refresh_halloween: ^2.0.0
   easy_refresh_bubbles: ^2.0.0
   easy_refresh_bow: ^2.0.0
-  material_ui: ^1.2.0
-  cupertino_ui: ^1.0.2
+  material_ui: ^1.5.0
+  cupertino_ui: ^1.1.1
 
 dev_dependencies:
   flutter_test:

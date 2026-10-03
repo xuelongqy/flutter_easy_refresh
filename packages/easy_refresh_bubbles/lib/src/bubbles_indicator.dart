@@ -70,7 +70,8 @@ class _BubblesIndicatorState extends State<_BubblesIndicator>
       file,
       stateMachineSelector: StateMachineNamed('Motion'),
     );
-    // The bundled .riv drives its state machine via inputs, not data binding.
+    // The bundled .riv has no ViewModel; data binding requires re-authoring
+    // and re-exporting the animation in the Rive editor.
     // ignore: deprecated_member_use
     _numDragInput = _riveController!.stateMachine.number('numDrag');
     // ignore: deprecated_member_use
