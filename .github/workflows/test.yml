@@ -9,6 +9,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter-version: ["3.47.0", "3.47.3"]
 
     steps:
       - name: Checkout repository
@@ -17,7 +21,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.47.3"
+          flutter-version: ${{ matrix.flutter-version }}
           channel: "stable"
           cache: true
 
@@ -41,7 +45,12 @@ jobs:
         working-directory: packages/easy_paging
         run: flutter test
 
+      - name: Run example tests
+        working-directory: example
+        run: flutter test
+
       - name: Upload coverage to Codecov
+        if: matrix.flutter-version == '3.47.3'
         uses: codecov/codecov-action@v4
         with:
           file: packages/easy_refresh/coverage/lcov.info

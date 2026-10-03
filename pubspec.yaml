@@ -1,4 +1,5 @@
 name: flutter_easy_refresh
+publish_to: none
 workspace:
   - example
   - packages/easy_refresh
@@ -15,3 +16,12 @@ environment:
 
 dev_dependencies:
   melos: ^8.7.0
+
+melos:
+  scripts:
+    release:check:
+      description: Validate the current package versions without publishing.
+      run: dart run melos publish --dry-run --no-private --yes
+    release:publish:
+      description: Publish the current package versions after confirmation.
+      run: dart run melos publish --no-dry-run --no-private --git-tag-version

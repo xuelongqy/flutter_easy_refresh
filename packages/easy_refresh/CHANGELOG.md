@@ -1,34 +1,33 @@
-## Unreleased
-
-- Ship 3 package skill(s) with complete examples and package-specific guidance.
-- Update usage documentation and skill installation instructions.
-
 ## 4.0.0
 
 > Note: This release has breaking changes.
 
- - **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
- - **BREAKING**: Remove the unused pre-Flutter 3.32 `kBezierSpringBuilderBelow3_32` helper.
- - **FEAT**: Expose `strokeWidth`, `strokeAlign`, `strokeCap`, `elevation`, `indicatorMargin`, and `indicatorPadding` on MaterialHeader and MaterialFooter.
- - **CHORE**: Upgrade to material_ui 1.5.0 and cupertino_ui 1.1.1; use floating-point color alpha supported by Flutter 3.47.
- - Requires Flutter >= 3.47 and Dart ^3.13.
- - Built-in indicators resolve `Theme` and localizations from `package:material_ui` / `package:cupertino_ui`.
- - Apps still using `package:flutter/material.dart` should stay on `easy_refresh: ^3.5.1`.
- - **FEAT**: NestedScrollView-safe physics, `EasyRefresh.nested`, and `isNested` as nested-safe physics (not bouncing patches).
- - **FIX**: NestedScrollView retracts Header before collapsing the AppBar when pushing up, so releasing below trigger no longer starts a refresh.
- - **FIX**: Completing refresh while the NestedScrollView AppBar is collapsed no longer flashes the AppBar background.
- - **FIX**: Nested TabBarView Footer / callLoad bind the visible inner instead of the first attached tab ([#735](https://github.com/xuelongqy/flutter_easy_refresh/issues/735)).
- - **FIX**: Inner EasyRefresh auto-adopted into NestedScrollView keeps nested-safe state across parent rebuilds ([#758](https://github.com/xuelongqy/flutter_easy_refresh/issues/758)).
- - **FIX**: NestedScrollView ballistic `result` / `RenderBox.size` asserts after refresh or load ([#627](https://github.com/xuelongqy/flutter_easy_refresh/issues/627), [#652](https://github.com/xuelongqy/flutter_easy_refresh/issues/652), [#908](https://github.com/xuelongqy/flutter_easy_refresh/issues/908)).
- - **FIX**: NestedScrollView ClassicFooter remaining after load ([#678](https://github.com/xuelongqy/flutter_easy_refresh/issues/678)).
- - **FIX**: Page-level Nested refresh, per-tab Footer, and per-tab EasyRefresh isolation ([#508](https://github.com/xuelongqy/flutter_easy_refresh/issues/508), [#725](https://github.com/xuelongqy/flutter_easy_refresh/issues/725), [#838](https://github.com/xuelongqy/flutter_easy_refresh/issues/838)).
- - **FIX**: `EasyRefresh.builder` preserves Footer overscroll across keyboard-driven viewport changes ([#890](https://github.com/xuelongqy/flutter_easy_refresh/issues/890)).
- - **FIX**: Remove unused `ValueNotifier` wrappers from ballistic simulation state snapshots ([#916](https://github.com/xuelongqy/flutter_easy_refresh/issues/916)).
- - **FIX**: Hide the opposite indicator while refresh/load tasks are mutually exclusive, while preserving non-clamping overscroll ([#872](https://github.com/xuelongqy/flutter_easy_refresh/issues/872)).
- - **FIX**: Stop carrying stale Footer rebound velocity after appended content expands the scroll extent ([#831](https://github.com/xuelongqy/flutter_easy_refresh/issues/831)).
- - **FIX**: Remove duplicate Cupertino indicator keys that could conflict during `AnimatedSwitcher` transitions ([#719](https://github.com/xuelongqy/flutter_easy_refresh/issues/719)).
- - **FIX**: Allow Header/Footer positions already beyond `maxOverOffset` to rebound toward the valid range without returning an invalid boundary delta ([#650](https://github.com/xuelongqy/flutter_easy_refresh/issues/650)).
+- **BREAKING** **FEAT**: migrate to material_ui and cupertino_ui for Flutter 3.47.
+- **BREAKING**: Remove the unused pre-Flutter 3.32 `kBezierSpringBuilderBelow3_32` helper.
+- **FEAT**: Expose `strokeWidth`, `strokeAlign`, `strokeCap`, `elevation`, `indicatorMargin`, and `indicatorPadding` on MaterialHeader and MaterialFooter.
+- **CHORE**: Upgrade to material_ui 1.5.0 and cupertino_ui 1.1.1; use floating-point color alpha supported by Flutter 3.47.
+- Requires Flutter >= 3.47 and Dart ^3.13.
+- Built-in indicators resolve `Theme` and localizations from `package:material_ui` / `package:cupertino_ui`.
+- Apps still using `package:flutter/material.dart` should stay on `easy_refresh: ^3.5.1`.
+- **FEAT**: NestedScrollView-safe physics, `EasyRefresh.nested`, and `isNested` as nested-safe physics (not bouncing patches).
+- **FIX**: NestedScrollView retracts Header before collapsing the AppBar when pushing up, so releasing below trigger no longer starts a refresh.
+- **FIX**: Completing refresh while the NestedScrollView AppBar is collapsed no longer flashes the AppBar background.
+- **FIX**: Nested TabBarView Footer / callLoad bind the visible inner instead of the first attached tab ([#735](https://github.com/xuelongqy/flutter_easy_refresh/issues/735)).
+- **FIX**: Inner EasyRefresh auto-adopted into NestedScrollView keeps nested-safe state across parent rebuilds ([#758](https://github.com/xuelongqy/flutter_easy_refresh/issues/758)).
+- **FIX**: NestedScrollView ballistic `result` / `RenderBox.size` asserts after refresh or load ([#627](https://github.com/xuelongqy/flutter_easy_refresh/issues/627), [#652](https://github.com/xuelongqy/flutter_easy_refresh/issues/652), [#908](https://github.com/xuelongqy/flutter_easy_refresh/issues/908)).
+- **FIX**: NestedScrollView ClassicFooter remaining after load ([#678](https://github.com/xuelongqy/flutter_easy_refresh/issues/678)).
+- **FIX**: Page-level Nested refresh, per-tab Footer, and per-tab EasyRefresh isolation ([#508](https://github.com/xuelongqy/flutter_easy_refresh/issues/508), [#725](https://github.com/xuelongqy/flutter_easy_refresh/issues/725), [#838](https://github.com/xuelongqy/flutter_easy_refresh/issues/838)).
+- **FIX**: `EasyRefresh.builder` preserves Footer overscroll across keyboard-driven viewport changes ([#890](https://github.com/xuelongqy/flutter_easy_refresh/issues/890)).
+- **FIX**: Remove unused `ValueNotifier` wrappers from ballistic simulation state snapshots ([#916](https://github.com/xuelongqy/flutter_easy_refresh/issues/916)).
+- **FIX**: Hide the opposite indicator while refresh/load tasks are mutually exclusive, while preserving non-clamping overscroll ([#872](https://github.com/xuelongqy/flutter_easy_refresh/issues/872)).
+- **FIX**: Stop carrying stale Footer rebound velocity after appended content expands the scroll extent ([#831](https://github.com/xuelongqy/flutter_easy_refresh/issues/831)).
+- **FIX**: Remove duplicate Cupertino indicator keys that could conflict during `AnimatedSwitcher` transitions ([#719](https://github.com/xuelongqy/flutter_easy_refresh/issues/719)).
+- **FIX**: Allow Header/Footer positions already beyond `maxOverOffset` to rebound toward the valid range without returning an invalid boundary delta ([#650](https://github.com/xuelongqy/flutter_easy_refresh/issues/650)).
 - **FEAT**: Add `IndicatorTriggerMode.onEdge` for Header/Footer drag-start triggering while preserving the existing `anywhere` default ([#606](https://github.com/xuelongqy/flutter_easy_refresh/issues/606)).
+- Ship 3 package skills with complete examples and package-specific guidance.
+- Update usage documentation and skill installation instructions.
+- **FIX**: Resume Header/Footer rebound after a tap interrupts the closing animation ([#913](https://github.com/xuelongqy/flutter_easy_refresh/issues/913)).
+- **FIX**: Support secondary-page closing gestures and interrupted animations with NestedScrollView, including automatically detected nested positions ([#853](https://github.com/xuelongqy/flutter_easy_refresh/issues/853)).
 
 ## 3.5.1
 
