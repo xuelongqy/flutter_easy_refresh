@@ -23,5 +23,5 @@ melos:
       description: Validate the current package versions without publishing.
       run: dart run melos publish --dry-run --no-private --yes
     release:publish:
-      description: Publish the current package versions after confirmation.
-      run: dart run melos publish --no-dry-run --no-private --git-tag-version
+      description: Publish the current package versions without another prompt.
+      run: dart run melos publish --no-dry-run --no-private --git-tag-version --yes

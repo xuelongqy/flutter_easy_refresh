@@ -40,7 +40,10 @@ dart run melos run release:publish
 ```
 
 This script explicitly uses `melos publish --no-dry-run --no-private
---git-tag-version` and keeps Melos's confirmation prompt. Melos publishes
+--git-tag-version --yes`. Running it performs a real upload without another
+confirmation prompt: the script wrapper does not forward interactive input to
+the child command. Review the package/version list with `release:check` first.
+Melos publishes
 serially in dependency order, with `easy_refresh` before its dependents, and
 creates package-specific local Git tags when the command succeeds. It does not
 push those tags or create GitHub releases.
