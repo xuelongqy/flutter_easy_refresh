@@ -1074,7 +1074,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         final axis = _headerNotifier.axis!;
         final axisDirection = _headerNotifier.axisDirection!;
         // Set safe area offset.
-        final safePadding = MediaQuery.paddingOf(context);
+        final safePadding = MediaQuery.paddingOf(ctx);
         _headerNotifier._safeOffset = axis == Axis.vertical
             ? axisDirection == AxisDirection.down
                   ? safePadding.top
@@ -1125,7 +1125,7 @@ class _EasyRefreshState extends State<EasyRefresh>
         final axis = _headerNotifier.axis!;
         final axisDirection = _headerNotifier.axisDirection!;
         // Set safe area offset.
-        final safePadding = MediaQuery.paddingOf(context);
+        final safePadding = MediaQuery.paddingOf(ctx);
         _footerNotifier._safeOffset = axis == Axis.vertical
             ? axisDirection == AxisDirection.down
                   ? safePadding.bottom
